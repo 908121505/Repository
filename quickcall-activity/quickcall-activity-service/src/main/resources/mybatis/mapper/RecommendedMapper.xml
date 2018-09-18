@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.honglu.quickcall.activity.service.dao.RecommendedMapper">
+  <resultMap id="BaseResultMap" type="com.honglu.quickcall.activity.facade.entity.Recommended">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="ip" jdbcType="VARCHAR" property="ip" />
+    <result column="share_id" jdbcType="INTEGER" property="shareId" />
+    <result column="registrant_id" jdbcType="INTEGER" property="registrantId" />
+    <result column="click_type" jdbcType="INTEGER" property="clickType" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="activity_uuid" jdbcType="VARCHAR" property="activityUuid" />
+     <result column="sex" jdbcType="INTEGER" property="sex" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    recommended.id, ip, share_id, registrant_id, click_type, recommended.create_date, activity_uuid
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from recommended
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  
+  <select id="selectByactivityIdAndShareId" resultType = "java.lang.Integer">
+    select 
+    count(id)
+    from recommended
+    where share_id = #{presionId,jdbcType=INTEGER}
+    and activity_uuid = #{ac_uuid,jdbcType=VARCHAR}
+  </select>
+  
+   <select id="selectByactivityIdAndregistrantId" resultMap="BaseResultMap">
+    select 
+      r.id,
+      r.ip,
+      r.share_id,
+      r.registrant_id,
+      r.click_type,
+      r.create_date,
+      r.activity_uuid,
+      p.sex
+    from recommended r
+    inner join persion p
+    on r.registrant_id=p.id
+    where r.registrant_id = #{presionId,jdbcType=INTEGER}
+    and r.activity_uuid = #{ac_uuid,jdbcType=VARCHAR}
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from recommended
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.honglu.quickcall.activity.facade.entity.Recommended">
+    insert into recommended (id, ip, share_id, 
+      registrant_id, click_type, create_date, 
+      activity_uuid)
+    values (#{id,jdbcType=INTEGER}, #{ip,jdbcType=VARCHAR}, #{shareId,jdbcType=INTEGER}, 
+      #{registrantId,jdbcType=INTEGER}, #{clickType,jdbcType=INTEGER}, #{createDate,jdbcType=TIMESTAMP}, 
+      #{activityUuid,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.honglu.quickcall.activity.facade.entity.Recommended">
+    insert into recommended
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="ip != null">
+        ip,
+      </if>
+      <if test="shareId != null">
+        share_id,
+      </if>
+      <if test="registrantId != null">
+        registrant_id,
+      </if>
+      <if test="clickType != null">
+        click_type,
+      </if>
+      <if test="createDate != null">
+        create_date,
+      </if>
+      <if test="activityUuid != null">
+        activity_uuid,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="ip != null">
+        #{ip,jdbcType=VARCHAR},
+      </if>
+      <if test="shareId != null">
+        #{shareId,jdbcType=INTEGER},
+      </if>
+      <if test="registrantId != null">
+        #{registrantId,jdbcType=INTEGER},
+      </if>
+      <if test="clickType != null">
+        #{clickType,jdbcType=INTEGER},
+      </if>
+      <if test="createDate != null">
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="activityUuid != null">
+        #{activityUuid,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.honglu.quickcall.activity.facade.entity.Recommended">
+    update recommended
+    <set>
+      <if test="ip != null">
+        ip = #{ip,jdbcType=VARCHAR},
+      </if>
+      <if test="shareId != null">
+        share_id = #{shareId,jdbcType=INTEGER},
+      </if>
+      <if test="registrantId != null">
+        registrant_id = #{registrantId,jdbcType=INTEGER},
+      </if>
+      <if test="clickType != null">
+        click_type = #{clickType,jdbcType=INTEGER},
+      </if>
+      <if test="createDate != null">
+        create_date = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="activityUuid != null">
+        activity_uuid = #{activityUuid,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.honglu.quickcall.activity.facade.entity.Recommended">
+    update recommended
+    set ip = #{ip,jdbcType=VARCHAR},
+      share_id = #{shareId,jdbcType=INTEGER},
+      registrant_id = #{registrantId,jdbcType=INTEGER},
+      click_type = #{clickType,jdbcType=INTEGER},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      activity_uuid = #{activityUuid,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

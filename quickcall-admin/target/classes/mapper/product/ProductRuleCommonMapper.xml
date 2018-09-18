@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ProductRuleCommon">
+    <resultMap id="resultMap" type="com.calf.module.product.entity.ProductRuleCommon" >
+        <result column="common_id" property="commonId" jdbcType="VARCHAR" />
+        <result column="rule_name" property="ruleName" jdbcType="VARCHAR" />
+        <result column="product_id" property="productId" jdbcType="VARCHAR" />
+        <result column="product_rule_id" property="productRuleId" jdbcType="VARCHAR" />
+        <result column="state" property="state" jdbcType="INTEGER" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="create_man" property="createMan" jdbcType="VARCHAR" />
+        <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+        <result column="modify_name" property="modifyName" jdbcType="VARCHAR" />
+    </resultMap>
+
+    <select id="queryAll" parameterType="map" resultMap="resultMap">
+        SELECT
+            a.rule_name AS rule_name,
+            b.product_id AS product_id,
+            a.product_rule_id AS product_rule_id,
+            b.common_id AS common_id,
+            b.create_man AS create_man,
+            b.create_time AS create_time,
+            b.modify_time AS modify_time,
+            b.modify_name AS modify_name,
+            a.state AS state
+        FROM
+            product_rule a
+        LEFT JOIN product_rule_common b ON a.product_rule_id = b.product_rule_id
+        where 1=1
+        <if test="productId != null"> and b.product_id = #{productId}</if>
+        <if test="state != null"> and a.state = #{state}</if>
+    </select>
+
+    <select id="query" parameterType="map" resultMap="resultMap">
+        SELECT
+        product_id AS product_id,
+        product_rule_id AS product_rule_id,
+        common_id AS common_id,
+        create_man AS create_man,
+        create_time AS create_time,
+        modify_time AS modify_time,
+        modify_name AS modify_name,
+        state AS state
+        FROM
+        product_rule_common
+        where 1=1
+        <if test="productId != null"> and product_id = #{productId}</if>
+    </select>
+
+    <insert id="insert" parameterType="com.calf.module.product.entity.ProductRuleCommon" >
+        insert into product_rule_common (common_id, product_id, product_rule_id,
+          state, create_time, create_man,
+          modify_time, modify_name)
+        values (#{commonId,jdbcType=VARCHAR}, #{productId,jdbcType=VARCHAR}, #{productRuleId,jdbcType=VARCHAR},
+          #{state,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{createMan,jdbcType=VARCHAR},
+          #{modifyTime,jdbcType=TIMESTAMP}, #{modifyName,jdbcType=VARCHAR})
+    </insert>
+
+    <update id="update" parameterType="map" >
+        update product_rule_common
+        set
+          product_rule_id = #{productRuleId,jdbcType=VARCHAR},
+          modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+          modify_name = #{modifyName,jdbcType=VARCHAR}
+        where product_id = #{productId,jdbcType=VARCHAR}
+    </update>
+
+</mapper>

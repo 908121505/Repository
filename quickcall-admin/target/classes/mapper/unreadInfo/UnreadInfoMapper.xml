@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="UnreadInfo" >
+  <resultMap id="BaseResultMap" type="com.calf.module.community.entity.UnreadInfo" >
+
+    <id column="communtiy_unread_id" property="communtiyUnreadId" jdbcType="VARCHAR" />
+    <result column="operation_account_id" property="operationAccountId" jdbcType="VARCHAR" />
+    <result column="message_account_id" property="messageAccountId" jdbcType="VARCHAR" />
+    <result column="operation_type" property="operationType" jdbcType="INTEGER" />
+    <result column="operation_content" property="operationContent" jdbcType="VARCHAR" />
+    <result column="is_read" property="isRead" jdbcType="INTEGER" />
+    <result column="parent_id" property="parentId" jdbcType="VARCHAR" />
+    <result column="reply_id" property="replyId" jdbcType="VARCHAR" />
+    <result column="curr_reply_id" property="currReplyId" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="create_man" property="createMan" jdbcType="VARCHAR" />
+    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+    <result column="modify_man" property="modifyMan" jdbcType="VARCHAR" />
+    <result column="state" property="state" jdbcType="INTEGER" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+  </resultMap>
+
+
+  <update id="update" parameterType="map"  >
+    update communtiy_unread_info
+    set
+    modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+    modify_man = #{modifyMan,jdbcType=VARCHAR},
+    state = #{state,jdbcType=INTEGER}
+    where 1 = 1
+    <if test="parentId != null" >
+      and parent_id = #{parentId}
+    </if>
+    <if test="replyId != null and currReplyId!=null" >
+      and reply_id = #{replyId}  or curr_reply_id = #{currReplyId}
+    </if>
+
+  </update>
+
+</mapper>

@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Icon">
+	<resultMap id="BannerResultMap" type="com.calf.module.zoneproduct.entity.ZoneProduct">
+		<id property="zoneId" column="zone_id" />
+		<id property="labelName" column="label_name" />
+		<id property="labelLcolor" column="label_lcolor" />
+		<id property="labelFontSize" column="label_font_size" />
+		<id property="labelBackgroundImg" column="label_background_img" />
+		<id property="linkUrlH" column="link_url_h" />
+		<id property="zoneName" column="zone_name" />
+		<id property="zoneType" column="zone_type" />
+		<id property="toolType" column="tool_type" />
+		<id property="createTime" column="create_time" />
+		<id property="createMan" column="create_man" />
+		<id property="state" column="state" />
+		<id property="homeType" column="home_type" />
+		<id property="matchTheUser" column="match_the_user" />
+		<id property="labelName" column="label_name" />
+		<id property="labelCode" column="label_code" />
+		<id property="actionDeviceType" column="action_device_type" />
+		<id property="actionVersion" column="action_version" />
+		<id property="versionCompareType" column="version_compare_type" />
+		<id property="backgroundPicture" column="background_picture" />
+		<id property="dynamicPicture" column="dynamic_picture" />
+		<id property="startTime" column="start_time" />
+		<id property="endTime" column="end_time" />
+		<id property="iconLabel" column="icon_label" />
+		<id property="isProduct" column="is_product" />
+		<id property="remark" column="remark" />
+		<id property="jumpType" column="jump_type" />
+
+	</resultMap>
+
+	<sql id="Base_Column_List">
+	   zone_id,label_name,label_lcolor,label_font_size,label_background_img,link_url_h,zone_name,zone_type,tool_type,create_time,create_man,remark,state,home_type
+	,match_the_user,action_device_type,action_version,version_compare_type,background_picture,dynamic_picture,start_time,end_time,icon_label,is_product,jump_type
+	</sql>
+	
+	<select id="queryUserLabel" parameterType="map" resultMap="BannerResultMap">
+SELECT b.label_name,b.label_code FROM label_category a INNER JOIN  (SELECT product_label.`label_category_id`,label_name,label_code FROM product_label WHERE product_label.state=1) b
+ON a.label_category_id=b.label_category_id  AND a.state=1 
+AND a.category_code='User_Label'  
+
+
+	
+	</select>
+	
+	<sql id="queryContion">
+	   <if test="zoneName!=null and zoneName!=''">
+	      and zone_name like CONCAT('%',#{zoneName},'%')
+	   </if>
+	    <if test="state!=null and state!=''">
+	     and state = #{state}
+	   </if>
+	   
+	    <if test="homeType !=null and homeType !=''">
+	     and home_type = #{homeType}
+	   </if>
+	    <if test="toolType !=null and toolType !=''">
+	     and tool_type = #{toolType}
+	   </if>
+	   <if test="sTime !=null and sTime!=''">
+	    AND start_time <![CDATA[ >= ]]> #{sTime}
+	   </if>
+	   <if test="eTime !=null and eTime!=''">
+	    AND start_time <![CDATA[ <= ]]> #{eTime}
+	   </if>
+	
+	</sql>
+
+	<select id="get" parameterType="map" resultMap="BannerResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from zone_product where
+		zone_id = #{arg0}
+	</select>
+
+	<select id="queryCount" parameterType="map" resultType="int">
+		select count(*) from zone_product where home_type in(5,6,8,9,10)
+			<include refid="queryContion" />
+		
+	</select>
+	<select id="query" parameterType="map" resultMap="BannerResultMap">
+		select
+		<include refid="Base_Column_List" />,modify_time modifyTime,modify_man modifyMan,jump_type jumpType
+		from
+		zone_product where home_type in(5,6,8,9,10)
+			<include refid="queryContion" />
+		  order by cast(zone_type as SIGNED INTEGER) desc,modify_time desc
+		limit ${iDisplayStart},${iDisplayLength}
+	</select>
+	
+    <select id="queryAll" parameterType="map" resultMap="BannerResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from
+		zone_product where state=1
+		<if test="homeType !=null"> and home_type IN
+			<foreach item="item" index="index" collection="homeType" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		  order by zone_type asc
+	</select>
+	
+	
+	
+	<insert id="insert" parameterType="map"  useGeneratedKeys="true" keyProperty="zoneId" keyColumn="zone_id">
+		INSERT INTO zone_product
+		(zone_id,label_name,label_lcolor,label_font_size,label_background_img,link_url_h,zone_name,zone_type,home_type,tool_type,create_time,create_man,
+		remark,state,match_the_user,is_area,start_time,end_time,icon_label,is_product
+		<if test="actionDeviceType !=null and actionDeviceType !='' ">
+			,action_device_type
+		</if>
+		<if test="actionVersion !=null and actionVersion !='' ">
+			,action_version
+		</if>
+		<if test="versionCompareType !=null and versionCompareType !='' ">
+			,version_compare_type
+		</if>
+		)
+		VALUES
+		(    #{zoneId},
+	         #{labelName},
+			 #{labelLcolor},
+			 #{labelFontSize},
+			 #{labelBackgroundImg},
+			 #{linkUrlH},
+			 #{zoneName},
+			 #{zoneType},
+			 #{homeType},
+			 #{toolType},
+			 #{createTime},
+			 #{createMan},
+			 #{remark},
+		     #{state},
+		     #{matchTheUser},
+		     #{isArea},
+		     #{startTime},
+		     #{endTime},
+		     #{iconLabel},
+		     #{isProduct}
+			<if test="actionDeviceType !=null and actionDeviceType !='' ">
+				,#{actionDeviceType}
+			</if>
+			<if test="actionVersion !=null and actionVersion !='' ">
+				,#{actionVersion}
+			</if>
+			<if test="versionCompareType !=null and versionCompareType !='' ">
+				,#{versionCompareType}
+			</if>
+		)
+	</insert>
+
+	<delete id="delete" parameterType="map">
+		DELETE FROM zone_product
+		WHERE zone_id = #{arg0}
+	</delete>
+
+	<select id="getZoneProductById" parameterType="map" resultMap="BannerResultMap">
+		SELECT
+		<include refid="Base_Column_List" />,is_area isArea
+		FROM zone_product
+		WHERE zone_id = #{arg0}
+	</select>
+
+	<update id="update" parameterType="map">
+		UPDATE zone_product
+		<set>
+			
+			<if test="zoneId != null and zoneId!=''">
+				zone_id = #{zoneId},
+			</if>
+			
+			<if test="labelName != null and labelName!=''">
+				label_name = #{labelName},
+			</if>
+			
+			<if test="labelLcolor != null and labelLcolor!=''">
+				label_lcolor = #{labelLcolor},
+			</if>
+			
+			<if test="labelFontSize != null and labelFontSize!=''">
+				label_font_size = #{labelFontSize},
+			</if>
+			
+			<if test="labelBackgroundImg != null and labelBackgroundImg!=''">
+				label_background_img = #{labelBackgroundImg},
+			</if>
+			
+			<if test="linkUrlH != null and linkUrlH!=''">
+				link_url_h = #{linkUrlH},
+			</if>
+			
+			<if test="zoneName != null and zoneName!=''">
+				zone_name = #{zoneName},
+			</if>
+			
+			<if test="zoneType != null and zoneType!=''">
+				zone_type = #{zoneType},
+			</if>
+			
+			<if test="homeType != null and homeType!=''">
+				home_type = #{homeType},
+			</if>
+
+			<if test="toolType != null and toolType!=''">
+				tool_type = #{toolType},
+			</if>
+			
+			<if test="remark != null and remark!=''">
+				remark = #{remark},
+			</if>
+			
+			<if test="modifyTime != null and modifyTime!=''">
+				modify_time = #{modifyTime},
+			</if>
+			
+			<if test="modifyMan != null and modifyMan!=''">
+				modify_man = #{modifyMan},
+			</if>
+			
+			<if test="state != null and state!=''">
+				state = #{state},
+			</if>
+			
+			<if test="matchTheUser != null and matchTheUser!=''">
+				match_the_user = #{matchTheUser},
+			</if>
+			<if test="isArea!=null and isArea!=''">
+				is_area = #{isArea},
+			</if>
+			<if test="actionVersion !=null and actionVersion !='' ">
+				action_version = #{actionVersion},
+			</if>
+			<if test="actionDeviceType !=null and actionDeviceType !='' ">
+				action_device_type = #{actionDeviceType},
+			</if>
+			<if test="versionCompareType !=null and versionCompareType !='' ">
+				version_compare_type = #{versionCompareType},
+			</if>
+			<if test="actionDeviceType !=null and actionDeviceType !='' ">
+				action_device_type = #{actionDeviceType},
+			</if>
+			<if test="dynamicPicture !=null and dynamicPicture !='' ">
+				dynamic_picture = #{dynamicPicture},
+			</if>
+			<if test="startTime!=null and startTime!=''">
+			start_time=#{startTime},
+			</if>
+			<if test="endTime!=null and endTime!=''">
+			end_time=#{endTime},
+			</if>
+			<if test="iconLabel!=null and iconLabel!=''">
+			icon_label=#{iconLabel},
+			</if>
+			<if test="isProduct!=null and isProduct!=''">
+			is_product=#{isProduct}
+			</if>
+
+		</set>
+		WHERE zone_id = #{zoneId}
+	</update>
+
+	<select id="selectCodeName"   resultType="java.util.Map">
+		SELECT zone_id zoneId,zone_name zoneName FROM zone_product where home_type=6
+	</select>
+
+
+</mapper>

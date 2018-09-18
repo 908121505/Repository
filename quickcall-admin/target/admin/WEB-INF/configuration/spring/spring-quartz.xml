@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:jee="http://www.springframework.org/schema/jee"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd 
+http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-2.0.xsd">
+ 
+    
+    
+     <bean id="baseDao" class="com.calf.cn.dao.BaseDao">
+    </bean>
+    
+    <bean id="baseManager" class="com.calf.cn.service.BaseManager">
+           <property name="baseDao" ref="baseDao" />
+    </bean>
+    
+    
+ 
+    <!-- 线程执行器配置，用于任务注册 -->
+    <bean id="executor"
+        class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+        <!-- 线程池维护线程的最少数量 -->
+        <property name="corePoolSize" value="10" />
+          <!-- 线程池维护线程的最大数量 -->  
+        <property name="maxPoolSize" value="500" />
+          <!-- 线程池所使用的缓冲队列 --> 
+        <property name="queueCapacity" value="1000" />
+    </bean>
+ 
+    <!-- 要调用的工作类 -->
+    <bean id="userGroupRecommendJob" class="com.calf.module.job.UserGroupRecommendJob">
+         <property name="baseManager" ref="baseManager" />
+    </bean>
+    
+    <bean id="quartzJob" class="com.calf.module.job.QuartzJobController">
+         <property name="baseManager" ref="baseManager" />
+    </bean>
+ 
+   <bean id="importDataJob" class="com.calf.module.job.ImportDataController">
+         <property name="baseManager" ref="baseManager" />
+    </bean>
+ 
+  <bean id="audoCommunityDataJob" class="com.calf.module.job.AudoReadNumPraiseNum">
+         <property name="baseManager" ref="baseManager" />
+    </bean>
+ 
+    <!--调度业务 : 定义调用对象和调用对象的方法 -->
+    <bean id="jobtask1"
+        class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <!-- 调用的类 -->
+        <property name="targetObject" ref="quartzJob" />
+        <!-- 调用类中的方法 -->
+        <property name="targetMethod" value="work" />
+    </bean>
+     
+    <!--  <bean id="jobtask2"
+        class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        调用的类
+        <property name="targetObject" ref="importDataJob" />
+        调用类中的方法
+        <property name="targetMethod" value="work" />
+    </bean> -->
+    
+     <bean id="jobtask3"
+        class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <!-- 调用的类 -->
+        <property name="targetObject" ref="audoCommunityDataJob" />
+        <!-- 调用类中的方法 -->
+        <property name="targetMethod" value="work" />
+    </bean>
+    
+     <bean id="jobtask4"
+        class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <!-- 调用的类 -->
+        <property name="targetObject" ref="userGroupRecommendJob" />
+        <!-- 调用类中的方法 -->
+        <property name="targetMethod" value="work" />
+    </bean>
+    
+    <bean id="jobtask5"
+        class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <!-- 调用的类 -->
+        <property name="targetObject" ref="importDataJob" />
+        <!-- 调用类中的方法 -->
+        <property name="targetMethod" value="importData" />
+    </bean>
+    
+    <bean id="jobtask6"
+        class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <!-- 调用的类 -->
+        <property name="targetObject" ref="importDataJob" />
+        <!-- 调用类中的方法 -->
+        <property name="targetMethod" value="importUserInstallInfoData" />
+    </bean>
+    
+    <!-- 定义触发时间  每天0点触发-->
+    <bean id="doTime1" class="org.springframework.scheduling.quartz.CronTriggerBean">
+        <property name="jobDetail" ref="jobtask1" />
+         <property name="cronExpression" value="0 0 0 * * ?" />
+    </bean>
+    
+     <!-- 定义触发时间  每天1点处理-->
+      <!-- <bean id="doTime2" class="org.springframework.scheduling.quartz.CronTriggerBean">
+        <property name="jobDetail" ref="jobtask2" />
+         <property name="cronExpression" value="0 0 1 * * ?" />
+    </bean> -->
+  
+    <!-- 定义触发时间  每2小时执行一次 -->
+    <bean id="doTime3" class="org.springframework.scheduling.quartz.CronTriggerBean">
+        <property name="jobDetail" ref="jobtask3" />
+         <property name="cronExpression" value="0 0 0/2 * * ?" />
+    </bean>
+     
+      <!-- 定义触发时间 每天0点处理-->
+    <bean id="doTime4" class="org.springframework.scheduling.quartz.CronTriggerBean">
+        <property name="jobDetail" ref="jobtask4" />
+         <property name="cronExpression" value="0 0 0 * * ?" />
+    </bean>
+    
+     <!-- 定义触发时间  每天3点处理-->
+      <bean id="doTime5" class="org.springframework.scheduling.quartz.CronTriggerBean">
+         <property name="jobDetail" ref="jobtask5" />
+         <property name="cronExpression" value="0 0 3 * * ?" />
+         <!-- <property name="cronExpression" value="0/5 * * * * ?" /> -->
+    </bean>
+     
+      <!-- 定义触发时间  每天2点处理-->
+      <bean id="doTime6" class="org.springframework.scheduling.quartz.CronTriggerBean">
+        <property name="jobDetail" ref="jobtask6" />
+         <property name="cronExpression" value="0 0 2 * * ?" />
+        <!--  <property name="cronExpression" value="0 0/5 * * * ?" />  -->
+    </bean>
+     
+    <!--设置调度 总管理类 如果将lazy-init='false'那么容器启动就会执行调度程序 -->
+    <bean id="startQuertz" lazy-init="false" autowire="no"
+        class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+        <property name="triggers">
+            <list>
+                <ref bean="doTime1" />
+               <!--  <ref bean="doTime2" /> -->
+                <ref bean="doTime3" />
+               	<ref bean="doTime4" />
+                <ref bean="doTime5" />
+                <ref bean="doTime6" />
+            </list>
+        </property>
+         
+        <property name="taskExecutor" ref="executor" />
+    </bean>
+ 
+</beans>

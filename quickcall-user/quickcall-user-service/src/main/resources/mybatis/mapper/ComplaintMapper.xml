@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.honglu.quickcall.user.service.dao.ComplaintMapper">
+  <resultMap id="BaseResultMap" type="com.honglu.quickcall.user.facade.entity.Complaint">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="video_order" jdbcType="INTEGER" property="videoOrder" />
+    <result column="buy_id" jdbcType="INTEGER" property="buyId" />
+    <result column="sell_id" jdbcType="INTEGER" property="sellId" />
+    <result column="reason" jdbcType="VARCHAR" property="reason" />
+    <result column="state" jdbcType="INTEGER" property="state" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="update_date" jdbcType="TIMESTAMP" property="updateDate" />
+    <result column="handle" jdbcType="VARCHAR" property="handle" />
+    <result column="screenshot" jdbcType="VARCHAR" property="screenshot" />
+    <result column="type" jdbcType="INTEGER" property="type" />
+    <result column="rate" jdbcType="DECIMAL" property="rate" />
+    <result column="label" jdbcType="INTEGER" property="label" />
+    <result column="review" jdbcType="INTEGER" property="review" />
+    <result column="adminid" jdbcType="INTEGER" property="adminid" />
+    <result column="note" jdbcType="VARCHAR" property="note" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, video_order, buy_id, sell_id, reason, state, create_date, update_date, handle, 
+    screenshot, type, rate, label, review, adminid, note
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from complaint
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from complaint
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.honglu.quickcall.user.facade.entity.Complaint">
+    insert into complaint (id, video_order, buy_id, 
+      sell_id, reason, state, 
+      create_date, update_date, handle, 
+      screenshot, type, rate, 
+      label, review, adminid, 
+      note)
+    values (#{id,jdbcType=INTEGER}, #{videoOrder,jdbcType=INTEGER}, #{buyId,jdbcType=INTEGER}, 
+      #{sellId,jdbcType=INTEGER}, #{reason,jdbcType=VARCHAR}, #{state,jdbcType=INTEGER}, 
+      #{createDate,jdbcType=TIMESTAMP}, #{updateDate,jdbcType=TIMESTAMP}, #{handle,jdbcType=VARCHAR}, 
+      #{screenshot,jdbcType=VARCHAR}, #{type,jdbcType=INTEGER}, #{rate,jdbcType=DECIMAL}, 
+      #{label,jdbcType=INTEGER}, #{review,jdbcType=INTEGER}, #{adminid,jdbcType=INTEGER}, 
+      #{note,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.honglu.quickcall.user.facade.entity.Complaint">
+    insert into complaint
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="videoOrder != null">
+        video_order,
+      </if>
+      <if test="buyId != null">
+        buy_id,
+      </if>
+      <if test="sellId != null">
+        sell_id,
+      </if>
+      <if test="reason != null">
+        reason,
+      </if>
+      <if test="state != null">
+        state,
+      </if>
+      <if test="createDate != null">
+        create_date,
+      </if>
+      <if test="updateDate != null">
+        update_date,
+      </if>
+      <if test="handle != null">
+        handle,
+      </if>
+      <if test="screenshot != null">
+        screenshot,
+      </if>
+      <if test="type != null">
+        type,
+      </if>
+      <if test="rate != null">
+        rate,
+      </if>
+      <if test="label != null">
+        label,
+      </if>
+      <if test="review != null">
+        review,
+      </if>
+      <if test="adminid != null">
+        adminid,
+      </if>
+      <if test="note != null">
+        note,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="videoOrder != null">
+        #{videoOrder,jdbcType=INTEGER},
+      </if>
+      <if test="buyId != null">
+        #{buyId,jdbcType=INTEGER},
+      </if>
+      <if test="sellId != null">
+        #{sellId,jdbcType=INTEGER},
+      </if>
+      <if test="reason != null">
+        #{reason,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null">
+        #{state,jdbcType=INTEGER},
+      </if>
+      <if test="createDate != null">
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateDate != null">
+        #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="handle != null">
+        #{handle,jdbcType=VARCHAR},
+      </if>
+      <if test="screenshot != null">
+        #{screenshot,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=INTEGER},
+      </if>
+      <if test="rate != null">
+        #{rate,jdbcType=DECIMAL},
+      </if>
+      <if test="label != null">
+        #{label,jdbcType=INTEGER},
+      </if>
+      <if test="review != null">
+        #{review,jdbcType=INTEGER},
+      </if>
+      <if test="adminid != null">
+        #{adminid,jdbcType=INTEGER},
+      </if>
+      <if test="note != null">
+        #{note,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.honglu.quickcall.user.facade.entity.Complaint">
+    update complaint
+    <set>
+      <if test="videoOrder != null">
+        video_order = #{videoOrder,jdbcType=INTEGER},
+      </if>
+      <if test="buyId != null">
+        buy_id = #{buyId,jdbcType=INTEGER},
+      </if>
+      <if test="sellId != null">
+        sell_id = #{sellId,jdbcType=INTEGER},
+      </if>
+      <if test="reason != null">
+        reason = #{reason,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null">
+        state = #{state,jdbcType=INTEGER},
+      </if>
+      <if test="createDate != null">
+        create_date = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateDate != null">
+        update_date = #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="handle != null">
+        handle = #{handle,jdbcType=VARCHAR},
+      </if>
+      <if test="screenshot != null">
+        screenshot = #{screenshot,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        type = #{type,jdbcType=INTEGER},
+      </if>
+      <if test="rate != null">
+        rate = #{rate,jdbcType=DECIMAL},
+      </if>
+      <if test="label != null">
+        label = #{label,jdbcType=INTEGER},
+      </if>
+      <if test="review != null">
+        review = #{review,jdbcType=INTEGER},
+      </if>
+      <if test="adminid != null">
+        adminid = #{adminid,jdbcType=INTEGER},
+      </if>
+      <if test="note != null">
+        note = #{note,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.honglu.quickcall.user.facade.entity.Complaint">
+    update complaint
+    set video_order = #{videoOrder,jdbcType=INTEGER},
+      buy_id = #{buyId,jdbcType=INTEGER},
+      sell_id = #{sellId,jdbcType=INTEGER},
+      reason = #{reason,jdbcType=VARCHAR},
+      state = #{state,jdbcType=INTEGER},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      update_date = #{updateDate,jdbcType=TIMESTAMP},
+      handle = #{handle,jdbcType=VARCHAR},
+      screenshot = #{screenshot,jdbcType=VARCHAR},
+      type = #{type,jdbcType=INTEGER},
+      rate = #{rate,jdbcType=DECIMAL},
+      label = #{label,jdbcType=INTEGER},
+      review = #{review,jdbcType=INTEGER},
+      adminid = #{adminid,jdbcType=INTEGER},
+      note = #{note,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

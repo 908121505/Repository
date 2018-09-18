@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.honglu.quickcall.activity.service.dao.RechargeMapper">
+  <resultMap id="BaseResultMap" type="com.honglu.quickcall.activity.facade.entity.Recharge">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="persion_id" jdbcType="INTEGER" property="persionId" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="finish_date" jdbcType="TIMESTAMP" property="finishDate" />
+    <result column="token_package" jdbcType="INTEGER" property="tokenPackage" />
+    <result column="amount" jdbcType="DOUBLE" property="amount" />
+    <result column="type" jdbcType="INTEGER" property="type" />
+    <result column="credits" jdbcType="INTEGER" property="credits" />
+    <result column="alipayordersn" jdbcType="VARCHAR" property="alipayordersn" />
+    <result column="ordersn" jdbcType="VARCHAR" property="ordersn" />
+    <result column="state" jdbcType="INTEGER" property="state" />
+    <result column="batchNo" jdbcType="VARCHAR" property="batchno" />
+    <result column="recharge_type" jdbcType="INTEGER" property="rechargeType" />
+    <result column="f_id" jdbcType="INTEGER" property="fId" />
+    <result column="f_rate" jdbcType="DOUBLE" property="fRate" />
+    <result column="s_id" jdbcType="INTEGER" property="sId" />
+    <result column="s_rate" jdbcType="DOUBLE" property="sRate" />
+    <result column="t_id" jdbcType="INTEGER" property="tId" />
+    <result column="t_rate" jdbcType="DOUBLE" property="tRate" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, persion_id, create_date, finish_date, token_package, amount, type, credits, alipayordersn, 
+    ordersn, state, batchNo, recharge_type, f_id, f_rate, s_id, s_rate, t_id, t_rate
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from recharge
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from recharge
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.honglu.quickcall.activity.facade.entity.Recharge">
+    insert into recharge (id, persion_id, create_date, 
+      finish_date, token_package, amount, 
+      type, credits, alipayordersn, 
+      ordersn, state, batchNo, 
+      recharge_type, f_id, f_rate, 
+      s_id, s_rate, t_id, t_rate
+      )
+    values (#{id,jdbcType=INTEGER}, #{persionId,jdbcType=INTEGER}, #{createDate,jdbcType=TIMESTAMP}, 
+      #{finishDate,jdbcType=TIMESTAMP}, #{tokenPackage,jdbcType=INTEGER}, #{amount,jdbcType=DOUBLE}, 
+      #{type,jdbcType=INTEGER}, #{credits,jdbcType=INTEGER}, #{alipayordersn,jdbcType=VARCHAR}, 
+      #{ordersn,jdbcType=VARCHAR}, #{state,jdbcType=INTEGER}, #{batchno,jdbcType=VARCHAR}, 
+      #{rechargeType,jdbcType=INTEGER}, #{fId,jdbcType=INTEGER}, #{fRate,jdbcType=DOUBLE}, 
+      #{sId,jdbcType=INTEGER}, #{sRate,jdbcType=DOUBLE}, #{tId,jdbcType=INTEGER}, #{tRate,jdbcType=DOUBLE}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.honglu.quickcall.activity.facade.entity.Recharge">
+    insert into recharge
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="persionId != null">
+        persion_id,
+      </if>
+      <if test="createDate != null">
+        create_date,
+      </if>
+      <if test="finishDate != null">
+        finish_date,
+      </if>
+      <if test="tokenPackage != null">
+        token_package,
+      </if>
+      <if test="amount != null">
+        amount,
+      </if>
+      <if test="type != null">
+        type,
+      </if>
+      <if test="credits != null">
+        credits,
+      </if>
+      <if test="alipayordersn != null">
+        alipayordersn,
+      </if>
+      <if test="ordersn != null">
+        ordersn,
+      </if>
+      <if test="state != null">
+        state,
+      </if>
+      <if test="batchno != null">
+        batchNo,
+      </if>
+      <if test="rechargeType != null">
+        recharge_type,
+      </if>
+      <if test="fId != null">
+        f_id,
+      </if>
+      <if test="fRate != null">
+        f_rate,
+      </if>
+      <if test="sId != null">
+        s_id,
+      </if>
+      <if test="sRate != null">
+        s_rate,
+      </if>
+      <if test="tId != null">
+        t_id,
+      </if>
+      <if test="tRate != null">
+        t_rate,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="persionId != null">
+        #{persionId,jdbcType=INTEGER},
+      </if>
+      <if test="createDate != null">
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="finishDate != null">
+        #{finishDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="tokenPackage != null">
+        #{tokenPackage,jdbcType=INTEGER},
+      </if>
+      <if test="amount != null">
+        #{amount,jdbcType=DOUBLE},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=INTEGER},
+      </if>
+      <if test="credits != null">
+        #{credits,jdbcType=INTEGER},
+      </if>
+      <if test="alipayordersn != null">
+        #{alipayordersn,jdbcType=VARCHAR},
+      </if>
+      <if test="ordersn != null">
+        #{ordersn,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null">
+        #{state,jdbcType=INTEGER},
+      </if>
+      <if test="batchno != null">
+        #{batchno,jdbcType=VARCHAR},
+      </if>
+      <if test="rechargeType != null">
+        #{rechargeType,jdbcType=INTEGER},
+      </if>
+      <if test="fId != null">
+        #{fId,jdbcType=INTEGER},
+      </if>
+      <if test="fRate != null">
+        #{fRate,jdbcType=DOUBLE},
+      </if>
+      <if test="sId != null">
+        #{sId,jdbcType=INTEGER},
+      </if>
+      <if test="sRate != null">
+        #{sRate,jdbcType=DOUBLE},
+      </if>
+      <if test="tId != null">
+        #{tId,jdbcType=INTEGER},
+      </if>
+      <if test="tRate != null">
+        #{tRate,jdbcType=DOUBLE},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.honglu.quickcall.activity.facade.entity.Recharge">
+    update recharge
+    <set>
+      <if test="persionId != null">
+        persion_id = #{persionId,jdbcType=INTEGER},
+      </if>
+      <if test="createDate != null">
+        create_date = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="finishDate != null">
+        finish_date = #{finishDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="tokenPackage != null">
+        token_package = #{tokenPackage,jdbcType=INTEGER},
+      </if>
+      <if test="amount != null">
+        amount = #{amount,jdbcType=DOUBLE},
+      </if>
+      <if test="type != null">
+        type = #{type,jdbcType=INTEGER},
+      </if>
+      <if test="credits != null">
+        credits = #{credits,jdbcType=INTEGER},
+      </if>
+      <if test="alipayordersn != null">
+        alipayordersn = #{alipayordersn,jdbcType=VARCHAR},
+      </if>
+      <if test="ordersn != null">
+        ordersn = #{ordersn,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null">
+        state = #{state,jdbcType=INTEGER},
+      </if>
+      <if test="batchno != null">
+        batchNo = #{batchno,jdbcType=VARCHAR},
+      </if>
+      <if test="rechargeType != null">
+        recharge_type = #{rechargeType,jdbcType=INTEGER},
+      </if>
+      <if test="fId != null">
+        f_id = #{fId,jdbcType=INTEGER},
+      </if>
+      <if test="fRate != null">
+        f_rate = #{fRate,jdbcType=DOUBLE},
+      </if>
+      <if test="sId != null">
+        s_id = #{sId,jdbcType=INTEGER},
+      </if>
+      <if test="sRate != null">
+        s_rate = #{sRate,jdbcType=DOUBLE},
+      </if>
+      <if test="tId != null">
+        t_id = #{tId,jdbcType=INTEGER},
+      </if>
+      <if test="tRate != null">
+        t_rate = #{tRate,jdbcType=DOUBLE},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.honglu.quickcall.activity.facade.entity.Recharge">
+    update recharge
+    set persion_id = #{persionId,jdbcType=INTEGER},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      finish_date = #{finishDate,jdbcType=TIMESTAMP},
+      token_package = #{tokenPackage,jdbcType=INTEGER},
+      amount = #{amount,jdbcType=DOUBLE},
+      type = #{type,jdbcType=INTEGER},
+      credits = #{credits,jdbcType=INTEGER},
+      alipayordersn = #{alipayordersn,jdbcType=VARCHAR},
+      ordersn = #{ordersn,jdbcType=VARCHAR},
+      state = #{state,jdbcType=INTEGER},
+      batchNo = #{batchno,jdbcType=VARCHAR},
+      recharge_type = #{rechargeType,jdbcType=INTEGER},
+      f_id = #{fId,jdbcType=INTEGER},
+      f_rate = #{fRate,jdbcType=DOUBLE},
+      s_id = #{sId,jdbcType=INTEGER},
+      s_rate = #{sRate,jdbcType=DOUBLE},
+      t_id = #{tId,jdbcType=INTEGER},
+      t_rate = #{tRate,jdbcType=DOUBLE}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+
+  <!-- 查询对应的金额是否有充值记录 -->
+  <select id="getRechargeByAmountsAndPersion" resultType="int">
+    SELECT
+      count(1)
+    from recharge
+    where 1=1
+    and persion_id = #{persionId}
+
+    and amount in
+
+    <foreach collection="amounts" item="amount" index="index" open="(" close=")" separator=",">
+      #{amount}
+    </foreach>
+
+    and state = 2
+  </select>
+</mapper>

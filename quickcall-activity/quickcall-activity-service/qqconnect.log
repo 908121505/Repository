@@ -1,0 +1,252 @@
+1150 DEBUG [2017-12-12 18:40:40]   [DUBBO] package com.alibaba.dubbo.rpc;
+import com.alibaba.dubbo.common.extension.ExtensionLoader;
+public class ProxyFactory$Adpative implements com.alibaba.dubbo.rpc.ProxyFactory {
+public com.alibaba.dubbo.rpc.Invoker getInvoker(java.lang.Object arg0, java.lang.Class arg1, com.alibaba.dubbo.common.URL arg2) throws java.lang.Object {
+if (arg2 == null) throw new IllegalArgumentException("url == null");
+com.alibaba.dubbo.common.URL url = arg2;
+String extName = url.getParameter("proxy", "javassist");
+if(extName == null) throw new IllegalStateException("Fail to get extension(com.alibaba.dubbo.rpc.ProxyFactory) name from url(" + url.toString() + ") use keys([proxy])");
+com.alibaba.dubbo.rpc.ProxyFactory extension = (com.alibaba.dubbo.rpc.ProxyFactory)ExtensionLoader.getExtensionLoader(com.alibaba.dubbo.rpc.ProxyFactory.class).getExtension(extName);
+return extension.getInvoker(arg0, arg1, arg2);
+}
+public java.lang.Object getProxy(com.alibaba.dubbo.rpc.Invoker arg0) throws com.alibaba.dubbo.rpc.Invoker {
+if (arg0 == null) throw new IllegalArgumentException("com.alibaba.dubbo.rpc.Invoker argument == null");
+if (arg0.getUrl() == null) throw new IllegalArgumentException("com.alibaba.dubbo.rpc.Invoker argument getUrl() == null");com.alibaba.dubbo.common.URL url = arg0.getUrl();
+String extName = url.getParameter("proxy", "javassist");
+if(extName == null) throw new IllegalStateException("Fail to get extension(com.alibaba.dubbo.rpc.ProxyFactory) name from url(" + url.toString() + ") use keys([proxy])");
+com.alibaba.dubbo.rpc.ProxyFactory extension = (com.alibaba.dubbo.rpc.ProxyFactory)ExtensionLoader.getExtensionLoader(com.alibaba.dubbo.rpc.ProxyFactory.class).getExtension(extName);
+return extension.getProxy(arg0);
+}
+}, dubbo version: 2.8.4, current host: 127.0.0.1
+1180 DEBUG [2017-12-12 18:40:40]  Eagerly caching bean 'com.honglu.quickcall.activity.facade.business.ActivityDubboBusiness' to allow for resolving potential circular references
+1213 DEBUG [2017-12-12 18:40:40]  Returning cached instance of singleton bean 'Activity.ActivityDubboBusiness'
+1214 DEBUG [2017-12-12 18:40:40]  Invoking afterPropertiesSet() on bean with name 'com.honglu.quickcall.activity.facade.business.ActivityDubboBusiness'
+1214 DEBUG [2017-12-12 18:40:40]  Returning cached instance of singleton bean 'calfLoan-activity-client'
+1215 DEBUG [2017-12-12 18:40:40]  Returning cached instance of singleton bean 'dubbo'
+1215 DEBUG [2017-12-12 18:40:40]  Returning cached instance of singleton bean 'org.springframework.transaction.config.internalTransactionAdvisor'
+1216 DEBUG [2017-12-12 18:40:40]  Finished creating instance of bean 'com.honglu.quickcall.activity.facade.business.ActivityDubboBusiness'
+1216 DEBUG [2017-12-12 18:40:40]  Returning cached instance of singleton bean 'org.springframework.context.event.internalEventListenerFactory'
+1216 DEBUG [2017-12-12 18:40:40]  Returning cached instance of singleton bean 'org.springframework.transaction.config.internalTransactionalEventListenerFactory'
+1240 DEBUG [2017-12-12 18:40:40]  Unable to locate LifecycleProcessor with name 'lifecycleProcessor': using default [org.springframework.context.support.DefaultLifecycleProcessor@415b0b49]
+1240 DEBUG [2017-12-12 18:40:40]  Returning cached instance of singleton bean 'lifecycleProcessor'
+1242 DEBUG [2017-12-12 18:40:40]  Returning cached instance of singleton bean 'sqlSessionFactory'
+1243 DEBUG [2017-12-12 18:40:40]  Returning cached instance of singleton bean 'com.honglu.quickcall.activity.facade.business.ActivityDubboBusiness'
+1244 INFO  [2017-12-12 18:40:40]   [DUBBO] The service ready on spring started. service: com.honglu.quickcall.activity.facade.business.ActivityDubboBusiness, dubbo version: 2.8.4, current host: 127.0.0.1
+1312 DEBUG [2017-12-12 18:40:41]   [DUBBO] package com.alibaba.dubbo.cache;
+import com.alibaba.dubbo.common.extension.ExtensionLoader;
+public class CacheFactory$Adpative implements com.alibaba.dubbo.cache.CacheFactory {
+public com.alibaba.dubbo.cache.Cache getCache(com.alibaba.dubbo.common.URL arg0) {
+if (arg0 == null) throw new IllegalArgumentException("url == null");
+com.alibaba.dubbo.common.URL url = arg0;
+String extName = url.getParameter("cache", "lru");
+if(extName == null) throw new IllegalStateException("Fail to get extension(com.alibaba.dubbo.cache.CacheFactory) name from url(" + url.toString() + ") use keys([cache])");
+com.alibaba.dubbo.cache.CacheFactory extension = (com.alibaba.dubbo.cache.CacheFactory)ExtensionLoader.getExtensionLoader(com.alibaba.dubbo.cache.CacheFactory.class).getExtension(extName);
+return extension.getCache(arg0);
+}
+}, dubbo version: 2.8.4, current host: 127.0.0.1
+1320 DEBUG [2017-12-12 18:40:41]   [DUBBO] package com.alibaba.dubbo.monitor;
+import com.alibaba.dubbo.common.extension.ExtensionLoader;
+public class MonitorFactory$Adpative implements com.alibaba.dubbo.monitor.MonitorFactory {
+public com.alibaba.dubbo.monitor.Monitor getMonitor(com.alibaba.dubbo.common.URL arg0) {
+if (arg0 == null) throw new IllegalArgumentException("url == null");
+com.alibaba.dubbo.common.URL url = arg0;
+String extName = ( url.getProtocol() == null ? "dubbo" : url.getProtocol() );
+if(extName == null) throw new IllegalStateException("Fail to get extension(com.alibaba.dubbo.monitor.MonitorFactory) name from url(" + url.toString() + ") use keys([protocol])");
+com.alibaba.dubbo.monitor.MonitorFactory extension = (com.alibaba.dubbo.monitor.MonitorFactory)ExtensionLoader.getExtensionLoader(com.alibaba.dubbo.monitor.MonitorFactory.class).getExtension(extName);
+return extension.getMonitor(arg0);
+}
+}, dubbo version: 2.8.4, current host: 127.0.0.1
+1330 DEBUG [2017-12-12 18:40:41]   [DUBBO] package com.alibaba.dubbo.validation;
+import com.alibaba.dubbo.common.extension.ExtensionLoader;
+public class Validation$Adpative implements com.alibaba.dubbo.validation.Validation {
+public com.alibaba.dubbo.validation.Validator getValidator(com.alibaba.dubbo.common.URL arg0) {
+if (arg0 == null) throw new IllegalArgumentException("url == null");
+com.alibaba.dubbo.common.URL url = arg0;
+String extName = url.getParameter("validation", "jvalidation");
+if(extName == null) throw new IllegalStateException("Fail to get extension(com.alibaba.dubbo.validation.Validation) name from url(" + url.toString() + ") use keys([validation])");
+com.alibaba.dubbo.validation.Validation extension = (com.alibaba.dubbo.validation.Validation)ExtensionLoader.getExtensionLoader(com.alibaba.dubbo.validation.Validation.class).getExtension(extName);
+return extension.getValidator(arg0);
+}
+}, dubbo version: 2.8.4, current host: 127.0.0.1
+1341 INFO  [2017-12-12 18:40:41]   [DUBBO] Export dubbo service com.honglu.quickcall.activity.facade.business.ActivityDubboBusiness to local registry, dubbo version: 2.8.4, current host: 127.0.0.1
+1341 INFO  [2017-12-12 18:40:41]   [DUBBO] Export dubbo service com.honglu.quickcall.activity.facade.business.ActivityDubboBusiness to url dubbo://192.168.89.206:21351/com.honglu.quickcall.activity.facade.business.ActivityDubboBusiness?anyhost=true&application=calfLoan-activity-client&dubbo=2.8.4&generic=false&group=activityCenter&interface=com.honglu.quickcall.activity.facade.business.ActivityDubboBusiness&methods=excute&organization=xiaoniu&owner=len.song&pid=9132&retries=0&revision=0.0.1&serialization=kryo&side=provider&timeout=60000&timestamp=1513075241007&version=0.0.1, dubbo version: 2.8.4, current host: 127.0.0.1
+1341 INFO  [2017-12-12 18:40:41]   [DUBBO] Register dubbo service com.honglu.quickcall.activity.facade.business.ActivityDubboBusiness url dubbo://192.168.89.206:21351/com.honglu.quickcall.activity.facade.business.ActivityDubboBusiness?anyhost=true&application=calfLoan-activity-client&dubbo=2.8.4&generic=false&group=activityCenter&interface=com.honglu.quickcall.activity.facade.business.ActivityDubboBusiness&methods=excute&organization=xiaoniu&owner=len.song&pid=9132&retries=0&revision=0.0.1&serialization=kryo&side=provider&timeout=60000&timestamp=1513075241007&version=0.0.1 to registry registry://127.0.0.1:2181/com.alibaba.dubbo.registry.RegistryService?application=calfLoan-activity-client&dubbo=2.8.4&organization=xiaoniu&owner=len.song&pid=9132&registry=zookeeper&timestamp=1513075240991, dubbo version: 2.8.4, current host: 127.0.0.1
+1347 DEBUG [2017-12-12 18:40:41]   [DUBBO] package com.alibaba.dubbo.rpc.cluster;
+import com.alibaba.dubbo.common.extension.ExtensionLoader;
+public class Cluster$Adpative implements com.alibaba.dubbo.rpc.cluster.Cluster {
+public com.alibaba.dubbo.rpc.Invoker join(com.alibaba.dubbo.rpc.cluster.Directory arg0) throws com.alibaba.dubbo.rpc.cluster.Directory {
+if (arg0 == null) throw new IllegalArgumentException("com.alibaba.dubbo.rpc.cluster.Directory argument == null");
+if (arg0.getUrl() == null) throw new IllegalArgumentException("com.alibaba.dubbo.rpc.cluster.Directory argument getUrl() == null");com.alibaba.dubbo.common.URL url = arg0.getUrl();
+String extName = url.getParameter("cluster", "failover");
+if(extName == null) throw new IllegalStateException("Fail to get extension(com.alibaba.dubbo.rpc.cluster.Cluster) name from url(" + url.toString() + ") use keys([cluster])");
+com.alibaba.dubbo.rpc.cluster.Cluster extension = (com.alibaba.dubbo.rpc.cluster.Cluster)ExtensionLoader.getExtensionLoader(com.alibaba.dubbo.rpc.cluster.Cluster.class).getExtension(extName);
+return extension.join(arg0);
+}
+}, dubbo version: 2.8.4, current host: 127.0.0.1
+1355 DEBUG [2017-12-12 18:40:41]   [DUBBO] package com.alibaba.dubbo.registry;
+import com.alibaba.dubbo.common.extension.ExtensionLoader;
+public class RegistryFactory$Adpative implements com.alibaba.dubbo.registry.RegistryFactory {
+public com.alibaba.dubbo.registry.Registry getRegistry(com.alibaba.dubbo.common.URL arg0) {
+if (arg0 == null) throw new IllegalArgumentException("url == null");
+com.alibaba.dubbo.common.URL url = arg0;
+String extName = ( url.getProtocol() == null ? "dubbo" : url.getProtocol() );
+if(extName == null) throw new IllegalStateException("Fail to get extension(com.alibaba.dubbo.registry.RegistryFactory) name from url(" + url.toString() + ") use keys([protocol])");
+com.alibaba.dubbo.registry.RegistryFactory extension = (com.alibaba.dubbo.registry.RegistryFactory)ExtensionLoader.getExtensionLoader(com.alibaba.dubbo.registry.RegistryFactory.class).getExtension(extName);
+return extension.getRegistry(arg0);
+}
+}, dubbo version: 2.8.4, current host: 127.0.0.1
+1372 DEBUG [2017-12-12 18:40:41]   [DUBBO] package com.alibaba.dubbo.remoting;
+import com.alibaba.dubbo.common.extension.ExtensionLoader;
+public class Transporter$Adpative implements com.alibaba.dubbo.remoting.Transporter {
+public com.alibaba.dubbo.remoting.Client connect(com.alibaba.dubbo.common.URL arg0, com.alibaba.dubbo.remoting.ChannelHandler arg1) throws com.alibaba.dubbo.common.URL {
+if (arg0 == null) throw new IllegalArgumentException("url == null");
+com.alibaba.dubbo.common.URL url = arg0;
+String extName = url.getParameter("client", url.getParameter("transporter", "netty"));
+if(extName == null) throw new IllegalStateException("Fail to get extension(com.alibaba.dubbo.remoting.Transporter) name from url(" + url.toString() + ") use keys([client, transporter])");
+com.alibaba.dubbo.remoting.Transporter extension = (com.alibaba.dubbo.remoting.Transporter)ExtensionLoader.getExtensionLoader(com.alibaba.dubbo.remoting.Transporter.class).getExtension(extName);
+return extension.connect(arg0, arg1);
+}
+public com.alibaba.dubbo.remoting.Server bind(com.alibaba.dubbo.common.URL arg0, com.alibaba.dubbo.remoting.ChannelHandler arg1) throws com.alibaba.dubbo.common.URL {
+if (arg0 == null) throw new IllegalArgumentException("url == null");
+com.alibaba.dubbo.common.URL url = arg0;
+String extName = url.getParameter("server", url.getParameter("transporter", "netty"));
+if(extName == null) throw new IllegalStateException("Fail to get extension(com.alibaba.dubbo.remoting.Transporter) name from url(" + url.toString() + ") use keys([server, transporter])");
+com.alibaba.dubbo.remoting.Transporter extension = (com.alibaba.dubbo.remoting.Transporter)ExtensionLoader.getExtensionLoader(com.alibaba.dubbo.remoting.Transporter.class).getExtension(extName);
+return extension.bind(arg0, arg1);
+}
+}, dubbo version: 2.8.4, current host: 127.0.0.1
+1397 DEBUG [2017-12-12 18:40:41]   [DUBBO] package com.alibaba.dubbo.remoting;
+import com.alibaba.dubbo.common.extension.ExtensionLoader;
+public class Dispatcher$Adpative implements com.alibaba.dubbo.remoting.Dispatcher {
+public com.alibaba.dubbo.remoting.ChannelHandler dispatch(com.alibaba.dubbo.remoting.ChannelHandler arg0, com.alibaba.dubbo.common.URL arg1) {
+if (arg1 == null) throw new IllegalArgumentException("url == null");
+com.alibaba.dubbo.common.URL url = arg1;
+String extName = url.getParameter("dispatcher", url.getParameter("dispather", url.getParameter("channel.handler", "all")));
+if(extName == null) throw new IllegalStateException("Fail to get extension(com.alibaba.dubbo.remoting.Dispatcher) name from url(" + url.toString() + ") use keys([dispatcher, dispather, channel.handler])");
+com.alibaba.dubbo.remoting.Dispatcher extension = (com.alibaba.dubbo.remoting.Dispatcher)ExtensionLoader.getExtensionLoader(com.alibaba.dubbo.remoting.Dispatcher.class).getExtension(extName);
+return extension.dispatch(arg0, arg1);
+}
+}, dubbo version: 2.8.4, current host: 127.0.0.1
+1406 DEBUG [2017-12-12 18:40:41]   [DUBBO] package com.alibaba.dubbo.common.threadpool;
+import com.alibaba.dubbo.common.extension.ExtensionLoader;
+public class ThreadPool$Adpative implements com.alibaba.dubbo.common.threadpool.ThreadPool {
+public java.util.concurrent.Executor getExecutor(com.alibaba.dubbo.common.URL arg0) {
+if (arg0 == null) throw new IllegalArgumentException("url == null");
+com.alibaba.dubbo.common.URL url = arg0;
+String extName = url.getParameter("threadpool", "fixed");
+if(extName == null) throw new IllegalStateException("Fail to get extension(com.alibaba.dubbo.common.threadpool.ThreadPool) name from url(" + url.toString() + ") use keys([threadpool])");
+com.alibaba.dubbo.common.threadpool.ThreadPool extension = (com.alibaba.dubbo.common.threadpool.ThreadPool)ExtensionLoader.getExtensionLoader(com.alibaba.dubbo.common.threadpool.ThreadPool.class).getExtension(extName);
+return extension.getExecutor(arg0);
+}
+}, dubbo version: 2.8.4, current host: 127.0.0.1
+1430 DEBUG [2017-12-12 18:40:41]   [DUBBO] Using the autodetected NIO constraint level: 0, dubbo version: 2.8.4, current host: 127.0.0.1
+1503 INFO  [2017-12-12 18:40:41]   [DUBBO] Start NettyServer bind /0.0.0.0:21351, export /192.168.89.206:21351, dubbo version: 2.8.4, current host: 127.0.0.1
+1509 DEBUG [2017-12-12 18:40:41]   [DUBBO] package com.alibaba.dubbo.remoting.zookeeper;
+import com.alibaba.dubbo.common.extension.ExtensionLoader;
+public class ZookeeperTransporter$Adpative implements com.alibaba.dubbo.remoting.zookeeper.ZookeeperTransporter {
+public com.alibaba.dubbo.remoting.zookeeper.ZookeeperClient connect(com.alibaba.dubbo.common.URL arg0) {
+if (arg0 == null) throw new IllegalArgumentException("url == null");
+com.alibaba.dubbo.common.URL url = arg0;
+String extName = url.getParameter("client", url.getParameter("transporter", "zkclient"));
+if(extName == null) throw new IllegalStateException("Fail to get extension(com.alibaba.dubbo.remoting.zookeeper.ZookeeperTransporter) name from url(" + url.toString() + ") use keys([client, transporter])");
+com.alibaba.dubbo.remoting.zookeeper.ZookeeperTransporter extension = (com.alibaba.dubbo.remoting.zookeeper.ZookeeperTransporter)ExtensionLoader.getExtensionLoader(com.alibaba.dubbo.remoting.zookeeper.ZookeeperTransporter.class).getExtension(extName);
+return extension.connect(arg0);
+}
+}, dubbo version: 2.8.4, current host: 127.0.0.1
+1519 INFO  [2017-12-12 18:40:41]   [DUBBO] Load registry store file C:\Users\liyingtang\.dubbo\dubbo-registry-127.0.0.1.cache, data: {activityCenter/com.honglu.quickcall.activity.facade.business.ActivityDubboBusiness:0.0.1=empty://192.168.89.206:21351/com.honglu.quickcall.activity.facade.business.ActivityDubboBusiness?anyhost=true&application=calfLoan-activity-client&category=configurators&check=false&dubbo=2.8.4&generic=false&group=activityCenter&interface=com.honglu.quickcall.activity.facade.business.ActivityDubboBusiness&methods=excute&organization=xiaoniu&owner=len.song&pid=30648&retries=0&revision=0.0.1&serialization=kryo&side=provider&timeout=60000&timestamp=1513075029520&version=0.0.1, gjapiJxl/com.xulu.gjapiCenter.ifc.GjapiJxlIfc:0.0.1=empty://192.168.89.206/com.xulu.gjapiCenter.ifc.GjapiJxlIfc?application=calfLoan-usercenter-server&category=configurators&check=false&dubbo=2.8.4&group=gjapiJxl&interface=com.xulu.gjapiCenter.ifc.GjapiJxlIfc&methods=excute&organization=xiaoniu&owner=conly.wang&pid=23148&retries=0&revision=0.0.1&side=consumer&timestamp=1510296457286&version=0.0.1 empty://192.168.89.206/com.xulu.gjapiCenter.ifc.GjapiJxlIfc?application=calfLoan-usercenter-server&category=routers&check=false&dubbo=2.8.4&group=gjapiJxl&interface=com.xulu.gjapiCenter.ifc.GjapiJxlIfc&methods=excute&organization=xiaoniu&owner=conly.wang&pid=23148&retries=0&revision=0.0.1&side=consumer&timestamp=1510296457286&version=0.0.1 empty://192.168.89.206/com.xulu.gjapiCenter.ifc.GjapiJxlIfc?application=calfLoan-usercenter-server&category=providers&check=false&dubbo=2.8.4&group=gjapiJxl&interface=com.xulu.gjapiCenter.ifc.GjapiJxlIfc&methods=excute&organization=xiaoniu&owner=conly.wang&pid=23148&retries=0&revision=0.0.1&side=consumer&timestamp=1510296457286&version=0.0.1, loanCenter/com.xulu.loancenter.ifc.LoanCenterIfc:0.0.1=empty://192.168.89.206/com.xulu.loancenter.ifc.LoanCenterIfc?application=calfLoan-loancenter-web-client&category=configurators&check=false&dubbo=2.8.4&group=loanCenter&interface=com.xulu.loancenter.ifc.LoanCenterIfc&methods=excute&organization=xiaoniu&owner=conly.wang&pid=23608&revision=0.0.1-SNAPSHOT&side=consumer&timestamp=1511791380545&version=0.0.1 empty://192.168.89.206/com.xulu.loancenter.ifc.LoanCenterIfc?application=calfLoan-loancenter-web-client&category=routers&check=false&dubbo=2.8.4&group=loanCenter&interface=com.xulu.loancenter.ifc.LoanCenterIfc&methods=excute&organization=xiaoniu&owner=conly.wang&pid=23608&revision=0.0.1-SNAPSHOT&side=consumer&timestamp=1511791380545&version=0.0.1 dubbo://192.168.89.206:21352/com.xulu.loancenter.ifc.LoanCenterIfc?anyhost=true&application=calfLoan-loancenter-server&dubbo=2.8.4&generic=false&group=loanCenter&interface=com.xulu.loancenter.ifc.LoanCenterIfc&methods=excute&organization=xiaoniu&owner=conly.wang&pid=8388&retries=0&revision=0.0.1&serialization=kryo&side=provider&timeout=60000&timestamp=1511791369009&version=0.0.1, activityCenter/com.xulu.activityCenter.ifc.ActivityCenterIfc:0.0.1=empty://192.168.89.206:21355/com.xulu.activityCenter.ifc.ActivityCenterIfc?anyhost=true&application=calfLoan-activityCenter-server&category=configurators&check=false&dubbo=2.8.4&generic=false&group=activityCenter&interface=com.xulu.activityCenter.ifc.ActivityCenterIfc&methods=excute&organization=xiaoniu&owner=conly.wang&pid=9684&retries=0&revision=0.0.1&serialization=kryo&side=provider&timeout=60000&timestamp=1508997205469&version=0.0.1, communityCenter/com.xulu.communitycenter.ifc.CommunityCenterIfc:0.0.1=empty://192.168.89.206:21353/com.xulu.communitycenter.ifc.CommunityCenterIfc?anyhost=true&application=calfLoan-communitycenter-server&category=configurators&check=false&dubbo=2.8.4&generic=false&group=communityCenter&interface=com.xulu.communitycenter.ifc.CommunityCenterIfc&methods=excute&organization=xiaoniu&owner=conly.wang&pid=28632&retries=0&revision=0.0.1&serialization=kryo&side=provider&timeout=60000&timestamp=1512026262017&version=0.0.1, userCenter/com.xulu.usercenter.ifc.UserCenterIfc:0.0.1=empty://192.168.89.206:21350/com.xulu.usercenter.ifc.UserCenterIfc?anyhost=true&application=calfLoan-usercenter-server&category=configurators&check=false&dubbo=2.8.4&generic=false&group=userCenter&interface=com.xulu.usercenter.ifc.UserCenterIfc&methods=excute&organization=xiaoniu&owner=conly.wang&pid=23148&retries=0&revision=0.0.1&serialization=kryo&side=provider&timeout=210000&timestamp=1510296458398&version=0.0.1, gjapiCenter/com.xulu.gjapiCenter.ifc.GjapiCenterIfc:0.0.1=empty://192.168.89.206:21356/com.xulu.gjapiCenter.ifc.GjapiCenterIfc?anyhost=true&application=calfLoan-gjapiCenter-server&category=configurators&check=false&dubbo=2.8.4&generic=false&group=gjapiCenter&interface=com.xulu.gjapiCenter.ifc.GjapiCenterIfc&methods=excute&organization=xiaoniu&owner=conly.wang&pid=14412&retries=0&revision=0.0.1&serialization=kryo&side=provider&timeout=60000&timestamp=1509086895883&version=0.0.1, userCenter/com.honglu.quickcall.user.facade.business.UserDubboBusiness:0.0.1=empty://192.168.89.206:21353/com.honglu.quickcall.user.facade.business.UserDubboBusiness?anyhost=true&application=calfLoan-user-client&category=configurators&check=false&dubbo=2.8.4&generic=false&group=userCenter&interface=com.honglu.quickcall.user.facade.business.UserDubboBusiness&methods=excute&organization=xiaoniu&owner=len.song&pid=21172&retries=0&revision=0.0.1&serialization=kryo&side=provider&timeout=60000&timestamp=1513074520734&version=0.0.1, gjapiTd/com.xulu.gjapiCenter.ifc.GjapiTdIfc:0.0.1=empty://192.168.89.206/com.xulu.gjapiCenter.ifc.GjapiTdIfc?application=calfLoan-usercenter-server&category=configurators&check=false&dubbo=2.8.4&group=gjapiTd&interface=com.xulu.gjapiCenter.ifc.GjapiTdIfc&methods=excute&organization=xiaoniu&owner=conly.wang&pid=23148&retries=0&revision=0.0.1&side=consumer&timestamp=1510296457950&version=0.0.1 empty://192.168.89.206/com.xulu.gjapiCenter.ifc.GjapiTdIfc?application=calfLoan-usercenter-server&category=routers&check=false&dubbo=2.8.4&group=gjapiTd&interface=com.xulu.gjapiCenter.ifc.GjapiTdIfc&methods=excute&organization=xiaoniu&owner=conly.wang&pid=23148&retries=0&revision=0.0.1&side=consumer&timestamp=1510296457950&version=0.0.1 empty://192.168.89.206/com.xulu.gjapiCenter.ifc.GjapiTdIfc?application=calfLoan-usercenter-server&category=providers&check=false&dubbo=2.8.4&group=gjapiTd&interface=com.xulu.gjapiCenter.ifc.GjapiTdIfc&methods=excute&organization=xiaoniu&owner=conly.wang&pid=23148&retries=0&revision=0.0.1&side=consumer&timestamp=1510296457950&version=0.0.1}, dubbo version: 2.8.4, current host: 127.0.0.1
+1529 DEBUG [2017-12-12 18:40:41]  Creating new ZookKeeper instance to connect to 127.0.0.1:2181.
+1529 INFO  [2017-12-12 18:40:41]  Starting ZkClient event thread.
+1536 INFO  [2017-12-12 18:40:41]  Client environment:zookeeper.version=3.4.8--1, built on 02/06/2016 03:18 GMT
+1536 INFO  [2017-12-12 18:40:41]  Client environment:host.name=liyingtang.xiaoniu.com
+1536 INFO  [2017-12-12 18:40:41]  Client environment:java.version=1.8.0_31
+1536 INFO  [2017-12-12 18:40:41]  Client environment:java.vendor=Oracle Corporation
+1536 INFO  [2017-12-12 18:40:41]  Client environment:java.home=D:\Program Files\Java
+1536 INFO  [2017-12-12 18:40:41]  Client environment:java.class.path=D:\Program Files\Java\lib\resources.jar;D:\Program Files\Java\lib\rt.jar;D:\Program Files\Java\lib\jsse.jar;D:\Program Files\Java\lib\jce.jar;D:\Program Files\Java\lib\charsets.jar;D:\Program Files\Java\lib\jfr.jar;D:\Program Files\Java\lib\ext\access-bridge-64.jar;D:\Program Files\Java\lib\ext\cldrdata.jar;D:\Program Files\Java\lib\ext\dnsns.jar;D:\Program Files\Java\lib\ext\jaccess.jar;D:\Program Files\Java\lib\ext\jfxrt.jar;D:\Program Files\Java\lib\ext\localedata.jar;D:\Program Files\Java\lib\ext\nashorn.jar;D:\Program Files\Java\lib\ext\sunec.jar;D:\Program Files\Java\lib\ext\sunjce_provider.jar;D:\Program Files\Java\lib\ext\sunmscapi.jar;D:\Program Files\Java\lib\ext\sunpkcs11.jar;D:\Program Files\Java\lib\ext\zipfs.jar;D:\quickcall-new\quickcall-activity\quickcall-activity-service\target\classes;D:\quickcall-new\quickcall-activity\quickcall-activity-facade\target\classes;D:\quickcall-new\quickcall-common\quickcall-common-core\target\classes;D:\work\org\springframework\spring-tx\4.3.12.RELEASE\spring-tx-4.3.12.RELEASE.jar;D:\work\commons-beanutils\commons-beanutils\1.9.3\commons-beanutils-1.9.3.jar;D:\work\commons-collections\commons-collections\3.2.2\commons-collections-3.2.2.jar;D:\work\com\fasterxml\jackson\core\jackson-databind\2.9.2\jackson-databind-2.9.2.jar;D:\work\com\fasterxml\jackson\core\jackson-annotations\2.9.0\jackson-annotations-2.9.0.jar;D:\work\com\fasterxml\jackson\core\jackson-core\2.9.2\jackson-core-2.9.2.jar;D:\quickcall-new\quickcall-common\quickcall-common-api\target\classes;D:\work\org\springframework\spring-aop\4.3.12.RELEASE\spring-aop-4.3.12.RELEASE.jar;D:\work\org\springframework\spring-aspects\4.3.12.RELEASE\spring-aspects-4.3.12.RELEASE.jar;D:\work\org\springframework\spring-beans\4.3.12.RELEASE\spring-beans-4.3.12.RELEASE.jar;D:\work\org\springframework\spring-context\4.3.12.RELEASE\spring-context-4.3.12.RELEASE.jar;D:\work\org\springframework\spring-expression\4.3.12.RELEASE\spring-expression-4.3.12.RELEASE.jar;D:\work\org\springframework\spring-context-support\4.3.12.RELEASE\spring-context-support-4.3.12.RELEASE.jar;D:\work\org\springframework\spring-core\4.3.12.RELEASE\spring-core-4.3.12.RELEASE.jar;D:\work\commons-logging\commons-logging\1.2\commons-logging-1.2.jar;D:\work\org\springframework\spring-jdbc\4.3.12.RELEASE\spring-jdbc-4.3.12.RELEASE.jar;D:\work\org\springframework\spring-web\4.3.12.RELEASE\spring-web-4.3.12.RELEASE.jar;D:\work\org\springframework\spring-webmvc\4.3.12.RELEASE\spring-webmvc-4.3.12.RELEASE.jar;D:\work\javax\servlet\servlet-api\2.5\servlet-api-2.5.jar;D:\work\javax\servlet\javax.servlet-api\3.1.0\javax.servlet-api-3.1.0.jar;D:\work\org\aspectj\aspectjweaver\1.6.8\aspectjweaver-1.6.8.jar;D:\work\org\apache\poi\poi\3.9\poi-3.9.jar;D:\work\org\codehaus\plexus\plexus-utils\3.0.22\plexus-utils-3.0.22.jar;D:\work\org\mybatis\mybatis\3.4.1\mybatis-3.4.1.jar;D:\work\org\mybatis\mybatis-spring\1.3.0\mybatis-spring-1.3.0.jar;D:\work\org\eclipse\persistence\javax.persistence\2.1.1\javax.persistence-2.1.1.jar;D:\work\org\slf4j\slf4j-api\1.7.25\slf4j-api-1.7.25.jar;D:\work\org\slf4j\slf4j-log4j12\1.7.25\slf4j-log4j12-1.7.25.jar;D:\work\log4j\log4j\1.2.17\log4j-1.2.17.jar;D:\work\org\lazyluke\log4jdbc-remix\0.2.7\log4jdbc-remix-0.2.7.jar;D:\work\org\dom4j\dom4j\2.1.0\dom4j-2.1.0.jar;D:\work\jaxen\jaxen\1.1.6\jaxen-1.1.6.jar;D:\work\org\apache\httpcomponents\httpclient\4.5.2\httpclient-4.5.2.jar;D:\work\org\apache\httpcomponents\httpcore\4.4.4\httpcore-4.4.4.jar;D:\work\org\json\json\20160810\json-20160810.jar;D:\work\commons-codec\commons-codec\1.10\commons-codec-1.10.jar;D:\work\org\apache\commons\commons-collections4\4.1\commons-collections4-4.1.jar;D:\work\commons-fileupload\commons-fileupload\1.3.1\commons-fileupload-1.3.1.jar;D:\work\commons-io\commons-io\2.2\commons-io-2.2.jar;D:\work\org\apache\commons\commons-lang3\3.3.2\commons-lang3-3.3.2.jar;D:\work\com\alibaba\fastjson\1.2.31\fastjson-1.2.31.jar;D:\work\com\alibaba\druid\1.1.5\druid-1.1.5.jar;D:\work\com\alibaba\dubbo\2.8.4\dubbo-2.8.4.jar;D:\work\org\apache\zookeeper\zookeeper\3.4.8\zookeeper-3.4.8.jar;D:\work\com\github\sgroschupf\zkclient\0.1\zkclient-0.1.jar;D:\work\org\objenesis\objenesis\2.1\objenesis-2.1.jar;D:\work\com\esotericsoftware\minlog\minlog\1.3.0\minlog-1.3.0.jar;D:\work\com\esotericsoftware\reflectasm\1.10.1\reflectasm-1.10.1.jar;D:\work\org\ow2\asm\asm\5.0.3\asm-5.0.3.jar;D:\work\javassist\javassist\3.12.0.GA\javassist-3.12.0.GA.jar;D:\work\org\jboss\netty\netty\3.2.10.Final\netty-3.2.10.Final.jar;D:\work\com\esotericsoftware\kryo\3.0.3\kryo-3.0.3.jar;D:\work\de\javakaffee\kryo-serializers\0.37\kryo-serializers-0.37.jar;D:\work\cglib\cglib\2.2.2\cglib-2.2.2.jar;D:\work\asm\asm\3.3.1\asm-3.3.1.jar;D:\work\aopalliance\aopalliance\1.0\aopalliance-1.0.jar;D:\work\mysql\mysql-connector-java\5.1.38\mysql-connector-java-5.1.38.jar;D:\work\jdom\jdom\1.0\jdom-1.0.jar;D:\work\com\google\code\gson\gson\2.2.4\gson-2.2.4.jar;D:\work\net\sf\json-lib\json-lib\2.4\json-lib-2.4.jar;D:\work\net\sourceforge\jexcelapi\jxl\2.6.12\jxl-2.6.12.jar;D:\work\it\sauronsoftware\cron4j\cron4j\2.2.5\cron4j-2.2.5.jar;D:\work\it\sauronsoftware\jave\jave\1.0.2\jave-1.0.2.jar;D:\work\cn\jpush\api\jpush-client\3.2.10\jpush-client-3.2.10.jar;D:\work\com\tuputech\api\tupuApi\1.0.0\tupuApi-1.0.0.jar;D:\work\com\qiniu\util\qiniu-java-sdk\7.2.8\qiniu-java-sdk-7.2.8.jar;D:\work\com\alipay\api\alipay-sdk-java\20170209153223\alipay-sdk-java-20170209153223.jar;D:\work\jp\sourceforge\qrcode\QRCode\1.0.0\QRCode-1.0.0.jar;D:\work\cn\jiguang\commom\jiguang-common\0.1.4\jiguang-common-0.1.4.jar;D:\work\com\qq\connect\qqSdk4J\1.0.0\qqSdk4J-1.0.0.jar;D:\work\org\springframework\amqp\spring-amqp\1.4.3.RELEASE\spring-amqp-1.4.3.RELEASE.jar;D:\work\org\springframework\amqp\spring-rabbit\1.4.3.RELEASE\spring-rabbit-1.4.3.RELEASE.jar;D:\work\org\springframework\spring-messaging\4.1.3.RELEASE\spring-messaging-4.1.3.RELEASE.jar;D:\work\org\springframework\retry\spring-retry\1.1.2.RELEASE\spring-retry-1.1.2.RELEASE.jar;D:\work\com\rabbitmq\amqp-client\3.5.6\amqp-client-3.5.6.jar;D:\work\redis\clients\jedis\2.2.0\jedis-2.2.0.jar;D:\work\commons-pool\commons-pool\1.6\commons-pool-1.6.jar
+1536 INFO  [2017-12-12 18:40:41]  Client environment:java.library.path=D:\Program Files\Java\bin;C:\WINDOWS\Sun\Java\bin;C:\WINDOWS\system32;C:\WINDOWS;D:/Program Files/Java/bin/server;D:/Program Files/Java/bin;D:/Program Files/Java/lib/amd64;C:\ProgramData\Oracle\Java\javapath;C:\windows\system32;C:\windows;C:\windows\System32\Wbem;C:\windows\System32\WindowsPowerShell\v1.0\;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;D:\Program Files\Java\jdk1.8.0_31\bin;D:\Program Files\Java\jdk1.8.0_31\jre\bin;D:\workPack\apache-tomcat-7.0.57\lib;D:\workPack\apache-tomcat-7.0.57\bin;;D:\workPack\apache-maven-3.3.3\bin;C:\Program Files\TortoiseSVN\bin;%M2_HOME%;% ZOOKEEPER_HOME %/bin; % ZOOKEEPER_HOME %/conf;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\Users\liyingtang\AppData\Local\Microsoft\WindowsApps;;E:\;C:\Users\liyingtang\Desktop;;.
+1536 INFO  [2017-12-12 18:40:41]  Client environment:java.io.tmpdir=C:\Users\LIYING~1\AppData\Local\Temp\
+1536 INFO  [2017-12-12 18:40:41]  Client environment:java.compiler=<NA>
+1536 INFO  [2017-12-12 18:40:41]  Client environment:os.name=Windows 8.1
+1536 INFO  [2017-12-12 18:40:41]  Client environment:os.arch=amd64
+1536 INFO  [2017-12-12 18:40:41]  Client environment:os.version=6.3
+1536 INFO  [2017-12-12 18:40:41]  Client environment:user.name=liyingtang
+1536 INFO  [2017-12-12 18:40:41]  Client environment:user.home=C:\Users\liyingtang
+1536 INFO  [2017-12-12 18:40:41]  Client environment:user.dir=D:\quickcall-new\quickcall-activity\quickcall-activity-service
+1537 INFO  [2017-12-12 18:40:41]  Initiating client connection, connectString=127.0.0.1:2181 sessionTimeout=60000 watcher=org.I0Itec.zkclient.ZkClient@1b7c473a
+1539 DEBUG [2017-12-12 18:40:41]  zookeeper.disableAutoWatchReset is false
+1548 DEBUG [2017-12-12 18:40:41]  Awaiting connection to Zookeeper server
+1548 DEBUG [2017-12-12 18:40:41]  Waiting for keeper state SyncConnected
+1552 INFO  [2017-12-12 18:40:41]  Opening socket connection to server 127.0.0.1/127.0.0.1:2181. Will not attempt to authenticate using SASL (unknown error)
+1552 INFO  [2017-12-12 18:40:41]  Socket connection established to 127.0.0.1/127.0.0.1:2181, initiating session
+1554 DEBUG [2017-12-12 18:40:41]  Session establishment request sent on 127.0.0.1/127.0.0.1:2181
+1581 INFO  [2017-12-12 18:40:41]  Session establishment complete on server 127.0.0.1/127.0.0.1:2181, sessionid = 0x160445cfba1002c, negotiated timeout = 40000
+1583 DEBUG [2017-12-12 18:40:41]  Received event: WatchedEvent state:SyncConnected type:None path:null
+1584 INFO  [2017-12-12 18:40:41]  zookeeper state changed (SyncConnected)
+1584 DEBUG [2017-12-12 18:40:41]  Leaving process event
+1584 DEBUG [2017-12-12 18:40:41]  State is SyncConnected
+1585 INFO  [2017-12-12 18:40:41]   [DUBBO] Register: dubbo://192.168.89.206:21351/com.honglu.quickcall.activity.facade.business.ActivityDubboBusiness?anyhost=true&application=calfLoan-activity-client&dubbo=2.8.4&generic=false&group=activityCenter&interface=com.honglu.quickcall.activity.facade.business.ActivityDubboBusiness&methods=excute&organization=xiaoniu&owner=len.song&pid=9132&retries=0&revision=0.0.1&serialization=kryo&side=provider&timeout=60000&timestamp=1513075241007&version=0.0.1, dubbo version: 2.8.4, current host: 127.0.0.1
+1611 DEBUG [2017-12-12 18:40:41]  Reading reply sessionid:0x160445cfba1002c, packet:: clientPath:null serverPath:null finished:false header:: 1,1  replyHeader:: 1,4294,-110  request:: '/dubbo,,v{s{31,s{'world,'anyone}}},0  response::  
+1637 DEBUG [2017-12-12 18:40:41]  Reading reply sessionid:0x160445cfba1002c, packet:: clientPath:null serverPath:null finished:false header:: 2,1  replyHeader:: 2,4295,-110  request:: '/dubbo/com.honglu.quickcall.activity.facade.business.ActivityDubboBusiness,,v{s{31,s{'world,'anyone}}},0  response::  
+1659 DEBUG [2017-12-12 18:40:41]  Reading reply sessionid:0x160445cfba1002c, packet:: clientPath:null serverPath:null finished:false header:: 3,1  replyHeader:: 3,4296,-110  request:: '/dubbo/com.honglu.quickcall.activity.facade.business.ActivityDubboBusiness/providers,,v{s{31,s{'world,'anyone}}},0  response::  
+1680 DEBUG [2017-12-12 18:40:41]  Reading reply sessionid:0x160445cfba1002c, packet:: clientPath:null serverPath:null finished:false header:: 4,1  replyHeader:: 4,4297,0  request:: '/dubbo/com.honglu.quickcall.activity.facade.business.ActivityDubboBusiness/providers/dubbo%253A%252F%252F192.168.89.206%253A21351%252Fcom.honglu.quickcall.activity.facade.business.ActivityDubboBusiness%253Fanyhost%253Dtrue%2526application%253DcalfLoan-activity-client%2526dubbo%253D2.8.4%2526generic%253Dfalse%2526group%253DactivityCenter%2526interface%253Dcom.honglu.quickcall.activity.facade.business.ActivityDubboBusiness%2526methods%253Dexcute%2526organization%253Dxiaoniu%2526owner%253Dlen.song%2526pid%253D9132%2526retries%253D0%2526revision%253D0.0.1%2526serialization%253Dkryo%2526side%253Dprovider%2526timeout%253D60000%2526timestamp%253D1513075241007%2526version%253D0.0.1,,v{s{31,s{'world,'anyone}}},1  response:: '/dubbo/com.honglu.quickcall.activity.facade.business.ActivityDubboBusiness/providers/dubbo%253A%252F%252F192.168.89.206%253A21351%252Fcom.honglu.quickcall.activity.facade.business.ActivityDubboBusiness%253Fanyhost%253Dtrue%2526application%253DcalfLoan-activity-client%2526dubbo%253D2.8.4%2526generic%253Dfalse%2526group%253DactivityCenter%2526interface%253Dcom.honglu.quickcall.activity.facade.business.ActivityDubboBusiness%2526methods%253Dexcute%2526organization%253Dxiaoniu%2526owner%253Dlen.song%2526pid%253D9132%2526retries%253D0%2526revision%253D0.0.1%2526serialization%253Dkryo%2526side%253Dprovider%2526timeout%253D60000%2526timestamp%253D1513075241007%2526version%253D0.0.1 
+1681 INFO  [2017-12-12 18:40:41]   [DUBBO] Subscribe: provider://192.168.89.206:21351/com.honglu.quickcall.activity.facade.business.ActivityDubboBusiness?anyhost=true&application=calfLoan-activity-client&category=configurators&check=false&dubbo=2.8.4&generic=false&group=activityCenter&interface=com.honglu.quickcall.activity.facade.business.ActivityDubboBusiness&methods=excute&organization=xiaoniu&owner=len.song&pid=9132&retries=0&revision=0.0.1&serialization=kryo&side=provider&timeout=60000&timestamp=1513075241007&version=0.0.1, dubbo version: 2.8.4, current host: 127.0.0.1
+1702 DEBUG [2017-12-12 18:40:41]  Reading reply sessionid:0x160445cfba1002c, packet:: clientPath:null serverPath:null finished:false header:: 5,1  replyHeader:: 5,4298,-110  request:: '/dubbo,,v{s{31,s{'world,'anyone}}},0  response::  
+1721 DEBUG [2017-12-12 18:40:41]  Reading reply sessionid:0x160445cfba1002c, packet:: clientPath:null serverPath:null finished:false header:: 6,1  replyHeader:: 6,4299,-110  request:: '/dubbo/com.honglu.quickcall.activity.facade.business.ActivityDubboBusiness,,v{s{31,s{'world,'anyone}}},0  response::  
+1743 DEBUG [2017-12-12 18:40:41]  Reading reply sessionid:0x160445cfba1002c, packet:: clientPath:null serverPath:null finished:false header:: 7,1  replyHeader:: 7,4300,-110  request:: '/dubbo/com.honglu.quickcall.activity.facade.business.ActivityDubboBusiness/configurators,,v{s{31,s{'world,'anyone}}},0  response::  
+1747 DEBUG [2017-12-12 18:40:41]  Reading reply sessionid:0x160445cfba1002c, packet:: clientPath:null serverPath:null finished:false header:: 8,3  replyHeader:: 8,4300,0  request:: '/dubbo/com.honglu.quickcall.activity.facade.business.ActivityDubboBusiness/configurators,T  response:: s{4211,4211,1513073401082,1513073401082,0,0,0,0,0,0,4211} 
+1750 DEBUG [2017-12-12 18:40:41]  Reading reply sessionid:0x160445cfba1002c, packet:: clientPath:null serverPath:null finished:false header:: 9,8  replyHeader:: 9,4300,0  request:: '/dubbo/com.honglu.quickcall.activity.facade.business.ActivityDubboBusiness/configurators,T  response:: v{} 
+1750 INFO  [2017-12-12 18:40:41]   [DUBBO] Notify urls for subscribe url provider://192.168.89.206:21351/com.honglu.quickcall.activity.facade.business.ActivityDubboBusiness?anyhost=true&application=calfLoan-activity-client&category=configurators&check=false&dubbo=2.8.4&generic=false&group=activityCenter&interface=com.honglu.quickcall.activity.facade.business.ActivityDubboBusiness&methods=excute&organization=xiaoniu&owner=len.song&pid=9132&retries=0&revision=0.0.1&serialization=kryo&side=provider&timeout=60000&timestamp=1513075241007&version=0.0.1, urls: [empty://192.168.89.206:21351/com.honglu.quickcall.activity.facade.business.ActivityDubboBusiness?anyhost=true&application=calfLoan-activity-client&category=configurators&check=false&dubbo=2.8.4&generic=false&group=activityCenter&interface=com.honglu.quickcall.activity.facade.business.ActivityDubboBusiness&methods=excute&organization=xiaoniu&owner=len.song&pid=9132&retries=0&revision=0.0.1&serialization=kryo&side=provider&timeout=60000&timestamp=1513075241007&version=0.0.1], dubbo version: 2.8.4, current host: 127.0.0.1
+1754 DEBUG [2017-12-12 18:40:41]   [DUBBO] package com.alibaba.dubbo.rpc.cluster;
+import com.alibaba.dubbo.common.extension.ExtensionLoader;
+public class RouterFactory$Adpative implements com.alibaba.dubbo.rpc.cluster.RouterFactory {
+public com.alibaba.dubbo.rpc.cluster.Router getRouter(com.alibaba.dubbo.common.URL arg0) {
+if (arg0 == null) throw new IllegalArgumentException("url == null");
+com.alibaba.dubbo.common.URL url = arg0;
+String extName = url.getProtocol();
+if(extName == null) throw new IllegalStateException("Fail to get extension(com.alibaba.dubbo.rpc.cluster.RouterFactory) name from url(" + url.toString() + ") use keys([protocol])");
+com.alibaba.dubbo.rpc.cluster.RouterFactory extension = (com.alibaba.dubbo.rpc.cluster.RouterFactory)ExtensionLoader.getExtensionLoader(com.alibaba.dubbo.rpc.cluster.RouterFactory.class).getExtension(extName);
+return extension.getRouter(arg0);
+}
+}, dubbo version: 2.8.4, current host: 127.0.0.1
+1762 DEBUG [2017-12-12 18:40:41]   [DUBBO] package com.alibaba.dubbo.rpc.cluster;
+import com.alibaba.dubbo.common.extension.ExtensionLoader;
+public class ConfiguratorFactory$Adpative implements com.alibaba.dubbo.rpc.cluster.ConfiguratorFactory {
+public com.alibaba.dubbo.rpc.cluster.Configurator getConfigurator(com.alibaba.dubbo.common.URL arg0) {
+if (arg0 == null) throw new IllegalArgumentException("url == null");
+com.alibaba.dubbo.common.URL url = arg0;
+String extName = url.getProtocol();
+if(extName == null) throw new IllegalStateException("Fail to get extension(com.alibaba.dubbo.rpc.cluster.ConfiguratorFactory) name from url(" + url.toString() + ") use keys([protocol])");
+com.alibaba.dubbo.rpc.cluster.ConfiguratorFactory extension = (com.alibaba.dubbo.rpc.cluster.ConfiguratorFactory)ExtensionLoader.getExtensionLoader(com.alibaba.dubbo.rpc.cluster.ConfiguratorFactory.class).getExtension(extName);
+return extension.getConfigurator(arg0);
+}
+}, dubbo version: 2.8.4, current host: 127.0.0.1
+1772 DEBUG [2017-12-12 18:40:41]  Could not find key 'spring.liveBeansView.mbeanDomain' in any property source
+1773 DEBUG [2017-12-12 18:40:41]  Returning cached instance of singleton bean 'lifecycleProcessor'
+1774 DEBUG [2017-12-12 18:40:41]  Returning cached instance of singleton bean 'sqlSessionFactory'
+1774 DEBUG [2017-12-12 18:40:41]  Returning cached instance of singleton bean 'com.honglu.quickcall.activity.facade.business.ActivityDubboBusiness'
+1774 INFO  [2017-12-12 18:40:41]  ----------本地启动服务：结束加载----------
+15084 DEBUG [2017-12-12 18:40:54]  Got ping response for sessionid: 0x160445cfba1002c after 0ms
+21364 DEBUG [2017-12-12 18:41:01]   [DUBBO] Decode decodeable message com.alibaba.dubbo.rpc.protocol.dubbo.DecodeableRpcInvocation, dubbo version: 2.8.4, current host: 127.0.0.1
+21371 DEBUG [2017-12-12 18:41:01]  Creating a new SqlSession
+21381 DEBUG [2017-12-12 18:41:01]  SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@63e7be2c] was not registered for synchronization because synchronization is not active
+21383 WARN  [2017-12-12 18:41:01]  设置方法[Present.all] use [READ] Strategy, SqlCommandType [SELECT]..
+21393 DEBUG [2017-12-12 18:41:01]  Fetching JDBC Connection from DataSource
+22020 INFO  [2017-12-12 18:41:01]  {dataSource-1} inited
+22024 DEBUG [2017-12-12 18:41:01]  JDBC Connection [com.mysql.jdbc.JDBC4Connection@31d04ac7] will not be managed by Spring
+22028 DEBUG [2017-12-12 18:41:01]  ==>  Preparing: SELECT * FROM PRESENT P WHERE P.STATE = 1 ORDER BY PRICE ASC 
+22046 DEBUG [2017-12-12 18:41:01]  ==> Parameters: 
+22066 DEBUG [2017-12-12 18:41:01]  <==      Total: 15
+22067 DEBUG [2017-12-12 18:41:01]  Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@63e7be2c]
+22067 DEBUG [2017-12-12 18:41:01]  Returning JDBC Connection to DataSource
+28416 DEBUG [2017-12-12 18:41:08]  Got ping response for sessionid: 0x160445cfba1002c after 0ms
+41750 DEBUG [2017-12-12 18:41:21]  Got ping response for sessionid: 0x160445cfba1002c after 0ms
+55083 DEBUG [2017-12-12 18:41:34]  Got ping response for sessionid: 0x160445cfba1002c after 0ms
+61778 INFO  [2017-12-12 18:41:41]  ============================= ActivityCenter is alive ! =======================================
+68417 DEBUG [2017-12-12 18:41:48]  Got ping response for sessionid: 0x160445cfba1002c after 0ms
+81750 DEBUG [2017-12-12 18:42:01]  Got ping response for sessionid: 0x160445cfba1002c after 0ms
+95083 DEBUG [2017-12-12 18:42:14]  Got ping response for sessionid: 0x160445cfba1002c after 0ms
+108417 DEBUG [2017-12-12 18:42:28]  Got ping response for sessionid: 0x160445cfba1002c after 0ms
+121509 DEBUG [2017-12-12 18:42:41]   [DUBBO] Receive heartbeat response in thread New I/O server worker #1-1, dubbo version: 2.8.4, current host: 127.0.0.1
+121509 DEBUG [2017-12-12 18:42:41]   [DUBBO] Send heartbeat to remote channel /192.168.89.206:53905, cause: The channel has no data-transmission exceeds a heartbeat period: 60000ms, dubbo version: 2.8.4, current host: 127.0.0.1
+121750 DEBUG [2017-12-12 18:42:41]  Got ping response for sessionid: 0x160445cfba1002c after 0ms
+121778 INFO  [2017-12-12 18:42:41]  ============================= ActivityCenter is alive ! =======================================
+135083 DEBUG [2017-12-12 18:42:54]  Got ping response for sessionid: 0x160445cfba1002c after 0ms

@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="BussProductLog">
+
+	<resultMap type="BussProductLog" id="bussProductLogMap">
+		<id property="id" column="id" javaType="java.lang.String"></id>
+		<result property="prodName" column="prod_name" javaType="java.lang.String"></result>
+		<result property="productId" column="product_id" javaType="java.lang.String"></result>
+		<result property="content" column="content" javaType="java.lang.String"></result>
+		<result property="newContent" column="new_content" javaType="java.lang.String"></result>
+		<result property="oldContent" column="old_content" javaType="java.lang.String"></result>
+		<result property="createMan" column="create_man" javaType="java.lang.String"></result>
+		<result property="modifyMan" column="modify_man" javaType="java.lang.String"></result>
+		<result property="createTime" column="create_time" javaType="java.lang.String"></result>
+		<result property="modifyTime" column="modify_time" javaType="java.lang.String"></result>
+	</resultMap>
+
+	<!-- 通用查询结果列-->
+	<sql id="Base_Column_List">
+id,	product_id,prod_name,	content,	new_content,	old_content,	create_man,	modify_man,	create_time,	modify_time
+	</sql>
+
+	<!-- 查询（根据主键ID查询） -->
+	<select id="getEntityById" resultMap="bussProductLogMap" parameterType="java.lang.String">
+		 SELECT
+		 <include refid="Base_Column_List" />
+		 FROM buss_product_log
+		 WHERE id = #{id}
+	</select>
+
+	<!-- 查询（根据主键ID查询） -->
+	<select id="findAll" resultMap="bussProductLogMap" parameterType="java.lang.String">
+		 SELECT
+		 <include refid="Base_Column_List" />
+		 FROM buss_product_log
+		 WHERE id = #{id}
+	</select>
+
+	<!--删除：根据主键ID删除-->
+	<delete id="deleteEntity" parameterType="java.lang.String">
+		 DELETE FROM buss_product_log
+		 WHERE id = #{id}
+	</delete>
+
+	<!-- 添加 -->
+	<insert id="insert" parameterType="com.calf.module.bussiness.entity.BussProductLog">
+		 INSERT INTO buss_product_log
+ 		(id,product_id,prod_name,content,new_content,old_content,create_man,modify_man,create_time,modify_time) 
+		 VALUES 
+ 		(#{id},#{productId},#{prodName},#{content},#{newContent},#{oldContent},#{createMan},#{modifyMan},#{createTime},#{modifyTime}) 
+	</insert>
+
+	<!-- 修 改-->
+	<update id="updateEntity" parameterType="com.calf.module.bussiness.entity.BussProductLog">
+		 UPDATE buss_product_log
+ 		 <set> 
+			<if test="productId != null">
+				 product_id = #{productId},
+			</if>
+			<if test="prodName != null">
+				 prod_name = #{prodName},
+			</if>
+			<if test="content != null">
+				 content = #{content},
+			</if>
+			<if test="newContent != null">
+				 new_content = #{newContent},
+			</if>
+			<if test="oldContent != null">
+				 old_content = #{oldContent},
+			</if>
+			<if test="createMan != null">
+				 create_man = #{createMan},
+			</if>
+			<if test="modifyMan != null">
+				 modify_man = #{modifyMan},
+			</if>
+			<if test="createTime != null">
+				 create_time = #{createTime},
+			</if>
+			<if test="modifyTime != null">
+				 modify_time = #{modifyTime},
+			</if>
+
+ 		 </set>
+		 WHERE id = #{id}
+	</update>
+	
+	
+	
+	
+	
+	
+	
+	<select id="query" parameterType="Map" resultMap="bussProductLogMap">
+	select log.*,bp.company_name as  companyName  from buss_product_log   log   left  join  buss_product  bp   on   log.product_id =  bp.product_id 
+	where 1=1
+	<if test="productName!=null and productName!=''">
+		and  LOCATE(#{productName},log.prod_name) <![CDATA[ > ]]> 0
+	</if>
+	<if test="createMan!=null and createMan!=''">
+		and log.create_man=#{createMan}
+	</if>
+	<if test="createTime!=null and createTime!=''">
+		and date(log.create_time) =#{createTime}
+	</if>
+	<if test="scontent!=null and scontent!=''">
+		and LOCATE(#{scontent},log.content) <![CDATA[ > ]]> 0
+	</if>
+	 <if test="exportflag==null">
+	      ORDER BY log.create_time DESC
+	      LIMIT  #{iDisplayStart},#{iDisplayLength}
+	</if>
+	</select>
+	
+	<select id="queryCount" parameterType="Map" resultType="int">
+	select count(id) from buss_product_log where 1=1
+	<if test="productName!=null and productName!=''">
+	and  LOCATE(#{productName},prod_name) <![CDATA[ > ]]> 0
+	</if>
+	<if test="createMan!=null and createMan!=''">
+	and create_man=#{createMan}
+	</if>
+	<if test="createTime!=null and createTime!=''">
+	and date(create_time) =#{createTime}
+	</if>
+	<if test="content!=null and content!=''">
+	and LOCATE(#{content},content) <![CDATA[ > ]]> 0
+	</if>
+	
+	</select>
+	
+	
+	
+	
+	
+
+</mapper>

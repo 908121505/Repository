@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="AccountBasic">
+
+
+	<resultMap id="resultBasicMap" type="com.calf.module.loan.entity.AccountBasic">
+		<id property="accountId" column="account_id" />
+		<id property="accountName" column="account_name" />
+		<id property="phoneNum" column="phone_num" />
+		<id property="idCode" column="id_code" />
+		<id property="registerTime" column="modify_time" />
+		<id property="gender" column="gender" />
+
+
+	</resultMap>
+	<select id="get" parameterType="map" resultMap="resultBasicMap">
+		SELECT
+		a.detail_info_id,
+		a.account_id,
+		b.phone_num,
+		a.account_label,
+		a.id_code,
+		a.account_name,
+		a.school_name,
+		a.inschool_time,
+		a.education,
+		a.is_credit,
+		a.company_name,
+		a.work_prov_name,
+		a.work_city_name,
+		a.work_city_area_name,
+		a.work_address,
+		a.live_address,
+		a.work_age,
+		a.work_income,
+		a.work_income_prove,
+		a.is_host_gjj AS qizhaNum,
+		a.is_host_sb AS IsNotLink,
+		a.is_host_house AS riskCode,
+		a.is_host_car AS zhimaNum,
+		a.loan_quota AS zhimaPfen,
+		a.loan_time_limit,
+		a.create_time,
+		a.update_time,
+		a.state,
+		a.remark1,
+		a.remark2,
+		a.remark3,
+		a.income_situation,
+		a.email,
+		a.if_marriage,
+		a.font_pic,
+		a.back_pic,
+		a.face_pic,
+		a.face_token,
+		a.is_host_gjj AS accountMZhu,
+		a.is_host_sb AS accountAdress,
+		a.is_host_sb AS accountPingFen,
+		a.is_host_sb AS accountZhengJIE
+		FROM
+		account_detail_info a
+		LEFT JOIN account b ON a.account_id = b.account_id where
+		a.account_id=#{arg0} and a.remark2='2'
+	</select>
+	<select id="queryCount" parameterType="map" resultType="int">
+		select count(a.account_id)
+		FROM
+		account a
+		INNER JOIN account_detail_info ad ON a.account_id = ad.account_id where 1=1 
+	</select>
+
+
+	<select id="query" parameterType="map" resultMap="resultBasicMap">
+		SELECT
+		a.account_id AS accountId,
+		ad.account_name AS accountName,
+		ad.id_code AS idCode,
+		a.phone_num AS phoneNum,
+		   DATE_FORMAT(
+            a.create_time,
+            '%Y-%c-%d %H:%i:%s'
+          ) as registerTime,
+		ad.gender AS gender
+		FROM
+		account a
+		INNER JOIN account_detail_info ad ON a.account_id = ad.account_id   where 1=1 
+		<if test="null != accountId and accountId != ''"> and a.account_id = #{accountId} </if>
+		<if test="null != accountName and accountName != ''"> and ad.account_name = #{accountName} </if>
+		<if test="null != phoneNum and phoneNum != ''"> and a.phone_num = #{phoneNum} </if>
+		<if test="null != idCode and idCode != ''"> and ad.id_code = #{idCode} </if>
+		order by a.create_time desc
+		limit ${iDisplayStart},${iDisplayLength}
+	</select>
+	<select id="getAccountId" parameterType="map" resultMap="resultBasicMap">
+
+		select
+		detail_info_id, account_id, account_label, id_code, account_name,
+		school_name,
+		inschool_time,
+		education, is_credit, company_name,
+		work_prov_name, work_city_name,
+		work_city_area_name,
+		work_address,
+		live_address, work_age, work_income, work_income_prove, is_host_gjj
+		as
+		qizhaNum,is_host_sb as IsNotLink,is_host_house as riskCode,
+		is_host_car as zhimaNum,
+		loan_quota as zhimaPfen, loan_time_limit,
+		create_time,
+		update_time, state, remark1, remark2, remark3,
+		income_situation, email,
+		if_marriage,
+		font_pic, back_pic, face_pic,
+		face_token,
+		is_host_gjj AS accountMZhu,
+		is_host_sb AS accountAdress,
+		is_host_sb AS accountPingFen,
+		is_host_sb AS accountZhengJIE
+		from
+		account_detail_info where account_id =
+		#{arg0} and remark2='2'
+	</select>
+</mapper>

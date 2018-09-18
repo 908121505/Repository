@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="BussProductSettle">
+
+    <resultMap type="BussProductSettle" id="bussProductSettleMap">
+        <id property="id" column="id" javaType="java.lang.String"></id>
+        <result property="prodId" column="prod_id" javaType="java.lang.String"></result>
+        <result property="companyId" column="company_id" javaType="java.lang.String"></result>
+        <result property="payDate" column="pay_date" javaType="java.lang.String"></result>
+        <result property="payAmount" column="pay_amount" javaType="java.lang.String"></result>
+        <result property="payer" column="payer" javaType="java.lang.String"></result>
+        <result property="createMan" column="create_man" javaType="java.lang.String"></result>
+        <result property="modifyMan" column="modify_man" javaType="java.lang.String"></result>
+        <result property="createTime" column="create_time" javaType="java.lang.String"></result>
+        <result property="modifyTime" column="modify_time" javaType="java.lang.String"></result>
+
+    </resultMap>
+
+    <!-- 通用查询结果列-->
+    <sql id="Base_Column_List">
+id,	prod_id,	company_id,	pay_date,	pay_amount,	payer,	create_man,	modify_man,	create_time,	modify_time
+	</sql>
+
+    <!-- 查询（根据主键ID查询） -->
+    <select id="getEntityById" resultMap="bussProductSettleMap" parameterType="java.lang.String">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM buss_product_settle
+        WHERE id = #{arg0}
+    </select>
+
+    <!-- 查询（根据主键ID查询） -->
+    <select id="findAll" resultMap="bussProductSettleMap" parameterType="java.lang.String">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM buss_product_settle
+        WHERE id = #{id}
+    </select>
+
+    <!--删除：根据主键ID删除-->
+    <delete id="delete" parameterType="java.lang.String">
+		 DELETE FROM buss_product_settle
+		 WHERE id = #{arg0}
+	</delete>
+
+    <!-- 添加 -->
+    <insert id="insert" parameterType="com.calf.module.bussiness.entity.BussProductSettle">
+		 INSERT INTO buss_product_settle
+ 		(id,prod_id,company_id,pay_date,pay_amount,payer,create_man,modify_man,create_time,modify_time)
+		 VALUES 
+ 		(#{id},#{prodId},#{companyId},#{payDate},#{payAmount},#{payer},#{createMan},#{modifyMan},#{createTime},#{modifyTime})
+	</insert>
+
+    <!-- 修 改-->
+    <update id="update" parameterType="com.calf.module.bussiness.entity.BussProductSettle">
+        UPDATE buss_product_settle
+        <set>
+            <if test="prodId != null">
+                prod_id = #{prodId},
+            </if>
+            <if test="payDate != null">
+                pay_date = #{payDate},
+            </if>
+            <if test="payAmount != null">
+                pay_amount = #{payAmount},
+            </if>
+            <if test="payer != null">
+                payer = #{payer},
+            </if>
+            <if test="createMan != null">
+                create_man = #{createMan},
+            </if>
+            <if test="modifyMan != null">
+                modify_man = #{modifyMan},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime},
+            </if>
+            <if test="modifyTime != null">
+                modify_time = #{modifyTime},
+            </if>
+
+        </set>
+        WHERE id = #{id}
+    </update>
+    <!-- 根据公司ID查询对应打款信息 -->
+    <select id="query" resultMap="bussProductSettleMap" parameterType="java.lang.String">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM buss_product_settle
+        WHERE company_id = #{companyId}
+        ORDER BY pay_date
+        ASC
+
+    </select>
+
+    <!--获取最后一次打款日期-->
+    <select id="getLastSettleById" parameterType="map" resultType="string">
+		SELECT
+		pay_date
+		FROM buss_product_settle
+		WHERE company_id = #{arg0}
+		ORDER BY
+		pay_date DESC
+		limit 1
+	</select>
+
+    <select id="getAllPayAmount" parameterType="map" resultType="string">
+		SELECT
+		sum(t.pay_amount)
+		FROM buss_product_settle t
+		WHERE t.company_id = #{arg0}
+	</select>
+    <!-- 查询（根据公司ID查询） -->
+    <select id="querySettleByCompanyId" resultMap="bussProductSettleMap" parameterType="java.util.Map">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM buss_product_settle
+        WHERE company_id = #{companyId}
+    </select>
+</mapper>

@@ -1,0 +1,832 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.honglu.quickcall.task.dao.PersionMapper">
+  <resultMap id="BaseResultMap" type="com.honglu.quickcall.task.entity.Persion">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="tel" jdbcType="VARCHAR" property="tel" />
+    <result column="pwd" jdbcType="VARCHAR" property="pwd" />
+    <result column="nick_name" jdbcType="VARCHAR" property="nickName" />
+    <result column="sex" jdbcType="INTEGER" property="sex" />
+    <result column="birthday" jdbcType="DATE" property="birthday" />
+    <result column="level" jdbcType="INTEGER" property="level" />
+    <result column="token" jdbcType="DECIMAL" property="token" />
+    <result column="area" jdbcType="VARCHAR" property="area" />
+    <result column="rate" jdbcType="DECIMAL" property="rate" />
+    <result column="photo" jdbcType="VARCHAR" property="photo" />
+    <result column="photo_ident" jdbcType="VARCHAR" property="photoIdent" />
+    <result column="voice_ident" jdbcType="VARCHAR" property="voiceIdent" />
+    <result column="video" jdbcType="VARCHAR" property="video" />
+    <result column="play_ident" jdbcType="INTEGER" property="playIdent" />
+    <result column="sup_ability" jdbcType="VARCHAR" property="supAbility" />
+    <result column="sign" jdbcType="VARCHAR" property="sign" />
+    <result column="love" jdbcType="INTEGER" property="love" />
+    <result column="use_state" jdbcType="INTEGER" property="useState" />
+    <result column="voice_state" jdbcType="INTEGER" property="voiceState" />
+    <result column="video_state" jdbcType="INTEGER" property="videoState" />
+    <result column="freeze_time" jdbcType="TIMESTAMP" property="freezeTime" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="login_time" jdbcType="TIMESTAMP" property="loginTime" />
+    <result column="third_login" jdbcType="VARCHAR" property="thirdLogin" />
+    <result column="voice_money" jdbcType="INTEGER" property="voiceMoney" />
+    <result column="video_money" jdbcType="INTEGER" property="videoMoney" />
+    <result column="sms_state" jdbcType="INTEGER" property="smsState" />
+    <result column="s_position_x" jdbcType="DOUBLE" property="sPositionX" />
+    <result column="s_position_y" jdbcType="DOUBLE" property="sPositionY" />
+    <result column="capitalBalance" jdbcType="DECIMAL" property="capitalbalance" />
+    <result column="sms_money" jdbcType="INTEGER" property="smsMoney" />
+    <result column="voice_time_length" jdbcType="INTEGER" property="voiceTimeLength" />
+    <result column="ident_pass_datetime" jdbcType="TIMESTAMP" property="identPassDatetime" />
+    <result column="invite_money" jdbcType="DECIMAL" property="inviteMoney" />
+    <result column="rongyuntoken" jdbcType="VARCHAR" property="rongyuntoken" />
+    <result column="version" jdbcType="INTEGER" property="version" />
+    <result column="otherkey" jdbcType="INTEGER" property="otherkey" />
+    <result column="level_version" jdbcType="INTEGER" property="levelVersion" />
+    <result column="identagain" jdbcType="INTEGER" property="identagain" />
+    <result column="thumbnails" jdbcType="VARCHAR" property="thumbnails" />
+    <result column="yet_video" jdbcType="INTEGER" property="yetVideo" />
+    <result column="yet_photo" jdbcType="INTEGER" property="yetPhoto" />
+    <result column="flag" jdbcType="INTEGER" property="flag" />
+    <result column="imstate" jdbcType="INTEGER" property="imstate" />
+    <result column="index_desc" jdbcType="INTEGER" property="indexDesc" />
+    <result column="index_time" jdbcType="TIMESTAMP" property="indexTime" />
+    <result column="online_date" jdbcType="TIMESTAMP" property="onlineDate" />
+    <result column="is_vip" jdbcType="INTEGER" property="isVip" />
+    <result column="opend_id" jdbcType="VARCHAR" property="openId" />
+    <result column="is_nicemeet" jdbcType="INTEGER" property="isNicemeet" />
+    <result column="voice" jdbcType="VARCHAR" property="voice" />
+    <result column="invite_code" jdbcType="VARCHAR" property="inviteCode" />
+    <result column="is_essence" jdbcType="INTEGER" property="isEssence" />
+    <result column="company_id" jdbcType="INTEGER" property="companyId" />
+    <result column="pair_push_url" jdbcType="VARCHAR" property="pairPushUrl" />
+    <result column="pair_live_url" jdbcType="VARCHAR" property="pairLiveUrl" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.honglu.quickcall.task.entity.Persion">
+    <result column="album" jdbcType="LONGVARCHAR" property="album" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, tel, pwd, nick_name, sex, birthday, level, token, area, rate, photo, photo_ident, 
+    voice_ident, video, play_ident, sup_ability, sign, love, use_state, voice_state, 
+    video_state, freeze_time, create_date, login_time, third_login, voice_money, video_money, 
+    sms_state, s_position_x, s_position_y, capitalBalance, sms_money, voice_time_length, 
+    ident_pass_datetime, invite_money, rongyuntoken, version, otherkey, level_version, 
+    identagain, thumbnails, yet_video, yet_photo, flag, imstate, index_desc, index_time, 
+    online_date, is_vip, opend_id, is_nicemeet, voice, invite_code, is_essence, 
+    company_id, pair_push_url, pair_live_url
+  </sql>
+  <sql id="Blob_Column_List">
+    album
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from persion
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  
+    <select id="selectAll" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from persion
+    where 1=1
+    order by id
+    limit #{pageIndex,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from persion
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.honglu.quickcall.task.entity.Persion">
+    insert into persion (id, tel, pwd, 
+      nick_name, sex, birthday, 
+      level, token, area, 
+      rate, photo, photo_ident, 
+      voice_ident, video, play_ident, 
+      sup_ability, sign, love, 
+      use_state, voice_state, video_state, 
+      freeze_time, create_date, login_time, 
+      third_login, voice_money, video_money, 
+      sms_state, s_position_x, s_position_y, 
+      capitalBalance, sms_money, voice_time_length, 
+      ident_pass_datetime, invite_money, rongyuntoken, 
+      version, otherkey, level_version, 
+      identagain, thumbnails, yet_video, 
+      yet_photo, flag, imstate, 
+      index_desc, index_time, online_date, 
+      is_vip, opend_id, is_nicemeet, 
+      voice, invite_code, is_essence, 
+       company_id, pair_push_url, 
+      pair_live_url, album)
+    values (#{id,jdbcType=INTEGER}, #{tel,jdbcType=VARCHAR}, #{pwd,jdbcType=VARCHAR}, 
+      #{nickName,jdbcType=VARCHAR}, #{sex,jdbcType=INTEGER}, #{birthday,jdbcType=DATE}, 
+      #{level,jdbcType=INTEGER}, #{token,jdbcType=DECIMAL}, #{area,jdbcType=VARCHAR}, 
+      #{rate,jdbcType=DECIMAL}, #{photo,jdbcType=VARCHAR}, #{photoIdent,jdbcType=VARCHAR}, 
+      #{voiceIdent,jdbcType=VARCHAR}, #{video,jdbcType=VARCHAR}, #{playIdent,jdbcType=INTEGER}, 
+      #{supAbility,jdbcType=VARCHAR}, #{sign,jdbcType=VARCHAR}, #{love,jdbcType=INTEGER}, 
+      #{useState,jdbcType=INTEGER}, #{voiceState,jdbcType=INTEGER}, #{videoState,jdbcType=INTEGER}, 
+      #{freezeTime,jdbcType=TIMESTAMP}, #{createDate,jdbcType=TIMESTAMP}, #{loginTime,jdbcType=TIMESTAMP}, 
+      #{thirdLogin,jdbcType=VARCHAR}, #{voiceMoney,jdbcType=INTEGER}, #{videoMoney,jdbcType=INTEGER}, 
+      #{smsState,jdbcType=INTEGER}, #{sPositionX,jdbcType=DOUBLE}, #{sPositionY,jdbcType=DOUBLE}, 
+      #{capitalbalance,jdbcType=DECIMAL}, #{smsMoney,jdbcType=INTEGER}, #{voiceTimeLength,jdbcType=INTEGER}, 
+      #{identPassDatetime,jdbcType=TIMESTAMP}, #{inviteMoney,jdbcType=DECIMAL}, #{rongyuntoken,jdbcType=VARCHAR}, 
+      #{version,jdbcType=INTEGER}, #{otherkey,jdbcType=INTEGER}, #{levelVersion,jdbcType=INTEGER}, 
+      #{identagain,jdbcType=INTEGER}, #{thumbnails,jdbcType=VARCHAR}, #{yetVideo,jdbcType=INTEGER}, 
+      #{yetPhoto,jdbcType=INTEGER}, #{flag,jdbcType=INTEGER}, #{imstate,jdbcType=INTEGER}, 
+      #{indexDesc,jdbcType=INTEGER}, #{indexTime,jdbcType=TIMESTAMP}, #{onlineDate,jdbcType=TIMESTAMP}, 
+      #{isVip,jdbcType=INTEGER}, #{openId,jdbcType=VARCHAR}, #{isNicemeet,jdbcType=INTEGER}, 
+      #{voice,jdbcType=VARCHAR}, #{inviteCode,jdbcType=VARCHAR}, #{isEssence,jdbcType=INTEGER}, 
+       #{companyId,jdbcType=INTEGER}, #{pairPushUrl,jdbcType=VARCHAR}, 
+      #{pairLiveUrl,jdbcType=VARCHAR}, #{album,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.honglu.quickcall.task.entity.Persion">
+    insert into persion
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="tel != null">
+        tel,
+      </if>
+      <if test="pwd != null">
+        pwd,
+      </if>
+      <if test="nickName != null">
+        nick_name,
+      </if>
+      <if test="sex != null">
+        sex,
+      </if>
+      <if test="birthday != null">
+        birthday,
+      </if>
+      <if test="level != null">
+        level,
+      </if>
+      <if test="token != null">
+        token,
+      </if>
+      <if test="area != null">
+        area,
+      </if>
+      <if test="rate != null">
+        rate,
+      </if>
+      <if test="photo != null">
+        photo,
+      </if>
+      <if test="photoIdent != null">
+        photo_ident,
+      </if>
+      <if test="voiceIdent != null">
+        voice_ident,
+      </if>
+      <if test="video != null">
+        video,
+      </if>
+      <if test="playIdent != null">
+        play_ident,
+      </if>
+      <if test="supAbility != null">
+        sup_ability,
+      </if>
+      <if test="sign != null">
+        sign,
+      </if>
+      <if test="love != null">
+        love,
+      </if>
+      <if test="useState != null">
+        use_state,
+      </if>
+      <if test="voiceState != null">
+        voice_state,
+      </if>
+      <if test="videoState != null">
+        video_state,
+      </if>
+      <if test="freezeTime != null">
+        freeze_time,
+      </if>
+      <if test="createDate != null">
+        create_date,
+      </if>
+      <if test="loginTime != null">
+        login_time,
+      </if>
+      <if test="thirdLogin != null">
+        third_login,
+      </if>
+      <if test="voiceMoney != null">
+        voice_money,
+      </if>
+      <if test="videoMoney != null">
+        video_money,
+      </if>
+      <if test="smsState != null">
+        sms_state,
+      </if>
+      <if test="sPositionX != null">
+        s_position_x,
+      </if>
+      <if test="sPositionY != null">
+        s_position_y,
+      </if>
+      <if test="capitalbalance != null">
+        capitalBalance,
+      </if>
+      <if test="smsMoney != null">
+        sms_money,
+      </if>
+      <if test="voiceTimeLength != null">
+        voice_time_length,
+      </if>
+      <if test="identPassDatetime != null">
+        ident_pass_datetime,
+      </if>
+      <if test="inviteMoney != null">
+        invite_money,
+      </if>
+      <if test="rongyuntoken != null">
+        rongyuntoken,
+      </if>
+      <if test="version != null">
+        version,
+      </if>
+      <if test="otherkey != null">
+        otherkey,
+      </if>
+      <if test="levelVersion != null">
+        level_version,
+      </if>
+      <if test="identagain != null">
+        identagain,
+      </if>
+      <if test="thumbnails != null">
+        thumbnails,
+      </if>
+      <if test="yetVideo != null">
+        yet_video,
+      </if>
+      <if test="yetPhoto != null">
+        yet_photo,
+      </if>
+      <if test="flag != null">
+        flag,
+      </if>
+      <if test="imstate != null">
+        imstate,
+      </if>
+      <if test="indexDesc != null">
+        index_desc,
+      </if>
+      <if test="indexTime != null">
+        index_time,
+      </if>
+      <if test="onlineDate != null">
+        online_date,
+      </if>
+      <if test="isVip != null">
+        is_vip,
+      </if>
+      <if test="openId != null">
+        opend_id,
+      </if>
+      <if test="isNicemeet != null">
+        is_nicemeet,
+      </if>
+      <if test="voice != null">
+        voice,
+      </if>
+      <if test="inviteCode != null">
+        invite_code,
+      </if>
+      <if test="isEssence != null">
+        is_essence,
+      </if>
+      
+      <if test="companyId != null">
+        company_id,
+      </if>
+      <if test="pairPushUrl != null">
+        pair_push_url,
+      </if>
+      <if test="pairLiveUrl != null">
+        pair_live_url,
+      </if>
+      <if test="album != null">
+        album,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="tel != null">
+        #{tel,jdbcType=VARCHAR},
+      </if>
+      <if test="pwd != null">
+        #{pwd,jdbcType=VARCHAR},
+      </if>
+      <if test="nickName != null">
+        #{nickName,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null">
+        #{sex,jdbcType=INTEGER},
+      </if>
+      <if test="birthday != null">
+        #{birthday,jdbcType=DATE},
+      </if>
+      <if test="level != null">
+        #{level,jdbcType=INTEGER},
+      </if>
+      <if test="token != null">
+        #{token,jdbcType=DECIMAL},
+      </if>
+      <if test="area != null">
+        #{area,jdbcType=VARCHAR},
+      </if>
+      <if test="rate != null">
+        #{rate,jdbcType=DECIMAL},
+      </if>
+      <if test="photo != null">
+        #{photo,jdbcType=VARCHAR},
+      </if>
+      <if test="photoIdent != null">
+        #{photoIdent,jdbcType=VARCHAR},
+      </if>
+      <if test="voiceIdent != null">
+        #{voiceIdent,jdbcType=VARCHAR},
+      </if>
+      <if test="video != null">
+        #{video,jdbcType=VARCHAR},
+      </if>
+      <if test="playIdent != null">
+        #{playIdent,jdbcType=INTEGER},
+      </if>
+      <if test="supAbility != null">
+        #{supAbility,jdbcType=VARCHAR},
+      </if>
+      <if test="sign != null">
+        #{sign,jdbcType=VARCHAR},
+      </if>
+      <if test="love != null">
+        #{love,jdbcType=INTEGER},
+      </if>
+      <if test="useState != null">
+        #{useState,jdbcType=INTEGER},
+      </if>
+      <if test="voiceState != null">
+        #{voiceState,jdbcType=INTEGER},
+      </if>
+      <if test="videoState != null">
+        #{videoState,jdbcType=INTEGER},
+      </if>
+      <if test="freezeTime != null">
+        #{freezeTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createDate != null">
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="loginTime != null">
+        #{loginTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="thirdLogin != null">
+        #{thirdLogin,jdbcType=VARCHAR},
+      </if>
+      <if test="voiceMoney != null">
+        #{voiceMoney,jdbcType=INTEGER},
+      </if>
+      <if test="videoMoney != null">
+        #{videoMoney,jdbcType=INTEGER},
+      </if>
+      <if test="smsState != null">
+        #{smsState,jdbcType=INTEGER},
+      </if>
+      <if test="sPositionX != null">
+        #{sPositionX,jdbcType=DOUBLE},
+      </if>
+      <if test="sPositionY != null">
+        #{sPositionY,jdbcType=DOUBLE},
+      </if>
+      <if test="capitalbalance != null">
+        #{capitalbalance,jdbcType=DECIMAL},
+      </if>
+      <if test="smsMoney != null">
+        #{smsMoney,jdbcType=INTEGER},
+      </if>
+      <if test="voiceTimeLength != null">
+        #{voiceTimeLength,jdbcType=INTEGER},
+      </if>
+      <if test="identPassDatetime != null">
+        #{identPassDatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="inviteMoney != null">
+        #{inviteMoney,jdbcType=DECIMAL},
+      </if>
+      <if test="rongyuntoken != null">
+        #{rongyuntoken,jdbcType=VARCHAR},
+      </if>
+      <if test="version != null">
+        #{version,jdbcType=INTEGER},
+      </if>
+      <if test="otherkey != null">
+        #{otherkey,jdbcType=INTEGER},
+      </if>
+      <if test="levelVersion != null">
+        #{levelVersion,jdbcType=INTEGER},
+      </if>
+      <if test="identagain != null">
+        #{identagain,jdbcType=INTEGER},
+      </if>
+      <if test="thumbnails != null">
+        #{thumbnails,jdbcType=VARCHAR},
+      </if>
+      <if test="yetVideo != null">
+        #{yetVideo,jdbcType=INTEGER},
+      </if>
+      <if test="yetPhoto != null">
+        #{yetPhoto,jdbcType=INTEGER},
+      </if>
+      <if test="flag != null">
+        #{flag,jdbcType=INTEGER},
+      </if>
+      <if test="imstate != null">
+        #{imstate,jdbcType=INTEGER},
+      </if>
+      <if test="indexDesc != null">
+        #{indexDesc,jdbcType=INTEGER},
+      </if>
+      <if test="indexTime != null">
+        #{indexTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="onlineDate != null">
+        #{onlineDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isVip != null">
+        #{isVip,jdbcType=INTEGER},
+      </if>
+      <if test="openId != null">
+        #{openId,jdbcType=VARCHAR},
+      </if>
+      <if test="isNicemeet != null">
+        #{isNicemeet,jdbcType=INTEGER},
+      </if>
+      <if test="voice != null">
+        #{voice,jdbcType=VARCHAR},
+      </if>
+      <if test="inviteCode != null">
+        #{inviteCode,jdbcType=VARCHAR},
+      </if>
+      <if test="isEssence != null">
+        #{isEssence,jdbcType=INTEGER},
+      </if>
+      
+      <if test="companyId != null">
+        #{companyId,jdbcType=INTEGER},
+      </if>
+      <if test="pairPushUrl != null">
+        #{pairPushUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="pairLiveUrl != null">
+        #{pairLiveUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="album != null">
+        #{album,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.honglu.quickcall.task.entity.Persion">
+    update persion
+    <set>
+      <if test="tel != null">
+        tel = #{tel,jdbcType=VARCHAR},
+      </if>
+      <if test="pwd != null">
+        pwd = #{pwd,jdbcType=VARCHAR},
+      </if>
+      <if test="nickName != null">
+        nick_name = #{nickName,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null">
+        sex = #{sex,jdbcType=INTEGER},
+      </if>
+      <if test="birthday != null">
+        birthday = #{birthday,jdbcType=DATE},
+      </if>
+      <if test="level != null">
+        level = #{level,jdbcType=INTEGER},
+      </if>
+      <if test="token != null">
+        token = #{token,jdbcType=DECIMAL},
+      </if>
+      <if test="area != null">
+        area = #{area,jdbcType=VARCHAR},
+      </if>
+      <if test="rate != null">
+        rate = #{rate,jdbcType=DECIMAL},
+      </if>
+      <if test="photo != null">
+        photo = #{photo,jdbcType=VARCHAR},
+      </if>
+      <if test="photoIdent != null">
+        photo_ident = #{photoIdent,jdbcType=VARCHAR},
+      </if>
+      <if test="voiceIdent != null">
+        voice_ident = #{voiceIdent,jdbcType=VARCHAR},
+      </if>
+      <if test="video != null">
+        video = #{video,jdbcType=VARCHAR},
+      </if>
+      <if test="playIdent != null">
+        play_ident = #{playIdent,jdbcType=INTEGER},
+      </if>
+      <if test="supAbility != null">
+        sup_ability = #{supAbility,jdbcType=VARCHAR},
+      </if>
+      <if test="sign != null">
+        sign = #{sign,jdbcType=VARCHAR},
+      </if>
+      <if test="love != null">
+        love = #{love,jdbcType=INTEGER},
+      </if>
+      <if test="useState != null">
+        use_state = #{useState,jdbcType=INTEGER},
+      </if>
+      <if test="voiceState != null">
+        voice_state = #{voiceState,jdbcType=INTEGER},
+      </if>
+      <if test="videoState != null">
+        video_state = #{videoState,jdbcType=INTEGER},
+      </if>
+      <if test="freezeTime != null">
+        freeze_time = #{freezeTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createDate != null">
+        create_date = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="loginTime != null">
+        login_time = #{loginTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="thirdLogin != null">
+        third_login = #{thirdLogin,jdbcType=VARCHAR},
+      </if>
+      <if test="voiceMoney != null">
+        voice_money = #{voiceMoney,jdbcType=INTEGER},
+      </if>
+      <if test="videoMoney != null">
+        video_money = #{videoMoney,jdbcType=INTEGER},
+      </if>
+      <if test="smsState != null">
+        sms_state = #{smsState,jdbcType=INTEGER},
+      </if>
+      <if test="sPositionX != null">
+        s_position_x = #{sPositionX,jdbcType=DOUBLE},
+      </if>
+      <if test="sPositionY != null">
+        s_position_y = #{sPositionY,jdbcType=DOUBLE},
+      </if>
+      <if test="capitalbalance != null">
+        capitalBalance = #{capitalbalance,jdbcType=DECIMAL},
+      </if>
+      <if test="smsMoney != null">
+        sms_money = #{smsMoney,jdbcType=INTEGER},
+      </if>
+      <if test="voiceTimeLength != null">
+        voice_time_length = #{voiceTimeLength,jdbcType=INTEGER},
+      </if>
+      <if test="identPassDatetime != null">
+        ident_pass_datetime = #{identPassDatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="inviteMoney != null">
+        invite_money = #{inviteMoney,jdbcType=DECIMAL},
+      </if>
+      <if test="rongyuntoken != null">
+        rongyuntoken = #{rongyuntoken,jdbcType=VARCHAR},
+      </if>
+      <if test="version != null">
+        version = #{version,jdbcType=INTEGER},
+      </if>
+      <if test="otherkey != null">
+        otherkey = #{otherkey,jdbcType=INTEGER},
+      </if>
+      <if test="levelVersion != null">
+        level_version = #{levelVersion,jdbcType=INTEGER},
+      </if>
+      <if test="identagain != null">
+        identagain = #{identagain,jdbcType=INTEGER},
+      </if>
+      <if test="thumbnails != null">
+        thumbnails = #{thumbnails,jdbcType=VARCHAR},
+      </if>
+      <if test="yetVideo != null">
+        yet_video = #{yetVideo,jdbcType=INTEGER},
+      </if>
+      <if test="yetPhoto != null">
+        yet_photo = #{yetPhoto,jdbcType=INTEGER},
+      </if>
+      <if test="flag != null">
+        flag = #{flag,jdbcType=INTEGER},
+      </if>
+      <if test="imstate != null">
+        imstate = #{imstate,jdbcType=INTEGER},
+      </if>
+      <if test="indexDesc != null">
+        index_desc = #{indexDesc,jdbcType=INTEGER},
+      </if>
+      <if test="indexTime != null">
+        index_time = #{indexTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="onlineDate != null">
+        online_date = #{onlineDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isVip != null">
+        is_vip = #{isVip,jdbcType=INTEGER},
+      </if>
+      <if test="openId != null">
+        opend_id = #{openId,jdbcType=VARCHAR},
+      </if>
+      <if test="isNicemeet != null">
+        is_nicemeet = #{isNicemeet,jdbcType=INTEGER},
+      </if>
+      <if test="voice != null">
+        voice = #{voice,jdbcType=VARCHAR},
+      </if>
+      <if test="inviteCode != null">
+        invite_code = #{inviteCode,jdbcType=VARCHAR},
+      </if>
+      <if test="isEssence != null">
+        is_essence = #{isEssence,jdbcType=INTEGER},
+      </if>
+     
+      <if test="companyId != null">
+        company_id = #{companyId,jdbcType=INTEGER},
+      </if>
+      <if test="pairPushUrl != null">
+        pair_push_url = #{pairPushUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="pairLiveUrl != null">
+        pair_live_url = #{pairLiveUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="album != null">
+        album = #{album,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.honglu.quickcall.task.entity.Persion">
+    update persion
+    set tel = #{tel,jdbcType=VARCHAR},
+      pwd = #{pwd,jdbcType=VARCHAR},
+      nick_name = #{nickName,jdbcType=VARCHAR},
+      sex = #{sex,jdbcType=INTEGER},
+      birthday = #{birthday,jdbcType=DATE},
+      level = #{level,jdbcType=INTEGER},
+      token = #{token,jdbcType=DECIMAL},
+      area = #{area,jdbcType=VARCHAR},
+      rate = #{rate,jdbcType=DECIMAL},
+      photo = #{photo,jdbcType=VARCHAR},
+      photo_ident = #{photoIdent,jdbcType=VARCHAR},
+      voice_ident = #{voiceIdent,jdbcType=VARCHAR},
+      video = #{video,jdbcType=VARCHAR},
+      play_ident = #{playIdent,jdbcType=INTEGER},
+      sup_ability = #{supAbility,jdbcType=VARCHAR},
+      sign = #{sign,jdbcType=VARCHAR},
+      love = #{love,jdbcType=INTEGER},
+      use_state = #{useState,jdbcType=INTEGER},
+      voice_state = #{voiceState,jdbcType=INTEGER},
+      video_state = #{videoState,jdbcType=INTEGER},
+      freeze_time = #{freezeTime,jdbcType=TIMESTAMP},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      login_time = #{loginTime,jdbcType=TIMESTAMP},
+      third_login = #{thirdLogin,jdbcType=VARCHAR},
+      voice_money = #{voiceMoney,jdbcType=INTEGER},
+      video_money = #{videoMoney,jdbcType=INTEGER},
+      sms_state = #{smsState,jdbcType=INTEGER},
+      s_position_x = #{sPositionX,jdbcType=DOUBLE},
+      s_position_y = #{sPositionY,jdbcType=DOUBLE},
+      capitalBalance = #{capitalbalance,jdbcType=DECIMAL},
+      sms_money = #{smsMoney,jdbcType=INTEGER},
+      voice_time_length = #{voiceTimeLength,jdbcType=INTEGER},
+      ident_pass_datetime = #{identPassDatetime,jdbcType=TIMESTAMP},
+      invite_money = #{inviteMoney,jdbcType=DECIMAL},
+      rongyuntoken = #{rongyuntoken,jdbcType=VARCHAR},
+      version = #{version,jdbcType=INTEGER},
+      otherkey = #{otherkey,jdbcType=INTEGER},
+      level_version = #{levelVersion,jdbcType=INTEGER},
+      identagain = #{identagain,jdbcType=INTEGER},
+      thumbnails = #{thumbnails,jdbcType=VARCHAR},
+      yet_video = #{yetVideo,jdbcType=INTEGER},
+      yet_photo = #{yetPhoto,jdbcType=INTEGER},
+      flag = #{flag,jdbcType=INTEGER},
+      imstate = #{imstate,jdbcType=INTEGER},
+      index_desc = #{indexDesc,jdbcType=INTEGER},
+      index_time = #{indexTime,jdbcType=TIMESTAMP},
+      online_date = #{onlineDate,jdbcType=TIMESTAMP},
+      is_vip = #{isVip,jdbcType=INTEGER},
+      opend_id = #{openId,jdbcType=VARCHAR},
+      is_nicemeet = #{isNicemeet,jdbcType=INTEGER},
+      voice = #{voice,jdbcType=VARCHAR},
+      invite_code = #{inviteCode,jdbcType=VARCHAR},
+      is_essence = #{isEssence,jdbcType=INTEGER},
+   
+      company_id = #{companyId,jdbcType=INTEGER},
+      pair_push_url = #{pairPushUrl,jdbcType=VARCHAR},
+      pair_live_url = #{pairLiveUrl,jdbcType=VARCHAR},
+      album = #{album,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.honglu.quickcall.task.entity.Persion">
+    update persion
+    set tel = #{tel,jdbcType=VARCHAR},
+      pwd = #{pwd,jdbcType=VARCHAR},
+      nick_name = #{nickName,jdbcType=VARCHAR},
+      sex = #{sex,jdbcType=INTEGER},
+      birthday = #{birthday,jdbcType=DATE},
+      level = #{level,jdbcType=INTEGER},
+      token = #{token,jdbcType=DECIMAL},
+      area = #{area,jdbcType=VARCHAR},
+      rate = #{rate,jdbcType=DECIMAL},
+      photo = #{photo,jdbcType=VARCHAR},
+      photo_ident = #{photoIdent,jdbcType=VARCHAR},
+      voice_ident = #{voiceIdent,jdbcType=VARCHAR},
+      video = #{video,jdbcType=VARCHAR},
+      play_ident = #{playIdent,jdbcType=INTEGER},
+      sup_ability = #{supAbility,jdbcType=VARCHAR},
+      sign = #{sign,jdbcType=VARCHAR},
+      love = #{love,jdbcType=INTEGER},
+      use_state = #{useState,jdbcType=INTEGER},
+      voice_state = #{voiceState,jdbcType=INTEGER},
+      video_state = #{videoState,jdbcType=INTEGER},
+      freeze_time = #{freezeTime,jdbcType=TIMESTAMP},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      login_time = #{loginTime,jdbcType=TIMESTAMP},
+      third_login = #{thirdLogin,jdbcType=VARCHAR},
+      voice_money = #{voiceMoney,jdbcType=INTEGER},
+      video_money = #{videoMoney,jdbcType=INTEGER},
+      sms_state = #{smsState,jdbcType=INTEGER},
+      s_position_x = #{sPositionX,jdbcType=DOUBLE},
+      s_position_y = #{sPositionY,jdbcType=DOUBLE},
+      capitalBalance = #{capitalbalance,jdbcType=DECIMAL},
+      sms_money = #{smsMoney,jdbcType=INTEGER},
+      voice_time_length = #{voiceTimeLength,jdbcType=INTEGER},
+      ident_pass_datetime = #{identPassDatetime,jdbcType=TIMESTAMP},
+      invite_money = #{inviteMoney,jdbcType=DECIMAL},
+      rongyuntoken = #{rongyuntoken,jdbcType=VARCHAR},
+      version = #{version,jdbcType=INTEGER},
+      otherkey = #{otherkey,jdbcType=INTEGER},
+      level_version = #{levelVersion,jdbcType=INTEGER},
+      identagain = #{identagain,jdbcType=INTEGER},
+      thumbnails = #{thumbnails,jdbcType=VARCHAR},
+      yet_video = #{yetVideo,jdbcType=INTEGER},
+      yet_photo = #{yetPhoto,jdbcType=INTEGER},
+      flag = #{flag,jdbcType=INTEGER},
+      imstate = #{imstate,jdbcType=INTEGER},
+      index_desc = #{indexDesc,jdbcType=INTEGER},
+      index_time = #{indexTime,jdbcType=TIMESTAMP},
+      online_date = #{onlineDate,jdbcType=TIMESTAMP},
+      is_vip = #{isVip,jdbcType=INTEGER},
+      opend_id = #{openId,jdbcType=VARCHAR},
+      is_nicemeet = #{isNicemeet,jdbcType=INTEGER},
+      voice = #{voice,jdbcType=VARCHAR},
+      invite_code = #{inviteCode,jdbcType=VARCHAR},
+      is_essence = #{isEssence,jdbcType=INTEGER},
+      company_id = #{companyId,jdbcType=INTEGER},
+      pair_push_url = #{pairPushUrl,jdbcType=VARCHAR},
+      pair_live_url = #{pairLiveUrl,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  <update id="updateImState" >
+    update persion
+    set 
+      imstate = #{state,jdbcType=INTEGER}
+    where id = #{persionId,jdbcType=INTEGER}
+  </update>
+  
+  <select id="queryAllMan" resultMap="ResultMapWithBLOBs">
+   select 
+    <include refid="Base_Column_List" />
+    from persion 
+    where sex=1 and use_state=1
+  </select>
+   <select id="fistWelcomeGodOfWealth" resultType="Persion" parameterType="Map">
+   select p.id,sum(b.token) totalss ,max(b.create_date) stime
+    from persion p
+    left join balance_of_payments b on p.id=b.persion_id
+    where b.create_date >= #{beginTime} and b.create_date &lt; #{endTime}
+    and b.type = 3
+    and p.sex = 1   and p.use_state = 1
+    group by p.id  order by totalss desc ,stime asc limit 1;
+  </select>
+  
+  
+  
+  
+  
+  
+  
+</mapper>

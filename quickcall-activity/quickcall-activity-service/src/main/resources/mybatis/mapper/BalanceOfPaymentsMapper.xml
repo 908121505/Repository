@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="BalanceOfPayments">
+
+    <select id="selectChristmasTalkTimesByType" resultType="int" parameterType="Map">
+        select  1
+        from balance_of_payments
+        where persion_id = #{persionId}  and type = #{type}
+        and create_date >= #{beginTime} and create_date &lt; #{endTime}
+        and batch_no is not null
+        GROUP BY batch_no
+        <if test="type ==1">
+          having count(id)>=3
+        </if>
+        <if test="type ==3 or type ==2">
+          having count(id)>=4
+        </if>
+    </select>
+
+
+     <select id="selectNewUserAward" resultType="int">
+        SELECT SUM(capital)  FROM
+        balance_of_payments  INNER JOIN persion  ON balance_of_payments.persion_id=persion.id
+		WHERE
+		balance_of_payments.other_id=#{userId}
+		and TO_DAYS( balance_of_payments.create_date) =TO_DAYS(persion.create_date)
+		and balance_of_payments.create_date <![CDATA[  >=  ]]> #{awardDate}
+    </select>
+
+
+    <insert id="insertSelective" parameterType="com.honglu.quickcall.activity.facade.entity.BalanceOfPayments">
+    insert into balance_of_payments
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="persionId != null">
+        persion_id,
+      </if>
+      <if test="type != null">
+        type,
+      </if>
+      <if test="token != null">
+        token,
+      </if>
+      <if test="createDate != null">
+        create_date,
+      </if>
+      <if test="finishDate != null">
+        finish_date,
+      </if>
+      <if test="state != null">
+        state,
+      </if>
+      <if test="present != null">
+        present,
+      </if>
+      <if test="chat != null">
+        chat,
+      </if>
+      <if test="otherId != null">
+        other_id,
+      </if>
+      <if test="capital != null">
+        capital,
+      </if>
+      <if test="charm != null">
+        charm,
+      </if>
+      <if test="rongOrderId != null">
+        rong_order_id,
+      </if>
+      <if test="adminget != null">
+        adminget,
+      </if>
+      <if test="fId != null">
+        f_id,
+      </if>
+      <if test="fRate != null">
+        f_rate,
+      </if>
+      <if test="sId != null">
+        s_id,
+      </if>
+      <if test="sRate != null">
+        s_rate,
+      </if>
+      <if test="tId != null">
+        t_id,
+      </if>
+      <if test="tRate != null">
+        t_rate,
+      </if>
+      <if test="grade != null">
+        grade,
+      </if>
+      <if test="aFlag != null">
+        a_flag,
+      </if>
+      <if test="batchNo != null">
+        batchNo,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="persionId != null">
+        #{persionId,jdbcType=INTEGER},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=INTEGER},
+      </if>
+      <if test="token != null">
+        #{token,jdbcType=INTEGER},
+      </if>
+      <if test="createDate != null">
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="finishDate != null">
+        #{finishDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="state != null">
+        #{state,jdbcType=INTEGER},
+      </if>
+      <if test="present != null">
+        #{present,jdbcType=INTEGER},
+      </if>
+      <if test="chat != null">
+        #{chat,jdbcType=INTEGER},
+      </if>
+      <if test="otherId != null">
+        #{otherId,jdbcType=INTEGER},
+      </if>
+      <if test="capital != null">
+        #{capital,jdbcType=DOUBLE},
+      </if>
+      <if test="charm != null">
+        #{charm,jdbcType=INTEGER},
+      </if>
+      <if test="rongOrderId != null">
+        #{rongOrderId,jdbcType=VARCHAR},
+      </if>
+      <if test="adminget != null">
+        #{adminget,jdbcType=DOUBLE},
+      </if>
+      <if test="fId != null">
+        #{fId,jdbcType=INTEGER},
+      </if>
+      <if test="fRate != null">
+        #{fRate,jdbcType=DOUBLE},
+      </if>
+      <if test="sId != null">
+        #{sId,jdbcType=INTEGER},
+      </if>
+      <if test="sRate != null">
+        #{sRate,jdbcType=DOUBLE},
+      </if>
+      <if test="tId != null">
+        #{tId,jdbcType=INTEGER},
+      </if>
+      <if test="tRate != null">
+        #{tRate,jdbcType=DOUBLE},
+      </if>
+      <if test="grade != null">
+        #{grade,jdbcType=INTEGER},
+      </if>
+      <if test="aFlag != null">
+        #{aFlag,jdbcType=INTEGER},
+      </if>
+      <if test="batchNo != null">
+        #{batchNo,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+
+
+<!-- 根据消费类型统计男女消费总额 -->
+<select id="queryReturns" parameterType="Map" resultType="BalanceOfPayments">
+SELECT sum(token) tokens,sum(capital) capitals from balance_of_payments  
+         <where>
+            <if test="pid!=null and pid != 0 and sex==1">
+			and	persion_id=#{pid}
+			</if>
+			<if test="pid!=null and pid != 0 and sex==2">
+			and	other_id=#{pid}
+			</if>
+			<if test="type!=null and type != 0">
+			and	type=#{type}
+			</if>
+			<if test="beginTime!=null ">
+			and	create_date &gt;=#{beginTime}
+			</if>
+			<if test="endTime!=null">
+			and	create_date &lt;=#{endTime}
+			</if>
+         </where>
+ </select>
+<!-- 统计一段期间内，男用户有无跟女生互动 -->
+<select id="interaction" parameterType="Map" resultType="BalanceOfPayments">
+SELECT b.* from balance_of_payments b
+ where 1=1 
+           <if test="beginTime!=null ">
+			and	create_date &gt;=#{beginTime}
+			</if>
+			<if test="endTime!=null">
+			and	create_date &lt;=#{endTime}
+			</if>
+			<if test="pid!=null and pid != 0">
+            and persion_id=#{pid}
+           </if>
+            and type &lt;5
+            order by create_date asc
+            <if test="state==2">
+            <!-- 当天获取一条记录 -->
+           GROUP BY  DATE_FORMAT(create_date,"%d")
+           </if>
+</select>
+
+    <select id="selectChocolateForValentine" resultType="BalanceOfPayments">
+        SELECT buy.nick_name nick_name,sell.nick_name present_name,b.create_date FROM balance_of_payments b
+        INNER JOIN present p
+        ON b.present = p.id
+        INNER  JOIN persion buy
+        ON b.persion_id = buy.id
+        INNER JOIN persion sell
+        ON b.other_id = sell.id
+        WHERE
+        b.type = 4
+        AND p.present_name = '浓情巧克力'
+        ORDER BY b.create_date DESC
+        limit 10
+    </select>
+
+
+    <select id="selectValentineCPRank" resultType="BalanceOfPayments" parameterType="Map">
+        select persion_id,nick_name,present_name,photo,mphoto,total,stime
+         from(
+         select buy.id persion_id,buy.nick_name nick_name,sell.id other_id,sell.nick_name present_name,buy.photo photo,sell.photo mphoto, max(b.create_date) stime, sum(b.token) total
+        from balance_of_payments b
+        inner join persion sell  on b.other_id = sell.id
+        inner join persion buy on b.persion_id = buy.id
+        where b.create_date >= #{beginTime} and b.create_date &lt; #{endTime}
+        and b.type in (1,2,3,4)
+        group by buy.id,sell.id  order by total desc,stime asc
+         ) rank group by persion_id  order by total desc,stime asc
+         limit 10;
+    </select>
+
+
+
+    <!-- 根据消费类型统计男女消费总额 -->
+    <select id="selectTotalTokenForValentine" parameterType="Map" resultType="int">
+        SELECT IFNULL(sum(token),0) tokens from balance_of_payments
+        WHERE
+              	persion_id=#{persionId}
+                and	type IN (1,2,3,4,5,8)
+            <if test="beginTime!=null ">
+                and	create_date &gt;=#{beginTime}
+            </if>
+            <if test="endTime!=null">
+                and	create_date &lt;=#{endTime}
+            </if>
+    </select>
+
+    <!-- 查询日期范围内消费金额超过每个指标的所有男生及 -->
+    <select id="todayManComsumeTotalQuery" parameterType="Map" resultType="BalanceOfPayments">
+        SELECT b.create_date,SUM(b.token) AS total_number FROM persion p
+        JOIN balance_of_payments b ON p.id=b.persion_id
+        WHERE b.create_date BETWEEN #{startDate} AND #{endDate} AND p.sex=1 AND b.type IN(1,2,3,4)
+        GROUP BY DATE_FORMAT(b.create_date,'%d')
+        HAVING total_number>#{consumeCondition}
+        ORDER BY b.create_date DESC
+    </select>
+
+    <!-- 查询日期范围内消费金额超过每个指标的所有男生及 -->
+    <select id="todayWomanComsumeTotalQuery" parameterType="Map" resultType="BalanceOfPayments">
+        SELECT b.create_date, COUNT(1) AS total_number,SUM(b.capital) AS income FROM persion p
+        JOIN balance_of_payments b ON p.id=b.other_id
+        WHERE b.create_date BETWEEN #{startDate} AND #{endDate} AND p.sex=2 AND b.type IN(3)
+        GROUP BY DATE_FORMAT(b.create_date,'%d')
+        HAVING COUNT(1)>#{consumeCondition}
+        ORDER BY b.create_date DESC
+    </select>
+
+    <select id="activityChatNumberQuery" parameterType="Map" resultType="BalanceOfPayments">
+        SELECT COUNT(1) AS chat_number,b.other_id AS persion_id,p.nick_name,p.photo FROM balance_of_payments b
+        LEFT JOIN persion p ON b.other_id=p.id
+        WHERE p.sex=2 AND b.type IN(3) AND b.create_date BETWEEN #{startDate} AND #{endDate}
+        GROUP BY b.other_id
+        ORDER BY chat_number DESC
+        LIMIT 10;
+    </select>
+
+
+    <select id="cumulativeLength" parameterType="Map"  resultType="Integer">
+    SELECT count(b.id) from balance_of_payments b INNER JOIN persion p
+     where 1=1
+             <if test="sex==1">
+		     and p.id=b.persion_id
+		     </if>
+		     <if test="sex==2">
+		     and p.id=b.other_id
+		     </if>
+              and type=3
+            <if test="beginTime!=null ">
+                and	b.create_date &gt;=#{beginTime}
+            </if>
+            <if test="endTime!=null">
+                and	b.create_date &lt;=#{endTime}
+            </if>
+            <if test="pid!=null">
+                and p.id=#{pid}
+            </if>
+
+
+    </select>
+
+
+
+
+
+</mapper>

@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="RaidersDetail">
+	<resultMap id="RaidersDetailResultMap" type="RaidersDetail">
+		<id property="raidersDetailId" column="raiders_detail_id" />
+		<id property="raidersCateId" column="raiders_cate_id" />
+		<id property="raidersTitle" column="raiders_title" />
+		<id property="content" column="content" />
+		<id property="image" column="image" />
+		<id property="readNum" column="read_num" />
+		<id property="isPush" column="is_push" />
+		<id property="sort" column="sort" />
+		<id property="state" column="state" />
+		<id property="createTime" column="create_time" />
+		<id property="createMan" column="create_man" />
+		<id property="modifyTime" column="modify_time" />
+		<id property="modifyMan" column="modify_man" />
+		<id property="remark" column="remark" />
+		<id property="titleType" column="title_type" />
+		<id property="description" column="description"></id>
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		raiders_detail_id, raiders_cate_id, raiders_title, content,
+		image, read_num, is_push, sort, state, create_time, create_man,
+		modify_time, modify_man, remark,title_type ,description 
+	</sql>
+
+	<select id="get" parameterType="map" resultMap="RaidersDetailResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from raiders_detail
+	</select>
+
+	<select id="queryCount" parameterType="map" resultType="int">
+		select count(raiders_detail_id) from raiders_detail where 1=1
+		<if test="raidersTitle !=null"> and raiders_title like concat('%',#{raidersTitle},'%')
+		</if>
+		<if test="state !=null"> and state = #{state}</if>
+		<if test="isPush !=null"> and is_push = #{isPush}</if>
+		<if test="raidersCateId !=null"> and raiders_cate_id = #{raidersCateId}</if>
+	</select>
+	<select id="query" parameterType="map" resultMap="RaidersDetailResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from
+		raiders_detail where 1=1
+		<if test="raidersTitle !=null"> and raiders_title like concat('%',#{raidersTitle},'%')
+		</if>
+		<if test="state !=null"> and state = #{state}</if>
+		<if test="isPush !=null"> and is_push = #{isPush}</if>
+		<if test="raidersCateId !=null"> and raiders_cate_id = #{raidersCateId}</if>
+		limit ${iDisplayStart},${iDisplayLength}
+	</select>
+
+	<insert id="insert" parameterType="map">
+		INSERT INTO raiders_detail
+		(raiders_detail_id,raiders_cate_id,raiders_title,content,image,read_num,is_push,sort,state,create_time,create_man,modify_time,modify_man,remark,title_type,description)
+		VALUES
+		(#{raidersDetailId},#{raidersCateId},#{raidersTitle},#{content},#{image},#{readNum},#{isPush},#{sort},#{state},#{createTime},#{createMan},#{modifyTime},#{modifyMan},#{remark},#{titleType},#{description})
+	</insert>
+
+	<delete id="delete" parameterType="map">
+		DELETE FROM raiders_detail
+		WHERE
+		raiders_detail_id = #{arg0}
+	</delete>
+
+	<select id="getRaidersDetailById" parameterType="map"
+		resultMap="RaidersDetailResultMap">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM raiders_detail
+		WHERE raiders_detail_id = #{arg0}
+	</select>
+
+	<update id="update" parameterType="map">
+		UPDATE raiders_detail
+		<set>
+
+			<if test="raidersCateId != null"> raiders_cate_id = #{raidersCateId}, </if>
+
+			<if test="raidersTitle != null"> raiders_title = #{raidersTitle}, </if>
+
+			<if test="content != null"> content = #{content}, </if>
+
+			<if test="image != null"> image = #{image}, </if>
+
+			<if test="readNum != null"> read_num = #{readNum}, </if>
+
+			<if test="isPush != null"> is_push = #{isPush}, </if>
+
+			<if test="sort != null"> sort = #{sort}, </if>
+
+			<if test="state != null"> state = #{state}, </if>
+
+			<if test="createTime != null"> create_time = #{createTime}, </if>
+
+			<if test="createMan != null"> create_man = #{createMan}, </if>
+
+			<if test="modifyTime != null"> modify_time = #{modifyTime}, </if>
+
+			<if test="modifyMan != null"> modify_man = #{modifyMan}, </if>
+
+			<if test="remark != null"> remark = #{remark}, </if>
+			<if test="titleType != null"> title_type = #{titleType}, </if>
+			<if test="description != null"> description = #{description} </if>
+		</set>
+		WHERE raiders_detail_id = #{raidersDetailId}
+	</update>
+
+
+
+
+</mapper>

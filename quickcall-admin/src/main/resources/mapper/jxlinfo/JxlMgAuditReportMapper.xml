@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="JxlMgAuditReport" >
+  <resultMap id="resultMap" type="JxlMgAuditReport" >
+   
+    <id column="report_id" property="reportId" jdbcType="VARCHAR" />
+    <result column="account_id" property="accountId" jdbcType="VARCHAR" />
+    <result column="phone_num" property="phoneNum" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="VARCHAR" />
+    <result column="auth_org" property="authOrg" jdbcType="VARCHAR" />
+    <result column="user_grid_id" property="userGridId" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="user_gray" property="userGray" jdbcType="LONGVARCHAR" />
+    <result column="user_phone_suspicion" property="userPhoneSuspicion" jdbcType="LONGVARCHAR" />
+    <result column="user_idcard_suspicion" property="userIdcardSuspicion" jdbcType="LONGVARCHAR" />
+    <result column="user_searched_history_by_orgs" property="userSearchedHistoryByOrgs" jdbcType="LONGVARCHAR" />
+    <result column="user_searched_statistic" property="userSearchedStatistic" jdbcType="LONGVARCHAR" />
+    <result column="user_blacklist" property="userBlacklist" jdbcType="LONGVARCHAR" />
+    <result column="user_basic" property="userBasic" jdbcType="LONGVARCHAR" />
+    <result column="user_register_orgs" property="userRegisterOrgs" jdbcType="LONGVARCHAR" />
+    </resultMap>
+  <sql id="Base_Column_List" >
+    report_id, account_id, phone_num, update_time, auth_org, user_grid_id, create_time, 
+    remark ,user_gray, user_phone_suspicion, user_idcard_suspicion, user_searched_history_by_orgs, 
+    user_searched_statistic, user_blacklist, user_basic, user_register_orgs
+  </sql>
+  
+  <select id="queryAll" parameterType="map" resultMap="resultMap">
+  
+  select 
+  <include refid="Base_Column_List"/>
+  from jxl_mg_audit_report  where 1=1
+  <if test="phoneNum!=null">and phone_num=#{phoneNum} </if>
+  <if test="userGridId!=null">and user_grid_id  like concat('%',#{userGridId},'%') </if>
+  <if test="sCreateTime!=null and sCreateTime!=''"> and create_time &gt;= #{sCreateTime}</if>
+  <if test="eCreateTime!=null and eCreateTime!=''"> and create_time &lt;= #{eCreateTime}</if>
+  <if test="sDate!=null and sDate!=''"> and create_time &gt;= #{sDate}</if>
+  <if test="eDate!=null and eDate!=''"> and create_time &lt;= #{eDate}</if>
+  order by create_time desc
+  limit ${iDisplayStart},${iDisplayLength}
+  </select>
+  
+  <select id="queryCount" parameterType="map" resultType="int">
+  select count(report_id) from jxl_mg_audit_report where 1=1  
+  <if test="phoneNum!=null">and phone_num=#{phoneNum} </if>
+  <if test="userGridId!=null">and user_grid_id=#{userGridId} </if>
+  <if test="sCreateTime!=null and sCreateTime!=''"> and create_time &gt;= #{sCreateTime}</if>
+  <if test="eCreateTime!=null and eCreateTime!=''"> and create_time &lt;= #{eCreateTime}</if>
+  <if test="sDate!=null and sDate!=''"> and create_time &gt;= #{sDate}</if>
+  <if test="eDate!=null and eDate!=''"> and create_time &lt;= #{eDate}</if>
+    </select>
+  <select id="getJxlMgAuditReportById" parameterType="map" resultMap="resultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from jxl_mg_audit_report where report_id = #{arg0}
+    </select>
+  
+</mapper>

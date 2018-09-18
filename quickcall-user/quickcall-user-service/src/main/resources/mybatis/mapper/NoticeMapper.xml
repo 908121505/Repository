@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.honglu.quickcall.user.service.dao.NoticeMapper">
+  <resultMap id="BaseResultMap" type="com.honglu.quickcall.user.facade.entity.Notice">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="persion_id" jdbcType="INTEGER" property="persionId" />
+    <result column="admin_id" jdbcType="INTEGER" property="adminId" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="state" jdbcType="INTEGER" property="state" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="flag" jdbcType="INTEGER" property="flag" />
+    <result column="noticeRecordId" jdbcType="INTEGER" property="noticeRecordId" />
+    <result column="link_url" jdbcType="VARCHAR" property="linkUrl" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.honglu.quickcall.user.facade.entity.Notice">
+    <result column="content" jdbcType="LONGVARCHAR" property="content" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    notice.id, notice.admin_id, notice.create_date, state, title,link_url
+  </sql>
+  <sql id="Blob_Column_List">
+    content
+  </sql>
+  
+  <!-- 通过用户id查询用户消息 -->
+  <select id="selectByPersionId" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />,
+    notice_record.id as noticeRecordId,
+    notice_record.flag as flag,
+    notice_record.persion_id as persion_id
+    from notice inner join notice_record 
+    on notice.id=notice_record.notice_id
+    where notice_record.persion_id = #{persion_id,jdbcType=INTEGER}
+    order by create_date desc
+    limit 0,100
+  </select>
+  
+  <!-- 通过用户id查询用户消息 -->
+  <select id="selectByPersionIdPage"  resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />,
+    notice_record.id as noticeRecordId,
+    notice_record.flag as flag,
+    notice_record.persion_id as persion_id
+    from notice inner join notice_record 
+    on notice.id=notice_record.notice_id
+    where notice_record.persion_id = #{persion_id,jdbcType=INTEGER}
+    order by create_date desc
+    limit 0,100
+  </select>
+  
+  <select id="selectUnReadAmount" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+    select 
+    count(notice_record.id)
+    from notice inner join notice_record 
+    on notice.id=notice_record.notice_id
+    where notice_record.persion_id = #{persion_id,jdbcType=INTEGER}
+    and notice_record.flag=1
+  </select>
+  
+  
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from notice
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from notice
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.honglu.quickcall.user.facade.entity.Notice">
+    insert into notice (id, persion_id, admin_id, 
+      create_date, state, title, 
+      flag, BDelete, content
+      )
+    values (#{id,jdbcType=INTEGER}, #{persionId,jdbcType=INTEGER}, #{adminId,jdbcType=INTEGER}, 
+      #{createDate,jdbcType=TIMESTAMP}, #{state,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR}, 
+      #{flag,jdbcType=INTEGER}, #{bdelete,jdbcType=INTEGER}, #{content,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.honglu.quickcall.user.facade.entity.Notice" useGeneratedKeys="true" keyProperty="id">
+    insert into notice
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="persionId != null">
+        persion_id,
+      </if>
+      <if test="adminId != null">
+        admin_id,
+      </if>
+      <if test="createDate != null">
+        create_date,
+      </if>
+      <if test="state != null">
+        state,
+      </if>
+      <if test="title != null">
+        title,
+      </if>
+      <if test="flag != null">
+        flag,
+      </if>
+      <if test="bdelete != null">
+        BDelete,
+      </if>
+      <if test="content != null">
+        content,
+      </if>
+      <if test="linkUrl != null">
+        link_url,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="persionId != null">
+        #{persionId,jdbcType=INTEGER},
+      </if>
+      <if test="adminId != null">
+        #{adminId,jdbcType=INTEGER},
+      </if>
+      <if test="createDate != null">
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="state != null">
+        #{state,jdbcType=INTEGER},
+      </if>
+      <if test="title != null">
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="flag != null">
+        #{flag,jdbcType=INTEGER},
+      </if>
+      <if test="bdelete != null">
+        #{bdelete,jdbcType=INTEGER},
+      </if>
+      <if test="content != null">
+        #{content,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="linkUrl != null">
+      #{linkUrl},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.honglu.quickcall.user.facade.entity.Notice">
+    update notice
+    <set>
+      <if test="persionId != null">
+        persion_id = #{persionId,jdbcType=INTEGER},
+      </if>
+      <if test="adminId != null">
+        admin_id = #{adminId,jdbcType=INTEGER},
+      </if>
+      <if test="createDate != null">
+        create_date = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="state != null">
+        state = #{state,jdbcType=INTEGER},
+      </if>
+      <if test="title != null">
+        title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="flag != null">
+        flag = #{flag,jdbcType=INTEGER},
+      </if>
+      <if test="bdelete != null">
+        BDelete = #{bdelete,jdbcType=INTEGER},
+      </if>
+      <if test="content != null">
+        content = #{content,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.honglu.quickcall.user.facade.entity.Notice">
+    update notice
+    set persion_id = #{persionId,jdbcType=INTEGER},
+      admin_id = #{adminId,jdbcType=INTEGER},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      state = #{state,jdbcType=INTEGER},
+      title = #{title,jdbcType=VARCHAR},
+      flag = #{flag,jdbcType=INTEGER},
+      BDelete = #{bdelete,jdbcType=INTEGER},
+      content = #{content,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.honglu.quickcall.user.facade.entity.Notice">
+    update notice
+    set persion_id = #{persionId,jdbcType=INTEGER},
+      admin_id = #{adminId,jdbcType=INTEGER},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      state = #{state,jdbcType=INTEGER},
+      title = #{title,jdbcType=VARCHAR},
+      flag = #{flag,jdbcType=INTEGER},
+      BDelete = #{bdelete,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  <update id="updateFlagByid" >
+    update notice
+    set 
+      flag = 2
+    where id in 
+    <foreach collection="ids" index="index" item="id" open="(" separator="," close=")">
+              #{id}                             
+    </foreach> 
+  </update>
+  
+    <update id="updateBDeleteByid" >
+    update notice
+    set 
+      BDelete = 2
+    where 
+    persion_id=#{id,jdbcType=INTEGER}
+  </update>
+  
+    <update id="updateDeleteByidAndpresionId" >
+    update notice
+    set 
+      BDelete = 2
+    where 
+    persion_id=#{persion_id,jdbcType=INTEGER}
+    and id =#{id,jdbcType=INTEGER}
+  </update>
+</mapper>

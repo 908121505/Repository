@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="CommunityStatistics">
+    <resultMap id="resultMap" type="CommunityStatistics">
+        <result property="actualPraiseNum" column="actual_praise_num"/>
+        <result property="actualCommentNum" column="actual_comment_num"/>
+        <result property="actualSeeNum" column="actual_see_num"/>
+        <result property="date" column="date"/>
+        <result property="realNum" column="real_Num"/>
+    </resultMap>
+
+    <select id="queryCount" parameterType="map" resultType="Integer">
+        SELECT
+        COUNT(0)
+        FROM
+        (
+        SELECT
+        DATE_FORMAT(a.track_time, '%Y-%m-%d') AS date
+        FROM
+        stat_tracker_his a
+        WHERE 1=1
+        AND a.area_id = 3
+        <if test="sDate != null">
+            and DATE_FORMAT(a.track_time , '%Y-%m-%d') &gt;= #{sDate}
+        </if>
+        <if test="eDate != null">
+            and DATE_FORMAT(a.track_time , '%Y-%m-%d') &lt;= #{eDate}
+        </if>
+        GROUP BY
+        DATE_FORMAT(a.track_time, '%Y-%m-%d')
+        ) AS c
+    </select>
+    <select id="query" parameterType="map" resultMap="resultMap">
+        SELECT
+            COUNT(
+                CASE
+                WHEN a.area_index = 2 THEN
+                    0
+                END
+            ) AS actual_see_num,
+            COUNT(
+                CASE
+                WHEN a.area_index = 3 THEN
+                    0
+                END
+            ) AS actual_comment_num,
+            COUNT(
+                CASE
+                WHEN a.area_index = 4 THEN
+                    0
+                END
+            ) AS actual_praise_num,
+            DATE_FORMAT(a.track_time, '%Y-%m-%d') AS date
+        FROM
+            stat_tracker_his a
+        WHERE 1=1
+        AND a.area_id = 3
+        <if test="sDate != null">
+            and DATE_FORMAT(a.track_time , '%Y-%m-%d') &gt;= #{sDate}
+        </if>
+        <if test="eDate != null">
+            and DATE_FORMAT(a.track_time , '%Y-%m-%d') &lt;= #{eDate}
+        </if>
+        GROUP BY
+            DATE_FORMAT(a.track_time, '%Y-%m-%d')
+        ORDER BY
+            a.track_time DESC
+        LIMIT ${iDisplayStart}, ${iDisplayLength}
+    </select>
+    
+    
+<!--     <select id="queryOut" parameterType="map" resultMap="resultMap">
+        SELECT
+            COUNT(
+                CASE
+                WHEN a.area_index = 2 THEN
+                    0
+                END
+            ) AS actual_see_num,
+            COUNT(
+                CASE
+                WHEN a.area_index = 3 THEN
+                    0
+                END
+            ) AS actual_comment_num,
+            COUNT(
+                CASE
+                WHEN a.area_index = 4 THEN
+                    0
+                END
+            ) AS actual_praise_num,
+            DATE_FORMAT(a.track_time, '%Y-%m-%d') AS date
+        FROM
+            stat_tracker_his a
+        WHERE 1=1
+        AND a.area_id = 3
+        AND TO_DAYS( NOW( ) ) - TO_DAYS(track_time) = 1
+        GROUP BY
+            DATE_FORMAT(a.track_time, '%Y-%m-%d')
+        ORDER BY
+            a.track_time DESC
+    </select> -->
+    
+        <select id="queryOut" parameterType="map" resultMap="resultMap">
+        SELECT
+            COUNT(
+                CASE
+                WHEN a.area_index = 2 THEN
+                    0
+                END
+            ) AS actual_see_num,
+            COUNT(
+                CASE
+                WHEN a.area_index = 3 THEN
+                    0
+                END
+            ) AS actual_comment_num,
+            COUNT(
+                CASE
+                WHEN a.area_index = 4 THEN
+                    0
+                END
+            ) AS actual_praise_num,
+            DATE_FORMAT(a.track_time, '%Y-%m-%d') AS date
+        FROM
+            stat_tracker_his a
+        WHERE 1=1
+        AND a.area_id = 3
+        AND TO_DAYS( NOW( ) ) - TO_DAYS(track_time) = 1
+        GROUP BY DATE_FORMAT(a.track_time, '%Y-%m-%d')
+<!--         ORDER BY a.track_time DESC -->
+    </select>
+    
+    <select id="queryCommunityOut" parameterType="java.util.Map" resultMap="resultMap">
+        SELECT
+            COUNT(
+                CASE
+                WHEN a.area_index = 2 THEN
+                    0
+                END
+            ) AS actual_see_num,
+            COUNT(
+                CASE
+                WHEN a.area_index = 3 THEN
+                    0
+                END
+            ) AS actual_comment_num,
+            COUNT(
+                CASE
+                WHEN a.area_index = 4 THEN
+                    0
+                END
+            ) AS actual_praise_num,
+            #{track_time} AS date
+        FROM stat_tracker_his a
+        WHERE a.area_id = 3 AND date(track_time) = #{track_time}
+    </select>
+    
+    <select id="queryOtherOut" parameterType="map" resultMap="resultMap">
+        SELECT
+        COUNT(distinct uid) as real_Num,
+        DATE_FORMAT(a.track_time, '%Y-%m-%d') AS date
+        FROM
+            stat_tracker_his a
+        WHERE 1=1
+        AND a.area_id = 3
+        AND a.area_index=#{areaIndex}
+        <![CDATA[
+        AND a.track_time >= date_add(date(now()),interval -1 day)
+        AND a.track_time <= date_add(date(now()),interval 1 day)
+        ]]>
+    </select>
+
+    <select id="queryAll" parameterType="map" resultMap="resultMap">
+        SELECT
+        COUNT(
+        CASE
+        WHEN a.area_index = 2 THEN
+        0
+        END
+        ) AS actual_see_num,
+        COUNT(
+        CASE
+        WHEN a.area_index = 3 THEN
+        0
+        END
+        ) AS actual_comment_num,
+        COUNT(
+        CASE
+        WHEN a.area_index = 4 THEN
+        0
+        END
+        ) AS actual_praise_num,
+        DATE_FORMAT(a.track_time, '%Y-%m-%d') AS date
+        FROM
+        stat_tracker_his a
+        WHERE 1=1
+        AND a.area_id = 3
+        <if test="sDate != null">
+            and DATE_FORMAT(a.track_time , '%Y-%m-%d') &gt;= #{sDate}
+        </if>
+        <if test="eDate != null">
+            and DATE_FORMAT(a.track_time , '%Y-%m-%d') &lt;= #{eDate}
+        </if>
+        GROUP BY
+        DATE_FORMAT(a.track_time, '%Y-%m-%d')
+<!--         ORDER BY a.track_time DESC -->
+    </select>
+
+</mapper>

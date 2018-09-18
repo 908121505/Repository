@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="EconomicFamilyMapper" >
+	
+	<insert id="addEconomicFamily" parameterType="EconomicFamily" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+    INSERT INTO economic_family
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      	<if test="familyName != null" >
+       		family_name,
+      	</if>
+      	<if test="proportion != null" >
+        	proportion,
+      	</if>
+      	<if test="withdrawalType != null" >
+        	withdrawal_type,
+      	</if>
+      	<if test="incomeType != null" >
+        	income_type,
+      	</if>
+   		<if test="goddessTotal != null" >
+        	goddess_total,
+      	</if>
+      	<if test="createTime != null " >
+        	createTime,
+      	</if>
+     	<if test="updateTime != null " >
+        	createTime,
+      	</if>
+      	<if test="operation != null " >
+        	operation,
+      	</if>
+      	
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      	<if test="familyName != null" >
+        	#{familyName,jdbcType=VARCHAR},
+      	</if>
+      	<if test="proportion != null" >
+        	#{proportion,jdbcType=DOUBLE},
+      	</if>
+      	<if test="withdrawalType != null" >
+        	#{withdrawalType,jdbcType=INTEGER},
+      	</if>
+      	<if test="incomeType != null" >
+        	#{incomeType,jdbcType=INTEGER},
+      	</if>
+      	<if test="goddessTotal != null " >
+        	#{goddessTotal,jdbcType=INTEGER},
+      	</if>
+      	<if test="createTime != null " >
+        	#{createTime,jdbcType=TIMESTAMP},
+      	</if>
+      	<if test="updateTime != null " >
+        	#{updateTime,jdbcType=TIMESTAMP},
+      	</if>
+      	<if test="operation != null " >
+        	#{operation,jdbcType=VARCHAR},
+      	</if>
+    </trim>
+  </insert>
+  
+  <select id="selectAll"  parameterType="EconomicFamily" resultType="EconomicFamily">
+  			SELECT
+			ef.id AS id,
+			ef.family_name AS familyName,
+			ef.proportion AS proportion,
+			ef.goddess_total AS goddessTotal,
+			ef.withdrawal_type AS withdrawalType,
+			ef.income_type AS incomeType
+		FROM
+			economic_family ef
+			
+			where 1=1 
+		<if test="familyName != null">
+			AND ef.family_name LIKE CONCAT("%",#{familyName},"%")
+	   </if>
+		<if test="id != null">
+			AND ef.id = #{id,jdbcType=INTEGER}
+		</if>
+		
+			
+  </select>
+  
+  
+    <select id="familyGoddessList"  parameterType="EconomicFamily" resultType="map">
+	  			SELECT
+			 DISTINCT ef.id AS id,
+			ef.family_name AS familyName,
+			ef.proportion AS proportion,
+			ef.goddess_total AS goddessTotal,
+			ef.withdrawal_type AS withdrawalType,
+			ef.income_type AS incomeType,
+			p.id as uid
+		FROM
+			economic_family ef
+		INNER JOIN persion p ON ef.id = p.company_id
+		INNER JOIN balance_of_payments bof on p.id = bof.other_id
+			where 1=1 
+		<if test="id != null">
+			AND ef.id =#{id}
+	   </if>
+			
+  </select>
+  
+  
+  
+  
+    
+    <select id="familyGoddessInfo"  parameterType="map" resultType="map">
+								select 
+				tt.other_id other_id,
+				max(case when tt.type='yy' then tt.sc else 0 end) as yysc,
+				max(case when tt.type='sp' then tt.sc else 0 end) spsc,
+				max(case when tt.type='lw' then tt.sc else 0 end ) lwsc,
+				max(case when tt.type='smsp' then tt.sc else 0 end ) smspsc,
+				max(case when tt.type='其他' then tt.sc else 0 end) qitasc,
+				max(case when tt.type='total' then tt.sc else 0 end ) totalsc,
+				max(case when tt.type='yy' then tt.sr else 0 end) as yysr,
+				max(case when tt.type='sp' then tt.sr else 0 end) spsr,
+				max(case when tt.type='lw' then tt.sr else 0 end ) lwsr,
+				max(case when tt.type='smsp' then tt.sr else 0 end ) smspsr,
+				max(case when tt.type='其他' then tt.sr else 0 end) qitasr,
+				max(case when tt.type='total' then tt.sr else 0 end ) totalsr                                                        
+				from (
+				SELECT
+				   a.other_id other_id,
+					CASE
+				WHEN a.type = '2' THEN
+					'yy'
+				WHEN a.type = '3' THEN
+					'sp'
+				WHEN a.type = '4' THEN
+					'lw'
+				WHEN a.type = '5' THEN
+					'smsp'
+				
+				ELSE
+					'其他'
+				END AS type,
+				 ifnull(
+					SUM(
+						TIMESTAMPDIFF(
+							MINUTE,
+							a.create_date,
+							a.finish_date
+						)
+					),
+					0
+				) AS sc,
+				 ifnull(sum(a.capital), 0) AS sr
+				FROM
+					balance_of_payments a
+				WHERE 1=1 and	a.other_id = #{id}
+				
+				
+					<if test="createDate != null">
+						 AND  DATE_FORMAT(a.create_date,'%Y-%m-%d') &gt; #{createDate}
+	   				</if>
+					<if test="finishDate != null">
+						 AND  DATE_FORMAT(a.finish_date,'%Y-%m-%d') &lt; #{finishDate}
+	   				</if>
+				
+				   
+   					
+				
+				GROUP BY
+					a.type
+				UNION ALL
+					SELECT
+					
+					 ifnull(a.other_id,0) other_id,
+					'total' as type,
+						ifnull(
+							SUM(
+								TIMESTAMPDIFF(
+									MINUTE,
+									a.create_date,
+									a.finish_date
+								)
+							),
+							0
+						) AS sc,
+						ifnull(sum(a.capital), 0) AS sr
+					FROM
+						balance_of_payments a
+					WHERE 1=1
+					 and	a.other_id = #{id}
+					 
+					 				
+					<if test="createDate != null">
+						 AND  DATE_FORMAT(a.create_date,'%Y-%m-%d') &gt; #{createDate}
+	   				</if>
+					<if test="finishDate != null">
+						 AND  DATE_FORMAT(a.finish_date,'%Y-%m-%d') &lt; #{finishDate}
+	   				</if>
+					 
+						) as tt
+  </select>
+  
+  
+  
+   <update id="modifyEconomicFamily" parameterType="EconomicFamily"  >
+    update economic_family
+    <set>
+      <if test="familyName != null">
+        family_name = #{familyName,jdbcType=VARCHAR},
+      </if>
+      <if test="proportion != null">
+        proportion = #{proportion,jdbcType=DOUBLE},
+      </if>
+      <if test="withdrawalType != null">
+        withdrawal_type = #{withdrawalType,jdbcType=INTEGER},
+      </if>
+      <if test="incomeType != null">
+        income_type = #{incomeType,jdbcType=INTEGER},
+      </if>
+      <if test="goddessTotal != null">
+        goddess_total = #{goddessTotal,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        createTime = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        updateTime = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="operation != null">
+        operation = #{operation,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+   <update id="removeFamilyGoddess" parameterType="Integer"  >
+    update persion
+        set  company_id = null
+    where id = #{0}
+  </update>
+	
+	
+  <update id="modifyFamilyGoddessTotal" parameterType="int"  >
+    update economic_family
+        set  goddess_total = goddess_total - 1
+    where id = #{id}
+  </update>
+  
+  
+      <select id="EconomyFamilyRules"  parameterType="Integer" resultType="map">
+			  	SELECT
+			efr.goddess_level AS goddessLevel,
+			efr.goddess_income AS goddessIncome,
+			efr.family_income AS familyIncome,
+			efr.ppb_income AS ppbIncome
+		FROM
+			economy_family_rules efr
+		WHERE 1=1
+		
+			and  efr.family_id =#{0}
+		GROUP BY
+			efr.goddess_level
+	  </select>
+  
+</mapper>

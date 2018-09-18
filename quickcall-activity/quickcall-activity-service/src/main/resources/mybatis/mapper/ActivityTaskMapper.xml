@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ActivityTask">
+  <sql id="Base_Column_List">
+    id, activity_id, task_name, task_sex, task_content, task_amount, task_award_amount, task_award_ratio,
+    create_time, create_man, remark,task_click_number,task_join_number
+  </sql>
+  <!-- 查询全部信息 -->
+  <select id="activityTask_all" resultType="ActivityTaskVo" parameterType="Map">
+    SELECT
+    act.id, act.activity_id,act.task_name, act.task_sex, act.task_content, act.task_amount, act.task_award_amount, act.task_award_ratio,
+    act.create_time, act.create_man, act.remark,ac.id,ac.ac_title
+    FROM activity_task act
+    LEFT JOIN activity ac ON act.activity_id  = ac.id
+    ORDER BY act.create_time ASC
+    <if test="begin!=null and last!=null">
+      LIMIT #{begin},#{last}
+    </if>
+  </select>
+  
+   <!-- 活动对应任务 -->
+  <select id="selectByActivityId" resultType="ActivityTaskVo" >
+    SELECT
+    act.id,act.task_uuid, act.activity_id,act.task_name, act.task_sex, act.task_content, act.task_amount, act.task_award_amount, act.task_award_ratio,
+    act.create_time, act.create_man, act.remark,act.task_click_number,act.task_join_number,act.task_type,act.task_isActivity
+    FROM activity_task  as act
+    where act.activity_id=#{id}
+    and act.task_award_ratio is not null    
+    ORDER BY act.create_time ASC
+  </select>
+  
+  <select id="selectByActivityIdAll" resultType="ActivityTaskVo" >
+    SELECT
+    act.id, act.activity_id,act.task_name, act.task_sex, act.task_content, act.task_amount, act.task_award_amount, act.task_award_ratio,
+    act.create_time, act.create_man, act.remark,act.task_click_number,act.task_join_number,act.task_type,act.task_isActivity
+    FROM activity_task  as act
+    where act.activity_id= #{activityId}
+    ORDER BY act.create_time ASC
+  </select>
+
+  <!-- 查询数据总数 -->
+  <select id="activityTask_all_count" resultType="Integer">
+    SELECT COUNT(ID) FROM activity_task
+  </select>
+  <select id="selectByKey" parameterType="ActivityTask" resultType="ActivityTask">
+    select 
+    <include refid="Base_Column_List" />
+    from activity_task
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+
+  <select id="findByUUId" parameterType="ActivityTask" resultType="ActivityTask">
+    select
+    <include refid="Base_Column_List" />
+    from activity_task
+    where task_uuid = #{task_uuid,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByKey" parameterType="ActivityTask">
+    delete from activity_task
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="ActivityTask">
+    insert into activity_task
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="activity_id != null">
+        activity_id,
+      </if>
+      <if test="task_name != null">
+        task_name,
+      </if>
+      <if test="task_sex != null">
+        task_sex,
+      </if>
+      <if test="task_content != null">
+        task_content,
+      </if>
+      <if test="task_amount != null">
+        task_amount,
+      </if>
+      <if test="task_award_amount != null">
+        task_award_amount,
+      </if>
+      <if test="task_award_ratio != null">
+        task_award_ratio,
+      </if>
+      <if test="create_time != null">
+        create_time,
+      </if>
+      <if test="create_man != null">
+        create_man,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="activity_id != null">
+        #{activity_id,jdbcType=INTEGER},
+      </if>
+      <if test="task_name != null">
+        #{task_name,jdbcType=VARCHAR},
+      </if>
+      <if test="task_sex != null">
+        #{task_sex,jdbcType=INTEGER},
+      </if>
+      <if test="task_content != null">
+        #{task_content,jdbcType=VARCHAR},
+      </if>
+      <if test="task_amount != null">
+        #{task_amount,jdbcType=DECIMAL},
+      </if>
+      <if test="task_award_amount != null">
+        #{task_award_amount,jdbcType=DECIMAL},
+      </if>
+      <if test="task_award_ratio != null">
+        #{task_award_ratio,jdbcType=DOUBLE},
+      </if>
+      <if test="create_time != null">
+        #{create_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="create_man != null">
+        #{create_man,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="update" parameterType="ActivityTask">
+    update activity_task
+    <set>
+      <if test="activity_id != null">
+        activity_id = #{activity_id,jdbcType=INTEGER},
+      </if>
+      <if test="task_name != null">
+        task_name = #{task_name,jdbcType=VARCHAR},
+      </if>
+      <if test="task_sex != null">
+        task_name = #{task_sex,jdbcType=INTEGER},
+      </if>
+      <if test="task_content != null">
+        task_content = #{task_content,jdbcType=VARCHAR},
+      </if>
+      <if test="task_amount != null">
+        task_amount = #{task_amount,jdbcType=DECIMAL},
+      </if>
+      <if test="task_award_amount != null">
+        task_award_amount = #{task_award_amount,jdbcType=DECIMAL},
+      </if>
+      <if test="task_award_ratio != null">
+        task_award_ratio = #{task_award_ratio,jdbcType=DOUBLE},
+      </if>
+      <if test="create_time != null">
+        create_time = #{create_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="create_man != null">
+        create_man = #{create_man,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="task_click_number != null">
+        task_click_number = #{task_click_number,jdbcType=VARCHAR},
+      </if>
+      <if test="task_join_number != null">
+        task_join_number = #{task_join_number,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

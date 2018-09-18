@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="ProductAppointOnline">
+	<resultMap id="BaseResultMap"
+		type="com.calf.module.product.entity.ProductAppointOnline">
+		<id column="id" property="id" jdbcType="VARCHAR" />
+		<result column="product_id" property="productId" jdbcType="VARCHAR" />
+		<result column="order_time" property="orderTime" jdbcType="TIMESTAMP" />
+		<result column="season_type" property="seasonType" jdbcType="BIGINT" />
+		<result column="status" property="status" jdbcType="BIGINT" />
+		<result column="remark" property="remark" jdbcType="VARCHAR" />
+		<result column="create_man" property="createMan" jdbcType="VARCHAR" />
+		<result column="modify_man" property="modifyMan" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+	<select id="selectProductAppointList" resultType="com.calf.module.bussiness.vo.ProductInfo">
+		SELECT
+		  DATE_FORMAT(pao.order_time,'%Y-%m-%d' )  AS  orderTime,
+		  pao.season_type  AS  seasonType,
+		  pao.product_id  AS  prodId,
+		  pc.category_name  AS  prodCat,
+		  p.product_name  AS  prodName,
+		  pao.create_time  AS  createTime,
+		  pao.create_man  AS  createMan,
+		  pao.modify_man  AS  modifyMan,
+		  pao.modify_time  AS  modifyTime
+		FROM
+			product_appoint_online pao
+		LEFT JOIN product p ON pao.product_id = p.product_id
+		LEFT JOIN product_category  pc  ON  p.product_category_id=  pc.product_category_id
+		WHERE  
+		    pao.status in (1,2)  
+		<if test="productId !=null">
+		    AND  pao.product_id = #{productId,jdbcType=VARCHAR}
+		</if>
+		<if test="productName !=null">
+			AND  p.product_name = #{productName,jdbcType=VARCHAR}
+		</if>
+		<if test="seasonType !=null">
+			AND  pao.season_type = #{seasonType,jdbcType=BIGINT}
+		</if>
+		<if test="startTime !=null">
+			AND  pao.order_time  <![CDATA[ > ]]>  #{startTime,jdbcType=TIMESTAMP} 
+		</if>
+		<if test="endTime !=null">
+			AND  pao.order_time  <![CDATA[ < ]]>  #{endTime,jdbcType=TIMESTAMP}
+		</if>
+		ORDER BY  pao.order_time   DESC
+		<if test="iDisplayStart !=null and iDisplayLength !=null">
+		limit ${iDisplayStart},${iDisplayLength}
+        </if>
+        
+        
+		
+		
+		
+	</select>
+	<select id="queryCount" resultType="int">
+		SELECT
+		  count(1)
+		FROM
+			product_appoint_online pao
+		LEFT JOIN product p ON pao.product_id = p.product_id
+		WHERE  
+		    pao.status in (1,2)   
+		<if test="productId !=null">
+		    AND  pao.product_id = #{productId,jdbcType=VARCHAR}
+		</if>
+		<if test="productName !=null">
+			AND  p.product_name = #{productName,jdbcType=VARCHAR}
+		</if>
+		<if test="seasonType !=null">
+			AND  pao.season_type = #{seasonType,jdbcType=BIGINT}
+		</if>
+		<if test="startTime !=null">
+			AND  pao.order_time  <![CDATA[ > ]]>  #{startTime,jdbcType=TIMESTAMP} 
+		</if>
+		<if test="endTime !=null">
+			AND  pao.order_time  <![CDATA[ < ]]>  #{endTime,jdbcType=TIMESTAMP}
+		</if>
+	</select>
+	
+	
+	<update id="updateAppoint"  parameterType="map">
+		update 
+			product_appoint_online
+		set
+		status = #{status},
+		modify_time = NOW(),
+		modify_man = 'JOBSYS'
+		WHERE  id = #{id}
+		
+	</update>
+	<update id="updateAppointForApprove"  parameterType="map">
+		update 
+			product_appoint_online
+		set
+		status = #{newStatus},
+		modify_time = NOW(),
+		modify_man = #{currUser}
+		WHERE  product_id = #{productId}  and  status = #{oldStatus}
+		
+	</update>
+	
+	
+	
+	<!-- 定时任务迁移 -->
+	<select id="selectProductIdList" resultType="java.lang.String">
+		SELECT
+		product_id
+		FROM
+		product_appoint_online
+		WHERE
+		(order_time BETWEEN #{startTime,jdbcType=TIMESTAMP} AND
+		#{endTime,jdbcType=TIMESTAMP})
+		AND status = #{status,jdbcType=BIGINT}
+	</select>
+	
+	<update id="autoUpdateStatus" >
+		update 
+			product
+		set 
+			state = #{statusOn,jdbcType=INTEGER},
+			modify_time = NOW()
+		where 
+			product_id in
+			<foreach collection="prodIdList" item="id" index="index"
+	            open="(" close=")" separator=",">
+		      #{id}
+		    </foreach>
+	</update>
+	
+	<update id="updateProductOppoint">
+		update product_appoint_online
+		set
+		status = #{statusOnline,jdbcType=BIGINT},
+		modify_time = NOW(),
+		modify_man = 'JOBSYS'
+		WHERE
+		(order_time BETWEEN #{startTime,jdbcType=TIMESTAMP} AND
+		#{endTime,jdbcType=TIMESTAMP})
+		AND status = #{status,jdbcType=BIGINT}
+	</update>
+	
+	
+	<update id="updateAppointStatus" parameterType="map">
+	    UPDATE 
+	    	product_appoint_online
+		SET 
+			status = #{status,jdbcType=BIGINT},
+			modify_man = #{modifyMan,jdbcType=VARCHAR} ,
+		    modify_time = #{modifyTime,jdbcType=TIMESTAMP}
+		WHERE
+			product_id = #{productId,jdbcType=VARCHAR}
+		AND  status  in (#{oldStatus,jdbcType=BIGINT}  , #{auditStatus,jdbcType=BIGINT}) 
+  </update>
+  
+  
+   <select id="countAppoint" resultType="java.lang.String">
+	   SELECT
+			id
+		FROM
+			product_appoint_online
+		WHERE
+			product_id = #{productId,jdbcType=VARCHAR}
+		AND  status  IN ( #{status,jdbcType=BIGINT} ,  #{auditStatus,jdbcType=BIGINT} )
+   </select>
+	
+	
+<!-- 	<update id="updateAppoint" parameterType="map">
+	    UPDATE 
+	    	product_appoint_online
+		SET 
+		 	season_type = #{seasonType,jdbcType=BIGINT},
+			order_time = #{orderTime,jdbcType=TIMESTAMP},
+		    modify_man = #{modifyMan,jdbcType=VARCHAR} ,
+		    modify_time = #{modifyTime,jdbcType=TIMESTAMP}
+		WHERE
+			id = #{id,jdbcType=VARCHAR}
+  </update> -->
+	
+	
+  <update id="updateAppointExt" parameterType="map">
+	    UPDATE 
+	    	product_appoint_online
+		SET 
+		 	season_type = #{seasonType,jdbcType=BIGINT},
+		 	<if test="status !=null">
+				 status = #{status,jdbcType=BIGINT} ,
+			</if>
+			order_time = #{orderTime,jdbcType=TIMESTAMP},
+		    modify_man = #{modifyMan,jdbcType=VARCHAR} ,
+		    modify_time = #{modifyTime,jdbcType=TIMESTAMP}
+		WHERE
+			id = #{id,jdbcType=VARCHAR}
+  </update>
+	
+	
+	  <select id="countInnerYear" resultType="com.calf.module.product.vo.ProductInfoResult">
+	   SELECT
+		COUNT(pao.product_id) AS count,
+		DATE_FORMAT(pao.order_time, '%m-%d') AS dateStr,
+		DATE_FORMAT(pao.order_time, '%k:%i') AS hourStr,
+		DATE_FORMAT(pao.order_time, '%k') AS hourNum,
+		pao.order_time AS orderTime,
+		  (DATEDIFF(pao.order_time,NOW()) + 1 ) AS diffDay,
+		  (YEAR(pao.order_time) - YEAR(NOW()) ) AS  diffYear
+		FROM
+			product_appoint_online  pao  LEFT JOIN  product_ext  pe   ON  pao.product_id = pe.prod_id
+		WHERE
+		    pe.product_status not in (2) 
+		AND	pao.status in (1,2) 
+		AND pao.order_time BETWEEN #{startTime,jdbcType=TIMESTAMP}
+		AND #{endTime,jdbcType=TIMESTAMP}
+		GROUP BY
+			MONTH (pao.order_time),
+			DAY (pao.order_time),
+			HOUR (pao.order_time)
+		ORDER BY
+			pao.order_time
+  </select>
+  
+  
+  <update id="updateAppointPart" parameterType="map">
+    UPDATE 
+	    product_appoint_online
+	SET order_time = #{orderTime},
+		modify_man = #{orderTime},
+		modify_time = NOW()
+	WHERE
+		product_id = #{productId}
+	AND status = 4
+  </update>	
+	
+	
+	
+	
+	
+	
+</mapper>

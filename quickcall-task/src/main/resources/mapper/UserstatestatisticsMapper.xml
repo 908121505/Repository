@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.honglu.quickcall.task.dao.UserstatestatisticsMapper">
+  <resultMap id="BaseResultMap" type="com.honglu.quickcall.task.entity.Userstatestatistics">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="totalTime" jdbcType="INTEGER" property="totaltime" />
+    <result column="sTotalTime" jdbcType="INTEGER" property="stotaltime" />
+    <result column="sTotalCapital" jdbcType="INTEGER" property="stotalcapital" />
+    <result column="yTotalTime" jdbcType="INTEGER" property="ytotaltime" />
+    <result column="yTotalCapital" jdbcType="INTEGER" property="ytotalcapital" />
+    <result column="yconnectNum" jdbcType="INTEGER" property="yconnectnum" />
+    <result column="yUnConnectNum" jdbcType="INTEGER" property="yunconnectnum" />
+    <result column="yRefuseNum" jdbcType="INTEGER" property="yrefusenum" />
+    <result column="sconnectNum" jdbcType="INTEGER" property="sconnectnum" />
+    <result column="sUnConnectNum" jdbcType="INTEGER" property="sunconnectnum" />
+    <result column="sRefuseNum" jdbcType="INTEGER" property="srefusenum" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, user_id, totalTime, sTotalTime, sTotalCapital, yTotalTime, yTotalCapital, yconnectNum, 
+    yUnConnectNum, yRefuseNum, sconnectNum, sUnConnectNum, sRefuseNum, create_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from userstatestatistics
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from userstatestatistics
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.honglu.quickcall.task.entity.Userstatestatistics">
+    insert into userstatestatistics (id, user_id, totalTime, 
+      sTotalTime, sTotalCapital, yTotalTime, 
+      yTotalCapital, yconnectNum, yUnConnectNum, 
+      yRefuseNum, sconnectNum, sUnConnectNum, 
+      sRefuseNum, create_time)
+    values (#{id,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{totaltime,jdbcType=INTEGER}, 
+      #{stotaltime,jdbcType=INTEGER}, #{stotalcapital,jdbcType=INTEGER}, #{ytotaltime,jdbcType=INTEGER}, 
+      #{ytotalcapital,jdbcType=INTEGER}, #{yconnectnum,jdbcType=INTEGER}, #{yunconnectnum,jdbcType=INTEGER}, 
+      #{yrefusenum,jdbcType=INTEGER}, #{sconnectnum,jdbcType=INTEGER}, #{sunconnectnum,jdbcType=INTEGER}, 
+      #{srefusenum,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.honglu.quickcall.task.entity.Userstatestatistics">
+    insert into userstatestatistics
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="totaltime != null">
+        totalTime,
+      </if>
+      <if test="stotaltime != null">
+        sTotalTime,
+      </if>
+      <if test="stotalcapital != null">
+        sTotalCapital,
+      </if>
+      <if test="ytotaltime != null">
+        yTotalTime,
+      </if>
+      <if test="ytotalcapital != null">
+        yTotalCapital,
+      </if>
+      <if test="yconnectnum != null">
+        yconnectNum,
+      </if>
+      <if test="yunconnectnum != null">
+        yUnConnectNum,
+      </if>
+      <if test="yrefusenum != null">
+        yRefuseNum,
+      </if>
+      <if test="sconnectnum != null">
+        sconnectNum,
+      </if>
+      <if test="sunconnectnum != null">
+        sUnConnectNum,
+      </if>
+      <if test="srefusenum != null">
+        sRefuseNum,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="totaltime != null">
+        #{totaltime,jdbcType=INTEGER},
+      </if>
+      <if test="stotaltime != null">
+        #{stotaltime,jdbcType=INTEGER},
+      </if>
+      <if test="stotalcapital != null">
+        #{stotalcapital,jdbcType=INTEGER},
+      </if>
+      <if test="ytotaltime != null">
+        #{ytotaltime,jdbcType=INTEGER},
+      </if>
+      <if test="ytotalcapital != null">
+        #{ytotalcapital,jdbcType=INTEGER},
+      </if>
+      <if test="yconnectnum != null">
+        #{yconnectnum,jdbcType=INTEGER},
+      </if>
+      <if test="yunconnectnum != null">
+        #{yunconnectnum,jdbcType=INTEGER},
+      </if>
+      <if test="yrefusenum != null">
+        #{yrefusenum,jdbcType=INTEGER},
+      </if>
+      <if test="sconnectnum != null">
+        #{sconnectnum,jdbcType=INTEGER},
+      </if>
+      <if test="sunconnectnum != null">
+        #{sunconnectnum,jdbcType=INTEGER},
+      </if>
+      <if test="srefusenum != null">
+        #{srefusenum,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.honglu.quickcall.task.entity.Userstatestatistics">
+    update userstatestatistics
+    <set>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="totaltime != null">
+        totalTime = #{totaltime,jdbcType=INTEGER},
+      </if>
+      <if test="stotaltime != null">
+        sTotalTime = #{stotaltime,jdbcType=INTEGER},
+      </if>
+      <if test="stotalcapital != null">
+        sTotalCapital = #{stotalcapital,jdbcType=INTEGER},
+      </if>
+      <if test="ytotaltime != null">
+        yTotalTime = #{ytotaltime,jdbcType=INTEGER},
+      </if>
+      <if test="ytotalcapital != null">
+        yTotalCapital = #{ytotalcapital,jdbcType=INTEGER},
+      </if>
+      <if test="yconnectnum != null">
+        yconnectNum = #{yconnectnum,jdbcType=INTEGER},
+      </if>
+      <if test="yunconnectnum != null">
+        yUnConnectNum = #{yunconnectnum,jdbcType=INTEGER},
+      </if>
+      <if test="yrefusenum != null">
+        yRefuseNum = #{yrefusenum,jdbcType=INTEGER},
+      </if>
+      <if test="sconnectnum != null">
+        sconnectNum = #{sconnectnum,jdbcType=INTEGER},
+      </if>
+      <if test="sunconnectnum != null">
+        sUnConnectNum = #{sunconnectnum,jdbcType=INTEGER},
+      </if>
+      <if test="srefusenum != null">
+        sRefuseNum = #{srefusenum,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.honglu.quickcall.task.entity.Userstatestatistics">
+    update userstatestatistics
+    set user_id = #{userId,jdbcType=INTEGER},
+      totalTime = #{totaltime,jdbcType=INTEGER},
+      sTotalTime = #{stotaltime,jdbcType=INTEGER},
+      sTotalCapital = #{stotalcapital,jdbcType=INTEGER},
+      yTotalTime = #{ytotaltime,jdbcType=INTEGER},
+      yTotalCapital = #{ytotalcapital,jdbcType=INTEGER},
+      yconnectNum = #{yconnectnum,jdbcType=INTEGER},
+      yUnConnectNum = #{yunconnectnum,jdbcType=INTEGER},
+      yRefuseNum = #{yrefusenum,jdbcType=INTEGER},
+      sconnectNum = #{sconnectnum,jdbcType=INTEGER},
+      sUnConnectNum = #{sunconnectnum,jdbcType=INTEGER},
+      sRefuseNum = #{srefusenum,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Export">
+	<select id="playData" parameterType="map" resultType="ExportPlayData">
+		SELECT app_code,uid as 'customer_code',course_code,unit_code,ware_code,create_time AS 'play_time',end_time,
+			watch_time AS 'play_times'
+		FROM log_course
+		WHERE cType='5' and create_time BETWEEN #{begin_time} AND #{end_time}
+	</select>
+	
+	<select id="userData" parameterType="map" resultType="ExportUserData">
+		SELECT app_code,id as 'uid',tv_code as 'serial_number',user_code as 'stu_no',
+			tv_code,name as 'names',sex,birthday,phone,register_time,'' as 'email','' as 'password'
+		from customer_info
+		where register_time BETWEEN #{begin_time} AND #{end_time}
+	</select>
+	
+	<select id="orderData" parameterType="map" resultType="ExportOrderData">
+		SELECT uid,appid,codes, product_code,price,begin_time,end_time,order_time,state,other_codes,order_source,remark
+		from order_info 
+		where order_time BETWEEN #{begin_time} AND #{end_time}
+	</select>
+</mapper>

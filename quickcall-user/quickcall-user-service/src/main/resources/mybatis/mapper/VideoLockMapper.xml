@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="VideoLock" >
+  
+  <insert id="insert" parameterType="VideoLock" >
+    insert into video_lock
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="vid != null and vid != 0" >
+        vid,
+      </if>
+      <if test="pid != null and pid != 0" >
+        pid,
+      </if>
+      <if test="unlocked != null and unlocked != 0" >
+        unlocked,
+      </if>
+      <if test="liked != null and liked != 0" >
+        liked,
+      </if>
+      <if test="unlock_time != null" >
+        unlock_time,
+      </if>
+      <if test="liked_time != null" >
+        liked_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="vid != null and vid != 0" >
+        #{vid,jdbcType=INTEGER},
+      </if>
+      <if test="pid != null and pid != 0" >
+        #{pid,jdbcType=INTEGER},
+      </if>
+      <if test="unlocked != null and unlocked != 0" >
+        #{unlocked,jdbcType=INTEGER},
+      </if>
+      <if test="liked != null and liked != 0" >
+        #{liked,jdbcType=INTEGER},
+      </if>
+      <if test="unlock_time != null " >
+        #{unlock_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="liked_time != null " >
+        #{liked_time,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  
+  <update id="update" parameterType="VideoLock" >
+    update video_lock
+    <set >
+      <if test="unlocked != null" >
+        unlocked = #{unlocked,jdbcType=INTEGER},
+      </if>
+      <if test="liked != null" >
+        liked = #{liked,jdbcType=INTEGER},
+      </if>
+      <if test="unlock_time != null " >
+        unlock_time = #{unlock_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="liked_time != null " >
+        liked_time = #{liked_time,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where vid = #{vid,jdbcType=INTEGER} and pid = #{pid,jdbcType=INTEGER}
+  </update>
+  
+  <!-- 根据用户和视频编号查询信息 -->
+  <select id="selectByVidAndPid" resultType="VideoLock" parameterType="VideoLock">
+  	select * from video_lock where pid=#{pid} and vid=#{vid}
+  </select>
+
+  <!-- 获取用户已解锁私密视频的总个数 -->
+  <select id="getlockedVideoNums" resultType="int" parameterType="int">
+    SELECT count(1)
+    from video_lock vl, video v
+    WHERE 1=1
+    and vl.vid = v.id
+    and vl.unlocked = 1
+    and v.type = 3
+    and v.status = 3
+    and vl.pid = #{id}
+  </select>
+
+</mapper>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="SysRoleMenu">
+	<cache-ref namespace="Home"/>
+	
+	<resultMap id="SysRoleMenuMap" type="SysRoleMenu">
+		<id property="id" column="id" />
+		<id property="role_code" column="role_code" />
+		<id property="menu_id" column="menu_id" />
+	</resultMap>
+	
+	<delete id="Roledelete" parameterType="map" flushCache="true">
+		delete from sys_role_menu where role_code = #{arg0}
+	</delete>
+	
+	
+	<insert id="batchInsert" parameterType="java.util.List">
+		insert into sys_role_menu(role_code,menu_id) values
+		<foreach collection="list" item="role_menu" separator=",">
+			(#{role_menu.role_code},#{role_menu.menu_id})
+		</foreach>
+	</insert>
+	
+</mapper>

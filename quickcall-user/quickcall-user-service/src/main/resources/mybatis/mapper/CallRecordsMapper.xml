@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.honglu.quickcall.user.service.dao.CallRecordsMapper">
+  <resultMap id="BaseResultMap" type="com.honglu.quickcall.user.facade.entity.CallRecords">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="persion_id" jdbcType="INTEGER" property="persionId" />
+    <result column="accept_id" jdbcType="INTEGER" property="acceptId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="state" jdbcType="INTEGER" property="state" />
+    <result column="call_type" jdbcType="INTEGER" property="callType" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, persion_id, accept_id, create_time, update_time, state, call_type
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from call_records
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  
+  <select id="selectByuserIdAndTypw"  resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from call_records
+    where persion_id = #{pid,jdbcType=INTEGER}
+    and accept_id = #{acceptId,jdbcType=INTEGER}
+    and state=1
+    and call_type= #{type,jdbcType=INTEGER}
+    order by id desc
+    limit 1    
+  </select>
+  
+  <select id="selectConnectRateBypersionId"  resultType="double">
+    SELECT COUNT(CASE WHEN `state` =2 THEN 1 ELSE NULL END)/count(*)
+    FROM call_records 
+    WHERE persion_id=#{other_id,jdbcType=INTEGER} AND call_type=2
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from call_records
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.honglu.quickcall.user.facade.entity.CallRecords">
+    insert into call_records (id, persion_id, accept_id, 
+      create_time, update_time, state, 
+      call_type)
+    values (#{id,jdbcType=INTEGER}, #{persionId,jdbcType=INTEGER}, #{acceptId,jdbcType=INTEGER}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{state,jdbcType=INTEGER}, 
+      #{callType,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.honglu.quickcall.user.facade.entity.CallRecords">
+    insert into call_records
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="persionId != null">
+        persion_id,
+      </if>
+      <if test="acceptId != null">
+        accept_id,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="state != null">
+        state,
+      </if>
+      <if test="callType != null">
+        call_type,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="persionId != null">
+        #{persionId,jdbcType=INTEGER},
+      </if>
+      <if test="acceptId != null">
+        #{acceptId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="state != null">
+        #{state,jdbcType=INTEGER},
+      </if>
+      <if test="callType != null">
+        #{callType,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.honglu.quickcall.user.facade.entity.CallRecords">
+    update call_records
+    <set>
+      <if test="persionId != null">
+        persion_id = #{persionId,jdbcType=INTEGER},
+      </if>
+      <if test="acceptId != null">
+        accept_id = #{acceptId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="state != null">
+        state = #{state,jdbcType=INTEGER},
+      </if>
+      <if test="callType != null">
+        call_type = #{callType,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.honglu.quickcall.user.facade.entity.CallRecords">
+    update call_records
+    set persion_id = #{persionId,jdbcType=INTEGER},
+      accept_id = #{acceptId,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      state = #{state,jdbcType=INTEGER},
+      call_type = #{callType,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

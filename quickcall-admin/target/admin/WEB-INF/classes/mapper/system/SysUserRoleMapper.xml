@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="SysUserRole">
+	<resultMap id="sysUserRoleResultMap" type="SysUserRole">
+		<id property="id" column="id" />
+		<result property="account" column="account" />
+		<result property="role_code" column="role_code" />
+	</resultMap>
+	
+	<sql id="sysUserRoleAllColumn">
+		id,account,role_code
+	</sql>
+	
+	<select id="get" parameterType="map" resultMap="sysUserRoleResultMap">
+		select <include refid="sysUserRoleAllColumn"/> from sys_user_role where id = #{id}
+	</select>
+	
+	<delete id="deleteUserRole" parameterType="map">
+		delete from sys_user_role where account=#{arg0}
+	</delete>
+	
+	<insert id="insert" parameterType="map">
+		insert into sys_user_role(account,role_code) 
+		values(#{account},#{role_code})
+	</insert>
+	
+	<insert id="batchInsert" parameterType="java.util.List">
+		insert into sys_user_role(account,role_code) values
+		<foreach collection="list" item="userRole" separator=",">
+			(#{userRole.account},#{userRole.role_code})
+		</foreach>
+	</insert>
+</mapper>

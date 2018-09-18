@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="JxlMfAuditReport" >
+  <resultMap id="resultMap" type="JxlMfAuditReport" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="account_id" property="accountId" jdbcType="VARCHAR" />
+    <result column="phone_num" property="phoneNum" jdbcType="VARCHAR" />
+    <result column="creatime" property="creatime" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+     <result column="user_phone_info" property="userPhoneInfo" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id,account_id,phone_num,creatime,update_time,remark,user_phone_info
+  </sql>
+  <select id="queryAll" parameterType="map" resultMap="resultMap">
+  
+  select 
+  <include refid="Base_Column_List"/>
+  from jxl_mf_audit_report  where 1=1
+  <if test="phoneNum!=null">and phone_num=#{phoneNum} </if>
+  <if test="sCreateTime!=null and sCreateTime!=''"> and creatime &gt;= #{sCreateTime}</if>
+  <if test="eCreateTime!=null and eCreateTime!=''"> and creatime &lt;= #{eCreateTime}</if>
+  <if test="sDate!=null and sDate!=''"> and creatime &gt;= #{sDate}</if>
+  <if test="eDate!=null and eDate!=''"> and creatime &lt;= #{eDate}</if>
+  order by creatime desc
+  limit ${iDisplayStart},${iDisplayLength}
+  </select>
+  
+  <select id="queryCount" parameterType="map" resultType="int">
+  select count(id) from jxl_mf_audit_report where 1=1
+  <if test="phoneNum!=null">and phone_num=#{phoneNum} </if>
+  <if test="sCreateTime!=null and sCreateTime!=''"> and creatime &gt;= #{sCreateTime}</if>
+  <if test="eCreateTime!=null and eCreateTime!=''"> and creatime &lt;= #{eCreateTime}</if>
+  <if test="sDate!=null and sDate!=''"> and creatime &gt;= #{sDate}</if>
+  <if test="eDate!=null and eDate!=''"> and creatime &lt;= #{eDate}</if>
+  </select>
+  
+  <select id="getJxlMfAuditReportById" parameterType="map" resultMap="resultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from jxl_mf_audit_report where id = #{arg0}
+    </select>
+  
+</mapper>

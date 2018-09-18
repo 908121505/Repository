@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Combobox">
+	<resultMap id="ComboboxMap" type="Combobox">
+		<result property="codes" column="codes" />
+		<result property="names" column="names" />
+	</resultMap>
+
+	<select id="queryCpInfos" resultMap="ComboboxMap">
+		SELECT codes,names from cp_info
+	</select>
+	
+	<!-- course -->
+	<select id="queryCourseInfos" resultMap="ComboboxMap">
+		select codes,names from course_info
+	</select>
+	
+	<select id="queryCourseTempType" resultMap="ComboboxMap">
+		SELECT temp_type as 'codes',temp_type as 'names' from course_info
+		GROUP BY temp_type
+		ORDER BY temp_type
+	</select>
+	
+	<select id="queryUnitByCourseCode" parameterType="map" resultMap="ComboboxMap">
+		SELECT codes,names from course_unit
+		where course_code=#{course_code}
+		ORDER BY seq;
+	</select>
+	
+	<select id="queryWareByUnitCode" parameterType="map" resultMap="ComboboxMap">
+		SELECT cw.codes,cw.`names` from course_unit_ware cuw
+		LEFT JOIN course_ware cw on cuw.ware_code = cw.codes
+		where cuw.unit_code = #{unit_code} and cuw.state='1'
+		ORDER BY cuw.seq;
+	</select>
+	<!-- end course -->
+	
+	<select id="queryProductInfos" resultMap="ComboboxMap">
+		SELECT codes,names FROM product_info
+	</select>
+	
+	<select id="queryColumnInfos" resultMap="ComboboxMap">
+		SELECT id as 'codes',names FROM views_column
+		where 1=1 
+		<if test="null != is_parent">and is_parent='1'</if>
+		order by parent_id,orders
+	</select>
+	
+	<select id="queryColumnDataInfos" resultMap="ComboboxMap">
+		SELECT id as 'codes',names FROM views_column_data
+		where 1=1
+		<if test="is_parent != null">and is_parent =#{is_parent}</if>
+		<if test="null != ctype"><![CDATA[and ctype<#{ctype}]]></if>
+		order by parent_id,orders
+	</select>
+
+	<select id="queryColumnPoster" resultMap="ComboboxMap">
+		SELECT id as 'codes',names FROM views_column_poster
+	</select>
+	<select id="queryUsersByAuthor" parameterType="map" resultMap="ComboboxMap">
+		SELECT ur.account codes ,ur.account names FROM sys_user_role ur , sys_role_menu rm , sys_menu m WHERE m.id = rm.menu_id AND ur.role_code = rm.role_code AND m.author = #{author};
+	</select>
+</mapper>

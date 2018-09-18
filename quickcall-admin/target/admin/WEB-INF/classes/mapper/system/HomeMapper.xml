@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Home">
+	<cache></cache>
+	<resultMap id="queryHomeMenuMap" type="QueryHomeMenu">
+		<result property="names" column="names" />
+		<result property="url" column="url" />
+		<result property="img_icon" column="img_icon" />
+		<collection property="mList" column="{pid=id,account=account}" ofType="SysMenu" select="Home.queryMenuChildren"/>
+	</resultMap>
+	<select id="queryLeftMenus" parameterType="map" resultMap="queryHomeMenuMap" useCache="false">
+		SELECT DISTINCT sm.id,sm.names,sm.url,sm.img_icon,#{account} as 'account' from sys_user_role sur
+		LEFT JOIN sys_role_menu srm on sur.role_code = srm.role_code
+		LEFT JOIN sys_menu sm on srm.menu_id = sm.id and sm.menu_type='1'
+		where sur.account = #{account} and sm.parent_id='0' and sm.menu_state=1
+		order by sm.orders
+	</select>
+	<select id="queryMenuChildren" parameterType="map" resultMap="SysMenu.SysMenuMap">
+		SELECT DISTINCT sm.names,sm.url from sys_user_role sur
+		LEFT JOIN sys_role_menu srm on sur.role_code = srm.role_code
+		LEFT JOIN sys_menu sm on srm.menu_id = sm.id and sm.menu_type='1'
+		where sur.account = #{account} and sm.parent_id=#{pid} and sm.menu_state=1
+		order by sm.orders
+	</select>
+	
+	
+	<select id="queryMenuAuthor" parameterType="map" resultType="string" useCache="true">
+		SELECT sm.author FROM sys_menu sm 
+		WHERE sm.parent_id IN 
+		( 
+		SELECT menu_id FROM sys_role_menu WHERE role_code IN 
+		<foreach collection="roles" open="(" separator="," close=")" item="rolecode">
+			(#{rolecode})
+		</foreach>
+		) AND sm.menu_type =2 
+		  AND sm.id IN
+		  (
+		  SELECT menu_id FROM sys_role_menu WHERE role_code IN 
+		  <foreach collection="roles" open="(" separator="," close=")" item="rolecode">
+			(#{rolecode})
+		</foreach>
+		  )
+	</select>
+</mapper>

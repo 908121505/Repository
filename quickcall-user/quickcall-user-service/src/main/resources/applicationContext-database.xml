@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="
+		http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-4.0.xsd http://www.springframework.org/schema/tx
+       http://www.springframework.org/schema/tx/spring-tx-4.1.xsd
+        ">
+
+    <bean id="abstractDataSource" class="com.alibaba.druid.pool.DruidDataSource" destroy-method="close">
+        <property name="driverClassName" value="${dbcp.driverClassName}" />
+        <property name="username" value="${dbcp.username}" />
+        <property name="password" value="${dbcp.password}" />
+        <property name="initialSize" value="${dbcp.initialSize}" />
+        <property name="maxActive" value="${dbcp.maxTotal}" />
+        <property name="validationQuery" value="${dbcp.validationQuery}" />
+        <property name="testOnBorrow" value="${dbcp.testOnBorrow}" />
+        <property name="testWhileIdle" value="${dbcp.testWhileIdle}" />
+        <property name="timeBetweenEvictionRunsMillis" value="${dbcp.timeBetweenEvictionRunsMillis}" />
+        <property name="minEvictableIdleTimeMillis" value="${dbcp.minEvictableIdleTimeMillis}" />
+        <property name="connectionInitSqls" value="set names utf8mb4;"/>
+    </bean>
+
+    <!-- 只读 -->
+    <bean id="dataSource-r"  parent="abstractDataSource">
+        <property name="url" value="${dbcp.url.r}" />
+        <property name="username" value="${dbcp.username.r}" />
+        <property name="password" value="${dbcp.password.r}" />
+    </bean>
+
+    <!-- 写 -->
+    <bean id="dataSource-w"  parent="abstractDataSource">
+        <property name="url" value="${dbcp.url}" />
+        <property name="username" value="${dbcp.username}" />
+        <property name="password" value="${dbcp.password}" />
+    </bean>
+
+    <bean id="defaultDataSource"  class="com.honglu.quickcall.common.core.datasourcerw.DynamicDataSource">
+        <property name="readDataSource"  ref="dataSource-r"></property>
+        <property name="writeDataSource" ref="dataSource-w"></property>
+    </bean>
+
+    <tx:annotation-driven transaction-manager="transactionManager"/>
+
+    <!-- 写加事务 -->
+    <bean id="transactionManager" class="com.honglu.quickcall.common.core.datasourcerw.DynamicDataSourceTransactionManager">
+        <property name="dataSource" ref="defaultDataSource"/>
+    </bean>
+
+    <!-- 配置sqlSessionFactory -->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <!-- 实例化sqlSessionFactory时需要使用上述配置好的数据源以及SQL映射文件 -->
+        <property name="dataSource" ref="defaultDataSource"/>
+        <property name="mapperLocations" value="classpath*:mybatis/mapper/*Mapper.xml" />
+        <property name="configLocation" value="classpath:mybatis/mybatis-config.xml"></property>
+        <property name="plugins">
+            <array>
+                <bean class="com.honglu.quickcall.common.core.datasourcerw.DynamicPlugin" />
+            </array>
+        </property>
+    </bean>
+
+    <bean id="sqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate">
+        <constructor-arg ref="sqlSessionFactory" />
+    </bean>
+
+    <!-- 配置扫描器 -->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <!-- 扫描包以及它的子包下的所有映射接口类 -->
+        <property name="basePackage" value="com.honglu.quickcall.user.service.dao"/>
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
+    </bean>
+</beans>

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="AccountLog">
+    <resultMap id="resultMap" type="AccountLog">
+        <id property="custLoginLogId" column="cust_login_log_id"/>
+        <id property="accountId" column="account_id"/>
+        <id property="loginTime" column="login_time"/>
+        <id property="loginIp" column="login_ip"/>
+        <id property="outTime" column="out_time"/>
+        <id property="outIp" column="out_ip"/>
+        <id property="lng" column="lng"/>
+        <id property="lat" column="lat"/>
+        <id property="token" column="token"/>
+        <id property="phoneNum" column="phone_num"/>
+        <id property="createTime" column="create_time"/>
+        <id property="createMan" column="create_man"/>
+        <id property="modifyTime" column="modify_time"/>
+        <id property="modifyMan" column="modify_man"/>
+        <id property="remark" column="remark"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+          cust_login_log_id,
+          account_id,
+          DATE_FORMAT(
+            login_time,
+            '%Y-%c-%d %H:%i:%s'
+          ) as login_time,
+          login_ip,
+          DATE_FORMAT(
+            out_time,
+            '%Y-%c-%d %H:%i:%s'
+          ) AS out_time,
+          out_ip,
+          lng,
+          lat,
+          token,
+          phone_num,
+          DATE_FORMAT(
+            create_time,
+            '%Y-%c-%d %H:%i:%s'
+          ) as create_time,
+          create_man,
+          DATE_FORMAT(
+            modify_time,
+            '%Y-%c-%d %H:%i:%s'
+          ) AS modify_time,
+          modify_man,
+          remark
+    </sql>
+
+    <select id="queryCount" parameterType="map" resultType="int">
+        select count(cust_login_log_id) from cust_login_log where 1=1
+        <if test="phoneNum != null">and phone_num like concat('%',#{phoneNum},'%')</if>
+        <if test="sLoginTime != null">and login_time &gt;=  #{sLoginTime}</if>
+        <if test="eLoginTime != null">and login_time &lt;= #{eLoginTime}</if>
+    </select>
+    <select id="query" parameterType="map" resultMap="resultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from
+        cust_login_log where 1=1
+        <if test="phoneNum != null">and phone_num like concat('%',#{phoneNum},'%')</if>
+        <if test="sLoginTime != null">and login_time &gt;=  #{sLoginTime}</if>
+        <if test="eLoginTime != null">and login_time &lt;= #{eLoginTime}</if>
+        order by login_time desc
+        limit ${iDisplayStart},${iDisplayLength}
+    </select>
+
+</mapper>

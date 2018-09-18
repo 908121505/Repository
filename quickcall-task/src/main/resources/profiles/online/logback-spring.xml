@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+	<include resource="org/springframework/boot/logging/logback/base.xml" />
+
+	<property name="LOG_HOME" value="." />
+	<property name="appName" value="quickcallTask"></property>
+
+	<appender name="FILE"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<File>${LOG_HOME}/${appName}.log</File>  
+		<encoder>
+			<pattern>%date [%level] [%thread] %logger{60} [%file : %line] %msg%n</pattern>
+		</encoder> 
+		
+      	 <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${LOG_HOME}${appName}-%d{yyyy-MM-dd}-%i.gz
+			</fileNamePattern>
+			<MaxHistory>60</MaxHistory>
+			<timeBasedFileNamingAndTriggeringPolicy
+				class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+				<maxFileSize>60MB</maxFileSize>
+			</timeBasedFileNamingAndTriggeringPolicy>
+		</rollingPolicy>  
+		
+	</appender>
+	
+	<springProfile name="dev">
+		<logger name="dao" level="DEBUG"/>  
+
+	    <root level="INFO">
+	        <appender-ref ref="CONSOLE"/>
+	        <appender-ref ref="FILE"/>
+	    </root>
+	</springProfile>
+	
+	<springProfile name="test">
+		<!-- <logger name="dao" level="WARN"/>   -->
+	    <root level="INFO">
+	        <appender-ref ref="FILE"/>
+	    </root>
+	</springProfile>
+
+</configuration>

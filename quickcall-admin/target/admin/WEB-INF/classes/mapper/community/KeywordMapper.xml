@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Keyword">
+	<resultMap id="keywordMap" type="Keyword">
+    <id column="keyword_id" property="keywordId"/>
+    <result column="keyword_type" property="keywordType"/>
+    <result column="keyword_content" property="keywordContent"/>
+    <result column="use_id" property="useId"/>
+    <result column="state" property="state"/>
+    <result column="create_time" property="createTime"/>
+    <result column="create_man" property="createMan"/>
+    <result column="modify_time" property="modifyTime"/>
+    <result column="modify_man" property="modifyMan"/>
+    <result column="remark" property="remark"/>
+	</resultMap>
+	
+	<sql id="columns">
+		keyword_id, keyword_type, keyword_content, use_id, state, create_time, create_man,modify_time, modify_man, remark
+    </sql>
+	
+	<select id="queryCount" parameterType="map" resultType="int">
+		select count(keywordId) from keyword where 1=1
+		<if test="null != state"> and instr(state , #{state}) > 0 </if>
+		
+	</select>
+	<select id="query" parameterType="map" resultMap="keywordMap">
+		select <include refid="columns"/> from keyword where 1=1
+		<if test="null != state"> and instr(state , #{state}) > 0 </if>
+		
+		order by article_id desc
+		limit ${iDisplayStart},${iDisplayLength}
+	</select>
+	
+	<select id="queryAll" parameterType="map" resultMap="keywordMap">
+		select <include refid="columns"/> from keyword where 1=1
+		<if test="null != keywordId"> and keywordId <![CDATA[>=]]> #{keywordId} </if>
+		order by keyword_id desc
+	</select>
+	<insert id="insert" parameterType="map">
+		insert into article(
+		<if test="null != keywordId"> keyword_id, </if>
+		<if test="null != keywordType"> keyword_type, </if>
+		<if test="null != keywordContent"> keyword_content,</if>
+		<if test="null != useId"> use_id, </if>
+		<if test="null != state"> state, </if>
+		<if test="null != createTime"> create_time, </if>
+		<if test="null != createMan"> create_man, </if>
+		<if test="null != modifyTime"> modify_time, </if>
+		<if test="null != modifyMan"> modify_man,</if>
+		<if test="null != remark"> remark</if>
+		) 
+		values(
+		<if test="null != keywordId">#{keywordId}, </if>
+		<if test="null != keywordType">#{keywordType}, </if>
+		<if test="null != keywordContent">#{keywordContent},</if>
+		<if test="null != useId">#{useId}, </if>
+		<if test="null != state"> #{state}, </if>
+		<if test="null != createTime"> #{createTime}, </if>
+		<if test="null != createMan"> #{createMan}, </if>
+		<if test="null != modifyTime">#{modifyTime}, </if>
+		<if test="null != modifyMan"> #{modifyMan},</if>
+		<if test="null != remark"> #{remark}</if>
+		)
+	</insert>
+	
+	<select id="get" parameterType="map" resultMap="keywordMap">
+		select <include refid="columns"/> from keyword where keyword_id = #{keywordId}
+	</select>
+	
+	<delete id="delete" parameterType="map">
+		delete from keyword where keyword_id = #{keywordId}
+	</delete>
+</mapper>

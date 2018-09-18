@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ThemeType">
+
+	<resultMap type="ThemeType" id="themeTypeinfoMap">
+		<id property="themeBankId" column="theme_bank_id"></id>
+		<result property="title" column="title"></result>
+		<result property="remark" column="remark"></result>
+		<result property="url" column="url"></result>
+		<result property="image" column="image"></result>
+		<result property="banner" column="banner"></result>
+		<result property="serialNum" column="serial_num"></result>
+		<result property="state" column="state"></result>
+		<result property="createTime" column="create_time"></result>
+		<result property="createMan" column="create_man"></result>
+		<result property="modifyTime" column="modify_time"></result>
+		<result property="modifyMan" column="modify_man"></result>
+		<result property="isRecommend" column="is_recommend"></result>
+		<result property="sort" column="sort"></result>
+	</resultMap>
+	<!-- 通用查询结果列 -->
+	<sql id="Base_Column_List">
+		theme_bank_id, title, remark, url, image, banner,
+		serial_num, state, create_time,
+		create_man, modify_time, modify_man,
+		is_recommend, sort
+	</sql>
+	<select id="get" parameterType="map" resultMap="themeTypeinfoMap">
+		select
+		<include refid="Base_Column_List" />
+		from theme_type
+	</select>
+	<select id="queryCount" parameterType="map" resultType="int">
+		select count(theme_bank_id) from theme_type where 1=1
+		<if test="title !=null"> and title like concat('%',#{title},'%')</if>
+		<if test="state !=null"> and state like concat('%',#{state},'%')</if>
+	</select>
+	<select id="query" parameterType="map" resultMap="themeTypeinfoMap">
+		select
+		<include refid="Base_Column_List" />
+		from
+		theme_type where 1=1
+		<if test="title !=null"> and title like concat('%',#{title},'%')</if>
+		<if test="state !=null"> and state like concat('%',#{state},'%')</if>
+		limit ${iDisplayStart},${iDisplayLength}
+	</select>
+	
+
+	<!-- 查询（根据主键ID查询） -->
+	<select id="getThemeTypeById" parameterType="map" resultMap="themeTypeinfoMap">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM theme_type
+		WHERE theme_bank_id = #{arg0}
+	</select>
+	<delete id="delete" parameterType="map">
+		DELETE FROM theme_type
+		WHERE
+		theme_bank_id =#{arg0}
+	</delete>
+	<!-- 添加 -->
+	<insert id="insert" parameterType="map">
+		INSERT INTO theme_type
+		(theme_bank_id,title,remark,url,image,banner,serial_num,state,create_time,create_man,modify_time,modify_man,is_recommend,sort)
+		VALUES
+		(#{themeBankId},#{title},#{remark},#{url},#{image},#{banner},#{serialNum},#{state},#{createTime},#{createMan},#{modifyTime},#{modifyMan},#{isRecommend},#{sort})
+	</insert>
+
+	<!-- 修 改 -->
+	<update id="update" parameterType="map">
+		UPDATE theme_type
+		<set>
+			<if test="title != null">
+				title = #{title},
+			</if>
+			<if test="remark != null">
+				remark = #{remark},
+			</if>
+			<if test="url != null">
+				url = #{url},
+			</if>
+			<if test="image != null">
+				image = #{image},
+			</if>
+			<if test="banner != null">
+				banner = #{banner},
+			</if>
+			<if test="serialNum != null">
+				serial_num = #{serialNum},
+			</if>
+			<if test="state != null">
+				state = #{state},
+			</if>
+			<if test="createTime != null">
+				create_time = #{createTime},
+			</if>
+			<if test="createMan != null">
+				create_man = #{createMan},
+			</if>
+			<if test="modifyTime != null">
+				modify_time = #{modifyTime},
+			</if>
+			<if test="modifyMan != null">
+				modify_man = #{modifyMan},
+			</if>
+			<if test="isRecommend != null">
+				is_recommend = #{isRecommend},
+			</if>
+			<if test="sort != null">
+				sort = #{sort},
+			</if>
+
+		</set>
+		WHERE theme_bank_id = #{themeBankId}
+	</update>
+
+</mapper>

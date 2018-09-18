@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="AccountDevice">
+
+	<resultMap type="AccountDevice" id="accountDeviceMap">
+		<id property="accountDeviceId" column="account_device_id" javaType="java.lang.String"></id>
+		<result property="accountId" column="account_id" javaType="java.lang.String"></result>
+		<result property="deviceId" column="device_id" javaType="java.lang.String"></result>
+		<result property="deviceState" column="device_state" javaType="java.lang.Integer"></result>
+		<result property="createTime" column="create_time" javaType="java.lang.String"></result>
+		<result property="createMan" column="create_man" javaType="java.lang.String"></result>
+		<result property="modifyTime" column="modify_time" javaType="java.lang.String"></result>
+		<result property="modifyMan" column="modify_man" javaType="java.lang.String"></result>
+		<result property="remark" column="remark" javaType="java.lang.String"></result>
+	</resultMap>
+
+	<!-- 通用查询结果列-->
+	<sql id="Base_Column_List">
+account_device_id,	account_id,	device_id,	device_state,	create_time,	create_man,	modify_time,	modify_man,	remark
+	</sql>
+
+	<!-- 查询（根据主键ID查询） -->
+	<select id="getEntityById" resultMap="accountDeviceMap" parameterType="java.lang.String">
+		 SELECT
+		 <include refid="Base_Column_List" />
+		 FROM account_device
+		 WHERE account_device_id = #{accountDeviceId}
+	</select>
+
+	<!-- 查询（根据主键ID查询） -->
+	<select id="findAll" resultMap="accountDeviceMap" parameterType="java.lang.String">
+		 SELECT
+		 <include refid="Base_Column_List" />
+		 FROM account_device
+		 WHERE account_device_id = #{accountDeviceId}
+	</select>
+
+	<!--删除：根据主键ID删除-->
+	<delete id="deleteEntity" parameterType="java.lang.String">
+		 DELETE FROM account_device
+		 WHERE account_device_id = #{accountDeviceId}
+	</delete>
+
+	<!-- 添加 -->
+	<insert id="insert" parameterType="AccountDevice">
+		 INSERT INTO account_device
+ 		(account_device_id,account_id,device_id,device_state,create_time,create_man,modify_time,modify_man,remark) 
+		 VALUES 
+ 		(#{accountDeviceId},#{accountId},#{deviceId},#{deviceState},#{createTime},#{createMan},#{modifyTime},#{modifyMan},#{remark}) 
+	</insert>
+
+	<!-- 修 改-->
+	<update id="update" parameterType="AccountDevice">
+		 UPDATE account_device
+ 		 <set> 
+			<if test="accountId != null">
+				 account_id = #{accountId},
+			</if>
+			<if test="deviceId != null">
+				 device_id = #{deviceId},
+			</if>
+			<if test="deviceState != null">
+				 device_state = #{deviceState},
+			</if>
+			<if test="createTime != null">
+				 create_time = #{createTime},
+			</if>
+			<if test="createMan != null">
+				 create_man = #{createMan},
+			</if>
+			<if test="modifyTime != null">
+				 modify_time = #{modifyTime},
+			</if>
+			<if test="modifyMan != null">
+				 modify_man = #{modifyMan},
+			</if>
+			<if test="remark != null">
+				 remark = #{remark},
+			</if>
+
+ 		 </set>
+		 WHERE account_device_id = #{accountDeviceId}
+	</update>
+	<select id="query" parameterType="map" resultType="map">
+		SELECT
+			act.phone_num phoneNum,
+			act.account_id accountId,
+			act.nickname nickName,
+			act.device_id deviceId,
+			acd.modify_man modifyMan,
+			acd.modify_time modifyTime,
+			(CASE WHEN
+			acd.device_state IS NULL
+			THEN 0
+			ELSE  acd.device_state
+
+			END) deviceState
+		FROM
+			account act
+		LEFT JOIN
+			account_device acd
+		ON
+			act.account_id = acd.account_id
+		WHERE 1 = 1
+		<if test="phoneNum != null and phoneNum !=''">
+			AND act.phone_num = #{phoneNum}
+		</if>
+		<if test="nickName != null and nickName !=''">
+			AND act.nickname = #{nickName}
+		</if>
+		<if test="deviceId != null and deviceId !=''">
+			AND LOCATE(#{deviceId},act.device_id) <![CDATA[ > ]]> 0
+		</if>
+		<if test="deviceState != null and deviceState !=''">
+			AND acd.device_state = #{deviceState}
+		</if>
+		ORDER BY
+		act.create_time DESC
+		LIMIT #{iDisplayStart},#{iDisplayLength}
+	</select>
+	<select id="queryCount" parameterType="java.util.Map" resultType="java.lang.Integer">
+		SELECT
+		count(1)
+		FROM
+		account act
+		LEFT JOIN
+		account_device acd
+		ON
+		act.account_id = acd.account_id
+		WHERE 1 = 1
+		<if test="phoneNum != null and phoneNum !=''">
+			AND act.phone_num = #{phoneNum}
+		</if>
+		<if test="nickName != null and nickName !=''">
+			AND act.nickname = #{nickName}
+		</if>
+		<if test="deviceId != null and deviceId !=''">
+			AND LOCATE(#{deviceId},act.device_id) <![CDATA[ > ]]> 0
+		</if>
+		<if test="deviceState != null and deviceState !=''">
+			AND acd.device_state = #{deviceState}
+		</if>
+	</select>
+
+	<select id="queryAccount" parameterType="map" resultType="map">
+		SELECT
+		act.account_id accountId,
+		act.device_id deviceId,
+		acd.account_device_id accountDeviceId,
+		(CASE WHEN
+		acd.device_state IS NULL
+		THEN 0
+		ELSE  acd.device_state
+
+		END) deviceState
+		FROM
+		account act
+		LEFT JOIN
+		account_device acd
+		ON
+		act.account_id = acd.account_id
+		WHERE 1 = 1
+		<if test="arg0 != null and arg0 !=''">
+			AND act.account_id = #{arg0}
+		</if>
+		LIMIT 1
+	</select>
+
+	<!-- 查询（根据用户id） -->
+	<select id="getDevice" resultMap="accountDeviceMap" parameterType="java.lang.String">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM account_device
+		WHERE account_id = #{arg0}
+		limit 1
+	</select>
+</mapper>

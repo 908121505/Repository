@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD SQL Map Config 3.0//EN"  
+	"http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<!--<settings>-->
+		<!--&lt;!&ndash; 开启驼峰命名转换:{create_time} -> {createTime} &ndash;&gt;-->
+		<!--<setting name="mapUnderscoreToCamelCase" value="true"/>-->
+	<!--</settings>-->
+
+	<!-- 配置实体类的别名，在实体类对应的mapper.xml中返回的类型就可以写类名，而不需要全类名了 -->
+	<typeAliases>
+		<package name="com.honglu.quickcall.account.facade.entity" />
+	</typeAliases>
+
+
+</configuration>

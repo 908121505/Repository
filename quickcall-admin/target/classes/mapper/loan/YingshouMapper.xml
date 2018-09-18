@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Yingshou">
+    <resultMap id="YingshouResultMap" type="Yingshou">
+        <id property="yingshouId" column="yingshou_id"/>
+        <id property="createTime" column="create_time"/>
+         <id property="ysTime" column="ys_Time"/>
+        <id property="totalMoney" column="total_money"/>
+        <id property="state" column="state"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+          yingshou_id,
+          create_time,
+          total_money,ys_Time,
+          state
+    </sql>
+
+    <select id="queryCount" parameterType="map" resultType="int">
+        select count(yingshou_id) from yingshou where 1=1
+       	<if test="ysTime != null and createTime != ''"> and DATEDIFF(ys_Time,#{ysTime}) = 0</if>
+    </select>
+    <select id="query" parameterType="map" resultMap="YingshouResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from
+        yingshou where 1=1
+       	<if test="ysTime != null and createTime != ''"> and DATEDIFF(ys_Time,#{ysTime}) = 0</if>
+<!--         <if test="sLoginTime != null">and login_time &gt;=  #{sLoginTime}</if> -->
+<!--         <if test="eLoginTime != null">and login_time &lt;= #{eLoginTime}</if> -->
+        order by create_time desc
+        limit ${iDisplayStart},${iDisplayLength}
+    </select>
+    
+    <select id="getYingshouById" parameterType="map" resultMap="YingshouResultMap">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM yingshou
+		WHERE yingshou_id = #{arg0}
+	</select>
+	
+	<select id="getYingshouByTime" parameterType="map" resultMap="YingshouResultMap">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM yingshou
+		WHERE DATEDIFF(create_time,#{arg0}) = 0
+	</select>
+    
+    <insert id="insert" parameterType="map">
+		INSERT INTO yingshou
+		(yingshou_id,create_time,total_money,state,ys_time)
+		VALUES
+		(#{yingshouId},#{createTime},#{totalMoney},#{state},#{ysTime})
+	</insert>
+	
+	<update id="update" parameterType="map">
+		UPDATE yingshou
+		<set>
+			<if test="createTime != null">
+				create_time = #{createTime},
+			</if>
+			<if test="totalMoney != null">
+				total_money = #{totalMoney},
+			</if>
+			<if test="state != null">
+				state = #{state},
+			</if>
+			<if test="ysTime != null">
+				ys_time = #{ysTime}
+			</if>
+		</set>
+		WHERE yingshou_id = #{yingshouId}
+	</update>
+
+</mapper>

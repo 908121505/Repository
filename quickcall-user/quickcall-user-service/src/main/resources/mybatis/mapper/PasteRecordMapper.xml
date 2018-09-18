@@ -1,0 +1,315 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="PasteRecord" >
+	
+  <select id="call_add_like" statementType="CALLABLE" parameterType="PasteRecord" resultType="Temp">
+    {CALL ADD_LIKE(#{persion_id,jdbcType=INTEGER,mode=IN},#{accept_id,jdbcType=INTEGER,mode=IN})}
+  </select>
+  
+  <!-- 查询关注人数 -->
+  <select id="selectAcountPresonId"  resultType="integer">
+   select count(id) from paste_record
+   where 
+   persion_id = #{other_id,jdbcType=INTEGER}
+  </select>
+  
+   <!-- 查询粉丝人数 -->
+  <select id="selectAcountAcceptId"  resultType="integer">
+    select count(id) from paste_record
+   where 
+  ACCEPT_ID  = #{other_id,jdbcType=INTEGER}
+  </select>
+  
+  <select id="selectByPresonId"  resultType="PasteRecord">
+    select persion_id,accept_id,nick_name from paste_record
+    inner join persion on paste_record.persion_id=persion.id
+   	where 
+  	paste_record.persion_id  = #{pid,jdbcType=INTEGER}
+  </select>
+  
+
+	<select id="selectByPresonIdAndAcceptId"  parameterType="PasteRecord" resultType="PasteRecord">
+    select *    from paste_record   
+     where 
+     persion_id = #{persion_id,jdbcType=INTEGER}
+     and ACCEPT_ID  = #{accept_id,jdbcType=INTEGER}
+  	</select>
+  	
+  <select id="selectByKey" resultType="PasteRecord" parameterType="java.lang.Integer" >
+    select *    from paste_record    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="delete" parameterType="PasteRecord" >
+    DELETE FROM PASTE_RECORD    WHERE PERSION_ID = #{persion_id,jdbcType=INTEGER} AND ACCEPT_ID = #{accept_id}
+  </delete>
+  <delete id="deleteById" parameterType="Integer" >
+    DELETE FROM PASTE_RECORD    WHERE ID = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="PasteRecord" useGeneratedKeys="true" keyProperty="id" keyColumn="id" >
+    INSERT IGNORE INTO PASTE_RECORD
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="persion_id != null and persion_id != 0" >
+        PERSION_ID,
+      </if>
+      <if test="accept_id != null and accept_id != 0" >
+        ACCEPT_ID,
+      </if>
+		is_attention,
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="persion_id != null and persion_id != 0" >
+        #{persion_id,jdbcType=INTEGER},
+      </if>
+      <if test="accept_id != null and accept_id != 0" >
+        #{accept_id,jdbcType=INTEGER},
+      </if>
+		1
+    </trim>
+  </insert>
+  <update id="update" parameterType="PasteRecord" >
+    update paste_record
+    <set >
+      <if test="persion_id != null" >
+        persion_id = #{persion_id,jdbcType=INTEGER},
+      </if>
+      <if test="accept_id != null" >
+        accept_id = #{accept_id,jdbcType=INTEGER},
+      </if>
+		update_time = now()
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+	
+  <update id="updateIsAttention" parameterType="Map">
+	  update paste_record
+	  set update_time = now(),
+	  is_attention = #{isAttention}
+	  where id = #{id}
+  </update>
+	
+  <select id="queryYesOrNo" parameterType="PasteRecord" resultType="PasteRecord">
+  	SELECT
+  		ID
+  	FROM
+  		PASTE_RECORD
+  	WHERE
+  		PERSION_ID = #{persion_id,jdbcType=INTEGER}
+  	AND
+  		ACCEPT_ID = #{accept_id,jdbcType=INTEGER}
+  </select>
+  
+  <!-- 查询我的好友列表 及互相关注 -->
+  <select id="queryFriendList" parameterType="Map" resultType="Persion">
+	 SELECT
+		PP.ACCEPT_ID AS ID,
+		PP.PERSION_ID,
+		F.NICK_NAME,
+		F.PHOTO,
+		F.AREA,
+		F.IMSTATE,
+		F.BIRTHDAY,
+		F.SEX,
+		F.VIDEO_MONEY,
+		PP.ID AS ISLIKE,
+		B.ID AS ISBLACK
+	FROM
+		PASTE_RECORD PP,PERSION F
+	LEFT JOIN 
+		BLACK B ON B.OTHER_ID = F.ID 
+	WHERE  1=1
+	AND exists(select '' from paste_record p where 1=1 and pp.accept_id = p.persion_id and p.is_attention = 1 and  p.accept_id=#{id})
+	AND
+		PP.ACCEPT_ID = F.ID
+	AND
+	    PP.is_attention = 1
+	HAVING
+		PP.PERSION_ID = #{id}
+	ORDER BY
+		CONVERT(F.NICK_NAME USING GBK) ASC
+	<if test="begin!=null and last!=null">  
+		LIMIT #{begin},#{last}
+	</if>
+  </select>
+
+	<!-- 查询我的粉丝列表 关注我的人 -->
+	<select id="queryFansUnlessList" parameterType="Map" resultType="Persion">
+		SELECT
+			P.PERSION_ID AS ID,
+			F.PHOTO,
+			F.NICK_NAME,
+			F.AREA,
+			F.BIRTHDAY,
+			F.IMSTATE,
+			F.SEX,
+			F.VIDEO_MONEY,
+			case when (select '' from paste_record where accept_id = p.persion_id and persion_id = #{id}) ='' then 1 else 0 end as isAttention ,
+			(select id from paste_record where accept_id = p.persion_id and persion_id = #{id})  as ISLIKE ,
+			case when (select '' from black where other_id = p.persion_id and persion_id = #{id})='' then 1 else 0 end  as isBlack
+		FROM
+			PASTE_RECORD P,PERSION F
+		WHERE
+			P.is_attention = 1
+		AND
+		P.PERSION_ID = F.ID
+		AND
+			P.ACCEPT_ID = #{id}
+		ORDER BY
+		CONVERT(F.NICK_NAME USING GBK) ASC
+		<if test="begin!=null and last!=null">
+			LIMIT #{begin},#{last}
+		</if>
+	</select>
+
+
+  <!-- 查询我的粉丝列表 关注我的人 去好友-->
+  <select id="queryFansList" parameterType="Map" resultType="Persion">
+	 SELECT
+		P.PERSION_ID AS ID,
+		F.PHOTO,
+		F.NICK_NAME,
+		F.AREA,
+		F.BIRTHDAY,
+		F.IMSTATE,
+		F.SEX,
+		F.VIDEO_MONEY
+	FROM
+		PASTE_RECORD P,PERSION F
+	WHERE
+		P.ACCEPT_ID = #{id}
+	AND
+		P.PERSION_ID = F.ID
+	AND
+		P.PERSION_ID NOT IN
+		(
+			SELECT
+				PPP.ACCEPT_ID
+			FROM
+				PASTE_RECORD PPP
+			WHERE
+				PPP.PERSION_ID = P.ACCEPT_ID
+		)
+	ORDER BY
+		CONVERT(F.NICK_NAME USING GBK) ASC
+	<if test="begin!=null and last!=null">
+		LIMIT #{begin},#{last}
+	</if>
+  </select>
+  <!-- 查询我的关注列表 我关注的人 -->
+  <select id="queryFollowList" parameterType="Map" resultType="Persion">
+	  SELECT
+		P.ACCEPT_ID AS ID,
+		F.PHOTO,
+		F.NICK_NAME,
+		F.AREA,
+		F.BIRTHDAY,
+		F.SEX,
+		F.IMSTATE,
+		F.VIDEO_MONEY,
+		P.ID AS ISLIKE
+	FROM
+		PASTE_RECORD P,PERSION F
+	WHERE
+		P.PERSION_ID = #{id}
+	AND
+		P.ACCEPT_ID = F.ID
+	AND
+	  	P.is_attention = 1
+	ORDER BY 
+	CONVERT(F.NICK_NAME USING GBK) ASC
+	<if test="begin!=null and last!=null">
+		LIMIT #{begin},#{last}
+	</if>
+  </select>
+  
+  <!-- 心动女神活动查询我关注的女神 -->
+  <select id="lotteryDrawList" parameterType="Map" resultType="Persion">
+	  SELECT
+		P.ACCEPT_ID AS ID,
+		F.PHOTO,
+		F.NICK_NAME,
+		F.AREA,
+		F.BIRTHDAY,
+		F.SEX,
+		F.IMSTATE,
+		F.VIDEO_MONEY,
+		P.ID AS ISLIKE
+	FROM
+		PASTE_RECORD P,PERSION F
+	WHERE
+		P.PERSION_ID = #{id}
+	AND
+		P.ACCEPT_ID = F.ID
+	AND
+	  	P.is_attention = 1
+	ORDER BY F.IMSTATE asc
+		LIMIT 20
+	
+  </select>
+  
+  
+  <!-- 根据ID、昵称关键字查询陌生人（即我没有关注的用户） -->
+  <select id="queryfriend" parameterType="Map" resultType="Persion">
+	 SELECT
+		P.ID,
+		P.NICK_NAME,
+		P.SEX,
+		P.BIRTHDAY,
+		P.SIGN,
+		P.PHOTO,
+		P.AREA
+	FROM
+		PERSION P
+	WHERE
+		P.ID != #{id}
+	AND
+		P.ID NOT IN 
+	(
+		SELECT
+			F.ACCEPT_ID
+		FROM
+			PASTE_RECORD F
+		WHERE
+			F.PERSION_ID = #{id}
+	)
+	AND
+		P.USE_STATE = 1
+	AND
+		P.ID NOT IN 
+	(
+		SELECT
+			B.OTHER_ID
+		FROM
+			BLACK B
+		WHERE
+			B.PERSION_ID = #{id}
+	)
+	<if test="key != null and key != ''">
+	AND
+		(
+		P.NICK_NAME LIKE CONCAT("%",#{key},"%")
+		OR
+		P.OTHERKEY = #{key}
+		)
+	</if>
+	ORDER BY
+		P.CREATE_DATE
+  </select>
+  
+  	<!-- 批量添加我喜欢 -->
+	<insert id="batch_add_like" parameterType="Map">
+		INSERT 
+			INTO
+		PASTE_RECORD(PERSION_ID,ACCEPT_ID)
+			VALUES
+		<foreach item="item" index="index" collection="persionIds"   separator="," >  
+             	(#{id},#{item}) 
+        </foreach> 
+	</insert>
+
+	<!-- 查询关注关系是否存在 -->
+	<select id="selectOneAttentionRecord" resultType="PasteRecord" parameterType="Map">
+		select * from PASTE_RECORD
+		where 1=1
+		and persion_id = #{persion_id}
+		and accept_id = #{accept_id}
+	</select>
+</mapper>

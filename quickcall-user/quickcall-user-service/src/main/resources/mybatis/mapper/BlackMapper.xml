@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="Black" >
+  <select id="selectByPrimaryKey" resultType="Black" parameterType="java.lang.Integer" >
+    select * from black   where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="delete" parameterType="Black" >
+    delete from black    where id = #{id}
+  </delete>
+  <delete id="deleteByBlack" parameterType="Black" >
+    DELETE FROM BLACK    WHERE PERSION_ID = #{persion_id} AND OTHER_ID = #{other_id}
+  </delete>
+  
+    <select id="selectBypersionIdAndOtherId" resultType="Black" parameterType="Map" >
+    select * from black   
+    where persion_id = #{persion_id,jdbcType=INTEGER}
+    and other_id=#{other_id,jdbcType=INTEGER}
+  </select>
+  
+  <select id="call_add_black" statementType="CALLABLE" parameterType="Black" resultType="Temp">
+    {CALL ADD_BLACK(#{persion_id,jdbcType=INTEGER,mode=IN},#{other_id,jdbcType=INTEGER,mode=IN})}
+  </select>
+  
+  <insert id="insert" parameterType="Black" useGeneratedKeys="true" keyProperty="id" keyColumn="id" >
+    INSERT INTO BLACK
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="persion_id != null" >
+        PERSION_ID,
+      </if>
+      <if test="other_id != null" >
+        OTHER_ID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="persion_id != null" >
+        #{persion_id,jdbcType=INTEGER},
+      </if>
+      <if test="other_id != null" >
+        #{other_id,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="update" parameterType="Black" >
+    update black
+    <set >
+      <if test="persion_id != null" >
+        persion_id = #{persion_id,jdbcType=INTEGER},
+      </if>
+      <if test="other_id != null" >
+        other_id = #{other_id,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  <!-- 查询黑名单是否存在 -->
+  <select id="selectCountBlack" resultType="java.lang.Integer" parameterType="Black">
+  	select count(*) from black where persion_id=#{persion_id} and other_id=#{other_id}
+  </select>
+  <!-- 查询我是否被别人拉黑 -->
+  <select id="queryOtherYesBlack" resultType="Integer" parameterType="Map">
+  	SELECT
+		ID
+	FROM
+		BLACK B
+	WHERE
+		B.OTHER_ID = #{self_id}
+	AND
+		B.PERSION_ID = #{other_id}
+	LIMIT 1
+  </select>
+  <!-- 查询我的黑名单 -->
+  <select id="queryMyBlackList" resultType="Persion" parameterType="Map">
+  	SELECT
+  		B.ID AS ISBLACK,
+		B.OTHER_ID AS ID,
+		P.PHOTO,
+		P.NICK_NAME,
+		P.SEX,
+		P.AREA,
+		P.BIRTHDAY
+	FROM
+		BLACK B,PERSION P
+	WHERE
+		B.PERSION_ID = #{id}
+	AND
+		P.ID = B.OTHER_ID
+	<if test="key != null and key != ''">
+	AND
+		(
+		P.NICK_NAME LIKE CONCAT("%",#{key},"%")
+		OR
+		P.OTHERKEY = #{key}
+		)
+	</if>
+	ORDER BY
+		CONVERT(P.NICK_NAME USING GBK) ASC
+	<if test="begin!=null and last!=null">
+			limit #{begin},#{last}
+	</if>
+  </select>
+    
+    
+    <!--  查询我是否把朋友拉黑 -->
+    <select id="queryBlackedFriend" resultType="java.lang.String">
+      select ''
+        from black
+      where
+        PERSION_ID = #{userId}
+        AND other_id = #{friendId}
+    </select>
+
+    <!-- 查询朋友是否把我拉黑 -->
+    <select id="queryBeBlacked" resultType="java.lang.String">
+        select ''
+        from black
+        where
+        PERSION_ID = #{friendId}
+        AND other_id = #{userId}
+    </select>
+</mapper>

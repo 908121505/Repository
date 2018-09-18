@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ArticleComment">
+	<resultMap id="articleCommentMap" type="ArticleComment">
+		<id column="article_comment_id" property="articleCommentId" />
+		<result column="article_id" property="articleId" />
+		<result column="create_time" property="createTime" />
+		<result column="create_man" property="createMan" />
+		<result column="modify_time" property="modifyTime" />
+		<result column="modify_man" property="modifyMan" />
+		<result column="sort" property="sort" />
+		<result column="read_num" property="readNum" />
+		
+		<result column="state" property="state" />
+		<result column="description" property="description" />
+		<result column="praise_num" property="praiseNum" />
+		<result column="content" property="content" />
+		<result column="commArticle" property="commArticle"/>
+		<result column="classification" property="classification"/>
+		<result column="article_class_id" property="articleClassId"/>
+		<result column="account_id" property="accountId"/>
+		<result column="article_class_title" property="articleClassTitle"/>
+		<result column="article_title" property="articleTitle"/>
+		
+	</resultMap>
+
+	<sql id="columns"> article_comment_id, content,article_id, create_time, create_man, modify_time, modify_man,
+    sort, state, description, praise_num
+	</sql>
+	
+	<sql id="queryCondition">
+	   <if test="accountId!=null and accountId!=''">
+	      AND article_comment.account_id like CONCAT('%',#{accountId},'%')
+	   </if>
+	   <if test="createMan!=null and createMan!=''">
+	       AND account.nickname like CONCAT('%',#{createMan},'%')
+	   </if>
+	   <if test="classification!=null and classification!=''">
+	       AND article.`article_class_id` = #{classification}
+	   </if>
+	   <if test="articleId != sort"> and article.article_id = #{articleId}  </if>
+  	   <if test="articleTitle!=null and articleTitle!=''"> and article.article_title like CONCAT('%',#{articleTitle},'%')  </if>
+	  	
+	</sql>
+	
+	<select id="queryCount" parameterType="map" resultType="int">
+		SELECT count(*)  FROM article_comment 
+		LEFT JOIN `article` ON article.`article_id` = article_comment.`article_id`
+		LEFT JOIN `article_class` ON article_class.`article_class_id` = article.`article_class_id`
+		LEFT JOIN account ON   account.account_id = article_comment.account_id
+		WHERE 1=1
+		<include refid="queryCondition"></include>
+    </select>
+	<select id="query" parameterType="map" resultMap="articleCommentMap">
+		SELECT article_comment.praise_num,article_comment.description,article_comment.state,article_comment.sort,article.article_id,article.read_num,
+		article_comment.`article_comment_id`,account.`account_id`,account.`nickname` AS create_man,article_comment.content,
+		article_comment.`create_time`,article.`article_title`,article_class.`article_class_title`,article_class.`article_class_title` AS classification 
+		FROM article_comment 
+		LEFT JOIN `article` ON article.`article_id` = article_comment.`article_id`
+		LEFT JOIN `article_class` ON article_class.`article_class_id` = article.`article_class_id`
+		LEFT JOIN account ON account.account_id = article_comment.account_id
+		WHERE 1=1
+		<include refid="queryCondition"></include>
+		ORDER BY article_comment.create_time DESC 
+		
+		 limit ${iDisplayStart},${iDisplayLength}
+	</select>
+	
+	
+	<select id="queryClassArticle" resultMap="articleCommentMap">
+	  SELECT article_class.`article_class_id`,article_class.`article_class_title` as commArticle  FROM article_class
+   </select>
+   
+	<insert id="insert" parameterType="map">
+		insert into article_comment(
+		<if test="null != articleCommentId"> article_comment_id, </if>
+		<if test="null != articleId"> article_id, </if>
+		<if test="null != createTime"> create_time,</if>
+		<if test="null != createMan"> create_man, </if>
+		<if test="null != modifyTime"> modify_time, </if>
+		<if test="null != modifyMan"> modify_man, </if>
+		<if test="null != sort"> sort, </if>
+		<if test="null != state"> state, </if>
+		<if test="null != description"> description,</if>
+		<if test="null != praiseNum"> praise_num,</if>
+		
+		)
+		values(
+		<if test="null != articleCommentId"> #{articleCommentId}, </if>
+		<if test="null != articleId"> #{articleId}, </if>
+		<if test="null != createTime"> #{createTime},</if>
+		<if test="null != createMan">#{createMan}, </if>
+		<if test="null != modifyTime"> #{modifyTime}, </if>
+		<if test="null != modifyMan">#{ modifyMan}, </if>
+		<if test="null != sort"> #{sort}, </if>
+		<if test="null != state"> #{state}, </if>
+		<if test="null != description"> #{description},</if>
+		<if test="null != praiseNum"> #{praiseNum},</if>
+		)
+	</insert>
+
+	<select id="get" parameterType="map" resultMap="articleCommentMap">
+		select
+		<include refid="columns" />
+		from article_comment where article_id = #{articleId}
+	</select>
+
+	<delete id="delete" parameterType="map">
+		delete from article_comment where
+		article_comment_id = #{arg0}
+	</delete>
+	
+	<delete id="batchDel" parameterType="map">
+		delete from article_comment where
+		article_comment_id in
+		<foreach item="articleCommentId" collection="articleCommentIds" open="(" separator="," close=")">
+		#{articleCommentId}</foreach>
+	</delete>
+</mapper>

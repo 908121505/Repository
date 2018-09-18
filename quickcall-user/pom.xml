@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<project
+        xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+        xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.honglu.quickcall</groupId>
+    <artifactId>quickcall-user</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+
+    <packaging>pom</packaging>
+    <url>http://maven.apache.org</url>
+
+    <modules>
+        <module>quickcall-user-facade</module>
+        <module>quickcall-user-service</module>
+        <module>quickcall-user-web</module>
+    </modules>
+
+    <distributionManagement>
+        <snapshotRepository>
+            <id>snapshots</id>
+            <name>my repository</name>
+            <url>http://172.16.0.186:5000/nexus/content/repositories/snapshots/</url>
+        </snapshotRepository>
+
+        <repository>
+            <id>snapshots</id>
+            <name>my repository</name>
+            <url>http://172.16.0.186:5000/nexus/content/repositories/releases/</url>
+        </repository>
+    </distributionManagement>
+</project>

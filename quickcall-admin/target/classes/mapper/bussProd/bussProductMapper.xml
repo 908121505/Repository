@@ -1,0 +1,538 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="BussProduct">
+
+    <resultMap type="BussProduct" id="bussProductMap">
+        <id property="id" column="id" javaType="java.lang.String"></id>
+        <result property="productId" column="product_id" javaType="java.lang.String"></result>
+        <result property="companyName" column="company_name" javaType="java.lang.String"></result>
+        <result property="productName" column="product_name" javaType="java.lang.String"></result>
+        <result property="settleDate" column="settle_date" javaType="java.lang.String"></result>
+        <result property="companyNature" column="company_nature" javaType="java.lang.String"></result>
+        <result property="cooperModel" column="cooper_model" javaType="java.lang.String"></result>
+        <result property="contactName" column="contact_name" javaType="java.lang.String"></result>
+        <result property="contactMobile" column="contact_mobile" javaType="java.lang.String"></result>
+        <result property="comContactMobile" column="com_contact_mobile" javaType="java.lang.String"></result>
+        <result property="comContactName" column="com_contact_name" javaType="java.lang.String"></result>
+        <result property="owner" column="owner" javaType="java.lang.String"></result>
+        <result property="remark" column="remark" javaType="java.lang.String"></result>
+        <result property="createMan" column="create_man" javaType="java.lang.String"></result>
+        <result property="modifyMan" column="modify_man" javaType="java.lang.String"></result>
+        <result property="createTime" column="create_time" javaType="java.lang.String"></result>
+        <result property="modifyTime" column="modify_time" javaType="java.lang.String"></result>
+
+
+    </resultMap>
+
+    <!-- 通用查询结果列-->
+    <sql id="Base_Column_List">
+id,	product_id,	company_name,		product_name,	settle_date,	company_nature,	cooper_model,	contact_name,	contact_mobile,	com_contact_mobile,	com_contact_name,	owner,	remark,	create_man,	modify_man,	create_time,	modify_time
+	</sql>
+
+    <!-- 查询（根据主键ID查询） -->
+    <select id="getEntityById" resultMap="bussProductMap" parameterType="map">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM buss_product
+        WHERE 1=1 
+        <if test="arg0!=null and arg0!=''">
+        and    id = #{arg0}
+        </if>
+        <if test="arg1!=null and arg1!=''">
+        and    product_id = #{arg1}
+        </if>
+       
+    </select>
+
+    <!-- 查询（根据主键ID查询） -->
+    <select id="findAll" resultMap="bussProductMap" parameterType="java.lang.String">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM buss_product
+        WHERE id = #{id}
+    </select>
+
+    <!--删除：根据主键ID删除-->
+    <delete id="deleteEntity" parameterType="Map">
+		 DELETE FROM buss_product
+		 WHERE id = #{arg0}
+	</delete>
+
+    <!-- 添加 -->
+    <insert id="insert" parameterType="BussProduct">
+		 INSERT INTO buss_product
+ 		(id,product_id,company_name,product_name,settle_date,company_nature,cooper_model,contact_name,contact_mobile,com_contact_mobile,com_contact_name,owner,remark,create_man,modify_man,create_time,modify_time) 
+		 VALUES 
+ 		(#{id},#{productId},#{companyName},#{productName},#{settleDate},#{companyNature},#{cooperModel},#{contactName},#{contactMobile},#{comContactMobile},#{comContactName},#{owner},#{remark},#{createMan},#{modifyMan},#{createTime},#{modifyTime}) 
+	</insert>
+
+    <!-- 修 改-->
+    <update id="update" parameterType="com.calf.module.bussiness.entity.BussProduct">
+        UPDATE buss_product
+        <set>
+            <if test="productId != null">
+                product_id = #{productId},
+            </if>
+            <if test="companyName != null">
+                company_name = #{companyName},
+            </if>
+            
+            <if test="productName != null">
+                product_name = #{productName},
+            </if>
+            <if test="settleDate != null">
+                settle_date = #{settleDate},
+            </if>
+            <if test="companyNature != null">
+                company_nature = #{companyNature},
+            </if>
+            <if test="cooperModel != null">
+                cooper_model = #{cooperModel},
+            </if>
+            <if test="contactName != null">
+                contact_name = #{contactName},
+            </if>
+            <if test="contactMobile != null">
+                contact_mobile = #{contactMobile},
+            </if>
+            <if test="comContactMobile != null">
+                com_contact_mobile = #{comContactMobile},
+            </if>
+            <if test="comContactName != null">
+                com_contact_name = #{comContactName},
+            </if>
+            <if test="owner != null">
+                owner = #{owner},
+            </if>
+            <if test="remark != null">
+                remark = #{remark},
+            </if>
+            <if test="createMan != null">
+                create_man = #{createMan},
+            </if>
+            <if test="modifyMan != null">
+                modify_man = #{modifyMan},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime},
+            </if>
+            <if test="modifyTime != null">
+                modify_time = #{modifyTime},
+            </if>
+        </set>
+        WHERE id = #{id}
+    </update>
+    <select id="query" parameterType="map" resultType="map">
+        SELECT
+        bp.id,
+        bp.company_name companyName,
+        bp.product_name productName,
+        bp.settle_date settleDate,
+        bp.company_nature companyNature,
+        bp.cooper_model cooperModel,
+        bp.com_contact_name comContactName,
+        bp.com_contact_mobile comContactMobile,
+        bp.`owner`,
+        bp.create_time createTime,
+        bp.modify_time modifyTime
+        FROM buss_product bp
+        WHERE 1 = 1
+        <if test="companyName != null and companyName != ''">
+            AND LOCATE(#{companyName},company_name) <![CDATA[ > ]]> 0
+        </if>
+        <if test="productName != null and productName != ''">
+            AND LOCATE(#{productName},product_name) <![CDATA[ > ]]> 0
+        </if>
+        <if test="owner != null and owner != ''">
+            AND LOCATE(#{owner},owner) <![CDATA[ > ]]> 0
+        </if>
+        <if test="startTime != null and startTime != ''">
+            AND bp.create_time <![CDATA[ >= ]]> #{startTime}
+        </if>
+        <if test="endTime != null and endTime != ''">
+            AND bp.create_time <![CDATA[ <= ]]> #{endTime}
+        </if>
+        <if test="owners != null and owners != ''">
+            AND bp.owner = #{owners}
+        </if>
+        GROUP BY
+        bp.id
+        ORDER BY
+        bp.create_time DESC
+        <if test="iDisplayStart != null and iDisplayLength != null">
+         limit #{iDisplayStart},#{iDisplayLength}
+        </if>
+    </select>
+    <select id="querySettle" parameterType="map" resultType="map">
+        SELECT
+        company_id companyId,
+        sum(pay_amount) payAmount
+        FROM buss_product_settle
+        GROUP BY
+        company_id
+    </select>
+    <select id="queryTally" parameterType="map" resultType="map">
+        SELECT
+        company_id companyId,
+        sum(tally_amount) tallyAmount
+        FROM buss_product_tally
+        GROUP BY
+        company_id
+    </select>
+    <select id="queryCount" parameterType="map" resultType="int">
+        SELECT
+        COUNT(1)
+        FROM buss_product bp
+        WHERE 1 = 1
+        <if test="companyName != null and companyName != ''">
+            AND LOCATE(#{companyName},company_name) <![CDATA[ > ]]> 0
+        </if>
+        <if test="productName != null and productName != ''">
+            AND LOCATE(#{productName},product_name) <![CDATA[ > ]]> 0
+        </if>
+        <if test="owner != null and owner != ''">
+            AND LOCATE(#{owner},owner) <![CDATA[ > ]]> 0
+        </if>
+        <if test="owners != null and owners != ''">
+            AND bp.owner = #{owners}
+        </if>
+    </select>
+    <select id="detailQueryCount" parameterType="map" resultType="int">
+        SELECT
+	count(bp.id) 
+	
+FROM
+	buss_product bp
+
+LEFT JOIN (
+	SELECT
+		*
+	FROM
+		(
+			SELECT
+				company_id,
+				AVG(cpa) cpa,
+				sum(tally_amount) amountOfIncome,
+				sum(tally_amount) tally_amount
+			FROM
+				buss_product_tally
+			GROUP BY
+				company_id
+		) bpt
+) bpt ON bpt.company_id = bp.id
+LEFT JOIN (
+	SELECT
+		*
+	FROM
+		(
+			SELECT
+				company_id,
+				max(pay_date) daylyDate,
+				max(modify_time) entryTime,
+				sum(pay_amount) settledIncome,
+				TIMESTAMPDIFF(DAY, max(pay_date), NOW()) daylyTime
+			FROM
+				buss_product_settle
+			GROUP BY
+				company_id
+		) bps
+) bps ON bps.company_id = bp.id
+where 1=1
+        
+        <if test="productName!=null and productName!=''">
+            and bp.product_name like concat('%',#{productName},'%')
+        </if>
+        <if test="companyName!=null and companyName!=''">
+            and bp.company_name like concat('%',#{companyName},'%')
+        </if>
+        <if test="onlineTime!=null and onlineTime!=''">
+            and date(onlineTime) =#{onlineTime}
+        </if>
+        <if test="offlineTime!=null and offlineTime!=''">
+            and date(offlineTime) =#{offlineTime}
+        </if>
+       <!--  <if test="onlineDate!=null and onlineDate!='' and redio1==1">
+            and onlineDate &gt;= #{onlineDate}
+        </if>
+        <if test="onlineDate!=null and onlineDate!='' and redio1==2">
+            and onlineDate &lt;= #{onlineDate}
+        </if> -->
+        <if test="owner!=null and owner!=''">
+            and owner =#{owner}
+        </if>
+        <if test="entryTime!=null and entryTime!=''">
+            and date(entryTime) =#{entryTime}
+        </if>
+        <if test="daylyDate!=null and daylyDate!=''">
+            and date(daylyDate) =#{daylyDate}
+        </if>
+        <if test="daylyTime!=null and daylyTime!='' and redio2==1">
+            and daylyTime &gt;= #{daylyTime}
+        </if>
+        <if test="daylyTime!=null and daylyTime!='' and redio2==2">
+            and daylyTime &lt;= #{daylyTime}
+        </if>
+        <if test="createMan!=null and createMan!=''">
+	    and bp.create_man=#{createMan}
+	    </if>
+
+
+    </select>
+
+    <select id="detailQuery" parameterType="map" resultMap="bussProductMap">
+        SELECT
+	bp.id id,
+	bp.product_id,
+	bp.product_name productName,
+	bp.company_name companyName,
+	bp.company_nature companyNature,
+	bpt.cpa cpa,
+	bp. OWNER OWNER,
+	bps.daylyDate,
+	bps.daylyTime,
+	bpt.amountOfIncome,
+	bps.settledIncome,
+	bps.settledIncome - bpt.tally_amount amountInArear,
+	bps.settledIncome / bpt.tally_amount reimbursementRate,
+	bps.entryTime
+FROM
+	buss_product bp
+
+LEFT JOIN (
+	SELECT
+		*
+	FROM
+		(
+			SELECT
+				company_id,
+				AVG(cpa) cpa,
+				sum(tally_amount) amountOfIncome,
+				sum(tally_amount) tally_amount
+			FROM
+				buss_product_tally
+			GROUP BY
+				company_id
+		) bpt
+) bpt ON bpt.company_id = bp.id
+LEFT JOIN (
+	SELECT
+		*
+	FROM
+		(
+			SELECT
+				company_id,
+				max(pay_date) daylyDate,
+				max(modify_time) entryTime,
+				sum(pay_amount) settledIncome,
+				if(TIMESTAMPDIFF(DAY, date(max(pay_date)), date(NOW()))>0,TIMESTAMPDIFF(DAY, date(max(pay_date)), date(NOW())),-1) daylyTime
+			FROM
+				buss_product_settle
+			GROUP BY
+				company_id
+		) bps
+) bps ON bps.company_id = bp.id
+where 1=1
+         <if test="productName!=null and productName!=''">
+            and bp.product_name like concat('%',#{productName},'%')
+        </if>
+        <if test="companyName!=null and companyName!=''">
+            and bp.company_name like concat('%',#{companyName},'%')
+        </if>
+        <if test="onlineTime!=null and onlineTime!=''">
+            and date(onlineTime) =#{onlineTime}
+        </if>
+        <if test="offlineTime!=null and offlineTime!=''">
+            and date(offlineTime) =#{offlineTime}
+        </if>
+        <!-- <if test="onlineDate!=null and onlineDate!='' and redio1==1">
+            and onlineDate &gt;= #{onlineDate}
+        </if>
+        <if test="onlineDate!=null and onlineDate!='' and redio1==2">
+            and onlineDate &lt;= #{onlineDate}
+        </if> -->
+        <if test="owner!=null and owner!=''">
+            and owner =#{owner}
+        </if>
+        <if test="entryTime!=null and entryTime!=''">
+            and date(entryTime) =#{entryTime}
+        </if>
+        <if test="daylyDate!=null and daylyDate!=''">
+            and date(daylyDate) =#{daylyDate}
+        </if>
+        <if test="daylyTime!=null and daylyTime!='' and redio2==1">
+            and daylyTime &gt;= #{daylyTime}
+        </if>
+        <if test="daylyTime!=null and daylyTime!='' and redio2==2">
+            and daylyTime &lt;= #{daylyTime}
+        </if>
+        <if test="createMan!=null and createMan!=''">
+	    and bp.create_man=#{createMan}
+	    </if>
+        
+        <if test="exportflag==null">
+            LIMIT #{iDisplayStart},#{iDisplayLength}
+            </if>
+       
+    </select>
+
+
+    <select id="detailQueryById" parameterType="Map" resultMap="bussProductMap">
+		 SELECT
+	bp.id id,
+	bp.product_id productId,
+	bp.product_name productName,
+	bp.company_name companyName,
+	bp.company_nature companyNature,
+	bp.settle_date settleDate,
+	bp.cooper_model cooperModel,
+	bpt.cpa cpa,
+	bp. OWNER OWNER,
+	bps.daylyDate,
+	bps.daylyTime,
+	bpt.amountOfIncome,
+	bps.settledIncome,
+	bps.settledIncome - bpt.tally_amount amountInArear,
+	bps.settledIncome / bpt.tally_amount reimbursementRate,
+	bps.entryTime,
+	bp.remark  remark
+FROM
+	buss_product bp
+
+LEFT JOIN (
+	SELECT
+		*
+	FROM
+		(
+			SELECT
+				company_id,
+				AVG(cpa) cpa,
+				sum(tally_amount) amountOfIncome,
+				sum(tally_amount) tally_amount
+			FROM
+				buss_product_tally
+			GROUP BY
+				company_id
+		) bpt
+) bpt ON bpt.company_id = bp.id
+LEFT JOIN (
+	SELECT
+		*
+	FROM
+		(
+			SELECT
+				company_id,
+				max(pay_date) daylyDate,
+				max(modify_time) entryTime,
+				sum(pay_amount) settledIncome,
+				if(TIMESTAMPDIFF(DAY, date(max(pay_date)), date(NOW()))>0,TIMESTAMPDIFF(DAY, date(max(pay_date)), date(NOW())),-1) daylyTime
+			FROM
+				buss_product_settle
+			GROUP BY
+				company_id
+		) bps
+) bps ON bps.company_id = bp.id
+	
+		where bp.id=#{arg0}
+
+
+
+    </select>
+
+
+    <select id="checkName" parameterType="java.lang.String" resultMap="bussProductMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM buss_product
+        WHERE 1 = 1
+        <if test="arg0 != null and arg0 != '' and arg0 !='null'">
+            AND company_name = #{arg0}
+        </if>
+        <if test="arg1 != null and arg1 != '' and arg1 !='null'">
+            AND product_name = #{arg1}
+        </if>
+        <if test="arg2 != null and arg2 != '' and arg2 !='null'">
+            AND id != #{arg2}
+        </if>
+        limit 1
+    </select>
+    <select id="queryExport" parameterType="map" resultType="map">
+        SELECT
+        bp.id,
+        bp.company_name companyName,
+        bp.product_name productName,
+        CASE WHEN
+        sum(bps.pay_amount) IS NULL
+        THEN 0
+        ELSE sum(bps.pay_amount)
+        END payAmount,
+        CASE WHEN
+        bpt.tally_amount is NULL
+        THEN '未对账'
+        WHEN
+        sum(bpt.tally_amount - bps.pay_amount) IS NULL
+        THEN 0
+        ELSE -(sum(bpt.tally_amount - bps.pay_amount))
+        END arrearsAmount,
+        bp.settle_date settleDate,
+        bp.company_nature companyNature,
+        bp.cooper_model cooperModel,
+        bp.com_contact_name comContactName,
+        bp.com_contact_mobile comContactMobile,
+        bp.`owner`
+        FROM buss_product bp
+        LEFT JOIN buss_product_tally bpt
+        ON bp.id = bpt.company_id
+        LEFT JOIN buss_product_settle bps
+        ON bp.id = bps.company_id
+        WHERE 1 = 1
+        <if test="companyName != null and companyName != ''">
+            AND LOCATE(#{companyName},company_name) <![CDATA[ > ]]> 0
+        </if>
+        <if test="productName != null and productName != ''">
+            AND LOCATE(#{productName},product_name) <![CDATA[ > ]]> 0
+        </if>
+        <if test="owner != null and owner != ''">
+            AND LOCATE(#{owner},owner) <![CDATA[ > ]]> 0
+        </if>
+        GROUP BY
+        bp.id
+        ORDER BY
+        bp.create_time DESC
+    </select>
+    
+    <select id="queryProductNameList"      resultType="com.calf.module.bussiness.vo.ProductIdNameInfo">
+		SELECT
+			product_id AS productId,
+			product_name AS productName,
+			company_name AS  companyName
+		FROM
+			buss_product
+		WHERE 1=1
+		<if test="currUser != null and currUser != ''">
+	          AND buss_product.owner = #{currUser}
+	    </if>
+	    order by  create_time desc 
+   </select>
+   <select id="queryCompanyIdByProductId"  resultType="java.lang.String">
+		SELECT
+			id
+		FROM
+			buss_product
+		WHERE
+			product_id = #{productId}	
+   </select>
+   <select id="queryComProInfo"   resultMap="bussProductMap" >
+	SELECT
+		id AS id,
+		product_id AS productId
+	FROM
+		buss_product
+	WHERE
+		product_name = #{productName}
+	AND company_name = #{companyName}
+   </select>
+    
+    
+    
+</mapper>

@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Sms">
+	<resultMap id="smsMap" type="Sms">
+		<id property="smsTemplateId" column="sms_template_id" />
+		<id property="smsName" column="sms_name" />
+		<id property="smsCode" column="sms_code" />
+		<id property="smsContent" column="sms_content" />
+		<id property="state" column="state" />
+		<id property="createTime" column="create_time" />
+		<id property="createMan" column="create_man" />
+		<id property="modifyTime" column="modify_time" />
+		<id property="modifyMan" column="modify_man" />
+		<id property="remark" column="remark" />
+		<id property="smsPhones" column="sms_phones" />
+		<id property="timePushTime" column="time_push_time" />
+		<id property="checkNumber" column="check_number" />
+		<id property="detailId" column="detail_id" />
+		<id property="target" column="target" />
+		<id property="pushType" column="push_type" />
+		<id property="isTime" column="is_time" />
+		<id property="pushSuccessNumber" column="push_success_number" />
+		<id property="linkUrl" column="link_url" />
+		<id property="articleTitle" column="article_title" />
+		<id property="alias" column="alias" />
+		<id property="url" column="url" />
+		<id property="sendType" column="send_type" />
+		<id property="arrivalNumber" column="arrival_number" />
+		<id property="clickrate" column="clickrate" />
+		
+		
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		sms_template_id,sms_name,sms_code,sms_content,state,create_time,
+		create_man,modify_time,modify_man,remark,sms_phones,time_push_time,check_number,
+		detail_id,target,push_type,is_time,push_success_number,link_url,article_title,alias,url,send_type
+	</sql>
+
+	
+	<sql id="queryCondition">
+	    <if test="null != smsName and smsName!=''"> and instr(sms_name , #{smsName}) > 0 </if>
+		<if test="null != smsCode and smsCode!=''"> and instr(sms_code , #{smsCode}) > 0 </if>
+		<if test="null != smsContent and smsContent!=''"> and instr(sms_content , #{smsContent}) > 0 </if>
+		<if test="null != state and state!=''"> and state = #{state} </if>
+	    <!-- 推送通知时间 -->
+	    <if test="null != createTime and createTime!=''"> and create_time like concat('%',#{createTime},'%')</if>
+	    
+	    
+	    <if test="null != isTime and isTime!=''"> and is_time = #{isTime} </if>
+	    
+	</sql>
+	
+	<!-- 统计通知量 -->
+	<select id="statisticPush" parameterType="map" resultType="int">
+		
+		select count(sms_template_id) from sms_template where 1=1
+		<include refid="queryCondition"></include>
+		group by sms_template.
+		
+	</select>
+
+	<select id="queryCount" parameterType="map" resultType="int">
+		select count(sms_template_id) from sms_template where 1=1
+		<include refid="queryCondition"></include>
+	</select>
+	<select id="query" parameterType="map" resultMap="smsMap">
+		select
+	   sms_template_id,sms_name,sms_content,create_time,create_man,check_number,state
+	   ,arrival_number,check_number/arrival_number clickrate ,push_success_number
+		from sms_template where 1=1
+		<include refid="queryCondition"></include>
+		 order by create_time desc
+		 <if test="iDisplayLength!=null and iDisplayLength!=''">
+		limit  ${iDisplayStart},${iDisplayLength}
+	    </if>
+	</select>
+
+	<insert id="insert" parameterType="map" >
+		insert into sms_template (
+		sms_template_id, 
+		sms_name, 
+		 sms_code, 
+		 sms_content, 
+		state, 
+	 create_time, 
+		 create_man, 
+		 modify_time, 
+		 modify_man, 
+		remark, 
+		 sms_phones,
+		
+		<if test="timePushTime!=null and timePushTime!=''">time_push_time,</if>  
+		
+		check_number,
+		detail_id,
+		target,
+		push_type,
+		is_time,
+		push_success_number,
+		link_url,
+		article_title,
+		alias,
+		url,
+		send_type
+		
+		)
+		values(
+		 #{smsTemplateId},
+		 #{smsName}, 
+		 #{smsCode}, 
+		 #{smsContent}, 
+		 #{state}, 
+		 #{createTime}, 
+		 #{createMan}, 
+		 #{modifyTime}, 
+		 #{modifyMan}, 
+		 #{remark},
+		 #{smsPhones},
+		<if test="timePushTime!=null and timePushTime!=''">#{timePushTime},</if>  
+		#{checkNumber},
+		#{detailId},
+		#{target},
+		#{pushType},
+		#{isTime},
+		#{pushSuccessNumber},
+		#{linkUrl},
+		#{articleTitle},
+		#{alias},
+		#{url},
+		#{sendType}
+		
+		)
+	</insert>
+
+	<select id="get" parameterType="map" resultMap="smsMap">
+		select
+		<include refid="Base_Column_List" />
+		from sms_template where sms_template_id = #{arg0}
+	</select>
+	
+	<update id="update" parameterType="map">
+	   update sms_template 
+	   <set>
+	       <if test="checkNumber!=null and checkNumber!=''">
+	          check_number = #{checkNumber},
+	       </if>
+	       
+	       <if test="pushSuccessNumber!=null and pushSuccessNumber!=''">
+	           push_success_number=#{pushSuccessNumber}
+	       </if>
+	   </set>
+	    
+	</update>
+
+	<delete id="delete" parameterType="map">
+		delete from sms_template where
+		sms_template_id = #{arg0}
+	</delete>
+	
+	
+	<select id="queryUrl" parameterType="map" resultMap="smsMap">
+		SELECT sys_app_param.`sys_param_name` as sms_name FROM `sys_app_param` WHERE sys_param_id = 'c048edecf72f4478a31d2926818bab32'
+    </select>
+    
+    <select id="queryActivityUrl" parameterType="map" resultMap="smsMap">
+		SELECT sys_app_param.`sys_param_name` as sms_name FROM `sys_app_param` WHERE sys_param_value = '活动链接'
+    </select>
+	
+	
+	
+</mapper>

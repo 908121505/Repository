@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Message">
+	<resultMap id="messageMap" type="com.calf.module.message.entity.Message">
+		<id column="message_id" property="messageId" />
+		<result column="customer_id" property="customerId" />
+		<result column="title" property="title" />
+		<result column="content" property="content" />
+		<result column="type" property="type" />
+		<result column="is_read" property="isRead" />
+		<result column="state" property="state" />
+		<result column="create_time" property="createTime"  />
+		<result column="create_man" property="createMan" />
+		<result column="modify_time" property="modifyTime" />
+		<result column="modify_man" property="modifyMan" />
+		<result column="remark" property="remark" />
+		<result column="cell_phone" property="cellPhone" />
+		<result column="message_url" property="messageUrl" />
+		<result column="from_source" property="fromSource" />
+		<result column="link_url_h" property="linkUrlH" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		message_id, customer_id, title, content, type, is_read,
+		state,  DATE_FORMAT(
+        create_time,
+        '%Y-%c-%d %H:%i:%s'
+        ) as create_time,
+		create_man, modify_time, modify_man,cell_phone,
+		remark, message_url,
+		from_source,
+		link_url_h
+	</sql>
+	<sql id="queryContion">
+		<if test="null != state and state != ''"> and state = #{state} </if>
+		<if test="null != isRead and isRead != 2"> and is_read = #{isRead} </if>
+		<if test="null != type and type != 0"> and type = #{type} </if>
+		<if test="null != cellPhone and cellPhone != ''"> and cell_phone = #{cellPhone} </if>
+		<if test="null != startTime"> and create_time &gt;=#{startTime} </if>
+		<if test="null != endTime"> and create_time &lt;=#{endTime} </if>
+		<if test="null != title"> and title = #{title} </if>
+		<if test="null != customerId"> and customer_id = #{customerId} </if>
+	</sql>
+	<select id="get" parameterType="map" resultMap="messageMap">
+		select
+		<include refid="Base_Column_List" />
+		from message where message_id = #{messageId}
+	</select>
+
+	<select id="queryCount" parameterType="map" resultType="int">
+		select count(*) from message where 1=1
+		<include refid="queryContion" />
+	</select>
+	<select id="query" parameterType="map" resultMap="messageMap">
+		select
+		<include refid="Base_Column_List" />
+		from message where 1=1
+		<include refid="queryContion" />
+		order by create_time desc
+		limit ${iDisplayStart},${iDisplayLength}
+	</select>
+
+	<select id="queryAll" parameterType="map" resultMap="messageMap">
+		select
+		<include refid="Base_Column_List" />
+		from message where 1=1
+		<if test="null != createTime and createTime != '' "> and create_time = #{createTime} </if>
+		order by create_time desc
+	</select>
+
+	<insert id="insert" parameterType="map">
+		INSERT INTO message
+		(message_id, customer_id, title, content, type, is_read,
+		state,
+		create_time,
+		create_man, modify_time, modify_man,cell_phone,
+		remark,
+		message_url,
+		from_source,
+		link_url_h)
+		VALUES
+		( #{messageId},
+		#{customerId},
+		#{title},
+		#{content},
+		#{type},
+		#{isRead},
+		#{state},
+		#{createTime},
+		#{createMan},
+		#{modifyTime},
+		#{modifyMan},
+		#{cellPhone},
+		#{remark},
+		#{messageUrl},
+		#{fromSource},
+		#{linkUrlH}
+		)
+	</insert>
+	<delete id="delete" parameterType="map">
+		delete from message where
+		message_id = #{arg0}
+	</delete>
+	<select id="getZoneProductById" parameterType="map" resultMap="messageMap">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM message
+		WHERE message_id = #{arg0}
+	</select>
+
+		<update id="update" parameterType="map">
+		UPDATE message
+		<set>
+
+			<if test="messageId != null and messageId!=''">
+				message_id = #{messageId},
+			</if>
+
+			<if test="title != null and title!=''">
+				title = #{title},
+			</if>
+
+			<if test="content != null and content!=''">
+				content = #{content},
+			</if>
+
+			<if test="type != null and type!=''">
+				type = #{type},
+			</if>
+
+			<if test="isRead != null and isRead!=''">
+				is_read = #{isRead},
+			</if>
+
+			<if test="state != null and state!=''">
+				state = #{state},
+			</if>
+
+			<if test="modifyTime != null and modifyTime!=''">
+				modify_time = #{modifyTime},
+			</if>
+
+			<if test="modifyMan != null and modifyMan!=''">
+				modify_man = #{modifyMan},
+			</if>
+
+			<if test="remark != null and remark!=''">
+				remark = #{remark},
+			</if>
+
+			<if test="cellPhone != null and cellPhone!=''">
+				cell_phone = #{cellPhone},
+			</if>
+
+			<if test="createTime != null and createTime!=''">
+				create_time = #{createTime},
+			</if>
+			<if test="createMan != null and createMan!=''">
+				create_man = #{createMan},
+			</if>
+			<if test="messageUrl != null and messageUrl!=''">
+				message_url = #{messageUrl},
+			</if>
+			<if test="linkUrlH != null and linkUrlH!=''">
+				link_url_h = #{linkUrlH},
+			</if>
+			<if test="fromSource != null and fromSource!=''">
+				from_source = #{fromSource},
+			</if>
+		</set>
+		WHERE message_id = #{messageId}
+	</update>
+	
+	<!--  批量插入 -->
+	
+		<insert id="batchInsert" parameterType="map">
+		INSERT INTO message
+		(message_id, customer_id, title, content, type, is_read,
+		state,
+		create_time,
+		create_man, modify_time, modify_man,cell_phone,
+		remark,
+		message_url,
+		from_source,
+		link_url_h)
+		VALUES
+		
+		
+		<foreach collection="list" item="item" index="index" separator=",">
+		( #{item.messageId},
+		#{item.customerId},
+		#{item.title},
+		#{item.content},
+		#{item.type},
+		#{item.isRead},
+		#{item.state},
+		#{item.createTime},
+		#{item.createMan},
+		#{item.modifyTime},
+		#{item.modifyMan},
+		#{item.cellPhone},
+		#{item.remark},
+		#{item.messageUrl},
+		#{item.fromSource},
+		#{item.linkUrlH}
+		)
+        </foreach>
+	</insert>
+	
+	<select id="queryPhoneNumList" parameterType="map" resultType="com.calf.module.message.entity.AccountVO">
+		SELECT
+			phone_num as  phoneNum,
+			account_id  as  userId
+		FROM
+			account
+		WHERE
+			last_login_time  <![CDATA[ > ]]> #{startTime}  and  last_login_time  <![CDATA[< ]]> #{endTime}
+		ORDER BY
+			create_time DESC
+		LIMIT #{pageIndex},#{pageSize}
+	</select>
+	<select id="queryAccountByPhoneNumList" parameterType="map" resultType="com.calf.module.message.entity.AccountVO">
+		SELECT
+			phone_num as  phoneNum,
+			account_id  as  userId
+		FROM
+			account
+		WHERE
+			phone_num in 
+		<foreach collection="list"  item="item" open="(" separator="," close=")">
+	                #{item}       
+	    </foreach> 
+	</select>
+	
+	
+	
+</mapper>

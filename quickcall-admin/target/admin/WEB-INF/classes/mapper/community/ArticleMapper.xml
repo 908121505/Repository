@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Article">
+    <resultMap id="articleMap" type="Article">
+        <id column="article_id" property="articleId"/>
+        <result column="article_class_id" property="articleClassId"/>
+        <result column="article_content" property="articleContent"/>
+        <result column="article_title" property="articleTitle"/>
+        <result column="article_img" property="articleImg"/>
+        <result column="read_num" property="readNum"/>
+        <result column="is_push" property="isPush"/>
+        <result column="create_time" property="createTime"/>
+        <result column="create_man" property="createMan"/>
+        <result column="modify_time" property="modifyTime"/>
+        <result column="modify_man" property="modifyMan"/>
+        <result column="sort" property="sort"/>
+        <result column="state" property="state"/>
+        <result column="title_type" property="titleType"/>
+        <result column="description" property="description"/>
+        <result column="praise_num" property="praiseNum"/>
+        <result column="recommend_type" property="recommendType"/>
+        <association property="articleClass" column="article_class_id" javaType="com.calf.module.loan.entity.ArticleClass">
+		<id property="articleClassId" column="article_class_id"/>  
+		<result property="articleClassTitle" column="article_class_title"/>  
+	    </association>  
+    </resultMap>
+
+    <sql id="columns">
+        article_id, article_class_id,article_content, article_title, article_img, read_num, is_push, create_time,
+        create_man, modify_time, modify_man, sort, state, title_type, description, praise_num,recommend_type
+    </sql>
+
+    <select id="queryCount" parameterType="map" resultType="int">
+        SELECT
+       	count(article_id)
+        FROM article art LEFT JOIN article_class arc ON art.article_class_id= arc.article_class_id   WHERE 1=1
+        <if test="null != state">and art.state =  #{state}</if>
+        <if test="null != isPush">and art.is_push =  #{isPush}</if>
+        <if test="null != articleTitle">and art.article_title like concat('%', #{articleTitle},'%')</if>
+    </select>
+    
+    <select id="query" parameterType="map" resultMap="articleMap">
+        select
+        art.*,arc.article_class_title
+        from article art left join article_class arc on art.article_class_id= arc.article_class_id   where 1=1
+        <if test="null != state">and art.state =  #{state}</if>
+        <if test="null != isPush">and art.is_push =  #{isPush}</if>
+        <if test="null != articleTitle">and art.article_title like concat('%', #{articleTitle},'%')</if>
+        order by art.modify_time DESC 
+        limit ${iDisplayStart},${iDisplayLength}
+    </select>
+    
+	 <select id="queryAll" parameterType="map" resultMap="articleMap">
+	        select
+	        <include refid="columns"/>
+	        from article where 1=1
+	        <if test="null != state">and state =  #{state}</if>
+	        order by create_time desc
+	    </select>
+	    
+    <insert id="insert" parameterType="map">
+        insert into article(
+        <if test="null != articleId">article_id,</if>
+        <if test="null != articleClassId">article_class_id,</if>
+        <if test="null != articleContent">article_content,</if>
+        <if test="null != articleTitle">article_title,</if>
+        <if test="null != articleImg">article_img,</if>
+        <if test="null != readNum">read_num,</if>
+        <if test="null != isPush">is_push,</if>
+        <if test="null != createTime">create_time,</if>
+        <if test="null != createMan">create_man,</if>
+        <if test="null != state">state,</if>
+        <if test="null != titleType">title_type,</if>
+        <if test="null != description">description,</if>
+        <if test="null != praiseNum">praise_num,</if>
+        <if test="null != modifyTime">modify_time,</if>
+        <if test="null != modifyMan">modify_man,</if>
+        <if test="null != linkUrlH">link_url_h,</if>
+        <if test="null != recommendType">recommend_type,</if>
+        <if test="null != sort">sort</if>
+        )
+        values(
+        <if test="null != articleId">#{articleId},</if>
+        <if test="null != articleClassId">#{articleClassId},</if>
+        <if test="null != articleContent">#{articleContent},</if>
+        <if test="null != articleTitle">#{articleTitle},</if>
+        <if test="null != articleImg">#{articleImg},</if>
+        <if test="null != readNum">#{readNum},</if>
+        <if test="null != isPush">#{isPush},</if>
+        <if test="null != createTime">#{createTime},</if>
+        <if test="null != createMan">#{createMan},</if>
+        <if test="null != state">#{state},</if>
+        <if test="null != titleType">#{titleType},</if>
+        <if test="null != description">#{description},</if>
+        <if test="null != praiseNum">#{praiseNum},</if>
+        <if test="null != modifyTime">#{modifyTime},</if>
+        <if test="null != modifyMan">#{modifyMan},</if>
+        <if test="null != linkUrlH">#{linkUrlH},</if>
+         <if test="null != recommendType">#{recommendType},</if>
+        <if test="null != sort">#{sort}</if>
+        )
+    </insert>
+
+    <select id="get" parameterType="map" resultMap="articleMap">
+        select
+        <include refid="columns"/>
+        from article where article_id = #{arg0}
+    </select>
+
+    <delete id="delete" parameterType="map">
+		delete from article where article_id = #{arg0}
+	</delete>
+
+    <update id="update" parameterType="map">
+        UPDATE article
+        <set>
+            <if test="articleClassId != null">
+                article_class_id = #{articleClassId},
+            </if>
+            <if test="articleContent != null">
+                article_content = #{articleContent},
+            </if>
+            <if test="articleTitle != null">
+                article_title = #{articleTitle},
+            </if>
+            <if test="articleImg != null">
+                article_img = #{articleImg},
+            </if>
+            <if test="readNum != null">
+                read_num = #{readNum},
+            </if>
+            <if test="isPush != null">
+                is_push = #{isPush},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime},
+            </if>
+            <if test="createMan != null">
+                create_man = #{createMan},
+            </if>
+            <if test="modifyTime != null">
+                modify_time = #{modifyTime},
+            </if>
+            <if test="modifyMan != null">
+                modify_man = #{modifyMan},
+            </if>
+            <if test="sort != null">
+                sort = #{sort},
+            </if>
+            <if test="state != null">
+                state = #{state},
+            </if>
+            <if test="titleType != null">
+                title_type = #{titleType},
+            </if>
+            <if test="description != null">
+                description = #{description},
+            </if>
+            <if test="praiseNum != null">
+                praise_num = #{praiseNum},
+            </if>
+            <if test="recommendType != null">
+                recommend_type = #{recommendType},
+            </if>
+        </set>
+        WHERE article_id = #{articleId}
+    </update>
+
+</mapper>
