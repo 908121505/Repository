@@ -9,6 +9,43 @@
 
     <name>quickcall-parent</name>
     <url>http://maven.apache.org</url>
+  
+  	<repositories>
+        <repository>
+            <id>nexus-local</id>
+            <url>http://pre.xnshandai.net/nexus/content/groups/nexus_public</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+    <pluginRepositories>
+        <pluginRepository>
+            <id>nexus-local</id>
+            <url>http://pre.xnshandai.net/nexus/content/groups/nexus_public</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </pluginRepository>
+    </pluginRepositories>
+
+  	<distributionManagement>
+    	<snapshotRepository>
+        <id>Snapshots</id>
+        <url>http://pre.xnshandai.net/nexus/content/repositories/snapshots/</url>
+    </snapshotRepository>
+    <repository>
+        <id>Releases</id>
+        <url>http://pre.xnshandai.net/nexus/content/repositories/releases/</url>
+    </repository>
+   </distributionManagement>
+
 
     <properties>
         <!-- 以下为版本控制，统一在这儿配置 -->
