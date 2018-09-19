@@ -29,5 +29,8 @@
         <typeAlias type="com.calf.module.export.entity.ExportOrderData" alias="ExportOrderData"/>
         <typeAlias type="com.calf.module.export.entity.ExportUserData" alias="ExportUserData"/>
 
+        <!-- APP配置 -->
+        <typeAlias type="com.calf.module.appconfig.entity.Banner" alias="Banner"/>
+
     </typeAliases>
 </configuration>
