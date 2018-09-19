@@ -16,7 +16,7 @@
 					</a>
 				</li>
 				<li class="dropdown hidden-xs">
-					<a  href='#' onclick='modifyUserInfo(${account })' class="dropdown-toggle" data-toggle="dropdown" target="_parent">
+					<a  href='#' onclick='modifyUserInfo("${account }")' class="dropdown-toggle" data-toggle="dropdown" target="_parent">
 						<span class="padding-right-small" style="position:relative;top: 3px;"></span> 修改用户信息
 					</a>
 				</li>
@@ -32,8 +32,7 @@
 	   </div>
 </div>
 <script type="text/javascript"> 
-
-function modifyUserInfo(account){
+	function modifyUserInfo(account){
 		$('#insertAndUpdate').addAndUpdateRow("system/user/modifyPass.htm?account="+account);
-}
+	}
 </script>

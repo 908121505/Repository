@@ -42,20 +42,20 @@
     <div class="modal fade" id="insertAndUpdate" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
          aria-hidden="true">
     </div>
-
-    <script type="text/javascript">
-        $(function () {
-            $.ajax({
-                url: "account/platfromTJ.htm",
-                async: false,
-                dataType: "JSON",
-                type: 'post',
-                success: function (data) {
-                    $('#lable1').html(data.accountTotal);
-                    $('#lable2').html(data.accountTodayTotal);
-                    $('#lable3').html(data.ysAmtTotal != null ? data.ysAmtTotal : 0);
-                    $('#lable4').html(data.todayysAmtTotal != null ? data.todayysAmtTotal : 0);
-                }
-            });
+</div>
+<script type="text/javascript">
+    /*$(function () {
+        $.ajax({
+            url: "account/platfromTJ.htm",
+            async: false,
+            dataType: "JSON",
+            type: 'post',
+            success: function (data) {
+                $('#lable1').html(data.accountTotal);
+                $('#lable2').html(data.accountTodayTotal);
+                $('#lable3').html(data.ysAmtTotal != null ? data.ysAmtTotal : 0);
+                $('#lable4').html(data.todayysAmtTotal != null ? data.todayysAmtTotal : 0);
+            }
         });
-    </script>
+    });*/
+</script>
