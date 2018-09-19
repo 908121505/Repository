@@ -13,6 +13,7 @@ import com.honglu.quickcall.user.facade.code.UserBizReturnCode;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -127,7 +128,7 @@ public class AccountUserInfoController {
      */
     @RequestMapping(value = "/queryAccount", method = RequestMethod.POST)
     @ResponseBody
-    public WebResponseModel queryAccount(QueryAccountRequest params) {
+    public WebResponseModel queryAccount(@RequestBody QueryAccountRequest params) {
         WebResponseModel response = accountOrderService.execute(params);
         return response;
     }
