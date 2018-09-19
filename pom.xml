@@ -106,7 +106,7 @@
     <repositories>
         <repository>
             <id>nexus-local</id>
-            <url>http://172.16.0.186:5000/nexus/content/groups/public</url>
+            <url>http://pre.xnshandai.net/nexus/content/groups/nexus_public</url>
             <releases>
                 <enabled>true</enabled>
             </releases>
@@ -118,7 +118,7 @@
     <pluginRepositories>
         <pluginRepository>
             <id>nexus-local</id>
-            <url>http://172.16.0.186:5000/nexus/content/groups/public</url>
+            <url>http://pre.xnshandai.net/nexus/content/groups/nexus_public</url>
             <releases>
                 <enabled>true</enabled>
             </releases>
@@ -127,23 +127,7 @@
             </snapshots>
         </pluginRepository>
     </pluginRepositories>
-
-
-    <distributionManagement>
-        <snapshotRepository>
-            <id>snapshots</id>
-            <name>my repository</name>
-            <url>http://172.16.0.186:5000/nexus/content/repositories/snapshots/</url>
-        </snapshotRepository>
-
-        <repository>
-            <id>snapshots</id>
-            <name>my repository</name>
-            <url>http://172.16.0.186:5000/nexus/content/repositories/releases/</url>
-        </repository>
-    </distributionManagement>
-
-
+    
     <dependencyManagement>
         <dependencies>
             <!-- for spring framework -->
