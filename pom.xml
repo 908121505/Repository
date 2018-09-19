@@ -688,6 +688,7 @@
         <module>quickcall-account</module>
         <module>quickcall-activity</module>
         <module>quickcall-admin</module>
+        <module>quickcall-task</module>
        
         
     </modules>
