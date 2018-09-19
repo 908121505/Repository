@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <div class="theme-blue">
     <div class="navbar navbar-default" role="navigation">
         <div class="navbar-header">
@@ -17,7 +16,7 @@
 					</a>
 				</li>
 				<li class="dropdown hidden-xs">
-					<a  href='#' onclick='modifyUserInfo(${id })' class="dropdown-toggle" data-toggle="dropdown" target="_parent">
+					<a  href='#' onclick='modifyUserInfo(${account })' class="dropdown-toggle" data-toggle="dropdown" target="_parent">
 						<span class="padding-right-small" style="position:relative;top: 3px;"></span> 修改用户信息
 					</a>
 				</li>
@@ -34,7 +33,7 @@
 </div>
 <script type="text/javascript"> 
 
-function modifyUserInfo(id){
-		$('#insertAndUpdate').addAndUpdateRow("system/user/modifyPass.htm?id="+id);
+function modifyUserInfo(account){
+		$('#insertAndUpdate').addAndUpdateRow("system/user/modifyPass.htm?account="+account);
 }
 </script>

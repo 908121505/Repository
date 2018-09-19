@@ -63,10 +63,10 @@ public class SysUserController implements BaseController<SysUser> {
 	}
 	
 	@RequestMapping(value="/modifyPass.htm",method=RequestMethod.GET)
-	public String modifyPass(Model model, String id,HttpServletRequest request) {
-		if(StringUtils.isNotBlank(id)){
+	public String modifyPass(Model model, String account,HttpServletRequest request) {
+		if(StringUtils.isNotBlank(account)){
 			
-			model.addAttribute("entity", baseManager.get("SysUser.getUserById", new Object[]{id}));
+			model.addAttribute("entity", baseManager.get("SysUser.getUserByAccount", new Object[]{account}));
 		}
 		return "home/updatePass";
 	}

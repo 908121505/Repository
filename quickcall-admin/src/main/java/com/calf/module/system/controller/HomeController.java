@@ -66,25 +66,29 @@ public class HomeController {
 		try{
 			currentUser.login(token);
 			SecurityUtils.getSubject().getSession().setTimeout(-10001);
-			Map<String,Object> params=new HashMap<String,Object>();
-			params.put("arg0", account);
-			List<SysUser>  sys= this.baseManager.query("SysUser.getUserByAccount", params);
-			model.addAttribute("id", sys.get(0).getId());
-			top(model);
-			left(model);
-			
-			return "index";
+			return "redirect:/index.htm";
 		} catch(Exception e){
 			e.printStackTrace();
 		}
 		return "login";
 	}
-	
+
+	/**
+	 * 登录页
+	 * @return
+	 */
+	@RequestMapping(value="/index.htm",method=RequestMethod.GET)
+	public String index(Model model){
+		top(model);
+		left(model);
+		return "index";
+	}
+
 	/**
 	 * 头部信息页
 	 * @return
 	 */
-	public void top(Model model){
+	private void top(Model model){
 		Subject currentUser = SecurityUtils.getSubject();
 		model.addAttribute("account", (String)currentUser.getPrincipal());
 	}
@@ -93,7 +97,7 @@ public class HomeController {
 	 * 左侧导航栏
 	 * @return
 	 */
-	public void left(Model model){
+	private void left(Model model){
 		Subject currentUser = SecurityUtils.getSubject();
 		Map<String,Object> paramters = new HashMap<String, Object>();
 		paramters.put("account", currentUser.getPrincipal());		
