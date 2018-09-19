@@ -1,3 +1,0 @@
-209116 INFO  [2017-12-13 23:47:28]  返回结果com.honglu.quickcall.user.facade.exchange.response.SelectGenderResponse@18c8d4de[persion=com.honglu.quickcall.user.facade.entity.Persion@339980fe,code=Default#Success,message=成功,object={result=com.honglu.quickcall.user.facade.entity.Persion@339980fe},data=<null>,extFields={}]
-215889 DEBUG [2017-12-13 23:47:35]  Got ping response for sessionid: 0x160445cfba10040 after 0ms
-229223 DEBUG [2017-12-13 23:47:48]  Got ping response for sessionid: 0x160445cfba10040 after 0ms
