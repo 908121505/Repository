@@ -59,6 +59,7 @@ public class ExportDataFileController {
 
 	@RequestMapping(value = "/home.htm", method = RequestMethod.GET)
 	public String home() {
+		System.out.println(1);
 		return "export/exportfile";
 	}
 
