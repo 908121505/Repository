@@ -8,8 +8,8 @@ import com.honglu.quickcall.common.api.exchange.AbstractRequest;
 import com.honglu.quickcall.common.api.exchange.CommonResponse;
 import com.honglu.quickcall.user.facade.business.UserDubboBusiness;
 import com.honglu.quickcall.user.facade.code.UserBizReturnCode;
-
-
+import com.honglu.quickcall.user.facade.code.UserFunctionType;
+import com.honglu.quickcall.user.facade.exchange.request.PersonInfoRequest;
 import com.honglu.quickcall.user.service.service.*;
 
 import org.slf4j.Logger;
@@ -24,7 +24,8 @@ public class UserDubboBusinessImpl implements UserDubboBusiness {
 
     @Autowired
     private CommonPersonService commonPersonService;
-
+    @Autowired
+	private PersonInfoService personInfoService;
    
 
     @Override
@@ -35,7 +36,9 @@ public class UserDubboBusinessImpl implements UserDubboBusiness {
         CommonResponse response = new CommonResponse();
         try {
             switch (request.getBizCode()) {
-                
+            case UserFunctionType.PersonInfo:
+				response = personInfoService.queryPersonInfo((PersonInfoRequest) request);
+				break;    
                 default:
                     throw new BizException(UserBizReturnCode.BizFunctionTypeNotMatch, UserBizReturnCode.BizFunctionTypeNotMatch.desc());
             }

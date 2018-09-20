@@ -15,6 +15,7 @@ public interface UserFunctionType {
     String MarketOnOff = "001300";
     String AppConfig = "001301";
 
-
+  //查看用户信息
+    String PersonInfo =  "0011128";
 
 }
