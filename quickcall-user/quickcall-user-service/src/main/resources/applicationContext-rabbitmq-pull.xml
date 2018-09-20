@@ -42,7 +42,7 @@
 
     </rabbit:listener-container>
 
-    <bean id="accountUserPayLitener"  class="com.honglu.quickcall.user.service.mq.pull.UserCenterMqPayListener" />
-    <bean id="userFromUserMqLitener"  class="com.honglu.quickcall.user.service.mq.pull.UserFromUserMqLitener" />
+     <bean id="accountUserPayLitener"  class="com.honglu.quickcall.user.service.mq.pull.UserCenterMqPayListener" />
+     <bean id="userFromUserMqLitener"  class="com.honglu.quickcall.user.service.mq.pull.UserFromUserMqLitener" />
 
 </beans>
