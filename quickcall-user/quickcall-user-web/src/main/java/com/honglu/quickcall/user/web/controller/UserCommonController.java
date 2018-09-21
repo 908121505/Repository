@@ -30,16 +30,78 @@ public class UserCommonController {
     private UserCenterService userCenterService;
 
     /**
-     * 检测手机号是否存在
+     * 检查用户是否存在
      * @param params
      * @return
      */
-    @RequestMapping(value = "/reg_tel_exist",  method = RequestMethod.POST)
+    @RequestMapping(value = "/regUserExist",  method = RequestMethod.POST)
     @ResponseBody
-    public WebResponseModel regTelExist( IsPhoneExistsRequest params) {
+    public WebResponseModel regUserExist( IsPhoneExistsRequest params) {
         WebResponseModel response = userCenterService.execute(params);
         return response;
     }
+    
+    /**
+     * 登录
+     * @param params
+     * @return
+     */
+    @RequestMapping(value = "/login", method = RequestMethod.POST)
+    @ResponseBody
+    public WebResponseModel login(UserLoginRequest params) {
+    	
+    	 WebResponseModel response=new WebResponseModel();
+    	 return response;
+    }
+    /**
+     * 设置密码
+     * @param params
+     * @return
+     */
+    @RequestMapping(value = "/setPwd",  method = RequestMethod.POST)
+    @ResponseBody
+    public WebResponseModel setpwd( SetPwdRequest params) {
+        WebResponseModel response = new WebResponseModel();
+        return response;
+    }
+    /**
+     * 找回密码
+     * @param params
+     * @return
+     */
+    @RequestMapping(value = "/findPwd",  method = RequestMethod.POST)
+    @ResponseBody
+    public WebResponseModel findPwd( FindPwdRequest params) {
+        WebResponseModel response = new WebResponseModel();
+        return response;
+    }
+    
+    /**
+     * 找回密码
+     * @param params
+     * @return
+     */
+    @RequestMapping(value = "/setHeardUrl",  method = RequestMethod.POST)
+    @ResponseBody
+    public WebResponseModel setHeardUrl( SetHeardUrlRequest params) {
+        WebResponseModel response = new WebResponseModel();
+        return response;
+    }
+    
+   /* *//**
+     * 退出登录
+     * @param params
+     * @return
+     *//*
+    @RequestMapping(value = "/loginout",  method = RequestMethod.POST)
+    @ResponseBody
+    public WebResponseModel loginout(LoginOutRequest params) {
+        WebResponseModel response = userCenterService.execute(params);
+        return response; 
+    }*/
+    
+    
+    
     
     
 }

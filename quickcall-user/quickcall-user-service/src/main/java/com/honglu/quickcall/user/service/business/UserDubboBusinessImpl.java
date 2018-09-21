@@ -37,7 +37,7 @@ public class UserDubboBusinessImpl implements UserDubboBusiness {
         try {
             switch (request.getBizCode()) {
             case UserFunctionType.PersonInfo:
-				response = personInfoService.queryPersonInfo((PersonInfoRequest) request);
+				/*response = personInfoService.queryPersonInfo((PersonInfoRequest) request);*/
 				break;    
                 default:
                     throw new BizException(UserBizReturnCode.BizFunctionTypeNotMatch, UserBizReturnCode.BizFunctionTypeNotMatch.desc());
