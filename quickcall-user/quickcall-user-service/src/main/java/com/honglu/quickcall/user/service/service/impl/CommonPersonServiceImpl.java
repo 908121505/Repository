@@ -25,6 +25,12 @@ import org.springframework.stereotype.Service;
 import com.alibaba.fastjson.JSON;
 import com.aliyuncs.dysmsapi.model.v20170525.SendSmsResponse;
 import com.aliyuncs.exceptions.ClientException;
+import com.honglu.quickcall.common.api.exchange.CommonResponse;
+import com.honglu.quickcall.user.facade.exchange.request.IsPhoneExistsRequest;
+import com.honglu.quickcall.user.facade.exchange.request.SetHeardUrlRequest;
+import com.honglu.quickcall.user.facade.exchange.request.SetPwdRequest;
+import com.honglu.quickcall.user.facade.exchange.request.UserLoginRequest;
+import com.honglu.quickcall.user.facade.exchange.request.UserRegisterRequest;
 import com.honglu.quickcall.user.service.service.CommonPersonService;
 
 import cn.jiguang.commom.utils.StringUtils;
@@ -38,6 +44,40 @@ public class CommonPersonServiceImpl implements CommonPersonService {
  
    
     private final static Logger logger = LoggerFactory.getLogger(CommonPersonServiceImpl.class);
+
+	@Override
+	public CommonResponse regUserExist(IsPhoneExistsRequest params) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	
+
+	@Override
+	public CommonResponse login(UserLoginRequest params) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public CommonResponse setpwd(SetPwdRequest params) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public CommonResponse setHeardUrl(SetHeardUrlRequest params) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+
+	@Override
+	public CommonResponse register(UserRegisterRequest request) {
+		// TODO Auto-generated method stub
+		return null;
+	}
     
     
     

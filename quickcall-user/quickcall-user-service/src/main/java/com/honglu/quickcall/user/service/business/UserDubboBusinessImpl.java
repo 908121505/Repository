@@ -24,8 +24,7 @@ public class UserDubboBusinessImpl implements UserDubboBusiness {
 
     @Autowired
     private CommonPersonService commonPersonService;
-    @Autowired
-	private PersonInfoService personInfoService;
+  
    
 
     @Override

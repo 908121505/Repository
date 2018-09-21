@@ -1,12 +1,6 @@
 package com.honglu.quickcall.user.web.controller;
 
-import com.honglu.quickcall.common.api.code.BizCode;
-import com.honglu.quickcall.common.api.code.PrivilegeCodeEnum;
 import com.honglu.quickcall.common.api.exchange.WebResponseModel;
-import com.honglu.quickcall.common.api.util.JedisUtil;
-import com.honglu.quickcall.common.api.util.RedisKeyConstants;
-import com.honglu.quickcall.common.core.util.StringUtil;
-import com.honglu.quickcall.user.facade.code.UserBizReturnCode;
 import com.honglu.quickcall.user.facade.exchange.request.*;
 import com.honglu.quickcall.user.web.service.UserCenterService;
 import org.slf4j.Logger;
@@ -40,6 +34,17 @@ public class UserCommonController {
         WebResponseModel response = userCenterService.execute(params);
         return response;
     }
+    /**
+     * 检查用户是否存在
+     * @param params
+     * @return
+     */
+    @RequestMapping(value = "/register",  method = RequestMethod.POST)
+    @ResponseBody
+    public WebResponseModel register( UserRegisterRequest params) {
+        WebResponseModel response =null;
+        return response;
+    }
     
     /**
      * 登录
@@ -64,17 +69,7 @@ public class UserCommonController {
         WebResponseModel response = new WebResponseModel();
         return response;
     }
-    /**
-     * 找回密码
-     * @param params
-     * @return
-     */
-    @RequestMapping(value = "/findPwd",  method = RequestMethod.POST)
-    @ResponseBody
-    public WebResponseModel findPwd( FindPwdRequest params) {
-        WebResponseModel response = new WebResponseModel();
-        return response;
-    }
+    
     
     /**
      * 找回密码
