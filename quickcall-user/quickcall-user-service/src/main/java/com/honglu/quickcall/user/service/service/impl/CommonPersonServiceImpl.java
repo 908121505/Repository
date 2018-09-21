@@ -37,9 +37,10 @@ import org.springframework.transaction.annotation.Transactional;
 public class CommonPersonServiceImpl implements CommonPersonService {
  
    
-  
-    
     private final static Logger logger = LoggerFactory.getLogger(CommonPersonServiceImpl.class);
+    
+    
+    
 
 
     
