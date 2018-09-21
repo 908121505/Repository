@@ -2,45 +2,40 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="Banner">
     <resultMap id="BannerResultMap" type="Banner">
-        <id property="bannerId" column="banner_id"/>
-        <id property="title" column="title"/>
-        <id property="image" column="image"/>
-        <id property="url" column="url"/>
-        <id property="bannerType" column="banner_type"/>
-        <id property="startTime" column="start_time"/>
-        <id property="endTime" column="end_time"/>
-        <id property="deviceType" column="device_type"/>
-        <id property="appVersion" column="app_version"/>
-        <id property="appVersionRule" column="app_version_rule"/>
-        <id property="state" column="state"/>
-        <id property="sort" column="sort"/>
-        <id property="remark" column="remark"/>
-        <id property="createTime" column="create_time"/>
-        <id property="createMan" column="create_man"/>
-        <id property="modifyTime" column="modify_time"/>
-        <id property="modifyMan" column="modify_man"/>
+        <id column="banner_id" property="bannerId" jdbcType="INTEGER" />
+        <result column="banner_type" property="bannerType" jdbcType="TINYINT" />
+        <result column="title" property="title" jdbcType="VARCHAR" />
+        <result column="image_url" property="imageUrl" jdbcType="VARCHAR" />
+        <result column="url" property="url" jdbcType="VARCHAR" />
+        <result column="sort" property="sort" jdbcType="SMALLINT" />
+        <result column="banner_status" property="bannerStatus" jdbcType="TINYINT" />
+        <result column="start_time" property="startTime" jdbcType="TIMESTAMP" />
+        <result column="end_time" property="endTime" jdbcType="TIMESTAMP" />
+        <result column="device_type" property="deviceType" jdbcType="TINYINT" />
+        <result column="app_version" property="appVersion" jdbcType="VARCHAR" />
+        <result column="app_version_rule" property="appVersionRule" jdbcType="TINYINT" />
+        <result column="remark" property="remark" jdbcType="VARCHAR" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+        <result column="create_man" property="createMan" jdbcType="VARCHAR" />
+        <result column="modify_man" property="modifyMan" jdbcType="VARCHAR" />
     </resultMap>
 
     <sql id="Base_Column_List">
-		banner_id, title, image, url, banner_type, start_time, end_time,
-		device_type, app_version, app_version_rule, state, sort, remark,
-		create_time, create_man, modify_time, modify_man
+		banner_id, banner_type, title, image_url, url, sort, banner_status,
+		start_time, end_time, device_type, app_version, app_version_rule, remark,
+		create_time, modify_time, create_man, modify_man
 	</sql>
-    <select id="get" parameterType="map" resultMap="BannerResultMap">
-        select
-        <include refid="Base_Column_List"/>
-        from banner
-        where banner_id = #{bannerId}
-    </select>
 
     <select id="queryCount" parameterType="map" resultType="int">
         select count(banner_id) from banner where 1=1
         <if test="title !=null">and title like concat('%',#{title},'%')</if>
-        <if test="state !=null">and state = #{state}</if>
+        <if test="bannerStatus !=null">and banner_status = #{bannerStatus}</if>
         <if test="bannerType !=null and bannerType!=''">and banner_type = #{bannerType}</if>
         <if test="startTime !=null and startTime!=''">and start_time <![CDATA[  >= ]]> #{startTime}</if>
         <if test="endTime !=null and endTime!=''">and end_time <![CDATA[  <= ]]> #{endTime}</if>
     </select>
+
     <select id="query" parameterType="map" resultMap="BannerResultMap">
         select
         <include refid="Base_Column_List"/>
@@ -59,15 +54,17 @@
     <insert id="insert" parameterType="map">
 		INSERT INTO banner
 		(
-		  banner_id, title, image, url, banner_type, start_time, end_time,
-		  device_type, app_version, app_version_rule, state, sort, remark,
-		  create_time, create_man, modify_time, modify_man
+		  banner_type, title, image_url, url, sort, banner_status,
+		  start_time, end_time, device_type, app_version, app_version_rule, remark,
+          create_time, modify_time, create_man, modify_man
 		)
 		VALUES
 		(
-		  #{bannerId},#{title},#{image},#{url},#{bannerType},#{startTime},#{endTime},
-		  #{deviceType},#{appVersion},#{appVersionRule},{state},{sort},#{remark},
-		  NOW(), #{createMan}, NOW(), #{modifyMan}
+		  #{bannerType,jdbcType=TINYINT}, #{title,jdbcType=VARCHAR}, #{imageUrl,jdbcType=VARCHAR},
+		  #{url,jdbcType=VARCHAR}, #{sort,jdbcType=SMALLINT}, #{bannerStatus,jdbcType=TINYINT},
+		  #{startTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP}, #{deviceType,jdbcType=TINYINT},
+		  #{appVersion,jdbcType=VARCHAR}, #{appVersionRule,jdbcType=TINYINT}, #{remark,jdbcType=VARCHAR},
+		  NOW(), NOW(), #{createMan,jdbcType=VARCHAR}, #{modifyMan,jdbcType=VARCHAR}
         )
 	</insert>
 
@@ -77,55 +74,51 @@
 
     <select id="getBannerById" parameterType="map" resultMap="BannerResultMap">
         SELECT
-        <include refid="Base_Column_List"/>,banner_color bannerColor,zone_id zoneId
-        FROM banner
-        WHERE banner_id = #{arg0}
+        <include refid="Base_Column_List"/>
+        FROM banner WHERE banner_id = #{arg0}
     </select>
 
     <update id="update" parameterType="map">
         UPDATE banner
-        <set>
-            <if test="title != null">
-                title = #{title},
-            </if>
-            <if test="image != null">
-                image = #{image},
-            </if>
-            <if test="url != null">
-                url = #{url},
-            </if>
-            <if test="bannerType != null">
+        <set >
+            <if test="bannerType != null" >
                 banner_type = #{bannerType},
             </if>
-            <if test="startTime != null">
-                start_time = #{startTime},
+            <if test="title != null" >
+                title = #{title},
             </if>
-            <if test="endTime != null">
-                end_time = #{endTime},
+            <if test="imageUrl != null" >
+                image_url = #{imageUrl},
             </if>
-            <if test="deviceType != null">
-                device_type = #{deviceType},
+            <if test="url != null" >
+                url = #{url},
             </if>
-            <if test="appVersion != null">
-                app_version = #{appVersion},
-            </if>
-            <if test="appVersionRule != null">
-                app_version_rule = #{appVersionRule},
-            </if>
-            <if test="state != null">
-                state = #{state},
-            </if>
-            <if test="sort != null">
+            <if test="sort != null" >
                 sort = #{sort},
             </if>
-            <if test="remark != null">
+            <if test="bannerStatus != null" >
+                banner_status = #{bannerStatus},
+            </if>
+            <if test="startTime != null" >
+                start_time = #{startTime},
+            </if>
+            <if test="endTime != null" >
+                end_time = #{endTime},
+            </if>
+            <if test="deviceType != null" >
+                device_type = #{deviceType},
+            </if>
+            <if test="appVersion != null" >
+                app_version = #{appVersion},
+            </if>
+            <if test="appVersionRule != null" >
+                app_version_rule = #{appVersionRule},
+            </if>
+            <if test="remark != null" >
                 remark = #{remark},
             </if>
-            <if test="createMan != null">
-                create_man = #{createMan},
-            </if>
             modify_time = NOW(),
-            <if test="modifyMan != null">
+            <if test="modifyMan != null" >
                 modify_man = #{modifyMan},
             </if>
         </set>
