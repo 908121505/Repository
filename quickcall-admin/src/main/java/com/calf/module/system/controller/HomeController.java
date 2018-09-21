@@ -68,7 +68,7 @@ public class HomeController {
 			SecurityUtils.getSubject().getSession().setTimeout(-10001);
 			return "redirect:/index.htm";
 		} catch(Exception e){
-			e.printStackTrace();
+			logger.warn("登录失败：{}", e.getMessage());
 		}
 		return "login";
 	}
