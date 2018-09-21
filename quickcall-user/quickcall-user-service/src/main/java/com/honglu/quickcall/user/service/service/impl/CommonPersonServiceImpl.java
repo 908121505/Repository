@@ -164,7 +164,7 @@ public class CommonPersonServiceImpl implements CommonPersonService {
      
 	private Customer saveUser(UserRegisterRequest request) {
 		Customer customer=new Customer();
-		customer.set
+		//customer.set
 		
 		
 		
