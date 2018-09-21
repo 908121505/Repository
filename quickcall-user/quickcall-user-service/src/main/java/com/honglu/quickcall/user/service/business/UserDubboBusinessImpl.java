@@ -9,7 +9,12 @@ import com.honglu.quickcall.common.api.exchange.CommonResponse;
 import com.honglu.quickcall.user.facade.business.UserDubboBusiness;
 import com.honglu.quickcall.user.facade.code.UserBizReturnCode;
 import com.honglu.quickcall.user.facade.code.UserFunctionType;
+import com.honglu.quickcall.user.facade.exchange.request.IsPhoneExistsRequest;
 import com.honglu.quickcall.user.facade.exchange.request.PersonInfoRequest;
+import com.honglu.quickcall.user.facade.exchange.request.SetHeardUrlRequest;
+import com.honglu.quickcall.user.facade.exchange.request.SetPwdRequest;
+import com.honglu.quickcall.user.facade.exchange.request.UserLoginRequest;
+import com.honglu.quickcall.user.facade.exchange.request.UserRegisterRequest;
 import com.honglu.quickcall.user.service.service.*;
 
 import org.slf4j.Logger;
@@ -35,9 +40,21 @@ public class UserDubboBusinessImpl implements UserDubboBusiness {
         CommonResponse response = new CommonResponse();
         try {
             switch (request.getBizCode()) {
-            case UserFunctionType.PersonInfo:
-				/*response = personInfoService.queryPersonInfo((PersonInfoRequest) request);*/
-				break;    
+            case UserFunctionType.CheckPhone:
+				response = commonPersonService.regUserExist((IsPhoneExistsRequest) request);
+				break;  
+            case UserFunctionType.register:
+            	response = commonPersonService.register((UserRegisterRequest) request);
+				break;  
+            case UserFunctionType.login:
+            	response = commonPersonService.login((UserLoginRequest) request);
+				break;
+            case UserFunctionType.setpwd:
+            	response = commonPersonService.setpwd((SetPwdRequest) request);
+				break;
+            case UserFunctionType.setHeardUrl:
+            	response = commonPersonService.setHeardUrl((SetHeardUrlRequest) request);
+				break;
                 default:
                     throw new BizException(UserBizReturnCode.BizFunctionTypeNotMatch, UserBizReturnCode.BizFunctionTypeNotMatch.desc());
             }
