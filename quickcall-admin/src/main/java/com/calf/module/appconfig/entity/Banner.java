@@ -3,7 +3,7 @@ package com.calf.module.appconfig.entity;
 import java.util.Date;
 
 /**
- * 标题bean
+ * Banner 表实体对象
  *
  * @author duanjun
  * @date 2018-09-21 16:12
