@@ -167,6 +167,11 @@
                             "sTitle":"版本号",
                             'sClass':"text-center"
                         },
+                        {
+                            "data": "sort",
+                            "sTitle":"排序",
+                            'sClass':"text-center"
+                        },
 			            { 
 			                "data": "remark",
 			                "sTitle":"备注",
@@ -197,7 +202,7 @@
 		             },
 		             aoColumnDefs : [
 						<shiro:hasPermission name="banner:update or banner:delete">
-		             	{"aTargets" :10,"mRender" : function(data, type, row){
+		             	{"aTargets" :11,"mRender" : function(data, type, row){
 		             		var edit="",del="";
 		             		<shiro:hasPermission name="banner:update">
 		             			edit = "<a href='#' onclick='addAndUpdateRow(\""+data+"\")' data-toggle='modal' class='padding-right-small label label-success'><i class='glyphicon glyphicon-edit'></i> 编辑</a>";

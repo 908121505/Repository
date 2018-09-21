@@ -4,8 +4,7 @@
 <div class="modal-dialog">
 	<div class="modal-content">
 		<div class="modal-header">
-			<button type="button" class="close" data-dismiss="modal"
-				aria-hidden="true">X</button>
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">X</button>
 			<h3 id="myModalLabel">${empty entity?'新增':'修改' }banner</h3>
 		</div>
 		<div class="modal-body">
@@ -16,29 +15,26 @@
 					<label class="col-sm-2 control-label">标题<font color="red">&nbsp;*</font></label>
 					<div class="col-sm-10">
 						<input type="hidden" value="${entity.bannerId }" name="bannerId" /> 
-						<input type="text" class="form-control required" id="banner_title" name="title"
-							value="${entity.title }">
-					    <input type="hidden"
-							class="form-control" name="image" id="bannerFile_input"
-							value="${entity.image }">
+						<input type="text" class="form-control required" id="banner_title" name="title" value="${entity.title }">
+					    <input type="hidden" class="form-control" name="image" id="bannerFile_input" value="${entity.image }">
 					</div>
 				</div>
 				<div class="form-group">
 					<label class="col-sm-2 control-label">链接<font color="red">&nbsp;*</font></label>
 					<div class="col-sm-10">
-						<input type="text" class="form-control" id="banner_url" name="url"
-							value="${entity.url }"><br>
-							<font color="red">(注：如果是跳转到APP产品详情页URL传入产品ID，产品ID从产品管理-产品详情页面获取，格式如下：productId=abd815646d8a4544b7c454d5e77a063b )</font>
+						<input type="text" class="form-control" id="banner_url" name="url" value="${entity.url }"><br>
+						<font color="red">(注：如果是跳转到APP产品详情页URL传入产品ID，产品ID从产品管理-产品详情页面获取，格式如下：productId=abd815646d8a4544b7c454d5e77a063b )</font>
 					</div>
 				</div>
 				<div class="form-group">
 					<label class="col-sm-2 control-label">状态<font color="red">&nbsp;*</font></label>
 					<div class="col-sm-10">
-						<label class="checkbox-inline"> <input type="radio"
-							name="state" value="1" ${entity.state=='1'?'checked':'' }>
+						<label class="checkbox-inline">
+							<input type="radio" name="state" value="1" ${entity.state=='1'?'checked':'' }>
 							开启
-						</label> <label class="checkbox-inline"> <input type="radio"
-							name="state" value="0" ${entity.state=='0'?'checked':'' }>
+						</label>
+						<label class="checkbox-inline">
+							<input type="radio" name="state" value="0" ${entity.state=='0'?'checked':'' }>
 							关闭
 						</label>
 					</div>
@@ -54,8 +50,7 @@
 				<div class="form-group">
 					<label class="col-sm-2 control-label">序号<font color="red">&nbsp;*</font></label>
 					<div class="col-sm-10">
-						<input type="number" step="1" class="form-control" id="banner_serialNum" name="serialNum"
-							value="${entity.serialNum }">
+						<input type="number" step="1" class="form-control" id="banner_sort" name="sort" value="${entity.sort }">
 					</div>
 				</div>
 				<div class="form-group">
@@ -107,16 +102,8 @@
 					</div>
 				</div>
 				<div class="form-group">
-					<label class="col-sm-2 control-label">背景色<font color="red">&nbsp;*</font></label>
-					<div class="col-sm-10">
-						<input type="text" step="1" class="form-control" id="bannerColor" name="bannerColor"
-							value="${entity.bannerColor }">
-					</div>
-				</div>
-				<div class="form-group">
 					<label class="col-sm-2 control-label">图片上传<c:if test="${entity eq null }"><font color="red">&nbsp;*</font></c:if>
 					</label>
-					
 					<div class="col-sm-10">
 						<div class="input-group">
 							<input type="file" class="form-control" id="appversionFile"
@@ -155,7 +142,7 @@ function check_fun(){
 	var b = true;
 	var endTime = $("#banner_endTime").val();
 	var startTime = $("#banner_startTime").val();
-	var serialNum = $("#banner_serialNum").val();
+	var sort = $("#banner_sort").val();
 	var state = $('input[name="state"]:checked').val();
 	var remark = $('input[name="remark"]').val();
 	var bannerFileInput = $('input[name="bannerFile_input"]').val();
@@ -188,7 +175,7 @@ function check_fun(){
 		$("#tip").html("请输入开始时间");
 		b = false;
 	}
-	if(serialNum == null || serialNum.trim() == ''){
+	if(sort == null || sort.trim() == ''){
 		$("#tip").html("请输入序号");
 		b = false;
 	}
@@ -214,7 +201,7 @@ function check_fun(){
 	}
 	
   
-    if(serialNum&&serialNum.length>9){
+    if(sort&&sort.length>9){
     	$("#tip").html("序号不能超过9个字");
     	b = false;
     }
@@ -226,7 +213,7 @@ function check_fun(){
     
     
     var temp = /^[0-9]*$/;
-    if(!temp.test(serialNum)){
+    if(!temp.test(sort)){
     	$("#tip").html("序号必须全部是数字");
     	b = false;
     }

@@ -6,23 +6,25 @@
         <id property="title" column="title"/>
         <id property="image" column="image"/>
         <id property="url" column="url"/>
-        <id property="serialNum" column="sort"/>
+        <id property="bannerType" column="banner_type"/>
         <id property="startTime" column="start_time"/>
         <id property="endTime" column="end_time"/>
+        <id property="deviceType" column="device_type"/>
+        <id property="appVersion" column="app_version"/>
+        <id property="appVersionRule" column="app_version_rule"/>
+        <id property="state" column="state"/>
+        <id property="sort" column="sort"/>
+        <id property="remark" column="remark"/>
         <id property="createTime" column="create_time"/>
         <id property="createMan" column="create_man"/>
         <id property="modifyTime" column="modify_time"/>
         <id property="modifyMan" column="modify_man"/>
-        <id property="state" column="state"/>
-        <id property="bannerType" column="banner_type"/>
-        <id property="appVersion" column="app_version"/>
-        <id property="appVersionRule" column="app_version_rule"/>
-        <id property="deviceType" column="device_type"/>
     </resultMap>
 
     <sql id="Base_Column_List">
-		banner_id, title, image, url, sort, state, end_time, start_time,
-		create_time, create_man, modify_time, modify_man, remark,banner_type,app_version,app_version_rule,device_type
+		banner_id, title, image, url, banner_type, start_time, end_time,
+		device_type, app_version, app_version_rule, state, sort, remark,
+		create_time, create_man, modify_time, modify_man
 	</sql>
     <select id="get" parameterType="map" resultMap="BannerResultMap">
         select
@@ -56,14 +58,21 @@
 
     <insert id="insert" parameterType="map">
 		INSERT INTO banner
-		(banner_id,title,image,url,sort,state,end_time,start_time,create_time,create_man,modify_time,modify_man,remark,banner_type,banner_color,zone_id,app_version,app_version_rule,device_type)
+		(
+		  banner_id, title, image, url, banner_type, start_time, end_time,
+		  device_type, app_version, app_version_rule, state, sort, remark,
+		  create_time, create_man, modify_time, modify_man
+		)
 		VALUES
-		(#{bannerId},#{title},#{image},#{url},#{serialNum},#{state},#{endTime},#{startTime},#{createTime},#{createMan},#{modifyTime},#{modifyMan},#{remark},#{bannerType},#{bannerColor},#{zoneId},#{appVersion},#{appVersionRule},#{deviceType})
+		(
+		  #{bannerId},#{title},#{image},#{url},#{bannerType},#{startTime},#{endTime},
+		  #{deviceType},#{appVersion},#{appVersionRule},{state},{sort},#{remark},
+		  NOW(), #{createMan}, NOW(), #{modifyMan}
+        )
 	</insert>
 
     <delete id="delete" parameterType="map">
-		DELETE FROM banner
-		WHERE banner_id = #{arg0}
+		DELETE FROM banner WHERE banner_id = #{arg0}
 	</delete>
 
     <select id="getBannerById" parameterType="map" resultMap="BannerResultMap">
@@ -85,41 +94,17 @@
             <if test="url != null">
                 url = #{url},
             </if>
-            <if test="serialNum != null">
-                sort = #{serialNum},
-            </if>
-            <if test="state != null">
-                state = #{state},
-            </if>
-            <if test="endTime != null">
-                end_time = #{endTime},
+            <if test="bannerType != null">
+                banner_type = #{bannerType},
             </if>
             <if test="startTime != null">
                 start_time = #{startTime},
             </if>
-            <if test="createTime != null">
-                create_time = #{createTime},
+            <if test="endTime != null">
+                end_time = #{endTime},
             </if>
-            <if test="createMan != null">
-                create_man = #{createMan},
-            </if>
-            <if test="modifyTime != null">
-                modify_time = #{modifyTime},
-            </if>
-            <if test="modifyMan != null">
-                modify_man = #{modifyMan},
-            </if>
-            <if test="remark != null">
-                remark = #{remark},
-            </if>
-            <if test="bannerType != null">
-                banner_type = #{bannerType},
-            </if>
-            <if test="bannerColor != null">
-                banner_color = #{bannerColor},
-            </if>
-            <if test="zoneId != null">
-                zone_id = #{zoneId},
+            <if test="deviceType != null">
+                device_type = #{deviceType},
             </if>
             <if test="appVersion != null">
                 app_version = #{appVersion},
@@ -127,8 +112,21 @@
             <if test="appVersionRule != null">
                 app_version_rule = #{appVersionRule},
             </if>
-            <if test="deviceType != null">
-                device_type = #{deviceType},
+            <if test="state != null">
+                state = #{state},
+            </if>
+            <if test="sort != null">
+                sort = #{sort},
+            </if>
+            <if test="remark != null">
+                remark = #{remark},
+            </if>
+            <if test="createMan != null">
+                create_man = #{createMan},
+            </if>
+            modify_time = NOW(),
+            <if test="modifyMan != null">
+                modify_man = #{modifyMan},
             </if>
         </set>
         WHERE banner_id = #{bannerId}
