@@ -8,18 +8,12 @@ import com.honglu.quickcall.common.api.exchange.CommonResponse;
 import com.honglu.quickcall.user.facade.business.UserDubboBusiness;
 import com.honglu.quickcall.user.facade.code.UserBizReturnCode;
 import com.honglu.quickcall.user.facade.code.UserFunctionType;
-import com.honglu.quickcall.user.facade.exchange.request.GetSmsCodeRequest;
-import com.honglu.quickcall.user.facade.exchange.request.IsPhoneExistsRequest;
-import com.honglu.quickcall.user.facade.exchange.request.PersonInfoRequest;
+import com.honglu.quickcall.user.facade.exchange.request.*;
 import com.honglu.quickcall.user.service.service.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.honglu.quickcall.user.facade.exchange.request.SetHeardUrlRequest;
-import com.honglu.quickcall.user.facade.exchange.request.SetPwdRequest;
-import com.honglu.quickcall.user.facade.exchange.request.UserLoginRequest;
-import com.honglu.quickcall.user.facade.exchange.request.UserRegisterRequest;
 
 @Service("User.UserDubboBusiness")
 public class UserDubboBusinessImpl implements UserDubboBusiness {
@@ -28,8 +22,8 @@ public class UserDubboBusinessImpl implements UserDubboBusiness {
 
     @Autowired
     private CommonPersonService commonPersonService;
- /*   @Autowired
-    private PersonInfoService personInfoService;*/
+    @Autowired
+    private UserMessageService userMessageService;
    
 
     @Override
@@ -62,6 +56,9 @@ public class UserDubboBusinessImpl implements UserDubboBusiness {
             case UserFunctionType.getSmsCode:
             	response=  commonPersonService.getSmsCode((GetSmsCodeRequest)request);
             	break;
+            case UserFunctionType.UNREAD_MESSAGE_NUM:
+                response=  userMessageService.queryUserUnreadMessageNum((UserUnreadMessageNumRequest)request);
+                break;
                 default:
                     throw new BizException(UserBizReturnCode.BizFunctionTypeNotMatch, UserBizReturnCode.BizFunctionTypeNotMatch.desc());
             }
