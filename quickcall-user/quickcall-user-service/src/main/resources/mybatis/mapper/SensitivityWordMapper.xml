@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.honglu.quickcall.user.service.service.OccupationMapper" >
-  <resultMap id="BaseResultMap" type="com.honglu.quickcall.user.facade.entity.Occupation" >
+<mapper namespace="com.honglu.quickcall.user.service.dao.SensitivityWordMapper" >
+  <resultMap id="BaseResultMap" type="com.honglu.quickcall.user.facade.entity.SensitivityWord" >
     <id column="id" property="id" jdbcType="INTEGER" />
-    <result column="name" property="name" jdbcType="VARCHAR" />
-    <result column="occu_describe" property="occuDescribe" jdbcType="VARCHAR" />
+    <result column="content" property="content" jdbcType="VARCHAR" />
     <result column="type" property="type" jdbcType="TINYINT" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
@@ -13,46 +12,40 @@
     <result column="remark" property="remark" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, name, occu_describe, type, create_time, modify_time, create_man, modify_man, 
-    remark
+    id, content, type, create_time, modify_time, create_man, modify_man, remark
   </sql>
-  <select id="selectByCustomerId" resultType="java.lang.String" parameterType="java.lang.Long" >
-    SELECT o.name FROM customer c 
-    LEFT JOIN customer_occupation co ON c.customer_id=co.customer_id
-	LEFT JOIN occupation o ON co.occupation_id=o.id 
-	WHERE c.customer_id=#{customerId}
+  <select id="querySensitiveName" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from sensitivity_word
+    where type='2'
   </select>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
     <include refid="Base_Column_List" />
-    from occupation
+    from sensitivity_word
     where id = #{id,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
-    delete from occupation
+    delete from sensitivity_word
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="com.honglu.quickcall.user.facade.entity.Occupation" >
-    insert into occupation (id, name, occu_describe, 
-      type, create_time, modify_time, 
-      create_man, modify_man, remark
-      )
-    values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{occuDescribe,jdbcType=VARCHAR}, 
-      #{type,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP}, #{modifyTime,jdbcType=TIMESTAMP}, 
-      #{createMan,jdbcType=VARCHAR}, #{modifyMan,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}
-      )
+  <insert id="insert" parameterType="com.honglu.quickcall.user.facade.entity.SensitivityWord" >
+    insert into sensitivity_word (id, content, type, 
+      create_time, modify_time, create_man, 
+      modify_man, remark)
+    values (#{id,jdbcType=INTEGER}, #{content,jdbcType=VARCHAR}, #{type,jdbcType=TINYINT}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{modifyTime,jdbcType=TIMESTAMP}, #{createMan,jdbcType=VARCHAR}, 
+      #{modifyMan,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.honglu.quickcall.user.facade.entity.Occupation" >
-    insert into occupation
+  <insert id="insertSelective" parameterType="com.honglu.quickcall.user.facade.entity.SensitivityWord" >
+    insert into sensitivity_word
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
         id,
       </if>
-      <if test="name != null" >
-        name,
-      </if>
-      <if test="occuDescribe != null" >
-        occu_describe,
+      <if test="content != null" >
+        content,
       </if>
       <if test="type != null" >
         type,
@@ -77,11 +70,8 @@
       <if test="id != null" >
         #{id,jdbcType=INTEGER},
       </if>
-      <if test="name != null" >
-        #{name,jdbcType=VARCHAR},
-      </if>
-      <if test="occuDescribe != null" >
-        #{occuDescribe,jdbcType=VARCHAR},
+      <if test="content != null" >
+        #{content,jdbcType=VARCHAR},
       </if>
       <if test="type != null" >
         #{type,jdbcType=TINYINT},
@@ -103,14 +93,11 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.honglu.quickcall.user.facade.entity.Occupation" >
-    update occupation
+  <update id="updateByPrimaryKeySelective" parameterType="com.honglu.quickcall.user.facade.entity.SensitivityWord" >
+    update sensitivity_word
     <set >
-      <if test="name != null" >
-        name = #{name,jdbcType=VARCHAR},
-      </if>
-      <if test="occuDescribe != null" >
-        occu_describe = #{occuDescribe,jdbcType=VARCHAR},
+      <if test="content != null" >
+        content = #{content,jdbcType=VARCHAR},
       </if>
       <if test="type != null" >
         type = #{type,jdbcType=TINYINT},
@@ -133,10 +120,9 @@
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.honglu.quickcall.user.facade.entity.Occupation" >
-    update occupation
-    set name = #{name,jdbcType=VARCHAR},
-      occu_describe = #{occuDescribe,jdbcType=VARCHAR},
+  <update id="updateByPrimaryKey" parameterType="com.honglu.quickcall.user.facade.entity.SensitivityWord" >
+    update sensitivity_word
+    set content = #{content,jdbcType=VARCHAR},
       type = #{type,jdbcType=TINYINT},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       modify_time = #{modifyTime,jdbcType=TIMESTAMP},
