@@ -28,8 +28,8 @@ public class UserDubboBusinessImpl implements UserDubboBusiness {
 
     @Autowired
     private CommonPersonService commonPersonService;
-    @Autowired
-    private PersonInfoService personInfoService;
+ /*   @Autowired
+    private PersonInfoService personInfoService;*/
    
 
     @Override
@@ -40,9 +40,9 @@ public class UserDubboBusinessImpl implements UserDubboBusiness {
         CommonResponse response = new CommonResponse();
         try {
             switch (request.getBizCode()) {
-            case UserFunctionType.PersonInfo://查看个人信息
+          /*  case UserFunctionType.PersonInfo://查看个人信息
 				response = personInfoService.queryPersonInfo((PersonInfoRequest) request);
-				break;    
+				break; */   
             
             case UserFunctionType.CheckPhone:
 				response = commonPersonService.regUserExist((IsPhoneExistsRequest) request);

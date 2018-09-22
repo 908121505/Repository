@@ -1,9 +1,8 @@
 package com.honglu.quickcall.user.facade.entity;
 
-import java.io.Serializable;
 import java.util.Date;
 
-public class Customer implements Serializable {
+public class Customer {
     private Long customerId;
 
     private String phone;
@@ -44,9 +43,13 @@ public class Customer implements Serializable {
 
     private String signName;
 
+    private String starSign;
+
     private Date birthday;
 
     private String voiceUrl;
+
+    private String vStatus;
 
     private Integer identityStatus;
 
@@ -63,38 +66,14 @@ public class Customer implements Serializable {
     private String modifyMan;
 
     private String remark;
-    
+
     private String appChannelName;
 
     private String deviceId;
 
     private Date loginTime;
 
-    public String getAppChannelName() {
-		return appChannelName;
-	}
-
-	public void setAppChannelName(String appChannelName) {
-		this.appChannelName = appChannelName;
-	}
-
-	public String getDeviceId() {
-		return deviceId;
-	}
-
-	public void setDeviceId(String deviceId) {
-		this.deviceId = deviceId;
-	}
-
-	public Date getLoginTime() {
-		return loginTime;
-	}
-
-	public void setLoginTime(Date loginTime) {
-		this.loginTime = loginTime;
-	}
-
-	public Long getCustomerId() {
+    public Long getCustomerId() {
         return customerId;
     }
 
@@ -110,15 +89,7 @@ public class Customer implements Serializable {
         this.phone = phone;
     }
 
-    public Integer getIdentityStatus() {
-		return identityStatus;
-	}
-
-	public void setIdentityStatus(Integer identityStatus) {
-		this.identityStatus = identityStatus;
-	}
-
-	public String getRealName() {
+    public String getRealName() {
         return realName;
     }
 
@@ -262,6 +233,14 @@ public class Customer implements Serializable {
         this.signName = signName == null ? null : signName.trim();
     }
 
+    public String getStarSign() {
+        return starSign;
+    }
+
+    public void setStarSign(String starSign) {
+        this.starSign = starSign == null ? null : starSign.trim();
+    }
+
     public Date getBirthday() {
         return birthday;
     }
@@ -278,7 +257,21 @@ public class Customer implements Serializable {
         this.voiceUrl = voiceUrl == null ? null : voiceUrl.trim();
     }
 
-   
+    public String getvStatus() {
+        return vStatus;
+    }
+
+    public void setvStatus(String vStatus) {
+        this.vStatus = vStatus == null ? null : vStatus.trim();
+    }
+
+    public Integer getIdentityStatus() {
+        return identityStatus;
+    }
+
+    public void setIdentityStatus(Integer identityStatus) {
+        this.identityStatus = identityStatus;
+    }
 
     public String getTokenCode() {
         return tokenCode;
@@ -334,5 +327,29 @@ public class Customer implements Serializable {
 
     public void setRemark(String remark) {
         this.remark = remark == null ? null : remark.trim();
+    }
+
+    public String getAppChannelName() {
+        return appChannelName;
+    }
+
+    public void setAppChannelName(String appChannelName) {
+        this.appChannelName = appChannelName == null ? null : appChannelName.trim();
+    }
+
+    public String getDeviceId() {
+        return deviceId;
+    }
+
+    public void setDeviceId(String deviceId) {
+        this.deviceId = deviceId == null ? null : deviceId.trim();
+    }
+
+    public Date getLoginTime() {
+        return loginTime;
+    }
+
+    public void setLoginTime(Date loginTime) {
+        this.loginTime = loginTime;
     }
 }

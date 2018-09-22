@@ -8,18 +8,18 @@ import com.honglu.quickcall.common.api.exchange.AbstractRequest;
  * Created by len.song on 2017-12-16.
  */
 public class CreateUserAccountRequest extends AbstractRequest {
-    private Integer userId;                             //用户id
+    private Long userId;                             //用户id
 
     @Override
     public String getBizCode() {
         return AccountFunctionType.CreateUserAccount;
     }
 
-    public Integer getUserId() {
+    public Long getUserId() {
         return userId;
     }
 
-    public void setUserId(Integer userId) {
+    public void setUserId(Long userId) {
         this.userId = userId;
     }
 

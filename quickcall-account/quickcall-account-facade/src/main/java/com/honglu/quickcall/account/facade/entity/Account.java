@@ -1,4 +1,4 @@
-package com.honglu.quickcall.user.facade.entity;
+package com.honglu.quickcall.account.facade.entity;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -144,4 +144,12 @@ public class Account  implements Serializable{
     public void setRemark(String remark) {
         this.remark = remark == null ? null : remark.trim();
     }
+    public Account() {
+    	
+    }
+    public Account(Long accountId,Long customerId) {
+    	this.accountId=accountId;
+    	this.customerId=customerId;
+    }
+    
 }

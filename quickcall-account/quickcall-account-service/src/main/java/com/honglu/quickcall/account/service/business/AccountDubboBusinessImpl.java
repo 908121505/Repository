@@ -4,7 +4,7 @@ import com.honglu.quickcall.account.facade.business.AccountDubboBusiness;
 import com.honglu.quickcall.account.facade.code.AccountBizReturnCode;
 import com.honglu.quickcall.account.facade.code.AccountFunctionType;
 import com.honglu.quickcall.account.facade.exchange.request.*;
-
+import com.honglu.quickcall.account.service.service.UserAccountService;
 import com.honglu.quickcall.common.api.code.BizCode;
 import com.honglu.quickcall.common.api.exception.BaseException;
 import com.honglu.quickcall.common.api.exception.BizException;
@@ -15,7 +15,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.honglu.quickcall.account.facade.exchange.request.ConsumeRequest;
 
 /**
  * Created by len.song on 2017-12-18.
@@ -23,8 +22,10 @@ import com.honglu.quickcall.account.facade.exchange.request.ConsumeRequest;
 @Service("Account.AccountDubboBusiness")
 public class AccountDubboBusinessImpl implements AccountDubboBusiness {
     private static final Logger logger = LoggerFactory.getLogger(AccountDubboBusinessImpl.class);
+    
+    @Autowired
+    private UserAccountService userAccountService;
 
-   
     @Override
     public CommonResponse excute(AbstractRequest request) {
         logger.info("请求参数为:{}",request);
@@ -35,8 +36,10 @@ public class AccountDubboBusinessImpl implements AccountDubboBusiness {
         CommonResponse response = new CommonResponse();
         try {
             switch (request.getBizCode()) {
-                
-
+            case AccountFunctionType.CreateUserAccount:
+                //创建账户
+                response = userAccountService.createAccount((CreateUserAccountRequest) request);
+                break;
                 default:
 
             }

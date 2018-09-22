@@ -32,6 +32,7 @@ import com.honglu.quickcall.user.facade.exchange.request.SetPwdRequest;
 import com.honglu.quickcall.user.facade.exchange.request.UserLoginRequest;
 import com.honglu.quickcall.user.facade.exchange.request.UserRegisterRequest;
 import com.honglu.quickcall.user.service.dao.CustomerMapper;
+import com.honglu.quickcall.user.service.integration.AccountDubboIntegrationService;
 import com.honglu.quickcall.user.service.service.CommonPersonService;
 
 
@@ -48,6 +49,9 @@ public class CommonPersonServiceImpl implements CommonPersonService {
     private static String defaultImg =   ResourceBundle.getBundle("thirdconfig").getString("defaultImg");
     @Autowired
     private CustomerMapper customerMapper;
+    
+    @Autowired
+    private AccountDubboIntegrationService accountDubboIntegrationService;
     
     private static String resendexpire= ResourceBundle.getBundle("thirdconfig").getString("resend.expire");
     private static String resendexpirehour= ResourceBundle.getBundle("thirdconfig").getString("resend.expire.hour");
@@ -195,15 +199,22 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 		customer.setPhone(request.getTel());
 		customer.setNickName(request.getNickName());
 		customer.setHeadPortraitUrl(request.getHeardUrl());
+		if(StringUtils.isNotBlank(request.getHeardUrl())) {
+			defaultImg=request.getHeardUrl();
+		}
+		if(StringUtils.isNotBlank(request.getNickName())) {
 		String rongyunToken = RongYunUtil.getToken(String.valueOf(customer.getCustomerId()), customer.getNickName(), defaultImg);
          if(rongyunToken==null||"".equals(rongyunToken)) {
         	 logger.error("用户获取融云token失败。用户ID为：" + customer.getCustomerId());
          }
          customer.setTokenCode(rongyunToken);
+		}
          int row= customerMapper.insertSelective(customer);
          if(row<=0) {
         	 throw new BizException(UserBizReturnCode.exceedError,"用户未注冊");	
          }
+         accountDubboIntegrationService.createAccount(customer.getCustomerId());
+         
 		return customer;
 	}
 
