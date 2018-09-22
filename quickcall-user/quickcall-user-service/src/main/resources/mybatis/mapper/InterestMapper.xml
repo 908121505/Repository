@@ -33,7 +33,7 @@
     delete from interest
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="test.model.Interest" >
+  <insert id="insert" parameterType="com.honglu.quickcall.user.facade.entity.Interest" >
     insert into interest (id, name, interest_describe, 
       type, create_time, modify_time, 
       create_man, modify_man, remark
@@ -43,7 +43,7 @@
       #{createMan,jdbcType=VARCHAR}, #{modifyMan,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}
       )
   </insert>
-  <insert id="insertSelective" parameterType="test.model.Interest" >
+  <insert id="insertSelective" parameterType="com.honglu.quickcall.user.facade.entity.Interest" >
     insert into interest
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -104,7 +104,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="test.model.Interest" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.honglu.quickcall.user.facade.entity.Interest" >
     update interest
     <set >
       <if test="name != null" >
@@ -134,7 +134,7 @@
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="test.model.Interest" >
+  <update id="updateByPrimaryKey" parameterType="com.honglu.quickcall.user.facade.entity.Interest" >
     update interest
     set name = #{name,jdbcType=VARCHAR},
       interest_describe = #{interestDescribe,jdbcType=VARCHAR},
