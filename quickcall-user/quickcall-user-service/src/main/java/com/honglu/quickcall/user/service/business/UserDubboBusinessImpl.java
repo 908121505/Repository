@@ -24,7 +24,8 @@ public class UserDubboBusinessImpl implements UserDubboBusiness {
 
     @Autowired
     private CommonPersonService commonPersonService;
-  
+    @Autowired
+    private PersonInfoService personInfoService;
    
 
     @Override
@@ -35,8 +36,8 @@ public class UserDubboBusinessImpl implements UserDubboBusiness {
         CommonResponse response = new CommonResponse();
         try {
             switch (request.getBizCode()) {
-            case UserFunctionType.PersonInfo:
-				/*response = personInfoService.queryPersonInfo((PersonInfoRequest) request);*/
+            case UserFunctionType.PersonInfo://查看个人信息
+				response = personInfoService.queryPersonInfo((PersonInfoRequest) request);
 				break;    
                 default:
                     throw new BizException(UserBizReturnCode.BizFunctionTypeNotMatch, UserBizReturnCode.BizFunctionTypeNotMatch.desc());

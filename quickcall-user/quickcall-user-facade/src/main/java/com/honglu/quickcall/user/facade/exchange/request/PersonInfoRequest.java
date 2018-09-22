@@ -5,29 +5,34 @@ import com.honglu.quickcall.user.facade.exchange.UserCenterRequest;
 
 public class PersonInfoRequest extends UserCenterRequest{
 	/*
-	 * 被查看者id
-	 */
-	private String id;
-	/*
 	 * 登录用户id
 	 */
-	private String persionId;
+	private Long customerId;
+	/*
+	 * 其他用户id
+	 */
+	private Long otherId;
 
-	public String getId() {
-		return id;
+	
+	public Long getCustomerId() {
+		return customerId;
 	}
 
-	public void setId(String id) {
-		this.id = id;
+
+	public void setCustomerId(Long customerId) {
+		this.customerId = customerId;
 	}
 
-	public String getPersionId() {
-		return persionId;
+
+	public Long getOtherId() {
+		return otherId;
 	}
 
-	public void setPersionId(String persionId) {
-		this.persionId = persionId;
+
+	public void setOtherId(Long otherId) {
+		this.otherId = otherId;
 	}
+
 
 	@Override
 	public String getBizCode() {
