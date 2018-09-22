@@ -1,7 +1,7 @@
 package com.honglu.quickcall.account.web.service.impl;
 
 import com.alibaba.fastjson.JSON;
-import com.honglu.quickcall.account.facade.business.PaymentDubboBusiness;
+import com.honglu.quickcall.account.facade.business.AccountDubboBusiness;
 import com.honglu.quickcall.account.facade.code.AccountBizReturnCode;
 import com.honglu.quickcall.account.web.service.PaymentService;
 import com.honglu.quickcall.common.api.code.MyServiceCode;
@@ -15,7 +15,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
 
 @Service
 public class PaymentServiceImpl implements PaymentService {
@@ -23,7 +22,7 @@ public class PaymentServiceImpl implements PaymentService {
     private static final Logger logger = LoggerFactory.getLogger(PaymentServiceImpl.class);
 
     @Autowired
-    private PaymentDubboBusiness paymentDubboBusiness;
+    private AccountDubboBusiness accountDubboBusiness;
 
     @Override
     public WebResponseModel execute(AbstractRequest request) {
@@ -32,7 +31,7 @@ public class PaymentServiceImpl implements PaymentService {
         logger.info("功能编码为"+request.getBizCode()+"发送请求：{}", request);
         WebResponseModel response = new WebResponseModel();
         try{
-            CommonResponse $response = paymentDubboBusiness.excute(request);
+            CommonResponse $response = accountDubboBusiness.excute(request);
             logger.info("功能编码为"+request.getBizCode()+"接收响应：{}", $response);
             if(!$response.isSuccess()){
                 throw new RemoteException($response.getCode(), $response.getMessage());
