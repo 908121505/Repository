@@ -1,6 +1,7 @@
 package com.honglu.quickcall.user.service.service;
 
 import com.honglu.quickcall.common.api.exchange.CommonResponse;
+import com.honglu.quickcall.user.facade.exchange.request.GetSmsCodeRequest;
 import com.honglu.quickcall.user.facade.exchange.request.IsPhoneExistsRequest;
 import com.honglu.quickcall.user.facade.exchange.request.SetHeardUrlRequest;
 import com.honglu.quickcall.user.facade.exchange.request.SetPwdRequest;
@@ -41,10 +42,16 @@ public interface CommonPersonService {
     CommonResponse setpwd( SetPwdRequest params);
     
     /**
-     * 
+     * 设置用户头像，昵称
      * @param params
      * @return
      */
     CommonResponse setHeardUrl( SetHeardUrlRequest params);
     
+    /**
+     * 获取验证码
+     * @param params
+     * @return
+     */
+    CommonResponse getSmsCode(GetSmsCodeRequest params);
 }

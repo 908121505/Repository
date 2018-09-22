@@ -4,17 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.ResourceBundle;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import com.aliyun.mns.client.CloudAccount;
-import com.aliyun.mns.client.CloudTopic;
-import com.aliyun.mns.client.MNSClient;
-import com.aliyun.mns.common.ServiceException;
-import com.aliyun.mns.model.BatchSmsAttributes;
-import com.aliyun.mns.model.MessageAttributes;
-import com.aliyun.mns.model.RawTopicMessage;
-import com.aliyun.mns.model.TopicMessage;
 import com.aliyuncs.DefaultAcsClient;
 import com.aliyuncs.IAcsClient;
 import com.aliyuncs.dysmsapi.model.v20170525.QuerySendDetailsRequest;

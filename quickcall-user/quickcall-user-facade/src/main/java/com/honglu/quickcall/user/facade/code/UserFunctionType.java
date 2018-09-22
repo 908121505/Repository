@@ -17,7 +17,8 @@ public interface UserFunctionType {
     String setpwd="001004";
     //设置头像
     String setHeardUrl="001005";
-    
+    //发送短信
+    String getSmsCode="001006";
     
 
     //系统相关 001300 - 001350
