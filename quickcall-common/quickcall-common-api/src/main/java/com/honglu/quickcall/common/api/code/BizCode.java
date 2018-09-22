@@ -34,6 +34,7 @@ public class BizCode extends AbstractCodedEnum{
         this.serviceCode = serviceCode;
     }
 
+    @Override
     protected Class<? extends AbstractEnum> getEnumType() {
         return BizCode.class;
     }
