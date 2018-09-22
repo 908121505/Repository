@@ -56,7 +56,7 @@ public class ImgUploadController {
 		        DiskFileItem fi = (DiskFileItem)cf.getFileItem(); 
 		       String md5Str = MD5Utils.getMD5(fi.getStoreLocation());//对文件进行加密
 		        
-				String imgFolder = "user/app";
+				String imgFolder = "voice/banner";
 				String fileName = System.currentTimeMillis() + "." + file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".") + 1);
 				OSSClient ossClient = OSSUtil.getOSSClient();
 				boolean flag = OSSUtil.uploadInputStreamObject2OSS(ossClient, file.getInputStream(), fileName, bucketName, imgFolder);
