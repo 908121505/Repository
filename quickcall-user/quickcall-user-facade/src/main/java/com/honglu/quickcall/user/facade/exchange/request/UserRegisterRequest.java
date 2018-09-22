@@ -20,10 +20,40 @@ public class UserRegisterRequest  extends UserCenterRequest{
     private String nickName;//第三方昵称
     
     private Integer scource;
-	private String device_no;
+	private String deviceNo;
 	private String appChannelName;
     
     
+	public Integer getScource() {
+		return scource;
+	}
+
+
+	public void setScource(Integer scource) {
+		this.scource = scource;
+	}
+
+
+	public String getDeviceNo() {
+		return deviceNo;
+	}
+
+
+	public void setDevice_no(String deviceNo) {
+		this.deviceNo = deviceNo;
+	}
+
+
+	public String getAppChannelName() {
+		return appChannelName;
+	}
+
+
+	public void setAppChannelName(String appChannelName) {
+		this.appChannelName = appChannelName;
+	}
+
+
 	public String getTel() {
 		return tel;
 	}

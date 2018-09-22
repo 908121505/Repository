@@ -1,17 +1,21 @@
 package com.honglu.quickcall.user.service.service.impl;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Random;
 import java.util.ResourceBundle;
 
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.simp.annotation.support.SimpAnnotationMethodMessageHandler;
 import org.springframework.stereotype.Service;
 
 import com.honglu.quickcall.common.api.code.BizCode;
 import com.honglu.quickcall.common.api.exception.BizException;
 import com.honglu.quickcall.common.api.exchange.CommonResponse;
+import com.honglu.quickcall.common.core.util.UUIDUtils;
 import com.honglu.quickcall.common.third.rongyun.util.RongYunUtil;
 import com.honglu.quickcall.user.facade.entity.Customer;
 import com.honglu.quickcall.user.facade.exchange.request.IsPhoneExistsRequest;
@@ -161,15 +165,31 @@ public class CommonPersonServiceImpl implements CommonPersonService {
     
     
 
-     
+     /**
+      * 保存用户，并生成融云token
+      * @param request
+      * @return
+      */
 	private Customer saveUser(UserRegisterRequest request) {
 		Customer customer=new Customer();
-		//customer.set
-		
-		
+		customer.setCustomerId(UUIDUtils.getId());
+		customer.setCreateTime(new Date());
+		customer.setMicroblogOpenId(request.getMicroblogOpenId());
+		customer.setQqOpenId(request.getQqOpenId());
+		customer.setWechatOpenId(request.getWechatOpenId());
+		customer.setPhone(request.getTel());
+		customer.setNickName(request.getNickName());
+		customer.setHeadPortraitUrl(request.getHeardUrl());
+		String rongyunToken = RongYunUtil.getToken(String.valueOf(customer.getCustomerId()), customer.getNickName(), defaultImg);
+         if(rongyunToken==null||"".equals(rongyunToken)) {
+        	 logger.error("用户获取融云token失败。用户ID为：" + customer.getCustomerId());
+         }
+         customer.setTokenCode(rongyunToken);
 		
 		return null;
 	}
+	
+	
 	
 	
 	

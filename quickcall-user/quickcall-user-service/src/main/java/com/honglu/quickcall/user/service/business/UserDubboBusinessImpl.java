@@ -1,64 +1,5 @@
 package com.honglu.quickcall.user.service.business;
 
-
-import com.honglu.quickcall.common.api.code.BizCode;
-import com.honglu.quickcall.common.api.exception.BaseException;
-import com.honglu.quickcall.common.api.exception.BizException;
-import com.honglu.quickcall.common.api.exchange.AbstractRequest;
-import com.honglu.quickcall.common.api.exchange.CommonResponse;
-import com.honglu.quickcall.user.facade.business.UserDubboBusiness;
-import com.honglu.quickcall.user.facade.code.UserBizReturnCode;
-import com.honglu.quickcall.user.facade.code.UserFunctionType;
-import com.honglu.quickcall.user.facade.exchange.request.PersonInfoRequest;
-import com.honglu.quickcall.user.service.service.*;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-@Service("User.UserDubboBusiness")
-public class UserDubboBusinessImpl implements UserDubboBusiness {
-
-    private static final Logger logger = LoggerFactory.getLogger(UserDubboBusinessImpl.class);
-
-    @Autowired
-    private CommonPersonService commonPersonService;
-    @Autowired
-    private PersonInfoService personInfoService;
-   
-
-    @Override
-    public CommonResponse excute(AbstractRequest request) {
-        if (request == null) {
-            throw new BizException(BizCode.ParamError, BizCode.ParamError.desc());
-        }
-        CommonResponse response = new CommonResponse();
-        try {
-            switch (request.getBizCode()) {
-            case UserFunctionType.PersonInfo://鏌ョ湅涓汉淇℃伅
-				response = personInfoService.queryPersonInfo((PersonInfoRequest) request);
-				break;    
-                default:
-                    throw new BizException(UserBizReturnCode.BizFunctionTypeNotMatch, UserBizReturnCode.BizFunctionTypeNotMatch.desc());
-            }
-        } catch (BaseException e) {
-            logger.error("鎺ュ彛缂栫爜涓猴細" + request.getBizCode() + "寮傚父锛�" + e.getMessage(), e);
-            response.setCode(e.getCode());
-            response.setMessage(e.getMessage());
-        } catch (Exception e) {
-            logger.error("鎺ュ彛缂栫爜涓猴細" + request.getBizCode() + "寮傚父锛�" + e.getMessage(), e);
-            response.setCode(UserBizReturnCode.Unknown);
-            response.setMessage(e.getMessage() == null ? e + "" : e.getMessage() + e);
-        }
-        logger.info("杩斿洖缁撴灉{}", response);
-        return response;
-    }
-}
-=======
-package com.honglu.quickcall.user.service.business;
-
-
 import com.honglu.quickcall.common.api.code.BizCode;
 import com.honglu.quickcall.common.api.exception.BaseException;
 import com.honglu.quickcall.common.api.exception.BizException;
@@ -69,16 +10,15 @@ import com.honglu.quickcall.user.facade.code.UserBizReturnCode;
 import com.honglu.quickcall.user.facade.code.UserFunctionType;
 import com.honglu.quickcall.user.facade.exchange.request.IsPhoneExistsRequest;
 import com.honglu.quickcall.user.facade.exchange.request.PersonInfoRequest;
-import com.honglu.quickcall.user.facade.exchange.request.SetHeardUrlRequest;
-import com.honglu.quickcall.user.facade.exchange.request.SetPwdRequest;
-import com.honglu.quickcall.user.facade.exchange.request.UserLoginRequest;
-import com.honglu.quickcall.user.facade.exchange.request.UserRegisterRequest;
 import com.honglu.quickcall.user.service.service.*;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import com.honglu.quickcall.user.facade.exchange.request.SetHeardUrlRequest;
+import com.honglu.quickcall.user.facade.exchange.request.SetPwdRequest;
+import com.honglu.quickcall.user.facade.exchange.request.UserLoginRequest;
+import com.honglu.quickcall.user.facade.exchange.request.UserRegisterRequest;
 
 @Service("User.UserDubboBusiness")
 public class UserDubboBusinessImpl implements UserDubboBusiness {
@@ -87,7 +27,8 @@ public class UserDubboBusinessImpl implements UserDubboBusiness {
 
     @Autowired
     private CommonPersonService commonPersonService;
-  
+    @Autowired
+    private PersonInfoService personInfoService;
    
 
     @Override
@@ -130,5 +71,6 @@ public class UserDubboBusinessImpl implements UserDubboBusiness {
         response.setMessage(e.getMessage() == null ? e + "" : e.getMessage() + e);
     }
     logger.info("返回结果{}", response);
+    return response;
     }
 }
