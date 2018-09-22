@@ -39,6 +39,7 @@ public class IsPhoneExistsRequest extends UserCenterRequest {
 		this.microblogOpenId = microblogOpenId;
 	}
 
+
 	public String getTel() {
 		return tel;
 	}

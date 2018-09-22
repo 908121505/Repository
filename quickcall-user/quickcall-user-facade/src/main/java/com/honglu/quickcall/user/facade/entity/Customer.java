@@ -6,17 +6,17 @@ import java.util.Date;
 public class Customer implements Serializable {
     private Long customerId;
 
-    private Integer phone;
+    private String phone;
 
     private String realName;
 
-    private Byte sex;
+    private Integer sex;
 
     private String nickName;
 
-    private Byte type;
+    private Integer type;
 
-    private Byte credentialsType;
+    private Integer credentialsType;
 
     private String credentialsNum;
 
@@ -36,9 +36,9 @@ public class Customer implements Serializable {
 
     private String headPortraitUrl;
 
-    private Byte source;
+    private Integer source;
 
-    private Byte custStatus;
+    private Integer custStatus;
 
     private String custPassword;
 
@@ -48,7 +48,7 @@ public class Customer implements Serializable {
 
     private String voiceUrl;
 
-    private Byte isIdentityConfirm;
+    private Integer identityStatus;
 
     private String tokenCode;
 
@@ -63,8 +63,38 @@ public class Customer implements Serializable {
     private String modifyMan;
 
     private String remark;
+    
+    private String appChannelName;
 
-    public Long getCustomerId() {
+    private String deviceId;
+
+    private Date loginTime;
+
+    public String getAppChannelName() {
+		return appChannelName;
+	}
+
+	public void setAppChannelName(String appChannelName) {
+		this.appChannelName = appChannelName;
+	}
+
+	public String getDeviceId() {
+		return deviceId;
+	}
+
+	public void setDeviceId(String deviceId) {
+		this.deviceId = deviceId;
+	}
+
+	public Date getLoginTime() {
+		return loginTime;
+	}
+
+	public void setLoginTime(Date loginTime) {
+		this.loginTime = loginTime;
+	}
+
+	public Long getCustomerId() {
         return customerId;
     }
 
@@ -72,15 +102,23 @@ public class Customer implements Serializable {
         this.customerId = customerId;
     }
 
-    public Integer getPhone() {
+    public String getPhone() {
         return phone;
     }
 
-    public void setPhone(Integer phone) {
+    public void setPhone(String phone) {
         this.phone = phone;
     }
 
-    public String getRealName() {
+    public Integer getIdentityStatus() {
+		return identityStatus;
+	}
+
+	public void setIdentityStatus(Integer identityStatus) {
+		this.identityStatus = identityStatus;
+	}
+
+	public String getRealName() {
         return realName;
     }
 
@@ -88,11 +126,11 @@ public class Customer implements Serializable {
         this.realName = realName == null ? null : realName.trim();
     }
 
-    public Byte getSex() {
+    public Integer getSex() {
         return sex;
     }
 
-    public void setSex(Byte sex) {
+    public void setSex(Integer sex) {
         this.sex = sex;
     }
 
@@ -104,19 +142,19 @@ public class Customer implements Serializable {
         this.nickName = nickName == null ? null : nickName.trim();
     }
 
-    public Byte getType() {
+    public Integer getType() {
         return type;
     }
 
-    public void setType(Byte type) {
+    public void setType(Integer type) {
         this.type = type;
     }
 
-    public Byte getCredentialsType() {
+    public Integer getCredentialsType() {
         return credentialsType;
     }
 
-    public void setCredentialsType(Byte credentialsType) {
+    public void setCredentialsType(Integer credentialsType) {
         this.credentialsType = credentialsType;
     }
 
@@ -192,19 +230,19 @@ public class Customer implements Serializable {
         this.headPortraitUrl = headPortraitUrl == null ? null : headPortraitUrl.trim();
     }
 
-    public Byte getSource() {
+    public Integer getSource() {
         return source;
     }
 
-    public void setSource(Byte source) {
+    public void setSource(Integer source) {
         this.source = source;
     }
 
-    public Byte getCustStatus() {
+    public Integer getCustStatus() {
         return custStatus;
     }
 
-    public void setCustStatus(Byte custStatus) {
+    public void setCustStatus(Integer custStatus) {
         this.custStatus = custStatus;
     }
 
@@ -240,13 +278,7 @@ public class Customer implements Serializable {
         this.voiceUrl = voiceUrl == null ? null : voiceUrl.trim();
     }
 
-    public Byte getIsIdentityConfirm() {
-        return isIdentityConfirm;
-    }
-
-    public void setIsIdentityConfirm(Byte isIdentityConfirm) {
-        this.isIdentityConfirm = isIdentityConfirm;
-    }
+   
 
     public String getTokenCode() {
         return tokenCode;

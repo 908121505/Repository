@@ -93,9 +93,9 @@ public class BannerController implements BaseController<Banner> {
 
     @Override
     @RequiresPermissions(value = {"banner:add", "banner:update"}, logical = Logical.OR)
-    public String addAndUpdateHome(Model model, String id) {
-        if (StringUtils.isNotBlank(id)) {
-            model.addAttribute("entity", baseManager.get("Banner.getBannerById", new Object[]{id}));
+    public String addAndUpdateHome(Model model, String bannerId) {
+        if (StringUtils.isNotBlank(bannerId)) {
+            model.addAttribute("entity", baseManager.get("Banner.getBannerById", new Object[]{bannerId}));
         }
         return String.format(JSP_PATH, "edit");
     }
@@ -108,9 +108,6 @@ public class BannerController implements BaseController<Banner> {
             entity.setUrl(entity.getUrl().trim());//去除前后空格
         }
 
-        entity.setBannerId(UUIDUtils.getUUID());
-        entity.setCreateTime(DateUtil.dateFormat());
-        entity.setModifyTime(DateUtil.dateFormat());
         entity.setCreateMan(currentUser.getPrincipal().toString());
         entity.setModifyMan(currentUser.getPrincipal().toString());
         return baseManager.insert(entity);
@@ -119,12 +116,12 @@ public class BannerController implements BaseController<Banner> {
     @Override
     @MethodLog(operType = "删除")
     @RequiresPermissions(value = "banner:delete")
-    public int delete(Long id) {
-        return delBanner(id);
+    public int delete(Long bannerId) {
+        return delBanner(bannerId);
     }
 
-    private int delBanner(Long id) {
-        return baseManager.delete(Banner.class, new Object[]{id});
+    private int delBanner(Long bannerId) {
+        return baseManager.delete(Banner.class, new Object[]{bannerId});
     }
 
     @Override
@@ -135,14 +132,13 @@ public class BannerController implements BaseController<Banner> {
         }
 
         Subject currentUser = SecurityUtils.getSubject();
-        entity.setModifyTime(DateUtil.dateFormat());
         entity.setModifyMan(currentUser.getPrincipal().toString());
         return baseManager.update(entity);
     }
 
     @Override
-    public int delete(String id) {
-        return baseManager.delete(Banner.class, new Object[]{id});
+    public int delete(String bannerId) {
+        return baseManager.delete(Banner.class, new Object[]{bannerId});
     }
 
 }
