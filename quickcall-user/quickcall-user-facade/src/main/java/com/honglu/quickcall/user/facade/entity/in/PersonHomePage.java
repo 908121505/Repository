@@ -12,19 +12,19 @@ public class PersonHomePage {
 
 	    private String realName;
 
-	    private Byte sex;
+	    private Integer sex;
 
 	    private String nickName;
 
-	    private Byte type;//用户类型(0=普通用户,1=大V)
+	    private Integer type;//用户类型(0=普通用户,1=大V)
 
-	    private Byte credentialsType;//证件类型
+	    private Integer credentialsType;//证件类型
 
 	    private String credentialsNum;
 
 	    private List<Interest> interest;//兴趣
 
-	    private Byte custStatus;//用户状态(状态:1=正常 2=锁定 3=冻结,4=禁用 5=注销；6=限制社区发帖；7=限制社区评论；8=限制社区发帖和评论,9=限制发送消息)
+	    private Integer custStatus;//用户状态(状态:1=正常 2=锁定 3=冻结,4=禁用 5=注销；6=限制社区发帖；7=限制社区评论；8=限制社区发帖和评论,9=限制发送消息)
 
 	    private String signName;//签名
 
@@ -69,11 +69,11 @@ public class PersonHomePage {
 			this.realName = realName;
 		}
 
-		public Byte getSex() {
+		public Integer getSex() {
 			return sex;
 		}
 
-		public void setSex(Byte sex) {
+		public void setSex(Integer sex) {
 			this.sex = sex;
 		}
 
@@ -85,19 +85,19 @@ public class PersonHomePage {
 			this.nickName = nickName;
 		}
 
-		public Byte getType() {
+		public Integer getType() {
 			return type;
 		}
 
-		public void setType(Byte type) {
+		public void setType(Integer type) {
 			this.type = type;
 		}
 
-		public Byte getCredentialsType() {
+		public Integer getCredentialsType() {
 			return credentialsType;
 		}
 
-		public void setCredentialsType(Byte credentialsType) {
+		public void setCredentialsType(Integer credentialsType) {
 			this.credentialsType = credentialsType;
 		}
 
@@ -117,11 +117,11 @@ public class PersonHomePage {
 			this.interest = interestList;
 		}
 
-		public Byte getCustStatus() {
+		public Integer getCustStatus() {
 			return custStatus;
 		}
 
-		public void setCustStatus(Byte custStatus) {
+		public void setCustStatus(Integer custStatus) {
 			this.custStatus = custStatus;
 		}
 
