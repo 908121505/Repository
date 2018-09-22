@@ -35,7 +35,7 @@ public class AppConfigDataController {
      */
     @RequestMapping(value = "/bannerQuery", method = RequestMethod.POST)
     @ResponseBody
-    public WebResponseModel bannerQuery(@RequestBody BannerRequest params) {
+    public WebResponseModel bannerQuery(BannerRequest params) {
         logger.info("activityWeb appConfigData bannerQuery request data : " + JSONObject.toJSONString(params));
         WebResponseModel response = activityCenterService.execute(params);
         logger.info("activityWeb appConfigData bannerQuery response data : " + JSONObject.toJSONString(response));
