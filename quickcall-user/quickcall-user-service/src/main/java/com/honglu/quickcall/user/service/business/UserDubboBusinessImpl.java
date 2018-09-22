@@ -8,6 +8,7 @@ import com.honglu.quickcall.common.api.exchange.CommonResponse;
 import com.honglu.quickcall.user.facade.business.UserDubboBusiness;
 import com.honglu.quickcall.user.facade.code.UserBizReturnCode;
 import com.honglu.quickcall.user.facade.code.UserFunctionType;
+import com.honglu.quickcall.user.facade.exchange.request.GetSmsCodeRequest;
 import com.honglu.quickcall.user.facade.exchange.request.IsPhoneExistsRequest;
 import com.honglu.quickcall.user.facade.exchange.request.PersonInfoRequest;
 import com.honglu.quickcall.user.service.service.*;
@@ -58,6 +59,9 @@ public class UserDubboBusinessImpl implements UserDubboBusiness {
             case UserFunctionType.setHeardUrl:
             	response = commonPersonService.setHeardUrl((SetHeardUrlRequest) request);
 				break;
+            case UserFunctionType.getSmsCode:
+            	response=  commonPersonService.getSmsCode((GetSmsCodeRequest)request);
+            	break;
                 default:
                     throw new BizException(UserBizReturnCode.BizFunctionTypeNotMatch, UserBizReturnCode.BizFunctionTypeNotMatch.desc());
             }

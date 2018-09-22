@@ -1,8 +1,6 @@
 package com.honglu.quickcall.activity.service.dao;
 
 import com.honglu.quickcall.activity.facade.entity.Activity;
-
-import org.apache.commons.lang.ObjectUtils.Null;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 

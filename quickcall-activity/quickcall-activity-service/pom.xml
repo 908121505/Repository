@@ -41,7 +41,10 @@
             <groupId>com.honglu.quickcall</groupId>
             <artifactId>quickcall-common-third</artifactId>
         </dependency>
-
+        <dependency>
+            <groupId>com.honglu.quickcall</groupId>
+            <artifactId>quickcall-account-facade</artifactId>
+        </dependency>
 
         <!-- spring -->
         <dependency>
@@ -378,10 +381,6 @@
         <dependency>
             <groupId>redis.clients</groupId>
             <artifactId>jedis</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.honglu.quickcall</groupId>
-            <artifactId>quickcall-account-facade</artifactId>
         </dependency>
         <dependency>
             <groupId>junit</groupId>

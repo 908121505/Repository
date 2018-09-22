@@ -37,11 +37,7 @@ public class UserBizReturnCode extends BizCode {
     public static final BizCode IsExist =new UserBizReturnCode("IsExist","520",MyServiceCode.USER,"绑定关系已存在");
     public static final BizCode NOExistError=new UserBizReturnCode("NOExistError","521",MyServiceCode.USER,"绑定关系不已存在");
 
-    public static final BizCode VideoSOFF =new UserBizReturnCode("VideoSOFF","522",MyServiceCode.USER,"视频已经解锁了");
-    public static final BizCode VideoNotExist =new UserBizReturnCode("VideoNotExist","523",MyServiceCode.USER,"视频不存在");
-    public static final BizCode applyDefeated =new UserBizReturnCode("applyDefeated","524",MyServiceCode.USER,"请先修改头像才可认证女神！");
-
-
+   
 
     public static final BizCode paramError=new UserBizReturnCode("paramError","535",MyServiceCode.USER,"参数错误");
     public static final BizCode jdbcError=new UserBizReturnCode("jdbcError","536",MyServiceCode.USER,"操作数据库异常");

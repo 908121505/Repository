@@ -43,9 +43,11 @@ public abstract class AbstractCodedEnum extends AbstractEnum {
         }
     }
 
+    @Override
     protected Object readResolve() throws ObjectStreamException {
         super.readResolve();
         return this.readResolve(this.code(), new ParseValue() {
+            @Override
             public AbstractEnum valueOf(Class<? extends AbstractEnum> enumType, String key) {
 
                 return AbstractCodedEnum.valueByCode(enumType, key);
