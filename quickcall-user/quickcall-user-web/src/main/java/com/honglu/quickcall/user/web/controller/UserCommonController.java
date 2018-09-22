@@ -4,6 +4,8 @@ import com.alibaba.fastjson.JSONObject;
 import com.aliyun.oss.OSSClient;
 import com.honglu.quickcall.common.api.code.BizCode;
 import com.honglu.quickcall.common.api.exchange.WebResponseModel;
+import com.honglu.quickcall.common.api.util.JedisUtil;
+import com.honglu.quickcall.common.api.util.RedisKeyConstants;
 import com.honglu.quickcall.common.core.util.UUIDUtils;
 import com.honglu.quickcall.common.third.OSS.OSSUtil;
 import com.honglu.quickcall.user.facade.code.UserBizReturnCode;
@@ -12,6 +14,7 @@ import com.honglu.quickcall.user.web.service.UserCenterService;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,19 +47,47 @@ public class UserCommonController {
     @ResponseBody
     public WebResponseModel regUserExist( IsPhoneExistsRequest params) {
     	logger.info("userWeb.user.regUserExist.request.data : " + JSONObject.toJSONString(params));
-        WebResponseModel response = userCenterService.execute(params);
+    	WebResponseModel response=new WebResponseModel();
+    	if(StringUtils.isBlank(params.getTel())&&StringUtils.isBlank(params.getQqOpenId())&&
+    			StringUtils.isBlank(params.getWechatOpenId())&&StringUtils.isBlank(params.getMicroblogOpenId())) {
+    		 response.setCode(UserBizReturnCode.paramError.code());
+             response.setMsg(UserBizReturnCode.paramError.desc());
+             return response;
+    	}
+         response = userCenterService.execute(params);
         logger.info("userWeb.user.regUserExist.response.data : " + JSONObject.toJSONString(response));
         return response;
     }
     /**
-     * 检查用户是否存在
+     * 注册
      * @param params
      * @return
      */
     @RequestMapping(value = "/register",  method = RequestMethod.POST)
     @ResponseBody
     public WebResponseModel register( UserRegisterRequest params) {
-        WebResponseModel response =null;
+    	logger.info("userWeb.user.register.request.data : " + JSONObject.toJSONString(params));
+    	WebResponseModel response=new WebResponseModel();
+    	if(StringUtils.isBlank(params.getTel())&&StringUtils.isBlank(params.getQqOpenId())&&
+    			StringUtils.isBlank(params.getWechatOpenId())&&StringUtils.isBlank(params.getMicroblogOpenId())) {
+    		 response.setCode(UserBizReturnCode.paramError.code());
+             response.setMsg(UserBizReturnCode.paramError.desc());
+             return response;
+    	}
+    	if(params.getVerifyCode()!=null&&params.getCodeType()!=null&&!"".equals(params.getVerifyCode())&&!"".equals(params.getCodeType())) {
+            if(StringUtils.isBlank(JedisUtil.get(RedisKeyConstants.USER_VERIFYCODE + params.getTel() + params.getCodeType()))){
+            	 response.setCode(UserBizReturnCode.paramError.code());
+                 response.setMsg("验证码失效请重新获取");
+                 return response;
+            } 
+            if(!params.getVerifyCode().equals(JedisUtil.get(RedisKeyConstants.USER_VERIFYCODE + params.getTel() + params.getCodeType()))){
+           	 response.setCode(UserBizReturnCode.paramError.code());
+                response.setMsg("验证码输入不正确");
+                return response;
+           }
+         }
+         response = userCenterService.execute(params);
+         logger.info("userWeb.user.register.response.data : " + JSONObject.toJSONString(response));
         return response;
     }
     
@@ -69,8 +100,29 @@ public class UserCommonController {
     @ResponseBody
     public WebResponseModel login(UserLoginRequest params) {
     	
-    	 WebResponseModel response=new WebResponseModel();
-    	 return response;
+    	logger.info("userWeb.user.login.request.data : " + JSONObject.toJSONString(params));
+    	WebResponseModel response=new WebResponseModel();
+    	if(StringUtils.isBlank(params.getTel())&&StringUtils.isBlank(params.getQqOpenId())&&
+    			StringUtils.isBlank(params.getWechatOpenId())&&StringUtils.isBlank(params.getMicroblogOpenId())) {
+    		 response.setCode(UserBizReturnCode.paramError.code());
+             response.setMsg(UserBizReturnCode.paramError.desc());
+             return response;
+    	}
+    	if(params.getVerifyCode()!=null&&params.getCodeType()!=null&&!"".equals(params.getVerifyCode())&&!"".equals(params.getCodeType())) {
+            if(StringUtils.isBlank(JedisUtil.get(RedisKeyConstants.USER_VERIFYCODE + params.getTel() + params.getCodeType()))){
+            	 response.setCode(UserBizReturnCode.paramError.code());
+                 response.setMsg("验证码失效请重新获取");
+                 return response;
+            } 
+            if(!params.getVerifyCode().equals(JedisUtil.get(RedisKeyConstants.USER_VERIFYCODE + params.getTel() + params.getCodeType()))){
+           	 response.setCode(UserBizReturnCode.paramError.code());
+                response.setMsg("验证码输入不正确");
+                return response;
+           }
+         }
+         response = userCenterService.execute(params);
+         logger.info("userWeb.user.login.response.data : " + JSONObject.toJSONString(response));
+        return response;
     }
     /**
      * 设置密码
@@ -80,7 +132,28 @@ public class UserCommonController {
     @RequestMapping(value = "/setPwd",  method = RequestMethod.POST)
     @ResponseBody
     public WebResponseModel setpwd( SetPwdRequest params) {
-        WebResponseModel response = new WebResponseModel();
+
+    	logger.info("userWeb.user.setpwd.request.data : " + JSONObject.toJSONString(params));
+    	WebResponseModel response=new WebResponseModel();
+    	if(StringUtils.isBlank(params.getTel())) {
+    		 response.setCode(UserBizReturnCode.paramError.code());
+             response.setMsg(UserBizReturnCode.paramError.desc());
+             return response;
+    	}
+    	if(params.getVerifyCode()!=null&&params.getCodeType()!=null&&!"".equals(params.getVerifyCode())&&!"".equals(params.getCodeType())) {
+            if(StringUtils.isBlank(JedisUtil.get(RedisKeyConstants.USER_VERIFYCODE + params.getTel() + params.getCodeType()))){
+            	 response.setCode(UserBizReturnCode.paramError.code());
+                 response.setMsg("验证码失效请重新获取");
+                 return response;
+            } 
+            if(!params.getVerifyCode().equals(JedisUtil.get(RedisKeyConstants.USER_VERIFYCODE + params.getTel() + params.getCodeType()))){
+           	 response.setCode(UserBizReturnCode.paramError.code());
+                response.setMsg("验证码输入不正确");
+                return response;
+           }
+         }
+         response = userCenterService.execute(params);
+         logger.info("userWeb.user.setpwd.response.data : " + JSONObject.toJSONString(response));
         return response;
     }
     
@@ -93,7 +166,16 @@ public class UserCommonController {
     @RequestMapping(value = "/setHeardUrl",  method = RequestMethod.POST)
     @ResponseBody
     public WebResponseModel setHeardUrl( SetHeardUrlRequest params) {
-        WebResponseModel response = new WebResponseModel();
+    	logger.info("userWeb.user.setHeardUrl.request.data : " + JSONObject.toJSONString(params));
+    	WebResponseModel response=new WebResponseModel();
+    	if(StringUtils.isBlank(params.getTel())) {
+    		 response.setCode(UserBizReturnCode.paramError.code());
+             response.setMsg(UserBizReturnCode.paramError.desc());
+             return response;
+    	}
+    	
+         response = userCenterService.execute(params);
+         logger.info("userWeb.user.setHeardUrl.response.data : " + JSONObject.toJSONString(response));
         return response;
     }
     
@@ -155,7 +237,27 @@ public class UserCommonController {
         return response;
     }
     
+    /**
+     * 发送短信
+     * @param params
+     * @return
+     */
+    @RequestMapping(value = "/getSmsCode",  method = RequestMethod.POST)
+    @ResponseBody
+    public WebResponseModel getSmsCode(GetSmsCodeRequest params) {
+
+    	logger.info("userWeb.user.getSmsCode.request.data : " + JSONObject.toJSONString(params));
+    	WebResponseModel response=new WebResponseModel();
+    	if(StringUtils.isBlank(params.getTel())||StringUtils.isBlank(params.getCodeType())) {
+    		 response.setCode(UserBizReturnCode.paramError.code());
+             response.setMsg(UserBizReturnCode.paramError.desc());
+             return response;
+    	}
+         response = userCenterService.execute(params);
+         logger.info("userWeb.user.getSmsCode.response.data : " + JSONObject.toJSONString(response));
+        return response;
     
+    }
     
     
     
