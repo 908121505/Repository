@@ -32,7 +32,7 @@
     delete from occupation
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="test.model.Occupation" >
+  <insert id="insert" parameterType="com.honglu.quickcall.user.facade.entity.Occupation" >
     insert into occupation (id, name, occu_describe, 
       type, create_time, modify_time, 
       create_man, modify_man, remark
@@ -42,7 +42,7 @@
       #{createMan,jdbcType=VARCHAR}, #{modifyMan,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}
       )
   </insert>
-  <insert id="insertSelective" parameterType="test.model.Occupation" >
+  <insert id="insertSelective" parameterType="com.honglu.quickcall.user.facade.entity.Occupation" >
     insert into occupation
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -103,7 +103,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="test.model.Occupation" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.honglu.quickcall.user.facade.entity.Occupation" >
     update occupation
     <set >
       <if test="name != null" >
@@ -133,7 +133,7 @@
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="test.model.Occupation" >
+  <update id="updateByPrimaryKey" parameterType="com.honglu.quickcall.user.facade.entity.Occupation" >
     update occupation
     set name = #{name,jdbcType=VARCHAR},
       occu_describe = #{occuDescribe,jdbcType=VARCHAR},
