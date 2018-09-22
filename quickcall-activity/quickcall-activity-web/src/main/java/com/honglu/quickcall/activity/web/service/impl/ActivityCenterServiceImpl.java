@@ -35,25 +35,25 @@ public class ActivityCenterServiceImpl implements ActivityCenterService {
     public WebResponseModel execute(AbstractRequest request) {
         request.setService(MyServiceCode.ACTIVITY);
         request.setSource(SourceCode.OpenApi);
-        logger.info("功能编码为"+request.getBizCode()+"发送请求：{}", request);
+        logger.info("功能编码为" + request.getBizCode() + "发送请求：{}", request);
         WebResponseModel response = new WebResponseModel();
-        try{
+        try {
             CommonResponse $response = activityDubboBusiness.excute(request);
-            logger.info("功能编码为"+request.getBizCode()+"接收响应：{}", $response);
-            if(!$response.isSuccess()){
+            logger.info("功能编码为" + request.getBizCode() + "接收响应：{}", $response);
+            if (!$response.isSuccess()) {
                 throw new RemoteException($response.getCode(), $response.getMessage());
             }
             response.setCode($response.getCode().code());
             response.setMsg($response.getMessage());
 //            response.setData(DES3Utils.encryptMode(JSON.toJSONString(result), ConstantUtils.THREEDES_KEY));
             response.setData(JSON.toJSONString($response.getData()));
-        }catch (RemoteException e){
-            logger.error("功能编码为"+request.getBizCode()+"的远程调用异常"+e.getMessage(), e);
+        } catch (RemoteException e) {
+            logger.error("功能编码为" + request.getBizCode() + "的远程调用异常" + e.getMessage(), e);
             response.setCode(e.getCode().code());
             response.setMsg(e.getMessage());
             response.setData("");
-        }catch (Exception e){
-            logger.error("功能编码为"+request.getBizCode()+"接口未知异常"+e.getMessage(), e);
+        } catch (Exception e) {
+            logger.error("功能编码为" + request.getBizCode() + "接口未知异常" + e.getMessage(), e);
             response.setCode(ActivityBizReturnCode.Unknown.code());
             response.setMsg(e.getMessage());
         }
