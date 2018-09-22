@@ -63,8 +63,38 @@ public class Customer implements Serializable {
     private String modifyMan;
 
     private String remark;
+    
+    private String appChannelName;
 
-    public Long getCustomerId() {
+    private String deviceId;
+
+    private Date loginTime;
+
+    public String getAppChannelName() {
+		return appChannelName;
+	}
+
+	public void setAppChannelName(String appChannelName) {
+		this.appChannelName = appChannelName;
+	}
+
+	public String getDeviceId() {
+		return deviceId;
+	}
+
+	public void setDeviceId(String deviceId) {
+		this.deviceId = deviceId;
+	}
+
+	public Date getLoginTime() {
+		return loginTime;
+	}
+
+	public void setLoginTime(Date loginTime) {
+		this.loginTime = loginTime;
+	}
+
+	public Long getCustomerId() {
         return customerId;
     }
 

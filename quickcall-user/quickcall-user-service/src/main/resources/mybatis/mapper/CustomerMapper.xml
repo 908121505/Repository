@@ -32,14 +32,19 @@
     <result column="create_man" property="createMan" jdbcType="VARCHAR" />
     <result column="modify_man" property="modifyMan" jdbcType="VARCHAR" />
     <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="app_channel_name" property="appChannelName" jdbcType="VARCHAR" />
+    <result column="device_id" property="deviceId" jdbcType="VARCHAR" />
+    <result column="login_time" property="loginTime" jdbcType="TIMESTAMP" />
   </resultMap>
-  <sql id="Base_Column_List" >
+ <sql id="Base_Column_List" >
     customer_id, phone, real_name, sex, nick_name, type, credentials_type, credentials_num, 
     interest_id, wechat_open_id, qq_open_id, microblog_open_id, occupation_id, front_portrait_url, 
     back_portrait_url, head_portrait_url, source, cust_status, cust_password, sign_name, 
-    birthday, voice_url, identity_status, token_code, other_relation, create_time, 
-    modify_time, create_man, modify_man, remark
+    star_sign, birthday, voice_url, v_status, identity_status, token_code, other_relation, 
+    create_time, modify_time, create_man, modify_man, remark, app_channel_name, device_id, 
+    login_time
   </sql>
+
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
     <include refid="Base_Column_List" />
@@ -57,22 +62,24 @@
       wechat_open_id, qq_open_id, microblog_open_id, 
       occupation_id, front_portrait_url, back_portrait_url, 
       head_portrait_url, source, cust_status, 
-      cust_password, sign_name, birthday, 
-      voice_url, identity_status, token_code, 
-      other_relation, create_time, modify_time, 
-      create_man, modify_man, remark
-      )
+      cust_password, sign_name, star_sign, 
+      birthday, voice_url, v_status, 
+      identity_status, token_code, other_relation, 
+      create_time, modify_time, create_man, 
+      modify_man, remark, app_channel_name, 
+      device_id, login_time)
     values (#{customerId,jdbcType=BIGINT}, #{phone,jdbcType=INTEGER}, #{realName,jdbcType=VARCHAR}, 
       #{sex,jdbcType=TINYINT}, #{nickName,jdbcType=VARCHAR}, #{type,jdbcType=TINYINT}, 
       #{credentialsType,jdbcType=TINYINT}, #{credentialsNum,jdbcType=VARCHAR}, #{interestId,jdbcType=INTEGER}, 
       #{wechatOpenId,jdbcType=VARCHAR}, #{qqOpenId,jdbcType=VARCHAR}, #{microblogOpenId,jdbcType=VARCHAR}, 
       #{occupationId,jdbcType=INTEGER}, #{frontPortraitUrl,jdbcType=VARCHAR}, #{backPortraitUrl,jdbcType=VARCHAR}, 
       #{headPortraitUrl,jdbcType=VARCHAR}, #{source,jdbcType=TINYINT}, #{custStatus,jdbcType=TINYINT}, 
-      #{custPassword,jdbcType=VARCHAR}, #{signName,jdbcType=VARCHAR}, #{birthday,jdbcType=TIMESTAMP}, 
-      #{voiceUrl,jdbcType=VARCHAR}, #{identityStatus,jdbcType=TINYINT}, #{tokenCode,jdbcType=VARCHAR}, 
-      #{otherRelation,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{modifyTime,jdbcType=TIMESTAMP}, 
-      #{createMan,jdbcType=VARCHAR}, #{modifyMan,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}
-      )
+      #{custPassword,jdbcType=VARCHAR}, #{signName,jdbcType=VARCHAR}, #{starSign,jdbcType=CHAR}, 
+      #{birthday,jdbcType=TIMESTAMP}, #{voiceUrl,jdbcType=VARCHAR}, #{vStatus,jdbcType=CHAR}, 
+      #{identityStatus,jdbcType=TINYINT}, #{tokenCode,jdbcType=VARCHAR}, #{otherRelation,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{modifyTime,jdbcType=TIMESTAMP}, #{createMan,jdbcType=VARCHAR}, 
+      #{modifyMan,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{appChannelName,jdbcType=VARCHAR}, 
+      #{deviceId,jdbcType=VARCHAR}, #{loginTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.honglu.quickcall.user.facade.entity.Customer" >
     insert into customer
@@ -137,11 +144,17 @@
       <if test="signName != null" >
         sign_name,
       </if>
+      <if test="starSign != null" >
+        star_sign,
+      </if>
       <if test="birthday != null" >
         birthday,
       </if>
       <if test="voiceUrl != null" >
         voice_url,
+      </if>
+      <if test="vStatus != null" >
+        v_status,
       </if>
       <if test="identityStatus != null" >
         identity_status,
@@ -166,6 +179,15 @@
       </if>
       <if test="remark != null" >
         remark,
+      </if>
+      <if test="appChannelName != null" >
+        app_channel_name,
+      </if>
+      <if test="deviceId != null" >
+        device_id,
+      </if>
+      <if test="loginTime != null" >
+        login_time,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
@@ -229,11 +251,17 @@
       <if test="signName != null" >
         #{signName,jdbcType=VARCHAR},
       </if>
+      <if test="starSign != null" >
+        #{starSign,jdbcType=CHAR},
+      </if>
       <if test="birthday != null" >
         #{birthday,jdbcType=TIMESTAMP},
       </if>
       <if test="voiceUrl != null" >
         #{voiceUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="vStatus != null" >
+        #{vStatus,jdbcType=CHAR},
       </if>
       <if test="identityStatus != null" >
         #{identityStatus,jdbcType=TINYINT},
@@ -258,6 +286,15 @@
       </if>
       <if test="remark != null" >
         #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="appChannelName != null" >
+        #{appChannelName,jdbcType=VARCHAR},
+      </if>
+      <if test="deviceId != null" >
+        #{deviceId,jdbcType=VARCHAR},
+      </if>
+      <if test="loginTime != null" >
+        #{loginTime,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
@@ -321,11 +358,17 @@
       <if test="signName != null" >
         sign_name = #{signName,jdbcType=VARCHAR},
       </if>
+      <if test="starSign != null" >
+        star_sign = #{starSign,jdbcType=CHAR},
+      </if>
       <if test="birthday != null" >
         birthday = #{birthday,jdbcType=TIMESTAMP},
       </if>
       <if test="voiceUrl != null" >
         voice_url = #{voiceUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="vStatus != null" >
+        v_status = #{vStatus,jdbcType=CHAR},
       </if>
       <if test="identityStatus != null" >
         identity_status = #{identityStatus,jdbcType=TINYINT},
@@ -351,6 +394,15 @@
       <if test="remark != null" >
         remark = #{remark,jdbcType=VARCHAR},
       </if>
+      <if test="appChannelName != null" >
+        app_channel_name = #{appChannelName,jdbcType=VARCHAR},
+      </if>
+      <if test="deviceId != null" >
+        device_id = #{deviceId,jdbcType=VARCHAR},
+      </if>
+      <if test="loginTime != null" >
+        login_time = #{loginTime,jdbcType=TIMESTAMP},
+      </if>
     </set>
     where customer_id = #{customerId,jdbcType=BIGINT}
   </update>
@@ -375,8 +427,10 @@
       cust_status = #{custStatus,jdbcType=TINYINT},
       cust_password = #{custPassword,jdbcType=VARCHAR},
       sign_name = #{signName,jdbcType=VARCHAR},
+      star_sign = #{starSign,jdbcType=CHAR},
       birthday = #{birthday,jdbcType=TIMESTAMP},
       voice_url = #{voiceUrl,jdbcType=VARCHAR},
+      v_status = #{vStatus,jdbcType=CHAR},
       identity_status = #{identityStatus,jdbcType=TINYINT},
       token_code = #{tokenCode,jdbcType=VARCHAR},
       other_relation = #{otherRelation,jdbcType=VARCHAR},
@@ -384,9 +438,13 @@
       modify_time = #{modifyTime,jdbcType=TIMESTAMP},
       create_man = #{createMan,jdbcType=VARCHAR},
       modify_man = #{modifyMan,jdbcType=VARCHAR},
-      remark = #{remark,jdbcType=VARCHAR}
+      remark = #{remark,jdbcType=VARCHAR},
+      app_channel_name = #{appChannelName,jdbcType=VARCHAR},
+      device_id = #{deviceId,jdbcType=VARCHAR},
+      login_time = #{loginTime,jdbcType=TIMESTAMP}
     where customer_id = #{customerId,jdbcType=BIGINT}
   </update>
+
   <!--登录  -->
   <select id="login" resultMap="BaseResultMap" parameterType="com.honglu.quickcall.user.facade.entity.Customer">
     select 
