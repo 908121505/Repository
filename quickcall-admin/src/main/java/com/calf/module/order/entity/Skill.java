@@ -13,7 +13,7 @@ import java.util.Date;
  * @date: 2018年9月21日 下午3:46:57
  */
 public class Skill {
-    private Integer id;
+    private String id;
 
     private String name;
     private String skillDescribe;
@@ -24,6 +24,7 @@ public class Skill {
     private String imageUrl;
 
     private Integer priceStep;
+    private Integer sort;
     private Integer skillStatus;
 
     private Date createTime;
@@ -34,11 +35,11 @@ public class Skill {
     private String modifyMan;
     private String remark;
 
-    public Integer getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -88,6 +89,13 @@ public class Skill {
 
     public void setPriceStep(Integer priceStep) {
         this.priceStep = priceStep;
+    }
+    public Integer getSort() {
+    	return sort;
+    }
+    
+    public void setSort(Integer sort) {
+    	this.sort = sort;
     }
 
     public Integer getSkillStatus() {

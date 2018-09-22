@@ -14,7 +14,8 @@ import java.math.BigDecimal;
 public class SkillVO {
 
 
-    private String name;
+	private String  id;
+	private String name;
     private String skillDescribe;
     private BigDecimal minPrice;
 
@@ -22,13 +23,20 @@ public class SkillVO {
 
     private String imageUrl;
 
-    private Short priceStep;
-    private Byte skillStatus;
-
+    private Integer priceStep;
+    private Integer sort;
+    private Integer skillStatus;
     private String remark;
 
+    public String getId() {
+		return id;
+	}
 
-    public String getName() {
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	public String getName() {
         return name;
     }
 
@@ -68,19 +76,27 @@ public class SkillVO {
         this.imageUrl = imageUrl == null ? null : imageUrl.trim();
     }
 
-    public Short getPriceStep() {
+    public Integer getPriceStep() {
         return priceStep;
     }
 
-    public void setPriceStep(Short priceStep) {
+    public void setPriceStep(Integer priceStep) {
         this.priceStep = priceStep;
     }
+    
+    public Integer getSort() {
+    	return sort;
+    }
+    
+    public void setSort(Integer sort) {
+    	this.sort = sort;
+    }
 
-    public Byte getSkillStatus() {
+    public Integer getSkillStatus() {
         return skillStatus;
     }
 
-    public void setSkillStatus(Byte skillStatus) {
+    public void setSkillStatus(Integer skillStatus) {
         this.skillStatus = skillStatus;
     }
 

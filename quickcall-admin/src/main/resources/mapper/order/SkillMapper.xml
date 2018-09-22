@@ -2,13 +2,14 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="Skill" >
   <resultMap id="BaseResultMap" type="com.calf.module.order.entity.Skill" >
-    <id column="id" property="id" jdbcType="INTEGER" />
+    <id column="id" property="id" jdbcType="BIGINT" />
     <result column="name" property="name" jdbcType="VARCHAR" />
     <result column="skill_describe" property="skillDescribe" jdbcType="VARCHAR" />
     <result column="min_price" property="minPrice" jdbcType="DECIMAL" />
     <result column="max_price" property="maxPrice" jdbcType="DECIMAL" />
     <result column="image_url" property="imageUrl" jdbcType="VARCHAR" />
     <result column="price_step" property="priceStep" jdbcType="SMALLINT" />
+    <result column="sort" property="sort" jdbcType="SMALLINT" />
     <result column="skill_status" property="skillStatus" jdbcType="TINYINT" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
@@ -19,7 +20,7 @@
 
 
   <sql id="Base_Column_List" >
-    id, name, skill_describe, min_price, max_price, image_url, price_step, skill_status, 
+    id, name, skill_describe, min_price, max_price, image_url, price_step,sort, skill_status, 
     create_time, modify_time, create_man, modify_man, remark
   </sql>
 
@@ -37,12 +38,12 @@
   <insert id="insert" parameterType="com.calf.module.order.entity.Skill" >
     insert into skill (id, name, skill_describe, 
       min_price, max_price, image_url, 
-      price_step, skill_status, create_time, 
+      price_step, sort,skill_status, create_time, 
       modify_time, create_man, modify_man, 
       remark)
     values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{skillDescribe,jdbcType=VARCHAR}, 
       #{minPrice,jdbcType=DECIMAL}, #{maxPrice,jdbcType=DECIMAL}, #{imageUrl,jdbcType=VARCHAR}, 
-      #{priceStep,jdbcType=SMALLINT}, #{skillStatus,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{priceStep,jdbcType=SMALLINT},#{sort,jdbcType=SMALLINT}, #{skillStatus,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP}, 
       #{modifyTime,jdbcType=TIMESTAMP}, #{createMan,jdbcType=VARCHAR}, #{modifyMan,jdbcType=VARCHAR}, 
       #{remark,jdbcType=VARCHAR})
   </insert>
@@ -69,6 +70,9 @@
       </if>
       <if test="priceStep != null" >
         price_step,
+      </if>
+      <if test="sort != null" >
+        sort,
       </if>
       <if test="skillStatus != null" >
         skill_status,
@@ -111,6 +115,9 @@
       <if test="priceStep != null" >
         #{priceStep,jdbcType=SMALLINT},
       </if>
+      <if test="sort != null" >
+        #{sort,jdbcType=SMALLINT},
+      </if>
       <if test="skillStatus != null" >
         #{skillStatus,jdbcType=TINYINT},
       </if>
@@ -132,7 +139,7 @@
     </trim>
   </insert>
 
-  <update id="updateByPrimaryKeySelective" parameterType="com.calf.module.order.entity.Skill" >
+  <update id="update" parameterType="com.calf.module.order.entity.Skill" >
     update skill
     <set >
       <if test="name != null" >
@@ -152,6 +159,9 @@
       </if>
       <if test="priceStep != null" >
         price_step = #{priceStep,jdbcType=SMALLINT},
+      </if>
+      <if test="sort != null" >
+        sort = #{sort,jdbcType=SMALLINT},
       </if>
       <if test="skillStatus != null" >
         skill_status = #{skillStatus,jdbcType=TINYINT},
@@ -182,6 +192,7 @@
       max_price = #{maxPrice,jdbcType=DECIMAL},
       image_url = #{imageUrl,jdbcType=VARCHAR},
       price_step = #{priceStep,jdbcType=SMALLINT},
+      sort = #{sort,jdbcType=SMALLINT},
       skill_status = #{skillStatus,jdbcType=TINYINT},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       modify_time = #{modifyTime,jdbcType=TIMESTAMP},
@@ -198,10 +209,10 @@
     from skill
     where  1 = 1
      <if test="skillStatus != null" >
-        and  skill_status = #{skillStatus},
+        and  skill_status = #{skillStatus}
      </if>
      <if test="name != null" >
-        and  name like  concat( '%',#{name},'%'),
+        and  name like  concat( '%',#{name},'%')
      </if>
   </select>
   <select id="slectCount" resultType="java.lang.Integer" parameterType="map" >
@@ -210,10 +221,10 @@
     from skill
     where  1= 1
      <if test="skillStatus != null" >
-        and  skill_status = #{skillStatus},
+        and  skill_status = #{skillStatus}
      </if>
      <if test="name != null" >
-        and  name like  concat( '%',#{name},'%'),
+        and  name like  concat( '%',#{name},'%')
      </if>
     
   </select>

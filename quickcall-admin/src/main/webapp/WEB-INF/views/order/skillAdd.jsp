@@ -4,8 +4,8 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="shiro" uri="http://shiro.apache.org/tags"%>
-<link type="text/css"  href="resources/bootstrap/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
-<script type="text/javascript" language="javascript"  src="resources/bootstrap/js/bootstrap-datetimepicker.min.js"  charset="utf-8"></script>
+<link type="text/css"  href="resources/bootstrap/css/bootstrap-datetimepicker.min.css"  rel="stylesheet" />
+<script type="text/javascript" language="javascript"	src="resources/bootstrap/js/bootstrap-datetimepicker.min.js"  charset="utf-8"></script>
 
 
 <div class="modal-dialog">
@@ -13,53 +13,64 @@
 		<div class="modal-header">
 			<button type="button" class="close" data-dismiss="modal"
 				aria-hidden="true">X</button>
-			<h3 id="myModalLabel">新增打款详情</h3>
+			<h3 id="myModalLabel">${empty entity?'新增商户上线推广':'活动详情修改' }</h3>
 		</div>
 		<div class="modal-body" style="max-height: 700px; overflow-y: auto;"  id = "editBody">
-			<form class="form-horizontal" method="post" action="companySettle/saveInsert.htm"  role="form">
-					<div class="form-group">
-						<label class="col-sm-4 control-label">公司名称<font  color="red">&nbsp;*</font></label>
-						<div class="col-sm-8">
-							<input type="text" class="form-control" id="companyName"  value=""  onchange="verifyCompanyName(this,1)"  name= "companyName">
-							<input type="hidden" class="form-control" id="checkFlag"  value="0"  >
-							<span id="checkCompanyName" style="color: red;font-size: 14px;margin-left:20px; "></span>
-						</div>
+			<form class="form-horizontal" method="post" id="skillForm"
+				name="skillForm"
+				action="skill/save${empty entity?'Insert':'Update' }.htm"
+				role="form">
+
+				 
+				 
+				<div class="form-group">
+					<label class="col-sm-4 control-label">技能名称<font color="red">&nbsp;*</font></label>
+					<div class="col-sm-8">
+						<input type="text" id="name" class="form-control"  name="name" value="${entity.name}"  maxlength="50">
+						<input type="hidden" id="id" class="form-control"  name="id" value="${entity.id}" >
 					</div>
-					
-					<div class="form-group">
-						<label class="col-sm-4 control-label">打款金额/元<font  color="red">&nbsp;*</font></label>
-						<div class="col-sm-8">
-							<input type="text" class="form-control" id="payAmount" value=""  name= "payAmount">
-							<span id="checkPayAmount" style="color: red;font-size: 14px;margin-left:20px; "></span>
-						</div>
+				</div>
+				<div class="form-group"  >
+					<label class="col-sm-4 control-label">最低价格</label>
+					<div class="col-sm-8">
+						<input type="text" id="minPrice" class="form-control" 
+							name="minPrice" value="${entity.minPrice}">
 					</div>
-					
-					<div class="form-group">
-						<label class="col-sm-4 control-label">打款人<font  color="red">&nbsp;*</font></label> 
-						<div class="col-sm-8">
-							<input type="text" class="form-control" id="payerName" value=""  name = "payerName" onchange="verifyPayerName(this)">
-							<span id="checkPayerName" style="color: red;font-size: 14px;margin-left:20px; "></span>
-						</div>
+				</div>
+				
+				
+				
+				<div class="form-group" >
+					<label class="col-sm-4 control-label">最高价格<font color="red">&nbsp;*</font></label>
+					<div class="col-sm-8">
+						<input type="text" id="maxPrice" class="form-control" name="maxPrice" value="${entity.maxPrice}">
 					</div>
-					<div class="form-group">
-						<label class="col-sm-4 control-label">打款时间<font  color="red">&nbsp;*</font></label>
-						<div class="col-sm-8">
-							<input type="text" class="form-control" id="payDate" value=""  name = "payDateStr">
-						</div>
+				</div>
+				<div class="form-group" >
+					<label class="col-sm-4 control-label">价格步长<font color="red">&nbsp;*</font></label>
+					<div class="col-sm-8">
+						<input type="text" id="priceStep" class="form-control" name="priceStep" value="${entity.priceStep}">
 					</div>
+				</div>
+				<div class="form-group" >
+					<label class="col-sm-4 control-label">排序<font color="red">&nbsp;*</font></label>
+					<div class="col-sm-8">
+						<input type="text" id="sort" class="form-control" name="sort" value="${entity.priceStep}" >
+					</div>
+				</div>
+				
+				
 			</form>
 		</div>
 		<div class="modal-footer">
-		    <span id="tip" style="color: red; font-size: 16px; margin-left: 20px;float:left;"></span>
-			<button class="btn btn-default" data-dismiss="modal" aria-hidden="true" >返回</button>
+		<span id="tip" style="color: red; font-size: 16px; margin-left: 20px;float:left;"></span>
+			<button class="btn btn-default" data-dismiss="modal" aria-hidden="true" >取消</button>
 			<button class="btn btn-primary" data-dismiss="modal" >保存</button>
 		</div>
 	</div>
 </div>
-<script type="text/javascript" charset="utf-8">
 
-
-
+<script type="text/javascript">
 	Date.prototype.Format = function (fmt) { //author: meizz   
 	    var o = {  
 	        "M+": this.getMonth() + 1, //月份   
@@ -75,64 +86,15 @@
 	    if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));  
 	    return fmt;  
 	}  
+	
+	
+	
+	
 
-	function check_fun() {
-		$("#tip").html("");
-		var  companyName = $("#companyName").val();
-		var  payerName = $("#payerName").val();
-		var payAmount = $("#payAmount").val();
-		var payDateStr = $("#payDate").val();
-		
-		var r =  true;
-		if(companyName == null  || companyName.trim() == ''){
-			$("#tip").html("请选择公司名称");
-			r =  false;
-		}else if(payerName == null  || payerName.trim() == ''){
-			$("#tip").html("请选择打款人");
-			r =  false;
-		}else if(payAmount == null  || payAmount.trim() == ''){
-			$("#tip").html("请选择打款金额");
-			r =  false;
-		}else if(payDateStr == null  || payDateStr.trim() == ''){
-			$("#tip").html("请选择打款日期");
-			r =  false;
-		}
-		
-		if(r){
-			//校验输入的打款金额是否是整数
-			if(isNotNumExt(payAmount)){
-				r =  false;
-				$("#tip").html("打款金额只能是整数");
-			}
-		}
-		
-		if(r){
-			var currDate =  new Date();
-			var currTimeStr = currDate.Format("yyyy-MM-dd HH:mm:ss");
-			//当前时间
-			var currTime = getDate(currTimeStr);
-			var payDate = getDate(payDateStr);
-			if(payDate > currTime){
-				r =  false;
-				$("#tip").html("打款时间不能早于当前时间");
-			}
-		}
-		
-		if(r){
-			var  checkFlag = $("#checkFlag").val();
-			if("1" ==  checkFlag){
-				$("#tip").html("公司打款人不匹配");
-				r = false;
-			}
-		}
-		
-		
-		return r ;
-	    
-	}
+	
+	
 
-    
-	//字符串转日期格式，strDate要转为日期格式的字符串
+	  //字符串转日期格式，strDate要转为日期格式的字符串
     function getDate(strDate) {
         var st = strDate;
         var a = st.split(" ");
@@ -141,93 +103,36 @@
         var date = new Date(b[0], (b[1]-1), b[2], c[0], c[1], c[2]);
         return date;
     }
-	//整数
- 	function isNotNumExt (numStr){
-		var r = /^\+?[1-9][0-9]*$/;
-		return !r.test(numStr);
-	} 
+	
+	
+
+	
+
+	
 
 
-	function verifyPayerName(obj){
-		$("#checkPayerName").text("");
-		$("#checkCompanyName").text("");
-		//公司名称
-		var  companyName = $("#companyName").val();
-		if(companyName == null ||  companyName.trim() == ''){
-			$("#checkCompanyName").text("请输入公司名称");
-			return ;
-		}
-		//打款人姓名
-		var  payerName =  $(obj).val();
-		if(payerName == null || payerName.trim() ==''){
-			$("#checkPayerName").text("请输入打款人姓名");
-			return ;
-		}
+	function check_fun() {
 		
-		$.ajax({
-	         type: "post",
-	         dataType: "json",
-	         url: "companySettle/verifyCompanyPayer",
-	         async:false,
-	         data: {
-	             "payerName": payerName,
-	             "companyName":companyName
-	         },
-	         error: function () {
-	             alert("错误！");
-	         },
-	         success: function (data) {
-	             var result =  data.result ;
-	             if(result == 0){
-	            	$("#checkPayerName").text("打款人"+payerName +"不属于公司："+companyName);
-	            	$("#checkFlag").val("1");
-	             }else{
-	            	 $("#checkFlag").val("0");
-	             }
-	         }
-	     });
+		var b = true;
+      
+			
+	
+		return b;
 	}
 	
 	
 	
-    function verifyCompanyName(obj,index){
-    	$("#checkCompanyName").text("");
-    	var item = $(obj).val();
-    	if(item == null || item.trim() == ''){
-    		return  ;
-    	}
-    	$.ajax({
-             type: "post",
-             dataType: "json",
-             url: "bussProduct/verify",
-             async:false,
-             data: {
-                 "item": item,
-                 "index":index
-             },
-             error: function () {
-                 alert("错误！");
-             },
-             success: function (data) {
-                 var result =  data.result ;
-                 if(result == 0){
-                	$("#companyName").val("");
-                	$("#checkCompanyName").text("公司："+item +"不存在");
-                 }
-             }
-         });
-    }
-    
-    
-    
-    
-    
-    $(function(){
-		$('#payDate').datetimepicker({
-			format : 'yyyy-mm-dd hh:ii:ss'
-		});
-    })
-    
-    
+	
 
+	$(function() {
+		/* $('#shangxianTime').datetimepicker({
+			format : 'yyyy-mm-dd hh:ii:ss'
+		}); */
+
+		
+
+
+
+
+	});
 </script>

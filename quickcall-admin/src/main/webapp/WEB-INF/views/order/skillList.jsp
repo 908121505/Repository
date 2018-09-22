@@ -124,7 +124,12 @@
 			               "sTitle":"背景图片",
 			               'sClass':"text-center",
 			               "mRender": function(data, type, full) { 
+			            	   if(data==''||data==null){
+	   	                             return	"--";
+			            	   }else{
 				            	return "<img src='" + data + "' height='50px;'/>"; 
+			            	   }
+			            	   
 			              } 
 			            },
 			            { 
@@ -147,7 +152,9 @@
                             "sTitle":"状态",
                             'sClass':"text-center",
                             "mRender": function(data, type, full) {
-                                if(data == 0){
+                            	/* if(data==''||data==null){
+   	                             return	"--";
+                                }else */ if(data == 0){
                                     return "<font color='red'>可用</font>";
                                 } else if(data == 1) {
                                     return "<font color='red'>不可用</font>";
@@ -220,14 +227,14 @@
 			         ],
 			         fnServerParams: function (aoData) {  //查询条件
 	                       aoData.push({ "name": "name", "value": $("#nameQuery").val().replace(new RegExp(" ","g"),"") } );
-		                   aoData.push({"name": "skillStatus", "value": $("#skillStatusQuery").val().replace(new RegExp(" ","g"),"")});
+		                   aoData.push({"name": "skillStatus", "value": $("#skillStatusQuery").val()});
 	                    },
 	                    aoColumnDefs : [ {
-							"aTargets" : 12,
+							"aTargets" : 11,
 							"mRender" : function(data,type, row) {
-								var edit = "", detail = "", approve = "", tally = "";
+								var detail = "";
 								detail = "<a href='#' onclick='addAndUpdateRow(\""+ row.id+ "\")' data-toggle='modal' class='padding-right-small label label-success'><i class='glyphicon glyphicon-edit'></i>详情</a>";
-								return approve+ "&nbsp;"+ edit+ "&nbsp;"/* +del+"&nbsp;" */+ detail+ "&nbsp;"+ tally;
+								return  detail;
 							}
 						} ]
 		            
@@ -240,7 +247,7 @@
 			});
 			//增加或者修改受影响的行数
 			function addAndUpdateRow(id){
-				$('#insertAndUpdate').addAndUpdateRow("banner/addAndUpdateHome.htm?id="+id);
+				$('#insertAndUpdate').addAndUpdateRow("skill/addAndUpdateHome.htm?id="+id);
 			}
 			</script>
 		<!---dialog选项-->
