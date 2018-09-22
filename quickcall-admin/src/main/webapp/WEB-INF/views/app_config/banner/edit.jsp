@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<div class="modal-dialog">
+<div class="modal-dialog" style="width: 50%;">
 	<div class="modal-content">
 		<div class="modal-header">
 			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">X</button>
@@ -16,7 +16,7 @@
 					<div class="col-sm-10">
 						<input type="hidden" value="${entity.bannerId }" name="bannerId" /> 
 						<input type="text" class="form-control required" id="banner_title" name="title" value="${entity.title }">
-					    <input type="hidden" class="form-control" name="image" id="bannerFile_input" value="${entity.image }">
+					    <input type="hidden" class="form-control" name="imageUrl" id="bannerFile_input" value="${entity.imageUrl }">
 					</div>
 				</div>
 				<div class="form-group">
@@ -30,11 +30,11 @@
 					<label class="col-sm-2 control-label">状态<font color="red">&nbsp;*</font></label>
 					<div class="col-sm-10">
 						<label class="checkbox-inline">
-							<input type="radio" name="state" value="1" ${entity.state=='1'?'checked':'' }>
+							<input type="radio" name="bannerStatus" value="1" ${empty entity or entity.bannerStatus=='1'?'checked':'' }>
 							开启
 						</label>
 						<label class="checkbox-inline">
-							<input type="radio" name="state" value="0" ${entity.state=='0'?'checked':'' }>
+							<input type="radio" name="bannerStatus" value="0" ${entity.bannerStatus=='0'?'checked':'' }>
 							关闭
 						</label>
 					</div>
@@ -97,8 +97,7 @@
 				<div class="form-group">
 					<label class="col-sm-2 control-label">备注</label>
 					<div class="col-sm-10">
-						<input type="text" class="form-control" name="remark"
-							value="${entity.remark }">
+						<input type="text" class="form-control" name="remark" value="${entity.remark }">
 					</div>
 				</div>
 				<div class="form-group">
@@ -117,7 +116,7 @@
 					<label for="bannerFile_img" class="col-sm-2 control-label">图片</label>
 					<div class="col-sm-10">
 						<div class="col-sm-6">
-							<img src="${entity.image }" alt="暂无图片，点击上传！" class="img-rounded" style="max-width: 100%; max-height: 300px;" id="bannerFile_img">
+							<img src="${entity.imageUrl }" alt="暂无图片，点击上传！" class="img-rounded" style="max-width: 100%; max-height: 300px;" id="bannerFile_img">
 						</div>
 					</div>
 				</div>
@@ -143,9 +142,8 @@ function check_fun(){
 	var endTime = $("#banner_endTime").val();
 	var startTime = $("#banner_startTime").val();
 	var sort = $("#banner_sort").val();
-	var state = $('input[name="state"]:checked').val();
+	var state = $('input[name="bannerStatus"]:checked').val();
 	var remark = $('input[name="remark"]').val();
-	var bannerFileInput = $('input[name="bannerFile_input"]').val();
 	var url = $("#banner_url").val();
 	var title = $("#banner_title").val();
 
@@ -191,16 +189,13 @@ function check_fun(){
 		$("#tip").html("请输入标题");
 		b = false;
 	}
-	
-	
+
 	//格式校验
-	
 	if(title&&title.length>150){
 		$("#tip").html("标题不能超过150个字");
 		b = false;
 	}
-	
-  
+
     if(sort&&sort.length>9){
     	$("#tip").html("序号不能超过9个字");
     	b = false;
@@ -210,15 +205,13 @@ function check_fun(){
    	    $("#tip").html("备注不能超过250个字");
     	b = false;
     } 
-    
-    
+
     var temp = /^[0-9]*$/;
     if(!temp.test(sort)){
     	$("#tip").html("序号必须全部是数字");
     	b = false;
     }
-    
-	
+
 	return b;
 }
 	$(function() {

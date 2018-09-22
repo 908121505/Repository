@@ -7,8 +7,17 @@ package com.honglu.quickcall.user.facade.code;
  */
 public interface UserFunctionType {
 
-    //检查手机号
+    //检查是否注册
     String CheckPhone =  "001001";
+    //注册
+    String register="001002";
+    //登录
+    String login="001003";
+    //设置、找回密码
+    String setpwd="001004";
+    //设置头像
+    String setHeardUrl="001005";
+    
     
 
     //系统相关 001300 - 001350

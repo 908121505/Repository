@@ -1,27 +1,35 @@
 package com.calf.module.appconfig.entity;
 
+import java.util.Date;
+
 /**
- * 标题bean
- * 
- * @author cx
- * @date Thu Mar 09 15:09:43 CST 2017
+ * Banner 表实体对象
+ *
+ * @author duanjun
+ * @date 2018-09-21 16:12
  **/
 public class Banner {
 
 	/** 系统参数编号 **/
-	private String bannerId;
+	private Integer bannerId;
+
+	/** banner类型 **/
+	private Byte bannerType;
 
 	/** 标题/说明 **/
 	private String title;
 
 	/** 图片 **/
-	private String image;
+	private String imageUrl;
 
 	/** 跳转URL连接 **/
 	private String url;
 
-	/** banner类型 **/
-	private String bannerType;
+	/** 排序字段 **/
+	private Short sort;
+
+	/** 状态 1：开启 0：关闭 **/
+	private Byte bannerStatus;
 
 	/** 开始时间 **/
 	private String startTime;
@@ -32,7 +40,7 @@ public class Banner {
 	/**
 	 * 设备类型 0-所有,1-ios,2-andriod
 	 */
-	private Integer deviceType;
+	private Byte deviceType;
 
 	/**
 	 * app版本
@@ -44,33 +52,36 @@ public class Banner {
 	 */
 	private Integer appVersionRule;
 
-	/** 状态 1：开启 0：关闭 **/
-	private Integer state;
-
-	/** 排序字段 **/
-	private Integer sort;
 
 	/** 备注 **/
 	private String remark;
 
 	/** 创建时间 **/
-	private String createTime;
+	private Date createTime;
+
+	/** 修改时间 **/
+	private Date modifyTime;
 
 	/** 创建人 **/
 	private String createMan;
 
-	/** 修改时间 **/
-	private String modifyTime;
-
 	/** 修改人 **/
 	private String modifyMan;
 
-	public String getBannerId() {
+	public Integer getBannerId() {
 		return bannerId;
 	}
 
-	public void setBannerId(String bannerId) {
+	public void setBannerId(Integer bannerId) {
 		this.bannerId = bannerId;
+	}
+
+	public Byte getBannerType() {
+		return bannerType;
+	}
+
+	public void setBannerType(Byte bannerType) {
+		this.bannerType = bannerType;
 	}
 
 	public String getTitle() {
@@ -81,12 +92,12 @@ public class Banner {
 		this.title = title;
 	}
 
-	public String getImage() {
-		return image;
+	public String getImageUrl() {
+		return imageUrl;
 	}
 
-	public void setImage(String image) {
-		this.image = image;
+	public void setImageUrl(String imageUrl) {
+		this.imageUrl = imageUrl;
 	}
 
 	public String getUrl() {
@@ -97,12 +108,20 @@ public class Banner {
 		this.url = url;
 	}
 
-	public String getBannerType() {
-		return bannerType;
+	public Short getSort() {
+		return sort;
 	}
 
-	public void setBannerType(String bannerType) {
-		this.bannerType = bannerType;
+	public void setSort(Short sort) {
+		this.sort = sort;
+	}
+
+	public Byte getBannerStatus() {
+		return bannerStatus;
+	}
+
+	public void setBannerStatus(Byte bannerStatus) {
+		this.bannerStatus = bannerStatus;
 	}
 
 	public String getStartTime() {
@@ -121,11 +140,11 @@ public class Banner {
 		this.endTime = endTime;
 	}
 
-	public Integer getDeviceType() {
+	public Byte getDeviceType() {
 		return deviceType;
 	}
 
-	public void setDeviceType(Integer deviceType) {
+	public void setDeviceType(Byte deviceType) {
 		this.deviceType = deviceType;
 	}
 
@@ -145,22 +164,6 @@ public class Banner {
 		this.appVersionRule = appVersionRule;
 	}
 
-	public Integer getState() {
-		return state;
-	}
-
-	public void setState(Integer state) {
-		this.state = state;
-	}
-
-	public Integer getSort() {
-		return sort;
-	}
-
-	public void setSort(Integer sort) {
-		this.sort = sort;
-	}
-
 	public String getRemark() {
 		return remark;
 	}
@@ -169,12 +172,20 @@ public class Banner {
 		this.remark = remark;
 	}
 
-	public String getCreateTime() {
+	public Date getCreateTime() {
 		return createTime;
 	}
 
-	public void setCreateTime(String createTime) {
+	public void setCreateTime(Date createTime) {
 		this.createTime = createTime;
+	}
+
+	public Date getModifyTime() {
+		return modifyTime;
+	}
+
+	public void setModifyTime(Date modifyTime) {
+		this.modifyTime = modifyTime;
 	}
 
 	public String getCreateMan() {
@@ -183,14 +194,6 @@ public class Banner {
 
 	public void setCreateMan(String createMan) {
 		this.createMan = createMan;
-	}
-
-	public String getModifyTime() {
-		return modifyTime;
-	}
-
-	public void setModifyTime(String modifyTime) {
-		this.modifyTime = modifyTime;
 	}
 
 	public String getModifyMan() {

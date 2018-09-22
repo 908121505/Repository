@@ -1,5 +1,8 @@
 package com.honglu.quickcall.user.service.dao;
 
+import org.apache.ibatis.annotations.Param;
+import org.springframework.data.web.PageableDefault;
+
 import com.honglu.quickcall.user.facade.entity.Customer;
 
 public interface CustomerMapper {
@@ -14,4 +17,11 @@ public interface CustomerMapper {
     int updateByPrimaryKeySelective(Customer record);
 
     int updateByPrimaryKey(Customer record);
+    
+    Customer login(Customer record);
+    
+    int setPwd(@Param("phone")String phone,@Param("passWord")String passWord);
+    
+    int setHeardUrl(@Param("phone")String phone,@Param("headPortraitUrl")String headPortraitUrl
+    		,@Param("nickName")String nickName);
 }
