@@ -23,6 +23,8 @@ public class ResultUtils {
     }
 
     /**
+     * 返回成功
+     *
      * @param data 返回数据
      * @return
      */
@@ -32,5 +34,28 @@ public class ResultUtils {
         return commonResponse;
     }
 
+    /**
+     * 返回参数为空错误
+     *
+     * @return
+     */
+    public static CommonResponse resultParamEmpty() {
+        CommonResponse commonResponse = new CommonResponse();
+        commonResponse.setCode(BizCode.ParamEmpty);
+        commonResponse.setMessage(BizCode.ParamEmpty.desc());
+        return commonResponse;
+    }
 
+    /**
+     * 返回参数为空错误
+     *
+     * @param msg -- 错误信息
+     * @return
+     */
+    public static CommonResponse resultParamEmpty(String msg) {
+        CommonResponse commonResponse = new CommonResponse();
+        commonResponse.setCode(BizCode.ParamEmpty);
+        commonResponse.setMessage(msg);
+        return commonResponse;
+    }
 }
