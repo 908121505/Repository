@@ -25,6 +25,11 @@ public interface UserFunctionType {
     String MarketOnOff = "001300";
     String AppConfig = "001301";
 
+    /**
+     * 推送APP消息
+     */
+    String PUSH_APP_MSG = "001310";
+
     //查看用户信息
     String PersonInfo =  "0011128";
 

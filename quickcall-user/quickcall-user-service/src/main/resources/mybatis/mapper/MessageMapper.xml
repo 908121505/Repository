@@ -37,7 +37,7 @@
       )
     values (#{messageId,jdbcType=BIGINT}, #{messageContent,jdbcType=VARCHAR}, #{messageDescribe,jdbcType=VARCHAR}, 
       #{type,jdbcType=TINYINT}, #{senderId,jdbcType=BIGINT}, #{receiverId,jdbcType=BIGINT}, 
-      #{messageStatus,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP}, #{modifyTime,jdbcType=TIMESTAMP}, 
+      #{messageStatus,jdbcType=TINYINT}, NOW(), NOW(),
       #{createMan,jdbcType=VARCHAR}, #{modifyMan,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}
       )
   </insert>

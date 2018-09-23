@@ -15,6 +15,30 @@ public class ResultUtils {
      *
      * @return
      */
+    public static CommonResponse result(BizCode bizCode) {
+        CommonResponse commonResponse = new CommonResponse();
+        commonResponse.setCode(bizCode);
+        commonResponse.setMessage(bizCode.desc());
+        return commonResponse;
+    }
+
+    /**
+     * 返回成功
+     *
+     * @return
+     */
+    public static CommonResponse result(BizCode bizCode, String msg) {
+        CommonResponse commonResponse = new CommonResponse();
+        commonResponse.setCode(bizCode);
+        commonResponse.setMessage(msg);
+        return commonResponse;
+    }
+
+    /**
+     * 返回成功
+     *
+     * @return
+     */
     public static CommonResponse resultSuccess() {
         CommonResponse commonResponse = new CommonResponse();
         commonResponse.setCode(BizCode.Success);
