@@ -329,7 +329,7 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 
 	@Override
 	public CommonResponse saveUserCertificationInfo(SaveCertificationRequest request) {
-		Customer customer = customerMapper.queryUserIdCardCertificationInfo(request.getCustomerId());
+		Customer customer = customerMapper.selectByPrimaryKey(request.getCustomerId());
 		if(customer == null){
 			return ResultUtils.resultDataNotExist("用户数据不存在");
 		}
