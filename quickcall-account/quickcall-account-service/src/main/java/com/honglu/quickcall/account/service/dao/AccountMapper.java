@@ -1,5 +1,7 @@
 package com.honglu.quickcall.account.service.dao;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.honglu.quickcall.account.facade.entity.Account;
 
 public interface AccountMapper {
@@ -16,4 +18,6 @@ public interface AccountMapper {
     int updateByPrimaryKey(Account record);
 
 	void createUserAccount(Account userAccount);
+	
+	Account queryAccount(@Param("userId")Long customerId);
 }

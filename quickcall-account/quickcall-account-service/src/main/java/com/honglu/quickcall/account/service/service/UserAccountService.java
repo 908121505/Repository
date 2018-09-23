@@ -1,6 +1,7 @@
 package com.honglu.quickcall.account.service.service;
 
 import com.honglu.quickcall.account.facade.exchange.request.CreateUserAccountRequest;
+import com.honglu.quickcall.account.facade.exchange.request.QueryAccountRequest;
 import com.honglu.quickcall.common.api.exchange.CommonResponse;
 
 /**
@@ -13,6 +14,9 @@ public interface UserAccountService {
      * @return
      */
     CommonResponse createAccount(CreateUserAccountRequest request);
+    
+    
+    CommonResponse qyeryAccount(QueryAccountRequest request);
 
    
 }

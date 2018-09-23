@@ -20,8 +20,8 @@ public interface CustomerMapper {
     
     Customer login(Customer record);
     
-    int setPwd(@Param("phone")String phone,@Param("passWord")String passWord);
+    int customerSetPwd(@Param("phone")String phone,@Param("passWord")String passWord);
     
-    int setHeardUrl(@Param("phone")String phone,@Param("headPortraitUrl")String headPortraitUrl
+    int customerSetHeardUrl(@Param("phone")String phone,@Param("headPortraitUrl")String headPortraitUrl
     		,@Param("nickName")String nickName);
 }

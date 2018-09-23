@@ -3,6 +3,7 @@ package com.honglu.quickcall.account.service.service.impl;
 import com.honglu.quickcall.account.facade.code.AccountBizReturnCode;
 import com.honglu.quickcall.account.facade.entity.Account;
 import com.honglu.quickcall.account.facade.exchange.request.CreateUserAccountRequest;
+import com.honglu.quickcall.account.facade.exchange.request.QueryAccountRequest;
 import com.honglu.quickcall.account.service.dao.AccountMapper;
 import com.honglu.quickcall.account.service.service.UserAccountService;
 import com.honglu.quickcall.common.api.code.BizCode;
@@ -26,7 +27,7 @@ public class UserAccountServiceImpl implements UserAccountService {
     private final static Logger logger = LoggerFactory.getLogger(UserAccountServiceImpl.class);
 
     @Autowired
-    private AccountMapper userAccountMapper;
+    private AccountMapper accountMapper;
 
   
 
@@ -39,13 +40,26 @@ public class UserAccountServiceImpl implements UserAccountService {
         logger.info("用户编号为："+request.getUserId() +"的用户开始创建账户...");
         Account userAccount = new Account(UUIDUtils.getId(),request.getUserId());
 
-        userAccountMapper.createUserAccount(userAccount);
+        accountMapper.createUserAccount(userAccount);
         CommonResponse commonResponse = new CommonResponse();
         commonResponse.setCode(BizCode.Success);
         commonResponse.setMessage(BizCode.Success.desc());
         logger.info("用户编号为："+request.getUserId() +"的账户创建成功...");
         return commonResponse;
     }
+
+
+
+	@Override
+	public CommonResponse qyeryAccount(QueryAccountRequest request) {
+		// TODO Auto-generated method stub
+		CommonResponse response=new CommonResponse();
+		Account account=accountMapper.queryAccount(request.getUserId());
+		response.setCode(BizCode.Success);
+		response.setMessage(BizCode.Success.desc());
+		response.setData(account);
+		return response;
+	}
 
 
 

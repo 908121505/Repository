@@ -24,4 +24,8 @@
 
 
     <import resource="applicationContext-dubbo-consumer.xml" />
+    
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+	</bean>
+    
 </beans>

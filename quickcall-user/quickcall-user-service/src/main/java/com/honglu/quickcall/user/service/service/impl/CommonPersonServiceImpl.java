@@ -15,9 +15,11 @@ import com.aliyuncs.dysmsapi.model.v20170525.SendSmsResponse;
 import com.honglu.quickcall.common.api.code.BizCode;
 import com.honglu.quickcall.common.api.exception.BizException;
 import com.honglu.quickcall.common.api.exchange.CommonResponse;
+import com.honglu.quickcall.common.api.exchange.ResultUtils;
 import com.honglu.quickcall.common.api.util.DateUtils;
 import com.honglu.quickcall.common.api.util.JedisUtil;
 import com.honglu.quickcall.common.api.util.RedisKeyConstants;
+import com.honglu.quickcall.common.core.util.MD5;
 import com.honglu.quickcall.common.core.util.UUIDUtils;
 import com.honglu.quickcall.common.third.AliyunSms.enums.SmsTemplateEnum;
 import com.honglu.quickcall.common.third.AliyunSms.utils.AliyunSmsCodeUtil;
@@ -101,7 +103,7 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 			param.setPhone(params.getTel());
 		}//手机号 密码登录
 		if(StringUtils.isNotBlank(params.getPassWord())) {
-			param.setCustPassword(params.getPassWord());
+			param.setCustPassword(MD5.md5(params.getPassWord()));
 		}//微博登录
 		else if(StringUtils.isNotBlank(params.getMicroblogOpenId())) {
 			param.setMicroblogOpenId(params.getMicroblogOpenId());
@@ -126,42 +128,37 @@ public class CommonPersonServiceImpl implements CommonPersonService {
             if(rongyunToken==null||"".equals(rongyunToken)) {
            	 logger.error("用户获取融云token失败。用户ID为：" + customer.getCustomerId());
             }
-            login.setCustomerId(customer.getCustomerId());
             login.setTokenCode(rongyunToken);
-            login.setModifyTime(new Date());
         }
+        login.setCustomerId(customer.getCustomerId());
+        
+        login.setModifyTime(new Date());
 		customerMapper.updateByPrimaryKeySelective(login);
 		
-		   response.setCode(BizCode.Success);
-           response.setData(customer);
-           response.setMessage(BizCode.Success.desc());
+		  
 		
-		return response;
+		return ResultUtils.resultSuccess(customer);
 	}
 
 	@Override
 	public CommonResponse setpwd(SetPwdRequest params) {
 		CommonResponse response=new CommonResponse();
-		int row=customerMapper.setPwd(params.getTel(), params.getPassWord());
+		int row=customerMapper.customerSetPwd(params.getTel(), MD5.md5(params.getPassWord()));//MD5加密);
 		if(row<=0) {
 			 throw new BizException(BizCode.ParamError, "设置密码失败");	
 		}
-		 response.setCode(BizCode.Success);
-         response.setMessage(BizCode.Success.desc());
-		return response;
+		return ResultUtils.resultSuccess();
 	}
 
 	@Override
 	public CommonResponse setHeardUrl(SetHeardUrlRequest params) {
 		// TODO Auto-generated method stub
 		CommonResponse response=new CommonResponse();
-		int row=customerMapper.setHeardUrl(params.getTel(), params.getHeadPortraitUrl(),params.getNickName());
+		int row=customerMapper.customerSetHeardUrl(params.getTel(), params.getHeadPortraitUrl(),params.getNickName());
 		if(row<=0) {
-			 throw new BizException(BizCode.ParamError, "设置密码失败");	
+			 throw new BizException(BizCode.ParamError, "设置昵称头像失败");	
 		}
-		 response.setCode(BizCode.Success);
-        response.setMessage(BizCode.Success.desc());
-		return response;
+		return ResultUtils.resultSuccess();
 	}
 
 
@@ -169,12 +166,8 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 	@Override
 	public CommonResponse register(UserRegisterRequest request) {
 		// TODO Auto-generated method stub
-		CommonResponse response=new CommonResponse();
 		Customer customer=saveUser(request);
-		response.setCode(BizCode.Success);
-		response.setData(customer);
-	    response.setMessage(BizCode.Success.desc());
-		return response;
+		return  ResultUtils.resultSuccess(customer);
 	}
     
     
@@ -256,7 +249,7 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 		}
 
 		// 查一小时
-		if (StringUtils.isNotBlank(JedisUtil.get(RedisKeyConstants.USER_VERIFYCODE_H + phoneNum))) {
+		if (StringUtils.isBlank(JedisUtil.get(RedisKeyConstants.USER_VERIFYCODE_H + phoneNum))) {
 			JedisUtil.set(RedisKeyConstants.USER_VERIFYCODE_H + phoneNum, "1", Integer.parseInt(resendexpirehour));
 		} else {
 			String count = JedisUtil.get(RedisKeyConstants.USER_VERIFYCODE_H + phoneNum);
@@ -268,7 +261,7 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 		}
 
 		// 查一天
-		if (StringUtils.isNotBlank(JedisUtil.get(RedisKeyConstants.USER_VERIFYCODE_D + phoneNum))) {
+		if (StringUtils.isBlank(JedisUtil.get(RedisKeyConstants.USER_VERIFYCODE_D + phoneNum))) {
 			JedisUtil.set(RedisKeyConstants.USER_VERIFYCODE_D + phoneNum, "1", DateUtils.getZeroTimestamp());
 		} else {
 			String count = JedisUtil.get(RedisKeyConstants.USER_VERIFYCODE_D + phoneNum);
@@ -288,10 +281,7 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 			JedisUtil.set(RedisKeyConstants.USER_VERIFYCODE + phoneNum + codeType, code, Integer.parseInt(smscodeexpire));
 			logger.info("手机号:" + phoneNum + " 手机验证码:" + code);
 			logger.info("将验证码存入redis中的key值为:{},失效时间为:{}",(RedisKeyConstants.USER_VERIFYCODE + phoneNum + codeType),Integer.parseInt(smscodeexpire));
-			response.setCode(BizCode.Success);
-			response.setData("success");
-			response.setMessage(BizCode.Success.desc());
-			return response;
+			return ResultUtils.resultSuccess();
 		} else {
 			//阿里云短信异常,用 "漫道"短信通道 发送
 			String mdResult = MandaoSmsCodeUtil.mdSmsSendSimple(phoneNum,
@@ -301,10 +291,7 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 			}else{
 				logger.info("漫道发送验证码手机号:" + phoneNum + " 手机验证码:" + code);
 				JedisUtil.set(RedisKeyConstants.USER_VERIFYCODE + phoneNum + codeType, code, Integer.parseInt(smscodeexpire));
-				response.setCode(BizCode.Success);
-				response.setData("success");
-				response.setMessage(BizCode.Success.desc());
-				return response;
+				return ResultUtils.resultSuccess();
 			}
 		}
 		} catch (ClientException e) {
@@ -316,10 +303,7 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 			}else{
 				logger.info("漫道发送验证码手机号:" + phoneNum + " 手机验证码:" + code);
 				JedisUtil.set(RedisKeyConstants.USER_VERIFYCODE + phoneNum + codeType, code, Integer.parseInt(smscodeexpire));
-				response.setCode(BizCode.Success);
-				response.setData("success");
-				response.setMessage(BizCode.Success.desc());
-				return response;
+				return ResultUtils.resultSuccess();
 			}
 		}
 		

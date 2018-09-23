@@ -204,8 +204,16 @@
   
   insert   into 
   account(account_id,customer_id)VALUES(#{accountId},#{customerId})
-  
   </insert>
+
+  <!-- 查询账户  -->
+  <select id="queryAccount" parameterType="Map" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from account
+    where customer_id = #{userId}
+  </select>
+   
   
   
   

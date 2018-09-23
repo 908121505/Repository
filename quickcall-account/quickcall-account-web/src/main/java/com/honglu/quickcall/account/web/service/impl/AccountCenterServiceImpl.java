@@ -3,7 +3,7 @@ package com.honglu.quickcall.account.web.service.impl;
 import com.alibaba.fastjson.JSON;
 import com.honglu.quickcall.account.facade.business.AccountDubboBusiness;
 import com.honglu.quickcall.account.facade.code.AccountBizReturnCode;
-import com.honglu.quickcall.account.web.service.PaymentService;
+import com.honglu.quickcall.account.web.service.AccountCenterService;
 import com.honglu.quickcall.common.api.code.MyServiceCode;
 import com.honglu.quickcall.common.api.code.SourceCode;
 import com.honglu.quickcall.common.api.exception.RemoteException;
@@ -17,9 +17,9 @@ import org.springframework.stereotype.Service;
 
 
 @Service
-public class PaymentServiceImpl implements PaymentService {
+public class AccountCenterServiceImpl implements AccountCenterService {
 
-    private static final Logger logger = LoggerFactory.getLogger(PaymentServiceImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(AccountCenterServiceImpl.class);
 
     @Autowired
     private AccountDubboBusiness accountDubboBusiness;

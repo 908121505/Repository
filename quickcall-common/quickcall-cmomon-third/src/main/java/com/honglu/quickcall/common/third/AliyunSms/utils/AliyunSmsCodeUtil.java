@@ -16,12 +16,22 @@ import com.aliyuncs.profile.DefaultProfile;
 import com.aliyuncs.profile.IClientProfile;
 
 public class AliyunSmsCodeUtil {
-    private static String templateCode = ResourceBundle.getBundle("thirdconfig").getString("templateCode");
+  /*  private static String templateCode = ResourceBundle.getBundle("thirdconfig").getString("templateCode");
     private static String monitorTemplateCode = ResourceBundle.getBundle("thirdconfig").getString("monitorTemplateCode");
     private static String smscodeexpire = ResourceBundle.getBundle("thirdconfig").getString("smscode.expire");
     private static String accessKeyId = ResourceBundle.getBundle("thirdconfig").getString("accessKeyId");
     private static String accessKeySecret = ResourceBundle.getBundle("thirdconfig").getString("accessKeySecret");
+*/
+    
+    private static String templateCode = "SMS_145595365";
+     private static String monitorTemplateCode = ResourceBundle.getBundle("thirdconfig").getString("monitorTemplateCode");
+     private static String smscodeexpire = ResourceBundle.getBundle("thirdconfig").getString("smscode.expire");
+     private static String accessKeyId = "LTAI7BmziSEtiLZF";
+     private static String accessKeySecret = "3bTyCNAY2zdsLTJkEzvgQrV9dRkqYh";
+     private static final String singName = "宪鹿短信";
 
+    
+    
     //产品名称:云通信短信API产品,开发者无需替换
     static final String product = "Dysmsapi";
     //产品域名,开发者无需替换
@@ -46,7 +56,7 @@ public class AliyunSmsCodeUtil {
         //必填:待发送手机号
         request.setPhoneNumbers(tel);
         //必填:短信签名-可在短信控制台中找到
-        request.setSignName("陪陪吧");
+        request.setSignName(singName);
         //必填:短信模板-可在短信控制台中找到
         request.setTemplateCode(templateCode);
         //可选:模板中的变量替换JSON串,如模板内容为"亲爱的${name},您的验证码为${code}"时,此处的值为
@@ -88,7 +98,7 @@ public class AliyunSmsCodeUtil {
         //必填:待发送手机号
         request.setPhoneNumbers(tel);
         //必填:短信签名-可在短信控制台中找到
-        request.setSignName("陪陪吧");
+        request.setSignName(singName);
         //必填:短信模板-可在短信控制台中找到
         request.setTemplateCode(monitorTemplateCode);
         //可选:模板中的变量替换JSON串,如模板内容为"亲爱的${name},您的验证码为${code}"时,此处的值为
