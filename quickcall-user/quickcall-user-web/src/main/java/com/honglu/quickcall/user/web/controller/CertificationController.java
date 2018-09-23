@@ -2,7 +2,6 @@ package com.honglu.quickcall.user.web.controller;
 
 import com.aliyun.oss.OSSClient;
 import com.honglu.quickcall.common.api.exchange.WebResponseModel;
-import com.honglu.quickcall.common.core.util.Assertion;
 import com.honglu.quickcall.common.core.util.UUIDUtils;
 import com.honglu.quickcall.common.third.OSS.OSSUtil;
 import com.honglu.quickcall.user.facade.code.UserBizReturnCode;
