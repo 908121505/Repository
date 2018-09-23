@@ -58,4 +58,29 @@ public class ResultUtils {
         commonResponse.setMessage(msg);
         return commonResponse;
     }
+
+    /**
+     * 返回数据不存在
+     *
+     * @return
+     */
+    public static CommonResponse resultDataNotExist() {
+        CommonResponse commonResponse = new CommonResponse();
+        commonResponse.setCode(BizCode.DataNotExist);
+        commonResponse.setMessage(BizCode.DataNotExist.desc());
+        return commonResponse;
+    }
+
+    /**
+     * 返回数据不存在
+     *
+     * @param msg -- 错误信息
+     * @return
+     */
+    public static CommonResponse resultDataNotExist(String msg) {
+        CommonResponse commonResponse = new CommonResponse();
+        commonResponse.setCode(BizCode.DataNotExist);
+        commonResponse.setMessage(msg);
+        return commonResponse;
+    }
 }
