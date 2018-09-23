@@ -5,7 +5,7 @@
 			<h1 class="page-title">订单管理</h1>
 			<ul class="breadcrumb">
 				<li>订单管理</li>
-				<li class="active">技能配置</li>
+				<li class="active">订单列表</li>
 			</ul>
 		</div>
 		<div class="main-content">
@@ -13,23 +13,24 @@
 				<div class="col-md-2">
 					<div class="form-group">
 						<div class="input-group">
-							<div class="input-group-addon">技能名称</div>
-							<input class="form-control" type="text" id="nameQuery">
+							<div class="input-group-addon">主播昵称</div>
+							<input class="form-control" type="text" id="servNickNameQuery">
 						</div>
 					</div>
 				</div>
 				<div class="col-md-2">
 					<div class="form-group">
 						<div class="input-group">
-							<div class="input-group-addon">状态</div>
-							<select class="form-control" id="skillStatusQuery">
-								<option value="">--请选择--</option>
-								<option value="0">可用</option>
-								<option value="1">不可用</option>
-							</select>
+							<div class="input-group-addon">订单分类</div>
+							<input class="form-control" type="text" id="orderTypeQuery">
 						</div>
 					</div>
 				</div>
+				
+				
+				
+				
+				
 				
 				<div class="col-md-2">
 					<button type="button" class="btn btn-primary btn-small btn-block"
@@ -37,12 +38,12 @@
 						<i class="glyphicon glyphicon-search"></i> 查询
 					</button>
 				</div>
-				<div class="col-md-2">
+				<!-- <div class="col-md-2">
 					<button type="button" class="btn btn-info btn-small btn-block"
 						onclick="addAndUpdateRow(0)">
 						<i class="glyphicon glyphicon-plus"></i> 增加
 					</button>
-				</div>
+				</div> -->
 			</div>
 <!-- 			<div class="row">
 				<div class="col-md-2">
@@ -112,125 +113,79 @@
 			//表格的初始化
 			$(document).ready(function() {
 				var table = $('#example').initTable({
-					sAjaxSource:"skill/initTable.htm",
+					sAjaxSource:"product/initTable.htm",
 					aoColumns: [
 			            { 
 			              "data": "name",
-			              "sTitle":"技能名称",
+			              "sTitle":"产品名称",
 			              'sClass':"text-center"
 			            },
 			            { 
-			               "data": "imageUrl",
-			               "sTitle":"背景图片",
+			               "data": "price",
+			               "sTitle":"产品单价",
 			               'sClass':"text-center",
-			               "mRender": function(data, type, full) { 
-			            	   if(data==''||data==null){
-	   	                             return	"--";
-			            	   }else{
-				            	return "<img src='" + data + "' height='50px;'/>"; 
-			            	   }
-			            	   
-			              } 
 			            },
 			            { 
-			                "data": "minPrice",
-			                "sTitle":"最低价格",
+			                "data": "serviceTime",
+			                "sTitle":"服务时长",
 			                'sClass':"text-center",
 			            },
                         {
-                            "data": "maxPrice",
-                            "sTitle":"最高价格",
-                            'sClass':"text-center",
-                        },
-                        {
-                            "data": "priceStep",
-                            "sTitle":"价格步长",
-                            'sClass':"text-center",
-                        },
-                        {
-                            "data": "skillStatus",
-                            "sTitle":"状态",
+                            "data": "productStatus",
+                            "sTitle":"产品状态",
                             'sClass':"text-center",
                             "mRender": function(data, type, full) {
-                            	/* if(data==''||data==null){
-   	                             return	"--";
-                                }else */ if(data == 0){
-                                    return "<font color='red'>可用</font>";
+                            	if(data == 0){
+                                    return "<font color='red'>关闭</font>";
                                 } else if(data == 1) {
-                                    return "<font color='red'>不可用</font>";
+                                    return "<font color='red'>开启</font>";
                                 }
                             }
                         },
-                     
-			            { 
-			                "data": "remark",
-			                "sTitle":"备注",
-			                'sClass':"text-center"
-			            },
-			            
-			            {
-							"data" : "createMan",
-							"sTitle" : "创建人",
-							'sClass' : "text-center",
-						     "mRender": function(data, type, full) {
-	                         	if(data==''||data==null){
-	                             return	"--";
-	                         	}else{
-	                         		return data;
-	                         	}
-	                         }
-						},
-	                        {
+                        {
+                            "data": "servNickName",
+                            "sTitle":"大V昵称",
+                            'sClass':"text-center",
+                        },
+                        
+                        
+	                    {
 							"data" : "createTime",
 							"sTitle" : "创建时间",
 							'sClass' : "text-center",
-							"mRender" : function(
-									data, type,
-									full) {
+							"mRender" : function(data, type,full) {
 								if (data != null) {
-									return Format(
-											new Date(
-													data),
-											"yyyy-MM-dd HH:mm:ss")
+									return Format(new Date(data),"yyyy-MM-dd HH:mm:ss")
 								} else {
 									return '--';
 								}
 							}
 						},
-						{
-							"data" : "modifyMan",
-							"sTitle" : "修改人",
-							'sClass' : "text-center"
-						},
-						{
+	                    {
 							"data" : "modifyTime",
 							"sTitle" : "修改时间",
 							'sClass' : "text-center",
-							"mRender" : function(
-									data, type,
-									full) {
+							"mRender" : function(data, type,full) {
 								if (data != null) {
-									return Format(
-											new Date(
-													data),
-											"yyyy-MM-dd HH:mm:ss")
+									return Format(new Date(data),"yyyy-MM-dd HH:mm:ss")
 								} else {
 									return '--';
 								}
 							}
 						},
+	                    /* ,
 						{
 							"data" : "id",
 							"sTitle" : "操作",
 							'sClass' : "text-center"
-						}
+						} */
 			         ],
 			         fnServerParams: function (aoData) {  //查询条件
-	                       aoData.push({ "name": "name", "value": $("#nameQuery").val().replace(new RegExp(" ","g"),"") } );
-		                   aoData.push({"name": "skillStatus", "value": $("#skillStatusQuery").val()});
+	                       aoData.push({ "name": "servNickName", "value": $("#servNickNameQuery").val().replace(new RegExp(" ","g"),"") } );
+		                   aoData.push({"name": "orderType", "value": $("#orderTypeQuery").val()});
 	                    },
 	                    aoColumnDefs : [ {
-							"aTargets" : 11,
+							"aTargets" : 7,
 							"mRender" : function(data,type, row) {
 								var detail = "";
 								detail = "<a href='#' onclick='addAndUpdateRow(\""+ row.id+ "\")' data-toggle='modal' class='padding-right-small label label-success'><i class='glyphicon glyphicon-edit'></i>详情</a>";
@@ -246,10 +201,10 @@
 			
 			});
 			//增加或者修改受影响的行数
-			function addAndUpdateRow(id){
-				$('#insertAndUpdate').addAndUpdateRow("skill/addAndUpdateHome.htm?id="+id);
-			}
-</script>
+			/* function addAndUpdateRow(id){
+				$('#insertAndUpdate').addAndUpdateRow("order/addAndUpdateHome.htm?id="+id);
+			} */
+			</script>
 		<!---dialog选项-->
 		<div>
 			<jsp:include page="/WEB-INF/views/common/delete_dialog.jsp" />
