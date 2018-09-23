@@ -10,11 +10,11 @@
   <sql id="Base_Column_List" >
     id, account_id, account, realname
   </sql>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="Map" >
     select 
     <include refid="Base_Column_List" />
     from aliacount
-    where id = #{id,jdbcType=INTEGER}
+    where account_id = #{userId}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from aliacount

@@ -1,5 +1,7 @@
 package com.honglu.quickcall.account.service.dao;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.honglu.quickcall.account.facade.entity.Aliacount;
 
 public interface AliacountMapper {
@@ -8,8 +10,13 @@ public interface AliacountMapper {
     int insert(Aliacount record);
 
     int insertSelective(Aliacount record);
-
-    Aliacount selectByPrimaryKey(Integer id);
+    
+    /**
+     * 根据用户ID 查询支付宝信息
+     * @param userId
+     * @return
+     */
+    Aliacount selectByPrimaryKey(@Param("userId")String userId);
 
     int updateByPrimaryKeySelective(Aliacount record);
 

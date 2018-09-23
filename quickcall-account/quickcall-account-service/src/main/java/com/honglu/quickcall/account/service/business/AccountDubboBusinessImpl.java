@@ -53,6 +53,9 @@ public class AccountDubboBusinessImpl implements AccountDubboBusiness {
             	//支付宝提现
             	response = aliPayService.whthdraw((WhthdrawRequest)request);
             	break;
+            case AccountFunctionType.BindAliaccount:
+            	response = aliPayService.bindAliaccount((BindAliaccountRequest)request);
+            	break;
                 default:
 
             }

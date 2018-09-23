@@ -18,6 +18,8 @@ public interface AccountFunctionType {
     String AlipayNotify = "002003";
     //微信支付回调
     String WechatNotify = "002004";
+    //绑定支付宝
+    String BindAliaccount= "002005";
     
    
 
