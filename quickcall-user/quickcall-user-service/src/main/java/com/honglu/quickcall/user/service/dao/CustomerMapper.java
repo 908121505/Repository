@@ -24,4 +24,11 @@ public interface CustomerMapper {
     
     int customerSetHeardUrl(@Param("phone")String phone,@Param("headPortraitUrl")String headPortraitUrl
     		,@Param("nickName")String nickName);
+
+    /**
+     * 查询用户身份证认证信息
+     * @param customerId
+     * @return
+     */
+    Customer queryUserIdCardCertificationInfo(Long customerId);
 }

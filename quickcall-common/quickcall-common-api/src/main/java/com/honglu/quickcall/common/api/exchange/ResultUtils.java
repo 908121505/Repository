@@ -83,4 +83,17 @@ public class ResultUtils {
         commonResponse.setMessage(msg);
         return commonResponse;
     }
+
+    /**
+     * 返回数据重复操作
+     *
+     * @param msg -- 错误信息
+     * @return
+     */
+    public static CommonResponse resultDuplicateOperation(String msg) {
+        CommonResponse commonResponse = new CommonResponse();
+        commonResponse.setCode(BizCode.DuplicateOperation);
+        commonResponse.setMessage(msg);
+        return commonResponse;
+    }
 }

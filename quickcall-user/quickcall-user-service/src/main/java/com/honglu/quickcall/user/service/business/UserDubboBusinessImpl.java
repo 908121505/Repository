@@ -59,6 +59,12 @@ public class UserDubboBusinessImpl implements UserDubboBusiness {
             case UserFunctionType.UNREAD_MESSAGE_NUM:
                 response=  userMessageService.queryUserUnreadMessageNum((UserUnreadMessageNumRequest)request);
                 break;
+            case UserFunctionType.USER_ID_CARD_CERTIFY_INFO:
+                response=  commonPersonService.queryUserIdCardCertificationInfo((UserIdCardInfoRequest)request);
+                break;
+            case UserFunctionType.SAVE_USER_CERTIFY_INFO:
+                response=  commonPersonService.saveUserCertificationInfo((SaveCertificationRequest)request);
+                break;
                 default:
                     throw new BizException(UserBizReturnCode.BizFunctionTypeNotMatch, UserBizReturnCode.BizFunctionTypeNotMatch.desc());
             }

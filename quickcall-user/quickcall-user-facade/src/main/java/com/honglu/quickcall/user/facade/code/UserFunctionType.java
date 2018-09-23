@@ -19,7 +19,7 @@ public interface UserFunctionType {
     String setHeardUrl="001005";
     //发送短信
     String getSmsCode="001006";
-    
+
 
     //系统相关 001300 - 001350
     String MarketOnOff = "001300";
@@ -32,4 +32,12 @@ public interface UserFunctionType {
      * 未读消息数量查询
      */
     String UNREAD_MESSAGE_NUM = "001020";
+    /**
+     * 用户身份认证信息查询接口
+     */
+    String USER_ID_CARD_CERTIFY_INFO = "001021";
+    /**
+     * 保存用户认证信息
+     */
+    String SAVE_USER_CERTIFY_INFO = "001022";
 }

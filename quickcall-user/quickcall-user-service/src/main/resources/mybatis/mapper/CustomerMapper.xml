@@ -380,15 +380,7 @@
       <if test="otherRelation != null" >
         other_relation = #{otherRelation,jdbcType=VARCHAR},
       </if>
-      <if test="createTime != null" >
-        create_time = #{createTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="modifyTime != null" >
-        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="createMan != null" >
-        create_man = #{createMan,jdbcType=VARCHAR},
-      </if>
+      modify_time = NOW(),
       <if test="modifyMan != null" >
         modify_man = #{modifyMan,jdbcType=VARCHAR},
       </if>
@@ -478,5 +470,13 @@
      update customer set head_portrait_url=#{headPortraitUrl},nick_name=#{nickName}
      where phone=#{phone}
     </update>
-  
+
+  <!-- 查询用户身份认证信息 -->
+  <select id="queryUserIdCardCertificationInfo" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select
+      customer_id, real_name, credentials_type, credentials_num,
+      front_portrait_url, back_portrait_url,identity_status
+    from customer
+    where customer_id = #{customerId,jdbcType=BIGINT}
+  </select>
 </mapper>

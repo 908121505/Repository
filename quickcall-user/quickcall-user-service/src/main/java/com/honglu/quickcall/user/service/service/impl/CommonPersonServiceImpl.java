@@ -2,9 +2,11 @@ package com.honglu.quickcall.user.service.service.impl;
 
 import java.text.MessageFormat;
 import java.util.Date;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
-import org.apache.commons.lang.StringUtils;
+import com.honglu.quickcall.user.facade.exchange.request.*;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,12 +29,6 @@ import com.honglu.quickcall.common.third.AliyunSms.utils.MandaoSmsCodeUtil;
 import com.honglu.quickcall.common.third.rongyun.util.RongYunUtil;
 import com.honglu.quickcall.user.facade.code.UserBizReturnCode;
 import com.honglu.quickcall.user.facade.entity.Customer;
-import com.honglu.quickcall.user.facade.exchange.request.GetSmsCodeRequest;
-import com.honglu.quickcall.user.facade.exchange.request.IsPhoneExistsRequest;
-import com.honglu.quickcall.user.facade.exchange.request.SetHeardUrlRequest;
-import com.honglu.quickcall.user.facade.exchange.request.SetPwdRequest;
-import com.honglu.quickcall.user.facade.exchange.request.UserLoginRequest;
-import com.honglu.quickcall.user.facade.exchange.request.UserRegisterRequest;
 import com.honglu.quickcall.user.service.dao.CustomerMapper;
 import com.honglu.quickcall.user.service.integration.AccountDubboIntegrationService;
 import com.honglu.quickcall.user.service.service.CommonPersonService;
@@ -316,21 +312,60 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 		
 		
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 
 
+	@Override
+	public CommonResponse queryUserIdCardCertificationInfo(UserIdCardInfoRequest request) {
+		Customer customer = customerMapper.queryUserIdCardCertificationInfo(request.getCustomerId());
+		if(customer == null){
+			return ResultUtils.resultDataNotExist("用户数据不存在");
+		}
+
+		if(customer.getIdentityStatus() == null){
+			customer.setIdentityStatus(0);//身份认证状态为空的时候，默认复制为未认证
+		}
+		return ResultUtils.resultSuccess(customer);
+	}
+
+	@Override
+	public CommonResponse saveUserCertificationInfo(SaveCertificationRequest request) {
+		Customer customer = customerMapper.queryUserIdCardCertificationInfo(request.getCustomerId());
+		if(customer == null){
+			return ResultUtils.resultDataNotExist("用户数据不存在");
+		}
+
+		// 身份认证上传照片 || 提交身份认证时 -- 校验状态
+		if(Objects.equals(request.getCredentialsType(), 0)
+				|| Objects.equals(request.getCredentialsType(), 1)){
+			if(Objects.equals(customer.getIdentityStatus(), 1)){
+				return ResultUtils.resultDuplicateOperation("身份认证正在审核中");
+			}
+			if(Objects.equals(customer.getIdentityStatus(), 2)){
+				return ResultUtils.resultDuplicateOperation("身份认证已通过");
+			}
+		}
+		Customer certifyCustomer = new Customer();
+		// 提交身份认证时 -- 判断身份证照片是否上传完整
+		if(Objects.equals(request.getCredentialsType(), 1)){
+			// 身份认证 -- 判断数据身份证身份已上传
+			if(StringUtils.isBlank(customer.getFrontPortraitUrl())){
+				return ResultUtils.resultDataNotExist("请上传身份证正面照片");
+			}
+			if(StringUtils.isBlank(customer.getBackPortraitUrl())){
+				return ResultUtils.resultDataNotExist("请上传身份证反面照片");
+			}
+			certifyCustomer.setIdentityStatus(1);// 更新状态为：审核中
+		}
+
+		certifyCustomer.setCustomerId(request.getCustomerId());
+		certifyCustomer.setRealName(request.getRealName());
+		certifyCustomer.setCredentialsType(request.getCredentialsType());
+		certifyCustomer.setCredentialsNum(request.getCredentialsNum());
+		certifyCustomer.setFrontPortraitUrl(request.getFrontPortraitUrl());
+		certifyCustomer.setBackPortraitUrl(request.getBackPortraitUrl());
+		certifyCustomer.setVoiceUrl(request.getVoiceUrl());
+		customerMapper.updateByPrimaryKeySelective(customer);
+
+		return ResultUtils.resultSuccess();
+	}
 }
