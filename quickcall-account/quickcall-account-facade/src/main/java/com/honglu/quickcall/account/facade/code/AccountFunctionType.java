@@ -27,10 +27,11 @@ public interface AccountFunctionType {
     //创建账户
     String CreateUserAccount = "002200";
     //入账
-    
-    
+    String InAccount  ="002201";
+    //出账
+    String OutAccount  ="002202";
     //查询账户
-    String QueryAccount = "002201";
+    String QueryAccount = "002203";
     
 
     //订单相关操作 从 002300 - 002399

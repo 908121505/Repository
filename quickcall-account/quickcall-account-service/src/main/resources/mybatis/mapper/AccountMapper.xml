@@ -213,8 +213,19 @@
     from account
     where customer_id = #{userId}
   </select>
+   <!-- 入账 -->
+   <update id="inAccount" parameterType="Map">
+    
+    update account set recharge_amounts=recharge_amounts+#{amount}
+    where customer_id = #{userId}
    
+   </update>
   
+   <!-- 出账 -->
+   <update id="outAccount" parameterType="Map">
+    update account set remainder_amounts=remainder_amounts-#{amount}
+    where customer_id = #{userId}
+   </update>
   
   
 </mapper>

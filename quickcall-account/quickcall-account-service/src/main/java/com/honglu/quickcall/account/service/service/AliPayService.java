@@ -1,5 +1,6 @@
 package com.honglu.quickcall.account.service.service;
 
+import com.honglu.quickcall.account.facade.exchange.request.AlipayNotifyRequest;
 import com.honglu.quickcall.account.facade.exchange.request.BindAliaccountRequest;
 import com.honglu.quickcall.account.facade.exchange.request.RechargeRequest;
 import com.honglu.quickcall.account.facade.exchange.request.WhthdrawRequest;
@@ -12,6 +13,10 @@ public interface AliPayService {
 	
 	CommonResponse whthdraw( WhthdrawRequest params);
 	
+	
 	CommonResponse bindAliaccount( BindAliaccountRequest params);
+	
+	
+	CommonResponse alipayNotify( AlipayNotifyRequest params);
 	
 }
