@@ -335,7 +335,7 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 		}
 
 		// 身份认证上传照片 || 提交身份认证时 -- 校验状态
-		if(Objects.equals(request.getCredentialsType(), 0)
+		if(Objects.equals(request.getCertifyType(), 0)
 				|| Objects.equals(request.getCredentialsType(), 1)){
 			if(Objects.equals(customer.getIdentityStatus(), 1)){
 				return ResultUtils.resultDuplicateOperation("身份认证正在审核中");
@@ -346,7 +346,7 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 		}
 		Customer certifyCustomer = new Customer();
 		// 提交身份认证时 -- 判断身份证照片是否上传完整
-		if(Objects.equals(request.getCredentialsType(), 1)){
+		if(Objects.equals(request.getCertifyType(), 1)){
 			// 身份认证 -- 判断数据身份证身份已上传
 			if(StringUtils.isBlank(customer.getFrontPortraitUrl())){
 				return ResultUtils.resultDataNotExist("请上传身份证正面照片");
@@ -357,6 +357,23 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 			certifyCustomer.setIdentityStatus(1);// 更新状态为：审核中
 		}
 
+		// 大V认证时 -- 判断大V认证状态
+		if(Objects.equals(request.getCertifyType(), 2)){
+			if(!Objects.equals(customer.getIdentityStatus(), 2)){
+				if(Objects.equals(customer.getIdentityStatus(), 1)){
+					return ResultUtils.resultDuplicateOperation("身份认证正在审核中，请等待审核通过后再进行大V认证");
+				}
+				return ResultUtils.resultDuplicateOperation("请先进行身份认证");
+			}
+			if(Objects.equals(customer.getvStatus(), 1)){
+				return ResultUtils.resultDuplicateOperation("大V认证正在审核中");
+			}
+			if(Objects.equals(customer.getvStatus(), 2)){
+				return ResultUtils.resultDuplicateOperation("大V认证已通过");
+			}
+			certifyCustomer.setvStatus(1);// 更新状态为：审核中
+		}
+
 		certifyCustomer.setCustomerId(request.getCustomerId());
 		certifyCustomer.setRealName(request.getRealName());
 		certifyCustomer.setCredentialsType(request.getCredentialsType());
@@ -364,7 +381,7 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 		certifyCustomer.setFrontPortraitUrl(request.getFrontPortraitUrl());
 		certifyCustomer.setBackPortraitUrl(request.getBackPortraitUrl());
 		certifyCustomer.setVoiceUrl(request.getVoiceUrl());
-		customerMapper.updateByPrimaryKeySelective(customer);
+		customerMapper.updateByPrimaryKeySelective(certifyCustomer);
 
 		return ResultUtils.resultSuccess();
 	}

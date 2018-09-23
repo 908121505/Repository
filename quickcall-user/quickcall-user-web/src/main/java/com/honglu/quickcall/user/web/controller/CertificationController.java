@@ -158,7 +158,21 @@ public class CertificationController {
     @ResponseBody
     public WebResponseModel introduceAudioUpload(HttpServletRequest request) {
         logger.info("userWeb.certification introduceAudioUpload request data : " + request);
+        String customerId = request.getParameter("customerId");
+        if(StringUtils.isBlank(customerId)){
+            WebResponseModel response = new WebResponseModel();
+            response.setCode(UserBizReturnCode.paramError.code());
+            response.setMsg("客户ID为空");
+            return response;
+        }
         WebResponseModel response = uploadFile(request, BIG_V_INTRODUCE_AUDIO);
+        if("000000".equals(response.getCode())){
+            SaveCertificationRequest params = new SaveCertificationRequest();
+            params.setCustomerId(Long.valueOf(customerId));
+            params.setVoiceUrl(response.getData());
+            params.setCertifyType(2);// 大V认证
+            response = userCenterService.execute(params);
+        }
         logger.info("userWeb.certification introduceAudioUpload response data : " + request);
         return response;
     }
