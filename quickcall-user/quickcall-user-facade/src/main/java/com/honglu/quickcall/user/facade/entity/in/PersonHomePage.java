@@ -20,9 +20,9 @@ public class PersonHomePage {
 
 	    private Integer credentialsType;//证件类型
 
-	    private String credentialsNum;
+	    private String credentialsNum;//身份证号
 
-	    private List<Interest> interest;//兴趣
+	    private List<String> interest;//兴趣
 
 	    private Integer custStatus;//用户状态(状态:1=正常 2=锁定 3=冻结,4=禁用 5=注销；6=限制社区发帖；7=限制社区评论；8=限制社区发帖和评论,9=限制发送消息)
 
@@ -109,11 +109,11 @@ public class PersonHomePage {
 			this.credentialsNum = credentialsNum;
 		}
 
-		public List<Interest> getInterest() {
+		public List<String> getInterest() {
 			return interest;
 		}
 
-		public void setInterest(List<Interest> interestList) {
+		public void setInterest(List<String> interestList) {
 			this.interest = interestList;
 		}
 

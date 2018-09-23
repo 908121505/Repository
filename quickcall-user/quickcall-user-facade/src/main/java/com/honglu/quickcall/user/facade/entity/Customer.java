@@ -69,8 +69,18 @@ public class Customer implements Serializable {
     private String deviceId;
 
     private Date loginTime;
+    
+    private int vStatus;//大V认证，(0=未认证,1=待审核,2=已通过,3=拒绝)
 
-    public String getAppChannelName() {
+    public int getvStatus() {
+		return vStatus;
+	}
+
+	public void setvStatus(int vStatus) {
+		this.vStatus = vStatus;
+	}
+
+	public String getAppChannelName() {
 		return appChannelName;
 	}
 
