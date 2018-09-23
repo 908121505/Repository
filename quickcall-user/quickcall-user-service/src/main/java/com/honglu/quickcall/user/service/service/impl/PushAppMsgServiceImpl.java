@@ -1,6 +1,5 @@
 package com.honglu.quickcall.user.service.service.impl;
 
-import com.alibaba.dubbo.config.annotation.Service;
 import com.honglu.quickcall.common.api.code.BizCode;
 import com.honglu.quickcall.common.api.exchange.CommonResponse;
 import com.honglu.quickcall.common.api.exchange.ResultUtils;
@@ -14,6 +13,7 @@ import com.honglu.quickcall.user.service.service.PushAppMsgService;
 import com.honglu.quickcall.user.service.util.GtPushUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
 
@@ -33,7 +33,6 @@ public class PushAppMsgServiceImpl implements PushAppMsgService {
 
     @Override
     public CommonResponse pushMsg(PushAppMsgRequest request) {
-
         // 查询要推送的用户信息
         Customer receiveCustomer = customerMapper.selectByPrimaryKey(request.getReceiverId());
         if (receiveCustomer == null) {

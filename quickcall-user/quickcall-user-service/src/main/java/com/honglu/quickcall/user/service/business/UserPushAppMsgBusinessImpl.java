@@ -23,7 +23,7 @@ import org.springframework.stereotype.Service;
  */
 @Service("User.UserPushAppMsgBusiness")
 public class UserPushAppMsgBusinessImpl implements UserPushAppMsgBusiness {
-    private static final Logger logger = LoggerFactory.getLogger(UserDubboBusinessImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(UserPushAppMsgBusinessImpl.class);
 
     @Autowired
     private PushAppMsgService pushAppMsgService;

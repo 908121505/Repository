@@ -18,5 +18,5 @@
 
     <!-- 注册服务端 - 发送APP消息服务 -->
     <dubbo:service group="userCenter" interface="com.honglu.quickcall.user.facade.business.UserPushAppMsgBusiness"
-                   ref="User.UserPushAppMsgBusiness" timeout="30000" retries="0" version="0.0.1" async="true"/>
+                   ref="User.UserPushAppMsgBusiness" timeout="30000" retries="0" version="0.0.1"/>
 </beans>
