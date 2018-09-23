@@ -1,6 +1,7 @@
 package com.honglu.quickcall.account.service.service.impl;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.ResourceBundle;
 
@@ -12,11 +13,14 @@ import org.springframework.stereotype.Service;
 import com.alibaba.fastjson.JSON;
 import com.honglu.quickcall.account.facade.entity.Account;
 import com.honglu.quickcall.account.facade.entity.Aliacount;
+import com.honglu.quickcall.account.facade.entity.Recharge;
+import com.honglu.quickcall.account.facade.exchange.request.AlipayNotifyRequest;
 import com.honglu.quickcall.account.facade.exchange.request.BindAliaccountRequest;
 import com.honglu.quickcall.account.facade.exchange.request.RechargeRequest;
 import com.honglu.quickcall.account.facade.exchange.request.WhthdrawRequest;
 import com.honglu.quickcall.account.service.dao.AccountMapper;
 import com.honglu.quickcall.account.service.dao.AliacountMapper;
+import com.honglu.quickcall.account.service.dao.RechargeMapper;
 import com.honglu.quickcall.account.service.service.AliPayService;
 import com.honglu.quickcall.common.api.code.BizCode;
 import com.honglu.quickcall.common.api.exception.BizException;
@@ -35,6 +39,9 @@ public class AliPayServiceImpl implements AliPayService {
 	@Autowired
 	private AccountMapper accountMapper;
 	
+	@Autowired
+	private RechargeMapper rechargeMapper;
+	
 	private final static Logger logger = LoggerFactory.getLogger(AliPayServiceImpl.class);
 	private static String aliPayUrl=ResourceBundle.getBundle("thirdconfig").getString("ALI_UNIFIED_ORDER_URL");
 	
@@ -47,8 +54,8 @@ public class AliPayServiceImpl implements AliPayService {
          String amount=packet.getAmount()+"";//交易金额
          String xnPayType="1";//支付类型 1:支付宝APP, 2 :微信APP ,3:支付宝H5支付,4：微信H5支付
         // String extData= "{\"phoneNum\":\"18217583747\"}";
-         String extData="{\"accountId\":packet.getAccountId()}";
-         String accountId=packet.getUserId();
+         String extData="{\"accountId\":packet.getUserId()}";
+         String accountId=packet.getUserId()+"";
          String createIp=packet.getRemoteIp();//请求ip
          params+="appName=1&orderId="+orderNo+"&orderDesc="+orderDesc;
          params+="&amount="+amount+"&xnPayType="+xnPayType+"&extData="+extData+"&createIp="+createIp+"&customerId="+accountId;
@@ -59,6 +66,16 @@ public class AliPayServiceImpl implements AliPayService {
 			 logger.info("预支付接口异常········");
 			 throw new BizException(BizCode.ParamError, "预支付接口异常");
 		 }
+         //插入充值信息
+         Recharge recharge=new Recharge();
+         recharge.setCustomerId(packet.getUserId());
+         recharge.setCreateDate(new Date());
+         recharge.setAmount(packet.getAmount());
+         recharge.setType(1);//1充值 2提现
+         recharge.setOrdersn(orderNo);
+         recharge.setState(1);//状态。1-申请支付，2-支付成功 3支付失败
+         recharge.setRechargeType(1);//充值类型。1为支付宝，2为微信
+         rechargeMapper.insertSelective(recharge);
          return ResultUtils.resultSuccess(result);
 		
 	}
@@ -92,15 +109,25 @@ public class AliPayServiceImpl implements AliPayService {
 			String res=HttpClientUtils.doPost(aliTransUrl, json);
 			logger.info("支付宝返账 用户ID "+customerId+"返账 res:"+res);
 			JSONObject  myJson = JSONObject.fromObject(res);
+			Recharge recharge=new Recharge();
+	        recharge.setCustomerId(params.getUserId());
+	        recharge.setCreateDate(new Date());
+	        recharge.setAmount(params.getAmount());
+	        recharge.setType(2);//1充值 2提现
+	        recharge.setOrdersn(outBizNo);
+	        recharge.setRechargeType(1);//充值类型。1为支付宝，2为微信
 			if("1".equals(myJson.getString("respCode"))) {//成功
-				
+		        recharge.setState(2);//状态。1-申请支付，2-支付成功 3支付失败
+		    	accountMapper.outAccount(params.getUserId(), params.getAmount());
 			}else {//失败
-				
+				 recharge.setState(3);//状态。1-申请支付，2-支付成功 3支付失败
 			}
+			//插入提现信息
+			 rechargeMapper.insertSelective(recharge);
 		}
 		
 	
-		return null;
+		return ResultUtils.resultSuccess();
 	}
 
 	@Override
@@ -120,6 +147,26 @@ public class AliPayServiceImpl implements AliPayService {
 		}
 		return ResultUtils.resultSuccess();
 		}
+	}
+
+	@Override
+	public CommonResponse alipayNotify(AlipayNotifyRequest params) {
+		// TODO Auto-generated method stub
+		logger.info("支付回调参数==========="+JSON.toJSONString(params));
+		
+		Recharge recharge=new Recharge();
+        recharge.setCustomerId(params.getUserId());
+        recharge.setFinishDate(new Date());
+        recharge.setOrdersn(params.getOrderNo());
+        if(params.getPayState()==1) {
+        	recharge.setState(2);//状态。1-申请支付，2-支付成功 3支付失败
+        	//入账
+        	accountMapper.inAccount(params.getUserId(), params.getAmount());
+		}else if(params.getPayState()==0) {
+			recharge.setState(3);//状态。1-申请支付，2-支付成功 3支付失败
+		}
+		rechargeMapper.updateByOrderNo(recharge);
+		return ResultUtils.resultSuccess();
 	}
 
 }

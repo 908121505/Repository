@@ -1,21 +1,24 @@
 package com.honglu.quickcall.account.service.service.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.honglu.quickcall.account.facade.code.AccountBizReturnCode;
 import com.honglu.quickcall.account.facade.entity.Account;
 import com.honglu.quickcall.account.facade.exchange.request.CreateUserAccountRequest;
+import com.honglu.quickcall.account.facade.exchange.request.InAccountRequest;
+import com.honglu.quickcall.account.facade.exchange.request.OutAccountRequest;
 import com.honglu.quickcall.account.facade.exchange.request.QueryAccountRequest;
 import com.honglu.quickcall.account.service.dao.AccountMapper;
 import com.honglu.quickcall.account.service.service.UserAccountService;
 import com.honglu.quickcall.common.api.code.BizCode;
 import com.honglu.quickcall.common.api.exception.BizException;
 import com.honglu.quickcall.common.api.exchange.CommonResponse;
+import com.honglu.quickcall.common.api.exchange.ResultUtils;
 import com.honglu.quickcall.common.core.util.UUIDUtils;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 
 
@@ -59,6 +62,35 @@ public class UserAccountServiceImpl implements UserAccountService {
 		response.setMessage(BizCode.Success.desc());
 		response.setData(account);
 		return response;
+	}
+
+
+
+	@Override
+	public CommonResponse inAccount(InAccountRequest request) {
+		Account account=accountMapper.queryAccount(request.getUserId());
+		if(account==null) {
+			return ResultUtils.resultParamEmpty("账户不存在");
+		}
+		accountMapper.inAccount(request.getUserId(), request.getAmount());
+		
+		return ResultUtils.resultSuccess();
+	}
+
+
+
+	@Override
+	public CommonResponse outAccount(OutAccountRequest request) {
+
+		Account account=accountMapper.queryAccount(request.getUserId());
+		if(account==null) {
+			return ResultUtils.resultParamEmpty("账户不存在");
+		}
+		if(account.getRemainderAmounts().compareTo(request.getAmount())==-1) {
+			return ResultUtils.resultParamEmpty("金额不足");
+		}
+		accountMapper.outAccount(request.getUserId(), request.getAmount());
+		return ResultUtils.resultSuccess();
 	}
 
 
