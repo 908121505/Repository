@@ -214,6 +214,8 @@
      <if test="name != null" >
         and  name like  concat( '%',#{name},'%')
      </if>
+     LIMIT ${iDisplayStart},${iDisplayLength}
+     
   </select>
   <select id="slectCount" resultType="java.lang.Integer" parameterType="map" >
     select 

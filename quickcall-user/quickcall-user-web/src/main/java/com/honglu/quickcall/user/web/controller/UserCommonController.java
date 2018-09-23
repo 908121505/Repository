@@ -48,7 +48,7 @@ public class UserCommonController {
     public WebResponseModel regUserExist( IsPhoneExistsRequest params) {
     	logger.info("userWeb.user.regUserExist.request.data : " + JSONObject.toJSONString(params));
     	WebResponseModel response=new WebResponseModel();
-    	if(StringUtils.isBlank(params.getTel())&&StringUtils.isBlank(params.getQqOpenId())&&
+    	if(params.getTel()==null&&StringUtils.isBlank(params.getQqOpenId())&&
     			StringUtils.isBlank(params.getWechatOpenId())&&StringUtils.isBlank(params.getMicroblogOpenId())) {
     		 response.setCode(UserBizReturnCode.paramError.code());
              response.setMsg(UserBizReturnCode.paramError.desc());

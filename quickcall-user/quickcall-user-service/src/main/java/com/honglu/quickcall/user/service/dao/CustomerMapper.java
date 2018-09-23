@@ -21,9 +21,9 @@ public interface CustomerMapper {
     
     Customer login(Customer record);
     
-    int setPwd(@Param("phone")String phone,@Param("passWord")String passWord);
+    int customerSetPwd(@Param("phone")String phone,@Param("passWord")String passWord);
     
-    int setHeardUrl(@Param("phone")String phone,@Param("headPortraitUrl")String headPortraitUrl
+    int customerSetHeardUrl(@Param("phone")String phone,@Param("headPortraitUrl")String headPortraitUrl
     		,@Param("nickName")String nickName);
     /**
 	 * 更新性别,生日
@@ -36,4 +36,11 @@ public interface CustomerMapper {
 	 */
 	HomePageLogout showHomePageLogout(Long customerId);
 	
+
+    /**
+     * 查询用户身份证认证信息
+     * @param customerId
+     * @return
+     */
+    Customer queryUserIdCardCertificationInfo(Long customerId);
 }

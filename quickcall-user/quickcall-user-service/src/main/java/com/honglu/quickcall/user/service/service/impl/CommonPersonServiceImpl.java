@@ -2,9 +2,11 @@ package com.honglu.quickcall.user.service.service.impl;
 
 import java.text.MessageFormat;
 import java.util.Date;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
-import org.apache.commons.lang.StringUtils;
+import com.honglu.quickcall.user.facade.exchange.request.*;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,9 +17,11 @@ import com.aliyuncs.dysmsapi.model.v20170525.SendSmsResponse;
 import com.honglu.quickcall.common.api.code.BizCode;
 import com.honglu.quickcall.common.api.exception.BizException;
 import com.honglu.quickcall.common.api.exchange.CommonResponse;
+import com.honglu.quickcall.common.api.exchange.ResultUtils;
 import com.honglu.quickcall.common.api.util.DateUtils;
 import com.honglu.quickcall.common.api.util.JedisUtil;
 import com.honglu.quickcall.common.api.util.RedisKeyConstants;
+import com.honglu.quickcall.common.core.util.MD5;
 import com.honglu.quickcall.common.core.util.UUIDUtils;
 import com.honglu.quickcall.common.third.AliyunSms.enums.SmsTemplateEnum;
 import com.honglu.quickcall.common.third.AliyunSms.utils.AliyunSmsCodeUtil;
@@ -25,13 +29,8 @@ import com.honglu.quickcall.common.third.AliyunSms.utils.MandaoSmsCodeUtil;
 import com.honglu.quickcall.common.third.rongyun.util.RongYunUtil;
 import com.honglu.quickcall.user.facade.code.UserBizReturnCode;
 import com.honglu.quickcall.user.facade.entity.Customer;
-import com.honglu.quickcall.user.facade.exchange.request.GetSmsCodeRequest;
-import com.honglu.quickcall.user.facade.exchange.request.IsPhoneExistsRequest;
-import com.honglu.quickcall.user.facade.exchange.request.SetHeardUrlRequest;
-import com.honglu.quickcall.user.facade.exchange.request.SetPwdRequest;
-import com.honglu.quickcall.user.facade.exchange.request.UserLoginRequest;
-import com.honglu.quickcall.user.facade.exchange.request.UserRegisterRequest;
 import com.honglu.quickcall.user.service.dao.CustomerMapper;
+import com.honglu.quickcall.user.service.integration.AccountDubboIntegrationService;
 import com.honglu.quickcall.user.service.service.CommonPersonService;
 
 
@@ -48,6 +47,9 @@ public class CommonPersonServiceImpl implements CommonPersonService {
     private static String defaultImg =   ResourceBundle.getBundle("thirdconfig").getString("defaultImg");
     @Autowired
     private CustomerMapper customerMapper;
+    
+    @Autowired
+    private AccountDubboIntegrationService accountDubboIntegrationService;
     
     private static String resendexpire= ResourceBundle.getBundle("thirdconfig").getString("resend.expire");
     private static String resendexpirehour= ResourceBundle.getBundle("thirdconfig").getString("resend.expire.hour");
@@ -97,7 +99,7 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 			param.setPhone(params.getTel());
 		}//手机号 密码登录
 		if(StringUtils.isNotBlank(params.getPassWord())) {
-			param.setCustPassword(params.getPassWord());
+			param.setCustPassword(MD5.md5(params.getPassWord()));
 		}//微博登录
 		else if(StringUtils.isNotBlank(params.getMicroblogOpenId())) {
 			param.setMicroblogOpenId(params.getMicroblogOpenId());
@@ -122,42 +124,37 @@ public class CommonPersonServiceImpl implements CommonPersonService {
             if(rongyunToken==null||"".equals(rongyunToken)) {
            	 logger.error("用户获取融云token失败。用户ID为：" + customer.getCustomerId());
             }
-            login.setCustomerId(customer.getCustomerId());
             login.setTokenCode(rongyunToken);
-            login.setModifyTime(new Date());
         }
+        login.setCustomerId(customer.getCustomerId());
+        
+        login.setModifyTime(new Date());
 		customerMapper.updateByPrimaryKeySelective(login);
 		
-		   response.setCode(BizCode.Success);
-           response.setData(customer);
-           response.setMessage(BizCode.Success.desc());
+		  
 		
-		return response;
+		return ResultUtils.resultSuccess(customer);
 	}
 
 	@Override
 	public CommonResponse setpwd(SetPwdRequest params) {
 		CommonResponse response=new CommonResponse();
-		int row=customerMapper.setPwd(params.getTel(), params.getPassWord());
+		int row=customerMapper.customerSetPwd(params.getTel(), MD5.md5(params.getPassWord()));//MD5加密);
 		if(row<=0) {
 			 throw new BizException(BizCode.ParamError, "设置密码失败");	
 		}
-		 response.setCode(BizCode.Success);
-         response.setMessage(BizCode.Success.desc());
-		return response;
+		return ResultUtils.resultSuccess();
 	}
 
 	@Override
 	public CommonResponse setHeardUrl(SetHeardUrlRequest params) {
 		// TODO Auto-generated method stub
 		CommonResponse response=new CommonResponse();
-		int row=customerMapper.setHeardUrl(params.getTel(), params.getHeadPortraitUrl(),params.getNickName());
+		int row=customerMapper.customerSetHeardUrl(params.getTel(), params.getHeadPortraitUrl(),params.getNickName());
 		if(row<=0) {
-			 throw new BizException(BizCode.ParamError, "设置密码失败");	
+			 throw new BizException(BizCode.ParamError, "设置昵称头像失败");	
 		}
-		 response.setCode(BizCode.Success);
-        response.setMessage(BizCode.Success.desc());
-		return response;
+		return ResultUtils.resultSuccess();
 	}
 
 
@@ -165,12 +162,8 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 	@Override
 	public CommonResponse register(UserRegisterRequest request) {
 		// TODO Auto-generated method stub
-		CommonResponse response=new CommonResponse();
 		Customer customer=saveUser(request);
-		response.setCode(BizCode.Success);
-		response.setData(customer);
-	    response.setMessage(BizCode.Success.desc());
-		return response;
+		return  ResultUtils.resultSuccess(customer);
 	}
     
     
@@ -195,15 +188,22 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 		customer.setPhone(request.getTel());
 		customer.setNickName(request.getNickName());
 		customer.setHeadPortraitUrl(request.getHeardUrl());
+		if(StringUtils.isNotBlank(request.getHeardUrl())) {
+			defaultImg=request.getHeardUrl();
+		}
+		if(StringUtils.isNotBlank(request.getNickName())) {
 		String rongyunToken = RongYunUtil.getToken(String.valueOf(customer.getCustomerId()), customer.getNickName(), defaultImg);
          if(rongyunToken==null||"".equals(rongyunToken)) {
         	 logger.error("用户获取融云token失败。用户ID为：" + customer.getCustomerId());
          }
          customer.setTokenCode(rongyunToken);
+		}
          int row= customerMapper.insertSelective(customer);
          if(row<=0) {
         	 throw new BizException(UserBizReturnCode.exceedError,"用户未注冊");	
          }
+         accountDubboIntegrationService.createAccount(customer.getCustomerId());
+         
 		return customer;
 	}
 
@@ -245,7 +245,7 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 		}
 
 		// 查一小时
-		if (StringUtils.isNotBlank(JedisUtil.get(RedisKeyConstants.USER_VERIFYCODE_H + phoneNum))) {
+		if (StringUtils.isBlank(JedisUtil.get(RedisKeyConstants.USER_VERIFYCODE_H + phoneNum))) {
 			JedisUtil.set(RedisKeyConstants.USER_VERIFYCODE_H + phoneNum, "1", Integer.parseInt(resendexpirehour));
 		} else {
 			String count = JedisUtil.get(RedisKeyConstants.USER_VERIFYCODE_H + phoneNum);
@@ -257,7 +257,7 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 		}
 
 		// 查一天
-		if (StringUtils.isNotBlank(JedisUtil.get(RedisKeyConstants.USER_VERIFYCODE_D + phoneNum))) {
+		if (StringUtils.isBlank(JedisUtil.get(RedisKeyConstants.USER_VERIFYCODE_D + phoneNum))) {
 			JedisUtil.set(RedisKeyConstants.USER_VERIFYCODE_D + phoneNum, "1", DateUtils.getZeroTimestamp());
 		} else {
 			String count = JedisUtil.get(RedisKeyConstants.USER_VERIFYCODE_D + phoneNum);
@@ -277,10 +277,7 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 			JedisUtil.set(RedisKeyConstants.USER_VERIFYCODE + phoneNum + codeType, code, Integer.parseInt(smscodeexpire));
 			logger.info("手机号:" + phoneNum + " 手机验证码:" + code);
 			logger.info("将验证码存入redis中的key值为:{},失效时间为:{}",(RedisKeyConstants.USER_VERIFYCODE + phoneNum + codeType),Integer.parseInt(smscodeexpire));
-			response.setCode(BizCode.Success);
-			response.setData("success");
-			response.setMessage(BizCode.Success.desc());
-			return response;
+			return ResultUtils.resultSuccess();
 		} else {
 			//阿里云短信异常,用 "漫道"短信通道 发送
 			String mdResult = MandaoSmsCodeUtil.mdSmsSendSimple(phoneNum,
@@ -290,10 +287,7 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 			}else{
 				logger.info("漫道发送验证码手机号:" + phoneNum + " 手机验证码:" + code);
 				JedisUtil.set(RedisKeyConstants.USER_VERIFYCODE + phoneNum + codeType, code, Integer.parseInt(smscodeexpire));
-				response.setCode(BizCode.Success);
-				response.setData("success");
-				response.setMessage(BizCode.Success.desc());
-				return response;
+				return ResultUtils.resultSuccess();
 			}
 		}
 		} catch (ClientException e) {
@@ -305,10 +299,7 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 			}else{
 				logger.info("漫道发送验证码手机号:" + phoneNum + " 手机验证码:" + code);
 				JedisUtil.set(RedisKeyConstants.USER_VERIFYCODE + phoneNum + codeType, code, Integer.parseInt(smscodeexpire));
-				response.setCode(BizCode.Success);
-				response.setData("success");
-				response.setMessage(BizCode.Success.desc());
-				return response;
+				return ResultUtils.resultSuccess();
 			}
 		}
 		
@@ -321,21 +312,77 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 		
 		
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 
 
+	@Override
+	public CommonResponse queryUserIdCardCertificationInfo(UserIdCardInfoRequest request) {
+		Customer customer = customerMapper.queryUserIdCardCertificationInfo(request.getCustomerId());
+		if(customer == null){
+			return ResultUtils.resultDataNotExist("用户数据不存在");
+		}
+
+		if(customer.getIdentityStatus() == null){
+			customer.setIdentityStatus(0);//身份认证状态为空的时候，默认复制为未认证
+		}
+		return ResultUtils.resultSuccess(customer);
+	}
+
+	@Override
+	public CommonResponse saveUserCertificationInfo(SaveCertificationRequest request) {
+		Customer customer = customerMapper.selectByPrimaryKey(request.getCustomerId());
+		if(customer == null){
+			return ResultUtils.resultDataNotExist("用户数据不存在");
+		}
+
+		// 身份认证上传照片 || 提交身份认证时 -- 校验状态
+		if(Objects.equals(request.getCertifyType(), 0)
+				|| Objects.equals(request.getCredentialsType(), 1)){
+			if(Objects.equals(customer.getIdentityStatus(), 1)){
+				return ResultUtils.resultDuplicateOperation("身份认证正在审核中");
+			}
+			if(Objects.equals(customer.getIdentityStatus(), 2)){
+				return ResultUtils.resultDuplicateOperation("身份认证已通过");
+			}
+		}
+		Customer certifyCustomer = new Customer();
+		// 提交身份认证时 -- 判断身份证照片是否上传完整
+		if(Objects.equals(request.getCertifyType(), 1)){
+			// 身份认证 -- 判断数据身份证身份已上传
+			if(StringUtils.isBlank(customer.getFrontPortraitUrl())){
+				return ResultUtils.resultDataNotExist("请上传身份证正面照片");
+			}
+			if(StringUtils.isBlank(customer.getBackPortraitUrl())){
+				return ResultUtils.resultDataNotExist("请上传身份证反面照片");
+			}
+			certifyCustomer.setIdentityStatus(1);// 更新状态为：审核中
+		}
+
+		// 大V认证时 -- 判断大V认证状态
+		if(Objects.equals(request.getCertifyType(), 2)){
+			if(!Objects.equals(customer.getIdentityStatus(), 2)){
+				if(Objects.equals(customer.getIdentityStatus(), 1)){
+					return ResultUtils.resultDuplicateOperation("身份认证正在审核中，请等待审核通过后再进行大V认证");
+				}
+				return ResultUtils.resultDuplicateOperation("请先进行身份认证");
+			}
+			if(Objects.equals(customer.getvStatus(), 1)){
+				return ResultUtils.resultDuplicateOperation("大V认证正在审核中");
+			}
+			if(Objects.equals(customer.getvStatus(), 2)){
+				return ResultUtils.resultDuplicateOperation("大V认证已通过");
+			}
+			certifyCustomer.setvStatus(1);// 更新状态为：审核中
+		}
+
+		certifyCustomer.setCustomerId(request.getCustomerId());
+		certifyCustomer.setRealName(request.getRealName());
+		certifyCustomer.setCredentialsType(request.getCredentialsType());
+		certifyCustomer.setCredentialsNum(request.getCredentialsNum());
+		certifyCustomer.setFrontPortraitUrl(request.getFrontPortraitUrl());
+		certifyCustomer.setBackPortraitUrl(request.getBackPortraitUrl());
+		certifyCustomer.setVoiceUrl(request.getVoiceUrl());
+		customerMapper.updateByPrimaryKeySelective(certifyCustomer);
+
+		return ResultUtils.resultSuccess();
+	}
 }

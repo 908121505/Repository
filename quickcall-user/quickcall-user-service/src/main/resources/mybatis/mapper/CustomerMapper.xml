@@ -24,6 +24,7 @@
     <result column="sign_name" property="signName" jdbcType="VARCHAR" />
     <result column="birthday" property="birthday" jdbcType="TIMESTAMP" />
     <result column="voice_url" property="voiceUrl" jdbcType="VARCHAR" />
+    <result column="v_status" property="vStatus"   />
     <result column="identity_status" property="identityStatus"   />
     <result column="token_code" property="tokenCode" jdbcType="VARCHAR" />
     <result column="other_relation" property="otherRelation" jdbcType="VARCHAR" />
@@ -80,7 +81,7 @@
       #{occupationId,jdbcType=INTEGER}, #{frontPortraitUrl,jdbcType=VARCHAR}, #{backPortraitUrl,jdbcType=VARCHAR}, 
       #{headPortraitUrl,jdbcType=VARCHAR}, #{source,jdbcType=TINYINT}, #{custStatus,jdbcType=TINYINT}, 
       #{custPassword,jdbcType=VARCHAR}, #{signName,jdbcType=VARCHAR}, #{starSign,jdbcType=CHAR}, 
-      #{birthday,jdbcType=TIMESTAMP}, #{voiceUrl,jdbcType=VARCHAR}, #{vStatus,jdbcType=CHAR}, 
+      #{birthday,jdbcType=TIMESTAMP}, #{voiceUrl,jdbcType=VARCHAR}, #{vStatus,jdbcType=TINYINT},
       #{identityStatus,jdbcType=TINYINT}, #{tokenCode,jdbcType=VARCHAR}, #{otherRelation,jdbcType=VARCHAR}, 
       #{createTime,jdbcType=TIMESTAMP}, #{modifyTime,jdbcType=TIMESTAMP}, #{createMan,jdbcType=VARCHAR}, 
       #{modifyMan,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{appChannelName,jdbcType=VARCHAR}, 
@@ -269,7 +270,7 @@
         #{voiceUrl,jdbcType=VARCHAR},
       </if>
       <if test="vStatus != null" >
-        #{vStatus,jdbcType=CHAR},
+        #{vStatus,jdbcType=TINYINT},
       </if>
       <if test="identityStatus != null" >
         #{identityStatus,jdbcType=TINYINT},
@@ -376,7 +377,7 @@
         voice_url = #{voiceUrl,jdbcType=VARCHAR},
       </if>
       <if test="vStatus != null" >
-        v_status = #{vStatus,jdbcType=CHAR},
+        v_status = #{vStatus,jdbcType=TINYINT},
       </if>
       <if test="identityStatus != null" >
         identity_status = #{identityStatus,jdbcType=TINYINT},
@@ -387,15 +388,7 @@
       <if test="otherRelation != null" >
         other_relation = #{otherRelation,jdbcType=VARCHAR},
       </if>
-      <if test="createTime != null" >
-        create_time = #{createTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="modifyTime != null" >
-        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="createMan != null" >
-        create_man = #{createMan,jdbcType=VARCHAR},
-      </if>
+      modify_time = NOW(),
       <if test="modifyMan != null" >
         modify_man = #{modifyMan,jdbcType=VARCHAR},
       </if>
@@ -441,7 +434,7 @@
       star_sign = #{starSign,jdbcType=CHAR},
       birthday = #{birthday,jdbcType=TIMESTAMP},
       voice_url = #{voiceUrl,jdbcType=VARCHAR},
-      v_status = #{vStatus,jdbcType=CHAR},
+      v_status = #{vStatus,jdbcType=TINYINT},
       identity_status = #{identityStatus,jdbcType=TINYINT},
       token_code = #{tokenCode,jdbcType=VARCHAR},
       other_relation = #{otherRelation,jdbcType=VARCHAR},
@@ -480,14 +473,22 @@
     </if>
     </select>
     <!-- 设置密码 -->
-    <update id="setPwd" parameterType="Map"  >
+    <update id="customerSetPwd" parameterType="Map"  >
      update customer set cust_password=#{passWord}
      where phone=#{phone}
     </update>
     <!-- 设置用户头像或者昵称 -->
-    <update id="setHeardUrl" parameterType="Map"  >
+    <update id="customerSetHeardUrl" parameterType="Map"  >
      update customer set head_portrait_url=#{headPortraitUrl},nick_name=#{nickName}
      where phone=#{phone}
     </update>
-  
+
+  <!-- 查询用户身份认证信息 -->
+  <select id="queryUserIdCardCertificationInfo" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select
+      customer_id, real_name, credentials_type, credentials_num,
+      front_portrait_url, back_portrait_url,identity_status
+    from customer
+    where customer_id = #{customerId,jdbcType=BIGINT}
+  </select>
 </mapper>

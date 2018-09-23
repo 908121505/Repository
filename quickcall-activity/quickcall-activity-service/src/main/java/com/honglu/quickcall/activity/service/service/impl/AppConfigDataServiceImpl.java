@@ -9,7 +9,6 @@ import com.honglu.quickcall.common.api.exchange.ResultUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -26,22 +25,19 @@ public class AppConfigDataServiceImpl implements AppConfigDataService {
 
     @Override
     public CommonResponse queryBannerInfo(BannerRequest request) {
+        if (request == null) {
+            return ResultUtils.resultParamEmpty();
+        }
+        if (request.getBannerType() == null) {
+            return ResultUtils.resultParamEmpty("Banner类型必传");
+        }
         Banner bannerParms = new Banner();
+        bannerParms.setBannerType(request.getBannerType());
+        bannerParms.setDeviceType(request.getDeviceType());
+        bannerParms.setAppVersionRule(request.getAppVersionRule());
+        bannerParms.setAppVersion(request.getAppVersion());
+
         List<Banner> list = bannerMapper.queryBannerInfo(bannerParms);
-        if (list == null || list.size() == 0) {
-            return ResultUtils.resultSuccess();
-        }
-
-        // 只返回部分数据
-        List<Banner> resultData = new ArrayList<>();
-        for (Banner banner : list) {
-            Banner data = new Banner();
-            data.setImageUrl(banner.getImageUrl());
-            data.setUrl(banner.getUrl());
-            data.setTitle(banner.getTitle());
-            resultData.add(data);
-        }
-
-        return ResultUtils.resultSuccess(resultData);
+        return ResultUtils.resultSuccess(list);
     }
 }

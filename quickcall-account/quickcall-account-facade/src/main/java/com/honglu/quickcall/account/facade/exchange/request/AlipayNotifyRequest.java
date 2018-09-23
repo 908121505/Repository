@@ -1,33 +1,83 @@
 package com.honglu.quickcall.account.facade.exchange.request;
 
+import java.math.BigDecimal;
+
 import com.honglu.quickcall.account.facade.code.AccountFunctionType;
-import com.honglu.quickcall.account.facade.exchange.PayRequest;
+import com.honglu.quickcall.common.api.exchange.AbstractRequest;
 
-/**
- * 接收支付宝回调实体类
- */
-public class AlipayNotifyRequest extends PayRequest {
-    String urlEncodeParam;
-    String accountFunctionType;
+public class AlipayNotifyRequest extends AbstractRequest {
+	private String orderNo;//支付订单号
+	private String phoneNum;
+	private Integer payState;//支付状态 0失败 1成功
+	private Long userId;//用户Id
+	private BigDecimal amount;//支付金额
+	private String extData;
+	
+	
+	public String getOrderNo() {
+		return orderNo;
+	}
 
-    public String getAccountFunctionType() {
-        return accountFunctionType;
-    }
 
-    public void setAccountFunctionType(String accountFunctionType) {
-        this.accountFunctionType = accountFunctionType;
-    }
+	public void setOrderNo(String orderNo) {
+		this.orderNo = orderNo;
+	}
 
-    public String getUrlEncodeParam() {
-        return urlEncodeParam;
-    }
 
-    public void setUrlEncodeParam(String urlEncodeParam) {
-        this.urlEncodeParam = urlEncodeParam;
-    }
+	public String getPhoneNum() {
+		return phoneNum;
+	}
 
-    @Override
-    public String getBizCode() {
-        return this.accountFunctionType;
-    }
+
+	public void setPhoneNum(String phoneNum) {
+		this.phoneNum = phoneNum;
+	}
+
+
+	public Integer getPayState() {
+		return payState;
+	}
+
+
+	public void setPayState(Integer payState) {
+		this.payState = payState;
+	}
+
+
+	public Long getUserId() {
+		return userId;
+	}
+
+
+	public void setUserId(Long userId) {
+		this.userId = userId;
+	}
+
+
+	public BigDecimal getAmount() {
+		return amount;
+	}
+
+
+	public void setAmount(BigDecimal amount) {
+		this.amount = amount;
+	}
+
+
+	public String getExtData() {
+		return extData;
+	}
+
+
+	public void setExtData(String extData) {
+		this.extData = extData;
+	}
+
+
+	@Override
+	public String getBizCode() {
+		// TODO Auto-generated method stub
+		return AccountFunctionType.AlipayNotify;
+	}
+
 }

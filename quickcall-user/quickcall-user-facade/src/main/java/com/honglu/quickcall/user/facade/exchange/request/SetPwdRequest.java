@@ -55,7 +55,7 @@ public class SetPwdRequest extends UserCenterRequest {
 	@Override
 	public String getBizCode() {
 		// TODO Auto-generated method stub
-		return UserFunctionType.setHeardUrl;
+		return UserFunctionType.setpwd;
 	}
 
 }

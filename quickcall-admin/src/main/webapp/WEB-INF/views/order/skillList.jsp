@@ -249,7 +249,7 @@
 			function addAndUpdateRow(id){
 				$('#insertAndUpdate').addAndUpdateRow("skill/addAndUpdateHome.htm?id="+id);
 			}
-			</script>
+</script>
 		<!---dialog选项-->
 		<div>
 			<jsp:include page="/WEB-INF/views/common/delete_dialog.jsp" />

@@ -204,9 +204,28 @@
   
   insert   into 
   account(account_id,customer_id)VALUES(#{accountId},#{customerId})
-  
   </insert>
+
+  <!-- 查询账户  -->
+  <select id="queryAccount" parameterType="Map" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from account
+    where customer_id = #{userId}
+  </select>
+   <!-- 入账 -->
+   <update id="inAccount" parameterType="Map">
+    
+    update account set recharge_amounts=recharge_amounts+#{amount}
+    where customer_id = #{userId}
+   
+   </update>
   
+   <!-- 出账 -->
+   <update id="outAccount" parameterType="Map">
+    update account set remainder_amounts=remainder_amounts-#{amount}
+    where customer_id = #{userId}
+   </update>
   
   
 </mapper>

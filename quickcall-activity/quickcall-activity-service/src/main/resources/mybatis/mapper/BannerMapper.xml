@@ -27,11 +27,10 @@
     create_man, modify_man
   </sql>
 
-  <!-- 查询Banner信息 -->
+  <!-- 查询Banner给前段展示 -->
   <select id="queryBannerInfo" resultType="Banner" resultMap="BaseResultMap">
-    SELECT
-    <include refid="Base_Column_List" />
-    from banner
+    SELECT title, image_url, url
+    FROM banner
     WHERE 1 = 1 and banner_status = 1
     and  start_time <![CDATA[ <= ]]>NOW() and end_time  <![CDATA[ >= ]]>  NOW()
     <if test="deviceType != null">
@@ -57,6 +56,6 @@
         and app_version_rule = #{appVersionRule} and app_version <![CDATA[ <= ]]> #{appVersion}
       </if>
     </if>
-    ORDER BY sort desc,modify_time desc
+    ORDER BY sort ASC,modify_time DESC
   </select>
 </mapper>
