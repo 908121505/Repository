@@ -30,7 +30,7 @@ $(function(){
 		<div class="navbar-header">
 			<a href="login.htm">
 				<span class="navbar-brand">
-					<span class="fa fa-paper-plane"></span> 网贷管家后台管理系统
+					<span class="fa fa-paper-plane"></span> Voice后台管理系统
 				</span>
 			</a>
 		</div>
