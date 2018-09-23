@@ -8,25 +8,12 @@ import com.honglu.quickcall.common.api.exchange.CommonResponse;
 import com.honglu.quickcall.user.facade.business.UserDubboBusiness;
 import com.honglu.quickcall.user.facade.code.UserBizReturnCode;
 import com.honglu.quickcall.user.facade.code.UserFunctionType;
-import com.honglu.quickcall.user.facade.exchange.request.GetSmsCodeRequest;
-import com.honglu.quickcall.user.facade.exchange.request.IsPhoneExistsRequest;
-import com.honglu.quickcall.user.facade.exchange.request.PersonInfoRequest;
-import com.honglu.quickcall.user.facade.exchange.request.SaveBirthRequest;
-import com.honglu.quickcall.user.facade.exchange.request.SaveGenderRequest;
-import com.honglu.quickcall.user.facade.exchange.request.SaveInterestRequest;
-import com.honglu.quickcall.user.facade.exchange.request.SaveNickNameRequest;
-import com.honglu.quickcall.user.facade.exchange.request.SaveOccupationRequest;
-import com.honglu.quickcall.user.facade.exchange.request.SaveSignNameRequest;
+import com.honglu.quickcall.user.facade.exchange.request.*;
 import com.honglu.quickcall.user.service.service.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.honglu.quickcall.user.facade.exchange.request.SetHeardUrlRequest;
-import com.honglu.quickcall.user.facade.exchange.request.SetPwdRequest;
-import com.honglu.quickcall.user.facade.exchange.request.ShowHomePageLogout;
-import com.honglu.quickcall.user.facade.exchange.request.UserLoginRequest;
-import com.honglu.quickcall.user.facade.exchange.request.UserRegisterRequest;
 
 @Service("User.UserDubboBusiness")
 public class UserDubboBusinessImpl implements UserDubboBusiness {
@@ -37,6 +24,8 @@ public class UserDubboBusinessImpl implements UserDubboBusiness {
 	private CommonPersonService commonPersonService;
 	@Autowired
 	private PersonInfoService personInfoService;
+	@Autowired
+	private UserMessageService userMessageService;
 
 	@Override
 	public CommonResponse excute(AbstractRequest request) {
@@ -68,6 +57,15 @@ public class UserDubboBusinessImpl implements UserDubboBusiness {
 			case UserFunctionType.getSmsCode:
 				response = commonPersonService.getSmsCode((GetSmsCodeRequest) request);
 				break;
+            case UserFunctionType.UNREAD_MESSAGE_NUM:
+                response=  userMessageService.queryUserUnreadMessageNum((UserUnreadMessageNumRequest)request);
+                break;
+            case UserFunctionType.USER_ID_CARD_CERTIFY_INFO:
+                response=  commonPersonService.queryUserIdCardCertificationInfo((UserIdCardInfoRequest)request);
+                break;
+            case UserFunctionType.SAVE_USER_CERTIFY_INFO:
+                response=  commonPersonService.saveUserCertificationInfo((SaveCertificationRequest)request);
+                break;
 			case UserFunctionType.SaveNicknameImage:// 保存昵称和头像
 				response = personInfoService.saveNicknameImage((SaveNickNameRequest) request);
 				break;

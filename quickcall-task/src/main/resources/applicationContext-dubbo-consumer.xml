@@ -13,5 +13,5 @@
 
     <dubbo:reference group="userCenter" id="userDubboBusiness" interface="com.honglu.quickcall.user.facade.business.UserDubboBusiness" check="false" version="0.0.1"/>
 
-    <dubbo:reference group="accountCenter" id="paymentDubboBusiness" interface="com.honglu.quickcall.account.facade.business.PaymentDubboBusiness" check="false" version="0.0.1"/>
+    <dubbo:reference group="userCenter" id="userPushAppMsgBusiness" interface="com.honglu.quickcall.user.facade.business.UserPushAppMsgBusiness" check="false" version="0.0.1"/>
 </beans>

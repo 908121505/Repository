@@ -36,7 +36,6 @@
     <result column="app_channel_name" property="appChannelName" jdbcType="VARCHAR" />
     <result column="device_id" property="deviceId" jdbcType="VARCHAR" />
     <result column="login_time" property="loginTime" jdbcType="TIMESTAMP" />
-    <result column="v_status" property="vStatus" />
   </resultMap>
  <sql id="Base_Column_List" >
     customer_id, phone, real_name, sex, nick_name, type, credentials_type, credentials_num, 
@@ -44,13 +43,9 @@
     back_portrait_url, head_portrait_url, source, cust_status, cust_password, sign_name, 
     star_sign, birthday, voice_url, v_status, identity_status, token_code, other_relation, 
     create_time, modify_time, create_man, modify_man, remark, app_channel_name, device_id, 
-    login_time,vStatus
+    login_time
   </sql>
-  <select id="showHomePageLogout" resultMap="com.honglu.quickcall.user.facade.entity.HomePageLogout" parameterType="java.lang.Long" >
-    SELECT c.head_portrait_url,c.nick_name,c.sex,c.v_status,c.voice_url,c.star_sign,c.sign_name
-    FROM customer c 
-    WHERE c.customer_Id=#{customerId} AND c.cust_status='1';
-  </select>
+
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
     <include refid="Base_Column_List" />
@@ -73,7 +68,7 @@
       identity_status, token_code, other_relation, 
       create_time, modify_time, create_man, 
       modify_man, remark, app_channel_name, 
-      device_id, login_time,vStatus)
+      device_id, login_time)
     values (#{customerId,jdbcType=BIGINT}, #{phone,jdbcType=INTEGER}, #{realName,jdbcType=VARCHAR}, 
       #{sex,jdbcType=TINYINT}, #{nickName,jdbcType=VARCHAR}, #{type,jdbcType=TINYINT}, 
       #{credentialsType,jdbcType=TINYINT}, #{credentialsNum,jdbcType=VARCHAR}, #{interestId,jdbcType=INTEGER}, 
@@ -85,7 +80,7 @@
       #{identityStatus,jdbcType=TINYINT}, #{tokenCode,jdbcType=VARCHAR}, #{otherRelation,jdbcType=VARCHAR}, 
       #{createTime,jdbcType=TIMESTAMP}, #{modifyTime,jdbcType=TIMESTAMP}, #{createMan,jdbcType=VARCHAR}, 
       #{modifyMan,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{appChannelName,jdbcType=VARCHAR}, 
-      #{deviceId,jdbcType=VARCHAR}, #{loginTime,jdbcType=TIMESTAMP},#{vStatus})
+      #{deviceId,jdbcType=VARCHAR}, #{loginTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.honglu.quickcall.user.facade.entity.Customer" >
     insert into customer
@@ -194,9 +189,6 @@
       </if>
       <if test="loginTime != null" >
         login_time,
-      </if>
-      <if test="vStatus != null" >
-        v_status,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
@@ -404,9 +396,6 @@
       <if test="loginTime != null" >
         login_time = #{loginTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="vStatus != null" >
-        v_status = #{vStatus},
-      </if>
     </set>
     where customer_id = #{customerId,jdbcType=BIGINT}
   </update>
@@ -445,8 +434,7 @@
       remark = #{remark,jdbcType=VARCHAR},
       app_channel_name = #{appChannelName,jdbcType=VARCHAR},
       device_id = #{deviceId,jdbcType=VARCHAR},
-      login_time = #{loginTime,jdbcType=TIMESTAMP},
-      v_status = #{vStatus}
+      login_time = #{loginTime,jdbcType=TIMESTAMP}
     where customer_id = #{customerId,jdbcType=BIGINT}
   </update>
 
