@@ -49,7 +49,7 @@ public class Customer {
 
     private String voiceUrl;
 
-    private String vStatus;
+    private Integer vStatus;
 
     private Integer identityStatus;
 
@@ -257,12 +257,12 @@ public class Customer {
         this.voiceUrl = voiceUrl == null ? null : voiceUrl.trim();
     }
 
-    public String getvStatus() {
+    public Integer getvStatus() {
         return vStatus;
     }
 
-    public void setvStatus(String vStatus) {
-        this.vStatus = vStatus == null ? null : vStatus.trim();
+    public void setvStatus(Integer vStatus) {
+        this.vStatus = vStatus;
     }
 
     public Integer getIdentityStatus() {
