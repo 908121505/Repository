@@ -37,10 +37,7 @@ public class UserPushAppMsgBusinessImpl implements UserPushAppMsgBusiness {
         try {
             switch (request.getBizCode()) {
                 case UserFunctionType.PUSH_APP_MSG:
-                    response=  pushAppMsgService.pushMsg((PushAppMsgRequest)request);
-                    break;
-                case UserFunctionType.PUSH_APP_MSG_JOB:
-                    response=  pushAppMsgService.pushMsgJob((PushAppMsgJobRequest)request);
+                    response = pushAppMsgService.pushMsg((PushAppMsgRequest) request);
                     break;
                 default:
                     throw new BizException(UserBizReturnCode.BizFunctionTypeNotMatch, UserBizReturnCode.BizFunctionTypeNotMatch.desc());
