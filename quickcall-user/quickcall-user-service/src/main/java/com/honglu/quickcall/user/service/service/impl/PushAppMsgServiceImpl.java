@@ -6,10 +6,10 @@ import com.honglu.quickcall.common.api.exchange.ResultUtils;
 import com.honglu.quickcall.common.core.util.UUIDUtils;
 import com.honglu.quickcall.user.facade.entity.Customer;
 import com.honglu.quickcall.user.facade.entity.Message;
-import com.honglu.quickcall.user.facade.exchange.request.PushAppMsgJobRequest;
 import com.honglu.quickcall.user.facade.exchange.request.PushAppMsgRequest;
 import com.honglu.quickcall.user.service.dao.CustomerMapper;
 import com.honglu.quickcall.user.service.dao.MessageMapper;
+import com.honglu.quickcall.user.service.service.CustomerRedisManagement;
 import com.honglu.quickcall.user.service.service.PushAppMsgService;
 import com.honglu.quickcall.user.service.util.GtPushUtil;
 import org.apache.commons.lang3.StringUtils;
@@ -62,11 +62,4 @@ public class PushAppMsgServiceImpl implements PushAppMsgService {
         return ResultUtils.resultSuccess();
     }
 
-    @Override
-    public CommonResponse pushMsgJob(PushAppMsgJobRequest request) {
-        // 查询数据库要推送消息提醒的数据
-//        messageMapper.queryWillBeStartMessage();
-
-        return null;
-    }
 }
