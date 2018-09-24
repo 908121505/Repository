@@ -29,6 +29,10 @@ public interface UserFunctionType {
      * 推送APP消息
      */
     String PUSH_APP_MSG = "001310";
+    /**
+     * 推送APP消息Job任务
+     */
+    String PUSH_APP_MSG_JOB = "001311";
 
     //查看用户信息
     String PersonInfo =  "0011128";

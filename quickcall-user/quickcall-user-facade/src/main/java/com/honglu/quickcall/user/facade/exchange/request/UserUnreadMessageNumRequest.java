@@ -10,6 +10,7 @@ import com.honglu.quickcall.user.facade.exchange.UserCenterRequest;
  * @date 2018-09-22 17:11
  */
 public class UserUnreadMessageNumRequest extends UserCenterRequest {
+    private static final long serialVersionUID = -5124283956163159830L;
     /**
      * 登录用户id
      */

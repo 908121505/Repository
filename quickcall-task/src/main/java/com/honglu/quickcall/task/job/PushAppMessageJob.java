@@ -2,6 +2,8 @@ package com.honglu.quickcall.task.job;
 
 import com.honglu.quickcall.common.api.util.JedisUtil;
 import com.honglu.quickcall.user.facade.business.UserPushAppMsgBusiness;
+import com.honglu.quickcall.user.facade.enums.PushAppMsgTypeEnum;
+import com.honglu.quickcall.user.facade.exchange.request.PushAppMsgJobRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +29,9 @@ public class PushAppMessageJob {
         }
         LOGGER.info("-----------定时job开始执行-----------");
         try {
-//			activityCenterService.excute(params);
+            PushAppMsgJobRequest jobRequest = new PushAppMsgJobRequest();
+            jobRequest.setMsgType(PushAppMsgTypeEnum.WILL_BE_START);
+            userPushAppMsgBusiness.excute(jobRequest);
         } catch (Exception e) {
             LOGGER.error("job执行发生异常，异常信息：", e);
         }

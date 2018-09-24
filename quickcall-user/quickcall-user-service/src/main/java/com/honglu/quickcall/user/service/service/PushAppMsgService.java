@@ -1,6 +1,7 @@
 package com.honglu.quickcall.user.service.service;
 
 import com.honglu.quickcall.common.api.exchange.CommonResponse;
+import com.honglu.quickcall.user.facade.exchange.request.PushAppMsgJobRequest;
 import com.honglu.quickcall.user.facade.exchange.request.PushAppMsgRequest;
 
 /**
@@ -18,4 +19,12 @@ public interface PushAppMsgService {
      * @return
      */
     CommonResponse pushMsg(PushAppMsgRequest request);
+
+    /**
+     * 推送消息Job任务
+     *
+     * @param request
+     * @return
+     */
+    CommonResponse pushMsgJob(PushAppMsgJobRequest request);
 }

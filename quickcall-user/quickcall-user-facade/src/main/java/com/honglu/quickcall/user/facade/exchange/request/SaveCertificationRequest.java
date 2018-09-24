@@ -11,6 +11,7 @@ import com.honglu.quickcall.user.facade.exchange.UserCenterRequest;
  */
 public class SaveCertificationRequest extends UserCenterRequest {
 
+    private static final long serialVersionUID = -3103220607272963118L;
     /**
      * 登录用户id
      */
