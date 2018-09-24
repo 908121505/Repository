@@ -39,6 +39,9 @@ public class UserPushAppMsgBusinessImpl implements UserPushAppMsgBusiness {
                 case UserFunctionType.PUSH_APP_MSG:
                     response=  pushAppMsgService.pushMsg((PushAppMsgRequest)request);
                     break;
+                case UserFunctionType.PUSH_APP_MSG_JOB:
+                    response=  pushAppMsgService.pushMsgJob((PushAppMsgJobRequest)request);
+                    break;
                 default:
                     throw new BizException(UserBizReturnCode.BizFunctionTypeNotMatch, UserBizReturnCode.BizFunctionTypeNotMatch.desc());
             }
@@ -54,4 +57,5 @@ public class UserPushAppMsgBusinessImpl implements UserPushAppMsgBusiness {
         logger.info("用户推送消息返回结果{}", response);
         return response;
     }
+
 }

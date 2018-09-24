@@ -10,5 +10,13 @@ import com.honglu.quickcall.common.api.exchange.CommonResponse;
  * @date 2018-09-23 16:48
  */
 public interface UserPushAppMsgBusiness {
+
+    /**
+     * 执行任务
+     *
+     * @param request
+     * @return
+     */
     CommonResponse excute(AbstractRequest request);
+
 }
