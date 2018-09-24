@@ -1,6 +1,7 @@
 package com.honglu.quickcall.task.job;
 
 import com.honglu.quickcall.common.api.util.JedisUtil;
+import com.honglu.quickcall.user.facade.business.UserDubboBusiness;
 import com.honglu.quickcall.user.facade.business.UserPushAppMsgBusiness;
 import com.honglu.quickcall.user.facade.enums.PushAppMsgTypeEnum;
 import com.honglu.quickcall.user.facade.exchange.request.PushAppMsgJobRequest;
@@ -16,26 +17,23 @@ public class PushAppMessageJob {
 
     public static final Logger LOGGER = LoggerFactory.getLogger(PushAppMessageJob.class);
 
-    @Autowired
-    private UserPushAppMsgBusiness userPushAppMsgBusiness;
-
     private final static String JOB_SERIAL_MESSAGE_KEY = "job_serial_message_key";
 
-    @Scheduled(cron = "0 5 7 * * ?")
+    @Scheduled(cron = "0 1 * * * ?")
     public void send() {
         if (JedisUtil.setnx(JOB_SERIAL_MESSAGE_KEY, JOB_SERIAL_MESSAGE_KEY, 300) == 0) {
             LOGGER.info("==任务已经执行，当前任务被正常拒绝==");
             return;
         }
-        LOGGER.info("-----------定时job开始执行-----------");
+        LOGGER.info("=============推送消息定时job开始=================");
         try {
             PushAppMsgJobRequest jobRequest = new PushAppMsgJobRequest();
             jobRequest.setMsgType(PushAppMsgTypeEnum.WILL_BE_START);
-            userPushAppMsgBusiness.excute(jobRequest);
+//            userPushAppMsgBusiness.excute(jobRequest);
         } catch (Exception e) {
             LOGGER.error("job执行发生异常，异常信息：", e);
         }
-        LOGGER.info("=============定时job结束=================");
+        LOGGER.info("=============推送消息定时job结束=================");
     }
 
 
