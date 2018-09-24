@@ -12,6 +12,6 @@ import com.honglu.quickcall.common.api.exchange.WebResponseModel;
  * @author: chenliuguang   
  * @date: 2018年9月22日 下午3:16:34
  */
-public interface OrderInfoService {
+public interface IOrderInfoService {
     WebResponseModel execute(AbstractRequest request);
 }

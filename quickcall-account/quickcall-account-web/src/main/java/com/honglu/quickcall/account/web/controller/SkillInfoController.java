@@ -11,7 +11,7 @@ import com.honglu.quickcall.account.facade.exchange.request.FirstPageDaVinfoRequ
 import com.honglu.quickcall.account.facade.exchange.request.FirstPageSkillinfoRequest;
 import com.honglu.quickcall.account.facade.exchange.request.SkillInfoRequest;
 import com.honglu.quickcall.account.facade.exchange.request.SkillUpdateRequest;
-import com.honglu.quickcall.account.web.service.OrderInfoService;
+import com.honglu.quickcall.account.web.service.IOrderInfoService;
 import com.honglu.quickcall.common.api.exchange.WebResponseModel;
 
 @Controller
@@ -19,7 +19,7 @@ import com.honglu.quickcall.common.api.exchange.WebResponseModel;
 public class SkillInfoController {
 
     @Autowired
-    private OrderInfoService orderInfoService;
+    private IOrderInfoService orderInfoService;
 
     /**
      * 大V接单设置展示

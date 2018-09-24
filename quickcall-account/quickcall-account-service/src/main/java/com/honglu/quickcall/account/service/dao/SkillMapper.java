@@ -3,6 +3,7 @@ package com.honglu.quickcall.account.service.dao;
 import java.util.List;
 
 import com.honglu.quickcall.account.facade.entity.Skill;
+import com.honglu.quickcall.account.facade.vo.FirstPageSkillinfoVO;
 
 public interface SkillMapper {
     int deleteByPrimaryKey(Long id);
@@ -19,4 +20,6 @@ public interface SkillMapper {
     
     
     List<Skill>  selectTotalSkill();
+
+	List<FirstPageSkillinfoVO> selectPartSkill();
 }

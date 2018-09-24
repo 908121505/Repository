@@ -21,10 +21,13 @@ import com.honglu.quickcall.account.facade.exchange.request.FirstPageDaVinfoRequ
 import com.honglu.quickcall.account.facade.exchange.request.FirstPageSkillinfoRequest;
 import com.honglu.quickcall.account.facade.exchange.request.SkillInfoRequest;
 import com.honglu.quickcall.account.facade.exchange.request.SkillUpdateRequest;
+import com.honglu.quickcall.account.facade.vo.FirstPageDaVinfoVO;
+import com.honglu.quickcall.account.facade.vo.FirstPageSkillinfoVO;
 import com.honglu.quickcall.account.facade.vo.SkillVO;
 import com.honglu.quickcall.account.service.dao.ProductMapper;
 import com.honglu.quickcall.account.service.dao.SkillMapper;
-import com.honglu.quickcall.account.service.service.SkillService;
+import com.honglu.quickcall.account.service.service.CommonService;
+import com.honglu.quickcall.account.service.service.ISkillService;
 import com.honglu.quickcall.common.api.code.BizCode;
 import com.honglu.quickcall.common.api.exception.BizException;
 import com.honglu.quickcall.common.api.exchange.CommonResponse;
@@ -40,9 +43,11 @@ import com.honglu.quickcall.common.api.exchange.CommonResponse;
  * @date: 2018年9月22日 下午3:17:04
  */
 @Service
-public class SkillServiceImpl implements SkillService {
+public class SkillServiceImpl implements ISkillService {
 	private static final Logger LOGGER = LoggerFactory.getLogger(SkillServiceImpl.class);
 	
+	@Autowired
+	private CommonService  commonService;
 	@Autowired
 	private SkillMapper  skillMapper;
 	@Autowired
@@ -51,9 +56,8 @@ public class SkillServiceImpl implements SkillService {
 	@Override
 	public CommonResponse querySkillInfoPersonal(SkillInfoRequest request) {
 		if (request == null || request.getCustomerId() == null) {
-			throw new BizException(AccountBizReturnCode.paramError, "创建账户参数异常");
+			throw new BizException(AccountBizReturnCode.paramError, "查询技能信息参数异常");
 		}
-		LOGGER.info("用户编号为：" + request.getCustomerId() + "的用户开始创建账户...");
 		Long  customerId =  request.getCustomerId();
 		//首先查询所有的技能信息
 		
@@ -72,7 +76,7 @@ public class SkillServiceImpl implements SkillService {
 				vo.setName(skill.getName());
 				vo.setProductStatus(OrderSkillConstants.PRODUCT_STATUS_UN_EFFECTIVE);
 				vo.setSkillId(skillId);
-				vo.setPriceList(getPriceList(skill));
+				vo.setPriceList(commonService.getPriceList(skill));
 				resultList.add(vo);
 				
 			}
@@ -108,19 +112,11 @@ public class SkillServiceImpl implements SkillService {
 	
 	
 
-	
-	
-
-	
-	
-	
-
 	@Override
 	public CommonResponse updateSkillInfoPersonal(SkillUpdateRequest request) {
 		if (request == null || request.getCustomerId() == null) {
-			throw new BizException(AccountBizReturnCode.paramError, "创建账户参数异常");
+			throw new BizException(AccountBizReturnCode.paramError, "更改技能参数异常");
 		}
-		LOGGER.info("用户编号为：" + request.getCustomerId() + "的用户开始创建账户...");
 		Long  customerId =  request.getCustomerId();
 		//查询技能信息直接更新吧
 		Long  productId =  request.getProductId();
@@ -151,52 +147,43 @@ public class SkillServiceImpl implements SkillService {
 		 CommonResponse commonResponse = new CommonResponse();
 		 commonResponse.setCode(BizCode.Success);
 		 commonResponse.setMessage(BizCode.Success.desc());
-		LOGGER.info("用户编号为：" + request.getCustomerId() + "查询成功");
+		LOGGER.info("用户编号为：" + request.getCustomerId() + "修改成功");
 		return commonResponse;
 	}
 	
 
 	@Override
 	public CommonResponse getFirstPageDaVinfo(FirstPageDaVinfoRequest request) {
-		// TODO Auto-generated method stub
-		return null;
+		if (request == null /*|| request.getCustomerId() == null*/) {
+			throw new BizException(AccountBizReturnCode.paramError, "查询首页大V列表参数异常");
+		}
+//		Long  customerId =  request.getCustomerId();
+		Long  skillId = request.getSkillId();
+		//首先查询所有的技能信息
+		List<FirstPageDaVinfoVO>   resultList =  productMapper.selectTotalDaVProduct(skillId);
+		CommonResponse commonResponse = commonService.getCommonResponse();
+		commonResponse.setData(resultList);
+		LOGGER.info("用户编号为：" + request.getCustomerId() + "查询成功");
+		return commonResponse;
 	}
 
 
 	@Override
 	public CommonResponse getFirstPageSkillinfo(FirstPageSkillinfoRequest request) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
-	
-	
-	
-	/**
-	 * 根据技能信息获取技能价格列表
-	 * @param skill
-	 * @return
-	 */
-	public List<BigDecimal>   getPriceList(Skill  skill){
-		
-		List<BigDecimal>   retList =  new  ArrayList<BigDecimal>();
-		BigDecimal  maxPrice = skill.getMaxPrice();
-		BigDecimal  minPrice = skill.getMinPrice();
-		BigDecimal  priceStep = skill.getPriceStep();
-		
-		retList.add(minPrice);
-		BigDecimal   tempPrice =  minPrice;
-		for (;;) {
-			tempPrice =  tempPrice.add(priceStep);
-			if(tempPrice.compareTo(maxPrice) <= 0){
-				retList.add(tempPrice);
-			}else{
-				break;
-			}
+		if (request == null /*|| request.getCustomerId() == null*/) {
+			throw new BizException(AccountBizReturnCode.paramError, "查询技能列表参数异常");
 		}
-		
-		return retList ;
+		List<FirstPageSkillinfoVO>   resultList = skillMapper.selectPartSkill();
+		CommonResponse commonResponse = commonService.getCommonResponse();
+		commonResponse.setData(resultList);
+		LOGGER.info("用户编号为：" + request.getCustomerId() + "查询成功");
+		return commonResponse;
 	}
+	
+	
+	
+	
+
 
 
 
@@ -208,21 +195,6 @@ public class SkillServiceImpl implements SkillService {
 
 
 	
-//	public static void main(String[] args) {
-//	BigDecimal  maxPrice = new BigDecimal(109);
-//	BigDecimal  minPrice = new BigDecimal(10);
-//	BigDecimal  priceStep = new BigDecimal(10);
-//	
-//	BigDecimal   tempPrice =  minPrice;
-//	System.out.println("============="+tempPrice);
-//	for (;;) {
-//		tempPrice =  tempPrice.add(priceStep);
-//		if(tempPrice.compareTo(maxPrice) <= 0){
-//			System.out.println("============="+tempPrice);
-//		}else{
-//			break;
-//		}
-//	}
-//}
+
 
 }

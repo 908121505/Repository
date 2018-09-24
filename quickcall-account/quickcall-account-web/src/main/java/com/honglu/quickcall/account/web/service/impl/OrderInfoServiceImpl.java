@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import com.alibaba.fastjson.JSON;
 import com.honglu.quickcall.account.facade.business.OrderInfoBussiness;
 import com.honglu.quickcall.account.facade.code.AccountBizReturnCode;
-import com.honglu.quickcall.account.web.service.OrderInfoService;
+import com.honglu.quickcall.account.web.service.IOrderInfoService;
 import com.honglu.quickcall.common.api.code.MyServiceCode;
 import com.honglu.quickcall.common.api.code.SourceCode;
 import com.honglu.quickcall.common.api.exception.RemoteException;
@@ -26,7 +26,7 @@ import com.honglu.quickcall.common.api.exchange.WebResponseModel;
  * @date: 2018年9月22日 下午3:17:04
  */
 @Service
-public class OrderInfoServiceImpl implements OrderInfoService {
+public class OrderInfoServiceImpl implements IOrderInfoService {
     private static final Logger LOGGER = LoggerFactory.getLogger(OrderInfoServiceImpl.class);
 
     @Autowired

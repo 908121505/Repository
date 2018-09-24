@@ -15,7 +15,7 @@ import com.honglu.quickcall.common.api.exchange.CommonResponse;
  * @author: chenliuguang   
  * @date: 2018年9月22日 下午3:16:34
  */
-public interface SkillService {
+public interface ISkillService {
     /**
      * 获取个人技能信息
      * @param request
