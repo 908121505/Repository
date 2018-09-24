@@ -12,6 +12,7 @@ import com.honglu.quickcall.user.facade.enums.PushAppMsgTypeEnum;
  */
 public class PushAppMsgRequest extends AbstractRequest {
 
+    private static final long serialVersionUID = 4486951339571335316L;
     /**
      * 消息类型
      */
