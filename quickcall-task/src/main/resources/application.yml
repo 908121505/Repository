@@ -58,9 +58,9 @@ spring:
 
   #Redis settings
   redis:
-    host: 172.16.0.227
+    host: 172.16.11.199
     port: 6379
-    password: sudai@3210
+    password: fzcfQwuMH2q
     timeout: 10000
     database: 0
     # pool config

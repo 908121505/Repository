@@ -2,8 +2,24 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.honglu.quickcall.task.dao.TaskMapper" >
 
-	<select id="selectPersonByTask" parameterType="map" resultType="Persion">
-		select * from  persion 
+	<!-- 订单返回结果集 -->
+	<resultMap id="OrderResultMap" type="com.honglu.quickcall.account.facade.entity.Order" >
+		<result column="buyer_id" property="buyerId" jdbcType="BIGINT" />
+		<result column="seller_id" property="sellerId" jdbcType="BIGINT" />
+	</resultMap>
+
+	<!-- 查询五分钟即将开始服务的订单 -->
+	<select id="queryWillBeStartMessage" resultMap="OrderResultMap" >
+		SELECT
+		buyer_id, seller_id
+		FROM orders WHERE 1 =1
+		and order_status in (2,3)
+		and start_time <![CDATA[  >= ]]> date_format(date_add(now(), interval 4 minute), '%Y-%m-%d %H:%i:00')
+		and start_time <![CDATA[  <= ]]> date_format(date_add(now(), interval 6 minute), '%Y-%m-%d %H:%i:00')
 	</select>
-  
+
+	<!-- 查询五分钟即将开始服务的订单 -->
+	<select id="getCustomerDeviceId" resultType="java.lang.String" parameterType="java.lang.Long">
+		SELECT device_id FROM customer WHERE customer_id=#{customerId}
+	</select>
 </mapper>

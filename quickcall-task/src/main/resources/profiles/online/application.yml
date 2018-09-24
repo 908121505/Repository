@@ -55,9 +55,9 @@ spring:
 
   #Redis settings
   redis:
-    host: r-uf664b51c2a07294.redis.rds.aliyuncs.com
+    host: 172.16.11.199
     port: 6379
-    password: Peipeiba123
+    password: fzcfQwuMH2q
     timeout: 10000
     database: 0
     # pool config
