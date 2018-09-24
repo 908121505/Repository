@@ -149,8 +149,16 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 	@Override
 	public CommonResponse setHeardUrl(SetHeardUrlRequest params) {
 		// TODO Auto-generated method stub
-		CommonResponse response=new CommonResponse();
-		int row=customerMapper.customerSetHeardUrl(params.getTel(), params.getHeadPortraitUrl(),params.getNickName());
+		String rongyunToken=null;
+		if(StringUtils.isNotBlank(params.getNickName())&&params.getCustomerId()!=null
+				&&StringUtils.isNotBlank(params.getHeadPortraitUrl())) {
+			rongyunToken= RongYunUtil.getToken(String.valueOf(params.getCustomerId()), params.getNickName(), params.getHeadPortraitUrl());
+	         if(rongyunToken==null||"".equals(rongyunToken)) {
+	        	 logger.error("用户获取融云token失败。用户ID为：" + params.getCustomerId());
+	         }
+			}
+		
+		int row=customerMapper.customerSetHeardUrl(params.getTel(), params.getHeadPortraitUrl(),params.getNickName(),rongyunToken);
 		if(row<=0) {
 			 throw new BizException(BizCode.ParamError, "设置昵称头像失败");	
 		}
@@ -187,10 +195,11 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 		customer.setWechatOpenId(request.getWechatOpenId());
 		customer.setPhone(request.getTel());
 		customer.setNickName(request.getNickName());
-		customer.setHeadPortraitUrl(request.getHeardUrl());
+		
 		if(StringUtils.isNotBlank(request.getHeardUrl())) {
 			defaultImg=request.getHeardUrl();
 		}
+		customer.setHeadPortraitUrl(defaultImg);
 		if(StringUtils.isNotBlank(request.getNickName())) {
 		String rongyunToken = RongYunUtil.getToken(String.valueOf(customer.getCustomerId()), customer.getNickName(), defaultImg);
          if(rongyunToken==null||"".equals(rongyunToken)) {
@@ -203,7 +212,7 @@ public class CommonPersonServiceImpl implements CommonPersonService {
         	 throw new BizException(UserBizReturnCode.exceedError,"用户未注冊");	
          }
          //创建账户
-         accountDubboIntegrationService.createAccount(customer.getCustomerId());
+           accountDubboIntegrationService.createAccount(customer.getCustomerId());
          customer=customerMapper.selectByPrimaryKey(customer.getCustomerId());
 		return customer;
 	}
