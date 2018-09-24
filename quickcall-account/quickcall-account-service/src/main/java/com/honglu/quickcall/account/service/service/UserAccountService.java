@@ -22,7 +22,7 @@ public interface UserAccountService {
      * @param request
      * @return
      */
-    CommonResponse qyeryAccount(QueryAccountRequest request);
+    CommonResponse queryAccount(QueryAccountRequest request);
     
     /**
      * 入账

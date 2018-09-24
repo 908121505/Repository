@@ -54,7 +54,7 @@ public class UserAccountServiceImpl implements UserAccountService {
 
 
 	@Override
-	public CommonResponse qyeryAccount(QueryAccountRequest request) {
+	public CommonResponse queryAccount(QueryAccountRequest request) {
 		// TODO Auto-generated method stub
 		CommonResponse response=new CommonResponse();
 		Account account=accountMapper.queryAccount(request.getUserId());

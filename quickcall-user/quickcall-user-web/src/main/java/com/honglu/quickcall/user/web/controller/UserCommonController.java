@@ -135,7 +135,7 @@ public class UserCommonController {
 
     	logger.info("userWeb.user.setpwd.request.data : " + JSONObject.toJSONString(params));
     	WebResponseModel response=new WebResponseModel();
-    	if(StringUtils.isBlank(params.getTel())) {
+    	if(StringUtils.isBlank(params.getTel())||StringUtils.isBlank(params.getPassWord())) {
     		 response.setCode(UserBizReturnCode.paramError.code());
              response.setMsg(UserBizReturnCode.paramError.desc());
              return response;
@@ -159,7 +159,7 @@ public class UserCommonController {
     
     
     /**
-     * 找回密码
+     * 设置头像 昵称
      * @param params
      * @return
      */

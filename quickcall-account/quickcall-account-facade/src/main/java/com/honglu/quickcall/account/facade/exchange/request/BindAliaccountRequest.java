@@ -41,7 +41,7 @@ public class BindAliaccountRequest extends AbstractRequest  {
 
 
 
-	public void setAccountId(String userId) {
+	public void setUserId(String userId) {
 		this.userId = userId;
 	}
 

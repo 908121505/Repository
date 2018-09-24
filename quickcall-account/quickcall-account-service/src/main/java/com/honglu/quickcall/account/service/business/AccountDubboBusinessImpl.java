@@ -60,6 +60,8 @@ public class AccountDubboBusinessImpl implements AccountDubboBusiness {
             case AccountFunctionType.AlipayNotify:
             	response = aliPayService.alipayNotify((AlipayNotifyRequest)request);
             	break;
+            case AccountFunctionType.QueryAccount:
+            	response = userAccountService.queryAccount((QueryAccountRequest)request);
                 default:
 
             }

@@ -202,8 +202,9 @@ public class CommonPersonServiceImpl implements CommonPersonService {
          if(row<=0) {
         	 throw new BizException(UserBizReturnCode.exceedError,"用户未注冊");	
          }
+         //创建账户
          accountDubboIntegrationService.createAccount(customer.getCustomerId());
-         
+         customer=customerMapper.selectByPrimaryKey(customer.getCustomerId());
 		return customer;
 	}
 
