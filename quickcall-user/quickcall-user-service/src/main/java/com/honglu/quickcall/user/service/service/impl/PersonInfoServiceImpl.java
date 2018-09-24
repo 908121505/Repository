@@ -13,9 +13,10 @@ import javax.persistence.criteria.Order;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.alibaba.dubbo.common.json.JSONObject;
-import com.alibaba.dubbo.config.annotation.Service;
 import com.honglu.quickcall.account.facade.code.AccountBizReturnCode;
 import com.honglu.quickcall.common.api.exception.BizException;
 import com.honglu.quickcall.common.api.exception.RemoteException;
@@ -48,23 +49,22 @@ import com.honglu.quickcall.user.facade.exchange.request.ShowHomePageLogout;
 import com.honglu.quickcall.user.service.dao.CustomerMapper;
 import com.honglu.quickcall.user.service.dao.CustomerOccupationMapper;
 import com.honglu.quickcall.user.service.dao.FansMapper;
+import com.honglu.quickcall.user.service.dao.InterestMapper;
+import com.honglu.quickcall.user.service.dao.OccupationMapper;
 import com.honglu.quickcall.user.service.dao.OrdersMapper;
 import com.honglu.quickcall.user.service.dao.ProductMapper;
 import com.honglu.quickcall.user.service.dao.SensitivityWordMapper;
 import com.honglu.quickcall.user.service.dao.SkillMapper;
 import com.honglu.quickcall.user.service.dao.CustomerInterestMapper;
 import com.honglu.quickcall.user.service.service.CustomerRedisManagement;
-import com.honglu.quickcall.user.service.service.InterestMapper;
-import com.honglu.quickcall.user.service.service.OccupationMapper;
 import com.honglu.quickcall.user.service.service.PersonInfoService;
 import com.honglu.quickcall.user.service.util.JsonParseUtil;
 import com.honglu.quickcall.user.service.util.RedisKeyConstants;
 
 import cn.jiguang.commom.utils.StringUtils;
-
 @Service
 @Transactional
-public class UserInfoServiceImpl implements PersonInfoService {
+public class PersonInfoServiceImpl implements PersonInfoService {
 	@Autowired
 	private CustomerRedisManagement customerRedisManagement;
 	@Autowired
@@ -91,9 +91,8 @@ public class UserInfoServiceImpl implements PersonInfoService {
 	 * 中文、英文、数字、下划线校验 4-24位
 	 */
 	private final static Pattern CH_EN_PATTERN = Pattern.compile("^[\\u4e00-\\u9fa5a-zA-Z]{4,24}+$");
-	private final static Pattern ID_PATTERN = Pattern.compile(
-			"^[1-9]\\d{5}(18|19|([23]\\d))\\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\\d{3}[0-9Xx]$)|(^[1-9]\\d{5}\\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\\d{2}$");
-	private static final Logger logger = LoggerFactory.getLogger(UserInfoServiceImpl.class);
+	private final static Pattern ID_PATTERN = Pattern.compile("^\\d{6}(18|19|20)?\\d{2}(0[1-9]|1[012])(0[1-9]|[12]\\d|3[01])\\d{3}(\\d|[xX])$");
+	private static final Logger logger = LoggerFactory.getLogger(PersonInfoServiceImpl.class);
 
 	/**
 	 * @author liuyinkai 查看个人信息

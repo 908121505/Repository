@@ -43,4 +43,5 @@ public interface CustomerMapper {
      * @return
      */
     Customer queryUserIdCardCertificationInfo(Long customerId);
+    
 }
