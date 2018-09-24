@@ -7,7 +7,17 @@ public class SetHeardUrlRequest extends UserCenterRequest {
       private String tel;
       private String nickName;
       private String headPortraitUrl;
+      private Long  customerId;
       
+      
+	public Long getCustomerId() {
+		return customerId;
+	}
+
+	public void setCustomerId(Long customerId) {
+		this.customerId = customerId;
+	}
+
 	public String getTel() {
 		return tel;
 	}
