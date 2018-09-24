@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.honglu.quickcall.user.service.dao.FansMapper" >
+  <resultMap id="BaseResultMap" type="com.honglu.quickcall.user.facade.entity.Fans" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="anchor_id" property="anchorId" jdbcType="BIGINT" />
+    <result column="fans_id" property="fansId" jdbcType="BIGINT" />
+    <result column="attention_state" property="attentionState" jdbcType="TINYINT" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+    <result column="create_man" property="createMan" jdbcType="VARCHAR" />
+    <result column="modify_man" property="modifyMan" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, anchor_id, fans_id, attention_state, create_time, modify_time, create_man, modify_man, 
+    remark
+  </sql>
+  <select id="queryFansNumByCustomerId" resultType="java.lang.Long" parameterType="java.lang.Long" >
+    SELECT COUNT(*) FROM fans WHERE anchor_id=#{customerId} AND attention_state=1; 
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from fans
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from fans
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.honglu.quickcall.user.facade.entity.Fans" >
+    insert into fans (id, anchor_id, fans_id, 
+      attention_state, create_time, modify_time, 
+      create_man, modify_man, remark
+      )
+    values (#{id,jdbcType=BIGINT}, #{anchorId,jdbcType=BIGINT}, #{fansId,jdbcType=BIGINT}, 
+      #{attentionState,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP}, #{modifyTime,jdbcType=TIMESTAMP}, 
+      #{createMan,jdbcType=VARCHAR}, #{modifyMan,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.honglu.quickcall.user.facade.entity.Fans" >
+    insert into fans
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="anchorId != null" >
+        anchor_id,
+      </if>
+      <if test="fansId != null" >
+        fans_id,
+      </if>
+      <if test="attentionState != null" >
+        attention_state,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="modifyTime != null" >
+        modify_time,
+      </if>
+      <if test="createMan != null" >
+        create_man,
+      </if>
+      <if test="modifyMan != null" >
+        modify_man,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="anchorId != null" >
+        #{anchorId,jdbcType=BIGINT},
+      </if>
+      <if test="fansId != null" >
+        #{fansId,jdbcType=BIGINT},
+      </if>
+      <if test="attentionState != null" >
+        #{attentionState,jdbcType=TINYINT},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyTime != null" >
+        #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createMan != null" >
+        #{createMan,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyMan != null" >
+        #{modifyMan,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.honglu.quickcall.user.facade.entity.Fans" >
+    update fans
+    <set >
+      <if test="anchorId != null" >
+        anchor_id = #{anchorId,jdbcType=BIGINT},
+      </if>
+      <if test="fansId != null" >
+        fans_id = #{fansId,jdbcType=BIGINT},
+      </if>
+      <if test="attentionState != null" >
+        attention_state = #{attentionState,jdbcType=TINYINT},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyTime != null" >
+        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createMan != null" >
+        create_man = #{createMan,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyMan != null" >
+        modify_man = #{modifyMan,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.honglu.quickcall.user.facade.entity.Fans" >
+    update fans
+    set anchor_id = #{anchorId,jdbcType=BIGINT},
+      fans_id = #{fansId,jdbcType=BIGINT},
+      attention_state = #{attentionState,jdbcType=TINYINT},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      create_man = #{createMan,jdbcType=VARCHAR},
+      modify_man = #{modifyMan,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>
