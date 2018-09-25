@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -35,16 +36,16 @@ public class AccountInfoController {
      */
     @RequestMapping(value = "/queryPersonInfo", method = RequestMethod.POST)
     @ResponseBody
-    public WebResponseModel queryPersonInfo( PersonInfoRequest params) {
+    public WebResponseModel queryPersonInfo( @RequestBody PersonInfoRequest params) {
         WebResponseModel response = userCenterService.execute(params);
         return response;
     }
     /**
      *保存昵称和头像
      */
-    @RequestMapping(value = "/queryPersonInfo", method = RequestMethod.POST)
+    @RequestMapping(value = "/saveNicknameImage", method = RequestMethod.POST)
     @ResponseBody
-    public WebResponseModel saveNicknameImage( SaveNickNameRequest params) {
+    public WebResponseModel saveNicknameImage( @RequestBody SaveNickNameRequest params) {
         WebResponseModel response = userCenterService.execute(params);
         return response;
     }
@@ -53,7 +54,7 @@ public class AccountInfoController {
      */
     @RequestMapping(value = "/saveGender", method = RequestMethod.POST)
     @ResponseBody
-    public WebResponseModel saveNicknameImage( SaveGenderRequest params) {
+    public WebResponseModel saveGender( @RequestBody SaveGenderRequest params) {
     	 WebResponseModel response = userCenterService.execute(params);
          return response;
     }
@@ -62,7 +63,7 @@ public class AccountInfoController {
      */
     @RequestMapping(value = "/saveSignName", method = RequestMethod.POST)
     @ResponseBody
-    public WebResponseModel saveSignName( SaveSignNameRequest params) {
+    public WebResponseModel saveSignName( @RequestBody SaveSignNameRequest params) {
         WebResponseModel response = userCenterService.execute(params);
         return response;
     }
@@ -71,7 +72,7 @@ public class AccountInfoController {
      */
     @RequestMapping(value = "/saveBirthday", method = RequestMethod.POST)
     @ResponseBody
-    public WebResponseModel saveBirthday( SaveBirthRequest params) {
+    public WebResponseModel saveBirthday( @RequestBody SaveBirthRequest params) {
    	 WebResponseModel response = userCenterService.execute(params);
         return response;
    }
@@ -80,7 +81,7 @@ public class AccountInfoController {
      */
     @RequestMapping(value = "/saveInterest", method = RequestMethod.POST)
     @ResponseBody
-    public WebResponseModel saveInterest( SaveInterestRequest params) {
+    public WebResponseModel saveInterest( @RequestBody SaveInterestRequest params) {
    	 WebResponseModel response = userCenterService.execute(params);
         return response;
    }
@@ -89,7 +90,7 @@ public class AccountInfoController {
      */
     @RequestMapping(value = "/saveOccupation", method = RequestMethod.POST)
     @ResponseBody
-    public WebResponseModel saveOccupation( SaveOccupationRequest params) {
+    public WebResponseModel saveOccupation( @RequestBody SaveOccupationRequest params) {
    	 WebResponseModel response = userCenterService.execute(params);
         return response;
    } 
@@ -98,7 +99,7 @@ public class AccountInfoController {
      */
     @RequestMapping(value = "/showHomePageLogout", method = RequestMethod.POST)
     @ResponseBody
-    public WebResponseModel showHomePageLogout( ShowHomePageLogout params) {
+    public WebResponseModel showHomePageLogout( @RequestBody ShowHomePageLogout params) {
    	 WebResponseModel response = userCenterService.execute(params);
         return response;
    } 

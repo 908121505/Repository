@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
+import com.honglu.quickcall.user.facade.entity.Interest;
+
 public class HomePageLogout implements Serializable{
 	
 	private static final long serialVersionUID = -7518793176114022958L;
@@ -74,7 +76,7 @@ public class HomePageLogout implements Serializable{
 
     private Date loginTime;
     
-    private List<String> interestName;//兴趣名字
+    private List<Interest> interestName;//兴趣名字
     
     private String occupationName;//工作名字
     
@@ -108,11 +110,11 @@ public class HomePageLogout implements Serializable{
 		this.vStatus = vStatus;
 	}
 
-	public List<String> getInterestName() {
+	public List<Interest> getInterestName() {
 		return interestName;
 	}
 
-	public void setInterestName(List<String> interestName) {
+	public void setInterestName(List<Interest> interestName) {
 		this.interestName = interestName;
 	}
 

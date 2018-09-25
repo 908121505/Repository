@@ -101,7 +101,7 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 	public CommonResponse queryPersonInfo(PersonInfoRequest params) {
 		CommonResponse commonResponse = new CommonResponse();
 		PersonHomePage personHomePage = null;
-		if (null != (params.getCustomerId()) || null != (params.getOtherId())) {
+		if (null == (params.getCustomerId()) || null == (params.getOtherId())) {
 			throw new RemoteException(UserBizReturnCode.paramError, "参数错误 request.getJson()=" + params.getCustomerId());
 		}
 		try {
@@ -157,8 +157,13 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 			personHomePage.setHeadPortraitUrl(customer.getHeadPortraitUrl());// 头像
 			personHomePage.setBirthday(customer.getBirthday());// 生日
 			// 查询兴趣爱好 by customerId
-			List<String> interestList = interestMapper.selectInterestByCustomerId(customerId);
-			personHomePage.setInterest(interestList);
+			try {
+				
+				List<Interest> interestList = interestMapper.selectInterestByCustomerId(customerId);
+				personHomePage.setInterest(interestList);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 			// 查询职业 by accountId
 			String occupation = occupationMapper.selectByCustomerId(customerId);
 			personHomePage.setOccupation(occupation);
@@ -267,7 +272,7 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 		}
 		customer.setSex(newGender);
 		// 更新性别
-		int result = customerMapper.updateGenderByCustomerID(customer);
+		int result = customerMapper.updateByPrimaryKeySelective(customer);
 		if (result > 0) {
 			JedisUtil.set(RedisKeyConstants.USER_CUSTOMER_INFO + params.getCustomerId(),
 					JsonParseUtil.castToJson(customer));
@@ -335,16 +340,21 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 		CommonResponse commonResponse = new CommonResponse();
 		Customer customer = customerRedisManagement.getCustomer(params.getCustomerId());
 		customer.setBirthday(params.getBirthday());
-		// 更新生日
-		int result = customerMapper.updateGenderByCustomerID(customer);
-		logger.info("=====saveGender,更新数量" + result);
-		if (result > 0) {
-			JedisUtil.set(RedisKeyConstants.USER_CUSTOMER_INFO + params.getCustomerId(),
-					JsonParseUtil.castToJson(customer));
-			commonResponse.setData(customer);
-			commonResponse.setCode(UserBizReturnCode.Success);
-			commonResponse.setMessage(UserBizReturnCode.Success.desc());
-			return commonResponse;
+		try {
+			// 更新生日
+			int result = customerMapper.updateByPrimaryKeySelective(customer);
+			
+			if (result > 0) {
+				JedisUtil.set(RedisKeyConstants.USER_CUSTOMER_INFO + params.getCustomerId(),
+						JsonParseUtil.castToJson(customer));
+				commonResponse.setData(customer);
+				commonResponse.setCode(UserBizReturnCode.Success);
+				commonResponse.setMessage(UserBizReturnCode.Success.desc());
+				return commonResponse;
+			}
+			logger.info("=====saveGender,更新数量" + result);
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		return null;
 	}
@@ -371,13 +381,22 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 				for (String str : interest) {
 					customerInterest.setInterestId(Integer.parseInt(str));
 					customerInterest.setCreateTime(new Date());
-					int result = customerInterestMapper.insertSelective(customerInterest);
+					//判断是否有重复数据
+					int num = customerInterestMapper.selectRepetitiveData(customerInterest);
+					if (num>0) {
+						//更新
+						customerInterestMapper.updateByPrimaryKeySelective(customerInterest);
+					} else {
+						//插入
+						int result = customerInterestMapper.insertSelective(customerInterest);
+					}
 				}
 				commonResponse.setData(customerInterest);
 				commonResponse.setCode(UserBizReturnCode.Success);
 				commonResponse.setMessage(UserBizReturnCode.Success.desc());
 				return commonResponse;
 			} catch (Exception e) {
+				e.printStackTrace();
 				throw new BizException(AccountBizReturnCode.JdbcError, "操作数据库异常");
 			}
 		} else {
@@ -400,22 +419,31 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 
 		Customer customer = customerRedisManagement.getCustomer(params.getCustomerId());
 		// 获取职业
-		String occupation = params.getOccupationId();
+		int occupation = params.getOccupationId();
 		if (null != customer) {
 			// 更新customer_interest表
 			try {
-				// 存入兴趣ID
-				customerOccupation.setOccupationId(Integer.parseInt(occupation));
+				// 存入职业ID
+				customerOccupation.setOccupationId(occupation);
 				// 创建时间
 				customerOccupation.setCreateTime(new Date());
-				int result = customerOccupationMapper.insertSelective(customerOccupation);
-				if (result > 0) {
-					commonResponse.setData(customerOccupation);
-					commonResponse.setCode(UserBizReturnCode.Success);
-					commonResponse.setMessage(UserBizReturnCode.Success.desc());
+				//查看重复数量
+				int num = customerOccupationMapper.findRepetitveData(customerOccupation);
+				if (num>0) {
+					//更新
+					customerOccupationMapper.updateByPrimaryKeySelective(customerOccupation);
+				} else {
+					//插入
+					int result = customerOccupationMapper.insertSelective(customerOccupation);
+					if (result > 0) {
+						commonResponse.setData(customerOccupation);
+						commonResponse.setCode(UserBizReturnCode.Success);
+						commonResponse.setMessage(UserBizReturnCode.Success.desc());
+					}
 				}
 				return commonResponse;
 			} catch (Exception e) {
+				e.printStackTrace();
 				throw new BizException(AccountBizReturnCode.JdbcError, "操作数据库异常");
 			}
 		} else {
@@ -435,33 +463,38 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 		CommonResponse commonResponse = new CommonResponse();
 		if (null != params) {
 			HomePageLogout homePageLogout = new HomePageLogout();
-			// 获取主页所有资料
-			HomePageLogout hpl = customerMapper.showHomePageLogout(params.getCustomerId());
-			// 获取兴趣名字
-			List<String> interestName = interestMapper.selectInterestByCustomerId(params.getCustomerId());
-			homePageLogout.setInterestName(interestName);
-			// 获取职业名字
-			String occupationName = occupationMapper.selectByCustomerId(params.getCustomerId());
-			homePageLogout.setOccupationName(occupationName);
-			// 判断是否是大V用户，只有拥有上架商品的用户和通过大V认证的用户才会显示大V认证
-			int num = productMapper.queryVProductNum(params.getCustomerId());
-			if (num > 0 && hpl.getvStatus() == 2) {
-				// 可以显示大V图标
-				homePageLogout.setvStatus(1);
-			} else {
-				// 不显示大V图标
-				homePageLogout.setvStatus(0);
+			try {
+				
+				// 获取主页所有资料
+				 homePageLogout = customerMapper.showHomePageLogout(params.getCustomerId());
+				// 获取兴趣名字
+				List<Interest> interestName = interestMapper.selectInterestByCustomerId(params.getCustomerId());
+				homePageLogout.setInterestName(interestName);
+				// 获取职业名字
+				String occupationName = occupationMapper.selectByCustomerId(params.getCustomerId());
+				homePageLogout.setOccupationName(occupationName);
+				// 判断是否是大V用户，只有拥有上架商品的用户和通过大V认证的用户才会显示大V认证
+				int num = productMapper.queryVProductNum(params.getCustomerId());
+				if (num > 0 && homePageLogout.getvStatus() == 2) {
+					// 可以显示大V图标
+					homePageLogout.setvStatus(1);
+				} else {
+					// 不显示大V图标
+					homePageLogout.setvStatus(0);
+				}
+				// 主播擅长项目
+				List<VProductTag> vProductTags = this.queryTag(params.getCustomerId());
+				homePageLogout.setvProductTags(vProductTags);
+				// 查询粉丝数量
+				Long fansNum = fansMapper.queryFansNumByCustomerId(params.getCustomerId());
+				homePageLogout.setFansNum(fansNum);
+				commonResponse.setData(homePageLogout);
+				commonResponse.setCode(UserBizReturnCode.Success);
+				commonResponse.setMessage(UserBizReturnCode.Success.desc());
+				return commonResponse;
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
-			// 主播擅长项目
-			List<VProductTag> vProductTags = this.queryTag(params.getCustomerId());
-			homePageLogout.setvProductTags(vProductTags);
-			// 查询粉丝数量
-			Long fansNum = fansMapper.queryFansNumByCustomerId(params.getCustomerId());
-			homePageLogout.setFansNum(fansNum);
-			commonResponse.setData(homePageLogout);
-			commonResponse.setCode(UserBizReturnCode.Success);
-			commonResponse.setMessage(UserBizReturnCode.Success.desc());
-			return commonResponse;
 		}
 		throw new BizException(AccountBizReturnCode.JdbcError, "操作数据库异常");
 	}
@@ -479,15 +512,27 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 		// 获取标签名称id，价钱，服务时间
 		list = productMapper.selectVProductTag(customerId);
 		for (VProductTag tag : list) {
-			// 获取标签名称
-			Product product = productMapper.selectByPrimaryKey(customerId);
-			tag.setTagName(product.getName());
-			// 获取该产品接单次数(订单完成状态)
-			// 封装参数
-			orders.setProductId(product.getProductId());
-			orders.setSellerId(customerId);
-			Long completeNum = ordersMapper.queryCompleteNumByCustomerIdProductId(orders);
-			tag.setCompletedOrderNum(completeNum);
+			try {
+				// 获取标签名称
+				Product product = productMapper.selectByPrimaryKey(customerId);
+				tag.setTagName(product.getName());
+				// 获取该产品接单次数(订单完成状态)
+				// 封装参数
+				orders.setProductId(product.getProductId());
+				orders.setSellerId(customerId);
+				//查询完成数量
+				Orders num = ordersMapper.queryCompleteNumByCustomerIdProductId(orders);
+				if (null!=num) {
+					int completeNum = orders.getOrderNum();
+					
+					tag.setCompletedOrderNum(completeNum);
+				}else {
+					tag.setCompletedOrderNum(0);
+				}
+				
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 		return list;
 

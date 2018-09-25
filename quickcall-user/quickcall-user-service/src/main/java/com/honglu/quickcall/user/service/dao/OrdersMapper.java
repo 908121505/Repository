@@ -1,9 +1,9 @@
 package com.honglu.quickcall.user.service.dao;
 
+
 import javax.persistence.criteria.Order;
 
 import com.honglu.quickcall.user.facade.entity.Orders;
-import com.honglu.quickcall.user.facade.entity.Product;
 
 public interface OrdersMapper {
     int deleteByPrimaryKey(Long orderId);
@@ -18,5 +18,5 @@ public interface OrdersMapper {
 
     int updateByPrimaryKey(Orders record);
     //根据主播id和产品ID查询该商品卖出的数量
-    Long queryCompleteNumByCustomerIdProductId(Orders orders);
+    Orders queryCompleteNumByCustomerIdProductId(Orders orders);
 }

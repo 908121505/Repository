@@ -15,7 +15,8 @@ public interface CustomerInterestMapper {
 
     int updateByPrimaryKey(CustomerInterest record);
     
-    //根据customerId，interestID 插入表
+    //查询数据是否存在，防止重复提交  customerId  interestId
+    int selectRepetitiveData(CustomerInterest record);
     
     
 }

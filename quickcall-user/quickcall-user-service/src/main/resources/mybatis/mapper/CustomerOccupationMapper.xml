@@ -13,6 +13,9 @@
   <sql id="Base_Column_List" >
     id, customer_id, occupation_id, create_time, modify_time, create_man, modify_man
   </sql>
+  <select id="findRepetitveData" resultType="java.lang.Integer" parameterType="com.honglu.quickcall.user.facade.entity.CustomerOccupation" >
+    SELECT COUNT(*) FROM customer_occupation WHERE customer_id=#{customerId} AND occupation_id=#{occupationId}
+  </select>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
     <include refid="Base_Column_List" />

@@ -5,7 +5,7 @@ import com.honglu.quickcall.user.facade.exchange.UserCenterRequest;
 
 public class SaveOccupationRequest extends UserCenterRequest{
 	private Long customerId;
-	private String occupationId;
+	private int occupationId;
 	
 	public Long getCustomerId() {
 		return customerId;
@@ -15,11 +15,11 @@ public class SaveOccupationRequest extends UserCenterRequest{
 		this.customerId = customerId;
 	}
 
-	public String getOccupationId() {
+	public int getOccupationId() {
 		return occupationId;
 	}
 
-	public void setOccupationId(String occupationId) {
+	public void setOccupationId(int occupationId) {
 		this.occupationId = occupationId;
 	}
 

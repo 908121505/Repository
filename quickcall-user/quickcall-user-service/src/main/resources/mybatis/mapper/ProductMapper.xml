@@ -31,8 +31,11 @@
     from product
     where product_id = #{productId,jdbcType=BIGINT}
   </select>
-  <select id="selectVProductTag" resultMap="com.honglu.quickcall.user.facade.entity.in.VProductTag" parameterType="java.lang.Long" >
-    SELECT * FROM product WHERE seller_id=#{customerId} AND product_status=1
+  <select id="selectVProductTag" resultType="com.honglu.quickcall.user.facade.entity.in.VProductTag" parameterType="java.lang.Long" >
+    SELECT 
+   	product_id as productId,skill_id as skillId,name,service_time as serviceTime,price,preferential_price as preferentialPrice, discount_rate as discountRate, 
+    discount_price as discountPrice, type, product_status as productStatus, seller_id as sellerId, product_describe as productDescribe,remark
+    FROM product WHERE seller_id=#{customerId} AND product_status=1
   </select>
   <select id="queryVProductNum" resultType="java.lang.Integer" parameterType="java.lang.Long" >
     SELECT COUNT(*) FROM product WHERE seller_id=#{customerId} AND product_status='1';

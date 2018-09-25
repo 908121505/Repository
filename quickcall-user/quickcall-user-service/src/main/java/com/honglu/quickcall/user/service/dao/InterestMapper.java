@@ -6,5 +6,5 @@ import com.honglu.quickcall.user.facade.entity.Interest;
 
 public interface InterestMapper {
 	//根据customerId查找兴趣
-	List<String> selectInterestByCustomerId (Long customerId);
+	List<Interest> selectInterestByCustomerId (Long customerId);
 }
