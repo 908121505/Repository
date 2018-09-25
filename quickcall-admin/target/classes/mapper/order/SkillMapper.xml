@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.honglu.quickcall.account.service.dao.SkillMapper" >
-  <resultMap id="BaseResultMap" type="com.honglu.quickcall.account.facade.entity.Skill" >
+<mapper namespace="Skill" >
+  <resultMap id="BaseResultMap" type="com.calf.module.order.entity.Skill" >
     <id column="id" property="id" jdbcType="BIGINT" />
     <result column="name" property="name" jdbcType="VARCHAR" />
     <result column="skill_describe" property="skillDescribe" jdbcType="VARCHAR" />
     <result column="min_price" property="minPrice" jdbcType="DECIMAL" />
     <result column="max_price" property="maxPrice" jdbcType="DECIMAL" />
     <result column="image_url" property="imageUrl" jdbcType="VARCHAR" />
-    <result column="sort" property="sort" jdbcType="SMALLINT" />
     <result column="price_step" property="priceStep" jdbcType="SMALLINT" />
+    <result column="sort" property="sort" jdbcType="SMALLINT" />
     <result column="skill_status" property="skillStatus" jdbcType="TINYINT" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
@@ -17,44 +17,37 @@
     <result column="modify_man" property="modifyMan" jdbcType="VARCHAR" />
     <result column="remark" property="remark" jdbcType="VARCHAR" />
   </resultMap>
-  
-  
-  
+
+
   <sql id="Base_Column_List" >
-    id, name, skill_describe, min_price, max_price, image_url, sort, price_step, skill_status, 
+    id, name, skill_describe, min_price, max_price, image_url, price_step,sort, skill_status, 
     create_time, modify_time, create_man, modify_man, remark
   </sql>
 
-
-
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
     <include refid="Base_Column_List" />
     from skill
-    where id = #{id,jdbcType=BIGINT}
+    where id = #{id,jdbcType=INTEGER}
   </select>
-
-  
-  
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from skill
-    where id = #{id,jdbcType=BIGINT}
+    where id = #{id,jdbcType=INTEGER}
   </delete>
 
-
-  <insert id="insert" parameterType="com.honglu.quickcall.account.facade.entity.Skill" >
+  <insert id="insert" parameterType="com.calf.module.order.entity.Skill" >
     insert into skill (id, name, skill_describe, 
       min_price, max_price, image_url, 
-      sort, price_step, skill_status, 
-      create_time, modify_time, create_man, 
-      modify_man, remark)
-    values (#{id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{skillDescribe,jdbcType=VARCHAR}, 
+      price_step, sort,skill_status, create_time, 
+      modify_time, create_man, modify_man, 
+      remark)
+    values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{skillDescribe,jdbcType=VARCHAR}, 
       #{minPrice,jdbcType=DECIMAL}, #{maxPrice,jdbcType=DECIMAL}, #{imageUrl,jdbcType=VARCHAR}, 
-      #{sort,jdbcType=SMALLINT}, #{priceStep,jdbcType=SMALLINT}, #{skillStatus,jdbcType=TINYINT}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{modifyTime,jdbcType=TIMESTAMP}, #{createMan,jdbcType=VARCHAR}, 
-      #{modifyMan,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR})
+      #{priceStep,jdbcType=SMALLINT},#{sort,jdbcType=SMALLINT}, #{skillStatus,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{modifyTime,jdbcType=TIMESTAMP}, #{createMan,jdbcType=VARCHAR}, #{modifyMan,jdbcType=VARCHAR}, 
+      #{remark,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.honglu.quickcall.account.facade.entity.Skill" >
+  <insert id="insertSelective" parameterType="com.calf.module.order.entity.Skill" >
     insert into skill
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -75,11 +68,11 @@
       <if test="imageUrl != null" >
         image_url,
       </if>
-      <if test="sort != null" >
-        sort,
-      </if>
       <if test="priceStep != null" >
         price_step,
+      </if>
+      <if test="sort != null" >
+        sort,
       </if>
       <if test="skillStatus != null" >
         skill_status,
@@ -102,7 +95,7 @@
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
-        #{id,jdbcType=BIGINT},
+        #{id,jdbcType=INTEGER},
       </if>
       <if test="name != null" >
         #{name,jdbcType=VARCHAR},
@@ -119,11 +112,11 @@
       <if test="imageUrl != null" >
         #{imageUrl,jdbcType=VARCHAR},
       </if>
-      <if test="sort != null" >
-        #{sort,jdbcType=SMALLINT},
-      </if>
       <if test="priceStep != null" >
         #{priceStep,jdbcType=SMALLINT},
+      </if>
+      <if test="sort != null" >
+        #{sort,jdbcType=SMALLINT},
       </if>
       <if test="skillStatus != null" >
         #{skillStatus,jdbcType=TINYINT},
@@ -145,10 +138,8 @@
       </if>
     </trim>
   </insert>
-  
 
-
-  <update id="updateByPrimaryKeySelective" parameterType="com.honglu.quickcall.account.facade.entity.Skill" >
+  <update id="update" parameterType="com.calf.module.order.entity.Skill" >
     update skill
     <set >
       <if test="name != null" >
@@ -166,11 +157,11 @@
       <if test="imageUrl != null" >
         image_url = #{imageUrl,jdbcType=VARCHAR},
       </if>
-      <if test="sort != null" >
-        sort = #{sort,jdbcType=SMALLINT},
-      </if>
       <if test="priceStep != null" >
         price_step = #{priceStep,jdbcType=SMALLINT},
+      </if>
+      <if test="sort != null" >
+        sort = #{sort,jdbcType=SMALLINT},
       </if>
       <if test="skillStatus != null" >
         skill_status = #{skillStatus,jdbcType=TINYINT},
@@ -191,60 +182,67 @@
         remark = #{remark,jdbcType=VARCHAR},
       </if>
     </set>
-    where id = #{id,jdbcType=BIGINT}
+    where id = #{id,jdbcType=INTEGER}
   </update>
-  
-  
-  
-  
-  <update id="updateByPrimaryKey" parameterType="com.honglu.quickcall.account.facade.entity.Skill" >
+  <update id="updateByPrimaryKey" parameterType="com.calf.module.order.entity.Skill" >
     update skill
     set name = #{name,jdbcType=VARCHAR},
       skill_describe = #{skillDescribe,jdbcType=VARCHAR},
       min_price = #{minPrice,jdbcType=DECIMAL},
       max_price = #{maxPrice,jdbcType=DECIMAL},
       image_url = #{imageUrl,jdbcType=VARCHAR},
-      sort = #{sort,jdbcType=SMALLINT},
       price_step = #{priceStep,jdbcType=SMALLINT},
+      sort = #{sort,jdbcType=SMALLINT},
       skill_status = #{skillStatus,jdbcType=TINYINT},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       modify_time = #{modifyTime,jdbcType=TIMESTAMP},
       create_man = #{createMan,jdbcType=VARCHAR},
       modify_man = #{modifyMan,jdbcType=VARCHAR},
       remark = #{remark,jdbcType=VARCHAR}
-    where id = #{id,jdbcType=BIGINT}
+    where id = #{id,jdbcType=INTEGER}
   </update>
   
-  <!-- 获取全部可用的技能 -->
-  <select id="selectTotalSkill" resultMap="BaseResultMap" >
+  
+  <select id="selectPageList" resultMap="BaseResultMap" parameterType="map" >
     select 
     <include refid="Base_Column_List" />
     from skill
-    where skill_status = 0
+    where  1 = 1
+     <if test="skillStatus != null" >
+        and  skill_status = #{skillStatus}
+     </if>
+     <if test="name != null" >
+        and  name like  concat( '%',#{name},'%')
+     </if>
+     LIMIT ${iDisplayStart},${iDisplayLength}
+     
+  </select>
+  <select id="slectCount" resultType="java.lang.Integer" parameterType="map" >
+    select 
+    count(1)
+    from skill
+    where  1= 1
+     <if test="skillStatus != null" >
+        and  skill_status = #{skillStatus}
+     </if>
+     <if test="name != null" >
+        and  name like  concat( '%',#{name},'%')
+     </if>
+    
   </select>
   
   
-  <!-- 获取全部技能分类 -->
-  <select id="selectPartSkill" resultType="com.honglu.quickcall.account.facade.vo.FirstPageSkillinfoVO" >
-		SELECT
-			sk.id  as  skillId,
-			sk.name as  name
-		FROM
-			(
-				SELECT
-					count(1) AS count,
-					skill_id
-				FROM
-					product
-				WHERE
-					product_status = 1
-				GROUP BY
-					skill_id
-			) tmp
-		LEFT JOIN skill sk ON sk.id = tmp.skill_id
-		ORDER BY
-			tmp.count DESC 
-  </select>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
   
   
   

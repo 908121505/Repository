@@ -10,7 +10,7 @@ public class VProductTag {
 	
 	private Short serviceTime;//服务时长
 	
-	private Long completedOrderNum;//已完成订单
+	private int completedOrderNum;//已完成订单
 	
     private Long productId;
     
@@ -66,11 +66,11 @@ public class VProductTag {
 		this.serviceTime = serviceTime;
 	}
 
-	public Long getCompletedOrderNum() {
+	public int getCompletedOrderNum() {
 		return completedOrderNum;
 	}
 
-	public void setCompletedOrderNum(Long completedOrderNum) {
+	public void setCompletedOrderNum(int completedOrderNum) {
 		this.completedOrderNum = completedOrderNum;
 	}
 

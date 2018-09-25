@@ -30,7 +30,7 @@ public class SaveGenderRequest extends UserCenterRequest{
 
 	@Override
 	public String getBizCode() {
-		return UserFunctionType.SaveNicknameImage;
+		return UserFunctionType.SaveGender;
 	}
 
 }

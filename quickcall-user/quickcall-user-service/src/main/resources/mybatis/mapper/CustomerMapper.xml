@@ -45,7 +45,6 @@
     create_time, modify_time, create_man, modify_man, remark, app_channel_name, device_id, 
     login_time
   </sql>
-
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
     <include refid="Base_Column_List" />
@@ -476,6 +475,16 @@
     select
       customer_id, real_name, credentials_type, credentials_num,
       front_portrait_url, back_portrait_url,identity_status
+    from customer
+    where customer_id = #{customerId,jdbcType=BIGINT}
+  </select>
+  <select id="showHomePageLogout" resultType="com.honglu.quickcall.user.facade.entity.in.HomePageLogout" parameterType="java.lang.Long" >
+    select 
+    customer_id as customerId,sex, nick_name as nickname, type,credentials_num as credentialsNum, 
+    interest_id as interestId,occupation_id as occupationId, front_portrait_url as frontPortraitUrl, 
+    cust_status as custStatus,sign_name as signName, 
+    star_sign as starSign, birthday, voice_url as voiceUrl, v_status as vStatus, identity_status as identityStatus, token_code as tokenCode, other_relation as otherRelation 
+    
     from customer
     where customer_id = #{customerId,jdbcType=BIGINT}
   </select>

@@ -7,7 +7,7 @@ public class CustomerOccupation {
 
     private Long customerId;
 
-    private Integer occupationId;
+    private int occupationId;
 
     private Date createTime;
 
@@ -33,11 +33,11 @@ public class CustomerOccupation {
         this.customerId = customerId;
     }
 
-    public Integer getOccupationId() {
+    public int getOccupationId() {
         return occupationId;
     }
 
-    public void setOccupationId(Integer occupationId) {
+    public void setOccupationId(int occupationId) {
         this.occupationId = occupationId;
     }
 

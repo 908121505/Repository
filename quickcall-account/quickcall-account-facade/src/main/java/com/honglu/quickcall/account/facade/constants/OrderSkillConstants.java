@@ -59,18 +59,20 @@ public interface OrderSkillConstants {
 	public static final Integer  ORDER_STATUS_CANCLE_DV_ACCEPT_USER_SELF_CANCLE = 8 ;
 	/**订单状态9.大V确认开始，立即开始*/
 	public static final Integer  ORDER_STATUS_PAYED_DV_CONFIRM_START = 9 ;
-	/**订单状态10.用户同意（待定）*/
-	public static final Integer  ORDER_STATUS_PAYED_DV_CONFIRM_USER_AGREE = 10 ;
-	/**订单状态11.进行中（用户同意或者到约定的订单开始时间）*/
-	public static final Integer  ORDER_STATUS_GOINGING = 11 ;
-	/**订单状态12.用户退款*/
-	public static final Integer  ORDER_STATUS_USER_APPLAY_REFUND = 12 ;
-	/**订单状态13.大V同意退款订单作废（退款到客户）*/
-	public static final Integer  ORDER_STATUS_CANCEL_DV_AGREE_REFUND = 13 ;
-	/**订单状态14.订单完成（大V拒绝）*/
-	public static final Integer  ORDER_STATUS_END_DV_REFUSE = 14 ;
-	/**订单状态15.订单完成（正常完成）*/
-	public static final Integer  ORDER_STATUS_END = 15 ;
+	/**订单状态10.用户同意（大V立即开始请求）*/
+	public static final Integer  ORDER_STATUS_CUST_AGREE_DV_START_SERVICE = 10 ;
+	/**订单状态11.用户拒绝（大V立即开始请求）*/
+	public static final Integer  ORDER_STATUS_CUST_REFUSE_DV_START_SERVICE = 11 ;
+	/**订单状态12.进行中（用户同意或者到约定的订单开始时间）*/
+	public static final Integer  ORDER_STATUS_GOINGING = 12 ;
+	/**订单状态13.用户退款*/
+	public static final Integer  ORDER_STATUS_USER_APPLAY_REFUND = 13 ;
+	/**订单状态14.大V同意退款订单作废（退款到客户）*/
+	public static final Integer  ORDER_STATUS_CANCEL_DV_AGREE_REFUND = 14 ;
+	/**订单状态15.订单完成（大V拒绝）*/
+	public static final Integer  ORDER_STATUS_END_DV_REFUSE = 15 ;
+	/**订单状态16.订单完成（正常完成）*/
+	public static final Integer  ORDER_STATUS_END = 16 ;
 	
 	
 }

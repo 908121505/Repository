@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.honglu.quickcall.user.service.dao.ProductMapper" >
-  <resultMap id="BaseResultMap" type="com.honglu.quickcall.user.facade.entity.Product" >
+<mapper namespace="Product" >
+  <resultMap id="BaseResultMap" type="com.calf.module.order.entity.Product" >
     <id column="product_id" property="productId" jdbcType="BIGINT" />
-    <result column="skill_id" property="skillId" jdbcType="BIGINT" />
     <result column="name" property="name" jdbcType="VARCHAR" />
     <result column="service_time" property="serviceTime" jdbcType="SMALLINT" />
     <result column="price" property="price" jdbcType="DECIMAL" />
@@ -21,9 +20,9 @@
     <result column="remark" property="remark" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    product_id, skill_id, name, service_time, price, preferential_price, discount_rate, 
-    discount_price, type, product_status, seller_id, product_describe, create_time, modify_time, 
-    create_man, modify_man, remark
+    product_id, name, service_time, price, preferential_price, discount_rate, discount_price, 
+    type, product_status, seller_id, product_describe, create_time, modify_time, create_man, 
+    modify_man, remark
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
@@ -31,41 +30,29 @@
     from product
     where product_id = #{productId,jdbcType=BIGINT}
   </select>
-  <select id="selectVProductTag" resultType="com.honglu.quickcall.user.facade.entity.in.VProductTag" parameterType="java.lang.Long" >
-    SELECT 
-   	product_id as productId,skill_id as skillId,name,service_time as serviceTime,price,preferential_price as preferentialPrice, discount_rate as discountRate, 
-    discount_price as discountPrice, type, product_status as productStatus, seller_id as sellerId, product_describe as productDescribe,remark
-    FROM product WHERE seller_id=#{customerId} AND product_status=1
-  </select>
-  <select id="queryVProductNum" resultType="java.lang.Integer" parameterType="java.lang.Long" >
-    SELECT COUNT(*) FROM product WHERE seller_id=#{customerId} AND product_status='1';
-  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
     delete from product
     where product_id = #{productId,jdbcType=BIGINT}
   </delete>
-  <insert id="insert" parameterType="com.honglu.quickcall.user.facade.entity.Product" >
-    insert into product (product_id, skill_id, name, 
-      service_time, price, preferential_price, 
-      discount_rate, discount_price, type, 
-      product_status, seller_id, product_describe, 
-      create_time, modify_time, create_man, 
-      modify_man, remark)
-    values (#{productId,jdbcType=BIGINT}, #{skillId,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, 
-      #{serviceTime,jdbcType=SMALLINT}, #{price,jdbcType=DECIMAL}, #{preferentialPrice,jdbcType=DECIMAL}, 
-      #{discountRate,jdbcType=DECIMAL}, #{discountPrice,jdbcType=DECIMAL}, #{type,jdbcType=TINYINT}, 
-      #{productStatus,jdbcType=TINYINT}, #{sellerId,jdbcType=BIGINT}, #{productDescribe,jdbcType=VARCHAR}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{modifyTime,jdbcType=TIMESTAMP}, #{createMan,jdbcType=VARCHAR}, 
-      #{modifyMan,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR})
+  <insert id="insert" parameterType="com.calf.module.order.entity.Product" >
+    insert into product (product_id, name, service_time, 
+      price, preferential_price, discount_rate, 
+      discount_price, type, product_status, 
+      seller_id, product_describe, create_time, 
+      modify_time, create_man, modify_man, 
+      remark)
+    values (#{productId,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{serviceTime,jdbcType=SMALLINT}, 
+      #{price,jdbcType=DECIMAL}, #{preferentialPrice,jdbcType=DECIMAL}, #{discountRate,jdbcType=DECIMAL}, 
+      #{discountPrice,jdbcType=DECIMAL}, #{type,jdbcType=TINYINT}, #{productStatus,jdbcType=TINYINT}, 
+      #{sellerId,jdbcType=BIGINT}, #{productDescribe,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{modifyTime,jdbcType=TIMESTAMP}, #{createMan,jdbcType=VARCHAR}, #{modifyMan,jdbcType=VARCHAR}, 
+      #{remark,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.honglu.quickcall.user.facade.entity.Product" >
+  <insert id="insertSelective" parameterType="com.calf.module.order.entity.Product" >
     insert into product
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="productId != null" >
         product_id,
-      </if>
-      <if test="skillId != null" >
-        skill_id,
       </if>
       <if test="name != null" >
         name,
@@ -117,9 +104,6 @@
       <if test="productId != null" >
         #{productId,jdbcType=BIGINT},
       </if>
-      <if test="skillId != null" >
-        #{skillId,jdbcType=BIGINT},
-      </if>
       <if test="name != null" >
         #{name,jdbcType=VARCHAR},
       </if>
@@ -167,12 +151,12 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.honglu.quickcall.user.facade.entity.Product" >
+
+
+
+  <update id="updateByPrimaryKeySelective" parameterType="com.calf.module.order.entity.Product" >
     update product
     <set >
-      <if test="skillId != null" >
-        skill_id = #{skillId,jdbcType=BIGINT},
-      </if>
       <if test="name != null" >
         name = #{name,jdbcType=VARCHAR},
       </if>
@@ -221,10 +205,9 @@
     </set>
     where product_id = #{productId,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.honglu.quickcall.user.facade.entity.Product" >
+  <update id="updateByPrimaryKey" parameterType="com.calf.module.order.entity.Product" >
     update product
-    set skill_id = #{skillId,jdbcType=BIGINT},
-      name = #{name,jdbcType=VARCHAR},
+    set name = #{name,jdbcType=VARCHAR},
       service_time = #{serviceTime,jdbcType=SMALLINT},
       price = #{price,jdbcType=DECIMAL},
       preferential_price = #{preferentialPrice,jdbcType=DECIMAL},
@@ -241,4 +224,43 @@
       remark = #{remark,jdbcType=VARCHAR}
     where product_id = #{productId,jdbcType=BIGINT}
   </update>
+  
+  
+  
+    <select id="selectPageList" resultType="com.calf.module.order.vo.ProductVO" parameterType="map" >
+		SELECT
+			p.name AS NAME,
+			p.price AS price,
+			p.service_time  as serviceTime,
+			sust.nick_name AS servNickName,
+			p.product_status AS productStatus,
+			p.create_time AS createTime,
+			p.modify_time AS modifyTime
+		FROM
+			product p
+		LEFT JOIN customer sust ON p.seller_id = sust.customer_id
+		where  1 = 1
+		 <if test="servNickName != null" >
+        	AND sust.nick_name LIKE  concat('%',#{servNickName},'%') 
+      	</if>
+		 <if test="orderType != null" >
+        	AND p.name  LIKE  concat('%',#{orderType},'%') 
+      	</if>
+		
+     LIMIT ${iDisplayStart},${iDisplayLength}
+  </select>
+  <select id="slectCount" resultType="java.lang.Integer" parameterType="map" >
+	SELECT
+		count(1)
+	FROM
+		product p
+	LEFT JOIN customer sust ON p.seller_id = sust.customer_id
+	where  1 = 1
+		 <if test="servNickName != null" >
+        	AND sust.nick_name LIKE  concat('%',#{servNickName},'%') 
+      	</if>
+		 <if test="orderType != null" >
+        	AND p.name  LIKE  concat('%',#{orderType},'%') 
+      	</if>
+  </select>
 </mapper>

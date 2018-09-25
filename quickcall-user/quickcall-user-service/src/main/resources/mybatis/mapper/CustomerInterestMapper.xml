@@ -14,6 +14,9 @@
   <sql id="Base_Column_List" >
     id, customer_id, interest_id, create_time, modify_time, create_man, modify_man, remark
   </sql>
+   <select id="selectRepetitiveData" resultType="java.lang.Integer" parameterType="com.honglu.quickcall.user.facade.entity.CustomerInterest" >
+    SELECT COUNT(*) FROM customer_interest WHERE customer_id=#{customerId} AND interest_id=#{interestId};
+  </select>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
     <include refid="Base_Column_List" />

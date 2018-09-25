@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.honglu.quickcall.user.service.dao.OrdersMapper" >
-  <resultMap id="BaseResultMap" type="com.honglu.quickcall.user.facade.entity.Orders" >
+<mapper namespace="Order" >
+  <resultMap id="BaseResultMap" type="com.calf.module.order.entity.Order" >
     <id column="order_id" property="orderId" jdbcType="BIGINT" />
     <result column="trade_id" property="tradeId" jdbcType="BIGINT" />
     <result column="product_id" property="productId" jdbcType="BIGINT" />
@@ -41,14 +41,11 @@
     from orders
     where order_id = #{orderId,jdbcType=BIGINT}
   </select>
-  <select id="queryCompleteNumByCustomerIdProductId" resultMap="BaseResultMap" parameterType="com.honglu.quickcall.user.facade.entity.Orders" >
-    SELECT order_num FROM orders WHERE product_id=#{productId} AND seller_id=#{sellerId} AND order_status='9'
-  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
     delete from orders
     where order_id = #{orderId,jdbcType=BIGINT}
   </delete>
-  <insert id="insert" parameterType="com.honglu.quickcall.user.facade.entity.Orders" >
+  <insert id="insert" parameterType="com.calf.module.order.entity.Order" >
     insert into orders (order_id, trade_id, product_id, 
       buyer_id, seller_id, order_describe, 
       order_num, order_amounts, payment_type, 
@@ -68,7 +65,7 @@
       #{createTime,jdbcType=TIMESTAMP}, #{modifyTime,jdbcType=TIMESTAMP}, #{createMan,jdbcType=VARCHAR}, 
       #{modifyMan,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.honglu.quickcall.user.facade.entity.Orders" >
+  <insert id="insertSelective" parameterType="com.calf.module.order.entity.Order" >
     insert into orders
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="orderId != null" >
@@ -231,7 +228,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.honglu.quickcall.user.facade.entity.Orders" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.calf.module.order.entity.Order" >
     update orders
     <set >
       <if test="tradeId != null" >
@@ -312,7 +309,7 @@
     </set>
     where order_id = #{orderId,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.honglu.quickcall.user.facade.entity.Orders" >
+  <update id="updateByPrimaryKey" parameterType="com.calf.module.order.entity.Order" >
     update orders
     set trade_id = #{tradeId,jdbcType=BIGINT},
       product_id = #{productId,jdbcType=BIGINT},
@@ -341,4 +338,64 @@
       remark = #{remark,jdbcType=VARCHAR}
     where order_id = #{orderId,jdbcType=BIGINT}
   </update>
+  <!-- 查询内容 -->
+  <sql id="SELECT_SQL_BODY">
+			orders od
+		LEFT JOIN customer cust ON od.buyer_id = cust.customer_id
+		LEFT JOIN customer sust ON od.seller_id = sust.customer_id
+		LEFT JOIN product p ON od.product_id = p.product_id
+  </sql>
+  <!-- 查询内容 -->
+  <sql id="SELECT_SQL_CONTENT">
+		order_id AS orderId,
+		sust.nick_name AS servNickName,
+		cust.nick_name AS custNickName,
+		p.name AS orderType,
+		p.price AS price,
+		order_num AS orderNum,
+		order_amounts AS orderAmounts,
+		confirm_time AS confirmTime,
+		start_time AS startTime,
+		end_time AS endTime,
+		order_time AS orderTime,
+		finish_time AS finishTime,
+		order_status AS orderStatus
+  </sql>
+  <!-- 查询内容 -->
+  <sql id="SELECT_SQL_CONDITION">
+	<if test="orderId != null" >
+        AND  order_id =   #{orderId}
+    </if>
+	<if test="servNickName != null" >
+        AND  sust.nick_name LIKE  concat('%',#{servNickName},'%') 
+    </if>
+	<if test="custNickName != null" >
+        AND  cust.nick_name LIKE  concat('%',#{custNickName},'%') 
+    </if>
+	<if test="orderType != null" >
+        AND  p.name LIKE  concat('%',#{orderType},'%') 
+    </if>
+  </sql>
+ 
+   <select id="selectPageList" resultType="com.calf.module.order.vo.OrderVO" parameterType="map" >
+    select 
+    <include refid="SELECT_SQL_CONTENT" />
+    from 
+    <include refid="SELECT_SQL_BODY" />
+    where 1= 1
+    <include refid="SELECT_SQL_CONDITION" />
+    LIMIT ${iDisplayStart},${iDisplayLength}
+  </select>
+   <select id="slectCount" resultType="java.lang.Integer" parameterType="map" >
+    select 
+    count(1)
+    from 
+    <include refid="SELECT_SQL_BODY" />
+    where 1= 1
+    <include refid="SELECT_SQL_CONDITION" />
+  </select>
+  
+  
+  
+  
 </mapper>

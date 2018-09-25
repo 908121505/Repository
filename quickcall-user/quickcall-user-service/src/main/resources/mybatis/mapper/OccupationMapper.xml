@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.honglu.quickcall.user.service.service.OccupationMapper" >
+<mapper namespace="com.honglu.quickcall.user.service.dao.OccupationMapper" >
   <resultMap id="BaseResultMap" type="com.honglu.quickcall.user.facade.entity.Occupation" >
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="name" property="name" jdbcType="VARCHAR" />
@@ -17,7 +17,7 @@
     remark
   </sql>
   <select id="selectByCustomerId" resultType="java.lang.String" parameterType="java.lang.Long" >
-    SELECT o.name FROM customer c 
+    SELECT DISTINCT o.name FROM customer c 
     LEFT JOIN customer_occupation co ON c.customer_id=co.customer_id
 	LEFT JOIN occupation o ON co.occupation_id=o.id 
 	WHERE c.customer_id=#{customerId}
