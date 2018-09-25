@@ -23,6 +23,7 @@
 <link rel="stylesheet" type="text/css" href="resources/css/jquery-ui.css">
 <link rel="stylesheet" type="text/css" href="resources/bootstrapvalidator/dist/css/bootstrapValidator.css" />
 <link rel="stylesheet" type="text/css" href="resources/ueditor/themes/default/css/ueditor.css" />
+<link rel="stylesheet" type="text/css" href="resources/plugins/layer-v3.1.1/theme/default/layer.css">
 <style>
 .label-info {
 	margin-right: 3px;
@@ -91,6 +92,7 @@ a {
 <script language="javascript" type="text/javascript" src="resources/js/ckeditor/ckeditor.js" mce_src="resources/js/ckeditor/ckeditor.js"></script>
 <script language="javascript" type="text/javascript" src="resources/js/ckeditor/config.js" mce_src="resources/js/ckeditor/config.js"></script>
 <script type="text/javascript" src="resources/js/My97DatePicker/WdatePicker.js" charset="utf-8"></script>
+<script type="text/javascript" src="resources/plugins/layer-v3.1.1/layer.js" charset="utf-8"></script>
 <body>
 	<div>
 		<jsp:include page="/WEB-INF/views/home/top.jsp" />
