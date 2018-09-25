@@ -30,12 +30,21 @@ public class PersonHomePage {
 
 	    private Date birthday;
 
-	    private String voiceUrl;
+	    private String voiceUrl;//语音链接
 	    
 	    private String occupation;//职业
 	    
 	    private String headPortraitUrl;//头像路径
 	    
+	    private String starSign;//星座
+	    
+		public String getStarSign() {
+			return starSign;
+		}
+
+		public void setStarSign(String starSign) {
+			this.starSign = starSign;
+		}
 
 		public String getHeadPortraitUrl() {
 			return headPortraitUrl;

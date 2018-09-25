@@ -17,6 +17,8 @@ public interface CustomerInterestMapper {
     
     //查询数据是否存在，防止重复提交  customerId  interestId
     int selectRepetitiveData(CustomerInterest record);
-    
-    
+    //根据customerId更新
+    int updateByCustomerIdSelective(CustomerInterest record);
+    //根据customerId删除
+    int deleteByCustomerId(Long customerId);
 }

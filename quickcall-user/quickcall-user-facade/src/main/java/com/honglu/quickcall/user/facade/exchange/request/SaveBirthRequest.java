@@ -16,6 +16,16 @@ public class SaveBirthRequest extends UserCenterRequest {
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date birthday; 
 	
+	private String starSign;//星座
+	
+	public String getStarSign() {
+		return starSign;
+	}
+
+	public void setStarSign(String starSign) {
+		this.starSign = starSign;
+	}
+
 	public Long getCustomerId() {
 		return customerId;
 	}

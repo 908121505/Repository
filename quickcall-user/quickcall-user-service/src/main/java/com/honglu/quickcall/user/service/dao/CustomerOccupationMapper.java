@@ -15,5 +15,7 @@ public interface CustomerOccupationMapper {
 
     int updateByPrimaryKey(CustomerOccupation record);
     //查询是否有重复数据
-    int findRepetitveData(CustomerOccupation customerOccupation);
+    int findRepetitveData(Long customerId);
+    //根据customerId更新
+    int updateByCustomerIdSelective(CustomerOccupation record);
 }

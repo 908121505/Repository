@@ -107,9 +107,9 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 		try {
 			// 判断是不是查看自己的资料
 			if (!params.getCustomerId().equals(params.getOtherId())) {
-				personHomePage = queryPersonal(params.getCustomerId());
-			} else {
 				personHomePage = queryPersonal(params.getOtherId());
+			} else {
+				personHomePage = queryPersonal(params.getCustomerId());
 			}
 
 			commonResponse.setData(personHomePage);
@@ -137,6 +137,8 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 		if (customer != null) {
 			personHomePage.setCustomerId(customerId);// id
 			personHomePage.setNickName(customer.getNickName());// 昵称
+			personHomePage.setSignName(customer.getSignName());//签名
+			personHomePage.setStarSign(customer.getStarSign());//星座
 			// 判断身份证是否为空，如果又身份证则按找身份证上面的性别
 			if (StringUtils.isNotEmpty(identityID)) {
 				Matcher m = ID_PATTERN.matcher(identityID);
@@ -339,7 +341,8 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 	public CommonResponse saveBirthday(SaveBirthRequest params) {
 		CommonResponse commonResponse = new CommonResponse();
 		Customer customer = customerRedisManagement.getCustomer(params.getCustomerId());
-		customer.setBirthday(params.getBirthday());
+		customer.setBirthday(params.getBirthday());//生日
+		customer.setStarSign(params.getStarSign());//星座
 		try {
 			// 更新生日
 			int result = customerMapper.updateByPrimaryKeySelective(customer);
@@ -378,18 +381,20 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 		if (null != customer) {
 			// 更新customer_interest表
 			try {
+				//如果customer_interest中间表有该用户，先删除该用户在此表的数据
+				customerInterestMapper.deleteByCustomerId(params.getCustomerId());
 				for (String str : interest) {
 					customerInterest.setInterestId(Integer.parseInt(str));
-					customerInterest.setCreateTime(new Date());
+					//customerInterest.setCreateTime(new Date());
 					//判断是否有重复数据
-					int num = customerInterestMapper.selectRepetitiveData(customerInterest);
-					if (num>0) {
-						//更新
-						customerInterestMapper.updateByPrimaryKeySelective(customerInterest);
-					} else {
+//					int num = customerInterestMapper.selectRepetitiveData(customerInterest);
+//					if (num>0) {
+//						//更新
+//						customerInterestMapper.updateByCustomerIdSelective(customerInterest);
+//					} else {
 						//插入
 						int result = customerInterestMapper.insertSelective(customerInterest);
-					}
+//					}
 				}
 				commonResponse.setData(customerInterest);
 				commonResponse.setCode(UserBizReturnCode.Success);
@@ -424,28 +429,30 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 			// 更新customer_interest表
 			try {
 				// 存入职业ID
-				customerOccupation.setOccupationId(occupation);
+				//customerOccupation.setOccupationId(occupation);
 				// 创建时间
-				customerOccupation.setCreateTime(new Date());
+				//customerOccupation.setCreateTime(new Date());
 				//查看重复数量
-				int num = customerOccupationMapper.findRepetitveData(customerOccupation);
+				int num = customerOccupationMapper.findRepetitveData(params.getCustomerId());
 				if (num>0) {
 					//更新
-					customerOccupationMapper.updateByPrimaryKeySelective(customerOccupation);
+					// 存入职业ID
+					customerOccupation.setOccupationId(occupation);
+					int nn=customerOccupationMapper.updateByCustomerIdSelective(customerOccupation);
 				} else {
+					// 存入职业ID
+					customerOccupation.setOccupationId(occupation);
 					//插入
 					int result = customerOccupationMapper.insertSelective(customerOccupation);
-					if (result > 0) {
-						commonResponse.setData(customerOccupation);
-						commonResponse.setCode(UserBizReturnCode.Success);
-						commonResponse.setMessage(UserBizReturnCode.Success.desc());
-					}
 				}
-				return commonResponse;
+				commonResponse.setData(customerOccupation);
+				commonResponse.setCode(UserBizReturnCode.Success);
+				commonResponse.setMessage(UserBizReturnCode.Success.desc());
 			} catch (Exception e) {
 				e.printStackTrace();
 				throw new BizException(AccountBizReturnCode.JdbcError, "操作数据库异常");
 			}
+			return commonResponse;
 		} else {
 			throw new BizException(AccountBizReturnCode.JdbcError, "操作数据库异常");
 		}
