@@ -70,6 +70,7 @@ public class HomeController {
 		} catch(Exception e){
 			logger.warn("登录失败：{}", e.getMessage());
 		}
+		request.setAttribute("loginFail", "1");
 		return "login";
 	}
 

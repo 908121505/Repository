@@ -16,11 +16,13 @@
 <script src="resources/message/js/messenger.min.js" type="text/javascript"></script>
 <script type="text/javascript">
 $(function(){
-	$.globalMessenger().post({
-		message: '用户名或者密码错误！',
-		type: 'error',
-		hideAfter: 2
-	});
+    if("${loginFail}" == 1){
+		$.globalMessenger().post({
+			message: '用户名或者密码错误！',
+			type: 'error',
+			hideAfter: 2
+		});
+    }
 });
 </script>
 </head>
