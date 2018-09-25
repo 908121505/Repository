@@ -33,6 +33,7 @@ import com.honglu.quickcall.account.service.service.CommonService;
 import com.honglu.quickcall.account.service.service.IOrderService;
 import com.honglu.quickcall.common.api.exception.BizException;
 import com.honglu.quickcall.common.api.exchange.CommonResponse;
+import com.honglu.quickcall.common.api.util.DateUtils;
 import com.honglu.quickcall.common.core.util.UUIDUtils;
 import com.honglu.quickcall.user.facade.enums.PushAppMsgTypeEnum;
 
@@ -82,13 +83,15 @@ public class OrderServiceImpl implements IOrderService {
 	
 	@Override
 	public CommonResponse saveOrder(OrderSaveRequest request) {
-		if (request == null || request.getCustomerId() == null) {
+		if (request == null || request.getCustomerId() == null || request.getProductId() == null) {
 			throw new BizException(AccountBizReturnCode.paramError, "查询技能信息参数异常");
 		}
 		//创建订单
 		Long  customerId =  request.getCustomerId();
 		Order record = new Order();
 		Long  orderId =  UUIDUtils.getId();
+		
+		
 		
 		Long  sellerId =  request.getSellerId() ;
 		record.setOrderId(orderId);
@@ -97,10 +100,15 @@ public class OrderServiceImpl implements IOrderService {
 		Integer  orderNum =  request.getOrderNum();
 		BigDecimal  price =  request.getPrice();
 		BigDecimal orderAmounts = new BigDecimal(orderNum).multiply(price);
+		record.setProductId(request.getProductId());
 		record.setOrderAmounts(orderAmounts);
 		record.setSellerId(sellerId);
 		record.setOrderNum(orderNum);
 		record.setOrderStatus(OrderSkillConstants.ORDER_STATUS_NOT_PAY);
+		
+		String  startTimeStr =  request.getStartTimeStr();
+		Date  startTime = DateUtils.formatDateExt(startTimeStr);
+		record.setStartTime(startTime);
 		orderMapper.insert(record);
 		CommonResponse commonResponse = commonService.getCommonResponse();
 		LOGGER.info("用户编号为：" + request.getCustomerId() + "下单成功");
@@ -162,9 +170,9 @@ public class OrderServiceImpl implements IOrderService {
 			Long  sellerId =  order.getSellerId();
 			//判断余额是否充足
 			Account account=accountMapper.queryAccount(userId);
-			BigDecimal  usableAmounts =  account.getUsableAmounts();
-			if(usableAmounts != null){
-				if(payAmount.compareTo(usableAmounts) > 0){
+			BigDecimal  remainderAmount =  account.getRemainderAmounts();
+			if(remainderAmount != null){
+				if(payAmount.compareTo(remainderAmount) < 0){
 					commonService.updateOrder(orderId, OrderSkillConstants.ORDER_STATUS_PAYED,null);
 					//修改账户余额
 					accountMapper.outAccount(userId, payAmount);
@@ -214,13 +222,13 @@ public class OrderServiceImpl implements IOrderService {
 
 	@Override
 	public CommonResponse applayRefund(ApplayRefundRequest request) {
-		Long  orderId =  request.getOrderId();
-		Integer  type =  request.getType();
-		if (request == null || orderId == null || type == null) {
+		if (request == null || request.getOrderId() == null || request.getType() == null) {
 			throw new BizException(AccountBizReturnCode.paramError, "申请退款/完成订单参数异常");
 		}
+		Long  orderId =  request.getOrderId();
+		Integer  type =  request.getType();
 		
-		if(type != OrderSkillConstants.REQUEST_REFUND_TYPE_REFUND  || type != OrderSkillConstants.REQUEST_REFUND_TYPE_FINISH){
+		if(type != OrderSkillConstants.REQUEST_REFUND_TYPE_REFUND  && type != OrderSkillConstants.REQUEST_REFUND_TYPE_FINISH){
 			throw new BizException(AccountBizReturnCode.paramError, "申请退款/完成订单参数异常");
 		}
 		
@@ -234,9 +242,9 @@ public class OrderServiceImpl implements IOrderService {
 				//退款理由
 				String  refundReason = request.getRefundReason();
 				
-				BigDecimal  payAmount = order.getOrderAmounts();
-				//修改账户余额
-				accountMapper.inAccount(userId, payAmount);
+				//BigDecimal  payAmount = order.getOrderAmounts();
+				//不能对客户入账，只能是主播端同意之后才行
+				//accountMapper.inAccount(userId, payAmount);
 				//修改订单状态为：申请退款
 				commonService.updateOrder(orderId, OrderSkillConstants.ORDER_STATUS_USER_APPLAY_REFUND,refundReason);
 				commonService.pushMessage(PushAppMsgTypeEnum.REFUND_TIP, sellerId, userId);
@@ -257,24 +265,27 @@ public class OrderServiceImpl implements IOrderService {
 
 	@Override
 	public CommonResponse confirmOrder(ConfirmOrderRequest request) {
-		Long  orderId =  request.getOrderId();
-		Integer  type =  request.getType();
-		if (request == null || orderId == null || type == null) {
+		if (request == null || request.getOrderId() == null || request.getType() == null) {
 			throw new BizException(AccountBizReturnCode.paramError, "同意/拒绝订单参数异常");
 		}
 		
-		if(type != OrderSkillConstants.REQUEST_CONFIRM_TYPE_YES   || type != OrderSkillConstants.REQUEST_CONFIRM_TYPE_NO){
+		Long  orderId =  request.getOrderId();
+		Integer  type =  request.getType();
+		if(type != OrderSkillConstants.REQUEST_CONFIRM_TYPE_YES  &&  type != OrderSkillConstants.REQUEST_CONFIRM_TYPE_NO){
 			throw new BizException(AccountBizReturnCode.paramError, "同意/拒绝订单参数异常");
 		}
 		
 		//查询订单详情
 		Order  order = orderMapper.selectByPrimaryKey(orderId);
 		if(order != null ){
+			Integer   orderStatus = null ;
 			//用户同意，修改状态，用户不同意，状态不变
 			if(OrderSkillConstants.REQUEST_CONFIRM_TYPE_YES == type ){
-				Integer   orderStatus = OrderSkillConstants.ORDER_STATUS_PAYED_DV_CONFIRM_USER_AGREE;
-				commonService.updateOrder(orderId, orderStatus,null);
+				orderStatus = OrderSkillConstants.ORDER_STATUS_CUST_AGREE_DV_START_SERVICE;
+			}else{
+				orderStatus = OrderSkillConstants.ORDER_STATUS_CUST_REFUSE_DV_START_SERVICE;
 			}
+			commonService.updateOrder(orderId, orderStatus,null);
 		}
 		
 		CommonResponse commonResponse = commonService.getCommonResponse();
@@ -288,13 +299,13 @@ public class OrderServiceImpl implements IOrderService {
 
 	@Override
 	public CommonResponse dvReceiveOrder(DvReceiveOrderRequest request) {
-		Long  orderId =  request.getOrderId();
-		Integer  type =  request.getType();
-		if (request == null || orderId == null || type == null) {
+		if (request == null || request.getOrderId() == null || request.getType() == null) {
 			throw new BizException(AccountBizReturnCode.paramError, "大V同意/拒绝订单参数异常");
 		}
 		
-		if(type != OrderSkillConstants.REQUEST_DV_CONFIRM_TYPE_YES   || type != OrderSkillConstants.REQUEST_DV_CONFIRM_TYPE_NO){
+		Long  orderId =  request.getOrderId();
+		Integer  type =  request.getType();
+		if(type != OrderSkillConstants.REQUEST_DV_CONFIRM_TYPE_YES   && type != OrderSkillConstants.REQUEST_DV_CONFIRM_TYPE_NO){
 			throw new BizException(AccountBizReturnCode.paramError, "大V同意/拒绝订单参数异常");
 		}
 		
@@ -342,13 +353,13 @@ public class OrderServiceImpl implements IOrderService {
 
 	@Override
 	public CommonResponse dvConfirmRefund(DvConfirmRefundRequest request) {
-		Long  orderId =  request.getOrderId();
-		Integer  type =  request.getType();
-		if (request == null || orderId == null || type == null) {
+		if (request == null || request.getOrderId() == null || request.getType() == null) {
 			throw new BizException(AccountBizReturnCode.paramError, "大V同意/拒绝退款参数异常");
 		}
+		Long  orderId =  request.getOrderId();
+		Integer  type =  request.getType();
 		
-		if(type != OrderSkillConstants.REQUEST_DV_REFUND_TYPE_YES   || type != OrderSkillConstants.REQUEST_DV_REFUND_TYPE_NO){
+		if(type != OrderSkillConstants.REQUEST_DV_REFUND_TYPE_YES   && type != OrderSkillConstants.REQUEST_DV_REFUND_TYPE_NO){
 			throw new BizException(AccountBizReturnCode.paramError, "大V同意/拒绝退款参数异常");
 		}
 		
@@ -368,7 +379,8 @@ public class OrderServiceImpl implements IOrderService {
 			if(OrderSkillConstants.REQUEST_DV_REFUND_TYPE_YES == type ){
 				Long  customerId =  order.getBuyerId();
 				BigDecimal  payAmount = order.getOrderAmounts();
-				accountMapper.outAccount(customerId, payAmount);
+				//大V同意退款，对消费客户入账
+				accountMapper.inAccount(customerId, payAmount);
 			}
 		}
 		CommonResponse commonResponse = commonService.getCommonResponse();

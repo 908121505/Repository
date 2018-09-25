@@ -2,7 +2,6 @@ package com.honglu.quickcall.account.facade.vo;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.Date;
 
 /**   
  * Copyright © 2018 www.xiaoniu.com All rights reserved.
@@ -14,7 +13,7 @@ import java.util.Date;
  */
 public class OrderReceiveOrderListVO implements  Serializable{
 
-	private static final long serialVersionUID = -5499251853117914626L;
+	private static final long serialVersionUID = -7409805272071992707L;
 	/**主播ID*/
 	private Long  orderId;
 	/**主播昵称*/
@@ -31,18 +30,17 @@ public class OrderReceiveOrderListVO implements  Serializable{
 	private Integer  orderNum;
 	/**订单金额*/
 	private BigDecimal  orderAmounts;
-	/**订单状态1.下单未支付（已下单，未支付）;
-	 * 2.下单未支付用户取消（已下单，30分钟内未支付）;3.已支付（已下单，支付完成）;
-	 * 4.超时未接（已支付，大V30分钟内未接单）;5.接单前用户自主取消;
-	 * 6.大v拒接（支付完成，大V拒绝，需要考虑账户退款）;7.大V接单;
-	 * 8.接单后用户取消（注意退款给用户）;9.大V确认开始;10.用户同意（待定）;
-	 * 11.进行中（用户同意或者到约定的订单开始时间）;12.用户退款;
-	 * 13.同意退款订单作废（退款到客户）;14.订单完成（大V拒绝）;
-	 * 15.订单完成（正常完成）
-	 * */
+	/**
+	 * 订单状态：
+	 * 1.下单未支付（已下单，未支付）;2.下单未支付用户取消（已下单，30分钟内未支付）3.已支付（已下单，支付完成）;
+	 * 4.超时未接（已支付，大V30分钟内未接单）;5.接单前用户自主取消;6.大v拒接（支付完成，大V拒绝，需要考虑账户退款）;
+	 * 7.大V接单;8.接单后用户取消（注意退款给用户）;9.大V确认开始;10.用户同意（大V立即开始请求）;
+	 * 11.用户拒绝（大V立即开始请求）12.进行中（用户同意或者到约定的订单开始时间）;13.用户退款;
+	 * 14.同意退款订单作废（退款到客户）;15.订单完成（大V拒绝）;16.订单完成（正常完成）;
+	 */
 	private Integer  orderStatus;
 	
-	private Date  startTime;
+	private String  startTimeStr;
 
 	public Long getOrderId() {
 		return orderId;
@@ -116,11 +114,13 @@ public class OrderReceiveOrderListVO implements  Serializable{
 		this.orderStatus = orderStatus;
 	}
 
-	public Date getStartTime() {
-		return startTime;
+	public String getStartTimeStr() {
+		return startTimeStr;
 	}
 
-	public void setStartTime(Date startTime) {
-		this.startTime = startTime;
+	public void setStartTimeStr(String startTimeStr) {
+		this.startTimeStr = startTimeStr;
 	}
+
+	
 }

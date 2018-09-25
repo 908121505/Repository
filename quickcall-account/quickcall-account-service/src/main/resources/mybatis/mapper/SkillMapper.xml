@@ -224,6 +224,29 @@
   </select>
   
   
+  <!-- 获取全部技能分类 -->
+  <select id="selectPartSkill" resultType="com.honglu.quickcall.account.facade.vo.FirstPageSkillinfoVO" >
+		SELECT
+			sk.id  as  skillId,
+			sk.name as  name
+		FROM
+			(
+				SELECT
+					count(1) AS count,
+					skill_id
+				FROM
+					product
+				WHERE
+					product_status = 1
+				GROUP BY
+					skill_id
+			) tmp
+		LEFT JOIN skill sk ON sk.id = tmp.skill_id
+		ORDER BY
+			tmp.count DESC 
+  </select>
+  
+  
   
   
 </mapper>

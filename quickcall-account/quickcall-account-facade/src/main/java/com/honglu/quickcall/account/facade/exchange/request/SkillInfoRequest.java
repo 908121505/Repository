@@ -1,7 +1,7 @@
 package com.honglu.quickcall.account.facade.exchange.request;
 
 import com.honglu.quickcall.account.facade.code.OrderRequestType;
-import com.honglu.quickcall.account.facade.exchange.PayRequest;
+import com.honglu.quickcall.common.api.exchange.AbstractRequest;
 
 /**
  * 
@@ -12,10 +12,10 @@ import com.honglu.quickcall.account.facade.exchange.PayRequest;
  * @author: chenliuguang   
  * @date: 2018年9月22日 下午3:39:53
  */
-public class SkillInfoRequest extends PayRequest {
+public class SkillInfoRequest extends AbstractRequest {
     
-	private static final long serialVersionUID = -849088641917599587L;
 	
+	private static final long serialVersionUID = 239067598194967591L;
 	/**客户编号*/
 	private Long  customerId;
 
@@ -30,7 +30,7 @@ public class SkillInfoRequest extends PayRequest {
 
 	@Override
 	public String getBizCode() {
-		return OrderRequestType.UPDATE_SKILL_INFO;
+		return OrderRequestType.QUERY_SKILL_INFO;
 	}
 
 

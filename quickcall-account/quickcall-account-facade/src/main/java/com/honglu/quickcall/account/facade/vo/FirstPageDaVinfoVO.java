@@ -13,13 +13,13 @@ import java.math.BigDecimal;
  */
 public class FirstPageDaVinfoVO implements  Serializable{
 
-	private static final long serialVersionUID = 1801251381604100871L;
+	private static final long serialVersionUID = -3051687815396246141L;
 	/**客户Id*/
 	private Long  customerId;
 	/**产品ID*/
 	private Long  productId; 
 	/**主播昵称*/
-	private String nikeName ;
+	private String nickName ;
     /**主播性别：性别(0=女,1=男)*/
     private Integer  sex;
     /**年龄*/
@@ -42,11 +42,11 @@ public class FirstPageDaVinfoVO implements  Serializable{
 	public void setProductId(Long productId) {
 		this.productId = productId;
 	}
-	public String getNikeName() {
-		return nikeName;
+	public String getNickName() {
+		return nickName;
 	}
-	public void setNikeName(String nikeName) {
-		this.nikeName = nikeName;
+	public void setNickName(String nickName) {
+		this.nickName = nickName;
 	}
 	public Integer getSex() {
 		return sex;

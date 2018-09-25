@@ -9,10 +9,13 @@ public class Product {
     private Long skillId;
 
     private String name;
-    private Short serviceTime;
+
+    private Integer serviceTime;
 
     private BigDecimal price;
+
     private BigDecimal preferentialPrice;
+
     private BigDecimal discountRate;
 
     private BigDecimal discountPrice;
@@ -24,13 +27,16 @@ public class Product {
     private Long sellerId;
 
     private String productDescribe;
-    
-    
-    private Date  modifyTime;
-    
-    private Date  createTime;
 
-   
+    private Date createTime;
+
+    private Date modifyTime;
+
+    private String createMan;
+
+    private String modifyMan;
+
+    private String remark;
 
     public Long getProductId() {
         return productId;
@@ -55,11 +61,12 @@ public class Product {
     public void setName(String name) {
         this.name = name == null ? null : name.trim();
     }
-    public Short getServiceTime() {
+
+    public Integer getServiceTime() {
         return serviceTime;
     }
 
-    public void setServiceTime(Short serviceTime) {
+    public void setServiceTime(Integer serviceTime) {
         this.serviceTime = serviceTime;
     }
 
@@ -118,6 +125,7 @@ public class Product {
     public void setSellerId(Long sellerId) {
         this.sellerId = sellerId;
     }
+
     public String getProductDescribe() {
         return productDescribe;
     }
@@ -126,28 +134,44 @@ public class Product {
         this.productDescribe = productDescribe == null ? null : productDescribe.trim();
     }
 
-	public Date getModifyTime() {
-		return modifyTime;
-	}
+    public Date getCreateTime() {
+        return createTime;
+    }
 
-	public void setModifyTime(Date modifyTime) {
-		this.modifyTime = modifyTime;
-	}
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
 
-	public Date getCreateTime() {
-		return createTime;
-	}
+    public Date getModifyTime() {
+        return modifyTime;
+    }
 
-	public void setCreateTime(Date createTime) {
-		this.createTime = createTime;
-	}
-	
-	
+    public void setModifyTime(Date modifyTime) {
+        this.modifyTime = modifyTime;
+    }
 
-    
-    
-    
-	
-	
+    public String getCreateMan() {
+        return createMan;
+    }
+
+    public void setCreateMan(String createMan) {
+        this.createMan = createMan == null ? null : createMan.trim();
+    }
+
+    public String getModifyMan() {
+        return modifyMan;
+    }
+
+    public void setModifyMan(String modifyMan) {
+        this.modifyMan = modifyMan == null ? null : modifyMan.trim();
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark == null ? null : remark.trim();
+    }
    
 }

@@ -3,6 +3,7 @@ package com.honglu.quickcall.account.web.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -34,7 +35,7 @@ public class OrderController {
      */
     @RequestMapping(value = "/dvProduct", method = RequestMethod.POST)
     @ResponseBody
-    public WebResponseModel queryDaVProduct( OrderDaVProductRequest params) {
+    public WebResponseModel queryDaVProduct( @RequestBody OrderDaVProductRequest params) {
     	WebResponseModel response = orderInfoService.execute(params);
         return response;
     }
@@ -46,7 +47,7 @@ public class OrderController {
      */
     @RequestMapping(value = "/saveOrder", method = RequestMethod.POST)
     @ResponseBody
-    public WebResponseModel saveOrder( OrderSaveRequest params) {
+    public WebResponseModel saveOrder( @RequestBody OrderSaveRequest params) {
     	WebResponseModel response = orderInfoService.execute(params);
     	return response;
     }
@@ -59,7 +60,7 @@ public class OrderController {
      */
     @RequestMapping(value = "/receiveOrderList", method = RequestMethod.POST)
     @ResponseBody
-    public WebResponseModel queryReceiveOrderList( OrderReceiveOrderListRequest params) {
+    public WebResponseModel queryReceiveOrderList( @RequestBody OrderReceiveOrderListRequest params) {
     	WebResponseModel response = orderInfoService.execute(params);
     	return response;
     }
@@ -72,7 +73,7 @@ public class OrderController {
      */
     @RequestMapping(value = "/sendOrderList", method = RequestMethod.POST)
     @ResponseBody
-    public WebResponseModel querySendOrderList( OrderSendOrderListRequest params) {
+    public WebResponseModel querySendOrderList( @RequestBody OrderSendOrderListRequest params) {
     	WebResponseModel response = orderInfoService.execute(params);
     	return response;
     }
@@ -85,7 +86,7 @@ public class OrderController {
      */
     @RequestMapping(value = "/payOrder", method = RequestMethod.POST)
     @ResponseBody
-    public WebResponseModel payOrder( PayOrderRequest params) {
+    public WebResponseModel payOrder( @RequestBody PayOrderRequest params) {
     	WebResponseModel response = orderInfoService.execute(params);
     	return response;
     }
@@ -96,7 +97,7 @@ public class OrderController {
      */
     @RequestMapping(value = "/applayRefund", method = RequestMethod.POST)
     @ResponseBody
-    public WebResponseModel applayRefund( ApplayRefundRequest params) {
+    public WebResponseModel applayRefund( @RequestBody ApplayRefundRequest params) {
     	WebResponseModel response = orderInfoService.execute(params);
     	return response;
     }
@@ -107,7 +108,7 @@ public class OrderController {
      */
     @RequestMapping(value = "/confirmOrder", method = RequestMethod.POST)
     @ResponseBody
-    public WebResponseModel confirmOrder( ConfirmOrderRequest params) {
+    public WebResponseModel confirmOrder( @RequestBody ConfirmOrderRequest params) {
     	WebResponseModel response = orderInfoService.execute(params);
     	return response;
     }
@@ -119,7 +120,7 @@ public class OrderController {
      */
     @RequestMapping(value = "/dvReceiveOrder", method = RequestMethod.POST)
     @ResponseBody
-    public WebResponseModel dvReceiveOrder( DvReceiveOrderRequest params) {
+    public WebResponseModel dvReceiveOrder( @RequestBody DvReceiveOrderRequest params) {
     	WebResponseModel response = orderInfoService.execute(params);
     	return response;
     }
@@ -130,7 +131,7 @@ public class OrderController {
      */
     @RequestMapping(value = "/dvStartService", method = RequestMethod.POST)
     @ResponseBody
-    public WebResponseModel dvStartService( DvStartServiceRequest params) {
+    public WebResponseModel dvStartService( @RequestBody DvStartServiceRequest params) {
     	WebResponseModel response = orderInfoService.execute(params);
     	return response;
     }
@@ -141,7 +142,7 @@ public class OrderController {
      */
     @RequestMapping(value = "/dvConfirmRefund", method = RequestMethod.POST)
     @ResponseBody
-    public WebResponseModel dvConfirmRefund( DvConfirmRefundRequest params) {
+    public WebResponseModel dvConfirmRefund( @RequestBody DvConfirmRefundRequest params) {
     	WebResponseModel response = orderInfoService.execute(params);
     	return response;
     }

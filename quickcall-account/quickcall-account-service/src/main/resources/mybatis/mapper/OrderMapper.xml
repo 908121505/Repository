@@ -360,4 +360,50 @@
   
   
   
+  
+   <!-- 查询发出的订单 -->
+  <select id="querySendOrderList" resultType="com.honglu.quickcall.account.facade.vo.OrderSendOrderListVO"  >
+	SELECT
+	  od.order_id AS  orderId,
+	  cu.nick_name  AS  nickName,
+	  cu.head_portrait_url  AS  headPortraitUrl,
+	  p.`name` AS  productName,
+	  p.price  AS  price,
+	  p.product_id  AS  productId,
+	  od.order_num  AS  orderNum,
+	  od.order_amounts  AS  orderAmounts,
+	  od.order_status  AS  orderStatus,
+	  DATE_FORMAT(od.start_time,'%Y-%m-%d %H:%i:%s') AS startTimeStr
+	FROM
+		orders od
+	LEFT JOIN customer cu ON od.buyer_id = cu.customer_id
+	LEFT JOIN product  p  ON  od.product_id  =  p.product_id
+	WHERE
+		od.buyer_id = #{customerId}
+  </select>
+  
+  
+  <!-- 查询收到的订单 -->
+  <select id="queryReceiveOrderList" resultType="com.honglu.quickcall.account.facade.vo.OrderReceiveOrderListVO"  >
+	SELECT
+	  od.order_id AS  orderId,
+	  cu.nick_name  AS  nickName,
+	  cu.head_portrait_url  AS  headPortraitUrl,
+	  p.`name` AS  productName,
+	  p.price  AS  price,
+	  p.product_id  AS  productId,
+	  od.order_num  AS  orderNum,
+	  od.order_amounts  AS  orderAmounts,
+	  od.order_status  AS  orderStatus,
+	  DATE_FORMAT(od.start_time,'%Y-%m-%d %H:%i:%s') AS startTimeStr
+	   
+	FROM
+		orders od
+	LEFT JOIN customer cu ON od.buyer_id = cu.customer_id
+	LEFT JOIN product  p  ON  od.product_id  =  p.product_id
+	WHERE
+		od.seller_id =  #{customerId}
+  </select>
+  
+  
 </mapper>

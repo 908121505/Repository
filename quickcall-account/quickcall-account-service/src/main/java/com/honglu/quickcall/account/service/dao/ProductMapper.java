@@ -2,6 +2,8 @@ package com.honglu.quickcall.account.service.dao;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.honglu.quickcall.account.facade.entity.Product;
 import com.honglu.quickcall.account.facade.vo.FirstPageDaVinfoVO;
 import com.honglu.quickcall.account.facade.vo.OrderDaVProductVO;
@@ -22,12 +24,12 @@ public interface ProductMapper {
 
     int updateByPrimaryKey(Product record);
 
-	List<Product> selectListBySkillIdList(Long customerId, List<Long> skillIdList);
+	List<Product> selectListBySkillIdList(@Param("customerId")  Long customerId,@Param("list")  List<Long> skillIdList);
 
-	List<FirstPageDaVinfoVO> selectTotalDaVProduct(Long skillId);
+	List<FirstPageDaVinfoVO> selectTotalDaVProduct(@Param("skillId")  Long skillId);
 
 	
-	List<OrderDaVProductVO> selectDaVPersonalProduct(Long customerId);
+	List<OrderDaVProductVO> selectDaVPersonalProduct(@Param("customerId") Long customerId);
 
 
 	

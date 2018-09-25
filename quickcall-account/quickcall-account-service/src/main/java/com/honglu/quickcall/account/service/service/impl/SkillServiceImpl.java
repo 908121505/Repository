@@ -31,6 +31,7 @@ import com.honglu.quickcall.account.service.service.ISkillService;
 import com.honglu.quickcall.common.api.code.BizCode;
 import com.honglu.quickcall.common.api.exception.BizException;
 import com.honglu.quickcall.common.api.exchange.CommonResponse;
+import com.honglu.quickcall.common.core.util.UUIDUtils;
 
 /**
  * 
@@ -124,6 +125,7 @@ public class SkillServiceImpl implements ISkillService {
 		Long skillId =  request.getSkillId();
 		BigDecimal  price = request.getPrice();
 		if(productId == null){
+			productId =  UUIDUtils.getId();
 			Product record = new Product();
 			record.setProductId(productId);
 			record.setProductStatus(request.getProductStatus());
