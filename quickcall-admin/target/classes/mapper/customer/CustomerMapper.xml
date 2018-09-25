@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="Customer">
+    <resultMap id="BaseResultMap" type="com.calf.module.checkauth.entity.Customer">
+        <id column="customer_id" property="customerId" jdbcType="BIGINT"/>
+        <result column="phone" property="phone"/>
+        <result column="real_name" property="realName" jdbcType="VARCHAR"/>
+        <result column="sex" property="sex"/>
+        <result column="nick_name" property="nickName" jdbcType="VARCHAR"/>
+        <result column="type" property="type"/>
+        <result column="credentials_type" property="credentialsType"/>
+        <result column="credentials_num" property="credentialsNum" jdbcType="VARCHAR"/>
+        <result column="interest_id" property="interestId" jdbcType="INTEGER"/>
+        <result column="wechat_open_id" property="wechatOpenId" jdbcType="VARCHAR"/>
+        <result column="qq_open_id" property="qqOpenId" jdbcType="VARCHAR"/>
+        <result column="microblog_open_id" property="microblogOpenId" jdbcType="VARCHAR"/>
+        <result column="occupation_id" property="occupationId" jdbcType="INTEGER"/>
+        <result column="front_portrait_url" property="frontPortraitUrl" jdbcType="VARCHAR"/>
+        <result column="back_portrait_url" property="backPortraitUrl" jdbcType="VARCHAR"/>
+        <result column="head_portrait_url" property="headPortraitUrl" jdbcType="VARCHAR"/>
+        <result column="source" property="source"/>
+        <result column="cust_status" property="custStatus"/>
+        <result column="cust_password" property="custPassword" jdbcType="VARCHAR"/>
+        <result column="sign_name" property="signName" jdbcType="VARCHAR"/>
+        <result column="birthday" property="birthday" jdbcType="TIMESTAMP"/>
+        <result column="voice_url" property="voiceUrl" jdbcType="VARCHAR"/>
+        <result column="v_status" property="vStatus"/>
+        <result column="identity_status" property="identityStatus"/>
+        <result column="token_code" property="tokenCode" jdbcType="VARCHAR"/>
+        <result column="other_relation" property="otherRelation" jdbcType="VARCHAR"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP"/>
+        <result column="create_man" property="createMan" jdbcType="VARCHAR"/>
+        <result column="modify_man" property="modifyMan" jdbcType="VARCHAR"/>
+        <result column="remark" property="remark" jdbcType="VARCHAR"/>
+        <result column="app_channel_name" property="appChannelName" jdbcType="VARCHAR"/>
+        <result column="device_id" property="deviceId" jdbcType="VARCHAR"/>
+        <result column="login_time" property="loginTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        customer_id, phone, real_name, sex, nick_name, type, credentials_type, credentials_num,
+        interest_id, wechat_open_id, qq_open_id, microblog_open_id, occupation_id, front_portrait_url,
+        back_portrait_url, head_portrait_url, source, cust_status, cust_password, sign_name,
+        star_sign, birthday, voice_url, v_status, identity_status, token_code, other_relation,
+        create_time, modify_time, create_man, modify_man, remark, app_channel_name, device_id,
+        login_time
+    </sql>
+
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        from customer
+        where customer_id = #{customerId,jdbcType=BIGINT}
+    </select>
+
+    <update id="update" parameterType="com.calf.module.checkauth.entity.Customer">
+        update customer
+        <set>
+            <if test="phone != null">
+                phone = #{phone,jdbcType=INTEGER},
+            </if>
+            <if test="realName != null">
+                real_name = #{realName,jdbcType=VARCHAR},
+            </if>
+            <if test="sex != null">
+                sex = #{sex,jdbcType=TINYINT},
+            </if>
+            <if test="nickName != null">
+                nick_name = #{nickName,jdbcType=VARCHAR},
+            </if>
+            <if test="type != null">
+                type = #{type,jdbcType=TINYINT},
+            </if>
+            <if test="credentialsType != null">
+                credentials_type = #{credentialsType,jdbcType=TINYINT},
+            </if>
+            <if test="credentialsNum != null">
+                credentials_num = #{credentialsNum,jdbcType=VARCHAR},
+            </if>
+            <if test="interestId != null">
+                interest_id = #{interestId,jdbcType=INTEGER},
+            </if>
+            <if test="wechatOpenId != null">
+                wechat_open_id = #{wechatOpenId,jdbcType=VARCHAR},
+            </if>
+            <if test="qqOpenId != null">
+                qq_open_id = #{qqOpenId,jdbcType=VARCHAR},
+            </if>
+            <if test="microblogOpenId != null">
+                microblog_open_id = #{microblogOpenId,jdbcType=VARCHAR},
+            </if>
+            <if test="occupationId != null">
+                occupation_id = #{occupationId,jdbcType=INTEGER},
+            </if>
+            <if test="frontPortraitUrl != null">
+                front_portrait_url = #{frontPortraitUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="backPortraitUrl != null">
+                back_portrait_url = #{backPortraitUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="headPortraitUrl != null">
+                head_portrait_url = #{headPortraitUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="source != null">
+                source = #{source,jdbcType=TINYINT},
+            </if>
+            <if test="custStatus != null">
+                cust_status = #{custStatus,jdbcType=TINYINT},
+            </if>
+            <if test="custPassword != null">
+                cust_password = #{custPassword,jdbcType=VARCHAR},
+            </if>
+            <if test="signName != null">
+                sign_name = #{signName,jdbcType=VARCHAR},
+            </if>
+            <if test="starSign != null">
+                star_sign = #{starSign,jdbcType=CHAR},
+            </if>
+            <if test="birthday != null">
+                birthday = #{birthday,jdbcType=TIMESTAMP},
+            </if>
+            <if test="voiceUrl != null">
+                voice_url = #{voiceUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="vStatus != null">
+                v_status = #{vStatus,jdbcType=TINYINT},
+            </if>
+            <if test="identityStatus != null">
+                identity_status = #{identityStatus,jdbcType=TINYINT},
+            </if>
+            <if test="tokenCode != null">
+                token_code = #{tokenCode,jdbcType=VARCHAR},
+            </if>
+            <if test="otherRelation != null">
+                other_relation = #{otherRelation,jdbcType=VARCHAR},
+            </if>
+            modify_time = NOW(),
+            <if test="modifyMan != null">
+                modify_man = #{modifyMan,jdbcType=VARCHAR},
+            </if>
+            <if test="remark != null">
+                remark = #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="appChannelName != null">
+                app_channel_name = #{appChannelName,jdbcType=VARCHAR},
+            </if>
+            <if test="deviceId != null">
+                device_id = #{deviceId,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where customer_id = #{customerId,jdbcType=BIGINT}
+    </update>
+
+    <!-- 查询用户信息条数 -->
+    <select id="queryCount" resultType="int" parameterType="map" >
+        select count(*) from customer where 1=1
+        <if test="nickName !=null and nickName != ''">and nick_name like concat('%',#{nickName},'%')</if>
+        <if test="realName !=null and realName != ''">and real_name like concat('%',#{realName},'%')</if>
+        <if test="credentialsNum !=null and credentialsNum != ''">and credentials_num = #{credentialsNum}</if>
+        <if test="identityStatus != null ">and identity_status = #{identityStatus}</if>
+    </select>
+
+    <select id="query" parameterType="map" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from customer where 1=1
+        <if test="nickName !=null and nickName != ''">and nick_name like concat('%',#{nickName},'%')</if>
+        <if test="realName !=null and realName != ''">and real_name like concat('%',#{realName},'%')</if>
+        <if test="credentialsNum !=null and credentialsNum != ''">and credentials_num = #{credentialsNum}</if>
+        <if test="identityStatus != null ">and identity_status = #{identityStatus}</if>
+        <if test="vStatus != null ">and v_status = #{vStatus}</if>
+        order by create_time desc
+        limit ${iDisplayStart},${iDisplayLength}
+    </select>
+
+
+</mapper>

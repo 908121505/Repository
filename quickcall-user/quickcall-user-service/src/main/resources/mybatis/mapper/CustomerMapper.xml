@@ -22,6 +22,7 @@
     <result column="cust_status" property="custStatus"   />
     <result column="cust_password" property="custPassword" jdbcType="VARCHAR" />
     <result column="sign_name" property="signName" jdbcType="VARCHAR" />
+    <result column="star_sign" property="starSign" jdbcType="CHAR" />
     <result column="birthday" property="birthday" jdbcType="TIMESTAMP" />
     <result column="voice_url" property="voiceUrl" jdbcType="VARCHAR" />
     <result column="v_status" property="vStatus"   />
