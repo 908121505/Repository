@@ -9,7 +9,7 @@ public class AlipayNotifyRequest extends AbstractRequest {
 	private String orderNo;//支付订单号
 	private String phoneNum;
 	private Integer payState;//支付状态 0失败 1成功
-	private Long userId;//用户Id
+	private Long accountId;//用户Id
 	private BigDecimal amount;//支付金额
 	private String extData;
 	
@@ -44,13 +44,15 @@ public class AlipayNotifyRequest extends AbstractRequest {
 	}
 
 
-	public Long getUserId() {
-		return userId;
+	
+
+	public Long getAccountId() {
+		return accountId;
 	}
 
 
-	public void setUserId(Long userId) {
-		this.userId = userId;
+	public void setAccountId(Long accountId) {
+		this.accountId = accountId;
 	}
 
 

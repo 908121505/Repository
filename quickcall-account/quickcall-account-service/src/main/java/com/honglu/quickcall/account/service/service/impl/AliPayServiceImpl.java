@@ -155,13 +155,13 @@ public class AliPayServiceImpl implements AliPayService {
 		logger.info("支付回调参数==========="+JSON.toJSONString(params));
 		
 		Recharge recharge=new Recharge();
-        recharge.setCustomerId(params.getUserId());
+        recharge.setCustomerId(params.getAccountId());
         recharge.setFinishDate(new Date());
         recharge.setOrdersn(params.getOrderNo());
         if(params.getPayState()==1) {
         	recharge.setState(2);//状态。1-申请支付，2-支付成功 3支付失败
         	//入账
-        	accountMapper.inAccount(params.getUserId(), params.getAmount());
+        	accountMapper.inAccount(params.getAccountId(), params.getAmount());
 		}else if(params.getPayState()==0) {
 			recharge.setState(3);//状态。1-申请支付，2-支付成功 3支付失败
 		}
