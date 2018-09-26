@@ -97,7 +97,7 @@ public class AliPayController extends BaseController {
     public WebResponseModel bindAliaccount( BindAliaccountRequest params) {
     	logger.info("accountWeb.pay.bindAliaccount.request.data : " + JSONObject.toJSONString(params));
     	WebResponseModel response=new WebResponseModel();
-    	if(params.getUserId()==null||StringUtils.isBlank(params.getAccount())||StringUtils.isBlank(params.getRealname())) {
+    	if(params.getUserId()==null) {
     		 response.setCode(AccountBizReturnCode.paramError.code());
              response.setMsg(AccountBizReturnCode.paramError.desc());
              return response;
