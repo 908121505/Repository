@@ -13,7 +13,7 @@ import java.math.BigDecimal;
  */
 public class FirstPageDaVinfoVO implements  Serializable{
 
-	private static final long serialVersionUID = -3051687815396246141L;
+	private static final long serialVersionUID = -3055007574006586759L;
 	/**客户Id*/
 	private Long  customerId;
 	/**产品ID*/
@@ -30,6 +30,8 @@ public class FirstPageDaVinfoVO implements  Serializable{
     private Integer  serviceTime;
     /**产品名称*/
     private String  productName;
+    /**主播头像URL*/
+    private String  headPortraitUrl;
 	public Long getCustomerId() {
 		return customerId;
 	}
@@ -78,5 +80,12 @@ public class FirstPageDaVinfoVO implements  Serializable{
 	public void setProductName(String productName) {
 		this.productName = productName;
 	}
+	public String getHeadPortraitUrl() {
+		return headPortraitUrl;
+	}
+	public void setHeadPortraitUrl(String headPortraitUrl) {
+		this.headPortraitUrl = headPortraitUrl;
+	}
     
+	
 }

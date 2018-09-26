@@ -1,6 +1,7 @@
 package com.honglu.quickcall.account.service.service;
 
 import com.honglu.quickcall.account.facade.exchange.request.ApplayRefundRequest;
+import com.honglu.quickcall.account.facade.exchange.request.CancelOrderRequest;
 import com.honglu.quickcall.account.facade.exchange.request.ConfirmOrderRequest;
 import com.honglu.quickcall.account.facade.exchange.request.DetailOrderRequest;
 import com.honglu.quickcall.account.facade.exchange.request.DvConfirmRefundRequest;
@@ -50,6 +51,13 @@ public interface IOrderService {
 	
 	
 	//==================================发起的订单页相关开始==================================
+	/**
+	 * 发起的订单页--取消订单
+	 * @param request
+	 */
+	public CommonResponse  cancelOrder(CancelOrderRequest  request);
+	
+	
 	/**
 	 * 发起的订单页--去支付
 	 * @param request

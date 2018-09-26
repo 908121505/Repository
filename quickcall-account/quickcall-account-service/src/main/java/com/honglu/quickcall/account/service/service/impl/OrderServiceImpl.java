@@ -14,6 +14,7 @@ import com.honglu.quickcall.account.facade.constants.OrderSkillConstants;
 import com.honglu.quickcall.account.facade.entity.Account;
 import com.honglu.quickcall.account.facade.entity.Order;
 import com.honglu.quickcall.account.facade.exchange.request.ApplayRefundRequest;
+import com.honglu.quickcall.account.facade.exchange.request.CancelOrderRequest;
 import com.honglu.quickcall.account.facade.exchange.request.ConfirmOrderRequest;
 import com.honglu.quickcall.account.facade.exchange.request.DetailOrderRequest;
 import com.honglu.quickcall.account.facade.exchange.request.DvConfirmRefundRequest;
@@ -159,6 +160,36 @@ public class OrderServiceImpl implements IOrderService {
 
 	//==================================发起的订单页相关开始==================================
 	
+	@Override
+	public CommonResponse cancelOrder(CancelOrderRequest request) {
+		if (request == null || request.getOrderId() == null ) {
+			throw new BizException(AccountBizReturnCode.paramError, "大V同意/拒绝订单参数异常");
+		}
+		
+		Long  orderId =  request.getOrderId();
+		//查询订单详情
+		Order  order = orderMapper.selectByPrimaryKey(orderId);
+		if(order != null ){
+			Integer   oldOrderStatus =  order.getOrderStatus();
+			Integer   orderStatus =  null ;
+			//根据不同状态进行取消
+			//下单未支付
+			if(OrderSkillConstants.ORDER_STATUS_NOT_PAY  == oldOrderStatus){
+				//支付之前取消
+				orderStatus = OrderSkillConstants.ORDER_STATUS_CANCEL_BEFORE_PAY;
+			}else if(OrderSkillConstants.ORDER_STATUS_PAYED  == oldOrderStatus){
+				//订单状态5.大V接单前用户自主取消
+				orderStatus = OrderSkillConstants.ORDER_STATUS_CANCEL_PAYED_USER_SELE_CANCEL;
+			}else if(OrderSkillConstants.ORDER_STATUS_PAYED_DV_ACCEPT_ORDER  == oldOrderStatus){
+				//订单状态5.大V接单前用户自主取消
+				orderStatus = OrderSkillConstants.ORDER_STATUS_CANCLE_DV_ACCEPT_USER_SELF_CANCLE;
+			}
+			commonService.updateOrder(orderId, orderStatus,null);
+		}
+		CommonResponse commonResponse = commonService.getCommonResponse();
+		LOGGER.info("订单支付，订单编号：" + orderId + "，大V同意/拒绝订单订单完成");
+		return commonResponse;
+	}
 	
 	
 	@Override
@@ -418,6 +449,11 @@ public class OrderServiceImpl implements IOrderService {
 		LOGGER.info("订单支付，订单编号：" + orderId + "，大V同意/拒绝退款订单完成");
 		return commonResponse;
 	}
+
+
+
+
+
 
 
 
