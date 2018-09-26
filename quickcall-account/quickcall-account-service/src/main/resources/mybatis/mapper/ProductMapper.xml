@@ -285,6 +285,7 @@
        		 AND  p.skill_id = #{skillId}
         </if>
 		ORDER BY  c.login_time  DESC
+        LIMIT #{pageIndex},#{pageSize}
   </select>
   
   

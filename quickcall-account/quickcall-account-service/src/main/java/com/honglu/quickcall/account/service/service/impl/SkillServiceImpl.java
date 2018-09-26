@@ -159,10 +159,19 @@ public class SkillServiceImpl implements ISkillService {
 		if (request == null /*|| request.getCustomerId() == null*/) {
 			throw new BizException(AccountBizReturnCode.paramError, "查询首页大V列表参数异常");
 		}
+		Integer  pageIndex = request.getPageIndex();
+		if(pageIndex == null || pageIndex < 1 ){
+			pageIndex = 1;
+		}
+		
+		Integer  pageSize =  OrderSkillConstants.DEFAULT_PAGE_SIZE;
+		
+		Integer  pageIndexQuery =  (pageIndex -  1) * pageSize;
+		
 //		Long  customerId =  request.getCustomerId();
 		Long  skillId = request.getSkillId();
 		//首先查询所有的技能信息
-		List<FirstPageDaVinfoVO>   resultList =  productMapper.selectTotalDaVProduct(skillId);
+		List<FirstPageDaVinfoVO>   resultList =  productMapper.selectTotalDaVProduct(skillId,pageIndexQuery,pageSize);
 		CommonResponse commonResponse = commonService.getCommonResponse();
 		commonResponse.setData(resultList);
 		LOGGER.info("用户编号为：" + request.getCustomerId() + "查询成功");
