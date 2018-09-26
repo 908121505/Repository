@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSON;
 import com.honglu.quickcall.account.facade.business.AccountDubboBusiness;
-import com.honglu.quickcall.account.facade.business.OrderInfoBussiness;
 import com.honglu.quickcall.account.facade.code.AccountBizReturnCode;
 import com.honglu.quickcall.account.web.service.IOrderInfoService;
 import com.honglu.quickcall.common.api.code.MyServiceCode;
@@ -30,8 +29,8 @@ import com.honglu.quickcall.common.api.exchange.WebResponseModel;
 public class OrderInfoServiceImpl implements IOrderInfoService {
     private static final Logger LOGGER = LoggerFactory.getLogger(OrderInfoServiceImpl.class);
 
-    @Autowired
-    private OrderInfoBussiness orderInfoBussiness;
+//    @Autowired
+//    private OrderInfoBussiness orderInfoBussiness;
     @Autowired
     private AccountDubboBusiness accountDubboBusiness;
 
