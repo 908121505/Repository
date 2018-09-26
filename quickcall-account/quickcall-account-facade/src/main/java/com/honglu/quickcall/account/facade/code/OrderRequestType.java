@@ -45,6 +45,8 @@ public interface OrderRequestType {
     public static final  String  CUST_APPLAY_REFUND = "19033";
     /**客户同意/拒绝订单*/
     public static final  String  CUST_CONFIRM_ORDER = "19034";
+    /**订单详情*/
+    public static final  String  DETAIL_ORDER = "19035";
     
     
     

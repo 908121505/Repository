@@ -40,6 +40,12 @@ public interface OrderSkillConstants {
 	public static final Integer  REQUEST_DV_REFUND_TYPE_NO = 2 ;
 	
 	
+	/**订单详情请求类型1：客户端*/
+	public static final Integer  REQUEST_TYPE_CUST = 1 ;
+	/**订单详情请求类型2：服务端*/
+	public static final Integer  REQUEST_TYPE_DV = 2 ;
+	
+	
 	
 	/**订单状态1.下单未支付（已下单，未支付）*/
 	public static final Integer  ORDER_STATUS_NOT_PAY = 1 ;

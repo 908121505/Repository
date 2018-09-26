@@ -106,7 +106,7 @@
     <repositories>
         <repository>
             <id>nexus-local</id>
-            <url>http://pre.xnshandai.net/nexus/content/groups/nexus_public</url>
+            <url>http://172.16.0.186:5000/nexus/content/groups/public</url>
             <releases>
                 <enabled>true</enabled>
             </releases>
@@ -118,7 +118,7 @@
     <pluginRepositories>
         <pluginRepository>
             <id>nexus-local</id>
-            <url>http://pre.xnshandai.net/nexus/content/groups/nexus_public</url>
+            <url>http://172.16.0.186:5000/nexus/content/groups/public</url>
             <releases>
                 <enabled>true</enabled>
             </releases>

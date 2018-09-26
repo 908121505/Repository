@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
 import com.honglu.quickcall.account.facade.entity.Order;
+import com.honglu.quickcall.account.facade.vo.OrderDetailVO;
 import com.honglu.quickcall.account.facade.vo.OrderReceiveOrderListVO;
 import com.honglu.quickcall.account.facade.vo.OrderSendOrderListVO;
 
@@ -32,4 +33,10 @@ public interface OrderMapper {
 
 	/**查询收到的订单*/
 	List<OrderReceiveOrderListVO> queryReceiveOrderList(@Param("customerId")  Long customerId);
+
+
+	/**查询大V订单详情*/
+	OrderDetailVO queryDvOrderDetail(@Param("orderId")Long orderId);
+	/**查询客户订单详情*/
+	OrderDetailVO queryCustOrderDetail(@Param("orderId")Long orderId);
 }

@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.honglu.quickcall.account.facade.exchange.request.ApplayRefundRequest;
 import com.honglu.quickcall.account.facade.exchange.request.ConfirmOrderRequest;
+import com.honglu.quickcall.account.facade.exchange.request.DetailOrderRequest;
 import com.honglu.quickcall.account.facade.exchange.request.DvConfirmRefundRequest;
 import com.honglu.quickcall.account.facade.exchange.request.DvReceiveOrderRequest;
 import com.honglu.quickcall.account.facade.exchange.request.DvStartServiceRequest;
@@ -79,6 +80,17 @@ public class OrderController {
     }
     
     /////////////////////////////////////////////////////////////////
+    /**
+     * 发起的订单页--去支付
+     * @param params
+     * @return
+     */
+    @RequestMapping(value = "/detailOrder", method = RequestMethod.POST)
+    @ResponseBody
+    public WebResponseModel detailOrder( @RequestBody DetailOrderRequest params) {
+    	WebResponseModel response = orderInfoService.execute(params);
+    	return response;
+    }
     /**
      * 发起的订单页--去支付
      * @param params
