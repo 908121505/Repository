@@ -4,6 +4,8 @@ import java.text.MessageFormat;
 import java.util.Date;
 import java.util.Objects;
 import java.util.ResourceBundle;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import com.honglu.quickcall.user.facade.exchange.request.*;
 import org.apache.commons.lang3.StringUtils;
@@ -65,6 +67,11 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 		Customer customer = null;
 		Customer param=new Customer();
 		if(StringUtils.isNotBlank(params.getTel())) {
+			 Pattern p = Pattern.compile("^((1[0-9]))\\d{9}$");   
+		        Matcher m=p.matcher(params.getTel());
+		        if(!m.matches()) {
+		        	 throw new BizException(BizCode.ParamError, "手机号格式不正确");	
+		        }
 			param.setPhone(params.getTel());
 		}
 		else if(StringUtils.isNotBlank(params.getMicroblogOpenId())) {
@@ -96,6 +103,11 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 		Customer param=new Customer();
 		//手机号登录 验证码登录
 		if(StringUtils.isNotBlank(params.getTel())) {
+			 Pattern p = Pattern.compile("^((1[0-9]))\\d{9}$");   
+		        Matcher m=p.matcher(params.getTel());
+		        if(!m.matches()) {
+		        	 throw new BizException(BizCode.ParamError, "手机号格式不正确");	
+		        }
 			param.setPhone(params.getTel());
 		}//手机号 密码登录
 		if(StringUtils.isNotBlank(params.getPassWord())) {
@@ -187,7 +199,36 @@ public class CommonPersonServiceImpl implements CommonPersonService {
       * @return
       */
 	private Customer saveUser(UserRegisterRequest request) {
+		Customer param=new Customer();
 		Customer customer=new Customer();
+		//手机号登录 验证码登录
+		      if(StringUtils.isNotBlank(request.getTel())) {
+			   Pattern p = Pattern.compile("^((1[0-9]))\\d{9}$");   
+			   Matcher m=p.matcher(request.getTel());
+			   if(!m.matches()) {
+			    throw new BizException(BizCode.ParamError, "手机号格式不正确");	
+		       }
+				param.setPhone(request.getTel());
+				}//手机号 密码登录
+					//微博登录
+				else if(StringUtils.isNotBlank(request.getMicroblogOpenId())) {
+						param.setMicroblogOpenId(request.getMicroblogOpenId());
+					}//QQ登录
+					else if(StringUtils.isNotBlank(request.getQqOpenId())) {
+						param.setQqOpenId(request.getQqOpenId());
+						
+					}//微信登录
+					else if(StringUtils.isNotBlank(request.getWechatOpenId())) {
+						param.setWechatOpenId(request.getWechatOpenId());
+					}
+					customer=customerMapper.login(param);
+					if(customer!=null) {
+						logger.info("用户不存在");
+						 throw new BizException(BizCode.ParamError, "用戶已存在");	
+					}
+			
+		
+		
 		customer.setCustomerId(UUIDUtils.getId());
 		customer.setCreateTime(new Date());
 		customer.setMicroblogOpenId(request.getMicroblogOpenId());
@@ -226,6 +267,11 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 		Customer param=new Customer();
 		if(StringUtils.isNotBlank(params.getTel())) {
 			param.setPhone(params.getTel());
+			 Pattern p = Pattern.compile("^((1[0-9]))\\d{9}$");   
+			   Matcher m=p.matcher(params.getTel());
+			   if(!m.matches()) {
+			    throw new BizException(BizCode.ParamError, "手机号格式不正确");	
+		       }
 		}
 		customer=customerMapper.login(param);
 		if(customer==null) {
