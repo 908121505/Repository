@@ -34,6 +34,8 @@ public class PushAppMsgServiceImpl implements PushAppMsgService {
 
     @Override
     public CommonResponse pushMsg(PushAppMsgRequest request) {
+        // ADUAN 砍需求 -- 先注释掉消息推送，后面记得打开
+        /*
         // 查询要推送的用户信息
         Customer receiveCustomer = customerMapper.selectByPrimaryKey(request.getReceiverId());
         if (receiveCustomer == null) {
@@ -57,9 +59,8 @@ public class PushAppMsgServiceImpl implements PushAppMsgService {
             return ResultUtils.result(BizCode.DBError, "数据库插入失败");
         }
 
-        // ADUAN 砍需求 -- 先注释掉消息推送，后面记得打开
-//        GtPushUtil.pushMessage(Arrays.asList(receiveCustomer.getDeviceId()), request.getMsgType().getMsgContent(), "");
-
+        GtPushUtil.pushMessage(Arrays.asList(receiveCustomer.getDeviceId()), request.getMsgType().getMsgContent(), "");
+*/
         return ResultUtils.resultSuccess();
     }
 
