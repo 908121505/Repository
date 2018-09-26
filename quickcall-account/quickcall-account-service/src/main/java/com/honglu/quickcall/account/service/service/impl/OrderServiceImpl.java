@@ -15,6 +15,7 @@ import com.honglu.quickcall.account.facade.entity.Account;
 import com.honglu.quickcall.account.facade.entity.Order;
 import com.honglu.quickcall.account.facade.exchange.request.ApplayRefundRequest;
 import com.honglu.quickcall.account.facade.exchange.request.ConfirmOrderRequest;
+import com.honglu.quickcall.account.facade.exchange.request.DetailOrderRequest;
 import com.honglu.quickcall.account.facade.exchange.request.DvConfirmRefundRequest;
 import com.honglu.quickcall.account.facade.exchange.request.DvReceiveOrderRequest;
 import com.honglu.quickcall.account.facade.exchange.request.DvStartServiceRequest;
@@ -24,6 +25,7 @@ import com.honglu.quickcall.account.facade.exchange.request.OrderSaveRequest;
 import com.honglu.quickcall.account.facade.exchange.request.OrderSendOrderListRequest;
 import com.honglu.quickcall.account.facade.exchange.request.PayOrderRequest;
 import com.honglu.quickcall.account.facade.vo.OrderDaVProductVO;
+import com.honglu.quickcall.account.facade.vo.OrderDetailVO;
 import com.honglu.quickcall.account.facade.vo.OrderReceiveOrderListVO;
 import com.honglu.quickcall.account.facade.vo.OrderSendOrderListVO;
 import com.honglu.quickcall.account.service.dao.AccountMapper;
@@ -72,8 +74,8 @@ public class OrderServiceImpl implements IOrderService {
 		}
 		Long  customerId =  request.getCustomerId();
 		List<OrderDaVProductVO>  resultList =  productMapper.selectDaVPersonalProduct(customerId);
-		 CommonResponse commonResponse = commonService.getCommonResponse();
-		 commonResponse.setData(resultList);
+		CommonResponse commonResponse = commonService.getCommonResponse();
+		commonResponse.setData(resultList);
 		LOGGER.info("用户编号为：" + request.getCustomerId() + "查询成功");
 		return commonResponse;
 	}
@@ -156,6 +158,35 @@ public class OrderServiceImpl implements IOrderService {
 
 
 	//==================================发起的订单页相关开始==================================
+	
+	
+	
+	@Override
+	public CommonResponse detailOrder(DetailOrderRequest request) {
+		if (request == null || request.getOrderId() == null  || request.getType() == null) {
+			throw new BizException(AccountBizReturnCode.paramError, "查询订单详情参数异常");
+		}
+		Integer  type =  request.getType();
+		if(type != OrderSkillConstants.REQUEST_TYPE_CUST  &&  type != OrderSkillConstants.REQUEST_TYPE_DV){
+			throw new BizException(AccountBizReturnCode.paramError, "查询订单详情参数异常");
+		}
+		
+		
+		Long  orderId =  request.getOrderId();
+		OrderDetailVO  orderDetail =  null ;
+		if(type == OrderSkillConstants.REQUEST_TYPE_CUST ){
+			orderDetail =  orderMapper.queryCustOrderDetail(orderId);
+		}else{
+			orderDetail =  orderMapper.queryDvOrderDetail(orderId);
+		}
+		CommonResponse commonResponse = commonService.getCommonResponse();
+		commonResponse.setData(orderDetail);
+		LOGGER.info("查询发送的订单，用户编号为：" + orderId + "查询成功");
+		return commonResponse;
+	}
+	
+	
+	
 	@Override
 	public CommonResponse payOrder(PayOrderRequest request) {
 		if (request == null || request.getOrderId() == null) {
@@ -387,6 +418,11 @@ public class OrderServiceImpl implements IOrderService {
 		LOGGER.info("订单支付，订单编号：" + orderId + "，大V同意/拒绝退款订单完成");
 		return commonResponse;
 	}
+
+
+
+
+
 	
 	//================================发起的订单页相关结束==================================
 

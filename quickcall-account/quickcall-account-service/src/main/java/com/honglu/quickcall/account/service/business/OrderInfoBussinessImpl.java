@@ -9,6 +9,7 @@ import com.honglu.quickcall.account.facade.business.OrderInfoBussiness;
 import com.honglu.quickcall.account.facade.code.OrderRequestType;
 import com.honglu.quickcall.account.facade.exchange.request.ApplayRefundRequest;
 import com.honglu.quickcall.account.facade.exchange.request.ConfirmOrderRequest;
+import com.honglu.quickcall.account.facade.exchange.request.DetailOrderRequest;
 import com.honglu.quickcall.account.facade.exchange.request.DvConfirmRefundRequest;
 import com.honglu.quickcall.account.facade.exchange.request.DvReceiveOrderRequest;
 import com.honglu.quickcall.account.facade.exchange.request.DvStartServiceRequest;
@@ -99,7 +100,11 @@ public class OrderInfoBussinessImpl implements OrderInfoBussiness {
             	break;
             	
            /////////////////////////////////////////////////////////////////
-            /**发起的订单页--去支付*/
+            /**订单详情*/
+            case OrderRequestType.DETAIL_ORDER:
+            	response=  orderService.detailOrder((DetailOrderRequest)request);
+            	break;
+            	/**发起的订单页--去支付*/
             case OrderRequestType.CUST_PAY_ORDER:
             	response=  orderService.payOrder((PayOrderRequest)request);
             	break;
