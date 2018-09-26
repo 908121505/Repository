@@ -36,7 +36,7 @@ public class AccountInfoController {
      */
     @RequestMapping(value = "/queryPersonInfo", method = RequestMethod.POST)
     @ResponseBody
-    public WebResponseModel queryPersonInfo( @RequestBody PersonInfoRequest params) {
+    public WebResponseModel queryPersonInfo(PersonInfoRequest params) {
         WebResponseModel response = userCenterService.execute(params);
         return response;
     }
@@ -45,7 +45,7 @@ public class AccountInfoController {
      */
     @RequestMapping(value = "/saveNicknameImage", method = RequestMethod.POST)
     @ResponseBody
-    public WebResponseModel saveNicknameImage( @RequestBody SaveNickNameRequest params) {
+    public WebResponseModel saveNicknameImage(SaveNickNameRequest params) {
         WebResponseModel response = userCenterService.execute(params);
         return response;
     }
@@ -54,7 +54,7 @@ public class AccountInfoController {
      */
     @RequestMapping(value = "/saveGender", method = RequestMethod.POST)
     @ResponseBody
-    public WebResponseModel saveGender( @RequestBody SaveGenderRequest params) {
+    public WebResponseModel saveGender(SaveGenderRequest params) {
     	 WebResponseModel response = userCenterService.execute(params);
          return response;
     }
@@ -63,7 +63,7 @@ public class AccountInfoController {
      */
     @RequestMapping(value = "/saveSignName", method = RequestMethod.POST)
     @ResponseBody
-    public WebResponseModel saveSignName( @RequestBody SaveSignNameRequest params) {
+    public WebResponseModel saveSignName(SaveSignNameRequest params) {
         WebResponseModel response = userCenterService.execute(params);
         return response;
     }
@@ -72,7 +72,7 @@ public class AccountInfoController {
      */
     @RequestMapping(value = "/saveBirthday", method = RequestMethod.POST)
     @ResponseBody
-    public WebResponseModel saveBirthday( @RequestBody SaveBirthRequest params) {
+    public WebResponseModel saveBirthday(SaveBirthRequest params) {
    	 WebResponseModel response = userCenterService.execute(params);
         return response;
    }
@@ -81,7 +81,7 @@ public class AccountInfoController {
      */
     @RequestMapping(value = "/saveInterest", method = RequestMethod.POST)
     @ResponseBody
-    public WebResponseModel saveInterest( @RequestBody SaveInterestRequest params) {
+    public WebResponseModel saveInterest(SaveInterestRequest params) {
    	 WebResponseModel response = userCenterService.execute(params);
         return response;
    }
@@ -90,7 +90,7 @@ public class AccountInfoController {
      */
     @RequestMapping(value = "/saveOccupation", method = RequestMethod.POST)
     @ResponseBody
-    public WebResponseModel saveOccupation( @RequestBody SaveOccupationRequest params) {
+    public WebResponseModel saveOccupation(SaveOccupationRequest params) {
    	 WebResponseModel response = userCenterService.execute(params);
         return response;
    } 
@@ -99,7 +99,7 @@ public class AccountInfoController {
      */
     @RequestMapping(value = "/showHomePageLogout", method = RequestMethod.POST)
     @ResponseBody
-    public WebResponseModel showHomePageLogout( @RequestBody ShowHomePageLogout params) {
+    public WebResponseModel showHomePageLogout(ShowHomePageLogout params) {
    	 WebResponseModel response = userCenterService.execute(params);
         return response;
    } 

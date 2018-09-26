@@ -438,6 +438,7 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 					//更新
 					// 存入职业ID
 					customerOccupation.setOccupationId(occupation);
+					customerOccupation.setModifyTime(new Date());//更新修改时间
 					int nn=customerOccupationMapper.updateByCustomerIdSelective(customerOccupation);
 				} else {
 					// 存入职业ID
