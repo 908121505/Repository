@@ -218,14 +218,14 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 			logger.info("用户不存在");
 			throw new BizException(BizCode.ParamError, "用戶已存在");
 		}
-
+		customer = new Customer();
 		customer.setCustomerId(UUIDUtils.getId());
 		customer.setCreateTime(new Date());
 		customer.setMicroblogOpenId(request.getMicroblogOpenId());
 		customer.setQqOpenId(request.getQqOpenId());
 		customer.setWechatOpenId(request.getWechatOpenId());
 		customer.setPhone(request.getTel());
-		customer.setNickName(request.getNickName());
+		customer.setNickName("小帅");
 
 		if (StringUtils.isNotBlank(request.getHeardUrl())) {
 			defaultImg = request.getHeardUrl();
