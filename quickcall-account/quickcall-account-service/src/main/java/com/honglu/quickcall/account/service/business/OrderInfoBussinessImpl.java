@@ -40,7 +40,7 @@ import com.honglu.quickcall.user.facade.code.UserBizReturnCode;
  * @author: chenliuguang   
  * @date: 2018年9月22日 下午3:37:13
  */
-@Service("orderInfoBussiness")
+@Service("Account.OrderInfoBussiness")
 public class OrderInfoBussinessImpl implements OrderInfoBussiness {
    
 	
