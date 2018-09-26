@@ -21,7 +21,7 @@ spring:
   data:
     datasource:
       druid:
-        url: jdbc:mysql://172.16.11.199:3306/voice?useUnicode=true&characterEncoding=utf8&allowMultiQueries=true&noAccessToProcedureBodies=true
+        url: jdbc:mysql://172.16.11.201:3306/voice?useUnicode=true&characterEncoding=utf8&allowMultiQueries=true&noAccessToProcedureBodies=true
         username: voice
         password: voice123
         # 使用druid数据源
@@ -55,7 +55,7 @@ spring:
 
   #Redis settings
   redis:
-    host: 172.16.11.199
+    host: 172.16.11.201
     port: 6379
     password: fzcfQwuMH2q
     timeout: 10000
