@@ -38,6 +38,16 @@ public class PersonHomePage {
 	    
 	    private String starSign;//星座
 	    
+	    private String tokenCode;//用户token
+	    
+		public String getTokenCode() {
+			return tokenCode;
+		}
+
+		public void setTokenCode(String tokenCode) {
+			this.tokenCode = tokenCode;
+		}
+
 		public String getStarSign() {
 			return starSign;
 		}

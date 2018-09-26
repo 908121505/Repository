@@ -140,6 +140,7 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 			personHomePage.setNickName(customer.getNickName());// 昵称
 			personHomePage.setSignName(customer.getSignName());//签名
 			personHomePage.setStarSign(customer.getStarSign());//星座
+			personHomePage.setTokenCode(customer.getTokenCode());//token
 			// 判断身份证是否为空，如果又身份证则按找身份证上面的性别
 			if (StringUtils.isNotEmpty(identityID)) {
 				Matcher m = ID_PATTERN.matcher(identityID);
