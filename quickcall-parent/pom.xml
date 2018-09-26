@@ -678,11 +678,6 @@
             </dependency>
             <dependency>
                 <groupId>com.honglu.quickcall</groupId>
-                <artifactId>quickcall-pair-facade</artifactId>
-                <version>${quickcall.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.honglu.quickcall</groupId>
                 <artifactId>quickcall-account-facade</artifactId>
                 <version>${quickcall.version}</version>
             </dependency>
