@@ -7,15 +7,14 @@ import java.util.ResourceBundle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.honglu.quickcall.user.facade.exchange.request.*;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.aliyuncs.exceptions.ClientException;
 import com.aliyuncs.dysmsapi.model.v20170525.SendSmsResponse;
+import com.aliyuncs.exceptions.ClientException;
 import com.honglu.quickcall.common.api.code.BizCode;
 import com.honglu.quickcall.common.api.exception.BizException;
 import com.honglu.quickcall.common.api.exchange.CommonResponse;
@@ -31,129 +30,128 @@ import com.honglu.quickcall.common.third.AliyunSms.utils.MandaoSmsCodeUtil;
 import com.honglu.quickcall.common.third.rongyun.util.RongYunUtil;
 import com.honglu.quickcall.user.facade.code.UserBizReturnCode;
 import com.honglu.quickcall.user.facade.entity.Customer;
+import com.honglu.quickcall.user.facade.exchange.request.GetSmsCodeRequest;
+import com.honglu.quickcall.user.facade.exchange.request.IsPhoneExistsRequest;
+import com.honglu.quickcall.user.facade.exchange.request.SaveCertificationRequest;
+import com.honglu.quickcall.user.facade.exchange.request.SetHeardUrlRequest;
+import com.honglu.quickcall.user.facade.exchange.request.SetPwdRequest;
+import com.honglu.quickcall.user.facade.exchange.request.UserIdCardInfoRequest;
+import com.honglu.quickcall.user.facade.exchange.request.UserLoginRequest;
+import com.honglu.quickcall.user.facade.exchange.request.UserRegisterRequest;
 import com.honglu.quickcall.user.service.dao.CustomerMapper;
 import com.honglu.quickcall.user.service.integration.AccountDubboIntegrationService;
 import com.honglu.quickcall.user.service.service.CommonPersonService;
-
 
 /**
  * Created by len.song on 2017-12-07.
  */
 @Service
 public class CommonPersonServiceImpl implements CommonPersonService {
- 
-   
-    private final static Logger logger = LoggerFactory.getLogger(CommonPersonServiceImpl.class);
-    
-    //默认图片
-    private static String defaultImg =   ResourceBundle.getBundle("thirdconfig").getString("defaultImg");
-    @Autowired
-    private CustomerMapper customerMapper;
-    
-    @Autowired
-    private AccountDubboIntegrationService accountDubboIntegrationService;
-    
-    private static String resendexpire= ResourceBundle.getBundle("thirdconfig").getString("resend.expire");
-    private static String resendexpirehour= ResourceBundle.getBundle("thirdconfig").getString("resend.expire.hour");
-    private static String onehourfreq= ResourceBundle.getBundle("thirdconfig").getString("one.hour.freq");
-    private static String onedayfreq= ResourceBundle.getBundle("thirdconfig").getString("one.day.freq");
-    private static String smscodeexpire= ResourceBundle.getBundle("thirdconfig").getString("smscode.expire");
-    
-    
-    
+
+	private final static Logger logger = LoggerFactory.getLogger(CommonPersonServiceImpl.class);
+
+	// 默认图片
+	private static String defaultImg = ResourceBundle.getBundle("thirdconfig").getString("defaultImg");
+	@Autowired
+	private CustomerMapper customerMapper;
+
+	@Autowired
+	private AccountDubboIntegrationService accountDubboIntegrationService;
+
+	private static String resendexpire = ResourceBundle.getBundle("thirdconfig").getString("resend.expire");
+	private static String resendexpirehour = ResourceBundle.getBundle("thirdconfig").getString("resend.expire.hour");
+	private static String onehourfreq = ResourceBundle.getBundle("thirdconfig").getString("one.hour.freq");
+	private static String onedayfreq = ResourceBundle.getBundle("thirdconfig").getString("one.day.freq");
+	private static String smscodeexpire = ResourceBundle.getBundle("thirdconfig").getString("smscode.expire");
+
 	@Override
 	public CommonResponse regUserExist(IsPhoneExistsRequest params) {
-		CommonResponse response=new CommonResponse();
+		CommonResponse response = new CommonResponse();
 		Customer customer = null;
-		Customer param=new Customer();
-		if(StringUtils.isNotBlank(params.getTel())) {
-			 Pattern p = Pattern.compile("^((1[0-9]))\\d{9}$");   
-		        Matcher m=p.matcher(params.getTel());
-		        if(!m.matches()) {
-		        	 throw new BizException(BizCode.ParamError, "手机号格式不正确");	
-		        }
+		Customer param = new Customer();
+		if (StringUtils.isNotBlank(params.getTel())) {
+			Pattern p = Pattern.compile("^((1[0-9]))\\d{9}$");
+			Matcher m = p.matcher(params.getTel());
+			if (!m.matches()) {
+				throw new BizException(BizCode.ParamError, "手机号格式不正确");
+			}
 			param.setPhone(params.getTel());
-		}
-		else if(StringUtils.isNotBlank(params.getMicroblogOpenId())) {
+		} else if (StringUtils.isNotBlank(params.getMicroblogOpenId())) {
 			param.setMicroblogOpenId(params.getMicroblogOpenId());
-		}
-		else if(StringUtils.isNotBlank(params.getQqOpenId())) {
+		} else if (StringUtils.isNotBlank(params.getQqOpenId())) {
 			param.setQqOpenId(params.getQqOpenId());
-			
-		}else if(StringUtils.isNotBlank(params.getWechatOpenId())) {
+
+		} else if (StringUtils.isNotBlank(params.getWechatOpenId())) {
 			param.setWechatOpenId(params.getWechatOpenId());
 		}
-		customer=customerMapper.login(param);
-		if(customer!=null) {
+		customer = customerMapper.login(param);
+		if (customer != null) {
 			response.setData(1);
-		}else {
+		} else {
 			response.setData(0);
 		}
-	     response.setCode(BizCode.Success);
-	     response.setMessage(BizCode.Success.desc());
+		response.setCode(BizCode.Success);
+		response.setMessage(BizCode.Success.desc());
 		return response;
 	}
 
-	
-
 	@Override
 	public CommonResponse login(UserLoginRequest params) {
-		CommonResponse response=new CommonResponse();
+		CommonResponse response = new CommonResponse();
 		Customer customer = null;
-		Customer param=new Customer();
-		//手机号登录 验证码登录
-		if(StringUtils.isNotBlank(params.getTel())) {
-			 Pattern p = Pattern.compile("^((1[0-9]))\\d{9}$");   
-		        Matcher m=p.matcher(params.getTel());
-		        if(!m.matches()) {
-		        	 throw new BizException(BizCode.ParamError, "手机号格式不正确");	
-		        }
+		Customer param = new Customer();
+		// 手机号登录 验证码登录
+		if (StringUtils.isNotBlank(params.getTel())) {
+			Pattern p = Pattern.compile("^((1[0-9]))\\d{9}$");
+			Matcher m = p.matcher(params.getTel());
+			if (!m.matches()) {
+				throw new BizException(BizCode.ParamError, "手机号格式不正确");
+			}
 			param.setPhone(params.getTel());
-		}//手机号 密码登录
-		if(StringUtils.isNotBlank(params.getPassWord())) {
+		} // 手机号 密码登录
+		if (StringUtils.isNotBlank(params.getPassWord())) {
 			param.setCustPassword(MD5.md5(params.getPassWord()));
-		}//微博登录
-		else if(StringUtils.isNotBlank(params.getMicroblogOpenId())) {
+		} // 微博登录
+		else if (StringUtils.isNotBlank(params.getMicroblogOpenId())) {
 			param.setMicroblogOpenId(params.getMicroblogOpenId());
-		}//QQ登录
-		else if(StringUtils.isNotBlank(params.getQqOpenId())) {
+		} // QQ登录
+		else if (StringUtils.isNotBlank(params.getQqOpenId())) {
 			param.setQqOpenId(params.getQqOpenId());
-			
-		}//微信登录
-		else if(StringUtils.isNotBlank(params.getWechatOpenId())) {
+
+		} // 微信登录
+		else if (StringUtils.isNotBlank(params.getWechatOpenId())) {
 			param.setWechatOpenId(params.getWechatOpenId());
 		}
-		customer=customerMapper.login(param);
-		if(customer==null) {
+		customer = customerMapper.login(param);
+		if (customer == null) {
 			logger.info("用户不存在");
-			 throw new BizException(BizCode.ParamError, "用戶不存在");	
+			throw new BizException(BizCode.ParamError, "用戶不存在");
 		}
-		
-		//修改登录时间  补 融云token
+
+		// 修改登录时间 补 融云token
 		Customer login = new Customer();
-        if (StringUtils.isNotBlank(customer.getTokenCode())) {
-            String rongyunToken = RongYunUtil.getToken(String.valueOf(customer.getCustomerId()), customer.getNickName(), defaultImg);
-            if(rongyunToken==null||"".equals(rongyunToken)) {
-           	 logger.error("用户获取融云token失败。用户ID为：" + customer.getCustomerId());
-            }
-            login.setTokenCode(rongyunToken);
-        }
-        login.setCustomerId(customer.getCustomerId());
-        
-        login.setModifyTime(new Date());
+		if (StringUtils.isNotBlank(customer.getTokenCode())) {
+			String rongyunToken = RongYunUtil.getToken(String.valueOf(customer.getCustomerId()), customer.getNickName(),
+					defaultImg);
+			if (rongyunToken == null || "".equals(rongyunToken)) {
+				logger.error("用户获取融云token失败。用户ID为：" + customer.getCustomerId());
+			}
+			login.setTokenCode(rongyunToken);
+		}
+		login.setCustomerId(customer.getCustomerId());
+
+		login.setModifyTime(new Date());
 		customerMapper.updateByPrimaryKeySelective(login);
-		
-		  
-		
+
 		return ResultUtils.resultSuccess(customer);
 	}
 
 	@Override
 	public CommonResponse setpwd(SetPwdRequest params) {
-		CommonResponse response=new CommonResponse();
-		int row=customerMapper.customerSetPwd(params.getTel(), MD5.md5(params.getPassWord()));//MD5加密);
-		if(row<=0) {
-			 throw new BizException(BizCode.ParamError, "设置密码失败");	
+		CommonResponse response = new CommonResponse();
+		int row = customerMapper.customerSetPwd(params.getTel(), MD5.md5(params.getPassWord()));// MD5加密);
+		if (row <= 0) {
+			throw new BizException(BizCode.ParamError, "设置密码失败");
 		}
 		return ResultUtils.resultSuccess();
 	}
@@ -161,74 +159,66 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 	@Override
 	public CommonResponse setHeardUrl(SetHeardUrlRequest params) {
 		// TODO Auto-generated method stub
-		String rongyunToken=null;
-		if(StringUtils.isNotBlank(params.getNickName())&&params.getCustomerId()!=null
-				&&StringUtils.isNotBlank(params.getHeadPortraitUrl())) {
-			rongyunToken= RongYunUtil.getToken(String.valueOf(params.getCustomerId()), params.getNickName(), params.getHeadPortraitUrl());
-	         if(rongyunToken==null||"".equals(rongyunToken)) {
-	        	 logger.error("用户获取融云token失败。用户ID为：" + params.getCustomerId());
-	         }
+		String rongyunToken = null;
+		if (StringUtils.isNotBlank(params.getNickName()) && params.getCustomerId() != null
+				&& StringUtils.isNotBlank(params.getHeadPortraitUrl())) {
+			rongyunToken = RongYunUtil.getToken(String.valueOf(params.getCustomerId()), params.getNickName(),
+					params.getHeadPortraitUrl());
+			if (rongyunToken == null || "".equals(rongyunToken)) {
+				logger.error("用户获取融云token失败。用户ID为：" + params.getCustomerId());
 			}
-		
-		int row=customerMapper.customerSetHeardUrl(params.getTel(), params.getHeadPortraitUrl(),params.getNickName(),rongyunToken);
-		if(row<=0) {
-			 throw new BizException(BizCode.ParamError, "设置昵称头像失败");	
+		}
+
+		int row = customerMapper.customerSetHeardUrl(params.getTel(), params.getHeadPortraitUrl(), params.getNickName(),
+				rongyunToken);
+		if (row <= 0) {
+			throw new BizException(BizCode.ParamError, "设置昵称头像失败");
 		}
 		return ResultUtils.resultSuccess();
 	}
 
-
-
 	@Override
 	public CommonResponse register(UserRegisterRequest request) {
 		// TODO Auto-generated method stub
-		Customer customer=saveUser(request);
-		return  ResultUtils.resultSuccess(customer);
+		Customer customer = saveUser(request);
+		return ResultUtils.resultSuccess(customer);
 	}
-    
-    
-    
 
-
-    
-    
-
-     /**
-      * 保存用户，并生成融云token
-      * @param request
-      * @return
-      */
+	/**
+	 * 保存用户，并生成融云token
+	 * 
+	 * @param request
+	 * @return
+	 */
 	private Customer saveUser(UserRegisterRequest request) {
-		Customer param=new Customer();
-		Customer customer=new Customer();
-		//手机号登录 验证码登录
-		      if(StringUtils.isNotBlank(request.getTel())) {
-			   Pattern p = Pattern.compile("^((1[0-9]))\\d{9}$");   
-			   Matcher m=p.matcher(request.getTel());
-			   if(!m.matches()) {
-			    throw new BizException(BizCode.ParamError, "手机号格式不正确");	
-		       }
-				param.setPhone(request.getTel());
-				}//手机号 密码登录
-					//微博登录
-				else if(StringUtils.isNotBlank(request.getMicroblogOpenId())) {
-						param.setMicroblogOpenId(request.getMicroblogOpenId());
-					}//QQ登录
-					else if(StringUtils.isNotBlank(request.getQqOpenId())) {
-						param.setQqOpenId(request.getQqOpenId());
-						
-					}//微信登录
-					else if(StringUtils.isNotBlank(request.getWechatOpenId())) {
-						param.setWechatOpenId(request.getWechatOpenId());
-					}
-					customer=customerMapper.login(param);
-					if(customer!=null) {
-						logger.info("用户不存在");
-						 throw new BizException(BizCode.ParamError, "用戶已存在");	
-					}
-			
-		
-		
+		Customer param = new Customer();
+		Customer customer = new Customer();
+		// 手机号登录 验证码登录
+		if (StringUtils.isNotBlank(request.getTel())) {
+			Pattern p = Pattern.compile("^((1[0-9]))\\d{9}$");
+			Matcher m = p.matcher(request.getTel());
+			if (!m.matches()) {
+				throw new BizException(BizCode.ParamError, "手机号格式不正确");
+			}
+			param.setPhone(request.getTel());
+		} // 手机号 密码登录
+			// 微博登录
+		else if (StringUtils.isNotBlank(request.getMicroblogOpenId())) {
+			param.setMicroblogOpenId(request.getMicroblogOpenId());
+		} // QQ登录
+		else if (StringUtils.isNotBlank(request.getQqOpenId())) {
+			param.setQqOpenId(request.getQqOpenId());
+
+		} // 微信登录
+		else if (StringUtils.isNotBlank(request.getWechatOpenId())) {
+			param.setWechatOpenId(request.getWechatOpenId());
+		}
+		customer = customerMapper.login(param);
+		if (customer != null) {
+			logger.info("用户不存在");
+			throw new BizException(BizCode.ParamError, "用戶已存在");
+		}
+
 		customer.setCustomerId(UUIDUtils.getId());
 		customer.setCreateTime(new Date());
 		customer.setMicroblogOpenId(request.getMicroblogOpenId());
@@ -236,68 +226,66 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 		customer.setWechatOpenId(request.getWechatOpenId());
 		customer.setPhone(request.getTel());
 		customer.setNickName(request.getNickName());
-		
-		if(StringUtils.isNotBlank(request.getHeardUrl())) {
-			defaultImg=request.getHeardUrl();
+
+		if (StringUtils.isNotBlank(request.getHeardUrl())) {
+			defaultImg = request.getHeardUrl();
 		}
 		customer.setHeadPortraitUrl(defaultImg);
-		if(StringUtils.isNotBlank(request.getNickName())) {
-		String rongyunToken = RongYunUtil.getToken(String.valueOf(customer.getCustomerId()), customer.getNickName(), defaultImg);
-         if(rongyunToken==null||"".equals(rongyunToken)) {
-        	 logger.error("用户获取融云token失败。用户ID为：" + customer.getCustomerId());
-         }
-         customer.setTokenCode(rongyunToken);
+		if (StringUtils.isNotBlank(request.getNickName())) {
+			String rongyunToken = RongYunUtil.getToken(String.valueOf(customer.getCustomerId()), customer.getNickName(),
+					defaultImg);
+			if (rongyunToken == null || "".equals(rongyunToken)) {
+				logger.error("用户获取融云token失败。用户ID为：" + customer.getCustomerId());
+			}
+			customer.setTokenCode(rongyunToken);
 		}
-         int row= customerMapper.insertSelective(customer);
-         if(row<=0) {
-        	 throw new BizException(UserBizReturnCode.exceedError,"用户未注冊");	
-         }
-         //创建账户
-           accountDubboIntegrationService.createAccount(customer.getCustomerId());
-         customer=customerMapper.selectByPrimaryKey(customer.getCustomerId());
+		int row = customerMapper.insertSelective(customer);
+		if (row <= 0) {
+			throw new BizException(UserBizReturnCode.exceedError, "用户未注冊");
+		}
+		// 创建账户
+		accountDubboIntegrationService.createAccount(customer.getCustomerId());
+		customer = customerMapper.selectByPrimaryKey(customer.getCustomerId());
 		return customer;
 	}
-
-
 
 	@Override
 	public CommonResponse getSmsCode(GetSmsCodeRequest params) {
 		// TODO Auto-generated method stub
 		Customer customer = null;
-		Customer param=new Customer();
-		if(StringUtils.isNotBlank(params.getTel())) {
+		Customer param = new Customer();
+		if (StringUtils.isNotBlank(params.getTel())) {
 			param.setPhone(params.getTel());
-			 Pattern p = Pattern.compile("^((1[0-9]))\\d{9}$");   
-			   Matcher m=p.matcher(params.getTel());
-			   if(!m.matches()) {
-			    throw new BizException(BizCode.ParamError, "手机号格式不正确");	
-		       }
-		}
-		customer=customerMapper.login(param);
-		if(customer==null) {
-			if(!"2".equals(params.getCodeType())){
-				throw new BizException(UserBizReturnCode.exceedError,"用户未注冊");	
-			}
-		}else {
-			if("2".equals(params.getCodeType())){
-			throw new BizException(UserBizReturnCode.exceedError,"用户已注冊");	
+			Pattern p = Pattern.compile("^((1[0-9]))\\d{9}$");
+			Matcher m = p.matcher(params.getTel());
+			if (!m.matches()) {
+				throw new BizException(BizCode.ParamError, "手机号格式不正确");
 			}
 		}
-		//四位随机数
+		customer = customerMapper.login(param);
+		if (customer == null) {
+			if (!"2".equals(params.getCodeType())) {
+				throw new BizException(UserBizReturnCode.exceedError, "用户未注冊");
+			}
+		} else {
+			if ("2".equals(params.getCodeType())) {
+				throw new BizException(UserBizReturnCode.exceedError, "用户已注冊");
+			}
+		}
+		// 四位随机数
 		int random = (int) ((Math.random() * 9 + 1) * 1000);
 		String randomCode = random + "";
-		
-		
-		return sendSms(params.getTel(),randomCode,params.getCodeType());
+
+		return sendSms(params.getTel(), randomCode, params.getCodeType());
 	}
-	
-	public static CommonResponse sendSms(String phoneNum, String code,String codeType) {
-		CommonResponse response= new CommonResponse();
+
+	public static CommonResponse sendSms(String phoneNum, String code, String codeType) {
+		CommonResponse response = new CommonResponse();
 		// 查一分钟
 		if (JedisUtil.get(RedisKeyConstants.USER_VERIFYCODE_M + phoneNum) == null) {
 			JedisUtil.set(RedisKeyConstants.USER_VERIFYCODE_M + phoneNum, "1", Integer.parseInt(resendexpire));
 		} else {
-			 throw new BizException(UserBizReturnCode.exceedError,"请勿重复发送验证码");	
+			throw new BizException(UserBizReturnCode.exceedError, "请勿重复发送验证码");
 		}
 
 		// 查一小时
@@ -306,10 +294,11 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 		} else {
 			String count = JedisUtil.get(RedisKeyConstants.USER_VERIFYCODE_H + phoneNum);
 			if (Integer.parseInt(count) >= Integer.parseInt(onehourfreq)) {
-				 throw new BizException(UserBizReturnCode.exceedError,"验证码每小时只能获取五次");	
+				throw new BizException(UserBizReturnCode.exceedError, "验证码每小时只能获取五次");
 			}
 			String total = String.valueOf(Integer.parseInt(count) + 1);
-			JedisUtil.set(RedisKeyConstants.USER_VERIFYCODE_H + phoneNum, total, JedisUtil.ddlTimes(RedisKeyConstants.USER_VERIFYCODE_H + phoneNum));
+			JedisUtil.set(RedisKeyConstants.USER_VERIFYCODE_H + phoneNum, total,
+					JedisUtil.ddlTimes(RedisKeyConstants.USER_VERIFYCODE_H + phoneNum));
 		}
 
 		// 查一天
@@ -318,67 +307,62 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 		} else {
 			String count = JedisUtil.get(RedisKeyConstants.USER_VERIFYCODE_D + phoneNum);
 			if (Integer.parseInt(count) >= Integer.parseInt(onedayfreq)) {
-				 throw new BizException(UserBizReturnCode.exceedError,"验证码日发送次数已达到上限");	
+				throw new BizException(UserBizReturnCode.exceedError, "验证码日发送次数已达到上限");
 			}
 			String total = String.valueOf(Integer.parseInt(count) + 1);
-			JedisUtil.set(RedisKeyConstants.USER_VERIFYCODE_D + phoneNum, total, JedisUtil.ddlTimes(RedisKeyConstants.USER_VERIFYCODE_D + phoneNum));
+			JedisUtil.set(RedisKeyConstants.USER_VERIFYCODE_D + phoneNum, total,
+					JedisUtil.ddlTimes(RedisKeyConstants.USER_VERIFYCODE_D + phoneNum));
 		}
-		
+
 		SendSmsResponse codeResponse;
 		try {
 			codeResponse = AliyunSmsCodeUtil.sendSms(phoneNum, code);
 
-
-		if (codeResponse!=null&&"OK".equals(codeResponse.getCode())) {
-			JedisUtil.set(RedisKeyConstants.USER_VERIFYCODE + phoneNum + codeType, code, Integer.parseInt(smscodeexpire));
-			logger.info("手机号:" + phoneNum + " 手机验证码:" + code);
-			logger.info("将验证码存入redis中的key值为:{},失效时间为:{}",(RedisKeyConstants.USER_VERIFYCODE + phoneNum + codeType),Integer.parseInt(smscodeexpire));
-			return ResultUtils.resultSuccess();
-		} else {
-			//阿里云短信异常,用 "漫道"短信通道 发送
-			String mdResult = MandaoSmsCodeUtil.mdSmsSendSimple(phoneNum,
-					MessageFormat.format(SmsTemplateEnum.login_auth_code_template.getContent(),code));
-			if(mdResult.startsWith("-")||mdResult.equals("")){
-				throw new BizException(UserBizReturnCode.DBError,"验证码发送失败，请检查手机号是否正常");
-			}else{
-				logger.info("漫道发送验证码手机号:" + phoneNum + " 手机验证码:" + code);
-				JedisUtil.set(RedisKeyConstants.USER_VERIFYCODE + phoneNum + codeType, code, Integer.parseInt(smscodeexpire));
+			if (codeResponse != null && "OK".equals(codeResponse.getCode())) {
+				JedisUtil.set(RedisKeyConstants.USER_VERIFYCODE + phoneNum + codeType, code,
+						Integer.parseInt(smscodeexpire));
+				logger.info("手机号:" + phoneNum + " 手机验证码:" + code);
+				logger.info("将验证码存入redis中的key值为:{},失效时间为:{}", (RedisKeyConstants.USER_VERIFYCODE + phoneNum + codeType),
+						Integer.parseInt(smscodeexpire));
 				return ResultUtils.resultSuccess();
+			} else {
+				// 阿里云短信异常,用 "漫道"短信通道 发送
+				String mdResult = MandaoSmsCodeUtil.mdSmsSendSimple(phoneNum,
+						MessageFormat.format(SmsTemplateEnum.login_auth_code_template.getContent(), code));
+				if (mdResult.startsWith("-") || mdResult.equals("")) {
+					throw new BizException(UserBizReturnCode.DBError, "验证码发送失败，请检查手机号是否正常");
+				} else {
+					logger.info("漫道发送验证码手机号:" + phoneNum + " 手机验证码:" + code);
+					JedisUtil.set(RedisKeyConstants.USER_VERIFYCODE + phoneNum + codeType, code,
+							Integer.parseInt(smscodeexpire));
+					return ResultUtils.resultSuccess();
+				}
 			}
-		}
 		} catch (ClientException e) {
-			//阿里云短信异常,用 "漫道"短信通道 发送
+			// 阿里云短信异常,用 "漫道"短信通道 发送
 			String mdResult = MandaoSmsCodeUtil.mdSmsSendSimple(phoneNum,
-					MessageFormat.format(SmsTemplateEnum.login_auth_code_template.getContent(),code));
-			if(mdResult.startsWith("-")||mdResult.equals("")){
-				throw new BizException(UserBizReturnCode.DBError,"验证码发送失败，请检查手机号是否正常");
-			}else{
+					MessageFormat.format(SmsTemplateEnum.login_auth_code_template.getContent(), code));
+			if (mdResult.startsWith("-") || mdResult.equals("")) {
+				throw new BizException(UserBizReturnCode.DBError, "验证码发送失败，请检查手机号是否正常");
+			} else {
 				logger.info("漫道发送验证码手机号:" + phoneNum + " 手机验证码:" + code);
-				JedisUtil.set(RedisKeyConstants.USER_VERIFYCODE + phoneNum + codeType, code, Integer.parseInt(smscodeexpire));
+				JedisUtil.set(RedisKeyConstants.USER_VERIFYCODE + phoneNum + codeType, code,
+						Integer.parseInt(smscodeexpire));
 				return ResultUtils.resultSuccess();
 			}
 		}
-		
-		
-		
-		
-		
-		
-		
-		
-		
-	}
 
+	}
 
 	@Override
 	public CommonResponse queryUserIdCardCertificationInfo(UserIdCardInfoRequest request) {
 		Customer customer = customerMapper.queryUserIdCardCertificationInfo(request.getCustomerId());
-		if(customer == null){
+		if (customer == null) {
 			return ResultUtils.resultDataNotExist("用户数据不存在");
 		}
 
-		if(customer.getIdentityStatus() == null){
-			customer.setIdentityStatus(0);//身份认证状态为空的时候，默认复制为未认证
+		if (customer.getIdentityStatus() == null) {
+			customer.setIdentityStatus(0);// 身份认证状态为空的时候，默认复制为未认证
 		}
 		return ResultUtils.resultSuccess(customer);
 	}
@@ -386,30 +370,29 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 	@Override
 	public CommonResponse saveUserCertificationInfo(SaveCertificationRequest request) {
 		Customer customer = customerMapper.selectByPrimaryKey(request.getCustomerId());
-		if(customer == null){
+		if (customer == null) {
 			return ResultUtils.resultDataNotExist("用户数据不存在");
 		}
 
 		Customer certifyCustomer = new Customer();
 		// 身份认证上传照片 || 提交身份认证时 -- 校验状态
-		if(Objects.equals(request.getCertifyType(), 0)
-				|| Objects.equals(request.getCredentialsType(), 1)){
-			if(Objects.equals(customer.getIdentityStatus(), 1)){
+		if (Objects.equals(request.getCertifyType(), 0) || Objects.equals(request.getCredentialsType(), 1)) {
+			if (Objects.equals(customer.getIdentityStatus(), 1)) {
 				return ResultUtils.resultDuplicateOperation("身份认证正在审核中");
 			}
-			if(Objects.equals(customer.getIdentityStatus(), 2)){
+			if (Objects.equals(customer.getIdentityStatus(), 2)) {
 				return ResultUtils.resultDuplicateOperation("身份认证已通过");
 			}
 			certifyCustomer.setFrontPortraitUrl(request.getFrontPortraitUrl());
 			certifyCustomer.setBackPortraitUrl(request.getBackPortraitUrl());
 		}
 		// 提交身份认证时 -- 判断身份证照片是否上传完整
-		if(Objects.equals(request.getCertifyType(), 1)){
+		if (Objects.equals(request.getCertifyType(), 1)) {
 			// 身份认证 -- 判断数据身份证身份已上传
-			if(StringUtils.isBlank(customer.getFrontPortraitUrl())){
+			if (StringUtils.isBlank(customer.getFrontPortraitUrl())) {
 				return ResultUtils.resultDataNotExist("请上传身份证正面照片");
 			}
-			if(StringUtils.isBlank(customer.getBackPortraitUrl())){
+			if (StringUtils.isBlank(customer.getBackPortraitUrl())) {
 				return ResultUtils.resultDataNotExist("请上传身份证反面照片");
 			}
 			certifyCustomer.setIdentityStatus(1);// 更新状态为：审核中
@@ -419,18 +402,18 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 		}
 
 		// 大V认证时 -- 判断大V认证状态
-		if(Objects.equals(request.getCertifyType(), 2)){
+		if (Objects.equals(request.getCertifyType(), 2)) {
 			// ADUAN 上传大V认证时 -- 先不判断身份认证状态了（后面记得打开注释）
-			/*if(!Objects.equals(customer.getIdentityStatus(), 2)){
-				if(Objects.equals(customer.getIdentityStatus(), 1)){
-					return ResultUtils.resultDuplicateOperation("身份认证正在审核中，请等待审核通过后再进行大V认证");
-				}
-				return ResultUtils.resultDuplicateOperation("请先进行身份认证");
-			}*/
-			if(Objects.equals(customer.getvStatus(), 1)){
+			/*
+			 * if(!Objects.equals(customer.getIdentityStatus(), 2)){
+			 * if(Objects.equals(customer.getIdentityStatus(), 1)){ return
+			 * ResultUtils.resultDuplicateOperation("身份认证正在审核中，请等待审核通过后再进行大V认证"); } return
+			 * ResultUtils.resultDuplicateOperation("请先进行身份认证"); }
+			 */
+			if (Objects.equals(customer.getvStatus(), 1)) {
 				return ResultUtils.resultDuplicateOperation("大V认证正在审核中");
 			}
-			if(Objects.equals(customer.getvStatus(), 2)){
+			if (Objects.equals(customer.getvStatus(), 2)) {
 				return ResultUtils.resultDuplicateOperation("大V认证已通过");
 			}
 			certifyCustomer.setvStatus(1);// 更新状态为：审核中
