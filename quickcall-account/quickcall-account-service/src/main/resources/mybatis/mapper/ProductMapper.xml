@@ -275,7 +275,8 @@
 		  p.service_time  AS  serviceTime,
 		  c.customer_id  AS  customerId,
 		  p.product_id AS  productId,
-		  p.name AS  productName
+		  p.name AS  productName,
+		  c.head_portrait_url  AS headPortraitUrl
 		FROM
 			product p
 		LEFT JOIN  customer  c   ON  p.seller_id  = c.customer_id  
