@@ -5,6 +5,9 @@ import com.calf.cn.entity.DataTables;
 import com.calf.cn.service.BaseManager;
 import com.calf.cn.utils.SearchUtil;
 import com.calf.module.checkauth.entity.Customer;
+import com.calf.module.order.entity.Product;
+import com.calf.module.order.entity.Skill;
+import com.honglu.quickcall.common.core.util.UUIDUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
@@ -15,8 +18,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
-import java.util.Map;
+import java.math.BigDecimal;
+import java.util.*;
 
 /**
  * 认证审核Controller
@@ -67,6 +70,36 @@ public class CheckAuthController implements BaseController<Customer> {
     public int saveUpdate(Customer entity) {
         Subject currentUser = SecurityUtils.getSubject();
         entity.setModifyMan(currentUser.getPrincipal().toString());
+        // ADUAN 大V审核通过后 -- 插入假数据（后面删除）
+        if (Objects.equals(entity.getvStatus(), 2)) {
+            // 插入大V技能数据
+            Map<String, Object> params = new HashMap<>();
+            params.put("skillStatus", "0");
+            params.put("iDisplayStart", "0");
+            params.put("iDisplayLength", "5");
+            List<Skill> skills = baseManager.query("Skill.selectPageList", params);
+            List<Product> list = new ArrayList<>();
+            for (Skill skill : skills) {
+                Product bean = new Product();
+                bean.setProductId(String.valueOf(UUIDUtils.getId()));
+                bean.setSkillId(skill.getId());
+                bean.setName(skill.getName());
+                bean.setServiceTime(30);
+                bean.setPrice(skill.getMinPrice().add(new BigDecimal(skill.getPriceStep())));
+                bean.setPreferentialPrice(new BigDecimal(skill.getPriceStep()));
+                bean.setDiscountRate(new BigDecimal(20));
+                bean.setDiscountPrice(new BigDecimal(skill.getPriceStep()).multiply(new BigDecimal(20)));
+                bean.setType(0);
+                bean.setProductStatus(1);
+                bean.setSellerId(entity.getCustomerId());
+                bean.setProductDescribe("审核通过时自动插入的数据，仅供测试使用");
+                bean.setCreateMan(currentUser.getPreviousPrincipals().toString());
+
+                list.add(bean);
+            }
+            baseManager.batchInsert("Product.insert", list);
+        }
+
         return baseManager.update(entity);
     }
 

@@ -14,6 +14,7 @@ import java.util.Date;
  */
 public class Product {
 	private String productId;
+	private String skillId;
     private String name;
     private BigDecimal price;
     private Integer serviceTime;
@@ -38,7 +39,14 @@ public class Product {
         this.productId = productId;
     }
 
-    
+    public String getSkillId() {
+        return skillId;
+    }
+
+    public void setSkillId(String skillId) {
+        this.skillId = skillId;
+    }
+
     public String getName() {
         return name;
     }

@@ -3,6 +3,7 @@
 <mapper namespace="Product" >
   <resultMap id="BaseResultMap" type="com.calf.module.order.entity.Product" >
     <id column="product_id" property="productId" jdbcType="BIGINT" />
+    <id column="skill_d" property="skillId" jdbcType="BIGINT" />
     <result column="name" property="name" jdbcType="VARCHAR" />
     <result column="service_time" property="serviceTime" jdbcType="SMALLINT" />
     <result column="price" property="price" jdbcType="DECIMAL" />
@@ -20,7 +21,7 @@
     <result column="remark" property="remark" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    product_id, name, service_time, price, preferential_price, discount_rate, discount_price, 
+    product_id, skill_d, name, service_time, price, preferential_price, discount_rate, discount_price,
     type, product_status, seller_id, product_describe, create_time, modify_time, create_man, 
     modify_man, remark
   </sql>
@@ -35,7 +36,7 @@
     where product_id = #{productId,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="com.calf.module.order.entity.Product" >
-    insert into product (product_id, name, service_time, 
+    insert into product (product_id, skill_d, name, service_time,
       price, preferential_price, discount_rate, 
       discount_price, type, product_status, 
       seller_id, product_describe, create_time, 
@@ -44,8 +45,8 @@
     values (#{productId,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{serviceTime,jdbcType=SMALLINT}, 
       #{price,jdbcType=DECIMAL}, #{preferentialPrice,jdbcType=DECIMAL}, #{discountRate,jdbcType=DECIMAL}, 
       #{discountPrice,jdbcType=DECIMAL}, #{type,jdbcType=TINYINT}, #{productStatus,jdbcType=TINYINT}, 
-      #{sellerId,jdbcType=BIGINT}, #{productDescribe,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{modifyTime,jdbcType=TIMESTAMP}, #{createMan,jdbcType=VARCHAR}, #{modifyMan,jdbcType=VARCHAR}, 
+      #{sellerId,jdbcType=BIGINT}, #{productDescribe,jdbcType=VARCHAR}, NOW(),
+      NOW(), #{createMan,jdbcType=VARCHAR}, #{modifyMan,jdbcType=VARCHAR},
       #{remark,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.calf.module.order.entity.Product" >
@@ -53,6 +54,9 @@
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="productId != null" >
         product_id,
+      </if>
+      <if test="skillId != null" >
+        skill_d,
       </if>
       <if test="name != null" >
         name,
@@ -157,6 +161,9 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.calf.module.order.entity.Product" >
     update product
     <set >
+      <if test="skillId != null" >
+        skill_d = #{skillId},
+      </if>
       <if test="name != null" >
         name = #{name,jdbcType=VARCHAR},
       </if>
@@ -207,7 +214,8 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.calf.module.order.entity.Product" >
     update product
-    set name = #{name,jdbcType=VARCHAR},
+    set skill_d=#{skillId},
+      name = #{name,jdbcType=VARCHAR},
       service_time = #{serviceTime,jdbcType=SMALLINT},
       price = #{price,jdbcType=DECIMAL},
       preferential_price = #{preferentialPrice,jdbcType=DECIMAL},
