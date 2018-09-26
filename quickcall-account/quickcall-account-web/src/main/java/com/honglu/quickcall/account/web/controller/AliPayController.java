@@ -23,114 +23,106 @@ import com.honglu.quickcall.account.web.service.AccountCenterService;
 import com.honglu.quickcall.common.api.exchange.BaseController;
 import com.honglu.quickcall.common.api.exchange.WebResponseModel;
 
-
 @Controller
 @RequestMapping("/alipay")
 public class AliPayController extends BaseController {
-	
+
 	private static Logger logger = LoggerFactory.getLogger(AliPayController.class);
-	
+
 	@Autowired
-	private AccountCenterService  accountCenterService;
-	
+	private AccountCenterService accountCenterService;
+
 	/**
-     *充值
-     */
-    @RequestMapping(value = "/recharge", method = RequestMethod.POST)
-    @ResponseBody
-    public WebResponseModel recharge(HttpServletRequest request, RechargeRequest params) {
-    	logger.info("accountWeb.pay.recharge.request.data : " + JSONObject.toJSONString(params));
-    	 WebResponseModel response=new  WebResponseModel ();
-    	if(params.getAmount()==null||params.getUserId()==null) {
-    		response.setCode(AccountBizReturnCode.paramError.code());
-            response.setMsg(AccountBizReturnCode.paramError.desc());
-            return response;
-    	}
-    	params.setRemoteIp(this.getRemoteHost(request));
-         response = accountCenterService.execute(params);
-        
-        logger.info("accountWeb.pay.recharge.resonse.data : " + JSONObject.toJSONString(response));
-        return response;
-    }
-    
-    /**
-     *提现
-     */
-    @RequestMapping(value = "/whthdraw", method = RequestMethod.POST)
-    @ResponseBody
-    public WebResponseModel whthdraw( WhthdrawRequest params) {
-    	logger.info("accountWeb.pay.whthdraw.request.data : " + JSONObject.toJSONString(params));
-     	 WebResponseModel response=new  WebResponseModel ();
-     	 if(params.getAmount()==null||params.getUserId()==null) {
-   	     		response.setCode(AccountBizReturnCode.paramError.code());
-   	     		response.setMsg(AccountBizReturnCode.paramError.desc());
-   	     		return response;
-   	}
-         response = accountCenterService.execute(params);
-     	logger.info("accountWeb.pay.whthdraw.response.data : " + JSONObject.toJSONString(response));
-        return response;
-    }
-    
-    /**
-     *查询账户
-     */
-    @RequestMapping(value = "/queryAccount", method = RequestMethod.POST)
-    @ResponseBody
-    public WebResponseModel queryAccount( QueryAccountRequest params) {
-    	logger.info("accountWeb.pay.queryAccount.request.data : " + JSONObject.toJSONString(params));
-    	WebResponseModel response=new WebResponseModel();
-    	if(params.getUserId()==null) {
-    		 response.setCode(AccountBizReturnCode.paramError.code());
-             response.setMsg(AccountBizReturnCode.paramError.desc());
-             return response;
-    	}
-         response = accountCenterService.execute(params);
-        logger.info("accountWeb.pay.queryAccount.response.data : " + JSONObject.toJSONString(response));
-        return response;
-    }
-    
-    
-    /**
-     *绑定支付宝
-     */
-    @RequestMapping(value = "/bindAliaccount", method = RequestMethod.POST)
-    @ResponseBody
-    public WebResponseModel bindAliaccount( BindAliaccountRequest params) {
-    	logger.info("accountWeb.pay.bindAliaccount.request.data : " + JSONObject.toJSONString(params));
-    	WebResponseModel response=new WebResponseModel();
-    	if(params.getUserId()==null) {
-    		 response.setCode(AccountBizReturnCode.paramError.code());
-             response.setMsg(AccountBizReturnCode.paramError.desc());
-             return response;
-    	}
-         response = accountCenterService.execute(params);
-        logger.info("accountWeb.pay.bindAliaccount.response.data : " + JSONObject.toJSONString(response));
-        return response;
-    }
-    
-    
-  
-    
-    
-    /**
-     *支付回调
-     */
-    @RequestMapping(value = "/alipayNotify",produces = "application/json;charset=UTF-8", method = RequestMethod.POST)
-    @ResponseBody
-    public WebResponseModel alipayNotify( @RequestBody AlipayNotifyRequest params) {
-    	logger.info("accountWeb.pay.alipayNotify.request.data : " + JSONObject.toJSONString(params));
-    	WebResponseModel response=new WebResponseModel();
-    	if(params.getAccountId()==null||StringUtils.isBlank(params.getOrderNo())||
-    			params.getAmount()==null||params.getPayState()==null) {
-    		 response.setCode(AccountBizReturnCode.paramError.code());
-             response.setMsg(AccountBizReturnCode.paramError.desc());
-             return response;
-    	}
-         response = accountCenterService.execute(params);
-        logger.info("accountWeb.pay.alipayNotify.response.data : " + JSONObject.toJSONString(response));
-        return response;
-    }
-	
-	
+	 * 充值
+	 */
+	@RequestMapping(value = "/recharge", method = RequestMethod.POST)
+	@ResponseBody
+	public WebResponseModel recharge(HttpServletRequest request, RechargeRequest params) {
+		logger.info("accountWeb.pay.recharge.request.data : " + JSONObject.toJSONString(params));
+		WebResponseModel response = new WebResponseModel();
+		if (params.getAmount() == null || params.getUserId() == null) {
+			response.setCode(AccountBizReturnCode.paramError.code());
+			response.setMsg(AccountBizReturnCode.paramError.desc());
+			return response;
+		}
+		params.setRemoteIp(this.getRemoteHost(request));
+		response = accountCenterService.executeWhite(params);
+
+		logger.info("accountWeb.pay.recharge.resonse.data : " + JSONObject.toJSONString(response));
+		return response;
+	}
+
+	/**
+	 * 提现
+	 */
+	@RequestMapping(value = "/whthdraw", method = RequestMethod.POST)
+	@ResponseBody
+	public WebResponseModel whthdraw(WhthdrawRequest params) {
+		logger.info("accountWeb.pay.whthdraw.request.data : " + JSONObject.toJSONString(params));
+		WebResponseModel response = new WebResponseModel();
+		if (params.getAmount() == null || params.getUserId() == null) {
+			response.setCode(AccountBizReturnCode.paramError.code());
+			response.setMsg(AccountBizReturnCode.paramError.desc());
+			return response;
+		}
+		response = accountCenterService.execute(params);
+		logger.info("accountWeb.pay.whthdraw.response.data : " + JSONObject.toJSONString(response));
+		return response;
+	}
+
+	/**
+	 * 查询账户
+	 */
+	@RequestMapping(value = "/queryAccount", method = RequestMethod.POST)
+	@ResponseBody
+	public WebResponseModel queryAccount(QueryAccountRequest params) {
+		logger.info("accountWeb.pay.queryAccount.request.data : " + JSONObject.toJSONString(params));
+		WebResponseModel response = new WebResponseModel();
+		if (params.getUserId() == null) {
+			response.setCode(AccountBizReturnCode.paramError.code());
+			response.setMsg(AccountBizReturnCode.paramError.desc());
+			return response;
+		}
+		response = accountCenterService.execute(params);
+		logger.info("accountWeb.pay.queryAccount.response.data : " + JSONObject.toJSONString(response));
+		return response;
+	}
+
+	/**
+	 * 绑定支付宝
+	 */
+	@RequestMapping(value = "/bindAliaccount", method = RequestMethod.POST)
+	@ResponseBody
+	public WebResponseModel bindAliaccount(BindAliaccountRequest params) {
+		logger.info("accountWeb.pay.bindAliaccount.request.data : " + JSONObject.toJSONString(params));
+		WebResponseModel response = new WebResponseModel();
+		if (params.getUserId() == null) {
+			response.setCode(AccountBizReturnCode.paramError.code());
+			response.setMsg(AccountBizReturnCode.paramError.desc());
+			return response;
+		}
+		response = accountCenterService.execute(params);
+		logger.info("accountWeb.pay.bindAliaccount.response.data : " + JSONObject.toJSONString(response));
+		return response;
+	}
+
+	/**
+	 * 支付回调
+	 */
+	@RequestMapping(value = "/alipayNotify", produces = "application/json;charset=UTF-8", method = RequestMethod.POST)
+	@ResponseBody
+	public WebResponseModel alipayNotify(@RequestBody AlipayNotifyRequest params) {
+		logger.info("accountWeb.pay.alipayNotify.request.data : " + JSONObject.toJSONString(params));
+		WebResponseModel response = new WebResponseModel();
+		if (params.getAccountId() == null || StringUtils.isBlank(params.getOrderNo()) || params.getAmount() == null
+				|| params.getPayState() == null) {
+			response.setCode(AccountBizReturnCode.paramError.code());
+			response.setMsg(AccountBizReturnCode.paramError.desc());
+			return response;
+		}
+		response = accountCenterService.execute(params);
+		logger.info("accountWeb.pay.alipayNotify.response.data : " + JSONObject.toJSONString(response));
+		return response;
+	}
 
 }
