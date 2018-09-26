@@ -344,6 +344,7 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 			return ResultUtils.resultDataNotExist("用户数据不存在");
 		}
 
+		Customer certifyCustomer = new Customer();
 		// 身份认证上传照片 || 提交身份认证时 -- 校验状态
 		if(Objects.equals(request.getCertifyType(), 0)
 				|| Objects.equals(request.getCredentialsType(), 1)){
@@ -353,8 +354,9 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 			if(Objects.equals(customer.getIdentityStatus(), 2)){
 				return ResultUtils.resultDuplicateOperation("身份认证已通过");
 			}
+			certifyCustomer.setFrontPortraitUrl(request.getFrontPortraitUrl());
+			certifyCustomer.setBackPortraitUrl(request.getBackPortraitUrl());
 		}
-		Customer certifyCustomer = new Customer();
 		// 提交身份认证时 -- 判断身份证照片是否上传完整
 		if(Objects.equals(request.getCertifyType(), 1)){
 			// 身份认证 -- 判断数据身份证身份已上传
@@ -365,16 +367,20 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 				return ResultUtils.resultDataNotExist("请上传身份证反面照片");
 			}
 			certifyCustomer.setIdentityStatus(1);// 更新状态为：审核中
+			certifyCustomer.setRealName(request.getRealName());
+			certifyCustomer.setCredentialsType(request.getCredentialsType());
+			certifyCustomer.setCredentialsNum(request.getCredentialsNum());
 		}
 
 		// 大V认证时 -- 判断大V认证状态
 		if(Objects.equals(request.getCertifyType(), 2)){
-			if(!Objects.equals(customer.getIdentityStatus(), 2)){
+			// ADUAN 上传大V认证时 -- 先不判断身份认证状态了（后面记得打开注释）
+			/*if(!Objects.equals(customer.getIdentityStatus(), 2)){
 				if(Objects.equals(customer.getIdentityStatus(), 1)){
 					return ResultUtils.resultDuplicateOperation("身份认证正在审核中，请等待审核通过后再进行大V认证");
 				}
 				return ResultUtils.resultDuplicateOperation("请先进行身份认证");
-			}
+			}*/
 			if(Objects.equals(customer.getvStatus(), 1)){
 				return ResultUtils.resultDuplicateOperation("大V认证正在审核中");
 			}
@@ -382,15 +388,10 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 				return ResultUtils.resultDuplicateOperation("大V认证已通过");
 			}
 			certifyCustomer.setvStatus(1);// 更新状态为：审核中
+			certifyCustomer.setVoiceUrl(request.getVoiceUrl());
 		}
 
 		certifyCustomer.setCustomerId(request.getCustomerId());
-		certifyCustomer.setRealName(request.getRealName());
-		certifyCustomer.setCredentialsType(request.getCredentialsType());
-		certifyCustomer.setCredentialsNum(request.getCredentialsNum());
-		certifyCustomer.setFrontPortraitUrl(request.getFrontPortraitUrl());
-		certifyCustomer.setBackPortraitUrl(request.getBackPortraitUrl());
-		certifyCustomer.setVoiceUrl(request.getVoiceUrl());
 		customerMapper.updateByPrimaryKeySelective(certifyCustomer);
 
 		return ResultUtils.resultSuccess();
