@@ -2,7 +2,7 @@ package com.honglu.quickcall.user.web.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.aliyun.oss.OSSClient;
-import com.honglu.quickcall.common.api.code.BizCode;
+import com.honglu.quickcall.common.api.code.AliYunFilePaths;
 import com.honglu.quickcall.common.api.exchange.WebResponseModel;
 import com.honglu.quickcall.common.api.util.JedisUtil;
 import com.honglu.quickcall.common.api.util.RedisKeyConstants;
@@ -11,20 +11,18 @@ import com.honglu.quickcall.common.third.OSS.OSSUtil;
 import com.honglu.quickcall.user.facade.code.UserBizReturnCode;
 import com.honglu.quickcall.user.facade.exchange.request.*;
 import com.honglu.quickcall.user.web.service.UserCenterService;
-
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
+
+import javax.servlet.http.HttpServletRequest;
 
 
 /**
@@ -191,17 +189,18 @@ public class UserCommonController {
         return response; 
     }*/
     
-    /**@Title 上传图片
+    /**
+     * @Title 上传用户头像
      * @modify liuyinkai
-     * @param type、request
+     * @param request
      * @return 
      */
-    @RequestMapping(value = "/image", produces = "application/json;charset=UTF-8", method = RequestMethod.POST)
+    @RequestMapping(value = "/uploadHeadImage", produces = "application/json;charset=UTF-8", method = RequestMethod.POST)
     @ResponseBody
     public WebResponseModel imageUpload(HttpServletRequest request){
-
         logger.info("userweb.user.image.request.data : " +request);
-        String imgFolder = "user/photo";
+
+        String imgFolder = AliYunFilePaths.USER_UPLOAD_HEAD_IMG;
         WebResponseModel response=new WebResponseModel();
 
         try {

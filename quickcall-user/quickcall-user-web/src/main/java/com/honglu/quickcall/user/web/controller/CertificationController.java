@@ -1,6 +1,7 @@
 package com.honglu.quickcall.user.web.controller;
 
 import com.aliyun.oss.OSSClient;
+import com.honglu.quickcall.common.api.code.AliYunFilePaths;
 import com.honglu.quickcall.common.api.exchange.WebResponseModel;
 import com.honglu.quickcall.common.core.util.UUIDUtils;
 import com.honglu.quickcall.common.third.OSS.OSSUtil;
@@ -32,15 +33,6 @@ import javax.servlet.http.HttpServletRequest;
 public class CertificationController {
 
     private static Logger logger = LoggerFactory.getLogger(CertificationController.class);
-
-    /**
-     * 用户身份证图片存放路径
-     **/
-    private static final String ID_CARD_IMAGE_FOLDER = "user/idcard";
-    /**
-     * 大V认证介绍录音文件存放路径
-     **/
-    private static final String BIG_V_INTRODUCE_AUDIO = "user/audio";
 
     @Autowired
     private UserCenterService userCenterService;
@@ -130,7 +122,7 @@ public class CertificationController {
             return response;
         }
 
-        WebResponseModel response = uploadFile(request, ID_CARD_IMAGE_FOLDER);
+        WebResponseModel response = uploadFile(request, AliYunFilePaths.IDENTITY_AUTH_ID_CARD_IMAGE);
         if("000000".equals(response.getCode())){
             // 保存身份证图片
             SaveCertificationRequest params = new SaveCertificationRequest();
@@ -164,7 +156,7 @@ public class CertificationController {
             response.setMsg("客户ID为空");
             return response;
         }
-        WebResponseModel response = uploadFile(request, BIG_V_INTRODUCE_AUDIO);
+        WebResponseModel response = uploadFile(request, AliYunFilePaths.BIG_V_INTRODUCE_AUDIO);
         if("000000".equals(response.getCode())){
             SaveCertificationRequest params = new SaveCertificationRequest();
             params.setCustomerId(Long.valueOf(customerId));
