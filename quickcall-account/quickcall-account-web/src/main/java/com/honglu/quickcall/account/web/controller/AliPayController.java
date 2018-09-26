@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -107,12 +108,16 @@ public class AliPayController extends BaseController {
         return response;
     }
     
+    
+  
+    
+    
     /**
      *支付回调
      */
-    @RequestMapping(value = "/alipayNotify", method = RequestMethod.POST)
+    @RequestMapping(value = "/alipayNotify",produces = "application/json;charset=UTF-8", method = RequestMethod.POST)
     @ResponseBody
-    public WebResponseModel alipayNotify( AlipayNotifyRequest params) {
+    public WebResponseModel alipayNotify( @RequestBody AlipayNotifyRequest params) {
     	logger.info("accountWeb.pay.alipayNotify.request.data : " + JSONObject.toJSONString(params));
     	WebResponseModel response=new WebResponseModel();
     	if(params.getAccountId()==null||StringUtils.isBlank(params.getOrderNo())||
