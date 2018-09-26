@@ -114,6 +114,7 @@ public class OrderServiceImpl implements IOrderService {
 		record.setStartTime(startTime);
 		orderMapper.insert(record);
 		CommonResponse commonResponse = commonService.getCommonResponse();
+		commonResponse.setData(orderId);
 		LOGGER.info("用户编号为：" + request.getCustomerId() + "下单成功");
 		return commonResponse;
 	}

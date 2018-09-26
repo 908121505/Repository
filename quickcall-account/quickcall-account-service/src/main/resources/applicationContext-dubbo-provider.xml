@@ -14,6 +14,5 @@
     <!-- 注册服务端 -->
     <!--账户相关 -->
     <dubbo:service group="accountCenter" interface="com.honglu.quickcall.account.facade.business.AccountDubboBusiness" ref="Account.AccountDubboBusiness" timeout="30000" retries="0" version="0.0.1"/>
-   <!--  <dubbo:service group="accountCenter" interface="com.honglu.quickcall.account.facade.business.OrderInfoBussiness" ref="Account.OrderInfoBussiness" timeout="30000" retries="0" version="0.0.1"/> -->
    
 </beans>
