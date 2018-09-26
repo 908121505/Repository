@@ -231,7 +231,7 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 			defaultImg = request.getHeardUrl();
 		}
 		customer.setHeadPortraitUrl(defaultImg);
-		if (StringUtils.isNotBlank(request.getNickName())) {
+		if (StringUtils.isNotBlank(customer.getNickName())) {
 			String rongyunToken = RongYunUtil.getToken(String.valueOf(customer.getCustomerId()), customer.getNickName(),
 					defaultImg);
 			if (rongyunToken == null || "".equals(rongyunToken)) {
