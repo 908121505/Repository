@@ -57,7 +57,8 @@ public class PushAppMsgServiceImpl implements PushAppMsgService {
             return ResultUtils.result(BizCode.DBError, "数据库插入失败");
         }
 
-        GtPushUtil.pushMessage(Arrays.asList(receiveCustomer.getDeviceId()), request.getMsgType().getMsgContent(), "");
+        // ADUAN 砍需求 -- 先注释掉消息推送，后面记得打开
+//        GtPushUtil.pushMessage(Arrays.asList(receiveCustomer.getDeviceId()), request.getMsgType().getMsgContent(), "");
 
         return ResultUtils.resultSuccess();
     }
