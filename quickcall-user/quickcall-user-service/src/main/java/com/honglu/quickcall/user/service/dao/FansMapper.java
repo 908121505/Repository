@@ -16,4 +16,6 @@ public interface FansMapper {
     int updateByPrimaryKey(Fans record);
     //根据customerId查询粉丝数量
     Long queryFansNumByCustomerId(Long customerId);
+    //根据customerId查询关注数量 
+    int queryAttentionNumByCustomerId(Long customerId);
 }

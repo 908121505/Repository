@@ -88,8 +88,18 @@ public class HomePageLogout implements Serializable{
     
     private int age;//年纪
     
+    private int attentionNum;//关注数量
     
-    public int getAge() {
+    
+    public int getAttentionNum() {
+		return attentionNum;
+	}
+
+	public void setAttentionNum(int attentionNum) {
+		this.attentionNum = attentionNum;
+	}
+
+	public int getAge() {
 		return age;
 	}
 

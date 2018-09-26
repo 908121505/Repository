@@ -503,6 +503,10 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 				// 查询粉丝数量
 				Long fansNum = fansMapper.queryFansNumByCustomerId(params.getCustomerId());
 				homePageLogout.setFansNum(fansNum);
+				//查询关注数量
+				int attentionNum = fansMapper.queryAttentionNumByCustomerId(params.getCustomerId());
+				homePageLogout.setAttentionNum(attentionNum);
+				
 				commonResponse.setData(homePageLogout);
 				commonResponse.setCode(UserBizReturnCode.Success);
 				commonResponse.setMessage(UserBizReturnCode.Success.desc());
