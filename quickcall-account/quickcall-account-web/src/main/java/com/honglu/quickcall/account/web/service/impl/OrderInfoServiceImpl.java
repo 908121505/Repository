@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSON;
+import com.honglu.quickcall.account.facade.business.AccountDubboBusiness;
 import com.honglu.quickcall.account.facade.business.OrderInfoBussiness;
 import com.honglu.quickcall.account.facade.code.AccountBizReturnCode;
 import com.honglu.quickcall.account.web.service.IOrderInfoService;
@@ -31,6 +32,8 @@ public class OrderInfoServiceImpl implements IOrderInfoService {
 
     @Autowired
     private OrderInfoBussiness orderInfoBussiness;
+    @Autowired
+    private AccountDubboBusiness accountDubboBusiness;
 
 
     @Override
@@ -40,7 +43,8 @@ public class OrderInfoServiceImpl implements IOrderInfoService {
         LOGGER.info("功能编码为" + request.getBizCode() + "发送请求：{}", request);
         WebResponseModel response = new WebResponseModel();
         try {
-            CommonResponse cResponse = orderInfoBussiness.excute(request);
+            CommonResponse cResponse = accountDubboBusiness.excute(request);
+//            CommonResponse cResponse = orderInfoBussiness.excute(request);
             LOGGER.info("功能编码为" + request.getBizCode() + "接收响应：{}", cResponse);
             if (!cResponse.isSuccess()) {
                 throw new RemoteException(cResponse.getCode(), cResponse.getMessage());
