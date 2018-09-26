@@ -18,9 +18,9 @@ public class AliYunFilePaths {
     /**
      * 大V认证介绍录音文件存放路径
      **/
-    public static final String BIG_V_INTRODUCE_AUDIO = "user/audio";
+    public static final String BIG_V_INTRODUCE_AUDIO = ROOT_PATH + "user/audio";
     /**
      * 用户上传头像存储的路径
      **/
-    public static final String USER_UPLOAD_HEAD_IMG = "user/headimg";
+    public static final String USER_UPLOAD_HEAD_IMG = ROOT_PATH + "user/headimg";
 }
