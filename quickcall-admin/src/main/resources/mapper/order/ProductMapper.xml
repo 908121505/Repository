@@ -3,7 +3,7 @@
 <mapper namespace="Product" >
   <resultMap id="BaseResultMap" type="com.calf.module.order.entity.Product" >
     <id column="product_id" property="productId" jdbcType="BIGINT" />
-    <id column="skill_d" property="skillId" jdbcType="BIGINT" />
+    <id column="skill_id" property="skillId" jdbcType="BIGINT" />
     <result column="name" property="name" jdbcType="VARCHAR" />
     <result column="service_time" property="serviceTime" jdbcType="SMALLINT" />
     <result column="price" property="price" jdbcType="DECIMAL" />
@@ -21,7 +21,7 @@
     <result column="remark" property="remark" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    product_id, skill_d, name, service_time, price, preferential_price, discount_rate, discount_price,
+    product_id, skill_id, name, service_time, price, preferential_price, discount_rate, discount_price,
     type, product_status, seller_id, product_describe, create_time, modify_time, create_man, 
     modify_man, remark
   </sql>
@@ -36,133 +36,24 @@
     where product_id = #{productId,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="com.calf.module.order.entity.Product" >
-    insert into product (product_id, skill_d, name, service_time,
+    insert into product (product_id, skill_id, name, service_time,
       price, preferential_price, discount_rate, 
       discount_price, type, product_status, 
       seller_id, product_describe, create_time, 
       modify_time, create_man, modify_man, 
       remark)
-    values (#{productId,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{serviceTime,jdbcType=SMALLINT}, 
+    values (#{productId,jdbcType=BIGINT},#{skillId,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{serviceTime,jdbcType=SMALLINT},
       #{price,jdbcType=DECIMAL}, #{preferentialPrice,jdbcType=DECIMAL}, #{discountRate,jdbcType=DECIMAL}, 
       #{discountPrice,jdbcType=DECIMAL}, #{type,jdbcType=TINYINT}, #{productStatus,jdbcType=TINYINT}, 
       #{sellerId,jdbcType=BIGINT}, #{productDescribe,jdbcType=VARCHAR}, NOW(),
       NOW(), #{createMan,jdbcType=VARCHAR}, #{modifyMan,jdbcType=VARCHAR},
       #{remark,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.calf.module.order.entity.Product" >
-    insert into product
-    <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="productId != null" >
-        product_id,
-      </if>
-      <if test="skillId != null" >
-        skill_d,
-      </if>
-      <if test="name != null" >
-        name,
-      </if>
-      <if test="serviceTime != null" >
-        service_time,
-      </if>
-      <if test="price != null" >
-        price,
-      </if>
-      <if test="preferentialPrice != null" >
-        preferential_price,
-      </if>
-      <if test="discountRate != null" >
-        discount_rate,
-      </if>
-      <if test="discountPrice != null" >
-        discount_price,
-      </if>
-      <if test="type != null" >
-        type,
-      </if>
-      <if test="productStatus != null" >
-        product_status,
-      </if>
-      <if test="sellerId != null" >
-        seller_id,
-      </if>
-      <if test="productDescribe != null" >
-        product_describe,
-      </if>
-      <if test="createTime != null" >
-        create_time,
-      </if>
-      <if test="modifyTime != null" >
-        modify_time,
-      </if>
-      <if test="createMan != null" >
-        create_man,
-      </if>
-      <if test="modifyMan != null" >
-        modify_man,
-      </if>
-      <if test="remark != null" >
-        remark,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="productId != null" >
-        #{productId,jdbcType=BIGINT},
-      </if>
-      <if test="name != null" >
-        #{name,jdbcType=VARCHAR},
-      </if>
-      <if test="serviceTime != null" >
-        #{serviceTime,jdbcType=SMALLINT},
-      </if>
-      <if test="price != null" >
-        #{price,jdbcType=DECIMAL},
-      </if>
-      <if test="preferentialPrice != null" >
-        #{preferentialPrice,jdbcType=DECIMAL},
-      </if>
-      <if test="discountRate != null" >
-        #{discountRate,jdbcType=DECIMAL},
-      </if>
-      <if test="discountPrice != null" >
-        #{discountPrice,jdbcType=DECIMAL},
-      </if>
-      <if test="type != null" >
-        #{type,jdbcType=TINYINT},
-      </if>
-      <if test="productStatus != null" >
-        #{productStatus,jdbcType=TINYINT},
-      </if>
-      <if test="sellerId != null" >
-        #{sellerId,jdbcType=BIGINT},
-      </if>
-      <if test="productDescribe != null" >
-        #{productDescribe,jdbcType=VARCHAR},
-      </if>
-      <if test="createTime != null" >
-        #{createTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="modifyTime != null" >
-        #{modifyTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="createMan != null" >
-        #{createMan,jdbcType=VARCHAR},
-      </if>
-      <if test="modifyMan != null" >
-        #{modifyMan,jdbcType=VARCHAR},
-      </if>
-      <if test="remark != null" >
-        #{remark,jdbcType=VARCHAR},
-      </if>
-    </trim>
-  </insert>
-
-
-
   <update id="updateByPrimaryKeySelective" parameterType="com.calf.module.order.entity.Product" >
     update product
     <set >
       <if test="skillId != null" >
-        skill_d = #{skillId},
+        skill_id = #{skillId},
       </if>
       <if test="name != null" >
         name = #{name,jdbcType=VARCHAR},
@@ -212,51 +103,29 @@
     </set>
     where product_id = #{productId,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.calf.module.order.entity.Product" >
-    update product
-    set skill_d=#{skillId},
-      name = #{name,jdbcType=VARCHAR},
-      service_time = #{serviceTime,jdbcType=SMALLINT},
-      price = #{price,jdbcType=DECIMAL},
-      preferential_price = #{preferentialPrice,jdbcType=DECIMAL},
-      discount_rate = #{discountRate,jdbcType=DECIMAL},
-      discount_price = #{discountPrice,jdbcType=DECIMAL},
-      type = #{type,jdbcType=TINYINT},
-      product_status = #{productStatus,jdbcType=TINYINT},
-      seller_id = #{sellerId,jdbcType=BIGINT},
-      product_describe = #{productDescribe,jdbcType=VARCHAR},
-      create_time = #{createTime,jdbcType=TIMESTAMP},
-      modify_time = #{modifyTime,jdbcType=TIMESTAMP},
-      create_man = #{createMan,jdbcType=VARCHAR},
-      modify_man = #{modifyMan,jdbcType=VARCHAR},
-      remark = #{remark,jdbcType=VARCHAR}
-    where product_id = #{productId,jdbcType=BIGINT}
-  </update>
   
-  
-  
-    <select id="selectPageList" resultType="com.calf.module.order.vo.ProductVO" parameterType="map" >
-		SELECT
-			p.name AS NAME,
-			p.price AS price,
-			p.service_time  as serviceTime,
-			sust.nick_name AS servNickName,
-			p.product_status AS productStatus,
-			p.create_time AS createTime,
-			p.modify_time AS modifyTime
-		FROM
-			product p
-		LEFT JOIN customer sust ON p.seller_id = sust.customer_id
-		where  1 = 1
-		 <if test="servNickName != null" >
-        	AND sust.nick_name LIKE  concat('%',#{servNickName},'%') 
-      	</if>
-		 <if test="orderType != null" >
-        	AND p.name  LIKE  concat('%',#{orderType},'%') 
-      	</if>
-		
+  <select id="selectPageList" resultType="com.calf.module.order.vo.ProductVO" parameterType="map" >
+      SELECT
+          p.name AS NAME,
+          p.price AS price,
+          p.service_time  as serviceTime,
+          sust.nick_name AS servNickName,
+          p.product_status AS productStatus,
+          p.create_time AS createTime,
+          p.modify_time AS modifyTime
+      FROM
+          product p
+      LEFT JOIN customer sust ON p.seller_id = sust.customer_id
+      where  1 = 1
+       <if test="servNickName != null" >
+          AND sust.nick_name LIKE  concat('%',#{servNickName},'%')
+      </if>
+       <if test="orderType != null" >
+          AND p.name  LIKE  concat('%',#{orderType},'%')
+      </if>
      LIMIT ${iDisplayStart},${iDisplayLength}
   </select>
+
   <select id="slectCount" resultType="java.lang.Integer" parameterType="map" >
 	SELECT
 		count(1)

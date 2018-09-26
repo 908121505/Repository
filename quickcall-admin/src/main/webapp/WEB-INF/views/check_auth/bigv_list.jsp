@@ -98,7 +98,11 @@
                         "sTitle": "声音",
                         'sClass': "text-center",
                         "mRender": function (data, type, full) {
-                            return "<img src='resources/images/pause.png' height='30px;' onclick='pauseVoiceFn(\"" + data + "\")'/>";
+                            if(data && data != ''){
+                                return "<img src='resources/images/pause.png' height='30px;' onclick='pauseVoiceFn(\"" + data + "\")'/>";
+                            }else {
+                                return "<font color='red'>文件不存在</font>";
+                            }
                         }
                     },
                     {

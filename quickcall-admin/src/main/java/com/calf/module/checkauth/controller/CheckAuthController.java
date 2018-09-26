@@ -78,7 +78,6 @@ public class CheckAuthController implements BaseController<Customer> {
             params.put("iDisplayStart", "0");
             params.put("iDisplayLength", "5");
             List<Skill> skills = baseManager.query("Skill.selectPageList", params);
-            List<Product> list = new ArrayList<>();
             for (Skill skill : skills) {
                 Product bean = new Product();
                 bean.setProductId(String.valueOf(UUIDUtils.getId()));
@@ -93,11 +92,10 @@ public class CheckAuthController implements BaseController<Customer> {
                 bean.setProductStatus(1);
                 bean.setSellerId(entity.getCustomerId());
                 bean.setProductDescribe("审核通过时自动插入的数据，仅供测试使用");
-                bean.setCreateMan(currentUser.getPreviousPrincipals().toString());
+                bean.setCreateMan(currentUser.getPrincipal().toString());
 
-                list.add(bean);
+                baseManager.insert("Product.insert", bean);
             }
-            baseManager.batchInsert("Product.insert", list);
         }
 
         return baseManager.update(entity);
