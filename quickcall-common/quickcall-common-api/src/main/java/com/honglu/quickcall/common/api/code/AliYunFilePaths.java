@@ -12,6 +12,14 @@ public class AliYunFilePaths {
      */
     private static final String ROOT_PATH = "voice/";
     /**
+     * 后台编辑器上传的文件（暂不知哪儿用了，先定义着）
+     */
+    public static final String EDITOR_FILE = ROOT_PATH + "editor";
+    /**
+     * APP展示Banner的图片存放路径
+     */
+    public static final String APP_BANNER = ROOT_PATH + "banner";
+    /**
      * 用户身份认证身份证图片存放路径
      **/
     public static final String IDENTITY_AUTH_ID_CARD_IMAGE = ROOT_PATH + "user/idcard";

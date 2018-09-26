@@ -200,7 +200,6 @@ public class UserCommonController {
     public WebResponseModel imageUpload(HttpServletRequest request){
         logger.info("userweb.user.image.request.data : " +request);
 
-        String imgFolder = AliYunFilePaths.USER_UPLOAD_HEAD_IMG;
         WebResponseModel response=new WebResponseModel();
 
         try {
@@ -215,6 +214,7 @@ public class UserCommonController {
             }
 
             String imageName = UUIDUtils.getUUID() + "." + "jpg";
+            String imgFolder = AliYunFilePaths.USER_UPLOAD_HEAD_IMG;
             //阿里云客户端
             OSSClient ossClient = OSSUtil.getOSSClient();
             //上传

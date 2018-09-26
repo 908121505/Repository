@@ -225,7 +225,7 @@ function check_fun(){
 				type : "post",
 				dataType : "json",
 				fileElementId : 'appversionFile',
-				url : "upload/appversion.htm",
+				url : "upload/appBanner.htm",
 				data : {
 					"id" : "${entity.bannerId }"
 				},
