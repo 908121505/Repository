@@ -29,8 +29,6 @@ import com.honglu.quickcall.common.api.exchange.WebResponseModel;
 public class OrderInfoServiceImpl implements IOrderInfoService {
     private static final Logger LOGGER = LoggerFactory.getLogger(OrderInfoServiceImpl.class);
 
-//    @Autowired
-//    private OrderInfoBussiness orderInfoBussiness;
     @Autowired
     private AccountDubboBusiness accountDubboBusiness;
 
@@ -43,7 +41,6 @@ public class OrderInfoServiceImpl implements IOrderInfoService {
         WebResponseModel response = new WebResponseModel();
         try {
             CommonResponse cResponse = accountDubboBusiness.excute(request);
-//            CommonResponse cResponse = orderInfoBussiness.excute(request);
             LOGGER.info("功能编码为" + request.getBizCode() + "接收响应：{}", cResponse);
             if (!cResponse.isSuccess()) {
                 throw new RemoteException(cResponse.getCode(), cResponse.getMessage());
