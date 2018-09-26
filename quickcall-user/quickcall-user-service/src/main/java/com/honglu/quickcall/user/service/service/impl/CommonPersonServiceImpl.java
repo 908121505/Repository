@@ -225,7 +225,7 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 		customer.setQqOpenId(request.getQqOpenId());
 		customer.setWechatOpenId(request.getWechatOpenId());
 		customer.setPhone(request.getTel());
-		customer.setNickName(request.getNickName());
+		customer.setNickName("小帅");
 
 		if (StringUtils.isNotBlank(request.getHeardUrl())) {
 			defaultImg = request.getHeardUrl();
