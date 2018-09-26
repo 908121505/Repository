@@ -26,7 +26,7 @@ public interface ProductMapper {
 
 	List<Product> selectListBySkillIdList(@Param("customerId")  Long customerId,@Param("list")  List<Long> skillIdList);
 
-	List<FirstPageDaVinfoVO> selectTotalDaVProduct(@Param("skillId")  Long skillId);
+	List<FirstPageDaVinfoVO> selectTotalDaVProduct(@Param("skillId")  Long skillId,@Param("pageIndex")  Integer pageIndex,@Param("pageSize")  Integer pageSize);
 
 	
 	List<OrderDaVProductVO> selectDaVPersonalProduct(@Param("customerId") Long customerId);

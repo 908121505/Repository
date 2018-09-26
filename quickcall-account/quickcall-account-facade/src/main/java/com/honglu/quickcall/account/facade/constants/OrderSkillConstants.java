@@ -10,6 +10,9 @@ package com.honglu.quickcall.account.facade.constants;
  * @date: 2018年9月23日 下午1:59:56
  */
 public interface OrderSkillConstants {
+	
+	/**默认每页显示条数*/
+	public static  final  Integer  DEFAULT_PAGE_SIZE = 6;
     
 	/**产品状态1：可用*/
 	public  static final  Integer  PRODUCT_STATUS_EFFECTIVE = 1 ;
