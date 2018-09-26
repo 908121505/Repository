@@ -57,7 +57,7 @@ public class AliPayServiceImpl implements AliPayService {
          String extData="{\"accountId\":packet.getUserId()}";
          String accountId=packet.getUserId()+"";
          String createIp=packet.getRemoteIp();//请求ip
-         params+="appName=1&orderId="+orderNo+"&orderDesc="+orderDesc;
+         params+="appName=3&orderId="+orderNo+"&orderDesc="+orderDesc;
          params+="&amount="+amount+"&xnPayType="+xnPayType+"&extData="+extData+"&createIp="+createIp+"&customerId="+accountId;
          String result=null;
          try{
