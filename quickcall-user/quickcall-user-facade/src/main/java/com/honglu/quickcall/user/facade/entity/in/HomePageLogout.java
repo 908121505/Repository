@@ -86,7 +86,18 @@ public class HomePageLogout implements Serializable{
     
     private List<VProductTag> vProductTags;//主播商品标签（擅长项目）
     
-    public List<VProductTag> getvProductTags() {
+    private int age;//年纪
+    
+    
+    public int getAge() {
+		return age;
+	}
+
+	public void setAge(int age) {
+		this.age = age;
+	}
+
+	public List<VProductTag> getvProductTags() {
 		return vProductTags;
 	}
 

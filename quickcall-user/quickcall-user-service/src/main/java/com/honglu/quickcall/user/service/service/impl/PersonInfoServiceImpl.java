@@ -60,6 +60,7 @@ import com.honglu.quickcall.user.service.service.CustomerRedisManagement;
 import com.honglu.quickcall.user.service.service.PersonInfoService;
 import com.honglu.quickcall.user.service.util.JsonParseUtil;
 import com.honglu.quickcall.user.service.util.RedisKeyConstants;
+import com.honglu.quickcall.user.service.util.CountAge;
 
 import cn.jiguang.commom.utils.StringUtils;
 @Service
@@ -475,6 +476,11 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 				
 				// 获取主页所有资料
 				 homePageLogout = customerMapper.showHomePageLogout(params.getCustomerId());
+				 //获取年纪
+				 Date birthday = homePageLogout.getBirthday();
+				 //用工具类去转换
+				 int age = CountAge.getAgeByBirth(birthday);
+				 homePageLogout.setAge(age);
 				// 获取兴趣名字
 				List<Interest> interestName = interestMapper.selectInterestByCustomerId(params.getCustomerId());
 				homePageLogout.setInterestName(interestName);
