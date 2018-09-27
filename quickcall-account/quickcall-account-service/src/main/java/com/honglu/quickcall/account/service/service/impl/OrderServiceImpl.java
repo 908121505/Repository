@@ -87,7 +87,7 @@ public class OrderServiceImpl implements IOrderService {
 	@Override
 	public CommonResponse saveOrder(OrderSaveRequest request) {
 		if (request == null || request.getCustomerId() == null || request.getProductId() == null) {
-			throw new BizException(AccountBizReturnCode.paramError, "查询技能信息参数异常");
+			throw new BizException(AccountBizReturnCode.paramError, "下单参数异常");
 		}
 		//创建订单
 		Long  customerId =  request.getCustomerId();
@@ -160,7 +160,7 @@ public class OrderServiceImpl implements IOrderService {
 
 
 	//==================================发起的订单页相关开始==================================
-	
+	/**TODO 退款还没有做*/
 	@Override
 	public CommonResponse cancelOrder(CancelOrderRequest request) {
 		if (request == null || request.getOrderId() == null ) {
@@ -173,6 +173,8 @@ public class OrderServiceImpl implements IOrderService {
 		if(order != null ){
 			Integer   oldOrderStatus =  order.getOrderStatus();
 			Integer   orderStatus =  null ;
+			//订单金额
+			BigDecimal   payAmount =  null;
 			//根据不同状态进行取消
 			//下单未支付
 			if(OrderSkillConstants.ORDER_STATUS_NOT_PAY  == oldOrderStatus){
@@ -181,17 +183,27 @@ public class OrderServiceImpl implements IOrderService {
 			}else if(OrderSkillConstants.ORDER_STATUS_PAYED  == oldOrderStatus){
 				//订单状态5.大V接单前用户自主取消
 				orderStatus = OrderSkillConstants.ORDER_STATUS_CANCEL_PAYED_USER_SELE_CANCEL;
+				payAmount =  order.getOrderAmounts();
 			//大V接受订单
 			}else if(OrderSkillConstants.ORDER_STATUS_PAYED_DV_ACCEPT_ORDER  == oldOrderStatus){
 				//订单状态8.大V接受订单之后开始之前用户自主取消
 				orderStatus = OrderSkillConstants.ORDER_STATUS_CANCLE_DV_ACCEPT_USER_SELF_CANCLE;
+				payAmount =  order.getOrderAmounts();
 			//
 			}else if(OrderSkillConstants.ORDER_STATUS_PAYED_DV_CONFIRM_START  == oldOrderStatus){
 				//订单状态8.大V接受订单之后开始之前用户自主取消
 				orderStatus = OrderSkillConstants.ORDER_STATUS_CANCEL_BEFORE_ING;
+				payAmount =  order.getOrderAmounts();
 			}
-			if(orderStatus != null){
+			if(orderStatus == null){
+				
+			}else{
 				commonService.updateOrder(orderId, orderStatus,null);
+				//金额不为空，说明需要退款给用户
+				if(payAmount != null){
+					Long  buyerId =  order.getBuyerId();
+					accountMapper.inAccount(buyerId, payAmount);
+				}
 			}
 		}
 		CommonResponse commonResponse = commonService.getCommonResponse();
