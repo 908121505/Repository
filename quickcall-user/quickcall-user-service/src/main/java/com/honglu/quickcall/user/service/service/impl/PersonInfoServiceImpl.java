@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -17,7 +18,10 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.alibaba.dubbo.common.json.JSONObject;
+import com.alibaba.fastjson.JSON;
 import com.honglu.quickcall.account.facade.code.AccountBizReturnCode;
+import com.honglu.quickcall.common.api.code.BizCode;
+import com.honglu.quickcall.common.api.code.MyServiceCode;
 import com.honglu.quickcall.common.api.exception.BizException;
 import com.honglu.quickcall.common.api.exception.RemoteException;
 import com.honglu.quickcall.common.api.exchange.CommonResponse;
@@ -100,18 +104,21 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 	 */
 	@Override
 	public CommonResponse queryPersonInfo(PersonInfoRequest params) {
+		if (null==params.getCustomerId()||"".equals(params.getCustomerId())) {
+			throw new RemoteException(UserBizReturnCode.UserNotExist, "用户不存在 request.getJson()=" + params.getCustomerId());
+		}
 		CommonResponse commonResponse = new CommonResponse();
 		PersonHomePage personHomePage = null;
-		if (null == (params.getCustomerId()) || null == (params.getOtherId())) {
-			throw new RemoteException(UserBizReturnCode.paramError, "参数错误 request.getJson()=" + params.getCustomerId());
-		}
+//		if (null == (params.getCustomerId()) || null == (params.getOtherId())) {
+//			throw new RemoteException(UserBizReturnCode.paramError, "参数错误 request.getJson()=" + params.getCustomerId());
+//		}
 		try {
 			// 判断是不是查看自己的资料
-			if (!params.getCustomerId().equals(params.getOtherId())) {
-				personHomePage = queryPersonal(params.getOtherId());
-			} else {
+//			if (!params.getCustomerId().equals(params.getOtherId())) {
+//				personHomePage = queryPersonal(params.getOtherId());
+//			} else {
 				personHomePage = queryPersonal(params.getCustomerId());
-			}
+//			}
 
 			commonResponse.setData(personHomePage);
 			commonResponse.setCode(UserBizReturnCode.Success);
@@ -141,6 +148,8 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 			personHomePage.setSignName(customer.getSignName());//签名
 			personHomePage.setStarSign(customer.getStarSign());//星座
 			personHomePage.setTokenCode(customer.getTokenCode());//token
+			personHomePage.setvStatus(customer.getvStatus());//大V审核状态
+			personHomePage.setIdentityStatus(customer.getIdentityStatus());//身份证审核状态
 			// 查询粉丝数量
 			Long fansNum = fansMapper.queryFansNumByCustomerId(customerId);
 			personHomePage.setFansNum(fansNum);

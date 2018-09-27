@@ -180,5 +180,22 @@ public class DateUtils {
         dateFormat = new SimpleDateFormat(date_format);
         return dateFormat.format(currentDate);
     }
+    
+    
+    /**
+     * 日期添加对应的分钟数
+     * @param date
+     * @param minutes
+     * @return
+     */
+    public static Date getAddDate(Date  date,int  minutes)  {
+    	Calendar  cal =  Calendar.getInstance();
+    	cal.setTime(date);
+    	cal.add(Calendar.MINUTE, minutes);
+    	return   cal.getTime()  ;
+    }
+    
+    
+    
 
 }

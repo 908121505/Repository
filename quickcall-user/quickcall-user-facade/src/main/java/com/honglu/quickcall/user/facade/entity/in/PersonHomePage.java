@@ -46,6 +46,26 @@ public class PersonHomePage {
 	    
 	    private int age;//年纪
 		
+	    private int vStatus;//大V认证(0=未认证,1=待审核,2=已通过,3=拒绝)
+	    
+	    private int identityStatus;//身份认证(0=未认证,1=待审核,2=已通过,3=拒绝)
+	    
+	    
+		public int getvStatus() {
+			return vStatus;
+		}
+
+		public void setvStatus(int vStatus) {
+			this.vStatus = vStatus;
+		}
+
+		public int getIdentityStatus() {
+			return identityStatus;
+		}
+
+		public void setIdentityStatus(int identityStatus) {
+			this.identityStatus = identityStatus;
+		}
 
 		public int getAge() {
 			return age;

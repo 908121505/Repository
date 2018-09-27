@@ -130,7 +130,7 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 
 		// 修改登录时间 补 融云token
 		Customer login = new Customer();
-		if (StringUtils.isNotBlank(customer.getTokenCode())) {
+		if (StringUtils.isBlank(customer.getTokenCode())) {
 			String rongyunToken = RongYunUtil.getToken(String.valueOf(customer.getCustomerId()), customer.getNickName(),
 					defaultImg);
 			if (rongyunToken == null || "".equals(rongyunToken)) {
@@ -412,9 +412,9 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 			 */
 
 			// 申请大V不校验是否在审核中
-//			if (Objects.equals(customer.getvStatus(), 1)) {
-//				return ResultUtils.resultDuplicateOperation("大V认证正在审核中");
-//			}
+			// if (Objects.equals(customer.getvStatus(), 1)) {
+			// return ResultUtils.resultDuplicateOperation("大V认证正在审核中");
+			// }
 			if (Objects.equals(customer.getvStatus(), 2)) {
 				return ResultUtils.resultDuplicateOperation("大V认证已通过");
 			}
