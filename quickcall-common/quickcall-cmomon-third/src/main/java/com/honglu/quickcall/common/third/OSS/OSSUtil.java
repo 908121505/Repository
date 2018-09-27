@@ -256,7 +256,7 @@ public class OSSUtil {
             return "audio/mp3";
         if ("m4a".equalsIgnoreCase(fileExtension))
             return "audio/mp3";
-        if ("mpr".equalsIgnoreCase(fileExtension))
+        if ("amr".equalsIgnoreCase(fileExtension))
             return "audio/mp3";
         return "text/html";
     }
