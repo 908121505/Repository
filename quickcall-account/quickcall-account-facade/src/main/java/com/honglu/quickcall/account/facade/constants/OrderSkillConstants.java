@@ -84,6 +84,8 @@ public interface OrderSkillConstants {
 	public static final Integer  ORDER_STATUS_END = 16 ;
 	/**订单状态17.支付之前取消;*/
 	public static final Integer  ORDER_STATUS_CANCEL_BEFORE_PAY = 17 ;
+	/**订单状态18.进行中之前取消;*/
+	public static final Integer  ORDER_STATUS_CANCEL_BEFORE_ING = 18 ;
 	
 	
 }
