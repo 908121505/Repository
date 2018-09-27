@@ -13,7 +13,7 @@ import com.honglu.quickcall.common.api.exchange.AbstractRequest;
  */
 public class DetailOrderRequest extends AbstractRequest {
     
-	private static final long serialVersionUID = -6370081696964910550L;
+	private static final long serialVersionUID = 2805484436032150633L;
 	/**订单编号*/
 	private Long  orderId;
 	/**查询类型1：消费端订单   2：服务端订单(大V)*/
@@ -43,6 +43,11 @@ public class DetailOrderRequest extends AbstractRequest {
 	@Override
 	public String getBizCode() {
 		return OrderRequestType.DETAIL_ORDER;
+	}
+
+	@Override
+	public String toString() {
+		return "DetailOrderRequest [orderId=" + orderId + ", type=" + type + "]";
 	}
 
 

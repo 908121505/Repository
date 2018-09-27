@@ -14,7 +14,7 @@ import com.honglu.quickcall.common.api.exchange.AbstractRequest;
 public class DvConfirmRefundRequest extends AbstractRequest {
     
 	
-	private static final long serialVersionUID = -4733852464817833692L;
+	private static final long serialVersionUID = -978476176248214169L;
 	/**客户编号*/
 	private Long  orderId;
 	/**请求类型1：同意  2：拒绝*/
@@ -49,6 +49,13 @@ public class DvConfirmRefundRequest extends AbstractRequest {
 	@Override
 	public String getBizCode() {
 		return OrderRequestType.DV_CONFRIM_ORDER;
+	}
+
+
+
+	@Override
+	public String toString() {
+		return "DvConfirmRefundRequest [orderId=" + orderId + ", type=" + type + "]";
 	}
 
 

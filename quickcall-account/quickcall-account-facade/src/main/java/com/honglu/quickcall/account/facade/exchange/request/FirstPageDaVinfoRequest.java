@@ -15,13 +15,11 @@ import com.honglu.quickcall.common.api.exchange.AbstractRequest;
 public class FirstPageDaVinfoRequest  extends  AbstractRequest{
     
 	
-	private static final long serialVersionUID = -8378236839079201785L;
+	private static final long serialVersionUID = 5399424740787721828L;
 	/**客户编号（预留暂时不用）*/
 	private Long  customerId;
 	/**技能ID*/
 	private Long  skillId;
-//	/**每页显示条数*/
-//	private Integer  pageSize;
 	/**当前页*/
 	private Integer  pageIndex;
 	
@@ -39,12 +37,6 @@ public class FirstPageDaVinfoRequest  extends  AbstractRequest{
 		this.skillId = skillId;
 	}
 	
-//	public Integer getPageSize() {
-//		return pageSize;
-//	}
-//	public void setPageSize(Integer pageSize) {
-//		this.pageSize = pageSize;
-//	}
 	public Integer getPageIndex() {
 		return pageIndex;
 	}
@@ -55,6 +47,9 @@ public class FirstPageDaVinfoRequest  extends  AbstractRequest{
 	public String getBizCode() {
 		return  OrderRequestType.QUERY_ORDER_FOR_FIRST_PAGE;
 	}
-	
-	
+	@Override
+	public String toString() {
+		return "FirstPageDaVinfoRequest [customerId=" + customerId + ", skillId=" + skillId + ", pageIndex=" + pageIndex
+				+ "]";
+	}
 }

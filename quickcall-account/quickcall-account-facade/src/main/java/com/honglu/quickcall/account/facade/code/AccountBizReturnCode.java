@@ -22,8 +22,14 @@ public class AccountBizReturnCode extends BizCode {
 //    public static final BizCode Unknown = new AccountBizReturnCode("Unknown","999", MyServiceCode.ACCOUNT,"未知异常");
     
     //订单中心使用异常号段：700-799-------开始
-    
-    public static final BizCode order_ = new AccountBizReturnCode("Unknown","999", MyServiceCode.ACCOUNT,"未知异常");
+    /**订单不存在*/
+    public static final BizCode ORDER_NOT_EXIST = new AccountBizReturnCode("ORDER_CANCEL_CODE","700", MyServiceCode.ACCOUNT,"订单状态不符合");
+    /**订单状态不符合*/
+    public static final BizCode ORDER_STATUS_ERROR = new AccountBizReturnCode("ORDER_CANCEL_CODE","701", MyServiceCode.ACCOUNT,"订单状态不符合");
+    /**余额不足*/
+    public static final BizCode ORDER_PAY_BALANCE_NOT_ENOUGH = new AccountBizReturnCode("ORDER_PAY_BALANCE_NOT_ENOUGH","702", MyServiceCode.ACCOUNT,"订单状态不符合");
+    /**账户不存在*/
+    public static final BizCode ORDER_PAY_ACCOUNT_NOT_EXIST = new AccountBizReturnCode("ORDER_PAY_BALANCE_NOT_ENOUGH","703", MyServiceCode.ACCOUNT,"订单状态不符合");
     
     
     //订单中心使用异常号段：700-799-------结束

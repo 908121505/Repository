@@ -13,32 +13,30 @@ import com.honglu.quickcall.common.api.exchange.AbstractRequest;
  */
 public class DvStartServiceRequest extends AbstractRequest {
     
-	private static final long serialVersionUID = 9146793037072243699L;
+	private static final long serialVersionUID = 4399342468232815453L;
 	/**客户编号*/
 	private Long  orderId;
-
-
-	
 
 
 	public Long getOrderId() {
 		return orderId;
 	}
 
-
 	public void setOrderId(Long orderId) {
 		this.orderId = orderId;
 	}
-
-
-	
-
 
 	@Override
 	public String getBizCode() {
 		return OrderRequestType.DV_START_SERVICE;
 	}
 
+	@Override
+	public String toString() {
+		return "DvStartServiceRequest [orderId=" + orderId + "]";
+	}
+
+	
 
 
 }

@@ -12,7 +12,7 @@ import com.honglu.quickcall.common.api.exchange.AbstractRequest;
  * @date: 2018年9月23日 下午8:22:05 
  */
 public class CopyOrderRequest extends AbstractRequest {
-	private static final long serialVersionUID = -3517299647239943809L;
+	private static final long serialVersionUID = -7696341780726644803L;
 	/**客户编号*/
 	private Long  orderId;
 
@@ -33,6 +33,13 @@ public class CopyOrderRequest extends AbstractRequest {
 	@Override
 	public String getBizCode() {
 		return OrderRequestType.CUST_COPY_ORDER;
+	}
+
+
+
+	@Override
+	public String toString() {
+		return "CopyOrderRequest [orderId=" + orderId + "]";
 	}
 
 

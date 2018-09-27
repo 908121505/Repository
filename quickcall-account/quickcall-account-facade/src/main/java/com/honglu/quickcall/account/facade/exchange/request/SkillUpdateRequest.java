@@ -17,7 +17,7 @@ import com.honglu.quickcall.common.api.exchange.AbstractRequest;
 public class SkillUpdateRequest extends AbstractRequest {
 	
 	
-	private static final long serialVersionUID = 8424942355002671655L;
+	private static final long serialVersionUID = 4153471218651383096L;
 	/**客户编号*/
 	private Long  customerId;
 	/**产品ID,可为空，但是有了必须传入*/
@@ -73,6 +73,11 @@ public class SkillUpdateRequest extends AbstractRequest {
 	@Override
 	public String getBizCode() {
 		return OrderRequestType.UPDATE_SKILL_INFO;
+	}
+	@Override
+	public String toString() {
+		return "SkillUpdateRequest [customerId=" + customerId + ", productId=" + productId + ", skillId=" + skillId
+				+ ", productStatus=" + productStatus + ", price=" + price + ", serviceTime=" + serviceTime + "]";
 	}
 
 

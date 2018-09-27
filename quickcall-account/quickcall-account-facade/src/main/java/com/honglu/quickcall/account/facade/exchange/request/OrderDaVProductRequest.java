@@ -15,7 +15,7 @@ import com.honglu.quickcall.common.api.exchange.AbstractRequest;
 public class OrderDaVProductRequest extends AbstractRequest {
     
 	
-	private static final long serialVersionUID = -6653512039773320540L;
+	private static final long serialVersionUID = -8443725563523486638L;
 	/**客户编号*/
 	private Long  customerId;
 
@@ -33,6 +33,12 @@ public class OrderDaVProductRequest extends AbstractRequest {
 		return OrderRequestType.ORDER_DAV_PRODUCT_LIST;
 	}
 
+	@Override
+	public String toString() {
+		return "OrderDaVProductRequest [customerId=" + customerId + "]";
+	}
+
+	
 
 
 }
