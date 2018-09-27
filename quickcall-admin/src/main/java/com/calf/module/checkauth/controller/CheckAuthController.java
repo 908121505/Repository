@@ -70,9 +70,10 @@ public class CheckAuthController implements BaseController<Customer> {
     public int saveUpdate(Customer entity) {
         Subject currentUser = SecurityUtils.getSubject();
         entity.setModifyMan(currentUser.getPrincipal().toString());
-        // ADUAN 大V审核通过后 -- 插入假数据（后面删除）
         if (Objects.equals(entity.getvStatus(), 2)) {
-            // 插入大V技能数据
+            entity.setType(1);// 大V审核通过后，客户类型变为大V
+
+            // ADUAN 大V审核通过后 -- 插入假数据（后面删除）
             Map<String, Object> params = new HashMap<>();
             params.put("skillStatus", "0");
             params.put("iDisplayStart", "0");
