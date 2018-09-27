@@ -90,8 +90,17 @@ public class HomePageLogout implements Serializable{
     
     private int attentionNum;//关注数量
     
+    private String starSign;//星座
     
-    public int getAttentionNum() {
+    public String getStarSign() {
+		return starSign;
+	}
+
+	public void setStarSign(String starSign) {
+		this.starSign = starSign;
+	}
+
+	public int getAttentionNum() {
 		return attentionNum;
 	}
 
