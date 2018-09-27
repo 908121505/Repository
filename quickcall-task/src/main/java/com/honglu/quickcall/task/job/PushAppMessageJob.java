@@ -31,7 +31,8 @@ public class PushAppMessageJob {
 
     private final static String JOB_SERIAL_MESSAGE_KEY = "job_serial_message_key";
 
-    @Scheduled(cron = "5 * * * * ?")
+    // ADUAN -- 砍需求，job发消息暂时不上
+//    @Scheduled(cron = "5 * * * * ?")
     public void send() {
         if (JedisUtil.setnx(JOB_SERIAL_MESSAGE_KEY, JOB_SERIAL_MESSAGE_KEY, 10) == 0) {
             LOGGER.info("==任务已经执行，当前任务被正常拒绝==");
