@@ -410,9 +410,11 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 			 * ResultUtils.resultDuplicateOperation("身份认证正在审核中，请等待审核通过后再进行大V认证"); } return
 			 * ResultUtils.resultDuplicateOperation("请先进行身份认证"); }
 			 */
-			if (Objects.equals(customer.getvStatus(), 1)) {
-				return ResultUtils.resultDuplicateOperation("大V认证正在审核中");
-			}
+
+			// 申请大V不校验是否在审核中
+//			if (Objects.equals(customer.getvStatus(), 1)) {
+//				return ResultUtils.resultDuplicateOperation("大V认证正在审核中");
+//			}
 			if (Objects.equals(customer.getvStatus(), 2)) {
 				return ResultUtils.resultDuplicateOperation("大V认证已通过");
 			}
