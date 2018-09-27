@@ -23,38 +23,6 @@ public class OSSUtil {
 
     public OSSUtil() {
     }
-/*
-
-    static {
-        InputStream is = null;
-        try {
-            Properties constant = new Properties();
-            is = OSSUtil.class.getClassLoader().getResourceAsStream("config.properties");
-            if (is != null) {
-                constant.load(is);
-            }
-            endPoint = constant.getProperty("endPoint");
-            accessKeyId = constant.getProperty("accessKeyId");
-            accessKeySecret = constant.getProperty("accessKeySecret");
-            bucketName = constant.getProperty("bucketName");
-            ossUrl = constant.getProperty("ossUrl");
-
-        } catch (IOException e) {
-            logger.error("读取ftp配置文件出错", e);
-        } catch (Exception e) {
-            logger.error("OSSUtil init error", e);
-        } finally {
-            if (is != null) {
-                try {
-                    is.close();
-                } catch (IOException e) {
-                    logger.error("关闭ftp配置文件流出错", e);
-                }
-            }
-        }
-    }
-*/
-
 
     public static String getAccessKeyId() {
         return accessKeyId;
