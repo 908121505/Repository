@@ -141,6 +141,13 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 			personHomePage.setSignName(customer.getSignName());//签名
 			personHomePage.setStarSign(customer.getStarSign());//星座
 			personHomePage.setTokenCode(customer.getTokenCode());//token
+			// 查询粉丝数量
+			Long fansNum = fansMapper.queryFansNumByCustomerId(customerId);
+			personHomePage.setFansNum(fansNum);
+			//查询关注数量
+			int attentionNum = fansMapper.queryAttentionNumByCustomerId(customerId);
+			personHomePage.setAttentionNum(attentionNum);
+			
 			// 判断身份证是否为空，如果又身份证则按找身份证上面的性别
 			if (StringUtils.isNotEmpty(identityID)) {
 				Matcher m = ID_PATTERN.matcher(identityID);
@@ -515,7 +522,7 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 				e.printStackTrace();
 			}
 		}
-		throw new BizException(AccountBizReturnCode.JdbcError, "操作数据库异常");
+		throw new BizException(AccountBizReturnCode.JdbcError, "未查询到此用户");
 	}
 
 	/**

@@ -40,6 +40,29 @@ public class PersonHomePage {
 	    
 	    private String tokenCode;//用户token
 	    
+	    private Long fansNum;
+	    
+	    private int attentionNum;
+	    
+	    
+		
+
+		public Long getFansNum() {
+			return fansNum;
+		}
+
+		public void setFansNum(Long fansNum) {
+			this.fansNum = fansNum;
+		}
+
+		public int getAttentionNum() {
+			return attentionNum;
+		}
+
+		public void setAttentionNum(int attentionNum) {
+			this.attentionNum = attentionNum;
+		}
+
 		public String getTokenCode() {
 			return tokenCode;
 		}
