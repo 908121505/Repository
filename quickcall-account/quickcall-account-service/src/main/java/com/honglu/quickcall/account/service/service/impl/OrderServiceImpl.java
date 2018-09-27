@@ -164,7 +164,7 @@ public class OrderServiceImpl implements IOrderService {
 	@Override
 	public CommonResponse cancelOrder(CancelOrderRequest request) {
 		if (request == null || request.getOrderId() == null ) {
-			throw new BizException(AccountBizReturnCode.paramError, "大V同意/拒绝订单参数异常");
+			throw new BizException(AccountBizReturnCode.paramError, "取消订单参数异常");
 		}
 		
 		Long  orderId =  request.getOrderId();
@@ -181,14 +181,21 @@ public class OrderServiceImpl implements IOrderService {
 			}else if(OrderSkillConstants.ORDER_STATUS_PAYED  == oldOrderStatus){
 				//订单状态5.大V接单前用户自主取消
 				orderStatus = OrderSkillConstants.ORDER_STATUS_CANCEL_PAYED_USER_SELE_CANCEL;
+			//大V接受订单
 			}else if(OrderSkillConstants.ORDER_STATUS_PAYED_DV_ACCEPT_ORDER  == oldOrderStatus){
-				//订单状态5.大V接单前用户自主取消
+				//订单状态8.大V接受订单之后开始之前用户自主取消
 				orderStatus = OrderSkillConstants.ORDER_STATUS_CANCLE_DV_ACCEPT_USER_SELF_CANCLE;
+			//
+			}else if(OrderSkillConstants.ORDER_STATUS_PAYED_DV_CONFIRM_START  == oldOrderStatus){
+				//订单状态8.大V接受订单之后开始之前用户自主取消
+				orderStatus = OrderSkillConstants.ORDER_STATUS_CANCEL_BEFORE_ING;
 			}
-			commonService.updateOrder(orderId, orderStatus,null);
+			if(orderStatus != null){
+				commonService.updateOrder(orderId, orderStatus,null);
+			}
 		}
 		CommonResponse commonResponse = commonService.getCommonResponse();
-		LOGGER.info("订单支付，订单编号：" + orderId + "，大V同意/拒绝订单订单完成");
+		LOGGER.info("订单编号：" + orderId + "，取消订单完成");
 		return commonResponse;
 	}
 	

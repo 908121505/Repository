@@ -11,6 +11,7 @@ import com.honglu.quickcall.account.facade.code.OrderRequestType;
 import com.honglu.quickcall.account.facade.exchange.request.AlipayNotifyRequest;
 import com.honglu.quickcall.account.facade.exchange.request.ApplayRefundRequest;
 import com.honglu.quickcall.account.facade.exchange.request.BindAliaccountRequest;
+import com.honglu.quickcall.account.facade.exchange.request.CancelOrderRequest;
 import com.honglu.quickcall.account.facade.exchange.request.ConfirmOrderRequest;
 import com.honglu.quickcall.account.facade.exchange.request.CreateUserAccountRequest;
 import com.honglu.quickcall.account.facade.exchange.request.DetailOrderRequest;
@@ -103,7 +104,11 @@ public class AccountDubboBusinessImpl implements AccountDubboBusiness {
 				break;
 
 			/////////////////////////////////////////////////////////////////
-			/** 订单详情 */
+			/** 取消订单 */
+			case OrderRequestType.CANCEL_ORDER:
+				response = orderService.cancelOrder((CancelOrderRequest) request);
+				break;
+				/** 订单详情 */
 			case OrderRequestType.DETAIL_ORDER:
 				response = orderService.detailOrder((DetailOrderRequest) request);
 				break;

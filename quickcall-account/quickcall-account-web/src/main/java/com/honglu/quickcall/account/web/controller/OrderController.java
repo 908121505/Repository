@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.honglu.quickcall.account.facade.exchange.request.ApplayRefundRequest;
+import com.honglu.quickcall.account.facade.exchange.request.CancelOrderRequest;
 import com.honglu.quickcall.account.facade.exchange.request.ConfirmOrderRequest;
 import com.honglu.quickcall.account.facade.exchange.request.DetailOrderRequest;
 import com.honglu.quickcall.account.facade.exchange.request.DvConfirmRefundRequest;
@@ -79,6 +80,17 @@ public class OrderController {
     }
     
     /////////////////////////////////////////////////////////////////
+    /**
+     * 发起的订单页--取消订单
+     * @param params
+     * @return
+     */
+    @RequestMapping(value = "/cancelOrder", method = RequestMethod.POST)
+    @ResponseBody
+    public WebResponseModel cancelOrder( /* @RequestBody */ CancelOrderRequest params) {
+    	WebResponseModel response = orderInfoService.execute(params);
+    	return response;
+    }
     /**
      * 发起的订单页--去支付
      * @param params
