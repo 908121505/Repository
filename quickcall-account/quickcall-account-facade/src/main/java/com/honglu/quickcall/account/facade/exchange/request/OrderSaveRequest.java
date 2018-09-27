@@ -122,5 +122,14 @@ public class OrderSaveRequest extends AbstractRequest {
 	}
 
 
+	@Override
+	public String toString() {
+		return "OrderSaveRequest [customerId=" + customerId + ", sellerId=" + sellerId + ", productId=" + productId
+				+ ", skillId=" + skillId + ", price=" + price + ", productName=" + productName + ", orderNum="
+				+ orderNum + ", startTimeStr=" + startTimeStr + "]";
+	}
+
+	
+
 
 }

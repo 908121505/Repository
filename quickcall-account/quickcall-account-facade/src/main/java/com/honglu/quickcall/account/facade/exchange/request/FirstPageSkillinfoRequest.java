@@ -15,7 +15,7 @@ import com.honglu.quickcall.common.api.exchange.AbstractRequest;
 public class FirstPageSkillinfoRequest  extends  AbstractRequest{
     
 	
-	private static final long serialVersionUID = 6701083649741118309L;
+	private static final long serialVersionUID = 7379238487444675373L;
 	/**客户编号（预留暂时不用）*/
 	private Long  customerId;
 
@@ -29,6 +29,10 @@ public class FirstPageSkillinfoRequest  extends  AbstractRequest{
 	@Override
 	public String getBizCode() {
 		return  OrderRequestType.QUERY_SKILL_NAME_FOR_FIRST_PAGE;
+	}
+	@Override
+	public String toString() {
+		return "FirstPageSkillinfoRequest [customerId=" + customerId + "]";
 	}
 	
 	

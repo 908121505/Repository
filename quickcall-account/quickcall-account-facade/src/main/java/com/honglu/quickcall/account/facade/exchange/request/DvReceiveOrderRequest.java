@@ -12,7 +12,7 @@ import com.honglu.quickcall.common.api.exchange.AbstractRequest;
  * @date: 2018年9月23日 下午8:22:05 
  */
 public class DvReceiveOrderRequest extends AbstractRequest {
-	private static final long serialVersionUID = 5979870818315119083L;
+	private static final long serialVersionUID = -937169256010787361L;
 	/**客户编号*/
 	private Long  orderId;
 	/**1:同意 2：拒绝*/
@@ -41,5 +41,12 @@ public class DvReceiveOrderRequest extends AbstractRequest {
 	}
 
 
+	@Override
+	public String toString() {
+		return "DvReceiveOrderRequest [orderId=" + orderId + ", type=" + type + "]";
+	}
+
+
+	
 
 }

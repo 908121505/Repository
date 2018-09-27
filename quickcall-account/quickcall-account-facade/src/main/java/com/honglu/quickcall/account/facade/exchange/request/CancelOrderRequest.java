@@ -13,7 +13,7 @@ import com.honglu.quickcall.common.api.exchange.AbstractRequest;
  */
 public class CancelOrderRequest extends AbstractRequest {
     
-	private static final long serialVersionUID = -389495146088577755L;
+	private static final long serialVersionUID = 7337350988892214178L;
 	/**订单编号*/
 	private Long  orderId;
 	
@@ -33,6 +33,12 @@ public class CancelOrderRequest extends AbstractRequest {
 		return OrderRequestType.CANCEL_ORDER;
 	}
 
+	@Override
+	public String toString() {
+		return "CancelOrderRequest [orderId=" + orderId + "]";
+	}
+
+	
 
 
 }

@@ -77,7 +77,7 @@ public interface OrderSkillConstants {
 	/**订单状态13.用户拒绝（响应大V立即服务请求）;*/
 	public static final Integer  ORDER_STATUS_CUST_REFUSE_DV_START_SERVICE = 13 ;
 	/**订单状态14.进行中（用户同意或者到约定的订单开始时间）;*/
-	public static final Integer  ORDER_STATUS_GOINGING = 14 ;
+	public static final Integer  ORDER_STATUS_GOING_ING = 14 ;
 	/**订单状态15.用户申请退款;*/
 	public static final Integer  ORDER_STATUS_USER_APPLAY_REFUND = 15 ;
 	/**订单状态16.订单作废（大V同意退款，客户退款）;*/
