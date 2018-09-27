@@ -94,6 +94,7 @@ public class AliPayServiceImpl implements AliPayService {
 	public CommonResponse whthdraw(WhthdrawRequest params) {
 
 		Account account = accountMapper.queryAccount(params.getUserId());
+		String errorMsg = null;
 		if (account.getRemainderAmounts().compareTo(params.getAmount()) == -1) {
 			return ResultUtils.resultParamEmpty("输入金额大于提现金额");
 		}
@@ -131,6 +132,8 @@ public class AliPayServiceImpl implements AliPayService {
 				accountMapper.outAccount(params.getUserId(), params.getAmount());
 			} else {// 失败
 				recharge.setState(3);// 状态。1-申请支付，2-支付成功 3支付失败
+				errorMsg = myJson.getString("respMsg");
+				throw new BizException(BizCode.ParamError, errorMsg);
 			}
 			// 插入提现信息
 			rechargeMapper.insertSelective(recharge);
