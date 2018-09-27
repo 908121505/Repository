@@ -14,6 +14,7 @@ import com.honglu.quickcall.account.facade.code.AccountBizReturnCode;
 import com.honglu.quickcall.account.facade.constants.OrderSkillConstants;
 import com.honglu.quickcall.account.facade.entity.Account;
 import com.honglu.quickcall.account.facade.entity.Order;
+import com.honglu.quickcall.account.facade.enums.TransferTypeEnum;
 import com.honglu.quickcall.account.facade.exchange.request.ApplayRefundRequest;
 import com.honglu.quickcall.account.facade.exchange.request.CancelOrderRequest;
 import com.honglu.quickcall.account.facade.exchange.request.ConfirmOrderRequest;
@@ -230,7 +231,7 @@ public class OrderServiceImpl implements IOrderService {
 				//金额不为空，说明需要退款给用户
 				if(payAmount != null){
 					Long  buyerId =  order.getBuyerId();
-					accountMapper.inAccount(buyerId, payAmount);
+					accountMapper.inAccount(buyerId, payAmount,TransferTypeEnum.RECHARGE.getType());
 				}
 			}
 		}
@@ -303,7 +304,7 @@ public class OrderServiceImpl implements IOrderService {
 				if(payAmount.compareTo(remainderAmount) < 0){
 					commonService.updateOrder(orderId, OrderSkillConstants.ORDER_STATUS_PAYED,null);
 					//修改账户余额
-					accountMapper.outAccount(userId, payAmount);
+					accountMapper.outAccount(userId, payAmount,TransferTypeEnum.RECHARGE.getType());
 					//发送消息 
 					commonService.pushMessage(PushAppMsgTypeEnum.NEW_ORDER, sellerId, userId);
 				}else{
@@ -558,7 +559,7 @@ public class OrderServiceImpl implements IOrderService {
 				Long  customerId =  order.getBuyerId();
 				BigDecimal  payAmount = order.getOrderAmounts();
 				//大V同意退款，对消费客户入账
-				accountMapper.inAccount(customerId, payAmount);
+				accountMapper.inAccount(customerId, payAmount,TransferTypeEnum.RECHARGE.getType());
 			}
 		}else{
 			//订单不存在
