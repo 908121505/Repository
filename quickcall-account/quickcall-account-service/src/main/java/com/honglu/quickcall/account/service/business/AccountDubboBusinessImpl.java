@@ -26,6 +26,7 @@ import com.honglu.quickcall.account.facade.exchange.request.OrderSaveRequest;
 import com.honglu.quickcall.account.facade.exchange.request.OrderSendOrderListRequest;
 import com.honglu.quickcall.account.facade.exchange.request.PayOrderRequest;
 import com.honglu.quickcall.account.facade.exchange.request.QueryAccountRequest;
+import com.honglu.quickcall.account.facade.exchange.request.QueryIngOrderCountRequest;
 import com.honglu.quickcall.account.facade.exchange.request.RechargeRequest;
 import com.honglu.quickcall.account.facade.exchange.request.SkillInfoRequest;
 import com.honglu.quickcall.account.facade.exchange.request.SkillUpdateRequest;
@@ -138,7 +139,12 @@ public class AccountDubboBusinessImpl implements AccountDubboBusiness {
 				response = orderService.dvConfirmRefund((DvConfirmRefundRequest) request);
 				break;
 			///////////////////////////
+				/** 查询进行中订单数量 */
+			case OrderRequestType.QUERY_ING_ORDER_COUNT:
+				response = orderService.queryIngOrderCount((QueryIngOrderCountRequest) request);
+				break;
 
+		   /////////////////////////////////订单相关结束///////////////////////////////////
 			case AccountFunctionType.CreateUserAccount:
 				// 创建账户
 				response = userAccountService.createAccount((CreateUserAccountRequest) request);

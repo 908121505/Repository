@@ -25,6 +25,7 @@ import com.honglu.quickcall.account.facade.exchange.request.OrderReceiveOrderLis
 import com.honglu.quickcall.account.facade.exchange.request.OrderSaveRequest;
 import com.honglu.quickcall.account.facade.exchange.request.OrderSendOrderListRequest;
 import com.honglu.quickcall.account.facade.exchange.request.PayOrderRequest;
+import com.honglu.quickcall.account.facade.exchange.request.QueryIngOrderCountRequest;
 import com.honglu.quickcall.account.facade.vo.OrderDaVProductVO;
 import com.honglu.quickcall.account.facade.vo.OrderDetailVO;
 import com.honglu.quickcall.account.facade.vo.OrderReceiveOrderListVO;
@@ -236,6 +237,7 @@ public class OrderServiceImpl implements IOrderService {
 			orderDetail =  orderMapper.queryCustOrderDetail(orderId);
 		}else{
 			orderDetail =  orderMapper.queryDvOrderDetail(orderId);
+			
 		}
 		CommonResponse commonResponse = commonService.getCommonResponse();
 		commonResponse.setData(orderDetail);
@@ -525,15 +527,26 @@ public class OrderServiceImpl implements IOrderService {
 	}
 
 
-
-
-
-
-
-
-
-
-	
 	//================================发起的订单页相关结束==================================
+
+
+	@Override
+	public CommonResponse queryIngOrderCount(QueryIngOrderCountRequest request) {
+		if (request == null || request.getBuyerId() == null  || request.getSellerId() == null) {
+			throw new BizException(AccountBizReturnCode.paramError, "查询进行中订单数量参数异常");
+		}
+		LOGGER.info("======>>>>>queryIngOrderCount()入参："+request.toString());
+		Long  buyerId =  request.getBuyerId();
+		Long  sellerId =  request.getSellerId();
+		Integer   count  =  orderMapper.queryIngOrderCount(buyerId,sellerId,OrderSkillConstants.ORDER_STATUS_GOING_ING);
+		if(count == null){
+			count = 0;
+		}
+		CommonResponse commonResponse = commonService.getCommonResponse();
+		commonResponse.setData(count);
+		LOGGER.info("======>>>>>查询进行中订单数量，客户编号为：" + buyerId + ",大V客户编号："+sellerId+"查询成功");
+		return commonResponse;
+	}
+
 
 }

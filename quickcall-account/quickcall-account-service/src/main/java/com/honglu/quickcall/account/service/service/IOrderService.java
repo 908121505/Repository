@@ -12,6 +12,7 @@ import com.honglu.quickcall.account.facade.exchange.request.OrderReceiveOrderLis
 import com.honglu.quickcall.account.facade.exchange.request.OrderSaveRequest;
 import com.honglu.quickcall.account.facade.exchange.request.OrderSendOrderListRequest;
 import com.honglu.quickcall.account.facade.exchange.request.PayOrderRequest;
+import com.honglu.quickcall.account.facade.exchange.request.QueryIngOrderCountRequest;
 import com.honglu.quickcall.common.api.exchange.CommonResponse;
 
 /**
@@ -119,7 +120,11 @@ public interface IOrderService {
 	
 	//##################################大V收到的订单页相关结束##################################
 	
-	
+	/**
+	 * 查询是否有进行中订单
+	 * @param request
+	 */
+	public CommonResponse  queryIngOrderCount(QueryIngOrderCountRequest  request);
 	
 	
 	

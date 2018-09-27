@@ -60,15 +60,8 @@ public interface OrderRequestType {
     public static final  String  DV_CONFRIM_ORDER = "19043";
     
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
+    /**查询进行中订单数量*/
+    public static final  String  QUERY_ING_ORDER_COUNT = "19051";
     
     
 }

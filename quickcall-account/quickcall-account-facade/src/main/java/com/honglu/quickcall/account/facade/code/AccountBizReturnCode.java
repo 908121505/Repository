@@ -11,10 +11,9 @@ import com.honglu.quickcall.common.api.code.ServiceCode;
  */
 public class AccountBizReturnCode extends BizCode {
     //异常编码(501 - 999)
-	private static final long serialVersionUID = -3385150802157469404L;
 
 
-
+	private static final long serialVersionUID = 4589118238396417922L;
 	public static final BizCode paramError=new AccountBizReturnCode("paramError","502",MyServiceCode.ACCOUNT,"参数错误");
     public static final BizCode JdbcError = new AccountBizReturnCode("JdbcError","996",MyServiceCode.ACCOUNT,"操作数据库异常");
     public static final BizCode CheckSignError = new AccountBizReturnCode("CheckSignError","997", MyServiceCode.ACCOUNT,"请求参数验签不正确");

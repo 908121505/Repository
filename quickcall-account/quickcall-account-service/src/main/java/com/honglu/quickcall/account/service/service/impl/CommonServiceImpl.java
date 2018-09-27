@@ -80,4 +80,10 @@ public class CommonServiceImpl implements CommonService {
 		orderMapper.updateByPrimaryKeySelective(record);
 	}
 
+	@Override
+	public Integer getOrderStatus(Order order) {
+		
+		return null;
+	}
+
 }
