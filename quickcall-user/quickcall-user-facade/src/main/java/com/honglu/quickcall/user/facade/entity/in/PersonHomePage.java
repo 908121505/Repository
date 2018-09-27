@@ -40,12 +40,20 @@ public class PersonHomePage {
 	    
 	    private String tokenCode;//用户token
 	    
-	    private Long fansNum;
+	    private Long fansNum;//粉丝数
 	    
-	    private int attentionNum;
+	    private int attentionNum;//关注数
 	    
-	    
+	    private int age;//年纪
 		
+
+		public int getAge() {
+			return age;
+		}
+
+		public void setAge(int age) {
+			this.age = age;
+		}
 
 		public Long getFansNum() {
 			return fansNum;

@@ -147,7 +147,11 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 			//查询关注数量
 			int attentionNum = fansMapper.queryAttentionNumByCustomerId(customerId);
 			personHomePage.setAttentionNum(attentionNum);
-			
+			//获取年纪
+			 Date birthday = personHomePage.getBirthday();
+			 //用工具类去转换
+			 int age = CountAge.getAgeByBirth(birthday);
+			 personHomePage.setAge(age);
 			// 判断身份证是否为空，如果又身份证则按找身份证上面的性别
 			if (StringUtils.isNotEmpty(identityID)) {
 				Matcher m = ID_PATTERN.matcher(identityID);
