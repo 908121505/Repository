@@ -39,4 +39,6 @@ public interface OrderMapper {
 	OrderDetailVO queryDvOrderDetail(@Param("orderId")Long orderId);
 	/**查询客户订单详情*/
 	OrderDetailVO queryCustOrderDetail(@Param("orderId")Long orderId);
+	/**查询进行中订单数量*/
+	Integer queryIngOrderCount(@Param("buyerId")Long buyerId, @Param("sellerId")Long sellerId, @Param("orderStatus")Integer orderStatus);
 }

@@ -3,6 +3,7 @@ package com.honglu.quickcall.account.service.service;
 import java.math.BigDecimal;
 import java.util.List;
 
+import com.honglu.quickcall.account.facade.entity.Order;
 import com.honglu.quickcall.account.facade.entity.Skill;
 import com.honglu.quickcall.common.api.exchange.CommonResponse;
 import com.honglu.quickcall.user.facade.enums.PushAppMsgTypeEnum;
@@ -43,6 +44,14 @@ public interface CommonService {
 	 * @param orderStatus
 	 */
 	public void updateOrder(Long orderId, Integer orderStatus,String  refundReason);
+	
+	
+	/***
+	 * 获取订单真实状态
+	 * @param order
+	 * @return
+	 */
+	public Integer  getOrderStatus(Order  order);
 	
    
 }

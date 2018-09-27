@@ -19,6 +19,7 @@ import com.honglu.quickcall.account.facade.exchange.request.OrderReceiveOrderLis
 import com.honglu.quickcall.account.facade.exchange.request.OrderSaveRequest;
 import com.honglu.quickcall.account.facade.exchange.request.OrderSendOrderListRequest;
 import com.honglu.quickcall.account.facade.exchange.request.PayOrderRequest;
+import com.honglu.quickcall.account.facade.exchange.request.QueryIngOrderCountRequest;
 import com.honglu.quickcall.account.web.service.IOrderInfoService;
 import com.honglu.quickcall.common.api.exchange.WebResponseModel;
 
@@ -170,6 +171,17 @@ public class OrderController {
     	return response;
     }
     /////////////////////////////////////////////////////////////////
+    /**
+     * 查询是否有进行中订单数量
+     * @param params
+     * @return
+     */
+    @RequestMapping(value = "/queryIngOrderCount", method = RequestMethod.POST)
+    @ResponseBody
+    public WebResponseModel queryIngOrderCount( /* @RequestBody */ QueryIngOrderCountRequest params) {
+    	WebResponseModel response = orderInfoService.execute(params);
+    	return response;
+    }
     
     
     
