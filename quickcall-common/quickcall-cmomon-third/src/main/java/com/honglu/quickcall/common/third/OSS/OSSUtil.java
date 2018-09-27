@@ -23,6 +23,7 @@ public class OSSUtil {
 
     public OSSUtil() {
     }
+/*
 
     static {
         InputStream is = null;
@@ -52,6 +53,7 @@ public class OSSUtil {
             }
         }
     }
+*/
 
 
     public static String getAccessKeyId() {
