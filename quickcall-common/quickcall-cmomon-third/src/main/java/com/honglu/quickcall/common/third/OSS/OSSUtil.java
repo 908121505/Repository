@@ -252,6 +252,12 @@ public class OSSUtil {
             return "application/msword";
         if ("xml".equalsIgnoreCase(fileExtension))
             return "text/xml";
+        if ("mp3".equalsIgnoreCase(fileExtension))
+            return "audio/mp3";
+        if ("m4a".equalsIgnoreCase(fileExtension))
+            return "audio/mp3";
+        if ("mpr".equalsIgnoreCase(fileExtension))
+            return "audio/mp3";
         return "text/html";
     }
 
