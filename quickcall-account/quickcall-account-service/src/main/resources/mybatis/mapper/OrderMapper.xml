@@ -381,6 +381,7 @@
 	LEFT JOIN product  p  ON  od.product_id  =  p.product_id
 	WHERE
 		od.buyer_id = #{customerId}
+		order  by  od.order_status
   </select>
   
   
