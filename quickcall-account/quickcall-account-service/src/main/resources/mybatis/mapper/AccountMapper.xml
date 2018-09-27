@@ -216,14 +216,26 @@
    <!-- 入账 -->
    <update id="inAccount" parameterType="Map">
     
-    update account set recharge_amounts=recharge_amounts+#{amount}
+    update account set 
+    <if test="type==1">
+    recharge_amounts=recharge_amounts+#{amount}
+    </if>
+    <if test="type==2">
+    remainder_amounts=remainder_amounts+#{amount}
+    </if>
     where customer_id = #{userId}
    
    </update>
   
    <!-- 出账 -->
    <update id="outAccount" parameterType="Map">
-    update account set remainder_amounts=remainder_amounts-#{amount}
+    update account set
+    <if test="type==1">
+    recharge_amounts=recharge_amounts-#{amount}
+    </if>
+    <if test="type==2">
+    remainder_amounts=remainder_amounts-#{amount}
+    </if>
     where customer_id = #{userId}
    </update>
   

@@ -15,6 +15,8 @@ import com.alibaba.fastjson.JSON;
 import com.honglu.quickcall.account.facade.entity.Account;
 import com.honglu.quickcall.account.facade.entity.Aliacount;
 import com.honglu.quickcall.account.facade.entity.Recharge;
+import com.honglu.quickcall.account.facade.enums.TradeTypeEnum;
+import com.honglu.quickcall.account.facade.enums.TransferTypeEnum;
 import com.honglu.quickcall.account.facade.exchange.request.AlipayNotifyRequest;
 import com.honglu.quickcall.account.facade.exchange.request.BindAliaccountRequest;
 import com.honglu.quickcall.account.facade.exchange.request.RechargeRequest;
@@ -81,7 +83,7 @@ public class AliPayServiceImpl implements AliPayService {
 		recharge.setCustomerId(packet.getUserId());
 		recharge.setCreateDate(new Date());
 		recharge.setAmount(packet.getAmount());
-		recharge.setType(1);// 1充值 2提现
+		recharge.setType(TradeTypeEnum.Pay.getType());// 1充值 2提现
 		recharge.setOrdersn(orderNo);
 		recharge.setState(1);// 状态。1-申请支付，2-支付成功 3支付失败
 		recharge.setRechargeType(1);// 充值类型。1为支付宝，2为微信
@@ -124,12 +126,12 @@ public class AliPayServiceImpl implements AliPayService {
 			recharge.setCustomerId(params.getUserId());
 			recharge.setCreateDate(new Date());
 			recharge.setAmount(params.getAmount());
-			recharge.setType(2);// 1充值 2提现
+			recharge.setType(TradeTypeEnum.Withdraw.getType());// 1充值 2提现
 			recharge.setOrdersn(outBizNo);
 			recharge.setRechargeType(1);// 充值类型。1为支付宝，2为微信
 			if ("1".equals(myJson.getString("respCode"))) {// 成功
 				recharge.setState(2);// 状态。1-申请支付，2-支付成功 3支付失败
-				accountMapper.outAccount(params.getUserId(), params.getAmount());
+				accountMapper.outAccount(params.getUserId(), params.getAmount(), TransferTypeEnum.REMAINDER.getType());
 			} else {// 失败
 				recharge.setState(3);// 状态。1-申请支付，2-支付成功 3支付失败
 				errorMsg = myJson.getString("respMsg");
@@ -173,7 +175,7 @@ public class AliPayServiceImpl implements AliPayService {
 		if (params.getPayState() == 1) {
 			recharge.setState(2);// 状态。1-申请支付，2-支付成功 3支付失败
 			// 入账
-			accountMapper.inAccount(params.getAccountId(), params.getAmount());
+			accountMapper.inAccount(params.getAccountId(), params.getAmount(), TransferTypeEnum.RECHARGE.getType());
 		} else if (params.getPayState() == 0) {
 			recharge.setState(3);// 状态。1-申请支付，2-支付成功 3支付失败
 		}
