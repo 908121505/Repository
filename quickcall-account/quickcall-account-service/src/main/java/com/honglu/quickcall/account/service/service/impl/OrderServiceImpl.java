@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import com.honglu.quickcall.account.facade.code.AccountBizReturnCode;
 import com.honglu.quickcall.account.facade.constants.OrderSkillConstants;
@@ -111,7 +112,7 @@ public class OrderServiceImpl implements IOrderService {
 		record.setSellerId(sellerId);
 		record.setOrderNum(orderNum);
 		record.setOrderStatus(OrderSkillConstants.ORDER_STATUS_NOT_PAY);
-		
+		record.setOrderTime(new Date());
 		String  startTimeStr =  request.getStartTimeStr();
 		Date  startTime = DateUtils.formatDateExt(startTimeStr);
 		record.setStartTime(startTime);
@@ -145,6 +146,8 @@ public class OrderServiceImpl implements IOrderService {
 
 
 
+	
+	private static final  Integer   DIFF_MINUTES  = 30;
 
 	/**
 	 * 发起的订单是全状态
@@ -158,6 +161,25 @@ public class OrderServiceImpl implements IOrderService {
 		LOGGER.info("======>>>>>querySendOrderList()入参："+request.toString());
 		Long  customerId =  request.getCustomerId();
 		List<OrderSendOrderListVO>  resultList =  orderMapper.querySendOrderList(customerId);
+		if(!CollectionUtils.isEmpty(resultList)){
+			Date  currDateTime =  new Date();
+			for (OrderSendOrderListVO info : resultList) {
+				Integer   orderStatus  = info.getOrderStatus();
+				if(OrderSkillConstants.ORDER_STATUS_NOT_PAY ==  orderStatus){
+					Date  orderTime =  info.getOrderTime();
+					//截止下单时间
+					Date  endPayDate = DateUtils.getAddDate(orderTime,DIFF_MINUTES);
+					//结束时间在当前时间之后，订单未取消
+					if(endPayDate.after(currDateTime)){
+						info.setCurrTime(currDateTime.getTime());
+						info.setEndTime(endPayDate.getTime());
+					}else{
+						info.setOrderStatus(OrderSkillConstants.ORDER_STATUS_CANCEL_NOT_PAY);
+					}
+				}
+			}
+		}
+		
 		CommonResponse commonResponse = commonService.getCommonResponse();
 		commonResponse.setData(resultList);
 		LOGGER.info("======>>>>>查询发送的订单，用户编号为：" + request.getCustomerId() + "查询成功");

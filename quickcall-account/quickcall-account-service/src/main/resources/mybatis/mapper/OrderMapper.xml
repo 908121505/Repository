@@ -365,6 +365,7 @@
   <select id="querySendOrderList" resultType="com.honglu.quickcall.account.facade.vo.OrderSendOrderListVO"  >
 	SELECT
 	  od.order_id AS  orderId,
+	  od.order_time AS orderTime,
 	  cu.nick_name  AS  nickName,
 	  cu.head_portrait_url  AS  headPortraitUrl,
 	  p.`name` AS  productName,
