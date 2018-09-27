@@ -20,88 +20,67 @@ import com.honglu.quickcall.common.api.exchange.CommonResponse;
 import com.honglu.quickcall.common.api.exchange.ResultUtils;
 import com.honglu.quickcall.common.core.util.UUIDUtils;
 
-
-
 /**
  * Created by len.song on 2017-12-16.
  */
 @Service
 public class UserAccountServiceImpl implements UserAccountService {
-    private final static Logger logger = LoggerFactory.getLogger(UserAccountServiceImpl.class);
+	private final static Logger logger = LoggerFactory.getLogger(UserAccountServiceImpl.class);
 
-    @Autowired
-    private AccountMapper accountMapper;
+	@Autowired
+	private AccountMapper accountMapper;
 
-  
+	@Override
+	@Transactional
+	public CommonResponse createAccount(CreateUserAccountRequest request) {
+		if (request == null || request.getUserId() == null) {
+			throw new BizException(AccountBizReturnCode.paramError, "创建账户参数异常");
+		}
+		logger.info("用户编号为：" + request.getUserId() + "的用户开始创建账户...");
+		Account userAccount = new Account(UUIDUtils.getId(), request.getUserId());
 
-    @Override
-    @Transactional
-    public CommonResponse createAccount(CreateUserAccountRequest request) {
-        if(request == null || request.getUserId() == null){
-            throw new BizException(AccountBizReturnCode.paramError,"创建账户参数异常");
-        }
-        logger.info("用户编号为："+request.getUserId() +"的用户开始创建账户...");
-        Account userAccount = new Account(UUIDUtils.getId(),request.getUserId());
-
-        accountMapper.createUserAccount(userAccount);
-        CommonResponse commonResponse = new CommonResponse();
-        commonResponse.setCode(BizCode.Success);
-        commonResponse.setMessage(BizCode.Success.desc());
-        logger.info("用户编号为："+request.getUserId() +"的账户创建成功...");
-        return commonResponse;
-    }
-
-
+		accountMapper.createUserAccount(userAccount);
+		CommonResponse commonResponse = new CommonResponse();
+		commonResponse.setCode(BizCode.Success);
+		commonResponse.setMessage(BizCode.Success.desc());
+		logger.info("用户编号为：" + request.getUserId() + "的账户创建成功...");
+		return commonResponse;
+	}
 
 	@Override
 	public CommonResponse queryAccount(QueryAccountRequest request) {
 		// TODO Auto-generated method stub
-		CommonResponse response=new CommonResponse();
-		Account account=accountMapper.queryAccount(request.getUserId());
+		CommonResponse response = new CommonResponse();
+		Account account = accountMapper.queryAccount(request.getUserId());
 		response.setCode(BizCode.Success);
 		response.setMessage(BizCode.Success.desc());
 		response.setData(account);
 		return response;
 	}
 
-
-
 	@Override
 	public CommonResponse inAccount(InAccountRequest request) {
-		Account account=accountMapper.queryAccount(request.getUserId());
-		if(account==null) {
+		Account account = accountMapper.queryAccount(request.getUserId());
+		if (account == null) {
 			return ResultUtils.resultParamEmpty("账户不存在");
 		}
-		accountMapper.inAccount(request.getUserId(), request.getAmount());
-		
+		// accountMapper.inAccount(request.getUserId(), request.getAmount());
+
 		return ResultUtils.resultSuccess();
 	}
-
-
 
 	@Override
 	public CommonResponse outAccount(OutAccountRequest request) {
 
-		Account account=accountMapper.queryAccount(request.getUserId());
-		if(account==null) {
+		Account account = accountMapper.queryAccount(request.getUserId());
+		if (account == null) {
 			return ResultUtils.resultParamEmpty("账户不存在");
 		}
-		if(account.getRemainderAmounts().compareTo(request.getAmount())==-1) {
+		if (account.getRemainderAmounts().compareTo(request.getAmount()) == -1) {
 			return ResultUtils.resultParamEmpty("金额不足");
 		}
-		accountMapper.outAccount(request.getUserId(), request.getAmount());
+		// accountMapper.outAccount(request.getUserId(), request.getAmount());
 		return ResultUtils.resultSuccess();
 	}
-
-
-
-	
-
-
-
-	
-
-   
-
 
 }
