@@ -47,11 +47,11 @@ public interface CommonService {
 	
 	
 	/***
-	 * 获取订单真实状态
+	 * 跟新订单状态
 	 * @param order
 	 * @return
 	 */
-	public Integer  getOrderStatus(Order  order);
+	public void  getNewOrder(Order  order);
 	
    
 }

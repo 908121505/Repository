@@ -58,12 +58,12 @@ public class CommonServiceImpl implements CommonService {
 
 	@Override
 	public void pushMessage(PushAppMsgTypeEnum msgType,Long  sellerId,Long  customerId) {
-		PushAppMsgRequest  msgRequest =  new PushAppMsgRequest();
-		msgRequest.setMsgType(PushAppMsgTypeEnum.NEW_ORDER);
-		msgRequest.setReceiverId(sellerId);
-		msgRequest.setSenderId(customerId);
-		//发送消息
-		userPushAppMsgBusiness.excute(msgRequest);
+//		PushAppMsgRequest  msgRequest =  new PushAppMsgRequest();
+//		msgRequest.setMsgType(PushAppMsgTypeEnum.NEW_ORDER);
+//		msgRequest.setReceiverId(sellerId);
+//		msgRequest.setSenderId(customerId);
+//		//发送消息
+//		userPushAppMsgBusiness.excute(msgRequest);
 		
 	}
 
@@ -81,9 +81,11 @@ public class CommonServiceImpl implements CommonService {
 	}
 
 	@Override
-	public Integer getOrderStatus(Order order) {
+	public void getNewOrder(Order order) {
 		
-		return null;
+		
+		
+		
 	}
 
 }
