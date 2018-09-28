@@ -404,7 +404,7 @@ public class OrderServiceImpl implements IOrderService {
 		Order  order = orderMapper.selectByPrimaryKey(orderId);
 		if(order != null ){
 			Integer  orderStatus =  order.getOrderStatus();
-			if(OrderSkillConstants.ORDER_STATUS_GOING_ING != orderStatus){
+			if(OrderSkillConstants.ORDER_STATUS_GOING_ING != orderStatus && OrderSkillConstants.ORDER_STATUS_END_DV_REFUSE  != orderStatus){
 				//只有进行中才能进行退款
 				throw new BizException(AccountBizReturnCode.ORDER_STATUS_ERROR, "订单状态异常");
 			}
