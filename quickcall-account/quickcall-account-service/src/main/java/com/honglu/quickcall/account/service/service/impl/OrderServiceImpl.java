@@ -538,8 +538,8 @@ public class OrderServiceImpl implements IOrderService {
 		Integer   orderStatus =  null ;
 		if(order != null ){
 			Integer  oldOrderStatus =  order.getOrderStatus();
-			//订单状态为11.用户同意    只有用户已经同意的订单才能发起立即服务
-			if(OrderSkillConstants.ORDER_STATUS_CUST_AGREE_DV_START_SERVICE  != oldOrderStatus){
+			//订单状态为8.大V接受订单    大V接受订单之后可以开启立即服务
+			if(OrderSkillConstants.ORDER_STATUS_PAYED_DV_ACCEPT_ORDER  != oldOrderStatus){
 				throw new BizException(AccountBizReturnCode.ORDER_STATUS_ERROR, "订单状态异常");
 			}
 			orderStatus =  OrderSkillConstants.ORDER_STATUS_PAYED_DV_CONFIRM_START ;
