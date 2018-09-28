@@ -218,7 +218,6 @@ public class OrderServiceImpl implements IOrderService {
 				//订单状态8.大V接受订单之后开始之前用户自主取消
 				orderStatus = OrderSkillConstants.ORDER_STATUS_CANCLE_DV_ACCEPT_USER_SELF_CANCLE;
 				payAmount =  order.getOrderAmounts();
-			//
 			}else if(OrderSkillConstants.ORDER_STATUS_PAYED_DV_CONFIRM_START  == oldOrderStatus){
 				//订单状态8.大V接受订单之后开始之前用户自主取消
 				orderStatus = OrderSkillConstants.ORDER_STATUS_CANCEL_BEFORE_ING;
