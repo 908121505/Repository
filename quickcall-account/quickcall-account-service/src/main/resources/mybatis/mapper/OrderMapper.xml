@@ -383,7 +383,7 @@
 	LEFT JOIN product  p  ON  od.product_id  =  p.product_id
 	WHERE
 		od.buyer_id = #{customerId}
-		order  by  od.order_status
+		order  by  od.order_time  desc
   </select>
   
   
@@ -410,7 +410,7 @@
 		od.seller_id =  #{customerId}
 		<!-- 大V端不能看到未支付的订单 -->
 		AND  od.order_status <![CDATA[ >  ]]> 3
-		order  by  od.order_status
+		order  by  od.order_time  desc
   </select>
   
   
