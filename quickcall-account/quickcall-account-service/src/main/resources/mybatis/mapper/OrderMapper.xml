@@ -472,10 +472,10 @@
   <!-- 查询消费端订单详情 -->
   <select id="queryIngOrderCount" resultType="java.lang.Integer"  >
 	SELECT
-	  count(1)
+	  count(1) 
 	FROM
 		orders 
-	WHERE  order_status = #{orderStatus}  and
+	WHERE  order_status in(#{orderStatus} ,#{orderStatusTwo})   and
 		buyer_id = #{buyerId}  and  seller_id =  #{sellerId}  
   </select>
   

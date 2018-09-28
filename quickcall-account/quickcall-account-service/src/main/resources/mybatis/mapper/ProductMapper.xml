@@ -284,6 +284,9 @@
 		<if test="skillId != null" >
        		 AND  p.skill_id = #{skillId}
         </if>
+		<if test="customerId != null" >
+       		 AND  p.customerId <![CDATA[ <> ]]> #{customerId}
+        </if>
 		ORDER BY  c.login_time  DESC
         LIMIT #{pageIndex},#{pageSize}
   </select>

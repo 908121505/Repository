@@ -168,10 +168,10 @@ public class SkillServiceImpl implements ISkillService {
 		
 		Integer  pageIndexQuery =  (pageIndex -  1) * pageSize;
 		
-//		Long  customerId =  request.getCustomerId();
+		Long  customerId =  request.getCustomerId();
 		Long  skillId = request.getSkillId();
 		//首先查询所有的技能信息
-		List<FirstPageDaVinfoVO>   resultList =  productMapper.selectTotalDaVProduct(skillId,pageIndexQuery,pageSize);
+		List<FirstPageDaVinfoVO>   resultList =  productMapper.selectTotalDaVProduct(customerId,skillId,pageIndexQuery,pageSize);
 		CommonResponse commonResponse = commonService.getCommonResponse();
 		commonResponse.setData(resultList);
 		LOGGER.info("用户编号为：" + request.getCustomerId() + "查询成功");

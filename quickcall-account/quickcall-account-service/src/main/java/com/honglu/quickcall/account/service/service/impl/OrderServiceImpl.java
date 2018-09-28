@@ -622,7 +622,7 @@ public class OrderServiceImpl implements IOrderService {
 		LOGGER.info("======>>>>>queryIngOrderCount()入参："+request.toString());
 		Long  buyerId =  request.getBuyerId();
 		Long  sellerId =  request.getSellerId();
-		Integer   count  =  orderMapper.queryIngOrderCount(buyerId,sellerId,OrderSkillConstants.ORDER_STATUS_GOING_ING);
+		Integer   count  =  orderMapper.queryIngOrderCount(buyerId,sellerId,OrderSkillConstants.ORDER_STATUS_GOING_ING,OrderSkillConstants.ORDER_STATUS_CUST_AGREE_DV_START_SERVICE);
 		if(count == null){
 			count = 0;
 		}
