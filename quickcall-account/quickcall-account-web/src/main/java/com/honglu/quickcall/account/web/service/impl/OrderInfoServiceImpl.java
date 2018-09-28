@@ -52,11 +52,12 @@ public class OrderInfoServiceImpl implements IOrderInfoService {
             LOGGER.error("功能编码为"+request.getBizCode()+"的远程调用异常"+e.getMessage(), e);
             response.setCode(e.getCode().code());
             response.setMsg(e.getMessage());
-            response.setData("");
+            response.setData(" ");
         }catch (Exception e){
             LOGGER.error("功能编码为"+request.getBizCode()+"接口未知异常"+e.getMessage(), e);
             response.setCode(AccountBizReturnCode.Unknown.code());
             response.setMsg(e.getMessage());
+            response.setData(" ");
         }
         LOGGER.info("返回结果{}", response);
         return response;
