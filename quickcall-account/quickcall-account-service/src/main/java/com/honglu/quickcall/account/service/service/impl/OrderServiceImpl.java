@@ -386,8 +386,11 @@ public class OrderServiceImpl implements IOrderService {
 				commonService.pushMessage(PushAppMsgTypeEnum.REFUND_TIP, sellerId, userId);
 			}else if(OrderSkillConstants.REQUEST_REFUND_TYPE_FINISH == type ){
 				newOrderStatus = OrderSkillConstants.ORDER_STATUS_END;
-				//修改订单状态为：15.订单完成（正常完成）
+				//修改订单状态为：18.订单完成（正常完成）
 				commonService.updateOrder(orderId, newOrderStatus,null);
+				//大V入账 
+				BigDecimal  orderAmount =  order.getOrderAmounts();
+				accountMapper.inAccount(sellerId, orderAmount, TransferTypeEnum.REMAINDER.getType());
 			}
 		}else{
 			//订单不存在
