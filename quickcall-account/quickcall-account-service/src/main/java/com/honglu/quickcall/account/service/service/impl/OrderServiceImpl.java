@@ -401,10 +401,10 @@ public class OrderServiceImpl implements IOrderService {
 		
 		Integer  newOrderStatus = null ;
 		//查询订单详情
-		Order  order = orderMapper.selectByPrimaryKey(orderId);
+		Order  order = orderMapper.selectByPrimaryKey(orderId); 
 		if(order != null ){
 			Integer  orderStatus =  order.getOrderStatus();
-			if(OrderSkillConstants.ORDER_STATUS_GOING_ING != orderStatus && OrderSkillConstants.ORDER_STATUS_END_DV_REFUSE  != orderStatus){
+			if(OrderSkillConstants.ORDER_STATUS_GOING_ING != orderStatus && OrderSkillConstants.ORDER_STATUS_END_DV_REFUSE  != orderStatus && OrderSkillConstants.ORDER_STATUS_CUST_AGREE_DV_START_SERVICE  != orderStatus   ){
 				//只有进行中才能进行退款
 				throw new BizException(AccountBizReturnCode.ORDER_STATUS_ERROR, "订单状态异常");
 			}
