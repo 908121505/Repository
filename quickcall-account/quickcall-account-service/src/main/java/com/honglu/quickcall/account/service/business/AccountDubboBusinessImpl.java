@@ -27,6 +27,7 @@ import com.honglu.quickcall.account.facade.exchange.request.OrderSendOrderListRe
 import com.honglu.quickcall.account.facade.exchange.request.PayOrderRequest;
 import com.honglu.quickcall.account.facade.exchange.request.QueryAccountRequest;
 import com.honglu.quickcall.account.facade.exchange.request.QueryIngOrderCountRequest;
+import com.honglu.quickcall.account.facade.exchange.request.QueryRefundReasonRequest;
 import com.honglu.quickcall.account.facade.exchange.request.RechargeRequest;
 import com.honglu.quickcall.account.facade.exchange.request.SkillInfoRequest;
 import com.honglu.quickcall.account.facade.exchange.request.SkillUpdateRequest;
@@ -142,6 +143,10 @@ public class AccountDubboBusinessImpl implements AccountDubboBusiness {
 				/** 查询进行中订单数量 */
 			case OrderRequestType.QUERY_ING_ORDER_COUNT:
 				response = orderService.queryIngOrderCount((QueryIngOrderCountRequest) request);
+				break;
+				/**查询退款理由 */
+			case OrderRequestType.QUERY_REFUND_REASON:
+				response = orderService.queryRefundReason((QueryRefundReasonRequest) request);
 				break;
 
 		   /////////////////////////////////订单相关结束///////////////////////////////////

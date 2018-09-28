@@ -1,6 +1,7 @@
 package com.honglu.quickcall.account.service.service.impl;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -28,6 +29,7 @@ import com.honglu.quickcall.account.facade.exchange.request.OrderSaveRequest;
 import com.honglu.quickcall.account.facade.exchange.request.OrderSendOrderListRequest;
 import com.honglu.quickcall.account.facade.exchange.request.PayOrderRequest;
 import com.honglu.quickcall.account.facade.exchange.request.QueryIngOrderCountRequest;
+import com.honglu.quickcall.account.facade.exchange.request.QueryRefundReasonRequest;
 import com.honglu.quickcall.account.facade.vo.OrderDaVProductVO;
 import com.honglu.quickcall.account.facade.vo.OrderDetailVO;
 import com.honglu.quickcall.account.facade.vo.OrderReceiveOrderListVO;
@@ -624,6 +626,21 @@ public class OrderServiceImpl implements IOrderService {
 		CommonResponse commonResponse = commonService.getCommonResponse();
 		commonResponse.setData(count);
 		LOGGER.info("======>>>>>查询进行中订单数量，客户编号为：" + buyerId + ",大V客户编号："+sellerId+"查询成功");
+		return commonResponse;
+	}
+
+
+
+
+	@Override
+	public CommonResponse queryRefundReason(QueryRefundReasonRequest request) {
+		CommonResponse commonResponse = commonService.getCommonResponse();
+		List<String>  reasonList =  new ArrayList<String>();
+		reasonList.add("态度恶劣");
+		reasonList.add("迟到早退");
+		reasonList.add("消极怠工");
+		reasonList.add("本是本人");
+		commonResponse.setData(reasonList);
 		return commonResponse;
 	}
 

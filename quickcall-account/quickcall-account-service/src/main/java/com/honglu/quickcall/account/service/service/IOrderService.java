@@ -13,6 +13,7 @@ import com.honglu.quickcall.account.facade.exchange.request.OrderSaveRequest;
 import com.honglu.quickcall.account.facade.exchange.request.OrderSendOrderListRequest;
 import com.honglu.quickcall.account.facade.exchange.request.PayOrderRequest;
 import com.honglu.quickcall.account.facade.exchange.request.QueryIngOrderCountRequest;
+import com.honglu.quickcall.account.facade.exchange.request.QueryRefundReasonRequest;
 import com.honglu.quickcall.common.api.exchange.CommonResponse;
 
 /**
@@ -125,6 +126,14 @@ public interface IOrderService {
 	 * @param request
 	 */
 	public CommonResponse  queryIngOrderCount(QueryIngOrderCountRequest  request);
+	
+	
+	
+	/**
+	 * 查询退款理由
+	 * @param request
+	 */
+	public CommonResponse  queryRefundReason(QueryRefundReasonRequest  request);
 	
 	
 	
