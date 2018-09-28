@@ -9,6 +9,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
@@ -35,22 +36,10 @@ public class OrderUpdateJob {
     /**默认超时分钟数*/
     private final static  Integer   DEFAULT_OVER_TIME_MINUTES = -30;
 
-    // ADUAN -- 砍需求，job发消息暂时不上
-//    @Scheduled(cron = "5 * * * * ?")
-    public void send() {
-        LOGGER.info("=============推送消息定时job开始=================");
-        try {
-            
-        } catch (Exception e) {
-            LOGGER.error("job执行发生异常，异常信息：", e);
-        }
-        LOGGER.info("=============推送消息定时job结束=================");
-    }
     
     
     
-//    @Scheduled(cron = "0 0/30 * * * ?")
-//    @Scheduled(cron = "0 * * * * ?")
+    @Scheduled(cron = "0 0/30 * * * ?")
     public void updateOrderStatus() {
     	LOGGER.info("=============修改订单状态自动任务开始=================");
     	try {
