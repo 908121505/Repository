@@ -378,7 +378,7 @@
 	  DATE_FORMAT(od.start_time,'%Y-%m-%d %H:%i:%s') AS startTimeStr
 	FROM
 		orders od
-	LEFT JOIN customer cu ON od.buyer_id = cu.customer_id
+	LEFT JOIN customer cu ON od.seller_id = cu.customer_id
 	LEFT JOIN product  p  ON  od.product_id  =  p.product_id
 	WHERE
 		od.buyer_id = #{customerId}
@@ -402,7 +402,7 @@
 	   
 	FROM
 		orders od
-	LEFT JOIN customer cu ON od.seller_id = cu.customer_id
+	LEFT JOIN customer cu ON od.buyer_id = cu.customer_id
 	LEFT JOIN product  p  ON  od.product_id  =  p.product_id
 	WHERE
 		od.seller_id =  #{customerId}
