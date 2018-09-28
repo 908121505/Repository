@@ -1,6 +1,7 @@
 package com.honglu.quickcall.account.service.service;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
 import com.honglu.quickcall.account.facade.entity.Order;
@@ -44,6 +45,14 @@ public interface CommonService {
 	 * @param orderStatus
 	 */
 	public void updateOrder(Long orderId, Integer orderStatus,String  refundReason);
+	/**
+	 * 支付修改订单状态
+	 * @param orderId
+	 * @param orderStatus
+	 * @param refundReason
+	 * @param payTime
+	 */
+	public void updateOrderForPay(Long orderId, Integer orderStatus,Date  payTime);
 	
 	
 	/***

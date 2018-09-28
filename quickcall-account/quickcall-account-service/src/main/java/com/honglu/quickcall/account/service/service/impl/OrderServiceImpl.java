@@ -302,7 +302,7 @@ public class OrderServiceImpl implements IOrderService {
 			BigDecimal  remainderAmount =  account.getRemainderAmounts();
 			if(remainderAmount != null){
 				if(payAmount.compareTo(remainderAmount) < 0){
-					commonService.updateOrder(orderId, OrderSkillConstants.ORDER_STATUS_PAYED,null);
+					commonService.updateOrderForPay(orderId, OrderSkillConstants.ORDER_STATUS_PAYED,new Date());
 					//修改账户余额
 					accountMapper.outAccount(userId, payAmount,TransferTypeEnum.RECHARGE.getType());
 					//发送消息 

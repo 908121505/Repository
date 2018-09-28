@@ -9,7 +9,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.honglu.quickcall.account.facade.constants.OrderSkillConstants;
 import com.honglu.quickcall.account.facade.entity.Order;
 import com.honglu.quickcall.account.facade.entity.Skill;
 import com.honglu.quickcall.account.service.dao.OrderMapper;
@@ -18,7 +17,6 @@ import com.honglu.quickcall.common.api.code.BizCode;
 import com.honglu.quickcall.common.api.exchange.CommonResponse;
 import com.honglu.quickcall.user.facade.business.UserPushAppMsgBusiness;
 import com.honglu.quickcall.user.facade.enums.PushAppMsgTypeEnum;
-import com.honglu.quickcall.user.facade.exchange.request.PushAppMsgRequest;
 
 
 @Service("commonService")
@@ -70,12 +68,22 @@ public class CommonServiceImpl implements CommonService {
 	@Override
 	public void updateOrder(Long orderId, Integer orderStatus,String  refundReason) {
 		Order record = new Order();
-		record.setOrderStatus(OrderSkillConstants.ORDER_STATUS_PAYED);
+		record.setOrderStatus(orderStatus);
 		record.setOrderId(orderId);
 		record.setModifyTime(new Date());
 		if(StringUtils.isNotBlank(refundReason)){
 			record.setRefundReason(refundReason);
 		}
+		//修改订单状态为：已支付
+		orderMapper.updateByPrimaryKeySelective(record);
+	}
+	@Override
+	public void updateOrderForPay(Long orderId, Integer orderStatus,Date  payTime) {
+		Order record = new Order();
+		record.setOrderStatus(orderStatus);
+		record.setOrderId(orderId);
+		record.setModifyTime(new Date());
+		record.setPaymentTime(payTime);
 		//修改订单状态为：已支付
 		orderMapper.updateByPrimaryKeySelective(record);
 	}
