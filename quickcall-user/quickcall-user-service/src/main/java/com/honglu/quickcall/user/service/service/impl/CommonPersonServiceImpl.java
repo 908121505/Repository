@@ -3,6 +3,7 @@ package com.honglu.quickcall.user.service.service.impl;
 import java.text.MessageFormat;
 import java.util.Date;
 import java.util.Objects;
+import java.util.Random;
 import java.util.ResourceBundle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -225,7 +226,7 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 		customer.setQqOpenId(request.getQqOpenId());
 		customer.setWechatOpenId(request.getWechatOpenId());
 		customer.setPhone(request.getTel());
-		customer.setNickName("小帅");
+		customer.setNickName("voice_" + randomFour());
 
 		if (StringUtils.isNotBlank(request.getHeardUrl())) {
 			defaultImg = request.getHeardUrl();
@@ -247,6 +248,12 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 		accountDubboIntegrationService.createAccount(customer.getCustomerId());
 		customer = customerMapper.selectByPrimaryKey(customer.getCustomerId());
 		return customer;
+	}
+
+	public int randomFour() {
+		Random rand = new Random();
+		int num = rand.nextInt(9999) + 1000;
+		return num;
 	}
 
 	@Override
