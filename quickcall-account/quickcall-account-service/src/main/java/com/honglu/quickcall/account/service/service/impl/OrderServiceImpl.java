@@ -508,9 +508,12 @@ public class OrderServiceImpl implements IOrderService {
 			//大V同意，状态为大V接受
 			if(OrderSkillConstants.REQUEST_DV_CONFIRM_TYPE_YES == type ){
 				newOrderStatus = OrderSkillConstants.ORDER_STATUS_PAYED_DV_ACCEPT_ORDER;
-			//大V不同意，状态为大V拒绝
+			//大V不同意，状态为大V拒绝，退款给购买者
 			}else {
 				newOrderStatus = OrderSkillConstants.ORDER_STATUS_PAYED_DV_REFUSE;
+				BigDecimal  payAmount = order.getOrderAmounts();
+				Long   buyerId =  order.getBuyerId();
+				accountMapper.inAccount(buyerId, payAmount, TransferTypeEnum.RECHARGE.getType());
 			}
 			commonService.updateOrder(orderId, newOrderStatus,null);
 		}else{
