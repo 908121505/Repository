@@ -416,6 +416,10 @@
   <select id="queryDvOrderDetail" resultType="com.honglu.quickcall.account.facade.vo.OrderDetailVO"  >
 	SELECT
 	  od.order_id AS  orderId,
+	  od.refund_reason  AS refundReason,
+	  cu.sex  AS  sex ,
+	  (YEAR(NOW()) -  YEAR(cu.birthday))  AS age ,
+	  cu.v_status  AS dvStatus,
 	  cu.nick_name  AS  anotherNickName,
 	  cu.head_portrait_url  AS  anotherHeadPortraitUrl,
 	  p.`name` AS  productName,
@@ -437,6 +441,10 @@
   <select id="queryCustOrderDetail" resultType="com.honglu.quickcall.account.facade.vo.OrderDetailVO"  >
 	SELECT
 	  od.order_id AS  orderId,
+	  od.refund_reason  AS refundReason,
+	  cu.sex  AS  sex ,
+	  (YEAR(NOW()) -  YEAR(cu.birthday))  AS age ,
+	  cu.v_status  AS dvStatus,
 	  cu.nick_name  AS  anotherNickName,
 	  cu.head_portrait_url  AS  anotherHeadPortraitUrl,
 	  p.`name` AS  productName,
