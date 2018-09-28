@@ -2,6 +2,7 @@ package com.honglu.quickcall.account.facade.vo;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Date;
 
 /**   
  * Copyright © 2018 www.xiaoniu.com All rights reserved.
@@ -13,7 +14,7 @@ import java.math.BigDecimal;
  */
 public class OrderReceiveOrderListVO implements  Serializable{
 
-	private static final long serialVersionUID = -7409805272071992707L;
+	private static final long serialVersionUID = -2082265673734379166L;
 	/**主播ID*/
 	private Long  orderId;
 	/**主播昵称*/
@@ -41,6 +42,18 @@ public class OrderReceiveOrderListVO implements  Serializable{
 	private Integer  orderStatus;
 	
 	private String  startTimeStr;
+	
+	/**支付时间*/
+	private Date  paymentTime;
+	
+
+	public Date getPaymentTime() {
+		return paymentTime;
+	}
+
+	public void setPaymentTime(Date paymentTime) {
+		this.paymentTime = paymentTime;
+	}
 
 	public Long getOrderId() {
 		return orderId;

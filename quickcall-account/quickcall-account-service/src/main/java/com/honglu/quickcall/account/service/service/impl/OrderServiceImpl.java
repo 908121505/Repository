@@ -177,6 +177,17 @@ public class OrderServiceImpl implements IOrderService {
 					}else{
 						info.setOrderStatus(OrderSkillConstants.ORDER_STATUS_CANCEL_NOT_PAY);
 					}
+					
+				}else  if(OrderSkillConstants.ORDER_STATUS_PAYED ==  orderStatus){
+				//判断订单支付后，大V是否接单超时
+					Date  paymentTime =  info.getPaymentTime();
+					//截止下单时间
+					Date  endReceiveDate = DateUtils.getAddDate(paymentTime,DIFF_MINUTES);
+					//接受截止时间在当前时间之前，订单取消
+					if(endReceiveDate.before(currDateTime)){
+						info.setOrderStatus(OrderSkillConstants.ORDER_STATUS_CANCEL_PAYED_DV_RECEIVE_OVER_TIME);
+					}
+					
 				}
 			}
 		}
@@ -256,9 +267,9 @@ public class OrderServiceImpl implements IOrderService {
 		
 		Long  orderId =  request.getOrderId();
 		OrderDetailVO  orderDetail =  null ;
+		Date  currDateTime = new Date();
 		if(type == OrderSkillConstants.REQUEST_TYPE_CUST ){
 			orderDetail =  orderMapper.queryCustOrderDetail(orderId);
-			Date  currDateTime = new Date();
 			//需要判断是否过了支付时间
 			Integer   orderStatus  = orderDetail.getOrderStatus();
 			if(OrderSkillConstants.ORDER_STATUS_NOT_PAY ==  orderStatus){
@@ -269,11 +280,31 @@ public class OrderServiceImpl implements IOrderService {
 				if(endPayDate.before(currDateTime)){
 					orderDetail.setOrderStatus(OrderSkillConstants.ORDER_STATUS_CANCEL_NOT_PAY);
 				}
+			}else  if(OrderSkillConstants.ORDER_STATUS_PAYED ==  orderStatus){
+			//判断订单支付后，大V是否接单超时
+				Date  paymentTime =  orderDetail.getPaymentTime();
+				//截止下单时间
+				Date  endReceiveDate = DateUtils.getAddDate(paymentTime,DIFF_MINUTES);
+				//接受截止时间在当前时间之前，订单取消
+				if(endReceiveDate.before(currDateTime)){
+					orderDetail.setOrderStatus(OrderSkillConstants.ORDER_STATUS_CANCEL_PAYED_DV_RECEIVE_OVER_TIME);
+				}
 			}
 			
 		}else{
 			orderDetail =  orderMapper.queryDvOrderDetail(orderId);
-			
+			//需要判断是否过了支付时间
+			Integer   orderStatus  = orderDetail.getOrderStatus();
+			if(OrderSkillConstants.ORDER_STATUS_PAYED ==  orderStatus){
+			//判断订单支付后，大V是否接单超时
+				Date  paymentTime =  orderDetail.getPaymentTime();
+				//截止下单时间
+				Date  endReceiveDate = DateUtils.getAddDate(paymentTime,DIFF_MINUTES);
+				//接受截止时间在当前时间之前，订单取消
+				if(endReceiveDate.before(currDateTime)){
+					orderDetail.setOrderStatus(OrderSkillConstants.ORDER_STATUS_CANCEL_PAYED_DV_RECEIVE_OVER_TIME);
+				}
+			}
 		}
 		CommonResponse commonResponse = commonService.getCommonResponse();
 		commonResponse.setData(orderDetail);
