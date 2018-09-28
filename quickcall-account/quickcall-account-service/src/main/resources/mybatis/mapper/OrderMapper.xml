@@ -424,6 +424,7 @@
 	  od.order_num  AS  orderNum,
 	  od.order_amounts  AS  orderAmounts,
 	  od.order_status  AS  orderStatus,
+	  od.order_time AS orderTime,
 	  DATE_FORMAT(od.start_time,'%Y-%m-%d %H:%i:%s') AS startTimeStr
 	FROM
 		orders od
@@ -444,6 +445,7 @@
 	  od.order_num  AS  orderNum,
 	  od.order_amounts  AS  orderAmounts,
 	  od.order_status  AS  orderStatus,
+	  od.order_time AS orderTime,
 	  DATE_FORMAT(od.start_time,'%Y-%m-%d %H:%i:%s') AS startTimeStr
 	FROM
 		orders od
