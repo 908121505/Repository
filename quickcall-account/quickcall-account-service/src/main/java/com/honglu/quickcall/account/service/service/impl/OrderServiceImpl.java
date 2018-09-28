@@ -199,9 +199,9 @@ public class OrderServiceImpl implements IOrderService {
 		Long  orderId =  request.getOrderId();
 		//查询订单详情
 		Order  order = orderMapper.selectByPrimaryKey(orderId);
+		Integer   orderStatus =  null ;
 		if(order != null ){
 			Integer   oldOrderStatus =  order.getOrderStatus();
-			Integer   orderStatus =  null ;
 			//订单金额
 			BigDecimal   payAmount =  null;
 			//根据不同状态进行取消
@@ -236,6 +236,7 @@ public class OrderServiceImpl implements IOrderService {
 			}
 		}
 		CommonResponse commonResponse = commonService.getCommonResponse();
+		commonResponse.setData(orderStatus);
 		LOGGER.info("======>>>>>订单编号：" + orderId + "，取消订单完成");
 		return commonResponse;
 	}
