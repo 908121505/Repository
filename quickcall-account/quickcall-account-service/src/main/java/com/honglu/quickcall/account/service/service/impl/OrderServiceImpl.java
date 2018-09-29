@@ -466,6 +466,10 @@ public class OrderServiceImpl implements IOrderService {
 				newOrderStatus = OrderSkillConstants.ORDER_STATUS_CUST_AGREE_DV_START_SERVICE;
 			}else{
 				newOrderStatus = OrderSkillConstants.ORDER_STATUS_CUST_REFUSE_DV_START_SERVICE;
+				//退钱给用户
+				Long  customerId =  order.getBuyerId();
+				BigDecimal   payAmount =  order.getOrderAmounts();
+				accountMapper.inAccount(customerId, payAmount, TransferTypeEnum.RECHARGE.getType());
 			}
 			commonService.updateOrder(orderId, newOrderStatus,null);
 		}else{
@@ -650,7 +654,7 @@ public class OrderServiceImpl implements IOrderService {
 		reasonList.add("态度恶劣");
 		reasonList.add("迟到早退");
 		reasonList.add("消极怠工");
-		reasonList.add("本是本人");
+		reasonList.add("不是本人");
 		commonResponse.setData(reasonList);
 		return commonResponse;
 	}
