@@ -626,6 +626,13 @@ public class OrderServiceImpl implements IOrderService {
 		if(count == null){
 			count = 0;
 		}
+		if(count == 0){
+			count  =  orderMapper.queryIngOrderCount(sellerId,buyerId,OrderSkillConstants.ORDER_STATUS_GOING_ING,OrderSkillConstants.ORDER_STATUS_CUST_AGREE_DV_START_SERVICE);
+		}
+		
+		if(count == null){
+			count = 0;
+		}
 		CommonResponse commonResponse = commonService.getCommonResponse();
 		commonResponse.setData(count);
 		LOGGER.info("======>>>>>查询进行中订单数量，客户编号为：" + buyerId + ",大V客户编号："+sellerId+"查询成功");
