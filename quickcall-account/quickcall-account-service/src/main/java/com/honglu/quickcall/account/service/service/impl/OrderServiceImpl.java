@@ -466,6 +466,10 @@ public class OrderServiceImpl implements IOrderService {
 				newOrderStatus = OrderSkillConstants.ORDER_STATUS_CUST_AGREE_DV_START_SERVICE;
 			}else{
 				newOrderStatus = OrderSkillConstants.ORDER_STATUS_CUST_REFUSE_DV_START_SERVICE;
+				//退钱给用户
+				Long  customerId =  order.getBuyerId();
+				BigDecimal   payAmount =  order.getOrderAmounts();
+				accountMapper.inAccount(customerId, payAmount, TransferTypeEnum.REMAINDER.getType());
 			}
 			commonService.updateOrder(orderId, newOrderStatus,null);
 		}else{
