@@ -245,19 +245,19 @@
         <profile>
             <id>online</id>
             <properties>
-                <package.environment>profiles/online</package.environment>
+                <package.environment>profiles/vpro</package.environment>
             </properties>
         </profile>
         <profile>
             <id>test</id>
             <properties>
-                <package.environment>profiles/test</package.environment>
+                <package.environment>profiles/vtest01</package.environment>
             </properties>
         </profile>
         <profile>
             <id>dev</id>
             <properties>
-                <package.environment>profiles/dev</package.environment>
+                <package.environment>profiles/vdev</package.environment>
             </properties>
         </profile>
     </profiles>

@@ -38,10 +38,10 @@
 	<!-- 异步的线程池 -->  
     <task:executor id="taskExecutor" pool-size="4-256" queue-capacity="128" />  
     <!-- queue litener  观察 监听模式 当有消息到达时会通知监听在对应的队列上的监听对象-->
-    <rabbit:listener-container connection-factory="RconnectionFactory" acknowledge="manual" task-executor="taskExecutor">
+    <!--<rabbit:listener-container connection-factory="RconnectionFactory" acknowledge="manual" task-executor="taskExecutor">
          <rabbit:listener queues="queue_activity" ref="queueUserCenterLitene"/>
          <rabbit:listener queues="queue_userCenter_forActivity" ref="queueUserCenterForActivityListener" />
-    </rabbit:listener-container>
+    </rabbit:listener-container>-->
     
    <bean id="queueUserCenterLitene"  class="com.honglu.quickcall.activity.service.mq.QueueUserCenterLitene"></bean>
 
