@@ -13,9 +13,11 @@ import com.honglu.quickcall.common.api.exchange.AbstractRequest;
  */
 public class PayOrderRequest extends AbstractRequest {
     
-	private static final long serialVersionUID = 3102756666124421099L;
+	private static final long serialVersionUID = -6317628619555302051L;
 	/**客户编号*/
 	private Long  orderId;
+	/**充值标识1：支付宝充值  2.微信支付  3：零钱支付*/
+	private int  rechageType ;
 
 	public Long getOrderId() {
 		return orderId;
@@ -26,6 +28,16 @@ public class PayOrderRequest extends AbstractRequest {
 		this.orderId = orderId;
 	}
 
+
+
+	public int getRechageType() {
+		return rechageType;
+	}
+
+
+	public void setRechageType(int rechageType) {
+		this.rechageType = rechageType;
+	}
 
 
 	@Override
