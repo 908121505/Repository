@@ -209,11 +209,11 @@
             <version>3.2.10.Final</version>
         </dependency>
 
-        <dependency>
+ <!--        <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>1.16.10</version>
-        </dependency>
+        </dependency> -->
 
 
         <!-- 个推 -->
