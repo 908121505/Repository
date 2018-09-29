@@ -469,7 +469,7 @@ public class OrderServiceImpl implements IOrderService {
 				//退钱给用户
 				Long  customerId =  order.getBuyerId();
 				BigDecimal   payAmount =  order.getOrderAmounts();
-				accountMapper.inAccount(customerId, payAmount, TransferTypeEnum.REMAINDER.getType());
+				accountMapper.inAccount(customerId, payAmount, TransferTypeEnum.RECHARGE.getType());
 			}
 			commonService.updateOrder(orderId, newOrderStatus,null);
 		}else{
