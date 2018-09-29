@@ -140,4 +140,12 @@
         	AND p.name  LIKE  concat('%',#{orderType},'%') 
       	</if>
   </select>
+
+  <!-- 查询大V的产品 -->
+  <select id="countSellerProduct" resultMap="BaseResultMap" parameterType="map" >
+    SELECT
+    <include refid="Base_Column_List" />
+    FROM product p
+    where p.seller_id=#{sellerId}
+  </select>
 </mapper>
