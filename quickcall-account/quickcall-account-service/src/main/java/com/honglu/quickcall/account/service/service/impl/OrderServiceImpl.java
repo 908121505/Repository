@@ -330,20 +330,20 @@ public class OrderServiceImpl implements IOrderService {
 			BigDecimal  payAmount =  order.getOrderAmounts();
 			Long  userId =  order.getBuyerId();
 			Long  sellerId =  order.getSellerId();
-			Integer   rechageType = request.getRechageType();
+			/*Integer   rechageType = request.getRechageType();
 			if(rechageType != null  && rechageType < 3){
 				commonService.updateOrderForPay(orderId, OrderSkillConstants.ORDER_STATUS_PAYED,new Date());
 				//修改账户余额
 				accountMapper.outAccount(userId, payAmount,TransferTypeEnum.RECHARGE.getType());
 				//发送消息 
 				commonService.pushMessage(PushAppMsgTypeEnum.NEW_ORDER, sellerId, userId);
-			}else{
+			}else{*/
 				//判断余额是否充足
 				Account account=accountMapper.queryAccount(userId);
 				//消费用户的充值金额
 				BigDecimal  rechargeAmounts =  account.getRechargeAmounts();
 				if(rechargeAmounts != null){
-					if(payAmount.compareTo(rechargeAmounts) < 0){
+					if(payAmount.compareTo(rechargeAmounts) <= 0){
 						commonService.updateOrderForPay(orderId, OrderSkillConstants.ORDER_STATUS_PAYED,new Date());
 						//修改账户余额
 						accountMapper.outAccount(userId, payAmount,TransferTypeEnum.RECHARGE.getType());
@@ -357,7 +357,7 @@ public class OrderServiceImpl implements IOrderService {
 					//余额不足提醒
 					throw new BizException(AccountBizReturnCode.ORDER_PAY_ACCOUNT_NOT_EXIST, "账户不存在，无法支付");
 				}
-			}
+			/*}*/
 			
 			
 		}else{
