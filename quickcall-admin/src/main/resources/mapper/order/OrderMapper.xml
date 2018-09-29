@@ -397,5 +397,58 @@
   
   
   
+  <!-- 查询未支付即将支付过期的订单ID列表 -->
+	<select id="queryPayOverTimeOrderIdList" resultType="java.lang.Long" parameterType="map">
+		SELECT  order_id AS  orderId  FROM  orders  WHERE  order_status  = #{orderStatus}  AND   order_time <![CDATA[  < ]]>  #{endTime}
+	</select>
+	
+	
+	<update id="batchUpdateOrderStatus"   >
+		UPDATE 
+			orders
+		SET 
+			order_status = #{orderStatus},
+			modify_man = 'sys_job',
+			modify_time = NOW()
+		WHERE
+			order_id IN
+		<foreach collection="list" item="id"  open="("  close=")"  separator="," >
+		        #{id}
+		</foreach>
+	</update>
+	
+	<!-- 查询已支付且大V未接受订单ID列表 -->
+	<select id="queryReceiveOverTimeOrderIdList" resultType="com.calf.module.order.entity.Order" parameterType="map">
+		SELECT  order_id  as  orderId ,buyer_id  AS  buyerId,seller_id  AS  sellerId ,order_amounts AS  orderAmounts   FROM  orders  WHERE  order_status  = #{orderStatus}  AND   payment_time <![CDATA[  < ]]>  #{endTime}
+	</select>
+	
+	
+	   <!-- 入账 -->
+   <update id="inAccount" parameterType="Map">
+    
+    update account set 
+    <if test="type==1">
+    recharge_amounts=recharge_amounts+#{amount}
+    </if>
+    <if test="type==2">
+    remainder_amounts=remainder_amounts+#{amount}
+    </if>
+    where customer_id = #{userId}
+   
+   </update>
+  
+   <!-- 出账 -->
+   <update id="outAccount" parameterType="Map">
+    update account set
+    <if test="type==1">
+    recharge_amounts=recharge_amounts-#{amount}
+    </if>
+    <if test="type==2">
+    remainder_amounts=remainder_amounts-#{amount}
+    </if>
+    where customer_id = #{userId}
+   </update>
+  
+  
   
 </mapper>
