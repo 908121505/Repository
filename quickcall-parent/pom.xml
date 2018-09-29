@@ -13,7 +13,7 @@
   	<repositories>
         <repository>
             <id>nexus-local</id>
-            <url>http://pre.xnshandai.net/nexus/content/groups/nexus_public</url>
+            <url>http://172.16.0.186:5000/nexus/content/groups/nexus_public</url>
             <releases>
                 <enabled>true</enabled>
             </releases>
@@ -25,7 +25,7 @@
     <pluginRepositories>
         <pluginRepository>
             <id>nexus-local</id>
-            <url>http://pre.xnshandai.net/nexus/content/groups/nexus_public</url>
+            <url>http://172.16.0.186:5000/content/groups/nexus_public</url>
             <releases>
                 <enabled>true</enabled>
             </releases>
@@ -38,11 +38,11 @@
   	<distributionManagement>
     	<snapshotRepository>
         <id>Snapshots</id>
-        <url>http://pre.xnshandai.net/nexus/content/repositories/snapshots/</url>
+        <url>http://http://172.16.0.186:5000/nexus/content/repositories/snapshots/</url>
     </snapshotRepository>
     <repository>
         <id>Releases</id>
-        <url>http://pre.xnshandai.net/nexus/content/repositories/releases/</url>
+        <url>http://172.16.0.186:5000/nexus/content/repositories/releases/</url>
     </repository>
    </distributionManagement>
 
