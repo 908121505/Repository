@@ -74,28 +74,34 @@ public class CheckAuthController implements BaseController<Customer> {
             entity.setType(1);// 大V审核通过后，客户类型变为大V
 
             // ADUAN 大V审核通过后 -- 插入假数据（后面删除）
-            Map<String, Object> params = new HashMap<>();
-            params.put("skillStatus", "0");
-            params.put("iDisplayStart", "0");
-            params.put("iDisplayLength", "5");
-            List<Skill> skills = baseManager.query("Skill.selectPageList", params);
-            for (Skill skill : skills) {
-                Product bean = new Product();
-                bean.setProductId(String.valueOf(UUIDUtils.getId()));
-                bean.setSkillId(skill.getId());
-                bean.setName(skill.getName());
-                bean.setServiceTime(30);
-                bean.setPrice(skill.getMinPrice().add(new BigDecimal(skill.getPriceStep())).divide(new BigDecimal(2)));
-                bean.setPreferentialPrice(new BigDecimal(skill.getPriceStep()));
-                bean.setDiscountRate(new BigDecimal(20));
-                bean.setDiscountPrice(new BigDecimal(skill.getPriceStep()).multiply(new BigDecimal(20)));
-                bean.setType(0);
-                bean.setProductStatus(1);
-                bean.setSellerId(entity.getCustomerId());
-                bean.setProductDescribe("审核通过时自动插入的数据，仅供测试使用");
-                bean.setCreateMan(currentUser.getPrincipal().toString());
 
-                baseManager.insert("Product.insert", bean);
+            Map<String, Object> params = new HashMap<>();
+            params.put("sellerId", entity.getCustomerId());
+            List<Product> product = baseManager.query("Product.countSellerProduct", params);
+            if(product.size() == 0){
+                params = new HashMap<>();
+                params.put("skillStatus", "0");
+                params.put("iDisplayStart", "0");
+                params.put("iDisplayLength", "5");
+                List<Skill> skills = baseManager.query("Skill.selectPageList", params);
+                for (Skill skill : skills) {
+                    Product bean = new Product();
+                    bean.setProductId(String.valueOf(UUIDUtils.getId()));
+                    bean.setSkillId(skill.getId());
+                    bean.setName(skill.getName());
+                    bean.setServiceTime(30);
+                    bean.setPrice(skill.getMinPrice().add(new BigDecimal(skill.getPriceStep())).divide(new BigDecimal(2)));
+                    bean.setPreferentialPrice(new BigDecimal(skill.getPriceStep()));
+                    bean.setDiscountRate(new BigDecimal(20));
+                    bean.setDiscountPrice(new BigDecimal(skill.getPriceStep()).multiply(new BigDecimal(20)));
+                    bean.setType(0);
+                    bean.setProductStatus(1);
+                    bean.setSellerId(entity.getCustomerId());
+                    bean.setProductDescribe("审核通过时自动插入的数据，仅供测试使用");
+                    bean.setCreateMan(currentUser.getPrincipal().toString());
+
+                    baseManager.insert("Product.insert", bean);
+                }
             }
         }
 
