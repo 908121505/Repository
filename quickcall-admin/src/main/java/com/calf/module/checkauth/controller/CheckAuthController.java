@@ -85,7 +85,7 @@ public class CheckAuthController implements BaseController<Customer> {
                 bean.setSkillId(skill.getId());
                 bean.setName(skill.getName());
                 bean.setServiceTime(30);
-                bean.setPrice(skill.getMinPrice().add(new BigDecimal(skill.getPriceStep())));
+                bean.setPrice(skill.getMinPrice().add(new BigDecimal(skill.getPriceStep())).divide(new BigDecimal(2)));
                 bean.setPreferentialPrice(new BigDecimal(skill.getPriceStep()));
                 bean.setDiscountRate(new BigDecimal(20));
                 bean.setDiscountPrice(new BigDecimal(skill.getPriceStep()).multiply(new BigDecimal(20)));
