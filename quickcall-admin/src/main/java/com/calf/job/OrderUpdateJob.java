@@ -41,8 +41,8 @@ public class OrderUpdateJob {
     
     
     
-//    @Scheduled(cron = "0 0/30 * * * ?")
-    @Scheduled(cron = "0 * * * * ?")
+    @Scheduled(cron = "0 0/30 * * * ?")
+//    @Scheduled(cron = "0 * * * * ?")
     public void updateOrderStatus() {
     	LOGGER.info("=============修改订单状态自动任务开始=================");
     	try {
