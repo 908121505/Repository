@@ -332,9 +332,10 @@ public class OrderServiceImpl implements IOrderService {
 			Long  sellerId =  order.getSellerId();
 			//判断余额是否充足
 			Account account=accountMapper.queryAccount(userId);
-			BigDecimal  remainderAmount =  account.getRemainderAmounts();
-			if(remainderAmount != null){
-				if(payAmount.compareTo(remainderAmount) < 0){
+			//消费用户的充值金额
+			BigDecimal  rechargeAmounts =  account.getRechargeAmounts();
+			if(rechargeAmounts != null){
+				if(payAmount.compareTo(rechargeAmounts) < 0){
 					commonService.updateOrderForPay(orderId, OrderSkillConstants.ORDER_STATUS_PAYED,new Date());
 					//修改账户余额
 					accountMapper.outAccount(userId, payAmount,TransferTypeEnum.RECHARGE.getType());
