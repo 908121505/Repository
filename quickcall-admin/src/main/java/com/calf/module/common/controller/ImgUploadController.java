@@ -2,11 +2,11 @@ package com.calf.module.common.controller;
 
 import com.aliyun.oss.OSSClient;
 import com.calf.cn.utils.MD5Utils;
-import com.calf.cn.utils.OSSUtil;
 import com.calf.cn.utils.SFtpUtil;
 import com.calf.cn.utils.UUIDUtils;
 import com.calf.module.common.entity.FileUpload;
 import com.honglu.quickcall.common.api.code.AliYunFilePaths;
+import com.honglu.quickcall.common.third.OSS.OSSUtil;
 import org.apache.commons.fileupload.disk.DiskFileItem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,9 +33,6 @@ import java.io.PrintWriter;
 @RequestMapping(value = "/upload")
 public class ImgUploadController {
     private static final Logger log = LoggerFactory.getLogger(ImgUploadController.class);
-
-    private static String webPath = "";
-    private static String bucketName = OSSUtil.getBucketName();
 
     /**
      * 商户app端展示Banner的接口
@@ -65,8 +62,11 @@ public class ImgUploadController {
 
             String imgFolder = AliYunFilePaths.APP_BANNER;
             String fileName = System.currentTimeMillis() + "." + file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".") + 1);
+
+            //阿里云客户端
             OSSClient ossClient = OSSUtil.getOSSClient();
-            boolean flag = OSSUtil.uploadInputStreamObject2OSS(ossClient, file.getInputStream(), fileName, bucketName, imgFolder);
+            //上传
+            boolean flag = OSSUtil.uploadInputStreamObject2OSS(ossClient, file.getInputStream(), fileName, imgFolder);
             if (flag) {
                 upload.setResult("success");
                 upload.setMsg("上传文件成功！");
@@ -97,8 +97,10 @@ public class ImgUploadController {
             try {
                 String imgFolder = AliYunFilePaths.EDITOR_FILE;
                 String imageName = UUIDUtils.getUUID() + "." + "jpg";
+                //阿里云客户端
                 OSSClient ossClient = OSSUtil.getOSSClient();
-                boolean flag = OSSUtil.uploadInputStreamObject2OSS(ossClient, file.getInputStream(), imageName, bucketName, imgFolder);
+                //上传
+                boolean flag = OSSUtil.uploadInputStreamObject2OSS(ossClient, file.getInputStream(), imageName, imgFolder);
                 if (flag) {
                     imgUrl = SFtpUtil.ossUrl + "/" + imgFolder + "/" + imageName;
                 }
