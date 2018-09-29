@@ -95,10 +95,17 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 	/**
 	 * 中文、英文、数字、下划线校验 4-24位
 	 */
-	private final static Pattern CH_EN_PATTERN = Pattern.compile("^[\\u4e00-\\u9fa5a-zA-Z]{4,24}+$");
+	private final static Pattern CH_EN_PATTERN = Pattern.compile("^[\\u4e00-\\u9fa5a-z\\d_]{4,24}$");
 	private final static Pattern ID_PATTERN = Pattern.compile("^\\d{6}(18|19|20)?\\d{2}(0[1-9]|1[012])(0[1-9]|[12]\\d|3[01])\\d{3}(\\d|[xX])$");
 	private static final Logger logger = LoggerFactory.getLogger(PersonInfoServiceImpl.class);
 
+	//测试正则
+//	public static void main(String[] args) {
+//		String string = "大猫__";
+//		Matcher m = CH_EN_PATTERN.matcher(string);
+//		System.out.println(m.matches());
+//
+//	}
 	/**
 	 * @author liuyinkai 查看个人信息
 	 */
@@ -210,7 +217,7 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 		String newNickname = params.getNickName();
 
 		if (StringUtils.isNotEmpty(newNickname)) {
-			if (newNickname.length() > 8) {
+			if (newNickname.length() > 24) {
 				throw new RemoteException(UserBizReturnCode.paramError, "您的昵称超出长度！");
 			}
 			String oldNickname = customer.getNickName();

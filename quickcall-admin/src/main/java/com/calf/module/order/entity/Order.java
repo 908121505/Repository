@@ -12,261 +12,337 @@ import java.util.Date;
  * @date: 2018年9月22日 下午4:38:59
  */
 public class Order {
-	private String orderId;
-	private String tradeId;
-    private String productId;
-    private String buyerId;
-    private String sellerId;
-    private String orderDescribe;
-    private Integer orderNum;
-    private BigDecimal orderAmounts;
-    private Integer paymentType;
-    private Date confirmTime;
-    private Date startTime;
-    private Date endTime;
-    private Date orderTime;
-    private Date finishTime;
-    private Byte orderStatus;
-    private String refundReason;
-    private Date paymentTime;
+	   private Long orderId;
 
-    private Date consignTime;
+	    
+	    private Long tradeId;
 
-    
-    private Integer buyerIsEvaluate;
+	    
+	    private Long productId;
 
-   
-    private String buyerMessage;
+	    
+	    private Long buyerId;
 
-    
-    private String buyerEvaluate;
+	   
+	    private Long sellerId;
 
-   
-    private Date createTime;
+	   
+	    private String orderDescribe;
 
-    
-    private Date modifyTime;
+	   
+	    private Integer orderNum;
 
-   
-    private String createMan;
+	   
+	    private BigDecimal orderAmounts;
 
-    
-    private String modifyMan;
+	    
+	    private Integer paymentType;
 
-    
-    private String remark;
+	    
+	    private Date confirmTime;
 
-    
-    public String getOrderId() {
-        return orderId;
-    }
+	    
+	    private Date startTime;
 
-    
-    public void setOrderId(String orderId) {
-        this.orderId = orderId;
-    }
+	    
+	    private Date endTime;
 
-    
-    public String getTradeId() {
-        return tradeId;
-    }
+	   
+	    private Date orderTime;
 
-   
-    public void setTradeId(String tradeId) {
-        this.tradeId = tradeId;
-    }
+	   
+	    private Date finishTime;
 
-    
-    public String getProductId() {
-        return productId;
-    }
+	    
+	    private Integer orderStatus;
 
-    
-    public void setProductId(String productId) {
-        this.productId = productId;
-    }
+	   
+	    private String refundReason;
 
-  
-    public String getBuyerId() {
-        return buyerId;
-    }
+	    
+	    private Date paymentTime;
 
-   
-    public void setBuyerId(String buyerId) {
-        this.buyerId = buyerId;
-    }
+	    
+	    private Date consignTime;
 
-    public String getSellerId() {
-        return sellerId;
-    }
-    public void setSellerId(String sellerId) {
-        this.sellerId = sellerId;
-    }
+	    
+	    private Integer buyerIsEvaluate;
 
-    public String getOrderDescribe() {
-        return orderDescribe;
-    }
+	   
+	    private String buyerMessage;
 
-    public void setOrderDescribe(String orderDescribe) {
-        this.orderDescribe = orderDescribe == null ? null : orderDescribe.trim();
-    }
+	    
+	    private String buyerEvaluate;
 
-    public Integer getOrderNum() {
-        return orderNum;
-    }
+	    
+	    private Date createTime;
 
-    public void setOrderNum(Integer orderNum) {
-        this.orderNum = orderNum;
-    }
+	    
+	    private Date modifyTime;
 
-    public BigDecimal getOrderAmounts() {
-        return orderAmounts;
-    }
+	    
+	    private String createMan;
 
-    public void setOrderAmounts(BigDecimal orderAmounts) {
-        this.orderAmounts = orderAmounts;
-    }
+	    
+	    private String modifyMan;
 
-    public Integer getPaymentType() {
-        return paymentType;
-    }
+	    
+	    private String remark;
 
-    public void setPaymentType(Integer paymentType) {
-        this.paymentType = paymentType;
-    }
+	    
+	    public Long getOrderId() {
+	        return orderId;
+	    }
 
-    public Date getConfirmTime() {
-        return confirmTime;
-    }
+	    
+	    public void setOrderId(Long orderId) {
+	        this.orderId = orderId;
+	    }
 
-    public void setConfirmTime(Date confirmTime) {
-        this.confirmTime = confirmTime;
-    }
+	    
+	    public Long getTradeId() {
+	        return tradeId;
+	    }
 
-    public Date getStartTime() {
-        return startTime;
-    }
+	    
+	    public void setTradeId(Long tradeId) {
+	        this.tradeId = tradeId;
+	    }
 
-    public void setStartTime(Date startTime) {
-        this.startTime = startTime;
-    }
+	   
+	    public Long getProductId() {
+	        return productId;
+	    }
 
-    public Date getEndTime() {
-        return endTime;
-    }
+	    
+	    public void setProductId(Long productId) {
+	        this.productId = productId;
+	    }
 
-    public void setEndTime(Date endTime) {
-        this.endTime = endTime;
-    }
+	    
+	    public Long getBuyerId() {
+	        return buyerId;
+	    }
 
-    public Date getOrderTime() {
-        return orderTime;
-    }
+	    
+	    public void setBuyerId(Long buyerId) {
+	        this.buyerId = buyerId;
+	    }
 
-    public void setOrderTime(Date orderTime) {
-        this.orderTime = orderTime;
-    }
+	    
+	    public Long getSellerId() {
+	        return sellerId;
+	    }
 
-    public Date getFinishTime() {
-        return finishTime;
-    }
+	    public void setSellerId(Long sellerId) {
+	        this.sellerId = sellerId;
+	    }
 
-    public void setFinishTime(Date finishTime) {
-        this.finishTime = finishTime;
-    }
+	   
+	    public String getOrderDescribe() {
+	        return orderDescribe;
+	    }
 
-    public Byte getOrderStatus() {
-        return orderStatus;
-    }
+	    
+	    public void setOrderDescribe(String orderDescribe) {
+	        this.orderDescribe = orderDescribe == null ? null : orderDescribe.trim();
+	    }
 
-    public void setOrderStatus(Byte orderStatus) {
-        this.orderStatus = orderStatus;
-    }
+	    
+	    public Integer getOrderNum() {
+	        return orderNum;
+	    }
 
-    public String getRefundReason() {
-        return refundReason;
-    }
+	   
+	    public void setOrderNum(Integer orderNum) {
+	        this.orderNum = orderNum;
+	    }
 
-    public void setRefundReason(String refundReason) {
-        this.refundReason = refundReason == null ? null : refundReason.trim();
-    }
+	    
+	    public BigDecimal getOrderAmounts() {
+	        return orderAmounts;
+	    }
 
-    public Date getPaymentTime() {
-        return paymentTime;
-    }
+	    
+	    public void setOrderAmounts(BigDecimal orderAmounts) {
+	        this.orderAmounts = orderAmounts;
+	    }
 
-    public void setPaymentTime(Date paymentTime) {
-        this.paymentTime = paymentTime;
-    }
+	    
+	    public Integer getPaymentType() {
+	        return paymentType;
+	    }
 
-    public Date getConsignTime() {
-        return consignTime;
-    }
+	    
+	    public void setPaymentType(Integer paymentType) {
+	        this.paymentType = paymentType;
+	    }
 
-    public void setConsignTime(Date consignTime) {
-        this.consignTime = consignTime;
-    }
+	    
+	    public Date getConfirmTime() {
+	        return confirmTime;
+	    }
 
-    public Integer getBuyerIsEvaluate() {
-        return buyerIsEvaluate;
-    }
+	   
+	    public void setConfirmTime(Date confirmTime) {
+	        this.confirmTime = confirmTime;
+	    }
 
-    public void setBuyerIsEvaluate(Integer buyerIsEvaluate) {
-        this.buyerIsEvaluate = buyerIsEvaluate;
-    }
+	    
+	    public Date getStartTime() {
+	        return startTime;
+	    }
 
-    public String getBuyerMessage() {
-        return buyerMessage;
-    }
+	   
+	    public void setStartTime(Date startTime) {
+	        this.startTime = startTime;
+	    }
 
-    public void setBuyerMessage(String buyerMessage) {
-        this.buyerMessage = buyerMessage == null ? null : buyerMessage.trim();
-    }
+	  
+	    public Date getEndTime() {
+	        return endTime;
+	    }
 
-    public String getBuyerEvaluate() {
-        return buyerEvaluate;
-    }
+	    
+	    public void setEndTime(Date endTime) {
+	        this.endTime = endTime;
+	    }
 
-    public void setBuyerEvaluate(String buyerEvaluate) {
-        this.buyerEvaluate = buyerEvaluate == null ? null : buyerEvaluate.trim();
-    }
+	    
+	    public Date getOrderTime() {
+	        return orderTime;
+	    }
 
-    public Date getCreateTime() {
-        return createTime;
-    }
+	    public void setOrderTime(Date orderTime) {
+	        this.orderTime = orderTime;
+	    }
 
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
+	    public Date getFinishTime() {
+	        return finishTime;
+	    }
 
-    public Date getModifyTime() {
-        return modifyTime;
-    }
-    public void setModifyTime(Date modifyTime) {
-        this.modifyTime = modifyTime;
-    }
+	    
+	    public void setFinishTime(Date finishTime) {
+	        this.finishTime = finishTime;
+	    }
 
-    public String getCreateMan() {
-        return createMan;
-    }
+	   
+	    public Integer getOrderStatus() {
+	        return orderStatus;
+	    }
 
-    public void setCreateMan(String createMan) {
-        this.createMan = createMan == null ? null : createMan.trim();
-    }
+	   
+	    public void setOrderStatus(Integer orderStatus) {
+	        this.orderStatus = orderStatus;
+	    }
 
-    public String getModifyMan() {
-        return modifyMan;
-    }
+	   
+	    public String getRefundReason() {
+	        return refundReason;
+	    }
 
-    public void setModifyMan(String modifyMan) {
-        this.modifyMan = modifyMan == null ? null : modifyMan.trim();
-    }
+	   
+	    public void setRefundReason(String refundReason) {
+	        this.refundReason = refundReason == null ? null : refundReason.trim();
+	    }
 
-    public String getRemark() {
-        return remark;
-    }
+	   
+	    public Date getPaymentTime() {
+	        return paymentTime;
+	    }
 
-    public void setRemark(String remark) {
-        this.remark = remark == null ? null : remark.trim();
-    }
+	   
+	    public void setPaymentTime(Date paymentTime) {
+	        this.paymentTime = paymentTime;
+	    }
+
+	    
+	    public Date getConsignTime() {
+	        return consignTime;
+	    }
+
+	    
+	    public void setConsignTime(Date consignTime) {
+	        this.consignTime = consignTime;
+	    }
+
+	    
+	    public Integer getBuyerIsEvaluate() {
+	        return buyerIsEvaluate;
+	    }
+
+	   
+	    public void setBuyerIsEvaluate(Integer buyerIsEvaluate) {
+	        this.buyerIsEvaluate = buyerIsEvaluate;
+	    }
+
+	    
+	    public String getBuyerMessage() {
+	        return buyerMessage;
+	    }
+
+	    
+	    public void setBuyerMessage(String buyerMessage) {
+	        this.buyerMessage = buyerMessage == null ? null : buyerMessage.trim();
+	    }
+
+	   
+	    public String getBuyerEvaluate() {
+	        return buyerEvaluate;
+	    }
+
+	   
+	    public void setBuyerEvaluate(String buyerEvaluate) {
+	        this.buyerEvaluate = buyerEvaluate == null ? null : buyerEvaluate.trim();
+	    }
+
+	   
+	    public Date getCreateTime() {
+	        return createTime;
+	    }
+
+	    
+	    public void setCreateTime(Date createTime) {
+	        this.createTime = createTime;
+	    }
+
+	    
+	    public Date getModifyTime() {
+	        return modifyTime;
+	    }
+
+	    
+	    public void setModifyTime(Date modifyTime) {
+	        this.modifyTime = modifyTime;
+	    }
+
+	    
+	    public String getCreateMan() {
+	        return createMan;
+	    }
+
+	    
+	    public void setCreateMan(String createMan) {
+	        this.createMan = createMan == null ? null : createMan.trim();
+	    }
+
+	   
+	    public String getModifyMan() {
+	        return modifyMan;
+	    }
+
+	   
+	    public void setModifyMan(String modifyMan) {
+	        this.modifyMan = modifyMan == null ? null : modifyMan.trim();
+	    }
+
+	    
+	    public String getRemark() {
+	        return remark;
+	    }
+
+	   
+	    public void setRemark(String remark) {
+	        this.remark = remark == null ? null : remark.trim();
+	    }
 }

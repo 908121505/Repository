@@ -1,5 +1,15 @@
 package com.honglu.quickcall.task.utils;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.codehaus.jackson.map.ObjectMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.gexin.rp.sdk.base.IPushResult;
 import com.gexin.rp.sdk.base.impl.ListMessage;
 import com.gexin.rp.sdk.base.impl.Target;
@@ -8,16 +18,6 @@ import com.gexin.rp.sdk.base.payload.APNPayload;
 import com.gexin.rp.sdk.base.payload.MultiMedia;
 import com.gexin.rp.sdk.http.IGtPush;
 import com.gexin.rp.sdk.template.TransmissionTemplate;
-import com.honglu.quickcall.common.core.util.UUIDUtils;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * Copyright © 2018 www.xiaoniu.com All rights reserved.
@@ -192,13 +192,13 @@ public class GtPushUtil {
         return alertMsg;
     }
 
-    public static void main(String[] args) {
-        System.out.println(UUIDUtils.getUUID());
+//    public static void main(String[] args) {
+//        System.out.println(UUIDUtils.getUUID());
 
 //		List<String> clientIdList =new  ArrayList<String>();
 //		clientIdList.add("cde7d0a13a65bd77dc5aad9fe2112a09");
 //		clientIdList.add("845975b8717db271dec57050299c8f36");
 //		pushMessage(clientIdList , "11", "22");
-    }
+//    }
 
 }
