@@ -654,7 +654,7 @@ public class OrderServiceImpl implements IOrderService {
 		reasonList.add("态度恶劣");
 		reasonList.add("迟到早退");
 		reasonList.add("消极怠工");
-		reasonList.add("本是本人");
+		reasonList.add("不是本人");
 		commonResponse.setData(reasonList);
 		return commonResponse;
 	}
