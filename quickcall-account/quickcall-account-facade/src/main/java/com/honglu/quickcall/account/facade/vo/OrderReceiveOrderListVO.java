@@ -14,11 +14,13 @@ import java.util.Date;
  */
 public class OrderReceiveOrderListVO implements  Serializable{
 
-	private static final long serialVersionUID = -2082265673734379166L;
+	private static final long serialVersionUID = -6622980617460273069L;
 	/**主播ID*/
 	private Long  orderId;
 	/**主播昵称*/
 	private String  nickName;
+	/**下单人iD*/
+	private Long  buyerId;
 	/**主播头像*/
 	private String  headPortraitUrl;
 	/**产品ID*/
@@ -46,6 +48,16 @@ public class OrderReceiveOrderListVO implements  Serializable{
 	/**支付时间*/
 	private Date  paymentTime;
 	
+	
+	
+
+	public Long getBuyerId() {
+		return buyerId;
+	}
+
+	public void setBuyerId(Long buyerId) {
+		this.buyerId = buyerId;
+	}
 
 	public Date getPaymentTime() {
 		return paymentTime;
