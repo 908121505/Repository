@@ -12,7 +12,7 @@ package com.honglu.quickcall.account.facade.constants;
 public interface OrderSkillConstants {
 	
 	/**默认每页显示条数*/
-	public static  final  Integer  DEFAULT_PAGE_SIZE = 12;
+	public static  final  Integer  DEFAULT_PAGE_SIZE = 6;
     
 	/**产品状态1：可用*/
 	public  static final  Integer  PRODUCT_STATUS_EFFECTIVE = 1 ;
