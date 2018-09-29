@@ -453,6 +453,10 @@
         </dependency>
         <dependency>
             <groupId>com.honglu.quickcall</groupId>
+            <artifactId>quickcall-common-third</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.honglu.quickcall</groupId>
             <artifactId>quickcall-account-facade</artifactId>
         </dependency>
         <dependency>
@@ -460,8 +464,7 @@
             <artifactId>quickcall-activity-facade</artifactId>
         </dependency>
        
-       
-       
+
        <!-- 原管家依赖 -->
        
        <dependency>
@@ -796,33 +799,23 @@
 			<version>2.5.0</version>
 		</dependency>
 
-
-
-
-
-
-
-
-
-
-
     </dependencies>
 
     <profiles>
         <profile>
-            <id>dev</id>
+            <id>vdev</id>
             <properties>
                 <package.environment>profiles/vdev</package.environment>
             </properties>
         </profile>
         <profile>
-            <id>test</id>
+            <id>vtest01</id>
             <properties>
                 <package.environment>profiles/vtest01</package.environment>
             </properties>
         </profile>
         <profile>
-            <id>online</id>
+            <id>vpro</id>
             <properties>
                 <package.environment>profiles/vpro</package.environment>
             </properties>
