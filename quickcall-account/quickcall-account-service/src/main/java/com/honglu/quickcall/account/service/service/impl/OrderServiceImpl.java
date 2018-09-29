@@ -343,7 +343,7 @@ public class OrderServiceImpl implements IOrderService {
 				//消费用户的充值金额
 				BigDecimal  rechargeAmounts =  account.getRechargeAmounts();
 				if(rechargeAmounts != null){
-					if(payAmount.compareTo(rechargeAmounts) < 0){
+					if(payAmount.compareTo(rechargeAmounts) <= 0){
 						commonService.updateOrderForPay(orderId, OrderSkillConstants.ORDER_STATUS_PAYED,new Date());
 						//修改账户余额
 						accountMapper.outAccount(userId, payAmount,TransferTypeEnum.RECHARGE.getType());
