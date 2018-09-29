@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.honglu.quickcall.activity.service.dao.BannerMapper" >
+  <resultMap id="BaseResultMap" type="com.honglu.quickcall.activity.facade.entity.Banner" >
+    <id column="banner_id" property="bannerId" jdbcType="INTEGER" />
+    <result column="banner_type" property="bannerType" jdbcType="TINYINT" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="image_url" property="imageUrl" jdbcType="VARCHAR" />
+    <result column="url" property="url" jdbcType="VARCHAR" />
+    <result column="sort" property="sort" jdbcType="SMALLINT" />
+    <result column="banner_status" property="bannerStatus" jdbcType="TINYINT" />
+    <result column="start_time" property="startTime" jdbcType="TIMESTAMP" />
+    <result column="end_time" property="endTime" jdbcType="TIMESTAMP" />
+    <result column="device_type" property="deviceType" jdbcType="TINYINT" />
+    <result column="app_version" property="appVersion" jdbcType="VARCHAR" />
+    <result column="app_version_rule" property="appVersionRule" jdbcType="TINYINT" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+    <result column="create_man" property="createMan" jdbcType="VARCHAR" />
+    <result column="modify_man" property="modifyMan" jdbcType="VARCHAR" />
+  </resultMap>
+
+  <sql id="Base_Column_List" >
+    banner_id, banner_type, title, image_url, url, sort, banner_status, start_time, 
+    end_time, device_type, app_version, app_version_rule, remark, create_time, modify_time, 
+    create_man, modify_man
+  </sql>
+
+  <!-- 查询Banner给前段展示 -->
+  <select id="queryBannerInfo" resultType="Banner" resultMap="BaseResultMap">
+    SELECT title, image_url, url
+    FROM banner
+    WHERE 1 = 1 and banner_status = 1
+    and  start_time <![CDATA[ <= ]]>NOW() and end_time  <![CDATA[ >= ]]>  NOW()
+    <if test="deviceType != null">
+      and device_type = #{deviceType}
+    </if>
+    <if test="appVersion != null">
+      and app_version = #{appVersion}
+    </if>
+    <if test="appVersionRule != null and appVersionRule != 0 and appVersion != null">
+      <if test="appVersionRule == 1">
+        and app_version_rule = #{appVersionRule} and app_version > #{appVersion}
+      </if>
+      <if test="appVersionRule == 2">
+        and app_version_rule = #{appVersionRule} and app_version <![CDATA[ < ]]> #{appVersion}
+      </if>
+      <if test="appVersionRule == 3">
+        and app_version_rule = #{appVersionRule} and app_version = #{appVersion}
+      </if>
+      <if test="appVersionRule == 4">
+        and app_version_rule = #{appVersionRule} and app_version >= #{appVersion}
+      </if>
+      <if test="appVersionRule == 5">
+        and app_version_rule = #{appVersionRule} and app_version <![CDATA[ <= ]]> #{appVersion}
+      </if>
+    </if>
+    ORDER BY sort ASC,modify_time DESC
+  </select>
+</mapper>

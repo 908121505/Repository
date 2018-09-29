@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.honglu.quickcall.account.service.dao.AccountMapper" >
+  <resultMap id="BaseResultMap" type="com.honglu.quickcall.account.facade.entity.Account" >
+    <id column="account_id" property="accountId" jdbcType="BIGINT" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="TINYINT" />
+    <result column="account_describe" property="accountDescribe" jdbcType="VARCHAR" />
+    <result column="customer_id" property="customerId" jdbcType="BIGINT" />
+    <result column="recharge_amounts" property="rechargeAmounts" jdbcType="DECIMAL" />
+    <result column="remainder_amounts" property="remainderAmounts" jdbcType="DECIMAL" />
+    <result column="usable_amounts" property="usableAmounts" jdbcType="DECIMAL" />
+    <result column="frozen_amounts" property="frozenAmounts" jdbcType="DECIMAL" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+    <result column="create_man" property="createMan" jdbcType="VARCHAR" />
+    <result column="modify_man" property="modifyMan" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    account_id, name, type, account_describe, customer_id, recharge_amounts, remainder_amounts, 
+    usable_amounts, frozen_amounts, create_time, modify_time, create_man, modify_man, 
+    remark
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from account
+    where account_id = #{accountId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from account
+    where account_id = #{accountId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.honglu.quickcall.account.facade.entity.Account" >
+    insert into account (account_id, name, type, 
+      account_describe, customer_id, recharge_amounts, 
+      remainder_amounts, usable_amounts, frozen_amounts, 
+      create_time, modify_time, create_man, 
+      modify_man, remark)
+    values (#{accountId,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{type,jdbcType=TINYINT}, 
+      #{accountDescribe,jdbcType=VARCHAR}, #{customerId,jdbcType=BIGINT}, #{rechargeAmounts,jdbcType=DECIMAL}, 
+      #{remainderAmounts,jdbcType=DECIMAL}, #{usableAmounts,jdbcType=DECIMAL}, #{frozenAmounts,jdbcType=DECIMAL}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{modifyTime,jdbcType=TIMESTAMP}, #{createMan,jdbcType=VARCHAR}, 
+      #{modifyMan,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.honglu.quickcall.account.facade.entity.Account" >
+    insert into account
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="accountId != null" >
+        account_id,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="accountDescribe != null" >
+        account_describe,
+      </if>
+      <if test="customerId != null" >
+        customer_id,
+      </if>
+      <if test="rechargeAmounts != null" >
+        recharge_amounts,
+      </if>
+      <if test="remainderAmounts != null" >
+        remainder_amounts,
+      </if>
+      <if test="usableAmounts != null" >
+        usable_amounts,
+      </if>
+      <if test="frozenAmounts != null" >
+        frozen_amounts,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="modifyTime != null" >
+        modify_time,
+      </if>
+      <if test="createMan != null" >
+        create_man,
+      </if>
+      <if test="modifyMan != null" >
+        modify_man,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="accountId != null" >
+        #{accountId,jdbcType=BIGINT},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=TINYINT},
+      </if>
+      <if test="accountDescribe != null" >
+        #{accountDescribe,jdbcType=VARCHAR},
+      </if>
+      <if test="customerId != null" >
+        #{customerId,jdbcType=BIGINT},
+      </if>
+      <if test="rechargeAmounts != null" >
+        #{rechargeAmounts,jdbcType=DECIMAL},
+      </if>
+      <if test="remainderAmounts != null" >
+        #{remainderAmounts,jdbcType=DECIMAL},
+      </if>
+      <if test="usableAmounts != null" >
+        #{usableAmounts,jdbcType=DECIMAL},
+      </if>
+      <if test="frozenAmounts != null" >
+        #{frozenAmounts,jdbcType=DECIMAL},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyTime != null" >
+        #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createMan != null" >
+        #{createMan,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyMan != null" >
+        #{modifyMan,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.honglu.quickcall.account.facade.entity.Account" >
+    update account
+    <set >
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=TINYINT},
+      </if>
+      <if test="accountDescribe != null" >
+        account_describe = #{accountDescribe,jdbcType=VARCHAR},
+      </if>
+      <if test="customerId != null" >
+        customer_id = #{customerId,jdbcType=BIGINT},
+      </if>
+      <if test="rechargeAmounts != null" >
+        recharge_amounts = #{rechargeAmounts,jdbcType=DECIMAL},
+      </if>
+      <if test="remainderAmounts != null" >
+        remainder_amounts = #{remainderAmounts,jdbcType=DECIMAL},
+      </if>
+      <if test="usableAmounts != null" >
+        usable_amounts = #{usableAmounts,jdbcType=DECIMAL},
+      </if>
+      <if test="frozenAmounts != null" >
+        frozen_amounts = #{frozenAmounts,jdbcType=DECIMAL},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyTime != null" >
+        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createMan != null" >
+        create_man = #{createMan,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyMan != null" >
+        modify_man = #{modifyMan,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where account_id = #{accountId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.honglu.quickcall.account.facade.entity.Account" >
+    update account
+    set name = #{name,jdbcType=VARCHAR},
+      type = #{type,jdbcType=TINYINT},
+      account_describe = #{accountDescribe,jdbcType=VARCHAR},
+      customer_id = #{customerId,jdbcType=BIGINT},
+      recharge_amounts = #{rechargeAmounts,jdbcType=DECIMAL},
+      remainder_amounts = #{remainderAmounts,jdbcType=DECIMAL},
+      usable_amounts = #{usableAmounts,jdbcType=DECIMAL},
+      frozen_amounts = #{frozenAmounts,jdbcType=DECIMAL},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      create_man = #{createMan,jdbcType=VARCHAR},
+      modify_man = #{modifyMan,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR}
+    where account_id = #{accountId,jdbcType=BIGINT}
+  </update>
+  
+  
+  <!-- 创建账户 -->
+  <insert id="createUserAccount" parameterType="com.honglu.quickcall.account.facade.entity.Account" >
+  
+  insert   into 
+  account(account_id,customer_id)VALUES(#{accountId},#{customerId})
+  </insert>
+
+  <!-- 查询账户  -->
+  <select id="queryAccount" parameterType="Map" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from account
+    where customer_id = #{userId}
+  </select>
+   <!-- 入账 -->
+   <update id="inAccount" parameterType="Map">
+    
+    update account set 
+    <if test="type==1">
+    recharge_amounts=recharge_amounts+#{amount}
+    </if>
+    <if test="type==2">
+    remainder_amounts=remainder_amounts+#{amount}
+    </if>
+    where customer_id = #{userId}
+   
+   </update>
+  
+   <!-- 出账 -->
+   <update id="outAccount" parameterType="Map">
+    update account set
+    <if test="type==1">
+    recharge_amounts=recharge_amounts-#{amount}
+    </if>
+    <if test="type==2">
+    remainder_amounts=remainder_amounts-#{amount}
+    </if>
+    where customer_id = #{userId}
+   </update>
+  
+  
+</mapper>

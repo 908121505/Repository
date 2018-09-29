@@ -10,10 +10,10 @@
         <dependent-module archiveName="quickcall-common-core-1.0.0-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/quickcall-common-core/quickcall-common-core">
             <dependency-type>uses</dependency-type>
         </dependent-module>
-        <dependent-module archiveName="quickcall-account-facade-1.0.0-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/quickcall-account-facade/quickcall-account-facade">
+        <dependent-module archiveName="quickcall-common-third-1.0.0-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/quickcall-common-third/quickcall-common-third">
             <dependency-type>uses</dependency-type>
         </dependent-module>
-        <dependent-module archiveName="quickcall-common-third-1.0.0-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/quickcall-common-third/quickcall-common-third">
+        <dependent-module archiveName="quickcall-account-facade-1.0.0-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/quickcall-account-facade/quickcall-account-facade">
             <dependency-type>uses</dependency-type>
         </dependent-module>
         <dependent-module archiveName="quickcall-activity-facade-1.0.0-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/quickcall-activity-facade/quickcall-activity-facade">

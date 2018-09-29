@@ -9,7 +9,5 @@
 
     <!-- 消费者 -->
     <dubbo:reference group="accountCenter" id="accountDubboBusiness" interface="com.honglu.quickcall.account.facade.business.AccountDubboBusiness" check="false" version="0.0.1"/>
-    <dubbo:reference group="accountCenter" id="paymentDubboBusiness" interface="com.honglu.quickcall.account.facade.business.PaymentDubboBusiness" check="false" version="0.0.1"/>
-    <dubbo:reference group="accountCenter" id="accountCommonBusiness" interface="com.honglu.quickcall.account.facade.business.AccountCommonBusiness" check="false" version="0.0.1"/>
 
 </beans>

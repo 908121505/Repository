@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.honglu.quickcall.user.service.dao.CustomerInterestMapper" >
+  <resultMap id="BaseResultMap" type="com.honglu.quickcall.user.facade.entity.CustomerInterest" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="customer_id" property="customerId" jdbcType="BIGINT" />
+    <result column="interest_id" property="interestId" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+    <result column="create_man" property="createMan" jdbcType="VARCHAR" />
+    <result column="modify_man" property="modifyMan" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, customer_id, interest_id, create_time, modify_time, create_man, modify_man, remark
+  </sql>
+   <select id="selectRepetitiveData" resultType="java.lang.Integer" parameterType="com.honglu.quickcall.user.facade.entity.CustomerInterest" >
+    SELECT COUNT(*) FROM customer_interest WHERE customer_id=#{customerId} AND interest_id=#{interestId};
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from customer_interest
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from customer_interest
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByCustomerId" parameterType="java.lang.Long" >
+    delete from customer_interest
+    where customer_id = #{customerId}
+  </delete>
+  <insert id="insert" parameterType="com.honglu.quickcall.user.facade.entity.CustomerInterest" >
+    insert into customer_interest (id, customer_id, interest_id, 
+      create_time, modify_time, create_man, 
+      modify_man, remark)
+    values (#{id,jdbcType=BIGINT}, #{customerId,jdbcType=BIGINT}, #{interestId,jdbcType=INTEGER}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{modifyTime,jdbcType=TIMESTAMP}, #{createMan,jdbcType=VARCHAR}, 
+      #{modifyMan,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.honglu.quickcall.user.facade.entity.CustomerInterest" >
+    insert into customer_interest
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="customerId != null" >
+        customer_id,
+      </if>
+      <if test="interestId != null" >
+        interest_id,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="modifyTime != null" >
+        modify_time,
+      </if>
+      <if test="createMan != null" >
+        create_man,
+      </if>
+      <if test="modifyMan != null" >
+        modify_man,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="customerId != null" >
+        #{customerId,jdbcType=BIGINT},
+      </if>
+      <if test="interestId != null" >
+        #{interestId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyTime != null" >
+        #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createMan != null" >
+        #{createMan,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyMan != null" >
+        #{modifyMan,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.honglu.quickcall.user.facade.entity.CustomerInterest" >
+    update customer_interest
+    <set >
+      <if test="customerId != null" >
+        customer_id = #{customerId,jdbcType=BIGINT},
+      </if>
+      <if test="interestId != null" >
+        interest_id = #{interestId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyTime != null" >
+        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createMan != null" >
+        create_man = #{createMan,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyMan != null" >
+        modify_man = #{modifyMan,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByCustomerIdSelective" parameterType="com.honglu.quickcall.user.facade.entity.CustomerInterest" >
+    update customer_interest
+    <set >
+      <if test="customerId != null" >
+        customer_id = #{customerId,jdbcType=BIGINT},
+      </if>
+      <if test="interestId != null" >
+        interest_id = #{interestId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyTime != null" >
+        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createMan != null" >
+        create_man = #{createMan,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyMan != null" >
+        modify_man = #{modifyMan,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.honglu.quickcall.user.facade.entity.CustomerInterest" >
+    update customer_interest
+    set customer_id = #{customerId,jdbcType=BIGINT},
+      interest_id = #{interestId,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      create_man = #{createMan,jdbcType=VARCHAR},
+      modify_man = #{modifyMan,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

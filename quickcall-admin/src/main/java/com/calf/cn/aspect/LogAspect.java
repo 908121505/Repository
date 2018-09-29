@@ -10,6 +10,7 @@ import org.aspectj.lang.annotation.Aspect;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.calf.cn.aspect.MethodLog;
 import com.calf.cn.service.BaseManager;
 import com.calf.cn.thread.SysLogThread;
 import com.calf.cn.utils.DateUtil;

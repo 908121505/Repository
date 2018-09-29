@@ -3,22 +3,25 @@ package com.honglu.quickcall.account.facade.exchange.request;
 import com.honglu.quickcall.account.facade.code.AccountFunctionType;
 import com.honglu.quickcall.common.api.exchange.AbstractRequest;
 
-/**
- * Created by len.song on 2017-12-18.
- */
 public class QueryAccountRequest extends AbstractRequest {
-    private Integer userId;                 //用户id
+     
+	private Long userId;
+	
+	
+	public Long getUserId() {
+		return userId;
+	}
 
-    @Override
-    public String getBizCode() {
-        return AccountFunctionType.QueryAccount;
-    }
 
-    public Integer getUserId() {
-        return userId;
-    }
+	public void setUserId(Long userId) {
+		this.userId = userId;
+	}
 
-    public void setUserId(Integer userId) {
-        this.userId = userId;
-    }
+
+	@Override
+	public String getBizCode() {
+		// TODO Auto-generated method stub
+		return AccountFunctionType.QueryAccount;
+	}
+
 }

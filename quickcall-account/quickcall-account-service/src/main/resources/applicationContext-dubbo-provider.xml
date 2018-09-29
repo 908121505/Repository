@@ -12,11 +12,7 @@
     <dubbo:protocol name="dubbo" port="21350" serialization="kryo"/>
 
     <!-- 注册服务端 -->
-    <!--支付相关 -->
-    <dubbo:service group="accountCenter" interface="com.honglu.quickcall.account.facade.business.PaymentDubboBusiness" ref="Account.PaymentDubboBusiness" timeout="30000" retries="0" version="0.0.1"/>
     <!--账户相关 -->
     <dubbo:service group="accountCenter" interface="com.honglu.quickcall.account.facade.business.AccountDubboBusiness" ref="Account.AccountDubboBusiness" timeout="30000" retries="0" version="0.0.1"/>
-    <!-- 账户中其他普通接口 -->
-    <dubbo:service group="accountCenter" interface="com.honglu.quickcall.account.facade.business.AccountCommonBusiness" ref="Account.AccountCommonBusiness" timeout="30000" retries="0" version="0.0.1"/>
-
+   
 </beans>

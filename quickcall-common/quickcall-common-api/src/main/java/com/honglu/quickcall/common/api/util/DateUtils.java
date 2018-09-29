@@ -6,6 +6,8 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+import org.apache.commons.lang3.StringUtils;
+
 public class DateUtils {
 
     static SimpleDateFormat dateFormat = null;
@@ -121,6 +123,26 @@ public class DateUtils {
         dateFormat = new SimpleDateFormat(date_format);
         return dateFormat.parse(date);
     }
+    
+    /**
+     * 将字符串日期转换为Date类型
+     *
+     * @param date
+     * @return
+     */
+    public static Date formatDateExt(String dateStr) {
+    	if(StringUtils.isBlank(dateStr)){
+    		return null ;
+    	}
+        dateFormat = new SimpleDateFormat(date_format);
+        Date date = null;
+		try {
+			date = dateFormat.parse(dateStr);
+		} catch (ParseException e) {
+			
+		}
+        return date;
+    }
 
     public static Date getNextDay(Date date) {
         Calendar calendar = Calendar.getInstance();
@@ -158,5 +180,22 @@ public class DateUtils {
         dateFormat = new SimpleDateFormat(date_format);
         return dateFormat.format(currentDate);
     }
+    
+    
+    /**
+     * 日期添加对应的分钟数
+     * @param date
+     * @param minutes
+     * @return
+     */
+    public static Date getAddDate(Date  date,int  minutes)  {
+    	Calendar  cal =  Calendar.getInstance();
+    	cal.setTime(date);
+    	cal.add(Calendar.MINUTE, minutes);
+    	return   cal.getTime()  ;
+    }
+    
+    
+    
 
 }

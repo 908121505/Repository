@@ -1,0 +1,492 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.honglu.quickcall.user.service.dao.CustomerMapper" >
+  <resultMap id="BaseResultMap" type="com.honglu.quickcall.user.facade.entity.Customer" >
+    <id column="customer_id" property="customerId" jdbcType="BIGINT" />
+    <result column="phone" property="phone"  />
+    <result column="real_name" property="realName" jdbcType="VARCHAR" />
+    <result column="sex" property="sex"   />
+    <result column="nick_name" property="nickName" jdbcType="VARCHAR" />
+    <result column="type" property="type"   />
+    <result column="credentials_type" property="credentialsType"   />
+    <result column="credentials_num" property="credentialsNum" jdbcType="VARCHAR" />
+    <result column="interest_id" property="interestId" jdbcType="INTEGER" />
+    <result column="wechat_open_id" property="wechatOpenId" jdbcType="VARCHAR" />
+    <result column="qq_open_id" property="qqOpenId" jdbcType="VARCHAR" />
+    <result column="microblog_open_id" property="microblogOpenId" jdbcType="VARCHAR" />
+    <result column="occupation_id" property="occupationId" jdbcType="INTEGER" />
+    <result column="front_portrait_url" property="frontPortraitUrl" jdbcType="VARCHAR" />
+    <result column="back_portrait_url" property="backPortraitUrl" jdbcType="VARCHAR" />
+    <result column="head_portrait_url" property="headPortraitUrl" jdbcType="VARCHAR" />
+    <result column="source" property="source"   />
+    <result column="cust_status" property="custStatus"   />
+    <result column="cust_password" property="custPassword" jdbcType="VARCHAR" />
+    <result column="sign_name" property="signName" jdbcType="VARCHAR" />
+    <result column="star_sign" property="starSign" jdbcType="CHAR" />
+    <result column="birthday" property="birthday" jdbcType="TIMESTAMP" />
+    <result column="voice_url" property="voiceUrl" jdbcType="VARCHAR" />
+    <result column="v_status" property="vStatus"   />
+    <result column="identity_status" property="identityStatus"   />
+    <result column="token_code" property="tokenCode" jdbcType="VARCHAR" />
+    <result column="other_relation" property="otherRelation" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+    <result column="create_man" property="createMan" jdbcType="VARCHAR" />
+    <result column="modify_man" property="modifyMan" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="app_channel_name" property="appChannelName" jdbcType="VARCHAR" />
+    <result column="device_id" property="deviceId" jdbcType="VARCHAR" />
+    <result column="login_time" property="loginTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+ <sql id="Base_Column_List" >
+    customer_id, phone, real_name, sex, nick_name, type, credentials_type, credentials_num, 
+    interest_id, wechat_open_id, qq_open_id, microblog_open_id, occupation_id, front_portrait_url, 
+    back_portrait_url, head_portrait_url, source, cust_status, cust_password, sign_name, 
+    star_sign, birthday, voice_url, v_status, identity_status, token_code, other_relation, 
+    create_time, modify_time, create_man, modify_man, remark, app_channel_name, device_id, 
+    login_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from customer
+    where customer_id = #{customerId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from customer
+    where customer_id = #{customerId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.honglu.quickcall.user.facade.entity.Customer" >
+    insert into customer (customer_id, phone, real_name, 
+      sex, nick_name, type, 
+      credentials_type, credentials_num, interest_id, 
+      wechat_open_id, qq_open_id, microblog_open_id, 
+      occupation_id, front_portrait_url, back_portrait_url, 
+      head_portrait_url, source, cust_status, 
+      cust_password, sign_name, star_sign, 
+      birthday, voice_url, v_status, 
+      identity_status, token_code, other_relation, 
+      create_time, modify_time, create_man, 
+      modify_man, remark, app_channel_name, 
+      device_id, login_time)
+    values (#{customerId,jdbcType=BIGINT}, #{phone,jdbcType=INTEGER}, #{realName,jdbcType=VARCHAR}, 
+      #{sex,jdbcType=TINYINT}, #{nickName,jdbcType=VARCHAR}, #{type,jdbcType=TINYINT}, 
+      #{credentialsType,jdbcType=TINYINT}, #{credentialsNum,jdbcType=VARCHAR}, #{interestId,jdbcType=INTEGER}, 
+      #{wechatOpenId,jdbcType=VARCHAR}, #{qqOpenId,jdbcType=VARCHAR}, #{microblogOpenId,jdbcType=VARCHAR}, 
+      #{occupationId,jdbcType=INTEGER}, #{frontPortraitUrl,jdbcType=VARCHAR}, #{backPortraitUrl,jdbcType=VARCHAR}, 
+      #{headPortraitUrl,jdbcType=VARCHAR}, #{source,jdbcType=TINYINT}, #{custStatus,jdbcType=TINYINT}, 
+      #{custPassword,jdbcType=VARCHAR}, #{signName,jdbcType=VARCHAR}, #{starSign,jdbcType=CHAR}, 
+      #{birthday,jdbcType=TIMESTAMP}, #{voiceUrl,jdbcType=VARCHAR}, #{vStatus,jdbcType=TINYINT},
+      #{identityStatus,jdbcType=TINYINT}, #{tokenCode,jdbcType=VARCHAR}, #{otherRelation,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{modifyTime,jdbcType=TIMESTAMP}, #{createMan,jdbcType=VARCHAR}, 
+      #{modifyMan,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{appChannelName,jdbcType=VARCHAR}, 
+      #{deviceId,jdbcType=VARCHAR}, #{loginTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.honglu.quickcall.user.facade.entity.Customer" >
+    insert into customer
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="customerId != null" >
+        customer_id,
+      </if>
+      <if test="phone != null" >
+        phone,
+      </if>
+      <if test="realName != null" >
+        real_name,
+      </if>
+      <if test="sex != null" >
+        sex,
+      </if>
+      <if test="nickName != null" >
+        nick_name,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="credentialsType != null" >
+        credentials_type,
+      </if>
+      <if test="credentialsNum != null" >
+        credentials_num,
+      </if>
+      <if test="interestId != null" >
+        interest_id,
+      </if>
+      <if test="wechatOpenId != null" >
+        wechat_open_id,
+      </if>
+      <if test="qqOpenId != null" >
+        qq_open_id,
+      </if>
+      <if test="microblogOpenId != null" >
+        microblog_open_id,
+      </if>
+      <if test="occupationId != null" >
+        occupation_id,
+      </if>
+      <if test="frontPortraitUrl != null" >
+        front_portrait_url,
+      </if>
+      <if test="backPortraitUrl != null" >
+        back_portrait_url,
+      </if>
+      <if test="headPortraitUrl != null" >
+        head_portrait_url,
+      </if>
+      <if test="source != null" >
+        source,
+      </if>
+      <if test="custStatus != null" >
+        cust_status,
+      </if>
+      <if test="custPassword != null" >
+        cust_password,
+      </if>
+      <if test="signName != null" >
+        sign_name,
+      </if>
+      <if test="starSign != null" >
+        star_sign,
+      </if>
+      <if test="birthday != null" >
+        birthday,
+      </if>
+      <if test="voiceUrl != null" >
+        voice_url,
+      </if>
+      <if test="vStatus != null" >
+        v_status,
+      </if>
+      <if test="identityStatus != null" >
+        identity_status,
+      </if>
+      <if test="tokenCode != null" >
+        token_code,
+      </if>
+      <if test="otherRelation != null" >
+        other_relation,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="modifyTime != null" >
+        modify_time,
+      </if>
+      <if test="createMan != null" >
+        create_man,
+      </if>
+      <if test="modifyMan != null" >
+        modify_man,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="appChannelName != null" >
+        app_channel_name,
+      </if>
+      <if test="deviceId != null" >
+        device_id,
+      </if>
+      <if test="loginTime != null" >
+        login_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="customerId != null" >
+        #{customerId,jdbcType=BIGINT},
+      </if>
+      <if test="phone != null" >
+        #{phone,jdbcType=INTEGER},
+      </if>
+      <if test="realName != null" >
+        #{realName,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null" >
+        #{sex,jdbcType=TINYINT},
+      </if>
+      <if test="nickName != null" >
+        #{nickName,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=TINYINT},
+      </if>
+      <if test="credentialsType != null" >
+        #{credentialsType,jdbcType=TINYINT},
+      </if>
+      <if test="credentialsNum != null" >
+        #{credentialsNum,jdbcType=VARCHAR},
+      </if>
+      <if test="interestId != null" >
+        #{interestId,jdbcType=INTEGER},
+      </if>
+      <if test="wechatOpenId != null" >
+        #{wechatOpenId,jdbcType=VARCHAR},
+      </if>
+      <if test="qqOpenId != null" >
+        #{qqOpenId,jdbcType=VARCHAR},
+      </if>
+      <if test="microblogOpenId != null" >
+        #{microblogOpenId,jdbcType=VARCHAR},
+      </if>
+      <if test="occupationId != null" >
+        #{occupationId,jdbcType=INTEGER},
+      </if>
+      <if test="frontPortraitUrl != null" >
+        #{frontPortraitUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="backPortraitUrl != null" >
+        #{backPortraitUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="headPortraitUrl != null" >
+        #{headPortraitUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="source != null" >
+        #{source,jdbcType=TINYINT},
+      </if>
+      <if test="custStatus != null" >
+        #{custStatus,jdbcType=TINYINT},
+      </if>
+      <if test="custPassword != null" >
+        #{custPassword,jdbcType=VARCHAR},
+      </if>
+      <if test="signName != null" >
+        #{signName,jdbcType=VARCHAR},
+      </if>
+      <if test="starSign != null" >
+        #{starSign,jdbcType=CHAR},
+      </if>
+      <if test="birthday != null" >
+        #{birthday,jdbcType=TIMESTAMP},
+      </if>
+      <if test="voiceUrl != null" >
+        #{voiceUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="vStatus != null" >
+        #{vStatus,jdbcType=TINYINT},
+      </if>
+      <if test="identityStatus != null" >
+        #{identityStatus,jdbcType=TINYINT},
+      </if>
+      <if test="tokenCode != null" >
+        #{tokenCode,jdbcType=VARCHAR},
+      </if>
+      <if test="otherRelation != null" >
+        #{otherRelation,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyTime != null" >
+        #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createMan != null" >
+        #{createMan,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyMan != null" >
+        #{modifyMan,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="appChannelName != null" >
+        #{appChannelName,jdbcType=VARCHAR},
+      </if>
+      <if test="deviceId != null" >
+        #{deviceId,jdbcType=VARCHAR},
+      </if>
+      <if test="loginTime != null" >
+        #{loginTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.honglu.quickcall.user.facade.entity.Customer" >
+    update customer
+    <set >
+      <if test="phone != null" >
+        phone = #{phone,jdbcType=INTEGER},
+      </if>
+      <if test="realName != null" >
+        real_name = #{realName,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null" >
+        sex = #{sex,jdbcType=TINYINT},
+      </if>
+      <if test="nickName != null" >
+        nick_name = #{nickName,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=TINYINT},
+      </if>
+      <if test="credentialsType != null" >
+        credentials_type = #{credentialsType,jdbcType=TINYINT},
+      </if>
+      <if test="credentialsNum != null" >
+        credentials_num = #{credentialsNum,jdbcType=VARCHAR},
+      </if>
+      <if test="interestId != null" >
+        interest_id = #{interestId,jdbcType=INTEGER},
+      </if>
+      <if test="wechatOpenId != null" >
+        wechat_open_id = #{wechatOpenId,jdbcType=VARCHAR},
+      </if>
+      <if test="qqOpenId != null" >
+        qq_open_id = #{qqOpenId,jdbcType=VARCHAR},
+      </if>
+      <if test="microblogOpenId != null" >
+        microblog_open_id = #{microblogOpenId,jdbcType=VARCHAR},
+      </if>
+      <if test="occupationId != null" >
+        occupation_id = #{occupationId,jdbcType=INTEGER},
+      </if>
+      <if test="frontPortraitUrl != null" >
+        front_portrait_url = #{frontPortraitUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="backPortraitUrl != null" >
+        back_portrait_url = #{backPortraitUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="headPortraitUrl != null" >
+        head_portrait_url = #{headPortraitUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="source != null" >
+        source = #{source,jdbcType=TINYINT},
+      </if>
+      <if test="custStatus != null" >
+        cust_status = #{custStatus,jdbcType=TINYINT},
+      </if>
+      <if test="custPassword != null" >
+        cust_password = #{custPassword,jdbcType=VARCHAR},
+      </if>
+      <if test="signName != null" >
+        sign_name = #{signName,jdbcType=VARCHAR},
+      </if>
+      <if test="starSign != null" >
+        star_sign = #{starSign,jdbcType=CHAR},
+      </if>
+      <if test="birthday != null" >
+        birthday = #{birthday,jdbcType=TIMESTAMP},
+      </if>
+      <if test="voiceUrl != null" >
+        voice_url = #{voiceUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="vStatus != null" >
+        v_status = #{vStatus,jdbcType=TINYINT},
+      </if>
+      <if test="identityStatus != null" >
+        identity_status = #{identityStatus,jdbcType=TINYINT},
+      </if>
+      <if test="tokenCode != null" >
+        token_code = #{tokenCode,jdbcType=VARCHAR},
+      </if>
+      <if test="otherRelation != null" >
+        other_relation = #{otherRelation,jdbcType=VARCHAR},
+      </if>
+      modify_time = NOW(),
+      <if test="modifyMan != null" >
+        modify_man = #{modifyMan,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="appChannelName != null" >
+        app_channel_name = #{appChannelName,jdbcType=VARCHAR},
+      </if>
+      <if test="deviceId != null" >
+        device_id = #{deviceId,jdbcType=VARCHAR},
+      </if>
+      <if test="loginTime != null" >
+        login_time = #{loginTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where customer_id = #{customerId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.honglu.quickcall.user.facade.entity.Customer" >
+    update customer
+    set phone = #{phone,jdbcType=INTEGER},
+      real_name = #{realName,jdbcType=VARCHAR},
+      sex = #{sex,jdbcType=TINYINT},
+      nick_name = #{nickName,jdbcType=VARCHAR},
+      type = #{type,jdbcType=TINYINT},
+      credentials_type = #{credentialsType,jdbcType=TINYINT},
+      credentials_num = #{credentialsNum,jdbcType=VARCHAR},
+      interest_id = #{interestId,jdbcType=INTEGER},
+      wechat_open_id = #{wechatOpenId,jdbcType=VARCHAR},
+      qq_open_id = #{qqOpenId,jdbcType=VARCHAR},
+      microblog_open_id = #{microblogOpenId,jdbcType=VARCHAR},
+      occupation_id = #{occupationId,jdbcType=INTEGER},
+      front_portrait_url = #{frontPortraitUrl,jdbcType=VARCHAR},
+      back_portrait_url = #{backPortraitUrl,jdbcType=VARCHAR},
+      head_portrait_url = #{headPortraitUrl,jdbcType=VARCHAR},
+      source = #{source,jdbcType=TINYINT},
+      cust_status = #{custStatus,jdbcType=TINYINT},
+      cust_password = #{custPassword,jdbcType=VARCHAR},
+      sign_name = #{signName,jdbcType=VARCHAR},
+      star_sign = #{starSign,jdbcType=CHAR},
+      birthday = #{birthday,jdbcType=TIMESTAMP},
+      voice_url = #{voiceUrl,jdbcType=VARCHAR},
+      v_status = #{vStatus,jdbcType=TINYINT},
+      identity_status = #{identityStatus,jdbcType=TINYINT},
+      token_code = #{tokenCode,jdbcType=VARCHAR},
+      other_relation = #{otherRelation,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      create_man = #{createMan,jdbcType=VARCHAR},
+      modify_man = #{modifyMan,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      app_channel_name = #{appChannelName,jdbcType=VARCHAR},
+      device_id = #{deviceId,jdbcType=VARCHAR},
+      login_time = #{loginTime,jdbcType=TIMESTAMP}
+    where customer_id = #{customerId,jdbcType=BIGINT}
+  </update>
+
+  <!--登录  -->
+  <select id="login" resultMap="BaseResultMap" parameterType="com.honglu.quickcall.user.facade.entity.Customer">
+    select 
+    <include refid="Base_Column_List" />
+    from customer
+    where 1=1
+    <if test="phone!=null and phone!=''">
+    and phone=#{phone}
+    </if>
+    <if test="custPassword!=null and custPassword !=''">
+    and cust_password=#{custPassword}
+    </if>
+    <if test="wechatOpenId!=null and wechatOpenId!=''">
+    and wechat_open_id=#{wechatOpenId}
+    </if>
+    <if test="qqOpenId!=null and qqOpenId!=''">
+    and qq_open_id=#{qqOpenId}
+    </if>
+    <if test="microblogOpenId!=null and microblogOpenId!=''">
+    and microblog_open_id=#{microblogOpenId}
+    </if>
+    </select>
+    <!-- 设置密码 -->
+    <update id="customerSetPwd" parameterType="Map"  >
+     update customer set cust_password=#{passWord}
+     where phone=#{phone}
+    </update>
+    <!-- 设置用户头像或者昵称 -->
+    <update id="customerSetHeardUrl" parameterType="Map"  >
+     update customer set head_portrait_url=#{headPortraitUrl},nick_name=#{nickName},token_code=#{tokenCode}
+     where phone=#{phone}
+    </update>
+
+  <!-- 查询用户身份认证信息 -->
+  <select id="queryUserIdCardCertificationInfo" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select
+      customer_id, real_name, credentials_type, credentials_num,
+      front_portrait_url, back_portrait_url,identity_status
+    from customer
+    where customer_id = #{customerId,jdbcType=BIGINT}
+  </select>
+  <select id="showHomePageLogout" resultType="com.honglu.quickcall.user.facade.entity.in.HomePageLogout" parameterType="java.lang.Long" >
+    select 
+    customer_id as customerId,sex, nick_name as nickname, type,credentials_num as credentialsNum,
+    interest_id as interestId,occupation_id as occupationId, front_portrait_url as frontPortraitUrl, 
+    cust_status as custStatus,sign_name as signName,head_portrait_url as headPortraitUrl,
+    star_sign as starSign, birthday, voice_url as voiceUrl, v_status as vStatus, identity_status as identityStatus, token_code as tokenCode, other_relation as otherRelation 
+    
+    from customer
+    where customer_id = #{customerId,jdbcType=BIGINT}
+  </select>
+</mapper>

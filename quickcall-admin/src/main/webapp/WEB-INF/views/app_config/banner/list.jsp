@@ -22,11 +22,10 @@
 				<div class="col-md-2">
 					<div class="form-group">
 						<div class="input-group">
-							<div class="input-group-addon">状态</div>
-							<select class="form-control" id="state">
+							<div class="input-group-addon">banner类型</div>
+							<select class="form-control" id="bannerType_query" name="bannerType">
 								<option value="">--请选择--</option>
-								<option value="1">开启</option>
-								<option value="0">关闭</option>
+								<option value="1" ${entity.bannerType=='1'?'selected':''}>首页banner</option>
 							</select>
 						</div>
 					</div>
@@ -34,12 +33,11 @@
 				<div class="col-md-2">
 					<div class="form-group">
 						<div class="input-group">
-							<div class="input-group-addon">banner类型</div>
-							<select class="form-control" id="bannerType_query" name="bannerType">
-								<option value="1" ${entity.bannerType=='1'?'selected':''}>首页banner</option>
-								<option value="2"  ${entity.bannerType=='2'?'selected':''}>活动banner</option>
-								<option value="5"  ${entity.bannerType=='5'?'selected':''}>社区banner</option>
-								<option value="9"  ${entity.bannerType=='9'?'selected':''}>工具banner</option>
+							<div class="input-group-addon">状态</div>
+							<select class="form-control" id="bannerStatus">
+								<option value="">--请选择--</option>
+								<option value="1">开启</option>
+								<option value="0">关闭</option>
 							</select>
 						</div>
 					</div>
@@ -85,7 +83,7 @@
 			              'sClass':"text-center"
 			            },
 			            { 
-			               "data": "image",
+			               "data": "imageUrl",
 			               "sTitle":"图片",
 			               'sClass':"text-center",
 			               "mRender": function(data, type, full) { 
@@ -167,13 +165,18 @@
                             "sTitle":"版本号",
                             'sClass':"text-center"
                         },
+                        {
+                            "data": "sort",
+                            "sTitle":"排序",
+                            'sClass':"text-center"
+                        },
 			            { 
 			                "data": "remark",
 			                "sTitle":"备注",
 			                'sClass':"text-center"
 			            },
 			            { 
-			                "data": "state",
+			                "data": "bannerStatus",
 			                "sTitle":"状态",
 			                'sClass':"text-center",
 			                "mRender": function(data, type, full) { 
@@ -190,14 +193,14 @@
 			         ],
 					 fnServerParams: function (aoData) {  //查询条件
 		             	aoData.push({ "name": "title", "value": $("#title").val() } );
-		             	aoData.push({ "name": "state", "value": $("#state").val() } );
+		             	aoData.push({ "name": "state", "value": $("#bannerStatus").val() } );
 						aoData.push({ "name": "bannerType", "value": $("#bannerType_query").val() } );
 						aoData.push({ "name": "startTime", "value": $("#sTime").val() } );
 						aoData.push({ "name": "endTime", "value": $("#eTime").val() } );
 		             },
 		             aoColumnDefs : [
 						<shiro:hasPermission name="banner:update or banner:delete">
-		             	{"aTargets" :10,"mRender" : function(data, type, row){
+		             	{"aTargets" :11,"mRender" : function(data, type, row){
 		             		var edit="",del="";
 		             		<shiro:hasPermission name="banner:update">
 		             			edit = "<a href='#' onclick='addAndUpdateRow(\""+data+"\")' data-toggle='modal' class='padding-right-small label label-success'><i class='glyphicon glyphicon-edit'></i> 编辑</a>";
@@ -218,22 +221,20 @@
 			
 			});
 			//删除受影响的行数
-			function deleteRow(id){
-				console.log(id);
-				$('#myModal').deleteRow('banner/del.htm?id='+id);
+			function deleteRow(bannerId){
+				$('#myModal').deleteRow('banner/del.htm?bannerId='+bannerId);
 			}
 			//增加或者修改受影响的行数
-			function addAndUpdateRow(id){
-				$('#insertAndUpdate').addAndUpdateRow("banner/addAndUpdateHome.htm?id="+id);
+			function addAndUpdateRow(bannerId){
+				$('#bannerInsertAndUpdate').addAndUpdateRow("banner/addAndUpdateHome.htm?bannerId="+bannerId);
 			}
 			</script>
 		<!---dialog选项-->
 		<div>
 			<jsp:include page="/WEB-INF/views/common/delete_dialog.jsp" />
-			<jsp:include page="/WEB-INF/views/common/addupdate_dialog.jsp" />
 
-			<div class="modal fade" id="insertAndUpdate" tabindex="-1"
-				role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			<div class="modal fade" id="bannerInsertAndUpdate" tabindex="-1"
+				role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
 			</div>
 		</div>
 	</div>
