@@ -106,7 +106,7 @@ public class AliPayServiceImpl implements AliPayService {
 		} else {
 			// 组装支付宝单批转账的数据
 			BigDecimal amount = params.getAmount();
-			String appPlatform = "2";// 贷款管家
+			String appPlatform = "3";// Voice
 			String customerId = params.getUserId() + "";
 			String outBizNo = UUIDUtils.getUUID();// 唯一的流水id
 			String payeeAccount = aliacount.getAccount();// 支付宝账号
