@@ -143,7 +143,6 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 	 * @param accountId
 	 * @return outPacket
 	 */
-	@SuppressWarnings("unchecked")
 	public PersonHomePage queryPersonal(Long customerId) {
 		Customer customer = customerRedisManagement.getCustomer(customerId);
 		// 获取身份证
@@ -196,7 +195,7 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 				e.printStackTrace();
 			}
 			// 查询职业 by accountId
-			String occupation = occupationMapper.selectByCustomerId(customerId);
+			List occupation = occupationMapper.selectByCustomerId(customerId);
 			personHomePage.setOccupation(occupation);
 			return personHomePage;
 		} else {
@@ -513,7 +512,7 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 				List<Interest> interestName = interestMapper.selectInterestByCustomerId(params.getCustomerId());
 				homePageLogout.setInterestName(interestName);
 				// 获取职业名字
-				String occupationName = occupationMapper.selectByCustomerId(params.getCustomerId());
+				List occupationName = occupationMapper.selectByCustomerId(params.getCustomerId());
 				homePageLogout.setOccupationName(occupationName);
 				// 判断是否是大V用户，只有拥有上架商品的用户和通过大V认证的用户才会显示大V认证
 				int num = productMapper.queryVProductNum(params.getCustomerId());
