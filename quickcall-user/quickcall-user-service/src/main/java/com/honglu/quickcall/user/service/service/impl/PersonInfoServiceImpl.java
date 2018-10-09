@@ -147,14 +147,14 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 			personHomePage.setTokenCode(customer.getTokenCode());//token
 			personHomePage.setvStatus(customer.getvStatus());//大V审核状态
 			personHomePage.setIdentityStatus(customer.getIdentityStatus());//身份证审核状态
-			// 查询粉丝数量
+			// 查询粉丝数量R
 			Long fansNum = fansMapper.queryFansNumByCustomerId(customerId);
 			personHomePage.setFansNum(fansNum);
 			//查询关注数量
 			int attentionNum = fansMapper.queryAttentionNumByCustomerId(customerId);
 			personHomePage.setAttentionNum(attentionNum);
 			//获取年纪
-			 Date birthday = personHomePage.getBirthday();
+			 Date birthday = customer.getBirthday();
 			 //用工具类去转换
 			 int age = CountAge.getAgeByBirth(birthday);
 			 personHomePage.setAge(age);
