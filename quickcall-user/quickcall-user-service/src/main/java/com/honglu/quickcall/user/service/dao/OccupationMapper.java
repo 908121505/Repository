@@ -1,5 +1,7 @@
 package com.honglu.quickcall.user.service.dao;
 
+import java.util.List;
+
 import com.honglu.quickcall.user.facade.entity.Occupation;
 
 public interface OccupationMapper {
@@ -16,5 +18,5 @@ public interface OccupationMapper {
     int updateByPrimaryKey(Occupation record);
     
     //根据customerId查找职业
-    String selectByCustomerId(Long customerId);
+    List selectByCustomerId(Long customerId);
 }
