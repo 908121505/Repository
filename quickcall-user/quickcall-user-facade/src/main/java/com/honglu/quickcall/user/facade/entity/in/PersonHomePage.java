@@ -32,7 +32,7 @@ public class PersonHomePage {
 
 	    private String voiceUrl;//语音链接
 	    
-	    private String occupation;//职业
+	    private List occupation;//职业
 	    
 	    private String headPortraitUrl;//头像路径
 	    
@@ -219,11 +219,11 @@ public class PersonHomePage {
 			this.voiceUrl = voiceUrl;
 		}
 
-		public String getOccupation() {
+		public List getOccupation() {
 			return occupation;
 		}
 
-		public void setOccupation(String occupation) {
+		public void setOccupation(List occupation) {
 			this.occupation = occupation;
 		}
 

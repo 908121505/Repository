@@ -78,7 +78,7 @@ public class HomePageLogout implements Serializable{
     
     private List<Interest> interestName;//兴趣名字
     
-    private String occupationName;//工作名字
+    private List occupationName;//工作名字
     
     private int vStatus;//大V认证，(0=未认证,1=已通过)
     
@@ -148,11 +148,11 @@ public class HomePageLogout implements Serializable{
 		this.interestName = interestName;
 	}
 
-	public String getOccupationName() {
+	public List getOccupationName() {
 		return occupationName;
 	}
 
-	public void setOccupationName(String occupationName) {
+	public void setOccupationName(List occupationName) {
 		this.occupationName = occupationName;
 	}
 
