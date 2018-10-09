@@ -9,7 +9,7 @@ public class Fans {
 
     private Long fansId;
 
-    private Byte attentionState;
+    private Integer attentionState;
 
     private Date createTime;
 
@@ -45,11 +45,11 @@ public class Fans {
         this.fansId = fansId;
     }
 
-    public Byte getAttentionState() {
+    public Integer getAttentionState() {
         return attentionState;
     }
 
-    public void setAttentionState(Byte attentionState) {
+    public void setAttentionState(Integer attentionState) {
         this.attentionState = attentionState;
     }
 

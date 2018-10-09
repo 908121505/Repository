@@ -1,7 +1,5 @@
 package com.honglu.quickcall.user.web.service.impl;
 
-import java.util.HashMap;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,8 +12,6 @@ import com.honglu.quickcall.common.api.exception.RemoteException;
 import com.honglu.quickcall.common.api.exchange.AbstractRequest;
 import com.honglu.quickcall.common.api.exchange.CommonResponse;
 import com.honglu.quickcall.common.api.exchange.WebResponseModel;
-import com.honglu.quickcall.common.api.util.ConstantUtils;
-import com.honglu.quickcall.common.api.util.DES3Utils;
 import com.honglu.quickcall.user.facade.business.UserDubboBusiness;
 import com.honglu.quickcall.user.facade.code.UserBizReturnCode;
 import com.honglu.quickcall.user.web.service.UserCenterService;

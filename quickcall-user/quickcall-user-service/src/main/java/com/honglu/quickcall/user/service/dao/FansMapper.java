@@ -2,6 +2,8 @@ package com.honglu.quickcall.user.service.dao;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.honglu.quickcall.user.facade.entity.Fans;
 import com.honglu.quickcall.user.facade.vo.AttentionFansVO;
 
@@ -35,4 +37,12 @@ public interface FansMapper {
 	 * @return
 	 */
 	List<AttentionFansVO> queryFansListByCustomerId(Long customerId);
+
+	/**
+	 * 判断关注记录
+	 * @param fansId
+	 * @param attendedId
+	 * @return
+	 */
+	Fans queryFans(@Param("fansId") Long fansId, @Param("attendedId")  Long attendedId);
 }

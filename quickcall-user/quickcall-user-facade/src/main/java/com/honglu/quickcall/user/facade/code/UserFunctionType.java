@@ -68,6 +68,10 @@ public interface UserFunctionType {
   public static  final  String  QUERY_OCCUPATION_LIST = "0011129";
   /**查询关注/粉丝*/
   public static  final  String  QUERY_ATTENDTION_FANS_LIST = "0011130";
+  /**添加/取消关注*/
+  public static  final  String  ADD_OR_UPDATE_FANS = "0011131";
+  /**判断是否关注对方*/
+  public static  final  String  CHECK_ATTENTION = "0011132";
   
   
   

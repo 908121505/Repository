@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.honglu.quickcall.common.api.exchange.WebResponseModel;
+import com.honglu.quickcall.user.facade.exchange.request.AddOrCancelFansRequest;
+import com.honglu.quickcall.user.facade.exchange.request.CheckAttentionRequest;
 import com.honglu.quickcall.user.facade.exchange.request.PersonInfoRequest;
 import com.honglu.quickcall.user.facade.exchange.request.QueryAttentionFansListRequest;
 import com.honglu.quickcall.user.facade.exchange.request.QueryInterestListRequest;
@@ -129,6 +131,28 @@ public class AccountInfoController {
     @RequestMapping(value = "/queryAttentionFansList", method = RequestMethod.POST)
     @ResponseBody
     public WebResponseModel queryAttentionFansList(QueryAttentionFansListRequest params) {
+    	WebResponseModel response = userCenterService.execute(params);
+    	return response;
+    }
+    
+    
+    /**
+     * 查询关注列表
+     */
+    @RequestMapping(value = "/addOrCancelFans", method = RequestMethod.POST)
+    @ResponseBody
+    public WebResponseModel addOrCancelFans(AddOrCancelFansRequest params) {
+    	WebResponseModel response = userCenterService.execute(params);
+    	return response;
+    }
+    
+    
+    /**
+     * 检查是否关注对方
+     */
+    @RequestMapping(value = "/checkAttention", method = RequestMethod.POST)
+    @ResponseBody
+    public WebResponseModel checkAttention(CheckAttentionRequest params) {
     	WebResponseModel response = userCenterService.execute(params);
     	return response;
     }

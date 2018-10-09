@@ -1,6 +1,8 @@
 package com.honglu.quickcall.user.service.service;
 
 import com.honglu.quickcall.common.api.exchange.CommonResponse;
+import com.honglu.quickcall.user.facade.exchange.request.AddOrCancelFansRequest;
+import com.honglu.quickcall.user.facade.exchange.request.CheckAttentionRequest;
 import com.honglu.quickcall.user.facade.exchange.request.PersonInfoRequest;
 import com.honglu.quickcall.user.facade.exchange.request.QueryAttentionFansListRequest;
 import com.honglu.quickcall.user.facade.exchange.request.QueryInterestListRequest;
@@ -61,4 +63,8 @@ public interface PersonInfoService {
 	CommonResponse queryOccupationList(QueryOccupationListRequest request);
 	/**查询关注/粉丝列表*/
 	CommonResponse queryAttentionFansList(QueryAttentionFansListRequest request);
+	/**添加/取消关注*/
+	CommonResponse addOrCancelFans(AddOrCancelFansRequest request);
+	/**检查是否关注对方*/
+	CommonResponse checkAttention(CheckAttentionRequest request);
 }

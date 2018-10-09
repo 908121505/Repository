@@ -18,11 +18,13 @@ import com.honglu.quickcall.common.api.exception.RemoteException;
 import com.honglu.quickcall.common.api.exchange.CommonResponse;
 import com.honglu.quickcall.common.api.util.JedisUtil;
 import com.honglu.quickcall.common.core.util.Detect;
+import com.honglu.quickcall.common.core.util.UUIDUtils;
 import com.honglu.quickcall.user.facade.code.UserBizReturnCode;
 import com.honglu.quickcall.user.facade.constants.UserBizConstants;
 import com.honglu.quickcall.user.facade.entity.Customer;
 import com.honglu.quickcall.user.facade.entity.CustomerInterest;
 import com.honglu.quickcall.user.facade.entity.CustomerOccupation;
+import com.honglu.quickcall.user.facade.entity.Fans;
 import com.honglu.quickcall.user.facade.entity.Interest;
 import com.honglu.quickcall.user.facade.entity.Orders;
 import com.honglu.quickcall.user.facade.entity.Product;
@@ -30,6 +32,8 @@ import com.honglu.quickcall.user.facade.entity.SensitivityWord;
 import com.honglu.quickcall.user.facade.entity.in.HomePageLogout;
 import com.honglu.quickcall.user.facade.entity.in.PersonHomePage;
 import com.honglu.quickcall.user.facade.entity.in.VProductTag;
+import com.honglu.quickcall.user.facade.exchange.request.AddOrCancelFansRequest;
+import com.honglu.quickcall.user.facade.exchange.request.CheckAttentionRequest;
 import com.honglu.quickcall.user.facade.exchange.request.PersonInfoRequest;
 import com.honglu.quickcall.user.facade.exchange.request.QueryAttentionFansListRequest;
 import com.honglu.quickcall.user.facade.exchange.request.QueryInterestListRequest;
@@ -633,6 +637,63 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 //			throw new RemoteException(UserBizReturnCode.UserNotExist, "用户不存在");
 		}
 
+		return commonResponse;
+	}
+
+	@Override
+	public CommonResponse addOrCancelFans(AddOrCancelFansRequest request) {
+		CommonResponse commonResponse = new CommonResponse();
+		try {
+			
+			Long  fansId =  request.getFansId();
+			Long  attendedId =  request.getAttendedId();
+			Integer  type =  request.getType();
+			
+			Fans  fans = fansMapper.queryFans(fansId,attendedId);
+			
+			if(UserBizConstants.ATTENTION_TYPE_ADD == type){
+				//添加关注
+				if(fans == null){
+					//添加关注
+					Fans  fan =  new Fans();
+					fan.setId(UUIDUtils.getId());
+					fan.setAttentionState(UserBizConstants.ATTENTION_STATUS_ATTENED);
+				    fan.setCreateTime(new Date());
+				    fan.setFansId(fansId);
+				    fan.setAnchorId(attendedId);
+				    fansMapper.insert(fan);
+				}
+			}else if(UserBizConstants.ATTENTION_TYPE_CANCEL == type){
+				//取消关注
+				if(fans != null){
+					Integer   attentionStatus =  fans.getAttentionState();
+					if(UserBizConstants.ATTENTION_STATUS_ATTENED == attentionStatus){
+						//更改状态
+						Fans record = new Fans();
+						record.setId(fans.getId());
+						record.setAttentionState(UserBizConstants.ATTENTION_STATUS_UN_ATTENED);
+						record.setModifyTime(new Date());
+						fansMapper.updateByPrimaryKey(record);
+					}
+				}
+				
+			}
+			
+			
+			commonResponse.setData("00000");
+			commonResponse.setCode(UserBizReturnCode.Success);
+			commonResponse.setMessage(UserBizReturnCode.Success.desc());
+		} catch (Exception e) {
+			logger.error("查询异常，异常信息：",e);
+//			throw new RemoteException(UserBizReturnCode.UserNotExist, "用户不存在");
+		}
+
+		return commonResponse;
+	}
+
+	@Override
+	public CommonResponse checkAttention(CheckAttentionRequest request) {
+		CommonResponse commonResponse = new CommonResponse();
 		return commonResponse;
 	}
 

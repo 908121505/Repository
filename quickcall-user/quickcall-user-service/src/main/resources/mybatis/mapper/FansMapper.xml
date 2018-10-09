@@ -184,6 +184,12 @@
 		) tmp
 	LEFT JOIN customer cust ON tmp.fansId = cust.customer_id;
   </select>
+  <!-- 查询粉丝列表 -->
+  <select id="queryFans"  resultMap="BaseResultMap"   >
+    SELECT  
+    <include refid="Base_Column_List"></include>
+    FROM  fans   WHERE  fans_id = #{fansId}   AND   anchor_id = #{attendedId}
+  </select>
   
   
   
