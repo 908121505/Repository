@@ -60,5 +60,11 @@ public interface UserFunctionType {
   String SaveOccupation = "0011124";
   //大V主页，普通用户主页（客态）
   String ShowHomePageLogout = "0011126";
+  
+  
+  /**查询兴趣列表*/
+  public static  final  String  QUERY_INTEREST_LIST = "0011127";
+  /**查询职业列表*/
+  public static  final  String  QUERY_OCCUPATION_LIST = "0011129";
       
 }

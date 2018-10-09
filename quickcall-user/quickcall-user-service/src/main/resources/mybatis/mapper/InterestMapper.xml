@@ -146,4 +146,10 @@
       remark = #{remark,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
+  
+  
+  <!--  -->
+  <select id="selectInterestList" resultType="com.honglu.quickcall.user.facade.vo.InterestVO"  >
+    SELECT  id  AS  id ,  name  AS  name   FROM  interest  
+  </select>
 </mapper>

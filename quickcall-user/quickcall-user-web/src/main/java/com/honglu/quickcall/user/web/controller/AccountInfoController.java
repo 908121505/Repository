@@ -1,7 +1,5 @@
 package com.honglu.quickcall.user.web.controller;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,6 +8,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.honglu.quickcall.common.api.exchange.WebResponseModel;
 import com.honglu.quickcall.user.facade.exchange.request.PersonInfoRequest;
+import com.honglu.quickcall.user.facade.exchange.request.QueryInterestListRequest;
+import com.honglu.quickcall.user.facade.exchange.request.QueryOccupationListRequest;
 import com.honglu.quickcall.user.facade.exchange.request.SaveBirthRequest;
 import com.honglu.quickcall.user.facade.exchange.request.SaveGenderRequest;
 import com.honglu.quickcall.user.facade.exchange.request.SaveInterestRequest;
@@ -25,10 +25,9 @@ import com.honglu.quickcall.user.web.service.UserCenterService;
 @Controller
 @RequestMapping("/account/info")
 public class AccountInfoController {
-	private static Logger logger = LoggerFactory.getLogger(AccountInfoController.class);
 
     @Autowired
-    UserCenterService userCenterService;
+    private  UserCenterService userCenterService;
 
     /**
      *查询个人信息
@@ -85,6 +84,15 @@ public class AccountInfoController {
         return response;
    }
     /**
+     * 查询兴趣列表
+     */
+    @RequestMapping(value = "/queryInterestList", method = RequestMethod.POST)
+    @ResponseBody
+    public WebResponseModel queryInterestList(QueryInterestListRequest params) {
+    	WebResponseModel response = userCenterService.execute(params);
+    	return response;
+    }
+    /**
      * 保存职业
      */
     @RequestMapping(value = "/saveOccupation", method = RequestMethod.POST)
@@ -93,6 +101,15 @@ public class AccountInfoController {
    	 WebResponseModel response = userCenterService.execute(params);
         return response;
    } 
+    /**
+     * 查询职业列表
+     */
+    @RequestMapping(value = "/queryOccupationList", method = RequestMethod.POST)
+    @ResponseBody
+    public WebResponseModel queryOccupationList(QueryOccupationListRequest params) {
+    	WebResponseModel response = userCenterService.execute(params);
+    	return response;
+    } 
     /**
      * 大V主页，普通用户主页（客态）
      */

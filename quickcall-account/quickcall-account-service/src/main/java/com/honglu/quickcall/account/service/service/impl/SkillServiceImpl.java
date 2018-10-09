@@ -99,6 +99,7 @@ public class SkillServiceImpl implements ISkillService {
 					Product  product = prodMap.get(skillId);
 					skillVO.setProductId(product.getProductId());
 					skillVO.setProductStatus(product.getProductStatus());
+					skillVO.setCurrPrice(product.getPrice());
 				}
 			}
 		}

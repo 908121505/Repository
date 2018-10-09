@@ -1,8 +1,9 @@
 package com.honglu.quickcall.user.service.service;
 
 import com.honglu.quickcall.common.api.exchange.CommonResponse;
-import com.honglu.quickcall.user.facade.exchange.request.IsPhoneExistsRequest;
 import com.honglu.quickcall.user.facade.exchange.request.PersonInfoRequest;
+import com.honglu.quickcall.user.facade.exchange.request.QueryInterestListRequest;
+import com.honglu.quickcall.user.facade.exchange.request.QueryOccupationListRequest;
 import com.honglu.quickcall.user.facade.exchange.request.SaveBirthRequest;
 import com.honglu.quickcall.user.facade.exchange.request.SaveGenderRequest;
 import com.honglu.quickcall.user.facade.exchange.request.SaveInterestRequest;
@@ -53,4 +54,7 @@ public interface PersonInfoService {
      * 大V主页，普通用户主页（客态）
      */
     CommonResponse showHomePageLogout( ShowHomePageLogout params);
+    /**查询兴趣列表*/
+	CommonResponse queryInterestList(QueryInterestListRequest request);
+	CommonResponse queryOccupationList(QueryOccupationListRequest request);
 }
