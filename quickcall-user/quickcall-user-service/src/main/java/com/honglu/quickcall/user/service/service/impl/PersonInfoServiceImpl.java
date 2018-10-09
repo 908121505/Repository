@@ -19,6 +19,7 @@ import com.honglu.quickcall.common.api.exchange.CommonResponse;
 import com.honglu.quickcall.common.api.util.JedisUtil;
 import com.honglu.quickcall.common.core.util.Detect;
 import com.honglu.quickcall.user.facade.code.UserBizReturnCode;
+import com.honglu.quickcall.user.facade.constants.UserBizConstants;
 import com.honglu.quickcall.user.facade.entity.Customer;
 import com.honglu.quickcall.user.facade.entity.CustomerInterest;
 import com.honglu.quickcall.user.facade.entity.CustomerOccupation;
@@ -30,6 +31,7 @@ import com.honglu.quickcall.user.facade.entity.in.HomePageLogout;
 import com.honglu.quickcall.user.facade.entity.in.PersonHomePage;
 import com.honglu.quickcall.user.facade.entity.in.VProductTag;
 import com.honglu.quickcall.user.facade.exchange.request.PersonInfoRequest;
+import com.honglu.quickcall.user.facade.exchange.request.QueryAttentionFansListRequest;
 import com.honglu.quickcall.user.facade.exchange.request.QueryInterestListRequest;
 import com.honglu.quickcall.user.facade.exchange.request.QueryOccupationListRequest;
 import com.honglu.quickcall.user.facade.exchange.request.SaveBirthRequest;
@@ -39,6 +41,7 @@ import com.honglu.quickcall.user.facade.exchange.request.SaveNickNameRequest;
 import com.honglu.quickcall.user.facade.exchange.request.SaveOccupationRequest;
 import com.honglu.quickcall.user.facade.exchange.request.SaveSignNameRequest;
 import com.honglu.quickcall.user.facade.exchange.request.ShowHomePageLogout;
+import com.honglu.quickcall.user.facade.vo.AttentionFansVO;
 import com.honglu.quickcall.user.facade.vo.InterestVO;
 import com.honglu.quickcall.user.facade.vo.OccupationVO;
 import com.honglu.quickcall.user.service.dao.CustomerInterestMapper;
@@ -583,7 +586,7 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 			commonResponse.setCode(UserBizReturnCode.Success);
 			commonResponse.setMessage(UserBizReturnCode.Success.desc());
 		} catch (Exception e) {
-			logger.error("查询异常");
+			logger.error("查询异常，异常信息：",e);
 //			throw new RemoteException(UserBizReturnCode.UserNotExist, "用户不存在");
 		}
 
@@ -599,7 +602,34 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 			commonResponse.setCode(UserBizReturnCode.Success);
 			commonResponse.setMessage(UserBizReturnCode.Success.desc());
 		} catch (Exception e) {
-			logger.error("查询异常");
+			logger.error("查询异常，异常信息：",e);
+//			throw new RemoteException(UserBizReturnCode.UserNotExist, "用户不存在");
+		}
+
+		return commonResponse;
+	}
+
+	@Override
+	public CommonResponse queryAttentionFansList(QueryAttentionFansListRequest request) {
+		
+		CommonResponse commonResponse = new CommonResponse();
+		try {
+			List<AttentionFansVO>  resultList =  new ArrayList<AttentionFansVO>();
+			
+			Long  customerId =  request.getCustomerId();
+			Integer   type =  request.getType();
+			if(UserBizConstants.QUERY_ATTENTION_LIST_TYPE == type){
+				//查询关注列表
+				resultList= fansMapper.queryAttentionListByCustomerId(customerId);
+			}else if(UserBizConstants.QUERY_FANS_LIST_TYPE == type){
+				//查询粉丝列表
+				resultList =fansMapper.queryFansListByCustomerId(customerId);
+			}
+			commonResponse.setData(resultList);
+			commonResponse.setCode(UserBizReturnCode.Success);
+			commonResponse.setMessage(UserBizReturnCode.Success.desc());
+		} catch (Exception e) {
+			logger.error("查询异常，异常信息：",e);
 //			throw new RemoteException(UserBizReturnCode.UserNotExist, "用户不存在");
 		}
 

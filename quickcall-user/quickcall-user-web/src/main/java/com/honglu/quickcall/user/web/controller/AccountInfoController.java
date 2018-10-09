@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.honglu.quickcall.common.api.exchange.WebResponseModel;
 import com.honglu.quickcall.user.facade.exchange.request.PersonInfoRequest;
+import com.honglu.quickcall.user.facade.exchange.request.QueryAttentionFansListRequest;
 import com.honglu.quickcall.user.facade.exchange.request.QueryInterestListRequest;
 import com.honglu.quickcall.user.facade.exchange.request.QueryOccupationListRequest;
 import com.honglu.quickcall.user.facade.exchange.request.SaveBirthRequest;
@@ -119,4 +120,21 @@ public class AccountInfoController {
    	 WebResponseModel response = userCenterService.execute(params);
         return response;
    } 
+    
+
+
+    /**
+     * 查询关注列表
+     */
+    @RequestMapping(value = "/queryAttentionFansList", method = RequestMethod.POST)
+    @ResponseBody
+    public WebResponseModel queryAttentionFansList(QueryAttentionFansListRequest params) {
+    	WebResponseModel response = userCenterService.execute(params);
+    	return response;
+    }
+    
+    
+    
+    
+    
 }

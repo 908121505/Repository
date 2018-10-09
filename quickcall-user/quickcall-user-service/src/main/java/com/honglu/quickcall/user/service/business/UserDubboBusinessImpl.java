@@ -17,6 +17,7 @@ import com.honglu.quickcall.user.facade.code.UserFunctionType;
 import com.honglu.quickcall.user.facade.exchange.request.GetSmsCodeRequest;
 import com.honglu.quickcall.user.facade.exchange.request.IsPhoneExistsRequest;
 import com.honglu.quickcall.user.facade.exchange.request.PersonInfoRequest;
+import com.honglu.quickcall.user.facade.exchange.request.QueryAttentionFansListRequest;
 import com.honglu.quickcall.user.facade.exchange.request.QueryInterestListRequest;
 import com.honglu.quickcall.user.facade.exchange.request.QueryOccupationListRequest;
 import com.honglu.quickcall.user.facade.exchange.request.SaveBirthRequest;
@@ -109,6 +110,9 @@ public class UserDubboBusinessImpl implements UserDubboBusiness {
 				break;
 			case UserFunctionType.QUERY_OCCUPATION_LIST://查询职业列表
 				response = personInfoService.queryOccupationList((QueryOccupationListRequest) request);
+				break;
+			case UserFunctionType.QUERY_ATTENDTION_FANS_LIST://查询关注/粉丝列表
+				response = personInfoService.queryAttentionFansList((QueryAttentionFansListRequest) request);
 				break;
 			///////////////////////////////////////////////////////////////////////////
 			case UserFunctionType.SaveOccupation:// 保存职业

@@ -66,5 +66,11 @@ public interface UserFunctionType {
   public static  final  String  QUERY_INTEREST_LIST = "0011127";
   /**查询职业列表*/
   public static  final  String  QUERY_OCCUPATION_LIST = "0011129";
+  /**查询关注/粉丝*/
+  public static  final  String  QUERY_ATTENDTION_FANS_LIST = "0011130";
+  
+  
+  
+  
       
 }

@@ -2,6 +2,7 @@ package com.honglu.quickcall.user.service.service;
 
 import com.honglu.quickcall.common.api.exchange.CommonResponse;
 import com.honglu.quickcall.user.facade.exchange.request.PersonInfoRequest;
+import com.honglu.quickcall.user.facade.exchange.request.QueryAttentionFansListRequest;
 import com.honglu.quickcall.user.facade.exchange.request.QueryInterestListRequest;
 import com.honglu.quickcall.user.facade.exchange.request.QueryOccupationListRequest;
 import com.honglu.quickcall.user.facade.exchange.request.SaveBirthRequest;
@@ -56,5 +57,8 @@ public interface PersonInfoService {
     CommonResponse showHomePageLogout( ShowHomePageLogout params);
     /**查询兴趣列表*/
 	CommonResponse queryInterestList(QueryInterestListRequest request);
+	/**查询职业列表*/
 	CommonResponse queryOccupationList(QueryOccupationListRequest request);
+	/**查询关注/粉丝列表*/
+	CommonResponse queryAttentionFansList(QueryAttentionFansListRequest request);
 }
