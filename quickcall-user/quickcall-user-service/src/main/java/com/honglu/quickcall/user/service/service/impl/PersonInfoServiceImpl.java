@@ -1,48 +1,37 @@
 package com.honglu.quickcall.user.service.service.impl;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import javax.persistence.criteria.Order;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import com.alibaba.dubbo.common.json.JSONObject;
-import com.alibaba.fastjson.JSON;
+
 import com.honglu.quickcall.account.facade.code.AccountBizReturnCode;
-import com.honglu.quickcall.common.api.code.BizCode;
-import com.honglu.quickcall.common.api.code.MyServiceCode;
 import com.honglu.quickcall.common.api.exception.BizException;
 import com.honglu.quickcall.common.api.exception.RemoteException;
 import com.honglu.quickcall.common.api.exchange.CommonResponse;
 import com.honglu.quickcall.common.api.util.JedisUtil;
-import com.honglu.quickcall.common.api.util.ResponseUtils;
 import com.honglu.quickcall.common.core.util.Detect;
-import com.honglu.quickcall.common.core.util.StringUtil;
 import com.honglu.quickcall.user.facade.code.UserBizReturnCode;
 import com.honglu.quickcall.user.facade.entity.Customer;
 import com.honglu.quickcall.user.facade.entity.CustomerInterest;
 import com.honglu.quickcall.user.facade.entity.CustomerOccupation;
 import com.honglu.quickcall.user.facade.entity.Interest;
-import com.honglu.quickcall.user.facade.entity.Occupation;
 import com.honglu.quickcall.user.facade.entity.Orders;
 import com.honglu.quickcall.user.facade.entity.Product;
 import com.honglu.quickcall.user.facade.entity.SensitivityWord;
-import com.honglu.quickcall.user.facade.entity.Skill;
 import com.honglu.quickcall.user.facade.entity.in.HomePageLogout;
 import com.honglu.quickcall.user.facade.entity.in.PersonHomePage;
 import com.honglu.quickcall.user.facade.entity.in.VProductTag;
 import com.honglu.quickcall.user.facade.exchange.request.PersonInfoRequest;
+import com.honglu.quickcall.user.facade.exchange.request.QueryInterestListRequest;
+import com.honglu.quickcall.user.facade.exchange.request.QueryOccupationListRequest;
 import com.honglu.quickcall.user.facade.exchange.request.SaveBirthRequest;
 import com.honglu.quickcall.user.facade.exchange.request.SaveGenderRequest;
 import com.honglu.quickcall.user.facade.exchange.request.SaveInterestRequest;
@@ -50,6 +39,9 @@ import com.honglu.quickcall.user.facade.exchange.request.SaveNickNameRequest;
 import com.honglu.quickcall.user.facade.exchange.request.SaveOccupationRequest;
 import com.honglu.quickcall.user.facade.exchange.request.SaveSignNameRequest;
 import com.honglu.quickcall.user.facade.exchange.request.ShowHomePageLogout;
+import com.honglu.quickcall.user.facade.vo.InterestVO;
+import com.honglu.quickcall.user.facade.vo.OccupationVO;
+import com.honglu.quickcall.user.service.dao.CustomerInterestMapper;
 import com.honglu.quickcall.user.service.dao.CustomerMapper;
 import com.honglu.quickcall.user.service.dao.CustomerOccupationMapper;
 import com.honglu.quickcall.user.service.dao.FansMapper;
@@ -59,12 +51,11 @@ import com.honglu.quickcall.user.service.dao.OrdersMapper;
 import com.honglu.quickcall.user.service.dao.ProductMapper;
 import com.honglu.quickcall.user.service.dao.SensitivityWordMapper;
 import com.honglu.quickcall.user.service.dao.SkillMapper;
-import com.honglu.quickcall.user.service.dao.CustomerInterestMapper;
 import com.honglu.quickcall.user.service.service.CustomerRedisManagement;
 import com.honglu.quickcall.user.service.service.PersonInfoService;
+import com.honglu.quickcall.user.service.util.CountAge;
 import com.honglu.quickcall.user.service.util.JsonParseUtil;
 import com.honglu.quickcall.user.service.util.RedisKeyConstants;
-import com.honglu.quickcall.user.service.util.CountAge;
 
 import cn.jiguang.commom.utils.StringUtils;
 @Service
@@ -143,7 +134,6 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 	 * @param accountId
 	 * @return outPacket
 	 */
-	@SuppressWarnings("unchecked")
 	public PersonHomePage queryPersonal(Long customerId) {
 		Customer customer = customerRedisManagement.getCustomer(customerId);
 		// 获取身份证
@@ -582,6 +572,38 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 		}
 		return list;
 
+	}
+	
+	@Override
+	public CommonResponse queryInterestList(QueryInterestListRequest request) {
+		CommonResponse commonResponse = new CommonResponse();
+		try {
+			List<InterestVO>  interestList =  interestMapper.selectInterestList();
+			commonResponse.setData(interestList);
+			commonResponse.setCode(UserBizReturnCode.Success);
+			commonResponse.setMessage(UserBizReturnCode.Success.desc());
+		} catch (Exception e) {
+			logger.error("查询异常");
+//			throw new RemoteException(UserBizReturnCode.UserNotExist, "用户不存在");
+		}
+
+		return commonResponse;
+	}
+
+	@Override
+	public CommonResponse queryOccupationList(QueryOccupationListRequest request) {
+		CommonResponse commonResponse = new CommonResponse();
+		try {
+			List<OccupationVO>  interestList =  occupationMapper.selectOccupationList();
+			commonResponse.setData(interestList);
+			commonResponse.setCode(UserBizReturnCode.Success);
+			commonResponse.setMessage(UserBizReturnCode.Success.desc());
+		} catch (Exception e) {
+			logger.error("查询异常");
+//			throw new RemoteException(UserBizReturnCode.UserNotExist, "用户不存在");
+		}
+
+		return commonResponse;
 	}
 
 }
