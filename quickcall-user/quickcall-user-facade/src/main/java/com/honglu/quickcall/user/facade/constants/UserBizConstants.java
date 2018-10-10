@@ -13,7 +13,7 @@ public interface UserBizConstants {
     
 	
 	/**关注状态 0：未关注*/
-	public  static final  Integer   ATTENTION_STATUS_UN_ATTENED = 1 ;
+	public  static final  Integer   ATTENTION_STATUS_UN_ATTENED = 0 ;
 	/**关注状态 1：关注*/
 	public  static final  Integer   ATTENTION_STATUS_ATTENED = 1 ;
 	

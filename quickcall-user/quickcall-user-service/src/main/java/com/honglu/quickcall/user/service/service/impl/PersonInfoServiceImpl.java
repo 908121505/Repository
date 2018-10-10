@@ -681,6 +681,16 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 				    fan.setFansId(fansId);
 				    fan.setAnchorId(attendedId);
 				    fansMapper.insert(fan);
+				}else{
+					//更改状态为关注
+					Integer  attentionStatus =  fans.getAttentionState();
+					if(UserBizConstants.ATTENTION_STATUS_UN_ATTENED == attentionStatus){
+						Fans record = new Fans();
+						record.setId(fans.getId());
+						record.setAttentionState(UserBizConstants.ATTENTION_STATUS_ATTENED);
+						record.setModifyTime(new Date());
+						fansMapper.updateByPrimaryKey(record);
+					}
 				}
 			}else if(UserBizConstants.ATTENTION_TYPE_CANCEL == type){
 				//取消关注
