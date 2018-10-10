@@ -658,7 +658,7 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 				}else{
 					
 					//获取
-					List<AttentionFansVO>  custList = fansMapper.queryCustomerListByCustomerIdList(fansIdList);
+					resultList = fansMapper.queryCustomerListByCustomerIdList(fansIdList);
 					
 					//获取
 					List<Fans>  fansList = fansMapper.queryFansListByFansIdList(fansIdList,customerId);
@@ -671,7 +671,7 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 						}
 					}
 					
-					for (AttentionFansVO vo : custList) {
+					for (AttentionFansVO vo : resultList) {
 						Long  custId = vo.getCustomerId();
 						Integer  attentionStatus =  attentionStatusMap.get(custId);
 						if(attentionStatus == null){
