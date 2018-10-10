@@ -72,9 +72,21 @@ public class Customer {
     private String deviceId;
 
     private Date loginTime;
+    /**大V声音时长*/
+    private Integer voiceTime;
+    
+    
     
 
-    public Long getCustomerId() {
+    public Integer getVoiceTime() {
+		return voiceTime;
+	}
+
+	public void setVoiceTime(Integer voiceTime) {
+		this.voiceTime = voiceTime;
+	}
+
+	public Long getCustomerId() {
         return customerId;
     }
 

@@ -29,14 +29,14 @@ public interface FansMapper {
      * @param customerId
      * @return
      */
-	List<AttentionFansVO> queryAttentionListByCustomerId(Long customerId);
+	List<AttentionFansVO> queryAttentionListByCustomerId(@Param("customerId")Long customerId ,@Param("attentionStatus")  Integer  attentionStatus);
 
 	/**
 	 * 查询粉丝列表
 	 * @param customerId
 	 * @return
 	 */
-	List<AttentionFansVO> queryFansListByCustomerId(Long customerId);
+	List<AttentionFansVO> queryFansListByCustomerId(@Param("customerId")Long customerId ,@Param("attentionStatus")  Integer  attentionStatus);
 
 	/**
 	 * 判断关注记录

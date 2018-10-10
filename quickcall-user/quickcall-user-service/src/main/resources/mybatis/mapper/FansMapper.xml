@@ -147,7 +147,7 @@
   </update> -->
   
   <!-- 查询关注列表 -->
-  <select id="queryAttentionListByCustomerId" resultType="com.honglu.quickcall.user.facade.vo.AttentionFansVO" parameterType="java.lang.Long" >
+  <select id="queryAttentionListByCustomerId" resultType="com.honglu.quickcall.user.facade.vo.AttentionFansVO" >
 		SELECT
 			fs.anchor_id AS customerId,
 			ct.head_portrait_url AS headPortraitUrl,
@@ -159,11 +159,11 @@
 			fans fs
 		LEFT JOIN customer ct ON fs.anchor_id = ct.customer_id
 		WHERE
-			fans_id = #{customerId}
+			fans_id = #{customerId}  and   fs.attention_state = #{attentionStatus}
   </select>
   
   <!-- 查询粉丝列表 -->
-  <select id="queryFansListByCustomerId" resultType="com.honglu.quickcall.user.facade.vo.AttentionFansVO" parameterType="java.lang.Long" >
+  <select id="queryFansListByCustomerId" resultType="com.honglu.quickcall.user.facade.vo.AttentionFansVO"  >
 	SELECT
 		tmp.fansId AS customerId,
 		cust.head_portrait_url AS headPortraitUrl,
@@ -180,9 +180,9 @@
 				fans fa
 			LEFT JOIN fans fb ON fa.fans_id = fb.anchor_id
 			WHERE
-				fa.anchor_id = #{customerId}
+				fa.anchor_id = #{customerId}  and  fa.attention_state  = #{attentionStatus}
 		) tmp
-	LEFT JOIN customer cust ON tmp.fansId = cust.customer_id;
+	LEFT JOIN customer cust ON tmp.fansId = cust.customer_id 
   </select>
   <!-- 查询粉丝列表 -->
   <select id="queryFans"  resultMap="BaseResultMap"   >

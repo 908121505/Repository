@@ -9,7 +9,8 @@ import com.honglu.quickcall.user.facade.entity.Occupation;
 
 public class HomePageLogout implements Serializable{
 	
-	private static final long serialVersionUID = -7518793176114022958L;
+
+	private static final long serialVersionUID = 3633660053755377730L;
 
 	private Long customerId;
 
@@ -95,10 +96,23 @@ public class HomePageLogout implements Serializable{
     
     /**是否关注该用户 0：未关注  1：已关注*/
     private Integer  attentionStatus;
+    /**大V认证声音时长*/
+    private Integer  voiceTime;
     
     
     
-    /**是否关注该用户 0：未关注  1：已关注*/
+    
+    /**大V认证声音时长*/
+    public Integer getVoiceTime() {
+		return voiceTime;
+	}
+
+    /**大V认证声音时长*/
+	public void setVoiceTime(Integer voiceTime) {
+		this.voiceTime = voiceTime;
+	}
+
+	/**是否关注该用户 0：未关注  1：已关注*/
     public Integer getAttentionStatus() {
 		return attentionStatus;
 	}

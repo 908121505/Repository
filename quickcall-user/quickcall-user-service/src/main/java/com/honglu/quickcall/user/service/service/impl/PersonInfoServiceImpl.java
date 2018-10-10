@@ -643,10 +643,10 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 			Integer   type =  request.getType();
 			if(UserBizConstants.QUERY_ATTENTION_LIST_TYPE == type){
 				//查询关注列表
-				resultList= fansMapper.queryAttentionListByCustomerId(customerId);
+				resultList= fansMapper.queryAttentionListByCustomerId(customerId,UserBizConstants.ATTENTION_STATUS_ATTENED);
 			}else if(UserBizConstants.QUERY_FANS_LIST_TYPE == type){
 				//查询粉丝列表
-				resultList =fansMapper.queryFansListByCustomerId(customerId);
+				resultList =fansMapper.queryFansListByCustomerId(customerId,UserBizConstants.ATTENTION_STATUS_ATTENED);
 			}
 			commonResponse.setData(resultList);
 			commonResponse.setCode(UserBizReturnCode.Success);
