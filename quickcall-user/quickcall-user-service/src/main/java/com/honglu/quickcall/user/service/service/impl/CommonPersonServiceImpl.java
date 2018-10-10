@@ -1,5 +1,6 @@
 package com.honglu.quickcall.user.service.service.impl;
 
+import java.math.BigDecimal;
 import java.text.MessageFormat;
 import java.util.Date;
 import java.util.Objects;
@@ -429,6 +430,8 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 			certifyCustomer.setVoiceUrl(request.getVoiceUrl());
 		}
 
+		//如果声音时长为null，sql不会更新
+		certifyCustomer.setVoiceTime(request.getVoiceTime());
 		certifyCustomer.setCustomerId(request.getCustomerId());
 		customerMapper.updateByPrimaryKeySelective(certifyCustomer);
 

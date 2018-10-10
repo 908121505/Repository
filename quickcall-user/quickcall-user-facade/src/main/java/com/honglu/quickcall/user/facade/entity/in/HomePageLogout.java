@@ -1,6 +1,7 @@
 package com.honglu.quickcall.user.facade.entity.in;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -10,7 +11,8 @@ import com.honglu.quickcall.user.facade.entity.Occupation;
 public class HomePageLogout implements Serializable{
 	
 
-	private static final long serialVersionUID = 3633660053755377730L;
+
+	private static final long serialVersionUID = 2134655214888357364L;
 
 	private Long customerId;
 
@@ -97,18 +99,18 @@ public class HomePageLogout implements Serializable{
     /**是否关注该用户 0：未关注  1：已关注*/
     private Integer  attentionStatus;
     /**大V认证声音时长*/
-    private Integer  voiceTime;
+    private BigDecimal  voiceTime;
     
     
     
     
     /**大V认证声音时长*/
-    public Integer getVoiceTime() {
+    public BigDecimal getVoiceTime() {
 		return voiceTime;
 	}
 
     /**大V认证声音时长*/
-	public void setVoiceTime(Integer voiceTime) {
+	public void setVoiceTime(BigDecimal voiceTime) {
 		this.voiceTime = voiceTime;
 	}
 

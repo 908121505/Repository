@@ -20,6 +20,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import java.math.BigDecimal;
+
 import javax.servlet.http.HttpServletRequest;
 
 /**
@@ -158,7 +160,11 @@ public class CertificationController {
         }
         WebResponseModel response = uploadFile(request, AliYunFilePaths.BIG_V_INTRODUCE_AUDIO);
         if("000000".equals(response.getCode())){
-            SaveCertificationRequest params = new SaveCertificationRequest();
+        	String   voiceTimeStr = request.getParameter("voiceTime");
+        	SaveCertificationRequest params = new SaveCertificationRequest();
+        	if(StringUtils.isNotBlank(voiceTimeStr)){
+        		params.setVoiceTime(new BigDecimal(voiceTimeStr).setScale(1, BigDecimal.ROUND_HALF_UP));
+        	}
             params.setCustomerId(Long.valueOf(customerId));
             params.setVoiceUrl(response.getData());
             params.setCertifyType(2);// 大V认证

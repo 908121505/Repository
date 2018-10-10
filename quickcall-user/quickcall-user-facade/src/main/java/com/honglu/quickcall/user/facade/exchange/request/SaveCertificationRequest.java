@@ -1,5 +1,7 @@
 package com.honglu.quickcall.user.facade.exchange.request;
 
+import java.math.BigDecimal;
+
 import com.honglu.quickcall.user.facade.code.UserFunctionType;
 import com.honglu.quickcall.user.facade.exchange.UserCenterRequest;
 
@@ -11,8 +13,9 @@ import com.honglu.quickcall.user.facade.exchange.UserCenterRequest;
  */
 public class SaveCertificationRequest extends UserCenterRequest {
 
-    private static final long serialVersionUID = -3103220607272963118L;
-    /**
+	private static final long serialVersionUID = 8422040350133766310L;
+
+	/**
      * 登录用户id
      */
     private Long customerId;
@@ -46,8 +49,20 @@ public class SaveCertificationRequest extends UserCenterRequest {
      * 大V认证上传的声音URL
      */
     private String voiceUrl;
+    /**认证声音时长*/
+    private BigDecimal  voiceTime;
+    
+    
 
-    public Long getCustomerId() {
+    public BigDecimal getVoiceTime() {
+		return voiceTime;
+	}
+
+	public void setVoiceTime(BigDecimal voiceTime) {
+		this.voiceTime = voiceTime;
+	}
+
+	public Long getCustomerId() {
         return customerId;
     }
 

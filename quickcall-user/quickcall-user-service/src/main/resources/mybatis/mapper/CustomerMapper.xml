@@ -25,7 +25,7 @@
     <result column="star_sign" property="starSign" jdbcType="CHAR" />
     <result column="birthday" property="birthday" jdbcType="TIMESTAMP" />
     <result column="voice_url" property="voiceUrl" jdbcType="VARCHAR" />
-    <result column="voice_time" property="voiceTime" jdbcType="INTEGER" />
+    <result column="voice_time" property="voiceTime" jdbcType="DECIMAL" />
     <result column="v_status" property="vStatus"   />
     <result column="identity_status" property="identityStatus"   />
     <result column="token_code" property="tokenCode" jdbcType="VARCHAR" />
@@ -77,7 +77,7 @@
       #{occupationId,jdbcType=INTEGER}, #{frontPortraitUrl,jdbcType=VARCHAR}, #{backPortraitUrl,jdbcType=VARCHAR}, 
       #{headPortraitUrl,jdbcType=VARCHAR}, #{source,jdbcType=TINYINT}, #{custStatus,jdbcType=TINYINT}, 
       #{custPassword,jdbcType=VARCHAR}, #{signName,jdbcType=VARCHAR}, #{starSign,jdbcType=CHAR}, 
-      #{birthday,jdbcType=TIMESTAMP}, #{voiceUrl,jdbcType=VARCHAR}, #{voiceTime,jdbcType=INTEGER}, #{vStatus,jdbcType=TINYINT},
+      #{birthday,jdbcType=TIMESTAMP}, #{voiceUrl,jdbcType=VARCHAR}, #{voiceTime,jdbcType=DECIMAL}, #{vStatus,jdbcType=TINYINT},
       #{identityStatus,jdbcType=TINYINT}, #{tokenCode,jdbcType=VARCHAR}, #{otherRelation,jdbcType=VARCHAR}, 
       #{createTime,jdbcType=TIMESTAMP}, #{modifyTime,jdbcType=TIMESTAMP}, #{createMan,jdbcType=VARCHAR}, 
       #{modifyMan,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{appChannelName,jdbcType=VARCHAR}, 
@@ -266,7 +266,7 @@
         #{voiceUrl,jdbcType=VARCHAR},
       </if>
       <if test="voiceTime != null" >
-        #{voiceTime,jdbcType=TINYINT},
+        #{voiceTime,jdbcType=DECIMAL},
       </if>
       <if test="vStatus != null" >
         #{vStatus,jdbcType=TINYINT},
@@ -376,7 +376,7 @@
         voice_url = #{voiceUrl,jdbcType=VARCHAR},
       </if>
       <if test="voiceTime != null" >
-        voice_time = #{voiceTime,jdbcType=TINYINT},
+        voice_time = #{voiceTime,jdbcType=DECIMAL},
       </if>
       <if test="vStatus != null" >
         v_status = #{vStatus,jdbcType=TINYINT},
@@ -433,7 +433,7 @@
       star_sign = #{starSign,jdbcType=CHAR},
       birthday = #{birthday,jdbcType=TIMESTAMP},
       voice_url = #{voiceUrl,jdbcType=VARCHAR},
-      voice_time = #{voiceTime,jdbcType=TINYINT},
+      voice_time = #{voiceTime,jdbcType=DECIMAL},
       v_status = #{vStatus,jdbcType=TINYINT},
       identity_status = #{identityStatus,jdbcType=TINYINT},
       token_code = #{tokenCode,jdbcType=VARCHAR},

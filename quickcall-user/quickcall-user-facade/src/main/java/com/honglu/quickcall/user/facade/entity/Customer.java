@@ -1,5 +1,6 @@
 package com.honglu.quickcall.user.facade.entity;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 public class Customer {
@@ -73,16 +74,16 @@ public class Customer {
 
     private Date loginTime;
     /**大V声音时长*/
-    private Integer voiceTime;
+    private BigDecimal voiceTime;
     
     
     
 
-    public Integer getVoiceTime() {
+    public BigDecimal getVoiceTime() {
 		return voiceTime;
 	}
 
-	public void setVoiceTime(Integer voiceTime) {
+	public void setVoiceTime(BigDecimal voiceTime) {
 		this.voiceTime = voiceTime;
 	}
 
