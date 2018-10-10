@@ -180,7 +180,7 @@
 				fans fa
 			LEFT JOIN fans fb ON fa.fans_id = fb.anchor_id
 			WHERE
-				fa.anchor_id = #{customerId}  and  fa.attention_state  = #{attentionStatus}
+				fa.anchor_id = #{customerId}  and  fa.attention_state  = #{attentionStatus}   AND   fb.fans_id = #{customerId}
 		) tmp
 	LEFT JOIN customer cust ON tmp.fansId = cust.customer_id 
   </select>
