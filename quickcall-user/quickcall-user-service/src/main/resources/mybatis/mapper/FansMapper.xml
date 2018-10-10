@@ -103,7 +103,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.honglu.quickcall.user.facade.entity.Fans" >
+  <update id="updateByPrimaryKey" parameterType="com.honglu.quickcall.user.facade.entity.Fans" >
     update fans
     <set >
       <if test="anchorId != null" >
@@ -133,7 +133,7 @@
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.honglu.quickcall.user.facade.entity.Fans" >
+<!--   <update id="updateByPrimaryKey" parameterType="com.honglu.quickcall.user.facade.entity.Fans" >
     update fans
     set anchor_id = #{anchorId,jdbcType=BIGINT},
       fans_id = #{fansId,jdbcType=BIGINT},
@@ -144,7 +144,7 @@
       modify_man = #{modifyMan,jdbcType=VARCHAR},
       remark = #{remark,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
-  </update>
+  </update> -->
   
   <!-- 查询关注列表 -->
   <select id="queryAttentionListByCustomerId" resultType="com.honglu.quickcall.user.facade.vo.AttentionFansVO" parameterType="java.lang.Long" >
