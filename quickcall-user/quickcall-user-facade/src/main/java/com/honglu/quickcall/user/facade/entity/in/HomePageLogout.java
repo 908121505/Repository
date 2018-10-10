@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.honglu.quickcall.user.facade.entity.Interest;
+import com.honglu.quickcall.user.facade.entity.Occupation;
 
 public class HomePageLogout implements Serializable{
 	
@@ -78,7 +79,7 @@ public class HomePageLogout implements Serializable{
     
     private List<Interest> interestName;//兴趣名字
     
-    private List occupationName;//工作名字
+    private List<Occupation> occupationName;//工作名字
     
     private int vStatus;//大V认证，(0=未认证,1=已通过)
     
@@ -92,7 +93,22 @@ public class HomePageLogout implements Serializable{
     
     private String starSign;//星座
     
-    public String getStarSign() {
+    /**是否关注该用户 0：未关注  1：已关注*/
+    private Integer  attentionStatus;
+    
+    
+    
+    /**是否关注该用户 0：未关注  1：已关注*/
+    public Integer getAttentionStatus() {
+		return attentionStatus;
+	}
+
+    /**是否关注该用户 0：未关注  1：已关注*/
+	public void setAttentionStatus(Integer attentionStatus) {
+		this.attentionStatus = attentionStatus;
+	}
+
+	public String getStarSign() {
 		return starSign;
 	}
 
@@ -148,11 +164,11 @@ public class HomePageLogout implements Serializable{
 		this.interestName = interestName;
 	}
 
-	public List getOccupationName() {
+	public List<Occupation> getOccupationName() {
 		return occupationName;
 	}
 
-	public void setOccupationName(List occupationName) {
+	public void setOccupationName(List<Occupation> occupationName) {
 		this.occupationName = occupationName;
 	}
 

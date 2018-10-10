@@ -19,7 +19,7 @@ public interface OccupationMapper {
     int updateByPrimaryKey(Occupation record);
     
     //根据customerId查找职业
-    List selectByCustomerId(Long customerId);
+    List<Occupation> selectByCustomerId(Long customerId);
 
     /**查询职业列表*/
 	List<OccupationVO> selectOccupationList();

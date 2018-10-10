@@ -45,4 +45,12 @@ public interface FansMapper {
 	 * @return
 	 */
 	Fans queryFans(@Param("fansId") Long fansId, @Param("attendedId")  Long attendedId);
+
+	/**
+	 * 查询关注情况
+	 * @param userId
+	 * @param customerId
+	 * @return
+	 */
+	Fans queryAttentionInfo(@Param("userId") Long userId, @Param("customerId")  Long customerId);
 }

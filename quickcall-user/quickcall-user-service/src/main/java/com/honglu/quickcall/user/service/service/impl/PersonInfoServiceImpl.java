@@ -26,6 +26,7 @@ import com.honglu.quickcall.user.facade.entity.CustomerInterest;
 import com.honglu.quickcall.user.facade.entity.CustomerOccupation;
 import com.honglu.quickcall.user.facade.entity.Fans;
 import com.honglu.quickcall.user.facade.entity.Interest;
+import com.honglu.quickcall.user.facade.entity.Occupation;
 import com.honglu.quickcall.user.facade.entity.Orders;
 import com.honglu.quickcall.user.facade.entity.Product;
 import com.honglu.quickcall.user.facade.entity.SensitivityWord;
@@ -510,7 +511,7 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 				List<Interest> interestName = interestMapper.selectInterestByCustomerId(params.getCustomerId());
 				homePageLogout.setInterestName(interestName);
 				// 获取职业名字
-				List occupationName = occupationMapper.selectByCustomerId(params.getCustomerId());
+				List<Occupation> occupationName = occupationMapper.selectByCustomerId(params.getCustomerId());
 				homePageLogout.setOccupationName(occupationName);
 				// 判断是否是大V用户，只有拥有上架商品的用户和通过大V认证的用户才会显示大V认证
 				int num = productMapper.queryVProductNum(params.getCustomerId());
@@ -530,6 +531,21 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 				//查询关注数量
 				int attentionNum = fansMapper.queryAttentionNumByCustomerId(params.getCustomerId());
 				homePageLogout.setAttentionNum(attentionNum);
+				
+				
+				
+				//判断当前用户是否关注对方
+				Long  userId =  params.getMyUserId();
+				Long  customerId =  params.getCustomerId();
+				
+				Integer  attentionStatus =  UserBizConstants.ATTENTION_STATUS_UN_ATTENED ;
+				if(userId != null){
+					Fans  fans = fansMapper.queryFans(userId,customerId);
+					if(fans != null){
+						attentionStatus =  fans.getAttentionState();
+					}
+				}
+				homePageLogout.setAttentionStatus(attentionStatus);
 				
 				commonResponse.setData(homePageLogout);
 				commonResponse.setCode(UserBizReturnCode.Success);
@@ -558,6 +574,9 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 			try {
 				// 获取标签名称
 				Product product = productMapper.selectByPrimaryKey(customerId);
+				if(product == null){
+					continue ;
+				}
 				tag.setTagName(product.getName());
 				// 获取该产品接单次数(订单完成状态)
 				// 封装参数
