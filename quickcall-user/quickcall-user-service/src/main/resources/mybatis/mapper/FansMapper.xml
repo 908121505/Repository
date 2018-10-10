@@ -162,6 +162,43 @@
 			fans_id = #{customerId}  and   fs.attention_state = #{attentionStatus}
   </select>
   
+  
+  
+  
+  
+  <!-- 查询粉丝Id -->
+  <select id="queryFansIdListByCustomerId" resultType="java.lang.Long"  >
+		SELECT  fans_id    FROM  fans WHERE   anchor_id = #{customerId}  and  attention_state  = #{attentionStatus}
+  </select>
+  
+  
+  <!-- 查询粉丝信息列表 -->
+  <select id="queryFansListByFansIdList" resultMap="BaseResultMap"  >
+		SELECT  <include refid="Base_Column_List"></include>    FROM  fans WHERE  fans_id  = #{customerId}   and  
+		
+		anchor_id in  
+		<foreach collection="list"  item="id"  open="("  close=")"  separator=",">
+		  #{id}
+		</foreach>
+  </select>
+  <!-- 查询粉丝信息列表 -->
+  <select id="queryCustomerListByCustomerIdList" resultType="com.honglu.quickcall.user.facade.vo.AttentionFansVO"  >
+		SELECT
+			customer_id  AS customerId,
+			head_portrait_url AS headPortraitUrl,
+			nick_name AS nickName,
+			(YEAR (NOW()) - YEAR (birthday)) AS age,
+			sex AS sex 
+		FROM  customer
+		where
+		customer_id in
+		<foreach collection="list"  item="id"  open="("  close=")"  separator=",">
+		  #{id}
+		</foreach>
+  </select>
+  
+  
+  
   <!-- 查询粉丝列表 -->
   <select id="queryFansListByCustomerId" resultType="com.honglu.quickcall.user.facade.vo.AttentionFansVO"  >
 	SELECT

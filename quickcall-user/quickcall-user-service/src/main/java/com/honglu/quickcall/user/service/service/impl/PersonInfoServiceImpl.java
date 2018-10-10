@@ -2,6 +2,7 @@ package com.honglu.quickcall.user.service.service.impl;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -11,7 +12,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
+//import com.alibaba.dubbo.common.utils.CollectionUtils;
 import com.honglu.quickcall.account.facade.code.AccountBizReturnCode;
 import com.honglu.quickcall.common.api.exception.BizException;
 import com.honglu.quickcall.common.api.exception.RemoteException;
@@ -646,7 +649,39 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 				resultList= fansMapper.queryAttentionListByCustomerId(customerId,UserBizConstants.ATTENTION_STATUS_ATTENED);
 			}else if(UserBizConstants.QUERY_FANS_LIST_TYPE == type){
 				//查询粉丝列表
-				resultList =fansMapper.queryFansListByCustomerId(customerId,UserBizConstants.ATTENTION_STATUS_ATTENED);
+//				resultList =fansMapper.queryFansListByCustomerId(customerId,UserBizConstants.ATTENTION_STATUS_ATTENED);
+				//粉丝ID
+				List<Long>  fansIdList = fansMapper.queryFansIdListByCustomerId(customerId,UserBizConstants.ATTENTION_STATUS_ATTENED);
+			
+				if(CollectionUtils.isEmpty(fansIdList)){
+					
+				}else{
+					
+					//获取
+					List<AttentionFansVO>  custList = fansMapper.queryCustomerListByCustomerIdList(fansIdList);
+					
+					//获取
+					List<Fans>  fansList = fansMapper.queryFansListByFansIdList(fansIdList,customerId);
+					
+					HashMap<Long, Integer>   attentionStatusMap = new HashMap<Long, Integer>();
+					if(!CollectionUtils.isEmpty(fansList)){
+						for (Fans fans : fansList) {
+							Long  anchorId = fans.getAnchorId();
+							attentionStatusMap.put(anchorId, fans.getAttentionState());
+						}
+					}
+					
+					for (AttentionFansVO vo : custList) {
+						Long  custId = vo.getCustomerId();
+						Integer  attentionStatus =  attentionStatusMap.get(custId);
+						if(attentionStatus == null){
+							attentionStatus =  UserBizConstants.ATTENTION_STATUS_UN_ATTENED;
+						}
+						vo.setAttentionStatus(attentionStatus);
+					}
+					
+				}
+			
 			}
 			commonResponse.setData(resultList);
 			commonResponse.setCode(UserBizReturnCode.Success);

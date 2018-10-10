@@ -36,6 +36,31 @@ public interface FansMapper {
 	 * @param customerId
 	 * @return
 	 */
+	List<Long> queryFansIdListByCustomerId(@Param("customerId")Long customerId ,@Param("attentionStatus")  Integer  attentionStatus);
+	/**
+	 * 根据客户ID列表查询客户列表
+	 * @param customerIdList
+	 * @return
+	 */
+	List<AttentionFansVO> queryCustomerListByCustomerIdList(@Param("list")List<Long>   customerIdList);
+	
+	
+	/**
+	 * 查询粉丝列表
+	 * @param fansId
+	 * @param customerId
+	 * @return
+	 */
+	List<Fans> queryFansListByFansIdList(@Param("list")List<Long> fansId,@Param("customerId")Long customerId);
+	
+	
+	
+	
+	/**
+	 * 查询粉丝列表
+	 * @param customerId
+	 * @return
+	 */
 	List<AttentionFansVO> queryFansListByCustomerId(@Param("customerId")Long customerId ,@Param("attentionStatus")  Integer  attentionStatus);
 
 	/**
