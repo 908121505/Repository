@@ -661,7 +661,14 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 
 	@Override
 	public CommonResponse addOrCancelFans(AddOrCancelFansRequest request) {
+		if (request == null || request.getFansId() == null ||  request.getAttendedId() == null) {
+			throw new BizException(UserBizReturnCode.paramError, "参数异常");
+		}
+		
 		CommonResponse commonResponse = new CommonResponse();
+		
+		
+		
 		try {
 			
 			Long  fansId =  request.getFansId();
