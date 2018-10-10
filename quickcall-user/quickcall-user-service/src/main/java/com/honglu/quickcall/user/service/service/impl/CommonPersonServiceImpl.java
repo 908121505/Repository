@@ -1,6 +1,5 @@
 package com.honglu.quickcall.user.service.service.impl;
 
-import java.math.BigDecimal;
 import java.text.MessageFormat;
 import java.util.Date;
 import java.util.Objects;
@@ -111,9 +110,10 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 			}
 			param.setPhone(params.getTel());
 		} // 手机号 密码登录
-		if (StringUtils.isNotBlank(params.getPassWord())) {
-			param.setCustPassword(MD5.md5(params.getPassWord()));
-		} // 微博登录
+		/*
+		 * if (StringUtils.isNotBlank(params.getPassWord())) {
+		 * param.setCustPassword(MD5.md5(params.getPassWord())); }
+		 */ // 微博登录
 		else if (StringUtils.isNotBlank(params.getMicroblogOpenId())) {
 			param.setMicroblogOpenId(params.getMicroblogOpenId());
 		} // QQ登录
@@ -128,6 +128,13 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 		if (customer == null) {
 			logger.info("用户不存在");
 			throw new BizException(BizCode.ParamError, "用戶不存在");
+		} else {
+			if (StringUtils.isNotBlank(params.getPassWord())) {
+				if (!MD5.md5(params.getPassWord()).equals(customer.getCustPassword())) {
+					logger.info("密码错误");
+					throw new BizException(BizCode.ParamError, "密码错误");
+				}
+			}
 		}
 
 		// 修改登录时间 补 融云token
@@ -217,7 +224,7 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 		}
 		customer = customerMapper.login(param);
 		if (customer != null) {
-			logger.info("用户不存在");
+			logger.info("用户已存在");
 			throw new BizException(BizCode.ParamError, "用戶已存在");
 		}
 		customer = new Customer();
@@ -227,7 +234,7 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 		customer.setQqOpenId(request.getQqOpenId());
 		customer.setWechatOpenId(request.getWechatOpenId());
 		customer.setPhone(request.getTel());
-		customer.setNickName("voice_" + randomFour());
+		customer.setNickName(request.getNickName());
 
 		if (StringUtils.isNotBlank(request.getHeardUrl())) {
 			defaultImg = request.getHeardUrl();
@@ -430,7 +437,7 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 			certifyCustomer.setVoiceUrl(request.getVoiceUrl());
 		}
 
-		//如果声音时长为null，sql不会更新
+		// 如果声音时长为null，sql不会更新
 		certifyCustomer.setVoiceTime(request.getVoiceTime());
 		certifyCustomer.setCustomerId(request.getCustomerId());
 		customerMapper.updateByPrimaryKeySelective(certifyCustomer);
