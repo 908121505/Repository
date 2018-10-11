@@ -270,7 +270,7 @@
 		SELECT
 		  c.nick_name AS nickName,
 		  c.sex  AS  sex ,
-		  (YEAR(NOW()) -  YEAR(c.birthday))  AS age ,
+		  ((YEAR(NOW()) -  YEAR(c.birthday)) + 1)  AS age ,
 		  p.price as price ,
 		  p.service_time  AS  serviceTime,
 		  c.customer_id  AS  customerId,
