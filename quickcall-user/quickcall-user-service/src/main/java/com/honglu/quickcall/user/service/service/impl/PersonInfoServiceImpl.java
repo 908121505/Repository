@@ -171,10 +171,11 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 			 personHomePage.setAge(age);
 			// 判断身份证是否为空，如果又身份证则按找身份证上面的性别
 			if (StringUtils.isNotEmpty(identityID)) {
-				Matcher m = ID_PATTERN.matcher(identityID);
-				if (!m.matches()) {
-					throw new RemoteException(UserBizReturnCode.paramError, "身份证参数错误");
-				}
+				//TODO  此处不应该校验身份证号码是否正确
+//				Matcher m = ID_PATTERN.matcher(identityID);
+//				if (!m.matches()) {
+//					throw new RemoteException(UserBizReturnCode.paramError, "身份证参数错误");
+//				}
 				// 判断身份证男女，截取身份证倒数第二位
 				String genderStr = identityID.substring(identityID.length() - 2, identityID.length() - 1);
 				int genderInt = Integer.parseInt(genderStr);
