@@ -74,6 +74,10 @@ public interface UserFunctionType {
   public static  final  String  CHECK_ATTENTION = "0011132";
   
   
+  /**保存大V声音信息*/
+  public  static  final String SAVE_DV_VOICE_INFO = "0011133";
+  
+  
   
   
       

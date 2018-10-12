@@ -63,4 +63,13 @@ public interface CommonPersonService {
      * @return
      */
     CommonResponse saveUserCertificationInfo(SaveCertificationRequest request);
+
+    
+    
+    /**
+     * 保存
+     * @param request
+     * @return
+     */
+	CommonResponse saveDvVoiceInfo(SaveDvVoiceRequest request);
 }

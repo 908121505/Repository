@@ -30,6 +30,11 @@ public interface UserBizConstants {
 	public static final   Integer   ATTENTION_TYPE_ADD = 1 ;
 	/**关注/取消类型2：取消*/
 	public static final   Integer   ATTENTION_TYPE_CANCEL = 2 ;
+	
+	
+	
+	/**声音上传请求类型*/
+	public static final   String   UPLOAD_AUDIT_REQUEST = "MYVOICE" ;
 
 
 

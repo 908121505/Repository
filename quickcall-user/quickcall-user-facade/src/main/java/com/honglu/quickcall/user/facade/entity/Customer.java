@@ -73,13 +73,34 @@ public class Customer {
     private String deviceId;
 
     private Date loginTime;
-    /**大V声音时长*/
+    /**大V认证声音时长*/
     private BigDecimal voiceTime;
+    /**大V自己声音时长*/
+    private BigDecimal vVoiceTime;
+    /**大V自己声音URL*/
+    private String vVoiceUrl;
+    
     
     
     
 
-    public BigDecimal getVoiceTime() {
+    public BigDecimal getvVoiceTime() {
+		return vVoiceTime;
+	}
+
+	public void setvVoiceTime(BigDecimal vVoiceTime) {
+		this.vVoiceTime = vVoiceTime;
+	}
+
+	public String getvVoiceUrl() {
+		return vVoiceUrl;
+	}
+
+	public void setvVoiceUrl(String vVoiceUrl) {
+		this.vVoiceUrl = vVoiceUrl;
+	}
+
+	public BigDecimal getVoiceTime() {
 		return voiceTime;
 	}
 

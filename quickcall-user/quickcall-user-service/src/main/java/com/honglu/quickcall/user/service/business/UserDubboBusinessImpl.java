@@ -24,6 +24,7 @@ import com.honglu.quickcall.user.facade.exchange.request.QueryInterestListReques
 import com.honglu.quickcall.user.facade.exchange.request.QueryOccupationListRequest;
 import com.honglu.quickcall.user.facade.exchange.request.SaveBirthRequest;
 import com.honglu.quickcall.user.facade.exchange.request.SaveCertificationRequest;
+import com.honglu.quickcall.user.facade.exchange.request.SaveDvVoiceRequest;
 import com.honglu.quickcall.user.facade.exchange.request.SaveGenderRequest;
 import com.honglu.quickcall.user.facade.exchange.request.SaveInterestRequest;
 import com.honglu.quickcall.user.facade.exchange.request.SaveNickNameRequest;
@@ -91,6 +92,9 @@ public class UserDubboBusinessImpl implements UserDubboBusiness {
             case UserFunctionType.SAVE_USER_CERTIFY_INFO:
                 response=  commonPersonService.saveUserCertificationInfo((SaveCertificationRequest)request);
                 break;
+            case UserFunctionType.SAVE_DV_VOICE_INFO:
+            	response=  commonPersonService.saveDvVoiceInfo((SaveDvVoiceRequest)request);
+            	break;
 			case UserFunctionType.SaveNicknameImage:// 保存昵称和头像
 				response = personInfoService.saveNicknameImage((SaveNickNameRequest) request);
 				break;

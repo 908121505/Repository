@@ -6,7 +6,9 @@ import com.honglu.quickcall.common.api.exchange.WebResponseModel;
 import com.honglu.quickcall.common.core.util.UUIDUtils;
 import com.honglu.quickcall.common.third.OSS.OSSUtil;
 import com.honglu.quickcall.user.facade.code.UserBizReturnCode;
+import com.honglu.quickcall.user.facade.constants.UserBizConstants;
 import com.honglu.quickcall.user.facade.exchange.request.SaveCertificationRequest;
+import com.honglu.quickcall.user.facade.exchange.request.SaveDvVoiceRequest;
 import com.honglu.quickcall.user.facade.exchange.request.UserIdCardInfoRequest;
 import com.honglu.quickcall.user.web.service.UserCenterService;
 import org.apache.commons.lang3.StringUtils;
@@ -161,14 +163,30 @@ public class CertificationController {
         WebResponseModel response = uploadFile(request, AliYunFilePaths.BIG_V_INTRODUCE_AUDIO);
         if("000000".equals(response.getCode())){
         	String   voiceTimeStr = request.getParameter("voiceTime");
-        	SaveCertificationRequest params = new SaveCertificationRequest();
-        	if(StringUtils.isNotBlank(voiceTimeStr)){
-        		params.setVoiceTime(new BigDecimal(voiceTimeStr).setScale(1, BigDecimal.ROUND_HALF_UP));
+        	String   requestType =  request.getParameter("requestType");
+        	if(UserBizConstants.UPLOAD_AUDIT_REQUEST.equals(requestType)){
+        		//大V自己的声音非大V认证声音
+        		SaveDvVoiceRequest params = new SaveDvVoiceRequest();
+        		if(StringUtils.isNotBlank(voiceTimeStr)){
+        			params.setVoiceTime(new BigDecimal(voiceTimeStr).setScale(1, BigDecimal.ROUND_HALF_UP));
+        		}
+        		params.setCustomerId(Long.valueOf(customerId));
+        		params.setVoiceUrl(response.getData());
+        		if(StringUtils.isNotBlank(voiceTimeStr)){
+        			params.setVoiceTime(new BigDecimal(voiceTimeStr).setScale(1, BigDecimal.ROUND_HALF_UP));
+        		}
+        		response = userCenterService.execute(params);
+        	}else{
+        		//大V认证声音上传
+        		SaveCertificationRequest params = new SaveCertificationRequest();
+        		if(StringUtils.isNotBlank(voiceTimeStr)){
+        			params.setVoiceTime(new BigDecimal(voiceTimeStr).setScale(1, BigDecimal.ROUND_HALF_UP));
+        		}
+        		params.setCustomerId(Long.valueOf(customerId));
+        		params.setVoiceUrl(response.getData());
+        		params.setCertifyType(2);// 大V认证
+        		response = userCenterService.execute(params);
         	}
-            params.setCustomerId(Long.valueOf(customerId));
-            params.setVoiceUrl(response.getData());
-            params.setCertifyType(2);// 大V认证
-            response = userCenterService.execute(params);
         }
         logger.info("userWeb.certification introduceAudioUpload response data : " + request);
         return response;

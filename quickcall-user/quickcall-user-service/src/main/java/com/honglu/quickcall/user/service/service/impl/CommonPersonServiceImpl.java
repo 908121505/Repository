@@ -34,6 +34,7 @@ import com.honglu.quickcall.user.facade.entity.Customer;
 import com.honglu.quickcall.user.facade.exchange.request.GetSmsCodeRequest;
 import com.honglu.quickcall.user.facade.exchange.request.IsPhoneExistsRequest;
 import com.honglu.quickcall.user.facade.exchange.request.SaveCertificationRequest;
+import com.honglu.quickcall.user.facade.exchange.request.SaveDvVoiceRequest;
 import com.honglu.quickcall.user.facade.exchange.request.SetHeardUrlRequest;
 import com.honglu.quickcall.user.facade.exchange.request.SetPwdRequest;
 import com.honglu.quickcall.user.facade.exchange.request.UserIdCardInfoRequest;
@@ -442,6 +443,22 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 		certifyCustomer.setCustomerId(request.getCustomerId());
 		customerMapper.updateByPrimaryKeySelective(certifyCustomer);
 
+		return ResultUtils.resultSuccess();
+	}
+
+	@Override
+	public CommonResponse saveDvVoiceInfo(SaveDvVoiceRequest request) {
+		Long   customerId =  request.getCustomerId();
+		Customer customer = customerMapper.selectByPrimaryKey(customerId);
+		if (customer == null) {
+			return ResultUtils.resultDataNotExist("用户数据不存在");
+		}
+		Customer record = new Customer();
+		record.setCustomerId(customerId);
+		record.setvVoiceUrl(request.getVoiceUrl());
+		record.setvVoiceTime(request.getVoiceTime());
+		customerMapper.updateByPrimaryKeySelective(record );
+		
 		return ResultUtils.resultSuccess();
 	}
 }
