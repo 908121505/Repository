@@ -14,7 +14,7 @@
 	</delete>
 	
 	
-	<insert id="batchInsert" parameterType="java.util.List">
+	<insert id="batchInsert" parameterType="java.util.List" flushCache="true">
 		insert into sys_role_menu(role_code,menu_id) values
 		<foreach collection="list" item="role_menu" separator=",">
 			(#{role_menu.role_code},#{role_menu.menu_id})
