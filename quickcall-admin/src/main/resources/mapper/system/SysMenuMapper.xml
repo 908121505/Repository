@@ -54,8 +54,7 @@
 		where id=#{id}
 	</update>
 	
-	<select id="queryTree" parameterType="map" resultMap="SysMenuMap" useCache="false">
-	<!--<select id="queryTree" parameterType="map" resultMap="SysMenuMap">-->
+	<select id="queryTree" parameterType="map" resultMap="SysMenuMap">
 		select id,names,url,img_icon,orders,parent_id,menu_type, author,
 		(
 			CASE WHEN id in ( SELECT menu_id FROM sys_role_menu WHERE role_code=#{role_code}) THEN '1'
