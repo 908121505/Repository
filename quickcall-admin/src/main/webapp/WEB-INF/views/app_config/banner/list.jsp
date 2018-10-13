@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="shiro" uri="http://shiro.apache.org/tags"%>
+
+<shiro:hasPermission name="banner:select">
 <div class="content1">
 	<div class="header">
 		<h1 class="page-title">banner管理</h1>
@@ -47,12 +49,14 @@
 					<i class="glyphicon glyphicon-search"></i> 查询
 				</button>
 			</div>
+			<shiro:hasPermission name="banner:add">
 			<div class="col-md-2">
 				<button type="button" class="btn btn-info btn-small btn-block"
 					onclick="addAndUpdateRow(0)">
 					<i class="glyphicon glyphicon-plus"></i> 增加
 				</button>
 			</div>
+			</shiro:hasPermission>
 		</div>
 		<div class="row">
 			<div class="col-md-2">
@@ -196,8 +200,13 @@
 				 aoColumnDefs : [
 					{"aTargets" :11,"mRender" : function(data, type, row){
 						var edit="",del="";
+						<shiro:hasPermission name="banner:update">
 						edit = "<a href='#' onclick='addAndUpdateRow(\""+data+"\")' data-toggle='modal' class='padding-right-small label label-success'><i class='glyphicon glyphicon-edit'></i> 编辑</a>";
+						</shiro:hasPermission>
+
+						<shiro:hasPermission name="banner:delete">
 						del ="<a href='#' onclick='deleteRow(\""+data+"\")' data-toggle='modal' class='label label label-danger'><i class='glyphicon glyphicon-trash'></i> 删除 </a>";
+						</shiro:hasPermission>
 						return edit+"&nbsp;"+del;
 					}
 				 }
@@ -227,3 +236,4 @@
 		</div>
 	</div>
 </div>
+</shiro:hasPermission>

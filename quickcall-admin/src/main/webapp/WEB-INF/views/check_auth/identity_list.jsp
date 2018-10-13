@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="shiro" uri="http://shiro.apache.org/tags" %>
-
+<shiro:hasPermission name="checkIdentityAuth:select">
 <link type="text/css" rel="stylesheet" href="resources/plugins/viewer/viewer.min.css" media="screen"/>
 
 <div class="content1">
@@ -128,10 +128,12 @@
                     {
                         "aTargets": 6, "mRender": function (data, type, row) {
                             var approved = "", refuse = "";
+                            <shiro:hasPermission name="checkIdentityAuth:update">
                             if (row.identityStatus == 1) {
                                 approved = "<a href='#' onclick='approvedFn(\"" + row.customerId + "\",\"" + row.credentialsNum + "\")' data-toggle='modal' class='padding-right-small label label-success'><i class='glyphicon glyphicon-edit'></i> 通过</a>";
                                 refuse = "<a href='#' onclick='refuseFn(\"" + row.customerId + "\")' data-toggle='modal' class='padding-right-small label label-success'><i class='glyphicon glyphicon-edit'></i> 拒绝</a>";
                             }
+                            </shiro:hasPermission>
                             return approved + "&nbsp;" + refuse;
                         }
                     }
@@ -214,3 +216,4 @@
     </div>
 </div>
 <script type="text/javascript" src="resources/plugins/viewer/viewer.min.js"></script>
+</shiro:hasPermission>

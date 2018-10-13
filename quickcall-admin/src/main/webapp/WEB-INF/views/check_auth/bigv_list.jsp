@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="shiro" uri="http://shiro.apache.org/tags" %>
+<shiro:hasPermission name="checkBigVAuth:select">
 <div class="content1">
     <div class="header">
         <h1 class="page-title">大V认证审核</h1>
@@ -135,10 +136,12 @@
                     {
                         "aTargets": 6, "mRender": function (data, type, row) {
                             var approved = "", refuse = "";
+                            <shiro:hasPermission name="checkBigVAuth:update">
                             if (row.vStatus == 1) {
                                 approved = "<a href='#' onclick='approvedFn(\"" + row.customerId + "\")' data-toggle='modal' class='padding-right-small label label-success'><i class='glyphicon glyphicon-edit'></i> 通过</a>";
                                 refuse = "<a href='#' onclick='refuseFn(\"" + row.customerId + "\")' data-toggle='modal' class='padding-right-small label label-success'><i class='glyphicon glyphicon-edit'></i> 拒绝</a>";
                             }
+                            </shiro:hasPermission>
                             return approved + "&nbsp;" + refuse;
                         }
                     }
@@ -223,3 +226,4 @@
 
 <link rel="stylesheet" type="text/css" href="resources/plugins/wx-audio/wx-audio.css">
 <script type="text/javascript" src="resources/plugins/wx-audio/wx-audio.js" charset="utf-8"></script>
+</shiro:hasPermission>
