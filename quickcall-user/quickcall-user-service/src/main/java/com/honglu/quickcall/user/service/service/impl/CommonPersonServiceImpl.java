@@ -458,9 +458,14 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 		record.setCustomerId(customerId);
 		record.setvVoiceUrlTmp(request.getVoiceUrl());
 		record.setvVoiceTimeTmp(request.getVoiceTime());
-		record.setvStatus(UserBizConstants.VOICE_STATUS_UN_APPROVE);
+		record.setVoiceStatus(UserBizConstants.VOICE_STATUS_UN_APPROVE);
 		customerMapper.updateByPrimaryKeySelective(record );
 		
-		return ResultUtils.resultSuccess();
+		
+		CommonResponse commonResponse = new CommonResponse();
+		commonResponse.setCode(BizCode.Success);
+		commonResponse.setMessage(BizCode.Success.desc());
+		commonResponse.setData(request.getVoiceUrl());
+		return commonResponse;
 	}
 }

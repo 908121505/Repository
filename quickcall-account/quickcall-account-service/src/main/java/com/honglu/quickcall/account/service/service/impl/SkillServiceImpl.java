@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,7 @@ import com.honglu.quickcall.account.facade.vo.FirstPageSkillinfoVO;
 import com.honglu.quickcall.account.facade.vo.SkillInfoVO;
 import com.honglu.quickcall.account.facade.vo.SkillVO;
 import com.honglu.quickcall.account.facade.vo.VoiceVO;
+import com.honglu.quickcall.account.facade.vo.VoiceVOCopy;
 import com.honglu.quickcall.account.service.dao.ProductMapper;
 import com.honglu.quickcall.account.service.dao.SkillMapper;
 import com.honglu.quickcall.account.service.service.CommonService;
@@ -66,10 +68,26 @@ public class SkillServiceImpl implements ISkillService {
 		
 		SkillInfoVO  resultVO  = new SkillInfoVO();
 		
-		VoiceVO   voiceVO    = skillMapper.getVoiceInfo(customerId);
-		if(voiceVO == null){
-			voiceVO =  new VoiceVO();
+		VoiceVOCopy   voiceQuery    = skillMapper.getVoiceInfo(customerId);
+		VoiceVO  voiceVO  = new VoiceVO(); 
+		if(voiceQuery == null){
 			voiceVO.setVoiceStatus(OrderSkillConstants.VOICE_STATUS_UNEXIST);
+		}else{
+			voiceVO.setVoiceStatus(voiceQuery.getVoiceStatus());
+			
+		
+			BigDecimal  voiceTime =  voiceQuery.getVoiceTime();
+			if(voiceTime == null ||  voiceTime.compareTo(BigDecimal.ZERO)== 0){
+				voiceVO.setVoiceTime(voiceQuery.getVoiceTimeTmp());
+			}else{
+				voiceVO.setVoiceTime(voiceQuery.getVoiceTime());
+			}
+			String  voiceUrl =  voiceQuery.getVoiceUrl();
+			if(StringUtils.isBlank(voiceUrl)){
+				voiceVO.setVoiceUrl(voiceQuery.getVoiceUrlTmp());
+			}else{
+				voiceVO.setVoiceUrl(voiceQuery.getVoiceUrl());
+			}
 		}
 		resultVO.setVoiceVO(voiceVO);
 		

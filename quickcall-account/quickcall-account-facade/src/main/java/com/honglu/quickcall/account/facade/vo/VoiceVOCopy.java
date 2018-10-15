@@ -11,12 +11,46 @@ import java.math.BigDecimal;
  * @author: chenliuguang   
  * @date: 2018年10月15日 下午3:20:39
  */
-public class VoiceVO {
+public class VoiceVOCopy {
     
     private Integer voiceStatus;
     private String  voiceUrl;
-    /**已设置金额*/
+    /***/
     private BigDecimal  voiceTime;
+    
+    private String  voiceUrlTmp;
+    
+    /**已设置金额*/
+    private BigDecimal  voiceTimeTmp;
+    
+    
+    
+    
+    
+
+	public String getVoiceUrl() {
+		return voiceUrl;
+	}
+
+	public void setVoiceUrl(String voiceUrl) {
+		this.voiceUrl = voiceUrl;
+	}
+
+	public String getVoiceUrlTmp() {
+		return voiceUrlTmp;
+	}
+
+	public void setVoiceUrlTmp(String voiceUrlTmp) {
+		this.voiceUrlTmp = voiceUrlTmp;
+	}
+
+	public BigDecimal getVoiceTimeTmp() {
+		return voiceTimeTmp;
+	}
+
+	public void setVoiceTimeTmp(BigDecimal voiceTimeTmp) {
+		this.voiceTimeTmp = voiceTimeTmp;
+	}
 
 	public Integer getVoiceStatus() {
 		return voiceStatus;
@@ -26,13 +60,7 @@ public class VoiceVO {
 		this.voiceStatus = voiceStatus;
 	}
 
-	public String getVoiceUrl() {
-		return voiceUrl;
-	}
 
-	public void setVoiceUrl(String voiceUrl) {
-		this.voiceUrl = voiceUrl;
-	}
 
 	public BigDecimal getVoiceTime() {
 		return voiceTime;

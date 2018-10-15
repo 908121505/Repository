@@ -258,11 +258,13 @@
 			tmp.count DESC 
   </select>
   <!-- 根据客户编号查询大V声音信息 -->
-  <select id="getVoiceInfo" resultType="com.honglu.quickcall.account.facade.vo.VoiceVO" >
+  <select id="getVoiceInfo" resultType="com.honglu.quickcall.account.facade.vo.VoiceVOCopy" >
 		SELECT
 			v_voice_status AS voiceStatus,
 			v_voice_time AS voiceTime,
-			v_voice_url AS voiceUrl
+			v_voice_url AS voiceUrl,
+			v_voice_time_tmp AS voiceTimeTmp,
+			v_voice_url_tmp AS voiceUrlTmp
 		FROM
 			customer
 		WHERE
