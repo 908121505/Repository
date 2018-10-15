@@ -23,7 +23,9 @@ import com.honglu.quickcall.account.facade.exchange.request.SkillInfoRequest;
 import com.honglu.quickcall.account.facade.exchange.request.SkillUpdateRequest;
 import com.honglu.quickcall.account.facade.vo.FirstPageDaVinfoVO;
 import com.honglu.quickcall.account.facade.vo.FirstPageSkillinfoVO;
+import com.honglu.quickcall.account.facade.vo.SkillInfoVO;
 import com.honglu.quickcall.account.facade.vo.SkillVO;
+import com.honglu.quickcall.account.facade.vo.VoiceVO;
 import com.honglu.quickcall.account.service.dao.ProductMapper;
 import com.honglu.quickcall.account.service.dao.SkillMapper;
 import com.honglu.quickcall.account.service.service.CommonService;
@@ -61,6 +63,15 @@ public class SkillServiceImpl implements ISkillService {
 		}
 		Long  customerId =  request.getCustomerId();
 		//首先查询所有的技能信息
+		
+		SkillInfoVO  resultVO  = new SkillInfoVO();
+		
+		VoiceVO   voiceVO    = skillMapper.getVoiceInfo(customerId);
+		if(voiceVO == null){
+			voiceVO =  new VoiceVO();
+			voiceVO.setVoiceStatus(OrderSkillConstants.VOICE_STATUS_UNEXIST);
+		}
+		resultVO.setVoiceVO(voiceVO);
 		
 		List<Skill>   skillList = skillMapper.selectTotalSkill();
 		List<Long>  skillIdList =  new ArrayList<Long>();
@@ -107,10 +118,11 @@ public class SkillServiceImpl implements ISkillService {
 			}
 		}
 		
-		 CommonResponse commonResponse = new CommonResponse();
-		 commonResponse.setCode(BizCode.Success);
-		 commonResponse.setMessage(BizCode.Success.desc());
-		 commonResponse.setData(resultList);
+		resultVO.setSkillVOList(resultList);
+		CommonResponse commonResponse = new CommonResponse();
+		commonResponse.setCode(BizCode.Success);
+		commonResponse.setMessage(BizCode.Success.desc());
+		commonResponse.setData(resultVO);
 		LOGGER.info("用户编号为：" + request.getCustomerId() + "查询成功");
 		return commonResponse;
 	}
