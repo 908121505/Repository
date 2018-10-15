@@ -62,7 +62,7 @@
 				</div>
 				
 				<div class="form-group">
-					<label class="col-sm-4 control-label">技能背景图片上传<c:if test="${entity eq null }"><font color="red">&nbsp;*</font></c:if>
+					<label class="col-sm-4 control-label">背景图片上传<c:if test="${entity eq null }"><font color="red">&nbsp;*</font></c:if>
 					</label>
 					<div class="col-sm-8">
 						<div class="input-group">
@@ -85,7 +85,7 @@
 				
 				
 				<div class="form-group">
-					<label class="col-sm-4 control-label">技能标题背景图片上传<c:if test="${entity eq null }"><font color="red">&nbsp;*</font></c:if>
+					<label class="col-sm-4 control-label">标题背景图片上传<c:if test="${entity eq null }"><font color="red">&nbsp;*</font></c:if>
 					</label>
 					<div class="col-sm-8">
 						<div class="input-group">

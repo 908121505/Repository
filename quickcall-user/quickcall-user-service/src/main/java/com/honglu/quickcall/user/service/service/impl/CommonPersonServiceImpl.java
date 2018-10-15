@@ -460,12 +460,6 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 		record.setvVoiceTimeTmp(request.getVoiceTime());
 		record.setVoiceStatus(UserBizConstants.VOICE_STATUS_UN_APPROVE);
 		customerMapper.updateByPrimaryKeySelective(record );
-		
-		
-		CommonResponse commonResponse = new CommonResponse();
-		commonResponse.setCode(BizCode.Success);
-		commonResponse.setMessage(BizCode.Success.desc());
-		commonResponse.setData(request.getVoiceUrl());
-		return commonResponse;
+		return ResultUtils.resultSuccess();
 	}
 }

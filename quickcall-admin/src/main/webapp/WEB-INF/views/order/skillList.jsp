@@ -133,6 +133,19 @@
 			              } 
 			            },
 			            { 
+			               "data": "titleUrl",
+			               "sTitle":"标题背景图片",
+			               'sClass':"text-center",
+			               "mRender": function(data, type, full) { 
+			            	   if(data==''||data==null){
+	   	                             return	"--";
+			            	   }else{
+				            	return "<img src='" + data + "' height='50px;'/>"; 
+			            	   }
+			            	   
+			              } 
+			            },
+			            { 
 			                "data": "minPrice",
 			                "sTitle":"最低价格",
 			                'sClass':"text-center",
@@ -230,7 +243,7 @@
 		                   aoData.push({"name": "skillStatus", "value": $("#skillStatusQuery").val()});
 	                    },
 	                    aoColumnDefs : [ {
-							"aTargets" : 11,
+							"aTargets" : 12,
 							"mRender" : function(data,type, row) {
 								var detail = "";
 								detail = "<a href='#' onclick='addAndUpdateRow(\""+ row.id+ "\")' data-toggle='modal' class='padding-right-small label label-success'><i class='glyphicon glyphicon-edit'></i>详情</a>";
