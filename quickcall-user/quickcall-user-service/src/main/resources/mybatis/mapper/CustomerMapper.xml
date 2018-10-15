@@ -91,7 +91,7 @@
       #{custPassword,jdbcType=VARCHAR}, #{signName,jdbcType=VARCHAR}, #{starSign,jdbcType=CHAR}, 
       #{birthday,jdbcType=TIMESTAMP}, #{voiceUrl,jdbcType=VARCHAR}, #{voiceTime,jdbcType=DECIMAL}, 
       #{vVoiceUrl,jdbcType=VARCHAR}, #{vVoiceUrlTmp,jdbcType=VARCHAR}, #{vVoiceTimeTmp,jdbcType=DECIMAL}, 
-      #{vVoiceStatus,jdbcType=TINYINT}, #{vVoiceTime,jdbcType=DECIMAL}, #{vStatus,jdbcType=TINYINT}, 
+      #{voiceStatus,jdbcType=TINYINT}, #{vVoiceTime,jdbcType=DECIMAL}, #{vStatus,jdbcType=TINYINT}, 
       #{identityStatus,jdbcType=TINYINT}, #{tokenCode,jdbcType=VARCHAR}, #{otherRelation,jdbcType=VARCHAR}, 
       #{createTime,jdbcType=TIMESTAMP}, #{modifyTime,jdbcType=TIMESTAMP}, #{createMan,jdbcType=VARCHAR}, 
       #{modifyMan,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{appChannelName,jdbcType=VARCHAR}, 
@@ -181,7 +181,7 @@
       <if test="vVoiceTimeTmp != null" >
         v_voice_time_tmp,
       </if>
-      <if test="vVoiceStatus != null" >
+      <if test="voiceStatus != null" >
         v_voice_status,
       </if>
       <if test="vVoiceTime != null" >
@@ -306,8 +306,8 @@
       <if test="vVoiceTimeTmp != null" >
         #{vVoiceTimeTmp,jdbcType=DECIMAL},
       </if>
-      <if test="vVoiceStatus != null" >
-        #{vVoiceStatus,jdbcType=TINYINT},
+      <if test="voiceStatus != null" >
+        #{voiceStatus,jdbcType=TINYINT},
       </if>
       <if test="vVoiceTime != null" >
         #{vVoiceTime,jdbcType=DECIMAL},
@@ -431,8 +431,8 @@
       <if test="vVoiceTimeTmp != null" >
         v_voice_time_tmp = #{vVoiceTimeTmp,jdbcType=DECIMAL},
       </if>
-      <if test="vVoiceStatus != null" >
-        v_voice_status = #{vVoiceStatus,jdbcType=TINYINT},
+      <if test="voiceStatus != null" >
+        v_voice_status = #{voiceStatus,jdbcType=TINYINT},
       </if>
       <if test="vVoiceTime != null" >
         v_voice_time = #{vVoiceTime,jdbcType=DECIMAL},
@@ -504,7 +504,7 @@
       v_voice_url = #{vVoiceUrl,jdbcType=VARCHAR},
       v_voice_url_tmp = #{vVoiceUrlTmp,jdbcType=VARCHAR},
       v_voice_time_tmp = #{vVoiceTimeTmp,jdbcType=DECIMAL},
-      v_voice_status = #{vVoiceStatus,jdbcType=TINYINT},
+      v_voice_status = #{voiceStatus,jdbcType=TINYINT},
       v_voice_time = #{vVoiceTime,jdbcType=DECIMAL},
       v_status = #{vStatus,jdbcType=TINYINT},
       identity_status = #{identityStatus,jdbcType=TINYINT},
