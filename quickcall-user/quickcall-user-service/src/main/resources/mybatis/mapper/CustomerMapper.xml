@@ -567,7 +567,7 @@
     customer_id as customerId,sex, nick_name as nickname, type,credentials_num as credentialsNum,
     interest_id as interestId,occupation_id as occupationId, front_portrait_url as frontPortraitUrl, 
     cust_status as custStatus,sign_name as signName,head_portrait_url as headPortraitUrl,
-    star_sign as starSign, birthday, voice_url as voiceUrl, voice_time as voiceTime, v_voice_url as vVoiceUrl, v_voice_time as vVoiceTime,v_status as vStatus, identity_status as identityStatus, token_code as tokenCode, other_relation as otherRelation 
+    star_sign as starSign, birthday, voice_url as voiceUrl, voice_time as voiceTime, v_voice_url as vVoiceUrl, v_voice_time as vVoiceTime,v_voice_status  AS  voiceStatus,v_status as vStatus, identity_status as identityStatus, token_code as tokenCode, other_relation as otherRelation 
     
     from customer
     where customer_id = #{customerId,jdbcType=BIGINT}

@@ -104,15 +104,37 @@ public class HomePageLogout implements Serializable{
     /**大V声音审核状态1：待审核（审核中） 2：审核拒绝   3.审核通过   4.修改之后待审核   5.修改之后审核拒绝    6.修改之后审核通过*/
     private  Integer  voiceStatus; 
     
+    /**大V自己声音时长*/
+    private BigDecimal  vVoiceTime;
+    /**大V自己声音URL*/
+    private String vVoiceUrl;
     
-    
-    
-    
-    
-    public Integer getVoiceStatus() {
+    /**大V自己声音时长*/
+    public BigDecimal getvVoiceTime() {
+		return vVoiceTime;
+	}
+
+    /**大V自己声音时长*/
+	public void setvVoiceTime(BigDecimal vVoiceTime) {
+		this.vVoiceTime = vVoiceTime;
+	}
+
+	/**大V自己声音URL*/
+	public String getvVoiceUrl() {
+		return vVoiceUrl;
+	}
+
+	/**大V自己声音URL*/
+	public void setvVoiceUrl(String vVoiceUrl) {
+		this.vVoiceUrl = vVoiceUrl;
+	}
+
+	/**大V声音审核状态1：待审核（审核中） 2：审核拒绝   3.审核通过   4.修改之后待审核   5.修改之后审核拒绝    6.修改之后审核通过*/
+	public Integer getVoiceStatus() {
 		return voiceStatus;
 	}
 
+	/**大V声音审核状态1：待审核（审核中） 2：审核拒绝   3.审核通过   4.修改之后待审核   5.修改之后审核拒绝    6.修改之后审核通过*/
 	public void setVoiceStatus(Integer voiceStatus) {
 		this.voiceStatus = voiceStatus;
 	}

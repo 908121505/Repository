@@ -30,6 +30,7 @@ import com.honglu.quickcall.common.third.AliyunSms.utils.AliyunSmsCodeUtil;
 import com.honglu.quickcall.common.third.AliyunSms.utils.MandaoSmsCodeUtil;
 import com.honglu.quickcall.common.third.rongyun.util.RongYunUtil;
 import com.honglu.quickcall.user.facade.code.UserBizReturnCode;
+import com.honglu.quickcall.user.facade.constants.UserBizConstants;
 import com.honglu.quickcall.user.facade.entity.Customer;
 import com.honglu.quickcall.user.facade.exchange.request.GetSmsCodeRequest;
 import com.honglu.quickcall.user.facade.exchange.request.IsPhoneExistsRequest;
@@ -455,8 +456,9 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 		}
 		Customer record = new Customer();
 		record.setCustomerId(customerId);
-		record.setvVoiceUrl(request.getVoiceUrl());
-		record.setvVoiceTime(request.getVoiceTime());
+		record.setvVoiceUrlTmp(request.getVoiceUrl());
+		record.setvVoiceTimeTmp(request.getVoiceTime());
+		record.setvStatus(UserBizConstants.VOICE_STATUS_UN_APPROVE);
 		customerMapper.updateByPrimaryKeySelective(record );
 		
 		return ResultUtils.resultSuccess();
