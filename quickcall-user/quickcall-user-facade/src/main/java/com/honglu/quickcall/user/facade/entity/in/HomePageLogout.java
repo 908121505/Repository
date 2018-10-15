@@ -12,7 +12,8 @@ public class HomePageLogout implements Serializable{
 	
 
 
-	private static final long serialVersionUID = 2134655214888357364L;
+
+	private static final long serialVersionUID = 5339650142050657756L;
 
 	private Long customerId;
 
@@ -100,11 +101,23 @@ public class HomePageLogout implements Serializable{
     private Integer  attentionStatus;
     /**大V认证声音时长*/
     private BigDecimal  voiceTime;
+    /**大V声音审核状态1：待审核（审核中） 2：审核拒绝   3.审核通过   4.修改之后待审核   5.修改之后审核拒绝    6.修改之后审核通过*/
+    private  Integer  voiceStatus; 
     
     
     
     
-    /**大V认证声音时长*/
+    
+    
+    public Integer getVoiceStatus() {
+		return voiceStatus;
+	}
+
+	public void setVoiceStatus(Integer voiceStatus) {
+		this.voiceStatus = voiceStatus;
+	}
+
+	/**大V认证声音时长*/
     public BigDecimal getVoiceTime() {
 		return voiceTime;
 	}
