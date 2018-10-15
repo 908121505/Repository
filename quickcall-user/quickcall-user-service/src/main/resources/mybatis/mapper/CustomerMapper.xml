@@ -31,8 +31,8 @@
     <!-- 大V自己声音相关 -->
     <result column="v_voice_url" property="voiceUrl" jdbcType="VARCHAR" />
     <result column="v_voice_time" property="voiceTime" jdbcType="DECIMAL" />
-    <result column="v_voice_url_tmp" property="voiceUrlTmp" jdbcType="VARCHAR" />
-    <result column="v_voice_time_tmp" property="voiceTimeTmp" jdbcType="DECIMAL" />
+    <result column="v_voice_url_tmp" property="vVoiceUrlTmp" jdbcType="VARCHAR" />
+    <result column="v_voice_time_tmp" property="vVoiceTimeTmp" jdbcType="DECIMAL" />
     <result column="v_voice_status" property="voiceStatus" />
     
     
