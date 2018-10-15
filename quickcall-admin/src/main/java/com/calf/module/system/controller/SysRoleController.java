@@ -95,7 +95,7 @@ public class SysRoleController implements BaseController<SysRole>{
 		
 		List<SysMenu> aaData = baseManager.query("SysMenu.queryTree", parameters);
 		Integer iTotalDisplayRecords = baseManager.get("SysMenu.queryCount", parameters);
-		
+
 		return new DataTables<SysMenu>(sEcho,aaData,aaData.size(),iTotalDisplayRecords);
 	}
 	/**
@@ -117,7 +117,8 @@ public class SysRoleController implements BaseController<SysRole>{
 				roleMenus.add(sysRoleMenu);
 			}
 		}
-		return baseManager.batchInsert(roleMenus);
+		return baseManager.batchInsert("Home.batchInsertRoleMenus", roleMenus);
+//		return baseManager.batchInsert(roleMenus);
 	}
 	
 	@Override
