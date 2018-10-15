@@ -177,6 +177,9 @@ public class SkillServiceImpl implements ISkillService {
 		
 		Long  customerId =  request.getCustomerId();
 		Long  skillId = request.getSkillId();
+		if(skillId == null ||  skillId == 0){
+			skillId =  null ;
+		}
 		//首先查询所有的技能信息
 		List<FirstPageDaVinfoVO>   resultList =  productMapper.selectTotalDaVProduct(customerId,skillId,pageIndexQuery,pageSize);
 		CommonResponse commonResponse = commonService.getCommonResponse();
