@@ -56,6 +56,16 @@ public class CheckAuthController implements BaseController<Customer> {
     public String bigVHome() {
         return String.format(JSP_PATH, "bigv_list");
     }
+    
+    /**
+     * 大V声音审核页面
+     *
+     * @return
+     */
+    @RequestMapping(value = "/bigVVoiceHome.htm")
+    public String bigVVoiceHome() {
+        return String.format(JSP_PATH, "bigvVoice_list");
+    }
 
     @Override
     public DataTables<Customer> initTable(HttpServletRequest request) {
@@ -103,6 +113,9 @@ public class CheckAuthController implements BaseController<Customer> {
                     baseManager.insert("Product.insert", bean);
                 }
             }
+        }
+        if(Objects.equals(entity.getvVoiceStatus(), 3)){
+        	entity.setvVoiceUrl(entity.getvVoiceUrlTmp());
         }
 
         return baseManager.update(entity);
