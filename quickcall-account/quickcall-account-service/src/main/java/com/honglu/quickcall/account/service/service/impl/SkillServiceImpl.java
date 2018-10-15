@@ -125,7 +125,7 @@ public class SkillServiceImpl implements ISkillService {
 		Long  customerId =  request.getCustomerId();
 		//查询技能信息直接更新吧
 		Long  productId =  request.getProductId();
-		if(productId == 0){
+		if(productId == null  || productId == 0){
 			productId = null;
 		}
 		
