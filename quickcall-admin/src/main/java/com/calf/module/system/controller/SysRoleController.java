@@ -109,7 +109,7 @@ public class SysRoleController implements BaseController<SysRole>{
 	@RequiresPermissions(value="role:menu")
 	public int  AddMenus(String role_code,String menu_id){
 		List<SysRoleMenu> roleMenus = new ArrayList<SysRoleMenu>();
-		if(baseManager.delete("SysRoleMenu.Roledelete", new Object[]{role_code})>=0){			
+		if(baseManager.delete("Home.deleteRoleMenus", new Object[]{role_code})>=0){
 			for (String menu : menu_id.split(",")) {
 				SysRoleMenu sysRoleMenu = new SysRoleMenu();
 				sysRoleMenu.setMenu_id(menu);
@@ -118,7 +118,6 @@ public class SysRoleController implements BaseController<SysRole>{
 			}
 		}
 		return baseManager.batchInsert("Home.batchInsertRoleMenus", roleMenus);
-//		return baseManager.batchInsert(roleMenus);
 	}
 	
 	@Override
