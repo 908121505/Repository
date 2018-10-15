@@ -77,6 +77,7 @@ public class SkillServiceImpl implements ISkillService {
 				vo.setName(skill.getName());
 				vo.setProductStatus(OrderSkillConstants.PRODUCT_STATUS_UN_EFFECTIVE);
 				vo.setSkillId(skillId);
+				vo.setCurrPrice(skill.getMinPrice());
 				vo.setPriceList(commonService.getPriceList(skill));
 				resultList.add(vo);
 				
@@ -124,6 +125,9 @@ public class SkillServiceImpl implements ISkillService {
 		Long  customerId =  request.getCustomerId();
 		//查询技能信息直接更新吧
 		Long  productId =  request.getProductId();
+		if(productId == 0){
+			productId = null;
+		}
 		
 		Long skillId =  request.getSkillId();
 		BigDecimal  price = request.getPrice();
