@@ -395,6 +395,12 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 		if (customer.getIdentityStatus() == null) {
 			customer.setIdentityStatus(0);// 身份认证状态为空的时候，默认复制为未认证
 		}
+
+		// 姓名 -- 姓氏打*
+		if (StringUtils.isNotBlank(customer.getRealName())) {
+			customer.setRealName("*" + customer.getRealName().substring(1));
+		}
+
 		// 身份证号中间打***
 		String credentialsNum = customer.getCredentialsNum();
 		if (StringUtils.isNotBlank(credentialsNum) && credentialsNum.length() > 10) {
