@@ -2,77 +2,26 @@
 <%@ taglib prefix="shiro" uri="http://shiro.apache.org/tags"%>
 	<div class="content1">
 		<div class="header">
-			<h1 class="page-title">订单管理</h1>
+			<h1 class="page-title">APP配置</h1>
 			<ul class="breadcrumb">
-				<li>订单管理</li>
-				<li class="active">订单列表</li>
+				<li>APP配置</li>
+				<li class="active">兴趣列表</li>
 			</ul>
 		</div>
 		<div class="main-content">
 			<div class="row">
-				<div class="col-md-2">
-					<div class="form-group">
-						<div class="input-group">
-							<div class="input-group-addon">订单ID</div>
-							<input class="form-control" type="text" id="orderIdQuery">
-						</div>
-					</div>
-				</div>
-				<div class="col-md-2">
-					<div class="form-group">
-						<div class="input-group">
-							<div class="input-group-addon">用户昵称</div>
-							<input class="form-control" type="text" id="custNickNameQuery" value = "">
-						</div>
-					</div>
-				</div>
-				<div class="col-md-2">
-					<div class="form-group">
-						<div class="input-group">
-							<div class="input-group-addon">主播昵称</div>
-							<input class="form-control" type="text" id="servNickNameQuery">
-						</div>
-					</div>
-				</div>
-				<div class="col-md-2">
-					<div class="form-group">
-						<div class="input-group">
-							<div class="input-group-addon">订单分类</div>
-							<input class="form-control" type="text" id="orderTypeQuery">
-						</div>
-					</div>
-				</div>
-				
-				
-				
-				
-				
-				
 				<div class="col-md-2">
 					<button type="button" class="btn btn-primary btn-small btn-block"
 						id="query">
 						<i class="glyphicon glyphicon-search"></i> 查询
 					</button>
 				</div>
-				<!-- <div class="col-md-2">
+				<div class="col-md-2">
 					<button type="button" class="btn btn-info btn-small btn-block"
 						onclick="addAndUpdateRow(0)">
 						<i class="glyphicon glyphicon-plus"></i> 增加
 					</button>
-				</div> -->
-			</div>
-<!-- 			<div class="row">
-				<div class="col-md-2">
-					<div class="form-group">
-						<div class="input-group">
-							<div class="input-group-addon">有效时间</div>
-							<input class="form-control" type="date" id="sTime">
-							<div class="input-group-addon">到</div>
-							<input class="form-control" type="date" id="eTime">
-						</div>
-					</div>
 				</div>
-			</div> -->
 			<table id="example" class="table"></table>
 		</div>
 <script>
@@ -129,58 +78,34 @@
 		//表格的初始化
 		$(document).ready(function() {
 			var table = $('#example').initTable({
-				sAjaxSource:"order/initTable.htm",
+				sAjaxSource:"interest/initTable.htm",
 				aoColumns: [
 		            { 
-		              "data": "orderId",
-		              "sTitle":"订单ID",
+		              "data": "id",
+		              "sTitle":"兴趣ID",
 		              'sClass':"text-center"
 		            },
 		            { 
-		               "data": "custNickName",
-		               "sTitle":"用户昵称",
+		               "data": "name",
+		               "sTitle":"兴趣名称",
 		               'sClass':"text-center",
 		            },
 		            { 
-		                "data": "servNickName",
-		                "sTitle":"大V昵称",
+		                "data": "type",
+		                "sTitle":"兴趣类型",
 		                'sClass':"text-center",
 		            },
+                   
+                   
+                   
                     {
-                        "data": "orderType",
-                        "sTitle":"订单分类",
+                        "data": "createMan",
+                        "sTitle":"创建人",
                         'sClass':"text-center",
                     },
                     {
-                        "data": "orderTime",
-                        "sTitle":"下单时间",
-                        'sClass':"text-center",
-                        "mRender" : function(data, type,full) {
-							if (data != null) {
-								return Format(new Date(data),"yyyy-MM-dd HH:mm:ss")
-							} else {
-								return '--';
-							}
-						}
-                    },
-                    {
-                        "data": "price",
-                        "sTitle":"订单单价",
-                        'sClass':"text-center",
-                    },
-                    {
-                        "data": "orderNum",
-                        "sTitle":"下单数量",
-                        'sClass':"text-center",
-                    },
-                    {
-                        "data": "orderAmounts",
-                        "sTitle":"总价",
-                        'sClass':"text-center",
-                    },
-                    {
-						"data" : "startTime",
-						"sTitle" : "开始时间",
+						"data" : "createTime",
+						"sTitle" : "创建时间",
 						'sClass' : "text-center",
 						"mRender" : function(data, type,full) {
 							if (data != null) {
@@ -191,20 +116,13 @@
 						}
 					},
                     {
-						"data" : "endTime",
-						"sTitle" : "结束时间",
-						'sClass' : "text-center",
-						"mRender" : function(data, type,full) {
-							if (data != null) {
-								return Format(new Date(data),"yyyy-MM-dd HH:mm:ss")
-							} else {
-								return '--';
-							}
-						}
-					},
+                        "data": "modifyMan",
+                        "sTitle":"修改人",
+                        'sClass':"text-center",
+                    },
                     {
-						"data" : "finishTime",
-						"sTitle" : "完成时间",
+						"data" : "modifyTime",
+						"sTitle" : "修改时间",
 						'sClass' : "text-center",
 						"mRender" : function(data, type,full) {
 							if (data != null) {
@@ -214,31 +132,22 @@
 							}
 						}
 					},
+           
 					{
-						"data" : "orderStatus",
-						"sTitle" : "订单状态",
-						'sClass' : "text-center"
-					}/*,
-					{
-						"data" : "orderId",
+						"data" : "id",
 						"sTitle" : "操作",
 						'sClass' : "text-center"
-					}*/
+					}
 		         ],
 		         fnServerParams: function (aoData) {  //查询条件
-                       aoData.push({ "name": "orderId", "value": $("#orderIdQuery").val() } );
-                       aoData.push({ "name": "custNickName", "value": $("#custNickNameQuery").val().replace(new RegExp(" ","g"),"") } );
-                       aoData.push({ "name": "servNickName", "value": $("#servNickNameQuery").val().replace(new RegExp(" ","g"),"") } );
-                       aoData.push({ "name": "orderType", "value": $("#orderTypeQuery").val().replace(new RegExp(" ","g"),"") } );
                     } ,
                  aoColumnDefs : [ {
-					"aTargets" : 11
-					 /*,
+					"aTargets" : 7,
 					"mRender" : function(data,type, row) {
 						var detail = "";
-						// detail = "<a href='#' onclick='viewOrderDetail(\""+ row.orderId+ "\")' data-toggle='modal' class='padding-right-small label label-success'><i class='glyphicon glyphicon-edit'></i>详情</a>";
+						detail = "<a href='#' onclick='addAndUpdateRow(\""+ row.id+ "\")' data-toggle='modal' class='padding-right-small label label-success'><i class='glyphicon glyphicon-edit'></i>详情</a>";
 						return  detail;
-					}*/
+					}
 			} ] 
 	            
 			});
@@ -246,20 +155,23 @@
 			 $('#query').click(function(){
 				$('#example').dataTable().fnDraw();
 			});
-
+		
 		});
-
-		function viewOrderDetail(id) {
-			$('#order_detail_model').addAndUpdateRow("order/addAndUpdateHome.htm?id=" + id);
+		
+		
+		//增加或者修改受影响的行数
+		function addAndUpdateRow(id){
+			$('#insertAndUpdate').addAndUpdateRow("interest/addAndUpdateHome.htm?id="+id);
 		}
-
+			
 </script>
 		<!---dialog选项-->
 		<div>
 			<jsp:include page="/WEB-INF/views/common/delete_dialog.jsp" />
+			<jsp:include page="/WEB-INF/views/common/addupdate_dialog.jsp" />
 
-			<div class="modal fade" id="order_detail_model" tabindex="-1"
-				 role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+			<div class="modal fade" id="insertAndUpdate" tabindex="-1"
+				role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 			</div>
 		</div>
 	</div>
