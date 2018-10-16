@@ -28,6 +28,7 @@ import com.honglu.quickcall.common.core.util.UUIDUtils;
 import com.honglu.quickcall.common.third.AliyunSms.enums.SmsTemplateEnum;
 import com.honglu.quickcall.common.third.AliyunSms.utils.AliyunSmsCodeUtil;
 import com.honglu.quickcall.common.third.AliyunSms.utils.MandaoSmsCodeUtil;
+import com.honglu.quickcall.common.third.rongyun.models.CodeSuccessReslut;
 import com.honglu.quickcall.common.third.rongyun.util.RongYunUtil;
 import com.honglu.quickcall.user.facade.code.UserBizReturnCode;
 import com.honglu.quickcall.user.facade.constants.UserBizConstants;
@@ -173,15 +174,27 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 		String rongyunToken = null;
 		if (StringUtils.isNotBlank(params.getNickName()) && params.getCustomerId() != null
 				&& StringUtils.isNotBlank(params.getHeadPortraitUrl())) {
-			rongyunToken = RongYunUtil.getToken(String.valueOf(params.getCustomerId()), params.getNickName(),
-					params.getHeadPortraitUrl());
-			if (rongyunToken == null || "".equals(rongyunToken)) {
-				logger.error("用户获取融云token失败。用户ID为：" + params.getCustomerId());
+			/*
+			 * rongyunToken = RongYunUtil.getToken(String.valueOf(params.getCustomerId()),
+			 * params.getNickName(), params.getHeadPortraitUrl()); if (rongyunToken == null
+			 * || "".equals(rongyunToken)) { logger.error("用户获取融云token失败。用户ID为：" +
+			 * params.getCustomerId()); }
+			 */
+			// 刷新融云用户信息
+			CodeSuccessReslut reslut = RongYunUtil.refreshUser(String.valueOf(params.getCustomerId()),
+					params.getNickName(), params.getHeadPortraitUrl());
+			// 刷新失败
+			if (reslut.getCode() != 200) {
+				logger.error("刷新融云用户信息失败，用户id为：" + String.valueOf(params.getCustomerId()) + "失败原因为："
+						+ reslut.getErrorMessage());
+			} else {
+				logger.info("刷新融云用户信息成功！");
 			}
+
 		}
 
-		int row = customerMapper.customerSetHeardUrl(params.getTel(), params.getHeadPortraitUrl(), params.getNickName(),
-				rongyunToken);
+		int row = customerMapper.customerSetHeardUrl(params.getTel(), params.getHeadPortraitUrl(),
+				params.getNickName());
 		if (row <= 0) {
 			throw new BizException(BizCode.ParamError, "设置昵称头像失败");
 		}
@@ -197,7 +210,7 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 
 	/**
 	 * 保存用户，并生成融云token
-	 * 
+	 *
 	 * @param request
 	 * @return
 	 */
@@ -236,7 +249,8 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 		customer.setQqOpenId(request.getQqOpenId());
 		customer.setWechatOpenId(request.getWechatOpenId());
 		customer.setPhone(request.getTel());
-		customer.setNickName(request.getNickName());
+		customer.setNickName(
+				StringUtils.isNotBlank(request.getNickName()) ? request.getNickName() : "轻音_" + randomFour());
 
 		if (StringUtils.isNotBlank(request.getHeardUrl())) {
 			defaultImg = request.getHeardUrl();
@@ -381,6 +395,23 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 		if (customer.getIdentityStatus() == null) {
 			customer.setIdentityStatus(0);// 身份认证状态为空的时候，默认复制为未认证
 		}
+
+		// 姓名 -- 姓氏打*
+		if (StringUtils.isNotBlank(customer.getRealName())) {
+			customer.setRealName("*" + customer.getRealName().substring(1));
+		}
+
+		// 身份证号中间打***
+		String credentialsNum = customer.getCredentialsNum();
+		if (StringUtils.isNotBlank(credentialsNum) && credentialsNum.length() > 10) {
+			StringBuilder idNo = new StringBuilder(credentialsNum.substring(0, 3));
+			for (int i = 0; i < credentialsNum.length() - 7; i++) {
+				idNo.append("*");
+			}
+			idNo.append(credentialsNum.substring(credentialsNum.length() - 4));
+			customer.setCredentialsNum(idNo.toString());
+		}
+
 		return ResultUtils.resultSuccess(customer);
 	}
 
@@ -418,26 +449,25 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 			certifyCustomer.setCredentialsNum(request.getCredentialsNum());
 		}
 
-		// 大V认证时 -- 判断大V认证状态
-		if (Objects.equals(request.getCertifyType(), 2)) {
-			// ADUAN 上传大V认证时 -- 先不判断身份认证状态了（后面记得打开注释）
-			/*
-			 * if(!Objects.equals(customer.getIdentityStatus(), 2)){
-			 * if(Objects.equals(customer.getIdentityStatus(), 1)){ return
-			 * ResultUtils.resultDuplicateOperation("身份认证正在审核中，请等待审核通过后再进行大V认证"); } return
-			 * ResultUtils.resultDuplicateOperation("请先进行身份认证"); }
-			 */
+		// 大V认证时 -- 判断大V身份认证状态
+        if (Objects.equals(request.getCertifyType(), 2)) {
+            if (!Objects.equals(customer.getIdentityStatus(), 2)) {
+                if (Objects.equals(customer.getIdentityStatus(), 1)) {
+                    return ResultUtils.resultDuplicateOperation("身份认证正在审核中，请等待审核通过后再进行大V认证");
+                }
+                return ResultUtils.resultDuplicateOperation("请先进行身份认证");
+            }
 
-			// 申请大V不校验是否在审核中
-			// if (Objects.equals(customer.getvStatus(), 1)) {
-			// return ResultUtils.resultDuplicateOperation("大V认证正在审核中");
-			// }
-			if (Objects.equals(customer.getvStatus(), 2)) {
-				return ResultUtils.resultDuplicateOperation("大V认证已通过");
-			}
-			certifyCustomer.setvStatus(1);// 更新状态为：审核中
-			certifyCustomer.setVoiceUrl(request.getVoiceUrl());
-		}
+            // 申请大V不校验是否在审核中
+            if (Objects.equals(customer.getvStatus(), 1)) {
+                return ResultUtils.resultDuplicateOperation("大V认证正在审核中");
+            }
+            if (Objects.equals(customer.getvStatus(), 2)) {
+                return ResultUtils.resultDuplicateOperation("大V认证已通过");
+            }
+            certifyCustomer.setvStatus(1);// 更新状态为：审核中
+            certifyCustomer.setVoiceUrl(request.getVoiceUrl());
+        }
 
 		// 如果声音时长为null，sql不会更新
 		certifyCustomer.setVoiceTime(request.getVoiceTime());
@@ -449,7 +479,7 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 
 	@Override
 	public CommonResponse saveDvVoiceInfo(SaveDvVoiceRequest request) {
-		Long   customerId =  request.getCustomerId();
+		Long customerId = request.getCustomerId();
 		Customer customer = customerMapper.selectByPrimaryKey(customerId);
 		if (customer == null) {
 			return ResultUtils.resultDataNotExist("用户数据不存在");
@@ -459,7 +489,7 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 		record.setvVoiceUrlTmp(request.getVoiceUrl());
 		record.setvVoiceTimeTmp(request.getVoiceTime());
 		record.setVoiceStatus(UserBizConstants.VOICE_STATUS_UN_APPROVE);
-		customerMapper.updateByPrimaryKeySelective(record );
+		customerMapper.updateByPrimaryKeySelective(record);
 		return ResultUtils.resultSuccess();
 	}
 }

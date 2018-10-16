@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
-//import com.alibaba.dubbo.common.utils.CollectionUtils;
 import com.honglu.quickcall.account.facade.code.AccountBizReturnCode;
 import com.honglu.quickcall.common.api.exception.BizException;
 import com.honglu.quickcall.common.api.exception.RemoteException;
@@ -22,6 +21,8 @@ import com.honglu.quickcall.common.api.exchange.CommonResponse;
 import com.honglu.quickcall.common.api.util.JedisUtil;
 import com.honglu.quickcall.common.core.util.Detect;
 import com.honglu.quickcall.common.core.util.UUIDUtils;
+import com.honglu.quickcall.common.third.rongyun.models.CodeSuccessReslut;
+import com.honglu.quickcall.common.third.rongyun.util.RongYunUtil;
 import com.honglu.quickcall.user.facade.code.UserBizReturnCode;
 import com.honglu.quickcall.user.facade.constants.UserBizConstants;
 import com.honglu.quickcall.user.facade.entity.Customer;
@@ -61,7 +62,6 @@ import com.honglu.quickcall.user.service.dao.OccupationMapper;
 import com.honglu.quickcall.user.service.dao.OrdersMapper;
 import com.honglu.quickcall.user.service.dao.ProductMapper;
 import com.honglu.quickcall.user.service.dao.SensitivityWordMapper;
-import com.honglu.quickcall.user.service.dao.SkillMapper;
 import com.honglu.quickcall.user.service.service.CustomerRedisManagement;
 import com.honglu.quickcall.user.service.service.PersonInfoService;
 import com.honglu.quickcall.user.service.util.CountAge;
@@ -69,6 +69,7 @@ import com.honglu.quickcall.user.service.util.JsonParseUtil;
 import com.honglu.quickcall.user.service.util.RedisKeyConstants;
 
 import cn.jiguang.commom.utils.StringUtils;
+
 @Service
 @Transactional
 public class PersonInfoServiceImpl implements PersonInfoService {
@@ -91,43 +92,42 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 	@Autowired
 	private FansMapper fansMapper;
 	@Autowired
-	private SkillMapper skillMapper;
-	@Autowired
 	private OrdersMapper ordersMapper;
 	/**
 	 * 中文、英文、数字、下划线校验 4-24位
 	 */
 	private final static Pattern CH_EN_PATTERN = Pattern.compile("^[\\u4e00-\\u9fa5a-z\\d_]{4,24}$");
-	private final static Pattern ID_PATTERN = Pattern.compile("^\\d{6}(18|19|20)?\\d{2}(0[1-9]|1[012])(0[1-9]|[12]\\d|3[01])\\d{3}(\\d|[xX])$");
 	private static final Logger logger = LoggerFactory.getLogger(PersonInfoServiceImpl.class);
 
-	//测试正则
-//	public static void main(String[] args) {
-//		String string = "大猫__";
-//		Matcher m = CH_EN_PATTERN.matcher(string);
-//		System.out.println(m.matches());
-//
-//	}
+	// 测试正则
+	// public static void main(String[] args) {
+	// String string = "大猫__";
+	// Matcher m = CH_EN_PATTERN.matcher(string);
+	// System.out.println(m.matches());
+	//
+	// }
 	/**
 	 * @author liuyinkai 查看个人信息
 	 */
 	@Override
 	public CommonResponse queryPersonInfo(PersonInfoRequest params) {
-		if (null==params.getCustomerId()||"".equals(params.getCustomerId())) {
-			throw new RemoteException(UserBizReturnCode.UserNotExist, "用户不存在 request.getJson()=" + params.getCustomerId());
+		if (null == params.getCustomerId() || "".equals(params.getCustomerId())) {
+			throw new RemoteException(UserBizReturnCode.UserNotExist,
+					"用户不存在 request.getJson()=" + params.getCustomerId());
 		}
 		CommonResponse commonResponse = new CommonResponse();
 		PersonHomePage personHomePage = null;
-//		if (null == (params.getCustomerId()) || null == (params.getOtherId())) {
-//			throw new RemoteException(UserBizReturnCode.paramError, "参数错误 request.getJson()=" + params.getCustomerId());
-//		}
+		// if (null == (params.getCustomerId()) || null == (params.getOtherId())) {
+		// throw new RemoteException(UserBizReturnCode.paramError, "参数错误
+		// request.getJson()=" + params.getCustomerId());
+		// }
 		try {
 			// 判断是不是查看自己的资料
-//			if (!params.getCustomerId().equals(params.getOtherId())) {
-//				personHomePage = queryPersonal(params.getOtherId());
-//			} else {
-				personHomePage = queryPersonal(params.getCustomerId());
-//			}
+			// if (!params.getCustomerId().equals(params.getOtherId())) {
+			// personHomePage = queryPersonal(params.getOtherId());
+			// } else {
+			personHomePage = queryPersonal(params.getCustomerId());
+			// }
 
 			commonResponse.setData(personHomePage);
 			commonResponse.setCode(UserBizReturnCode.Success);
@@ -149,33 +149,29 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 		Customer customer = customerRedisManagement.getCustomer(customerId);
 		// 获取身份证
 		String identityID = customer.getCredentialsNum();
-		PersonHomePage personHomePage = new PersonHomePage();
+		PersonHomePage personHomePage = null;
 		if (customer != null) {
+			personHomePage = new PersonHomePage();
 			personHomePage.setCustomerId(customerId);// id
 			personHomePage.setNickName(customer.getNickName());// 昵称
-			personHomePage.setSignName(customer.getSignName());//签名
-			personHomePage.setStarSign(customer.getStarSign());//星座
-			personHomePage.setTokenCode(customer.getTokenCode());//token
-			personHomePage.setvStatus(customer.getvStatus());//大V审核状态
-			personHomePage.setIdentityStatus(customer.getIdentityStatus());//身份证审核状态
+			personHomePage.setSignName(customer.getSignName());// 签名
+			personHomePage.setStarSign(customer.getStarSign());// 星座
+			personHomePage.setTokenCode(customer.getTokenCode());// token
+			personHomePage.setvStatus(customer.getvStatus());// 大V审核状态
+			personHomePage.setIdentityStatus(customer.getIdentityStatus());// 身份证审核状态
 			// 查询粉丝数量R
 			Long fansNum = fansMapper.queryFansNumByCustomerId(customerId);
 			personHomePage.setFansNum(fansNum);
-			//查询关注数量
+			// 查询关注数量
 			int attentionNum = fansMapper.queryAttentionNumByCustomerId(customerId);
 			personHomePage.setAttentionNum(attentionNum);
-			//获取年纪
-			 Date birthday = customer.getBirthday();
-			 //用工具类去转换
-			 int age = CountAge.getAgeByBirth(birthday);
-			 personHomePage.setAge(age);
+			// 获取年纪
+			Date birthday = customer.getBirthday();
+			// 用工具类去转换
+			int age = CountAge.getAgeByBirth(birthday);
+			personHomePage.setAge(age);
 			// 判断身份证是否为空，如果又身份证则按找身份证上面的性别
 			if (StringUtils.isNotEmpty(identityID)) {
-				//TODO  此处不应该校验身份证号码是否正确
-//				Matcher m = ID_PATTERN.matcher(identityID);
-//				if (!m.matches()) {
-//					throw new RemoteException(UserBizReturnCode.paramError, "身份证参数错误");
-//				}
 				// 判断身份证男女，截取身份证倒数第二位
 				String genderStr = identityID.substring(identityID.length() - 2, identityID.length() - 1);
 				int genderInt = Integer.parseInt(genderStr);
@@ -191,19 +187,17 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 			personHomePage.setBirthday(customer.getBirthday());// 生日
 			// 查询兴趣爱好 by customerId
 			try {
-				
+
 				List<Interest> interestList = interestMapper.selectInterestByCustomerId(customerId);
 				personHomePage.setInterest(interestList);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 			// 查询职业 by accountId
-			List occupation = occupationMapper.selectByCustomerId(customerId);
+			List<Occupation> occupation = occupationMapper.selectByCustomerId(customerId);
 			personHomePage.setOccupation(occupation);
-			return personHomePage;
-		} else {
-			return null;
-		}
+		} 
+		return personHomePage;
 	}
 
 	/**
@@ -245,6 +239,18 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 		int result = customerMapper.updateByPrimaryKeySelective(customer);
 		logger.info("=====saveNickName,更新数量" + result);
 		if (result > 0) {
+
+			// 刷新融云用户信息
+			CodeSuccessReslut reslut = RongYunUtil.refreshUser(String.valueOf(customer.getCustomerId()),
+					customer.getNickName(), customer.getHeadPortraitUrl());
+			// 刷新失败
+			if (reslut.getCode() != 200) {
+				logger.error("刷新融云用户信息失败，用户id为：" + String.valueOf(customer.getCustomerId()) + "失败原因为："
+						+ reslut.getErrorMessage());
+			} else {
+				logger.info("刷新融云用户信息成功！");
+			}
+
 			JedisUtil.set(RedisKeyConstants.USER_CUSTOMER_INFO + params.getCustomerId(),
 					JsonParseUtil.castToJson(customer));
 			commonResponse.setData(customer);
@@ -260,7 +266,8 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 	 * 昵称规则校验
 	 * 
 	 * @modify liuyinkai
-	 * @param nickName 用户昵称
+	 * @param nickName
+	 *            用户昵称
 	 * @return 0 - 通过，1 - 敏感词，2 - 中英文
 	 */
 	private Integer checkNickName(String nickName) {
@@ -372,12 +379,12 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 	public CommonResponse saveBirthday(SaveBirthRequest params) {
 		CommonResponse commonResponse = new CommonResponse();
 		Customer customer = customerRedisManagement.getCustomer(params.getCustomerId());
-		customer.setBirthday(params.getBirthday());//生日
-		customer.setStarSign(params.getStarSign());//星座
+		customer.setBirthday(params.getBirthday());// 生日
+		customer.setStarSign(params.getStarSign());// 星座
 		try {
 			// 更新生日
 			int result = customerMapper.updateByPrimaryKeySelective(customer);
-			
+
 			if (result > 0) {
 				JedisUtil.set(RedisKeyConstants.USER_CUSTOMER_INFO + params.getCustomerId(),
 						JsonParseUtil.castToJson(customer));
@@ -412,20 +419,20 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 		if (null != customer) {
 			// 更新customer_interest表
 			try {
-				//如果customer_interest中间表有该用户，先删除该用户在此表的数据
+				// 如果customer_interest中间表有该用户，先删除该用户在此表的数据
 				customerInterestMapper.deleteByCustomerId(params.getCustomerId());
 				for (String str : interest) {
 					customerInterest.setInterestId(Integer.parseInt(str));
-					//customerInterest.setCreateTime(new Date());
-					//判断是否有重复数据
-//					int num = customerInterestMapper.selectRepetitiveData(customerInterest);
-//					if (num>0) {
-//						//更新
-//						customerInterestMapper.updateByCustomerIdSelective(customerInterest);
-//					} else {
-						//插入
-						int result = customerInterestMapper.insertSelective(customerInterest);
-//					}
+					// customerInterest.setCreateTime(new Date());
+					// 判断是否有重复数据
+					// int num = customerInterestMapper.selectRepetitiveData(customerInterest);
+					// if (num>0) {
+					// //更新
+					// customerInterestMapper.updateByCustomerIdSelective(customerInterest);
+					// } else {
+					// 插入
+					customerInterestMapper.insertSelective(customerInterest);
+					// }
 				}
 				commonResponse.setData(customerInterest);
 				commonResponse.setCode(UserBizReturnCode.Success);
@@ -460,22 +467,22 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 			// 更新customer_interest表
 			try {
 				// 存入职业ID
-				//customerOccupation.setOccupationId(occupation);
+				// customerOccupation.setOccupationId(occupation);
 				// 创建时间
-				//customerOccupation.setCreateTime(new Date());
-				//查看重复数量
+				// customerOccupation.setCreateTime(new Date());
+				// 查看重复数量
 				int num = customerOccupationMapper.findRepetitveData(params.getCustomerId());
-				if (num>0) {
-					//更新
+				if (num > 0) {
+					// 更新
 					// 存入职业ID
 					customerOccupation.setOccupationId(occupation);
-					customerOccupation.setModifyTime(new Date());//更新修改时间
-					int nn=customerOccupationMapper.updateByCustomerIdSelective(customerOccupation);
+					customerOccupation.setModifyTime(new Date());// 更新修改时间
+					/*int nn = */customerOccupationMapper.updateByCustomerIdSelective(customerOccupation);
 				} else {
 					// 存入职业ID
 					customerOccupation.setOccupationId(occupation);
-					//插入
-					int result = customerOccupationMapper.insertSelective(customerOccupation);
+					// 插入
+					/*int result = */customerOccupationMapper.insertSelective(customerOccupation);
 				}
 				commonResponse.setData(customerOccupation);
 				commonResponse.setCode(UserBizReturnCode.Success);
@@ -503,22 +510,28 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 		if (null != params) {
 			HomePageLogout homePageLogout = new HomePageLogout();
 			try {
-				
+
 				// 获取主页所有资料
-				 homePageLogout = customerMapper.showHomePageLogout(params.getCustomerId());
+				homePageLogout = customerMapper.showHomePageLogout(params.getCustomerId());
+
+				
+				String   vVoiceUrl =  homePageLogout.getvVoiceUrl();
+				if(org.apache.commons.lang3.StringUtils.isBlank(vVoiceUrl)){
+					 homePageLogout.setvVoiceTime(homePageLogout.getVoiceTime());
+					 homePageLogout.setvVoiceUrl(homePageLogout.getVoiceUrl());
+				}
 				 
-				 Integer  voiceStatus =  homePageLogout.getVoiceStatus();
-				//voiceStatus == null  未录制声音
-				 if(voiceStatus == null){
-					 voiceStatus = UserBizConstants.VOICE_STATUS_UNEXIST;
-				 }
-				 
-				 
-				 //获取年纪
-				 Date birthday = homePageLogout.getBirthday();
-				 //用工具类去转换
-				 int age = CountAge.getAgeByBirth(birthday);
-				 homePageLogout.setAge(age);
+				Integer voiceStatus = homePageLogout.getVoiceStatus();
+				// voiceStatus == null 未录制声音
+				if (voiceStatus == null) {
+					voiceStatus = UserBizConstants.VOICE_STATUS_UNEXIST;
+				}
+
+				// 获取年纪
+				Date birthday = homePageLogout.getBirthday();
+				// 用工具类去转换
+				int age = CountAge.getAgeByBirth(birthday);
+				homePageLogout.setAge(age);
 				// 获取兴趣名字
 				List<Interest> interestName = interestMapper.selectInterestByCustomerId(params.getCustomerId());
 				homePageLogout.setInterestName(interestName);
@@ -540,25 +553,23 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 				// 查询粉丝数量
 				Long fansNum = fansMapper.queryFansNumByCustomerId(params.getCustomerId());
 				homePageLogout.setFansNum(fansNum);
-				//查询关注数量
+				// 查询关注数量
 				int attentionNum = fansMapper.queryAttentionNumByCustomerId(params.getCustomerId());
 				homePageLogout.setAttentionNum(attentionNum);
-				
-				
-				
-				//判断当前用户是否关注对方
-				Long  userId =  params.getMyUserId();
-				Long  customerId =  params.getCustomerId();
-				
-				Integer  attentionStatus =  UserBizConstants.ATTENTION_STATUS_UN_ATTENED ;
-				if(userId != null){
-					Fans  fans = fansMapper.queryFans(userId,customerId);
-					if(fans != null){
-						attentionStatus =  fans.getAttentionState();
+
+				// 判断当前用户是否关注对方
+				Long userId = params.getMyUserId();
+				Long customerId = params.getCustomerId();
+
+				Integer attentionStatus = UserBizConstants.ATTENTION_STATUS_UN_ATTENED;
+				if (userId != null) {
+					Fans fans = fansMapper.queryFans(userId, customerId);
+					if (fans != null) {
+						attentionStatus = fans.getAttentionState();
 					}
 				}
 				homePageLogout.setAttentionStatus(attentionStatus);
-				
+
 				commonResponse.setData(homePageLogout);
 				commonResponse.setCode(UserBizReturnCode.Success);
 				commonResponse.setMessage(UserBizReturnCode.Success.desc());
@@ -586,24 +597,24 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 			try {
 				// 获取标签名称
 				Product product = productMapper.selectByPrimaryKey(customerId);
-				if(product == null){
-					continue ;
+				if (product == null) {
+					continue;
 				}
 				tag.setTagName(product.getName());
 				// 获取该产品接单次数(订单完成状态)
 				// 封装参数
 				orders.setProductId(product.getProductId());
 				orders.setSellerId(customerId);
-				//查询完成数量
+				// 查询完成数量
 				Orders num = ordersMapper.queryCompleteNumByCustomerIdProductId(orders);
-				if (null!=num) {
+				if (null != num) {
 					int completeNum = orders.getOrderNum();
-					
+
 					tag.setCompletedOrderNum(completeNum);
-				}else {
+				} else {
 					tag.setCompletedOrderNum(0);
 				}
-				
+
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -611,18 +622,18 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 		return list;
 
 	}
-	
+
 	@Override
 	public CommonResponse queryInterestList(QueryInterestListRequest request) {
 		CommonResponse commonResponse = new CommonResponse();
 		try {
-			List<InterestVO>  interestList =  interestMapper.selectInterestList();
+			List<InterestVO> interestList = interestMapper.selectInterestList();
 			commonResponse.setData(interestList);
 			commonResponse.setCode(UserBizReturnCode.Success);
 			commonResponse.setMessage(UserBizReturnCode.Success.desc());
 		} catch (Exception e) {
-			logger.error("查询异常，异常信息：",e);
-//			throw new RemoteException(UserBizReturnCode.UserNotExist, "用户不存在");
+			logger.error("查询异常，异常信息：", e);
+			// throw new RemoteException(UserBizReturnCode.UserNotExist, "用户不存在");
 		}
 
 		return commonResponse;
@@ -632,13 +643,13 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 	public CommonResponse queryOccupationList(QueryOccupationListRequest request) {
 		CommonResponse commonResponse = new CommonResponse();
 		try {
-			List<OccupationVO>  interestList =  occupationMapper.selectOccupationList();
+			List<OccupationVO> interestList = occupationMapper.selectOccupationList();
 			commonResponse.setData(interestList);
 			commonResponse.setCode(UserBizReturnCode.Success);
 			commonResponse.setMessage(UserBizReturnCode.Success.desc());
 		} catch (Exception e) {
-			logger.error("查询异常，异常信息：",e);
-//			throw new RemoteException(UserBizReturnCode.UserNotExist, "用户不存在");
+			logger.error("查询异常，异常信息：", e);
+			// throw new RemoteException(UserBizReturnCode.UserNotExist, "用户不存在");
 		}
 
 		return commonResponse;
@@ -646,58 +657,61 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 
 	@Override
 	public CommonResponse queryAttentionFansList(QueryAttentionFansListRequest request) {
-		
+
 		CommonResponse commonResponse = new CommonResponse();
 		try {
-			List<AttentionFansVO>  resultList =  new ArrayList<AttentionFansVO>();
-			
-			Long  customerId =  request.getCustomerId();
-			Integer   type =  request.getType();
-			if(UserBizConstants.QUERY_ATTENTION_LIST_TYPE == type){
-				//查询关注列表
-				resultList= fansMapper.queryAttentionListByCustomerId(customerId,UserBizConstants.ATTENTION_STATUS_ATTENED);
-			}else if(UserBizConstants.QUERY_FANS_LIST_TYPE == type){
-				//查询粉丝列表
-//				resultList =fansMapper.queryFansListByCustomerId(customerId,UserBizConstants.ATTENTION_STATUS_ATTENED);
-				//粉丝ID
-				List<Long>  fansIdList = fansMapper.queryFansIdListByCustomerId(customerId,UserBizConstants.ATTENTION_STATUS_ATTENED);
-			
-				if(CollectionUtils.isEmpty(fansIdList)){
-					
-				}else{
-					
-					//获取
+			List<AttentionFansVO> resultList = new ArrayList<AttentionFansVO>();
+
+			Long customerId = request.getCustomerId();
+			Integer type = request.getType();
+			if (UserBizConstants.QUERY_ATTENTION_LIST_TYPE == type) {
+				// 查询关注列表
+				resultList = fansMapper.queryAttentionListByCustomerId(customerId,
+						UserBizConstants.ATTENTION_STATUS_ATTENED);
+			} else if (UserBizConstants.QUERY_FANS_LIST_TYPE == type) {
+				// 查询粉丝列表
+				// resultList
+				// =fansMapper.queryFansListByCustomerId(customerId,UserBizConstants.ATTENTION_STATUS_ATTENED);
+				// 粉丝ID
+				List<Long> fansIdList = fansMapper.queryFansIdListByCustomerId(customerId,
+						UserBizConstants.ATTENTION_STATUS_ATTENED);
+
+				if (CollectionUtils.isEmpty(fansIdList)) {
+
+				} else {
+
+					// 获取
 					resultList = fansMapper.queryCustomerListByCustomerIdList(fansIdList);
-					
-					//获取
-					List<Fans>  fansList = fansMapper.queryFansListByFansIdList(fansIdList,customerId);
-					
-					HashMap<Long, Integer>   attentionStatusMap = new HashMap<Long, Integer>();
-					if(!CollectionUtils.isEmpty(fansList)){
+
+					// 获取
+					List<Fans> fansList = fansMapper.queryFansListByFansIdList(fansIdList, customerId);
+
+					HashMap<Long, Integer> attentionStatusMap = new HashMap<Long, Integer>();
+					if (!CollectionUtils.isEmpty(fansList)) {
 						for (Fans fans : fansList) {
-							Long  anchorId = fans.getAnchorId();
+							Long anchorId = fans.getAnchorId();
 							attentionStatusMap.put(anchorId, fans.getAttentionState());
 						}
 					}
-					
+
 					for (AttentionFansVO vo : resultList) {
-						Long  custId = vo.getCustomerId();
-						Integer  attentionStatus =  attentionStatusMap.get(custId);
-						if(attentionStatus == null){
-							attentionStatus =  UserBizConstants.ATTENTION_STATUS_UN_ATTENED;
+						Long custId = vo.getCustomerId();
+						Integer attentionStatus = attentionStatusMap.get(custId);
+						if (attentionStatus == null) {
+							attentionStatus = UserBizConstants.ATTENTION_STATUS_UN_ATTENED;
 						}
 						vo.setAttentionStatus(attentionStatus);
 					}
-					
+
 				}
-			
+
 			}
 			commonResponse.setData(resultList);
 			commonResponse.setCode(UserBizReturnCode.Success);
 			commonResponse.setMessage(UserBizReturnCode.Success.desc());
 		} catch (Exception e) {
-			logger.error("查询异常，异常信息：",e);
-//			throw new RemoteException(UserBizReturnCode.UserNotExist, "用户不存在");
+			logger.error("查询异常，异常信息：", e);
+			// throw new RemoteException(UserBizReturnCode.UserNotExist, "用户不存在");
 		}
 
 		return commonResponse;
@@ -705,37 +719,35 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 
 	@Override
 	public CommonResponse addOrCancelFans(AddOrCancelFansRequest request) {
-		if (request == null || request.getFansId() == null ||  request.getAttendedId() == null) {
+		if (request == null || request.getFansId() == null || request.getAttendedId() == null) {
 			throw new BizException(UserBizReturnCode.paramError, "参数异常");
 		}
-		
+
 		CommonResponse commonResponse = new CommonResponse();
-		
-		
-		
+
 		try {
-			
-			Long  fansId =  request.getFansId();
-			Long  attendedId =  request.getAttendedId();
-			Integer  type =  request.getType();
-			
-			Fans  fans = fansMapper.queryFans(fansId,attendedId);
-			
-			if(UserBizConstants.ATTENTION_TYPE_ADD == type){
-				//添加关注
-				if(fans == null){
-					//添加关注
-					Fans  fan =  new Fans();
+
+			Long fansId = request.getFansId();
+			Long attendedId = request.getAttendedId();
+			Integer type = request.getType();
+
+			Fans fans = fansMapper.queryFans(fansId, attendedId);
+
+			if (UserBizConstants.ATTENTION_TYPE_ADD == type) {
+				// 添加关注
+				if (fans == null) {
+					// 添加关注
+					Fans fan = new Fans();
 					fan.setId(UUIDUtils.getId());
 					fan.setAttentionState(UserBizConstants.ATTENTION_STATUS_ATTENED);
-				    fan.setCreateTime(new Date());
-				    fan.setFansId(fansId);
-				    fan.setAnchorId(attendedId);
-				    fansMapper.insert(fan);
-				}else{
-					//更改状态为关注
-					Integer  attentionStatus =  fans.getAttentionState();
-					if(UserBizConstants.ATTENTION_STATUS_UN_ATTENED == attentionStatus){
+					fan.setCreateTime(new Date());
+					fan.setFansId(fansId);
+					fan.setAnchorId(attendedId);
+					fansMapper.insert(fan);
+				} else {
+					// 更改状态为关注
+					Integer attentionStatus = fans.getAttentionState();
+					if (UserBizConstants.ATTENTION_STATUS_UN_ATTENED == attentionStatus) {
 						Fans record = new Fans();
 						record.setId(fans.getId());
 						record.setAttentionState(UserBizConstants.ATTENTION_STATUS_ATTENED);
@@ -743,12 +755,12 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 						fansMapper.updateByPrimaryKey(record);
 					}
 				}
-			}else if(UserBizConstants.ATTENTION_TYPE_CANCEL == type){
-				//取消关注
-				if(fans != null){
-					Integer   attentionStatus =  fans.getAttentionState();
-					if(UserBizConstants.ATTENTION_STATUS_ATTENED == attentionStatus){
-						//更改状态
+			} else if (UserBizConstants.ATTENTION_TYPE_CANCEL == type) {
+				// 取消关注
+				if (fans != null) {
+					Integer attentionStatus = fans.getAttentionState();
+					if (UserBizConstants.ATTENTION_STATUS_ATTENED == attentionStatus) {
+						// 更改状态
 						Fans record = new Fans();
 						record.setId(fans.getId());
 						record.setAttentionState(UserBizConstants.ATTENTION_STATUS_UN_ATTENED);
@@ -756,16 +768,15 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 						fansMapper.updateByPrimaryKey(record);
 					}
 				}
-				
+
 			}
-			
-			
+
 			commonResponse.setData("00000");
 			commonResponse.setCode(UserBizReturnCode.Success);
 			commonResponse.setMessage(UserBizReturnCode.Success.desc());
 		} catch (Exception e) {
-			logger.error("查询异常，异常信息：",e);
-//			throw new RemoteException(UserBizReturnCode.UserNotExist, "用户不存在");
+			logger.error("查询异常，异常信息：", e);
+			// throw new RemoteException(UserBizReturnCode.UserNotExist, "用户不存在");
 		}
 
 		return commonResponse;
