@@ -28,6 +28,7 @@ import com.honglu.quickcall.common.core.util.UUIDUtils;
 import com.honglu.quickcall.common.third.AliyunSms.enums.SmsTemplateEnum;
 import com.honglu.quickcall.common.third.AliyunSms.utils.AliyunSmsCodeUtil;
 import com.honglu.quickcall.common.third.AliyunSms.utils.MandaoSmsCodeUtil;
+import com.honglu.quickcall.common.third.rongyun.models.CodeSuccessReslut;
 import com.honglu.quickcall.common.third.rongyun.util.RongYunUtil;
 import com.honglu.quickcall.user.facade.code.UserBizReturnCode;
 import com.honglu.quickcall.user.facade.constants.UserBizConstants;
@@ -173,11 +174,23 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 		String rongyunToken = null;
 		if (StringUtils.isNotBlank(params.getNickName()) && params.getCustomerId() != null
 				&& StringUtils.isNotBlank(params.getHeadPortraitUrl())) {
-			rongyunToken = RongYunUtil.getToken(String.valueOf(params.getCustomerId()), params.getNickName(),
-					params.getHeadPortraitUrl());
-			if (rongyunToken == null || "".equals(rongyunToken)) {
-				logger.error("用户获取融云token失败。用户ID为：" + params.getCustomerId());
+			/*
+			 * rongyunToken = RongYunUtil.getToken(String.valueOf(params.getCustomerId()),
+			 * params.getNickName(), params.getHeadPortraitUrl()); if (rongyunToken == null
+			 * || "".equals(rongyunToken)) { logger.error("用户获取融云token失败。用户ID为：" +
+			 * params.getCustomerId()); }
+			 */
+			// 刷新融云用户信息
+			CodeSuccessReslut reslut = RongYunUtil.refreshUser(String.valueOf(params.getCustomerId()),
+					params.getNickName(), params.getHeadPortraitUrl());
+			// 刷新失败
+			if (reslut.getCode() != 200) {
+				logger.error("刷新融云用户信息失败，用户id为：" + String.valueOf(params.getCustomerId()) + "失败原因为："
+						+ reslut.getErrorMessage());
+			} else {
+				logger.info("刷新融云用户信息成功！");
 			}
+
 		}
 
 		int row = customerMapper.customerSetHeardUrl(params.getTel(), params.getHeadPortraitUrl(), params.getNickName(),
@@ -236,7 +249,8 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 		customer.setQqOpenId(request.getQqOpenId());
 		customer.setWechatOpenId(request.getWechatOpenId());
 		customer.setPhone(request.getTel());
-		customer.setNickName(request.getNickName());
+		customer.setNickName(
+				StringUtils.isNotBlank(request.getNickName()) ? request.getNickName() : "轻音_" + randomFour());
 
 		if (StringUtils.isNotBlank(request.getHeardUrl())) {
 			defaultImg = request.getHeardUrl();
@@ -459,7 +473,7 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 
 	@Override
 	public CommonResponse saveDvVoiceInfo(SaveDvVoiceRequest request) {
-		Long   customerId =  request.getCustomerId();
+		Long customerId = request.getCustomerId();
 		Customer customer = customerMapper.selectByPrimaryKey(customerId);
 		if (customer == null) {
 			return ResultUtils.resultDataNotExist("用户数据不存在");
@@ -469,7 +483,7 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 		record.setvVoiceUrlTmp(request.getVoiceUrl());
 		record.setvVoiceTimeTmp(request.getVoiceTime());
 		record.setVoiceStatus(UserBizConstants.VOICE_STATUS_UN_APPROVE);
-		customerMapper.updateByPrimaryKeySelective(record );
+		customerMapper.updateByPrimaryKeySelective(record);
 		return ResultUtils.resultSuccess();
 	}
 }
