@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
-//import com.alibaba.dubbo.common.utils.CollectionUtils;
 import com.honglu.quickcall.account.facade.code.AccountBizReturnCode;
 import com.honglu.quickcall.common.api.exception.BizException;
 import com.honglu.quickcall.common.api.exception.RemoteException;
@@ -63,7 +62,6 @@ import com.honglu.quickcall.user.service.dao.OccupationMapper;
 import com.honglu.quickcall.user.service.dao.OrdersMapper;
 import com.honglu.quickcall.user.service.dao.ProductMapper;
 import com.honglu.quickcall.user.service.dao.SensitivityWordMapper;
-import com.honglu.quickcall.user.service.dao.SkillMapper;
 import com.honglu.quickcall.user.service.service.CustomerRedisManagement;
 import com.honglu.quickcall.user.service.service.PersonInfoService;
 import com.honglu.quickcall.user.service.util.CountAge;
@@ -94,15 +92,11 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 	@Autowired
 	private FansMapper fansMapper;
 	@Autowired
-	private SkillMapper skillMapper;
-	@Autowired
 	private OrdersMapper ordersMapper;
 	/**
 	 * 中文、英文、数字、下划线校验 4-24位
 	 */
 	private final static Pattern CH_EN_PATTERN = Pattern.compile("^[\\u4e00-\\u9fa5a-z\\d_]{4,24}$");
-	private final static Pattern ID_PATTERN = Pattern
-			.compile("^\\d{6}(18|19|20)?\\d{2}(0[1-9]|1[012])(0[1-9]|[12]\\d|3[01])\\d{3}(\\d|[xX])$");
 	private static final Logger logger = LoggerFactory.getLogger(PersonInfoServiceImpl.class);
 
 	// 测试正则
@@ -155,8 +149,9 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 		Customer customer = customerRedisManagement.getCustomer(customerId);
 		// 获取身份证
 		String identityID = customer.getCredentialsNum();
-		PersonHomePage personHomePage = new PersonHomePage();
+		PersonHomePage personHomePage = null;
 		if (customer != null) {
+			personHomePage = new PersonHomePage();
 			personHomePage.setCustomerId(customerId);// id
 			personHomePage.setNickName(customer.getNickName());// 昵称
 			personHomePage.setSignName(customer.getSignName());// 签名
@@ -177,11 +172,6 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 			personHomePage.setAge(age);
 			// 判断身份证是否为空，如果又身份证则按找身份证上面的性别
 			if (StringUtils.isNotEmpty(identityID)) {
-				// TODO 此处不应该校验身份证号码是否正确
-				// Matcher m = ID_PATTERN.matcher(identityID);
-				// if (!m.matches()) {
-				// throw new RemoteException(UserBizReturnCode.paramError, "身份证参数错误");
-				// }
 				// 判断身份证男女，截取身份证倒数第二位
 				String genderStr = identityID.substring(identityID.length() - 2, identityID.length() - 1);
 				int genderInt = Integer.parseInt(genderStr);
@@ -204,12 +194,10 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 				e.printStackTrace();
 			}
 			// 查询职业 by accountId
-			List occupation = occupationMapper.selectByCustomerId(customerId);
+			List<Occupation> occupation = occupationMapper.selectByCustomerId(customerId);
 			personHomePage.setOccupation(occupation);
-			return personHomePage;
-		} else {
-			return null;
-		}
+		} 
+		return personHomePage;
 	}
 
 	/**
@@ -443,7 +431,7 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 					// customerInterestMapper.updateByCustomerIdSelective(customerInterest);
 					// } else {
 					// 插入
-					int result = customerInterestMapper.insertSelective(customerInterest);
+					customerInterestMapper.insertSelective(customerInterest);
 					// }
 				}
 				commonResponse.setData(customerInterest);
@@ -489,12 +477,12 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 					// 存入职业ID
 					customerOccupation.setOccupationId(occupation);
 					customerOccupation.setModifyTime(new Date());// 更新修改时间
-					int nn = customerOccupationMapper.updateByCustomerIdSelective(customerOccupation);
+					/*int nn = */customerOccupationMapper.updateByCustomerIdSelective(customerOccupation);
 				} else {
 					// 存入职业ID
 					customerOccupation.setOccupationId(occupation);
 					// 插入
-					int result = customerOccupationMapper.insertSelective(customerOccupation);
+					/*int result = */customerOccupationMapper.insertSelective(customerOccupation);
 				}
 				commonResponse.setData(customerOccupation);
 				commonResponse.setCode(UserBizReturnCode.Success);
