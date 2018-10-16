@@ -218,12 +218,12 @@
 						"data" : "orderStatus",
 						"sTitle" : "订单状态",
 						'sClass' : "text-center"
-					},
+					}/*,
 					{
-						"data" : "id",
+						"data" : "orderId",
 						"sTitle" : "操作",
 						'sClass' : "text-center"
-					}
+					}*/
 		         ],
 		         fnServerParams: function (aoData) {  //查询条件
                        aoData.push({ "name": "orderId", "value": $("#orderIdQuery").val() } );
@@ -232,12 +232,13 @@
                        aoData.push({ "name": "orderType", "value": $("#orderTypeQuery").val().replace(new RegExp(" ","g"),"") } );
                     } ,
                  aoColumnDefs : [ {
-					"aTargets" : 12,
+					"aTargets" : 11
+					 /*,
 					"mRender" : function(data,type, row) {
 						var detail = "";
-						detail = "<a href='#' onclick='addAndUpdateRow(\""+ row.id+ "\")' data-toggle='modal' class='padding-right-small label label-success'><i class='glyphicon glyphicon-edit'></i>详情</a>";
+						// detail = "<a href='#' onclick='viewOrderDetail(\""+ row.orderId+ "\")' data-toggle='modal' class='padding-right-small label label-success'><i class='glyphicon glyphicon-edit'></i>详情</a>";
 						return  detail;
-					}
+					}*/
 			} ] 
 	            
 			});
@@ -245,17 +246,20 @@
 			 $('#query').click(function(){
 				$('#example').dataTable().fnDraw();
 			});
-		
+
 		});
-			
+
+		function viewOrderDetail(id) {
+			$('#order_detail_model').addAndUpdateRow("order/addAndUpdateHome.htm?id=" + id);
+		}
+
 </script>
 		<!---dialog选项-->
 		<div>
 			<jsp:include page="/WEB-INF/views/common/delete_dialog.jsp" />
-			<jsp:include page="/WEB-INF/views/common/addupdate_dialog.jsp" />
 
-			<div class="modal fade" id="insertAndUpdate" tabindex="-1"
-				role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			<div class="modal fade" id="order_detail_model" tabindex="-1"
+				 role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
 			</div>
 		</div>
 	</div>
