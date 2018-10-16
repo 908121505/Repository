@@ -12,8 +12,7 @@ public class HomePageLogout implements Serializable{
 	
 
 
-
-	private static final long serialVersionUID = 5339650142050657756L;
+	private static final long serialVersionUID = -1511252745865490428L;
 
 	private Long customerId;
 
@@ -65,13 +64,13 @@ public class HomePageLogout implements Serializable{
 
     private String otherRelation;
 
-    private Date createTime;
-
-    private Date modifyTime;
-
-    private String createMan;
-
-    private String modifyMan;
+//    private Date createTime;
+//
+//    private Date modifyTime;
+//
+//    private String createMan;
+//
+//    private String modifyMan;
 
     private String remark;
     
@@ -423,37 +422,6 @@ public class HomePageLogout implements Serializable{
 		this.otherRelation = otherRelation;
 	}
 
-	public Date getCreateTime() {
-		return createTime;
-	}
-
-	public void setCreateTime(Date createTime) {
-		this.createTime = createTime;
-	}
-
-	public Date getModifyTime() {
-		return modifyTime;
-	}
-
-	public void setModifyTime(Date modifyTime) {
-		this.modifyTime = modifyTime;
-	}
-
-	public String getCreateMan() {
-		return createMan;
-	}
-
-	public void setCreateMan(String createMan) {
-		this.createMan = createMan;
-	}
-
-	public String getModifyMan() {
-		return modifyMan;
-	}
-
-	public void setModifyMan(String modifyMan) {
-		this.modifyMan = modifyMan;
-	}
 
 	public String getRemark() {
 		return remark;

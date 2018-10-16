@@ -526,6 +526,13 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 				// 获取主页所有资料
 				homePageLogout = customerMapper.showHomePageLogout(params.getCustomerId());
 
+				
+				String   vVoiceUrl =  homePageLogout.getvVoiceUrl();
+				if(org.apache.commons.lang3.StringUtils.isBlank(vVoiceUrl)){
+					 homePageLogout.setvVoiceTime(homePageLogout.getVoiceTime());
+					 homePageLogout.setvVoiceUrl(homePageLogout.getVoiceUrl());
+				}
+				 
 				Integer voiceStatus = homePageLogout.getVoiceStatus();
 				// voiceStatus == null 未录制声音
 				if (voiceStatus == null) {
