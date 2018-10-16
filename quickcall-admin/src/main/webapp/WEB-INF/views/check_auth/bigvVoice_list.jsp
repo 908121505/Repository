@@ -43,8 +43,8 @@
                         <div class="input-group-addon">声音认证状态</div>
                         <select class="form-control" id="vVoiceStatus" name="vVoiceStatus">
                             <option value="2">待审核</option>
-                            <option value="3">已通过</option>
-                            <option value="4">拒绝</option>
+                            <option value="4">已通过</option>
+                            <option value="3">拒绝</option>
                             <%--<option value="0">未认证</option>--%>
                         </select>
                     </div>
@@ -115,9 +115,9 @@
                                 return "<font color='red'>未认证</font>";
                             } else if (data == 2) {
                                 return "<font color='blue'>待审核</font>";
-                            } else if (data == 3) {
-                                return "<font color='blue'>已通过</font>";
                             } else if (data == 4) {
+                                return "<font color='blue'>已通过</font>";
+                            } else if (data == 3) {
                                 return "<font color='blue'>拒绝</font>";
                             } else {
                                 return "<font color='red'>" + data + "</font>";
@@ -169,13 +169,13 @@
 
         function approvedFn(customerId,vVoiceUrlTmp) {
             if (window.confirm("确认通过审核？")) {
-                doCheck(customerId, 3,vVoiceUrlTmp);
+                doCheck(customerId, 4,vVoiceUrlTmp);
             }
         }
 
         function refuseFn(customerId,vVoiceUrlTmp) {
             if (window.confirm("确认拒绝审核？")) {
-                doCheck(customerId, 4,vVoiceUrlTmp);
+                doCheck(customerId, 3,vVoiceUrlTmp);
             }
         }
 
