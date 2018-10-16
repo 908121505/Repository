@@ -160,6 +160,10 @@ public class SkillServiceImpl implements ISkillService {
 		}
 		
 		Long skillId =  request.getSkillId();
+		
+		Skill   skill = skillMapper.selectByPrimaryKey(skillId);
+		
+		
 		BigDecimal  price = request.getPrice();
 		if(productId == null){
 			productId =  UUIDUtils.getId();
@@ -170,6 +174,7 @@ public class SkillServiceImpl implements ISkillService {
 			record.setSkillId(skillId);
 			record.setSellerId(customerId);
 			record.setCreateTime(new Date());
+			record.setName(skill.getName());
 			//直接插入
 			productMapper.insertSelective(record );
 		}else{
@@ -180,6 +185,7 @@ public class SkillServiceImpl implements ISkillService {
 			record.setSkillId(skillId);
 			record.setSellerId(customerId);
 			record.setModifyTime(new Date());
+			record.setName(skill.getName());
 			//直接更新
 			productMapper.updateByPrimaryKeySelective(record);
 		}
