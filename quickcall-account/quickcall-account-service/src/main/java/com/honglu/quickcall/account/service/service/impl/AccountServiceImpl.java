@@ -42,10 +42,10 @@ public class AccountServiceImpl implements AccountService {
 		// 记录流水
 		TradeDetail tradeDetail = new TradeDetail();
 		tradeDetail.setTradeId(UUIDUtils.getId());
-		tradeDetail.setSellerId(customerId);
+		tradeDetail.setCustomerId(customerId);
 		tradeDetail.setCreateTime(new Date());
 		tradeDetail.setType(accountBusinessType.getType());
-		tradeDetail.setPrice(amount);
+		tradeDetail.setInPrice(amount);
 		tradeDetailMapper.insertSelective(tradeDetail);
 
 	}
@@ -58,10 +58,10 @@ public class AccountServiceImpl implements AccountService {
 		// 记录流水
 		TradeDetail tradeDetail = new TradeDetail();
 		tradeDetail.setTradeId(UUIDUtils.getId());
-		tradeDetail.setSellerId(customerId);
+		tradeDetail.setCustomerId(customerId);
 		tradeDetail.setCreateTime(new Date());
 		tradeDetail.setType(accountBusinessType.getType());
-		tradeDetail.setPrice(amount);
+		tradeDetail.setOutPrice(amount);
 		tradeDetailMapper.insertSelective(tradeDetail);
 
 	}

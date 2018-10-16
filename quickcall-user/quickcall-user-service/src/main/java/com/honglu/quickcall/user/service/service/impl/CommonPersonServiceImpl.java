@@ -193,8 +193,8 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 
 		}
 
-		int row = customerMapper.customerSetHeardUrl(params.getTel(), params.getHeadPortraitUrl(), params.getNickName(),
-				rongyunToken);
+		int row = customerMapper.customerSetHeardUrl(params.getTel(), params.getHeadPortraitUrl(),
+				params.getNickName());
 		if (row <= 0) {
 			throw new BizException(BizCode.ParamError, "设置昵称头像失败");
 		}

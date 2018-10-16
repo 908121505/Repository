@@ -15,6 +15,7 @@ import com.honglu.quickcall.account.facade.code.AccountBizReturnCode;
 import com.honglu.quickcall.account.facade.constants.OrderSkillConstants;
 import com.honglu.quickcall.account.facade.entity.Account;
 import com.honglu.quickcall.account.facade.entity.Order;
+import com.honglu.quickcall.account.facade.enums.AccountBusinessTypeEnum;
 import com.honglu.quickcall.account.facade.enums.TransferTypeEnum;
 import com.honglu.quickcall.account.facade.exchange.request.ApplayRefundRequest;
 import com.honglu.quickcall.account.facade.exchange.request.CancelOrderRequest;
@@ -34,7 +35,6 @@ import com.honglu.quickcall.account.facade.vo.OrderDaVProductVO;
 import com.honglu.quickcall.account.facade.vo.OrderDetailVO;
 import com.honglu.quickcall.account.facade.vo.OrderReceiveOrderListVO;
 import com.honglu.quickcall.account.facade.vo.OrderSendOrderListVO;
-import com.honglu.quickcall.account.service.dao.AccountMapper;
 import com.honglu.quickcall.account.service.dao.OrderMapper;
 import com.honglu.quickcall.account.service.dao.ProductMapper;
 import com.honglu.quickcall.account.service.service.AccountService;
@@ -66,8 +66,8 @@ public class OrderServiceImpl implements IOrderService {
 	private ProductMapper  productMapper;
 	@Autowired
 	private OrderMapper  orderMapper;
-	@Autowired
-	private AccountMapper  accountMapper;
+//	@Autowired
+//	private AccountMapper  accountMapper;
 	@Autowired
 	private AccountService  accountService;
 
@@ -235,7 +235,7 @@ public class OrderServiceImpl implements IOrderService {
 				orderStatus = OrderSkillConstants.ORDER_STATUS_CANCLE_DV_ACCEPT_USER_SELF_CANCLE;
 				payAmount =  order.getOrderAmounts();
 			}else if(OrderSkillConstants.ORDER_STATUS_PAYED_DV_CONFIRM_START  == oldOrderStatus){
-				//订单状态8.大V接受订单之后开始之前用户自主取消
+				//订单状态12.大V接受订单之后开始之前用户自主取消
 				orderStatus = OrderSkillConstants.ORDER_STATUS_CANCEL_BEFORE_ING;
 				payAmount =  order.getOrderAmounts();
 			}
@@ -246,7 +246,8 @@ public class OrderServiceImpl implements IOrderService {
 				//金额不为空，说明需要退款给用户
 				if(payAmount != null){
 					Long  buyerId =  order.getBuyerId();
-					accountMapper.inAccount(buyerId, payAmount,TransferTypeEnum.RECHARGE.getType());
+//					accountMapper.inAccount(buyerId, payAmount,TransferTypeEnum.RECHARGE.getType());
+					accountService.inAccount(buyerId, payAmount,TransferTypeEnum.RECHARGE,AccountBusinessTypeEnum.OrderRefund);
 				}
 			}
 		}
@@ -334,14 +335,14 @@ public class OrderServiceImpl implements IOrderService {
 			Long  userId =  order.getBuyerId();
 			Long  sellerId =  order.getSellerId();
 			//判断余额是否充足
-			Account account=accountMapper.queryAccount(userId);
+			Account account=accountService.queryAccount(userId);
 			//消费用户的充值金额
 			BigDecimal  rechargeAmounts =  account.getRechargeAmounts();
 			if(rechargeAmounts != null){
 				if(payAmount.compareTo(rechargeAmounts) <=  0){
 					commonService.updateOrderForPay(orderId, OrderSkillConstants.ORDER_STATUS_PAYED,new Date());
 					//修改账户余额
-					accountMapper.outAccount(userId, payAmount,TransferTypeEnum.RECHARGE.getType());
+					accountService.outAccount(userId, payAmount,TransferTypeEnum.RECHARGE,AccountBusinessTypeEnum.PlaceOrder);
 					//发送消息 
 					commonService.pushMessage(PushAppMsgTypeEnum.NEW_ORDER, sellerId, userId);
 				}else{
@@ -427,7 +428,7 @@ public class OrderServiceImpl implements IOrderService {
 				commonService.updateOrder(orderId, newOrderStatus,null);
 				//大V入账 
 				BigDecimal  orderAmount =  order.getOrderAmounts();
-				accountMapper.inAccount(sellerId, orderAmount, TransferTypeEnum.REMAINDER.getType());
+				accountService.inAccount(sellerId, orderAmount, TransferTypeEnum.REMAINDER,AccountBusinessTypeEnum.CompleteOrder);
 			}
 		}else{
 			//订单不存在
@@ -472,7 +473,7 @@ public class OrderServiceImpl implements IOrderService {
 				//退钱给用户
 				Long  customerId =  order.getBuyerId();
 				BigDecimal   payAmount =  order.getOrderAmounts();
-				accountMapper.inAccount(customerId, payAmount, TransferTypeEnum.RECHARGE.getType());
+				accountService.inAccount(customerId, payAmount, TransferTypeEnum.RECHARGE,AccountBusinessTypeEnum.OrderRefund);
 			}
 			commonService.updateOrder(orderId, newOrderStatus,null);
 		}else{
@@ -521,7 +522,7 @@ public class OrderServiceImpl implements IOrderService {
 				newOrderStatus = OrderSkillConstants.ORDER_STATUS_PAYED_DV_REFUSE;
 				BigDecimal  payAmount = order.getOrderAmounts();
 				Long   buyerId =  order.getBuyerId();
-				accountMapper.inAccount(buyerId, payAmount, TransferTypeEnum.RECHARGE.getType());
+				accountService.inAccount(buyerId, payAmount, TransferTypeEnum.RECHARGE,AccountBusinessTypeEnum.OrderRefund);
 			}
 			commonService.updateOrder(orderId, newOrderStatus,null);
 		}else{
@@ -606,7 +607,7 @@ public class OrderServiceImpl implements IOrderService {
 				Long  customerId =  order.getBuyerId();
 				BigDecimal  payAmount = order.getOrderAmounts();
 				//大V同意退款，对消费客户入账
-				accountMapper.inAccount(customerId, payAmount,TransferTypeEnum.RECHARGE.getType());
+				accountService.inAccount(customerId, payAmount,TransferTypeEnum.RECHARGE,AccountBusinessTypeEnum.OrderRefund);
 			}
 		}else{
 			//订单不存在
