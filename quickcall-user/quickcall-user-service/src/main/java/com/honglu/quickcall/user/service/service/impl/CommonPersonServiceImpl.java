@@ -197,7 +197,7 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 
 	/**
 	 * 保存用户，并生成融云token
-	 * 
+	 *
 	 * @param request
 	 * @return
 	 */
@@ -381,6 +381,17 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 		if (customer.getIdentityStatus() == null) {
 			customer.setIdentityStatus(0);// 身份认证状态为空的时候，默认复制为未认证
 		}
+		// 身份证号中间打***
+		String credentialsNum = customer.getCredentialsNum();
+		if (StringUtils.isNotBlank(credentialsNum) && credentialsNum.length() > 10) {
+			StringBuilder idNo = new StringBuilder(credentialsNum.substring(0, 3));
+			for (int i = 0; i < credentialsNum.length() - 7; i++) {
+				idNo.append("*");
+			}
+			idNo.append(credentialsNum.substring(credentialsNum.length() - 4));
+			customer.setCredentialsNum(idNo.toString());
+		}
+
 		return ResultUtils.resultSuccess(customer);
 	}
 
@@ -418,26 +429,25 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 			certifyCustomer.setCredentialsNum(request.getCredentialsNum());
 		}
 
-		// 大V认证时 -- 判断大V认证状态
-		if (Objects.equals(request.getCertifyType(), 2)) {
-			// ADUAN 上传大V认证时 -- 先不判断身份认证状态了（后面记得打开注释）
-			/*
-			 * if(!Objects.equals(customer.getIdentityStatus(), 2)){
-			 * if(Objects.equals(customer.getIdentityStatus(), 1)){ return
-			 * ResultUtils.resultDuplicateOperation("身份认证正在审核中，请等待审核通过后再进行大V认证"); } return
-			 * ResultUtils.resultDuplicateOperation("请先进行身份认证"); }
-			 */
+		// 大V认证时 -- 判断大V身份认证状态
+        if (Objects.equals(request.getCertifyType(), 2)) {
+            if (!Objects.equals(customer.getIdentityStatus(), 2)) {
+                if (Objects.equals(customer.getIdentityStatus(), 1)) {
+                    return ResultUtils.resultDuplicateOperation("身份认证正在审核中，请等待审核通过后再进行大V认证");
+                }
+                return ResultUtils.resultDuplicateOperation("请先进行身份认证");
+            }
 
-			// 申请大V不校验是否在审核中
-			// if (Objects.equals(customer.getvStatus(), 1)) {
-			// return ResultUtils.resultDuplicateOperation("大V认证正在审核中");
-			// }
-			if (Objects.equals(customer.getvStatus(), 2)) {
-				return ResultUtils.resultDuplicateOperation("大V认证已通过");
-			}
-			certifyCustomer.setvStatus(1);// 更新状态为：审核中
-			certifyCustomer.setVoiceUrl(request.getVoiceUrl());
-		}
+            // 申请大V不校验是否在审核中
+            if (Objects.equals(customer.getvStatus(), 1)) {
+                return ResultUtils.resultDuplicateOperation("大V认证正在审核中");
+            }
+            if (Objects.equals(customer.getvStatus(), 2)) {
+                return ResultUtils.resultDuplicateOperation("大V认证已通过");
+            }
+            certifyCustomer.setvStatus(1);// 更新状态为：审核中
+            certifyCustomer.setVoiceUrl(request.getVoiceUrl());
+        }
 
 		// 如果声音时长为null，sql不会更新
 		certifyCustomer.setVoiceTime(request.getVoiceTime());
