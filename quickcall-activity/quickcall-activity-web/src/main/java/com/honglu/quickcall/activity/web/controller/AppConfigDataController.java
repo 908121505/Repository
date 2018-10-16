@@ -29,6 +29,7 @@ public class AppConfigDataController {
 
     /**
      * Banner查询接口
+     * @date 2018-10-16 限制 -- 最多支持5个资源位
      *
      * @param params
      * @return
