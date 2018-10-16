@@ -72,6 +72,12 @@ public class Customer {
     private String deviceId;
 
     private Date loginTime;
+    //大V对外展示声音URL
+    private String vVoiceUrl;
+    //大V自己声音URL
+    private String vVoiceUrlTmp;
+    //大V声音审核状态
+    private Integer vVoiceStatus;
 
     public String getCustomerId() {
         return customerId;
@@ -352,4 +358,28 @@ public class Customer {
     public void setLoginTime(Date loginTime) {
         this.loginTime = loginTime;
     }
+
+	public String getvVoiceUrlTmp() {
+		return vVoiceUrlTmp;
+	}
+
+	public void setvVoiceUrlTmp(String vVoiceUrlTmp) {
+		this.vVoiceUrlTmp = vVoiceUrlTmp;
+	}
+
+	public String getvVoiceUrl() {
+		return vVoiceUrl;
+	}
+
+	public void setvVoiceUrl(String vVoiceUrl) {
+		this.vVoiceUrl = vVoiceUrl;
+	}
+
+	public Integer getvVoiceStatus() {
+		return vVoiceStatus;
+	}
+
+	public void setvVoiceStatus(Integer vVoiceStatus) {
+		this.vVoiceStatus = vVoiceStatus;
+	}
 }
