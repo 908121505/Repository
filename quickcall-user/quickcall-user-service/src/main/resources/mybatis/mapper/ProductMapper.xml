@@ -31,11 +31,32 @@
     from product
     where product_id = #{productId,jdbcType=BIGINT}
   </select>
-  <select id="selectVProductTag" resultType="com.honglu.quickcall.user.facade.entity.in.VProductTag" parameterType="java.lang.Long" >
+<!--   <select id="selectVProductTag" resultType="com.honglu.quickcall.user.facade.entity.in.VProductTag" parameterType="java.lang.Long" >
     SELECT 
    	product_id as productId,skill_id as skillId,name,service_time as serviceTime,price,preferential_price as preferentialPrice, discount_rate as discountRate, 
     discount_price as discountPrice, type, product_status as productStatus, seller_id as sellerId, product_describe as productDescribe,remark
     FROM product WHERE seller_id=#{customerId} AND product_status=1
+  </select> -->
+  <select id="selectVProductTag" resultType="com.honglu.quickcall.user.facade.entity.in.VProductTag" parameterType="java.lang.Long" >
+   SELECT
+	p.product_id AS productId,
+	p.skill_id AS skillId,
+	p.name  AS  name,
+	p.service_time AS serviceTime,
+	p.price,
+	p.preferential_price AS preferentialPrice,
+	p.discount_rate AS discountRate,
+	p.discount_price AS discountPrice,
+	p.type  AS  type,
+	p.product_status AS productStatus,
+	p.seller_id AS sellerId,
+	p.product_describe AS productDescribe,
+	p.remark AS  remark ,
+  sk.image_url  AS  imageUrl
+
+FROM
+	product  p  LEFT JOIN  skill   sk  ON  p.skill_id   = sk.id
+   WHERE p.seller_id=#{customerId} AND p.product_status=1
   </select>
   <select id="queryVProductNum" resultType="java.lang.Integer" parameterType="java.lang.Long" >
     SELECT COUNT(*) FROM product WHERE seller_id=#{customerId} AND product_status='1';

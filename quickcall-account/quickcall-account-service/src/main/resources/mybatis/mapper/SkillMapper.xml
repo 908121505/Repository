@@ -8,6 +8,7 @@
     <result column="min_price" property="minPrice" jdbcType="DECIMAL" />
     <result column="max_price" property="maxPrice" jdbcType="DECIMAL" />
     <result column="image_url" property="imageUrl" jdbcType="VARCHAR" />
+    <result column="title_url" property="titleUrl" jdbcType="VARCHAR" />
     <result column="sort" property="sort" jdbcType="SMALLINT" />
     <result column="price_step" property="priceStep" jdbcType="SMALLINT" />
     <result column="skill_status" property="skillStatus" jdbcType="TINYINT" />
@@ -21,7 +22,7 @@
   
   
   <sql id="Base_Column_List" >
-    id, name, skill_describe, min_price, max_price, image_url, sort, price_step, skill_status, 
+    id, name, skill_describe, min_price, max_price, image_url, title_url,sort, price_step, skill_status, 
     create_time, modify_time, create_man, modify_man, remark
   </sql>
 
@@ -44,12 +45,12 @@
 
   <insert id="insert" parameterType="com.honglu.quickcall.account.facade.entity.Skill" >
     insert into skill (id, name, skill_describe, 
-      min_price, max_price, image_url, 
+      min_price, max_price, image_url, title_url,
       sort, price_step, skill_status, 
       create_time, modify_time, create_man, 
       modify_man, remark)
     values (#{id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{skillDescribe,jdbcType=VARCHAR}, 
-      #{minPrice,jdbcType=DECIMAL}, #{maxPrice,jdbcType=DECIMAL}, #{imageUrl,jdbcType=VARCHAR}, 
+      #{minPrice,jdbcType=DECIMAL}, #{maxPrice,jdbcType=DECIMAL}, #{imageUrl,jdbcType=VARCHAR}, #{titleUrl,jdbcType=VARCHAR}, 
       #{sort,jdbcType=SMALLINT}, #{priceStep,jdbcType=SMALLINT}, #{skillStatus,jdbcType=TINYINT}, 
       #{createTime,jdbcType=TIMESTAMP}, #{modifyTime,jdbcType=TIMESTAMP}, #{createMan,jdbcType=VARCHAR}, 
       #{modifyMan,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR})
@@ -74,6 +75,9 @@
       </if>
       <if test="imageUrl != null" >
         image_url,
+      </if>
+      <if test="titleUrl != null" >
+        title_url,
       </if>
       <if test="sort != null" >
         sort,
@@ -118,6 +122,9 @@
       </if>
       <if test="imageUrl != null" >
         #{imageUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="titleUrl != null" >
+        #{titleUrl,jdbcType=VARCHAR},
       </if>
       <if test="sort != null" >
         #{sort,jdbcType=SMALLINT},
@@ -166,6 +173,9 @@
       <if test="imageUrl != null" >
         image_url = #{imageUrl,jdbcType=VARCHAR},
       </if>
+      <if test="titleUrl != null" >
+        title_url = #{titleUrl,jdbcType=VARCHAR},
+      </if>
       <if test="sort != null" >
         sort = #{sort,jdbcType=SMALLINT},
       </if>
@@ -204,6 +214,7 @@
       min_price = #{minPrice,jdbcType=DECIMAL},
       max_price = #{maxPrice,jdbcType=DECIMAL},
       image_url = #{imageUrl,jdbcType=VARCHAR},
+      title_url = #{titleUrl,jdbcType=VARCHAR},
       sort = #{sort,jdbcType=SMALLINT},
       price_step = #{priceStep,jdbcType=SMALLINT},
       skill_status = #{skillStatus,jdbcType=TINYINT},
@@ -228,7 +239,8 @@
   <select id="selectPartSkill" resultType="com.honglu.quickcall.account.facade.vo.FirstPageSkillinfoVO" >
 		SELECT
 			sk.id  as  skillId,
-			sk.name as  name
+			sk.name as  name,
+			sk.title_url  as  titleUrl
 		FROM
 			(
 				SELECT
@@ -244,6 +256,19 @@
 		LEFT JOIN skill sk ON sk.id = tmp.skill_id
 		ORDER BY
 			tmp.count DESC 
+  </select>
+  <!-- 根据客户编号查询大V声音信息 -->
+  <select id="getVoiceInfo" resultType="com.honglu.quickcall.account.facade.vo.VoiceVOCopy" >
+		SELECT
+			v_voice_status AS voiceStatus,
+			v_voice_time AS voiceTime,
+			v_voice_url AS voiceUrl,
+			v_voice_time_tmp AS voiceTimeTmp,
+			v_voice_url_tmp AS voiceUrlTmp
+		FROM
+			customer
+		WHERE
+			customer_id =#{customerId}
   </select>
   
   

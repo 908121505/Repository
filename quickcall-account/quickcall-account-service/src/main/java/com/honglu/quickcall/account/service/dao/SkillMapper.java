@@ -4,6 +4,8 @@ import java.util.List;
 
 import com.honglu.quickcall.account.facade.entity.Skill;
 import com.honglu.quickcall.account.facade.vo.FirstPageSkillinfoVO;
+import com.honglu.quickcall.account.facade.vo.VoiceVO;
+import com.honglu.quickcall.account.facade.vo.VoiceVOCopy;
 
 public interface SkillMapper {
     int deleteByPrimaryKey(Long id);
@@ -22,4 +24,7 @@ public interface SkillMapper {
     List<Skill>  selectTotalSkill();
 
 	List<FirstPageSkillinfoVO> selectPartSkill();
+
+	/**根据客户编号查询大V声音信息*/
+	VoiceVOCopy getVoiceInfo(Long customerId);
 }

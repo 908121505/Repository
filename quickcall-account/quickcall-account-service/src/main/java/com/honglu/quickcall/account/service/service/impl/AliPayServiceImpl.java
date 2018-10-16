@@ -15,6 +15,7 @@ import com.alibaba.fastjson.JSON;
 import com.honglu.quickcall.account.facade.entity.Account;
 import com.honglu.quickcall.account.facade.entity.Aliacount;
 import com.honglu.quickcall.account.facade.entity.Recharge;
+import com.honglu.quickcall.account.facade.enums.AccountBusinessTypeEnum;
 import com.honglu.quickcall.account.facade.enums.TradeTypeEnum;
 import com.honglu.quickcall.account.facade.enums.TransferTypeEnum;
 import com.honglu.quickcall.account.facade.exchange.request.AlipayNotifyRequest;
@@ -24,6 +25,7 @@ import com.honglu.quickcall.account.facade.exchange.request.WhthdrawRequest;
 import com.honglu.quickcall.account.service.dao.AccountMapper;
 import com.honglu.quickcall.account.service.dao.AliacountMapper;
 import com.honglu.quickcall.account.service.dao.RechargeMapper;
+import com.honglu.quickcall.account.service.service.AccountService;
 import com.honglu.quickcall.account.service.service.AliPayService;
 import com.honglu.quickcall.common.api.code.BizCode;
 import com.honglu.quickcall.common.api.exception.BizException;
@@ -45,6 +47,8 @@ public class AliPayServiceImpl implements AliPayService {
 
 	@Autowired
 	private RechargeMapper rechargeMapper;
+	@Autowired
+	private AccountService accountService;
 
 	private final static Logger logger = LoggerFactory.getLogger(AliPayServiceImpl.class);
 	private static String aliPayUrl = ResourceBundle.getBundle("thirdconfig").getString("ALI_UNIFIED_ORDER_URL");
@@ -131,7 +135,10 @@ public class AliPayServiceImpl implements AliPayService {
 			recharge.setRechargeType(1);// 充值类型。1为支付宝，2为微信
 			if ("1".equals(myJson.getString("respCode"))) {// 成功
 				recharge.setState(2);// 状态。1-申请支付，2-支付成功 3支付失败
-				accountMapper.outAccount(params.getUserId(), params.getAmount(), TransferTypeEnum.REMAINDER.getType());
+				// accountMapper.outAccount(params.getUserId(), params.getAmount(),
+				// TransferTypeEnum.REMAINDER.getType());
+				accountService.outAccount(params.getUserId(), params.getAmount(), TransferTypeEnum.REMAINDER,
+						AccountBusinessTypeEnum.Withdraw);
 			} else {// 失败
 				recharge.setState(3);// 状态。1-申请支付，2-支付成功 3支付失败
 				errorMsg = myJson.getString("respMsg");
@@ -175,7 +182,10 @@ public class AliPayServiceImpl implements AliPayService {
 		if (params.getPayState() == 1) {
 			recharge.setState(2);// 状态。1-申请支付，2-支付成功 3支付失败
 			// 入账
-			accountMapper.inAccount(params.getAccountId(), params.getAmount(), TransferTypeEnum.RECHARGE.getType());
+			// accountMapper.inAccount(params.getAccountId(), params.getAmount(),
+			// TransferTypeEnum.RECHARGE.getType());
+			accountService.inAccount(params.getAccountId(), params.getAmount(), TransferTypeEnum.RECHARGE,
+					AccountBusinessTypeEnum.Recharge);
 		} else if (params.getPayState() == 0) {
 			recharge.setState(3);// 状态。1-申请支付，2-支付成功 3支付失败
 		}

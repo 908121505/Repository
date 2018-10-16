@@ -21,6 +21,7 @@ public class Skill {
 
     
     private String imageUrl;
+    private String titleUrl;
 
     
     private Integer sort;
@@ -47,7 +48,19 @@ public class Skill {
     private String remark;
 
     
-    public Long getId() {
+    
+    
+    public String getTitleUrl() {
+		return titleUrl;
+	}
+
+
+	public void setTitleUrl(String titleUrl) {
+		this.titleUrl = titleUrl;
+	}
+
+
+	public Long getId() {
         return id;
     }
 

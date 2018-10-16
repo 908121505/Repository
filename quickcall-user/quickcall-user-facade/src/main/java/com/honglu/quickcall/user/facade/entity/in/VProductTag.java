@@ -41,6 +41,21 @@ public class VProductTag {
     private String modifyMan;
 
     private String remark;
+    
+    /**擅长项目背景图片*/
+    private String  imageUrl ;
+    
+    
+    
+    
+
+	public String getImageUrl() {
+		return imageUrl;
+	}
+
+	public void setImageUrl(String imageUrl) {
+		this.imageUrl = imageUrl;
+	}
 
 	public String getTagName() {
 		return tagName;

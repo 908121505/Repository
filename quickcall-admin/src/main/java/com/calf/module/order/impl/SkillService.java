@@ -54,8 +54,8 @@ public class SkillService {
 	public int saveAdd(SkillVO entity) {
 		//根据名称获取公司信息
 		Skill  skill =  new Skill();
-		Long  id = UUIDUtils.getId();
 		BeanUtils.copyProperties(entity, skill);
+		Long  id = UUIDUtils.getId();
 		skill.setId(id+"");
 		skill.setCreateMan(commonUtilService.getCurrUser());
 		skill.setSkillStatus(0);//有效

@@ -176,6 +176,7 @@ public class CertificationController {
         			params.setVoiceTime(new BigDecimal(voiceTimeStr).setScale(1, BigDecimal.ROUND_HALF_UP));
         		}
         		response = userCenterService.execute(params);
+        		response.setData(response.getData());
         	}else{
         		//大V认证声音上传
         		SaveCertificationRequest params = new SaveCertificationRequest();

@@ -22,6 +22,8 @@ public class SkillVO {
     private BigDecimal maxPrice;
 
     private String imageUrl;
+    
+    private String titleUrl;
 
     private Integer priceStep;
     private Integer sort;
@@ -68,15 +70,24 @@ public class SkillVO {
         this.maxPrice = maxPrice;
     }
 
-    public String getImageUrl() {
-        return imageUrl;
-    }
+	
+	public String getImageUrl() {
+		return imageUrl;
+	}
 
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl == null ? null : imageUrl.trim();
-    }
+	public void setImageUrl(String imageUrl) {
+		this.imageUrl = imageUrl;
+	}
 
-    public Integer getPriceStep() {
+	public String getTitleUrl() {
+		return titleUrl;
+	}
+
+	public void setTitleUrl(String titleUrl) {
+		this.titleUrl = titleUrl;
+	}
+
+	public Integer getPriceStep() {
         return priceStep;
     }
 

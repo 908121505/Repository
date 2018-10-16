@@ -13,7 +13,7 @@
 		<div class="modal-header">
 			<button type="button" class="close" data-dismiss="modal"
 				aria-hidden="true">X</button>
-			<h3 id="myModalLabel">${empty entity?'新增商户上线推广':'活动详情修改' }</h3>
+			<h3 id="myModalLabel">${empty entity?'新增技能项':'技能项修改' }</h3>
 		</div>
 		<div class="modal-body" style="max-height: 700px; overflow-y: auto;"  id = "editBody">
 			<form class="form-horizontal" method="post" id="skillForm"
@@ -28,6 +28,8 @@
 					<div class="col-sm-8">
 						<input type="text" id="name" class="form-control"  name="name" value="${entity.name}"  maxlength="50">
 						<input type="hidden" id="id" class="form-control"  name="id" value="${entity.id}" >
+						<input type="hidden" id="skillBackGroungImg" class="form-control"  name="imageUrl" value="" >
+						<input type="hidden" id="skillTitleImg" class="form-control"  name="titleUrl" value="" >
 					</div>
 				</div>
 				<div class="form-group"  >
@@ -56,6 +58,50 @@
 					<label class="col-sm-4 control-label">排序<font color="red">&nbsp;*</font></label>
 					<div class="col-sm-8">
 						<input type="text" id="sort" class="form-control" name="sort" value="${entity.priceStep}" >
+					</div>
+				</div>
+				
+				<div class="form-group">
+					<label class="col-sm-4 control-label">背景图片上传<c:if test="${entity eq null }"><font color="red">&nbsp;*</font></c:if>
+					</label>
+					<div class="col-sm-8">
+						<div class="input-group">
+							<input type="file" class="form-control" id="imageFile"  name="imageFile"> 
+							<span class="input-group-btn">
+								<button class="btn btn-success" type="button" id="uploadImage">上传图片</button>
+							</span>
+						</div>
+					</div>
+				</div>
+		      <div class="form-group">
+					<label for="skillFile_img" class="col-sm-4 control-label">图片</label>
+					<div class="col-sm-8">
+						<div class="col-sm-6">
+							<img src="${entity.imageUrl }" alt="暂无图片，点击上传！" class="img-rounded" style="max-width: 100%; max-height: 300px;" id="skillFile_img">
+						</div>
+					</div>
+				</div>
+				
+				
+				
+				<div class="form-group">
+					<label class="col-sm-4 control-label">标题背景图片上传<c:if test="${entity eq null }"><font color="red">&nbsp;*</font></c:if>
+					</label>
+					<div class="col-sm-8">
+						<div class="input-group">
+							<input type="file" class="form-control" id="imageFile1"
+								name="imageFile1"> <span class="input-group-btn">
+								<button class="btn btn-success" type="button" id="uploadImage1">上传图片</button>
+							</span>
+						</div>
+					</div>
+				</div>
+		      <div class="form-group">
+					<label for="skillFile_img1" class="col-sm-4 control-label">图片</label>
+					<div class="col-sm-8">
+						<div class="col-sm-6">
+							<img src="${entity.titleUrl }" alt="暂无图片，点击上传！" class="img-rounded" style="max-width: 100%; max-height: 300px;" id="skillFile_img1">
+						</div>
 					</div>
 				</div>
 				
@@ -128,6 +174,66 @@
 		/* $('#shangxianTime').datetimepicker({
 			format : 'yyyy-mm-dd hh:ii:ss'
 		}); */
+		$('#uploadImage').click(function() {
+			var file = document.skillForm.imageFile.value;
+			if(file == ""){
+				$("#tip").html("请选择图片");
+				return false;
+			}
+			$.ajaxFileUpload({
+				type : "post",
+				dataType : "json",
+				fileElementId : 'imageFile',
+				url : "upload/skillImageupload.htm",
+				data : {
+					"id" : ""
+				},
+				error : function(data) {
+					alert("错误！");
+				},
+				success : function(data) {
+					if (data.result = 'success') {
+						console.info(data);
+						alert("上传图片成功！");
+						$('#skillBackGroungImg').val(data.imgUrl);
+						$('#skillFile_img').attr("src", data.imgUrl);
+						$("#tip").html("");
+					} else {
+						alert(data.msg);
+					}
+				}
+			});
+		});
+		$('#uploadImage1').click(function() {
+			var file = document.skillForm.imageFile1.value;
+			if(file == ""){
+				$("#tip").html("请选择图片");
+				return false;
+			}
+			$.ajaxFileUpload({
+				type : "post",
+				dataType : "json",
+				fileElementId : 'imageFile1',
+				url : "upload/skillImageupload1.htm",
+				data : {
+					"id" : ""
+				},
+				error : function(data) {
+					alert("错误！");
+				},
+				success : function(data) {
+					if (data.result = 'success') {
+						console.info(data);
+						alert("上传图片成功！");
+						$('#skillTitleImg').val(data.imgUrl);
+						$('#skillFile_img1').attr("src", data.imgUrl);
+						$("#tip").html("");
+					} else {
+						alert(data.msg);
+					}
+				}
+			});
+		});
 
 		
 

@@ -34,8 +34,20 @@ public class Skill {
 
     private String modifyMan;
     private String remark;
+    
+    private String titleUrl;
+    
+    
 
-    public String getId() {
+    public String getTitleUrl() {
+		return titleUrl;
+	}
+
+	public void setTitleUrl(String titleUrl) {
+		this.titleUrl = titleUrl;
+	}
+
+	public String getId() {
         return id;
     }
 

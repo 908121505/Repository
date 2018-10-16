@@ -26,10 +26,17 @@
     <result column="birthday" property="birthday" jdbcType="TIMESTAMP" />
     <result column="voice_url" property="voiceUrl" jdbcType="VARCHAR" />
     <result column="voice_time" property="voiceTime" jdbcType="DECIMAL" />
+    <result column="v_status" property="vStatus"   />
+    
+    <!-- 大V自己声音相关 -->
     <result column="v_voice_url" property="voiceUrl" jdbcType="VARCHAR" />
     <result column="v_voice_time" property="voiceTime" jdbcType="DECIMAL" />
-    <result column="v_status" property="vStatus"   />
-    <result column="identity_status" property="identityStatus"   />
+    <result column="v_voice_url_tmp" property="vVoiceUrlTmp" jdbcType="VARCHAR" />
+    <result column="v_voice_time_tmp" property="vVoiceTimeTmp" jdbcType="DECIMAL" />
+    <result column="v_voice_status" property="voiceStatus" />
+    
+    
+    <result column="identity_status" property="identityStatus" />
     <result column="token_code" property="tokenCode" jdbcType="VARCHAR" />
     <result column="other_relation" property="otherRelation" jdbcType="VARCHAR" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
@@ -42,10 +49,11 @@
     <result column="login_time" property="loginTime" jdbcType="TIMESTAMP" />
   </resultMap>
  <sql id="Base_Column_List" >
-    customer_id, phone, real_name, sex, nick_name, type, credentials_type, credentials_num, 
+        customer_id, phone, real_name, sex, nick_name, type, credentials_type, credentials_num, 
     interest_id, wechat_open_id, qq_open_id, microblog_open_id, occupation_id, front_portrait_url, 
     back_portrait_url, head_portrait_url, source, cust_status, cust_password, sign_name, 
-    star_sign, birthday, voice_url,voice_time,v_voice_url,v_voice_time,  v_status, identity_status, token_code, other_relation, 
+    star_sign, birthday, voice_url, voice_time, v_voice_url, v_voice_url_tmp, v_voice_time_tmp, 
+    v_voice_status, v_voice_time, v_status, identity_status, token_code, other_relation, 
     create_time, modify_time, create_man, modify_man, remark, app_channel_name, device_id, 
     login_time
   </sql>
@@ -60,33 +68,37 @@
     where customer_id = #{customerId,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="com.honglu.quickcall.user.facade.entity.Customer" >
-    insert into customer (customer_id, phone, real_name, 
+        insert into customer (customer_id, phone, real_name, 
       sex, nick_name, type, 
       credentials_type, credentials_num, interest_id, 
       wechat_open_id, qq_open_id, microblog_open_id, 
       occupation_id, front_portrait_url, back_portrait_url, 
       head_portrait_url, source, cust_status, 
       cust_password, sign_name, star_sign, 
-      birthday, voice_url,  voice_time, v_voice_url,  v_voice_time,v_status, 
+      birthday, voice_url, voice_time, 
+      v_voice_url, v_voice_url_tmp, v_voice_time_tmp, 
+      v_voice_status, v_voice_time, v_status, 
       identity_status, token_code, other_relation, 
       create_time, modify_time, create_man, 
       modify_man, remark, app_channel_name, 
       device_id, login_time)
-    values (#{customerId,jdbcType=BIGINT}, #{phone,jdbcType=INTEGER}, #{realName,jdbcType=VARCHAR}, 
+    values (#{customerId,jdbcType=BIGINT}, #{phone,jdbcType=BIGINT}, #{realName,jdbcType=VARCHAR}, 
       #{sex,jdbcType=TINYINT}, #{nickName,jdbcType=VARCHAR}, #{type,jdbcType=TINYINT}, 
       #{credentialsType,jdbcType=TINYINT}, #{credentialsNum,jdbcType=VARCHAR}, #{interestId,jdbcType=INTEGER}, 
       #{wechatOpenId,jdbcType=VARCHAR}, #{qqOpenId,jdbcType=VARCHAR}, #{microblogOpenId,jdbcType=VARCHAR}, 
       #{occupationId,jdbcType=INTEGER}, #{frontPortraitUrl,jdbcType=VARCHAR}, #{backPortraitUrl,jdbcType=VARCHAR}, 
       #{headPortraitUrl,jdbcType=VARCHAR}, #{source,jdbcType=TINYINT}, #{custStatus,jdbcType=TINYINT}, 
       #{custPassword,jdbcType=VARCHAR}, #{signName,jdbcType=VARCHAR}, #{starSign,jdbcType=CHAR}, 
-      #{birthday,jdbcType=TIMESTAMP}, #{voiceUrl,jdbcType=VARCHAR}, #{voiceTime,jdbcType=DECIMAL}, #{vVoiceUrl,jdbcType=VARCHAR}, #{vVoiceTime,jdbcType=DECIMAL},#{vStatus,jdbcType=TINYINT},
+      #{birthday,jdbcType=TIMESTAMP}, #{voiceUrl,jdbcType=VARCHAR}, #{voiceTime,jdbcType=DECIMAL}, 
+      #{vVoiceUrl,jdbcType=VARCHAR}, #{vVoiceUrlTmp,jdbcType=VARCHAR}, #{vVoiceTimeTmp,jdbcType=DECIMAL}, 
+      #{voiceStatus,jdbcType=TINYINT}, #{vVoiceTime,jdbcType=DECIMAL}, #{vStatus,jdbcType=TINYINT}, 
       #{identityStatus,jdbcType=TINYINT}, #{tokenCode,jdbcType=VARCHAR}, #{otherRelation,jdbcType=VARCHAR}, 
       #{createTime,jdbcType=TIMESTAMP}, #{modifyTime,jdbcType=TIMESTAMP}, #{createMan,jdbcType=VARCHAR}, 
       #{modifyMan,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{appChannelName,jdbcType=VARCHAR}, 
       #{deviceId,jdbcType=VARCHAR}, #{loginTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.honglu.quickcall.user.facade.entity.Customer" >
-    insert into customer
+     insert into customer
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="customerId != null" >
         customer_id,
@@ -163,6 +175,15 @@
       <if test="vVoiceUrl != null" >
         v_voice_url,
       </if>
+      <if test="vVoiceUrlTmp != null" >
+        v_voice_url_tmp,
+      </if>
+      <if test="vVoiceTimeTmp != null" >
+        v_voice_time_tmp,
+      </if>
+      <if test="voiceStatus != null" >
+        v_voice_status,
+      </if>
       <if test="vVoiceTime != null" >
         v_voice_time,
       </if>
@@ -208,7 +229,7 @@
         #{customerId,jdbcType=BIGINT},
       </if>
       <if test="phone != null" >
-        #{phone,jdbcType=INTEGER},
+        #{phone,jdbcType=BIGINT},
       </if>
       <if test="realName != null" >
         #{realName,jdbcType=VARCHAR},
@@ -279,6 +300,15 @@
       <if test="vVoiceUrl != null" >
         #{vVoiceUrl,jdbcType=VARCHAR},
       </if>
+      <if test="vVoiceUrlTmp != null" >
+        #{vVoiceUrlTmp,jdbcType=VARCHAR},
+      </if>
+      <if test="vVoiceTimeTmp != null" >
+        #{vVoiceTimeTmp,jdbcType=DECIMAL},
+      </if>
+      <if test="voiceStatus != null" >
+        #{voiceStatus,jdbcType=TINYINT},
+      </if>
       <if test="vVoiceTime != null" >
         #{vVoiceTime,jdbcType=DECIMAL},
       </if>
@@ -321,10 +351,10 @@
     </trim>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="com.honglu.quickcall.user.facade.entity.Customer" >
-    update customer
+     update customer
     <set >
       <if test="phone != null" >
-        phone = #{phone,jdbcType=INTEGER},
+        phone = #{phone,jdbcType=BIGINT},
       </if>
       <if test="realName != null" >
         real_name = #{realName,jdbcType=VARCHAR},
@@ -395,6 +425,15 @@
       <if test="vVoiceUrl != null" >
         v_voice_url = #{vVoiceUrl,jdbcType=VARCHAR},
       </if>
+      <if test="vVoiceUrlTmp != null" >
+        v_voice_url_tmp = #{vVoiceUrlTmp,jdbcType=VARCHAR},
+      </if>
+      <if test="vVoiceTimeTmp != null" >
+        v_voice_time_tmp = #{vVoiceTimeTmp,jdbcType=DECIMAL},
+      </if>
+      <if test="voiceStatus != null" >
+        v_voice_status = #{voiceStatus,jdbcType=TINYINT},
+      </if>
       <if test="vVoiceTime != null" >
         v_voice_time = #{vVoiceTime,jdbcType=DECIMAL},
       </if>
@@ -410,7 +449,15 @@
       <if test="otherRelation != null" >
         other_relation = #{otherRelation,jdbcType=VARCHAR},
       </if>
-      modify_time = NOW(),
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyTime != null" >
+        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createMan != null" >
+        create_man = #{createMan,jdbcType=VARCHAR},
+      </if>
       <if test="modifyMan != null" >
         modify_man = #{modifyMan,jdbcType=VARCHAR},
       </if>
@@ -430,8 +477,8 @@
     where customer_id = #{customerId,jdbcType=BIGINT}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.honglu.quickcall.user.facade.entity.Customer" >
-    update customer
-    set phone = #{phone,jdbcType=INTEGER},
+     update customer
+    set phone = #{phone,jdbcType=BIGINT},
       real_name = #{realName,jdbcType=VARCHAR},
       sex = #{sex,jdbcType=TINYINT},
       nick_name = #{nickName,jdbcType=VARCHAR},
@@ -455,6 +502,9 @@
       voice_url = #{voiceUrl,jdbcType=VARCHAR},
       voice_time = #{voiceTime,jdbcType=DECIMAL},
       v_voice_url = #{vVoiceUrl,jdbcType=VARCHAR},
+      v_voice_url_tmp = #{vVoiceUrlTmp,jdbcType=VARCHAR},
+      v_voice_time_tmp = #{vVoiceTimeTmp,jdbcType=DECIMAL},
+      v_voice_status = #{voiceStatus,jdbcType=TINYINT},
       v_voice_time = #{vVoiceTime,jdbcType=DECIMAL},
       v_status = #{vStatus,jdbcType=TINYINT},
       identity_status = #{identityStatus,jdbcType=TINYINT},
@@ -517,7 +567,7 @@
     customer_id as customerId,sex, nick_name as nickname, type,credentials_num as credentialsNum,
     interest_id as interestId,occupation_id as occupationId, front_portrait_url as frontPortraitUrl, 
     cust_status as custStatus,sign_name as signName,head_portrait_url as headPortraitUrl,
-    star_sign as starSign, birthday, voice_url as voiceUrl, voice_time as voiceTime, v_voice_url as vVoiceUrl, v_voice_time as vVoiceTime,v_status as vStatus, identity_status as identityStatus, token_code as tokenCode, other_relation as otherRelation 
+    star_sign as starSign, birthday, voice_url as voiceUrl, voice_time as voiceTime, v_voice_url as vVoiceUrl, v_voice_time as vVoiceTime,v_voice_status  AS  voiceStatus,v_status as vStatus, identity_status as identityStatus, token_code as tokenCode, other_relation as otherRelation 
     
     from customer
     where customer_id = #{customerId,jdbcType=BIGINT}

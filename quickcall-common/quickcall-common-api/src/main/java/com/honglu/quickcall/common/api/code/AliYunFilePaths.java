@@ -20,6 +20,10 @@ public class AliYunFilePaths {
      */
     public static final String APP_BANNER = ROOT_PATH + "banner";
     /**
+     * APP展示技能的图片存放路径
+     */
+    public static final String APP_SKILL = ROOT_PATH + "skill";
+    /**
      * 用户身份认证身份证图片存放路径
      **/
     public static final String IDENTITY_AUTH_ID_CARD_IMAGE = ROOT_PATH + "user/idcard";

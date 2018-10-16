@@ -29,7 +29,7 @@ public interface AccountMapper {
 	 * @param customerId
 	 * @param inMoney
 	 * @param type
-	 *            1 +可用金额 2 +提现金额出账
+	 *            1 +可用金额 2 +提现金额
 	 */
 	void inAccount(@Param("userId") Long customerId, @Param("amount") BigDecimal inMoney, @Param("type") Integer type);
 
