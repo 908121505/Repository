@@ -114,7 +114,7 @@ public class CheckAuthController implements BaseController<Customer> {
                 }
             }
         }
-        if(Objects.equals(entity.getvVoiceStatus(), 3)){
+        if(Objects.equals(entity.getvVoiceStatus(), 4)){
         	entity.setvVoiceUrl(entity.getvVoiceUrlTmp());
         }
 
