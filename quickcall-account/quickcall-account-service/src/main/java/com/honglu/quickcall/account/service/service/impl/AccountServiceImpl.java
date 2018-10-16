@@ -15,6 +15,7 @@ import com.honglu.quickcall.account.facade.enums.TransferTypeEnum;
 import com.honglu.quickcall.account.service.dao.AccountMapper;
 import com.honglu.quickcall.account.service.dao.TradeDetailMapper;
 import com.honglu.quickcall.account.service.service.AccountService;
+import com.honglu.quickcall.common.core.util.UUIDUtils;
 
 @Service
 public class AccountServiceImpl implements AccountService {
@@ -40,6 +41,7 @@ public class AccountServiceImpl implements AccountService {
 		accountMapper.inAccount(customerId, amount, transferType.getType());
 		// 记录流水
 		TradeDetail tradeDetail = new TradeDetail();
+		tradeDetail.setTradeId(UUIDUtils.getId());
 		tradeDetail.setSellerId(customerId);
 		tradeDetail.setCreateTime(new Date());
 		tradeDetail.setType(accountBusinessType.getType());
@@ -55,6 +57,7 @@ public class AccountServiceImpl implements AccountService {
 		accountMapper.outAccount(customerId, amount, transferType.getType());
 		// 记录流水
 		TradeDetail tradeDetail = new TradeDetail();
+		tradeDetail.setTradeId(UUIDUtils.getId());
 		tradeDetail.setSellerId(customerId);
 		tradeDetail.setCreateTime(new Date());
 		tradeDetail.setType(accountBusinessType.getType());
