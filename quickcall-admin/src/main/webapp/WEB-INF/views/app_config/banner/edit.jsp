@@ -23,7 +23,7 @@
 					<label class="col-sm-2 control-label">链接<font color="red">&nbsp;*</font></label>
 					<div class="col-sm-10">
 						<input type="text" class="form-control" id="banner_url" name="url" value="${entity.url }"><br>
-						<font color="red">(注：如果是跳转到APP产品详情页URL传入产品ID，产品ID从产品管理-产品详情页面获取，格式如下：productId=abd815646d8a4544b7c454d5e77a063b )</font>
+						<font color="red">(注：····· )</font>
 					</div>
 				</div>
 				<div class="form-group">
@@ -51,6 +51,7 @@
 					<label class="col-sm-2 control-label">序号<font color="red">&nbsp;*</font></label>
 					<div class="col-sm-10">
 						<input type="number" step="1" class="form-control" id="banner_sort" name="sort" value="${entity.sort }">
+						<font color="red">(注：通过序号权重排序，数字大的优先展示 )</font>
 					</div>
 				</div>
 				<div class="form-group">
