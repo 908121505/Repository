@@ -37,6 +37,7 @@ import com.honglu.quickcall.account.facade.vo.OrderSendOrderListVO;
 import com.honglu.quickcall.account.service.dao.AccountMapper;
 import com.honglu.quickcall.account.service.dao.OrderMapper;
 import com.honglu.quickcall.account.service.dao.ProductMapper;
+import com.honglu.quickcall.account.service.service.AccountService;
 import com.honglu.quickcall.account.service.service.CommonService;
 import com.honglu.quickcall.account.service.service.IOrderService;
 import com.honglu.quickcall.common.api.exception.BizException;
@@ -67,6 +68,8 @@ public class OrderServiceImpl implements IOrderService {
 	private OrderMapper  orderMapper;
 	@Autowired
 	private AccountMapper  accountMapper;
+	@Autowired
+	private AccountService  accountService;
 
 	
 	
