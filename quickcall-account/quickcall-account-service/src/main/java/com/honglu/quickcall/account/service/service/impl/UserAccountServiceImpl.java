@@ -8,11 +8,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.honglu.quickcall.account.facade.code.AccountBizReturnCode;
 import com.honglu.quickcall.account.facade.entity.Account;
+import com.honglu.quickcall.account.facade.enums.TransferTypeEnum;
 import com.honglu.quickcall.account.facade.exchange.request.CreateUserAccountRequest;
 import com.honglu.quickcall.account.facade.exchange.request.InAccountRequest;
 import com.honglu.quickcall.account.facade.exchange.request.OutAccountRequest;
 import com.honglu.quickcall.account.facade.exchange.request.QueryAccountRequest;
 import com.honglu.quickcall.account.service.dao.AccountMapper;
+import com.honglu.quickcall.account.service.service.AccountService;
 import com.honglu.quickcall.account.service.service.UserAccountService;
 import com.honglu.quickcall.common.api.code.BizCode;
 import com.honglu.quickcall.common.api.exception.BizException;
@@ -29,6 +31,8 @@ public class UserAccountServiceImpl implements UserAccountService {
 
 	@Autowired
 	private AccountMapper accountMapper;
+	@Autowired
+	private AccountService accountService;
 
 	@Override
 	@Transactional
@@ -64,7 +68,7 @@ public class UserAccountServiceImpl implements UserAccountService {
 		if (account == null) {
 			return ResultUtils.resultParamEmpty("账户不存在");
 		}
-		// accountMapper.inAccount(request.getUserId(), request.getAmount());
+		accountMapper.inAccount(request.getUserId(), request.getAmount(), request.getTransferType());
 
 		return ResultUtils.resultSuccess();
 	}
@@ -76,10 +80,15 @@ public class UserAccountServiceImpl implements UserAccountService {
 		if (account == null) {
 			return ResultUtils.resultParamEmpty("账户不存在");
 		}
-		if (account.getRemainderAmounts().compareTo(request.getAmount()) == -1) {
+		if (request.getTransferType() == TransferTypeEnum.REMAINDER.getType()
+				&& account.getRemainderAmounts().compareTo(request.getAmount()) == -1) {
 			return ResultUtils.resultParamEmpty("金额不足");
 		}
-		// accountMapper.outAccount(request.getUserId(), request.getAmount());
+		if (request.getTransferType() == TransferTypeEnum.RECHARGE.getType()
+				&& account.getRechargeAmounts().compareTo(request.getAmount()) == -1) {
+			return ResultUtils.resultParamEmpty("金额不足");
+		}
+		accountMapper.outAccount(request.getUserId(), request.getAmount(), request.getTransferType());
 		return ResultUtils.resultSuccess();
 	}
 

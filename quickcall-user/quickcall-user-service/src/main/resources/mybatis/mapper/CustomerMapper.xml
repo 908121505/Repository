@@ -31,8 +31,8 @@
     <!-- 大V自己声音相关 -->
     <result column="v_voice_url" property="voiceUrl" jdbcType="VARCHAR" />
     <result column="v_voice_time" property="voiceTime" jdbcType="DECIMAL" />
-    <result column="v_voice_url_tmp" property="voiceUrlTmp" jdbcType="VARCHAR" />
-    <result column="v_voice_time_tmp" property="voiceTimeTmp" jdbcType="DECIMAL" />
+    <result column="v_voice_url_tmp" property="vVoiceUrlTmp" jdbcType="VARCHAR" />
+    <result column="v_voice_time_tmp" property="vVoiceTimeTmp" jdbcType="DECIMAL" />
     <result column="v_voice_status" property="voiceStatus" />
     
     
@@ -91,7 +91,7 @@
       #{custPassword,jdbcType=VARCHAR}, #{signName,jdbcType=VARCHAR}, #{starSign,jdbcType=CHAR}, 
       #{birthday,jdbcType=TIMESTAMP}, #{voiceUrl,jdbcType=VARCHAR}, #{voiceTime,jdbcType=DECIMAL}, 
       #{vVoiceUrl,jdbcType=VARCHAR}, #{vVoiceUrlTmp,jdbcType=VARCHAR}, #{vVoiceTimeTmp,jdbcType=DECIMAL}, 
-      #{vVoiceStatus,jdbcType=TINYINT}, #{vVoiceTime,jdbcType=DECIMAL}, #{vStatus,jdbcType=TINYINT}, 
+      #{voiceStatus,jdbcType=TINYINT}, #{vVoiceTime,jdbcType=DECIMAL}, #{vStatus,jdbcType=TINYINT}, 
       #{identityStatus,jdbcType=TINYINT}, #{tokenCode,jdbcType=VARCHAR}, #{otherRelation,jdbcType=VARCHAR}, 
       #{createTime,jdbcType=TIMESTAMP}, #{modifyTime,jdbcType=TIMESTAMP}, #{createMan,jdbcType=VARCHAR}, 
       #{modifyMan,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{appChannelName,jdbcType=VARCHAR}, 
@@ -181,7 +181,7 @@
       <if test="vVoiceTimeTmp != null" >
         v_voice_time_tmp,
       </if>
-      <if test="vVoiceStatus != null" >
+      <if test="voiceStatus != null" >
         v_voice_status,
       </if>
       <if test="vVoiceTime != null" >
@@ -306,8 +306,8 @@
       <if test="vVoiceTimeTmp != null" >
         #{vVoiceTimeTmp,jdbcType=DECIMAL},
       </if>
-      <if test="vVoiceStatus != null" >
-        #{vVoiceStatus,jdbcType=TINYINT},
+      <if test="voiceStatus != null" >
+        #{voiceStatus,jdbcType=TINYINT},
       </if>
       <if test="vVoiceTime != null" >
         #{vVoiceTime,jdbcType=DECIMAL},
@@ -431,8 +431,8 @@
       <if test="vVoiceTimeTmp != null" >
         v_voice_time_tmp = #{vVoiceTimeTmp,jdbcType=DECIMAL},
       </if>
-      <if test="vVoiceStatus != null" >
-        v_voice_status = #{vVoiceStatus,jdbcType=TINYINT},
+      <if test="voiceStatus != null" >
+        v_voice_status = #{voiceStatus,jdbcType=TINYINT},
       </if>
       <if test="vVoiceTime != null" >
         v_voice_time = #{vVoiceTime,jdbcType=DECIMAL},
@@ -504,7 +504,7 @@
       v_voice_url = #{vVoiceUrl,jdbcType=VARCHAR},
       v_voice_url_tmp = #{vVoiceUrlTmp,jdbcType=VARCHAR},
       v_voice_time_tmp = #{vVoiceTimeTmp,jdbcType=DECIMAL},
-      v_voice_status = #{vVoiceStatus,jdbcType=TINYINT},
+      v_voice_status = #{voiceStatus,jdbcType=TINYINT},
       v_voice_time = #{vVoiceTime,jdbcType=DECIMAL},
       v_status = #{vStatus,jdbcType=TINYINT},
       identity_status = #{identityStatus,jdbcType=TINYINT},
@@ -567,7 +567,7 @@
     customer_id as customerId,sex, nick_name as nickname, type,credentials_num as credentialsNum,
     interest_id as interestId,occupation_id as occupationId, front_portrait_url as frontPortraitUrl, 
     cust_status as custStatus,sign_name as signName,head_portrait_url as headPortraitUrl,
-    star_sign as starSign, birthday, voice_url as voiceUrl, voice_time as voiceTime, v_voice_url as vVoiceUrl, v_voice_time as vVoiceTime,v_status as vStatus, identity_status as identityStatus, token_code as tokenCode, other_relation as otherRelation 
+    star_sign as starSign, birthday, voice_url as voiceUrl, voice_time as voiceTime, v_voice_url as vVoiceUrl, v_voice_time as vVoiceTime,v_voice_status  AS  voiceStatus,v_status as vStatus, identity_status as identityStatus, token_code as tokenCode, other_relation as otherRelation 
     
     from customer
     where customer_id = #{customerId,jdbcType=BIGINT}

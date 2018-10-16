@@ -78,6 +78,96 @@ public class ImgUploadController {
         }
         return upload;
     }
+    /**
+     * 商户app端展示Banner的接口
+     *
+     * @param id
+     * @param file
+     * @param request
+     * @return
+     * @throws IOException
+     */
+    @RequestMapping("/skillImageupload.htm")
+    @ResponseBody
+    public FileUpload skillImageupload(String id,
+    		@RequestParam("imageFile") MultipartFile file,
+    		HttpServletRequest request) throws IOException {
+    	FileUpload upload = new FileUpload("error", "上传文件失败", null);
+    	
+    	if (file == null) {
+    		upload.setMsg("请选择一个文件上传！");
+    		return upload;
+    	}
+    	try {
+    		//MultipartFile转换FILE
+    		CommonsMultipartFile cf = (CommonsMultipartFile) file;
+    		DiskFileItem fi = (DiskFileItem) cf.getFileItem();
+    		String md5Str = MD5Utils.getMD5(fi.getStoreLocation());//对文件进行加密
+    		
+    		String imgFolder = AliYunFilePaths.APP_SKILL;
+    		String fileName = System.currentTimeMillis() + "." + file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".") + 1);
+    		
+    		//阿里云客户端
+    		OSSClient ossClient = OSSUtil.getOSSClient();
+    		//上传
+    		boolean flag = OSSUtil.uploadInputStreamObject2OSS(ossClient, file.getInputStream(), fileName, imgFolder);
+    		if (flag) {
+    			upload.setResult("success");
+    			upload.setMsg("上传文件成功！");
+    			upload.setImgUrl(SFtpUtil.ossUrl + "/" + imgFolder + "/" + fileName);
+    			upload.setMd5Str(md5Str);
+    		}
+    	} catch (Exception e) {
+    		log.error("上传技能背景图片失败：", e);
+    	}
+    	return upload;
+    }
+    
+    
+    /**
+     * 商户app端展示Banner的接口
+     *
+     * @param id
+     * @param file
+     * @param request
+     * @return
+     * @throws IOException
+     */
+    @RequestMapping("/skillImageupload1.htm")
+    @ResponseBody
+    public FileUpload skillImageupload1(String id,
+    		@RequestParam("imageFile1") MultipartFile file,
+    		HttpServletRequest request) throws IOException {
+    	FileUpload upload = new FileUpload("error", "上传文件失败", null);
+    	
+    	if (file == null) {
+    		upload.setMsg("请选择一个文件上传！");
+    		return upload;
+    	}
+    	try {
+    		//MultipartFile转换FILE
+    		CommonsMultipartFile cf = (CommonsMultipartFile) file;
+    		DiskFileItem fi = (DiskFileItem) cf.getFileItem();
+    		String md5Str = MD5Utils.getMD5(fi.getStoreLocation());//对文件进行加密
+    		
+    		String imgFolder = AliYunFilePaths.APP_SKILL;
+    		String fileName = System.currentTimeMillis() + "." + file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".") + 1);
+    		
+    		//阿里云客户端
+    		OSSClient ossClient = OSSUtil.getOSSClient();
+    		//上传
+    		boolean flag = OSSUtil.uploadInputStreamObject2OSS(ossClient, file.getInputStream(), fileName, imgFolder);
+    		if (flag) {
+    			upload.setResult("success");
+    			upload.setMsg("上传文件成功！");
+    			upload.setImgUrl(SFtpUtil.ossUrl + "/" + imgFolder + "/" + fileName);
+    			upload.setMd5Str(md5Str);
+    		}
+    	} catch (Exception e) {
+    		log.error("上传技能背景图片失败：", e);
+    	}
+    	return upload;
+    }
 
     /**
      * 编辑器文件上传

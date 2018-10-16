@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +24,10 @@ import com.honglu.quickcall.account.facade.exchange.request.SkillInfoRequest;
 import com.honglu.quickcall.account.facade.exchange.request.SkillUpdateRequest;
 import com.honglu.quickcall.account.facade.vo.FirstPageDaVinfoVO;
 import com.honglu.quickcall.account.facade.vo.FirstPageSkillinfoVO;
+import com.honglu.quickcall.account.facade.vo.SkillInfoVO;
 import com.honglu.quickcall.account.facade.vo.SkillVO;
+import com.honglu.quickcall.account.facade.vo.VoiceVO;
+import com.honglu.quickcall.account.facade.vo.VoiceVOCopy;
 import com.honglu.quickcall.account.service.dao.ProductMapper;
 import com.honglu.quickcall.account.service.dao.SkillMapper;
 import com.honglu.quickcall.account.service.service.CommonService;
@@ -61,6 +65,31 @@ public class SkillServiceImpl implements ISkillService {
 		}
 		Long  customerId =  request.getCustomerId();
 		//首先查询所有的技能信息
+		
+		SkillInfoVO  resultVO  = new SkillInfoVO();
+		
+		VoiceVOCopy   voiceQuery    = skillMapper.getVoiceInfo(customerId);
+		VoiceVO  voiceVO  = new VoiceVO(); 
+		if(voiceQuery == null){
+			voiceVO.setVoiceStatus(OrderSkillConstants.VOICE_STATUS_UNEXIST);
+		}else{
+			voiceVO.setVoiceStatus(voiceQuery.getVoiceStatus());
+			
+		
+			BigDecimal  voiceTime =  voiceQuery.getVoiceTime();
+			if(voiceTime == null ||  voiceTime.compareTo(BigDecimal.ZERO)== 0){
+				voiceVO.setVoiceTime(voiceQuery.getVoiceTimeTmp());
+			}else{
+				voiceVO.setVoiceTime(voiceQuery.getVoiceTime());
+			}
+			String  voiceUrl =  voiceQuery.getVoiceUrl();
+			if(StringUtils.isBlank(voiceUrl)){
+				voiceVO.setVoiceUrl(voiceQuery.getVoiceUrlTmp());
+			}else{
+				voiceVO.setVoiceUrl(voiceQuery.getVoiceUrl());
+			}
+		}
+		resultVO.setVoiceVO(voiceVO);
 		
 		List<Skill>   skillList = skillMapper.selectTotalSkill();
 		List<Long>  skillIdList =  new ArrayList<Long>();
@@ -107,10 +136,11 @@ public class SkillServiceImpl implements ISkillService {
 			}
 		}
 		
-		 CommonResponse commonResponse = new CommonResponse();
-		 commonResponse.setCode(BizCode.Success);
-		 commonResponse.setMessage(BizCode.Success.desc());
-		 commonResponse.setData(resultList);
+		resultVO.setSkillVOList(resultList);
+		CommonResponse commonResponse = new CommonResponse();
+		commonResponse.setCode(BizCode.Success);
+		commonResponse.setMessage(BizCode.Success.desc());
+		commonResponse.setData(resultVO);
 		LOGGER.info("用户编号为：" + request.getCustomerId() + "查询成功");
 		return commonResponse;
 	}

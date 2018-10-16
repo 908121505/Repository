@@ -506,6 +506,14 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 				
 				// 获取主页所有资料
 				 homePageLogout = customerMapper.showHomePageLogout(params.getCustomerId());
+				 
+				 Integer  voiceStatus =  homePageLogout.getVoiceStatus();
+				//voiceStatus == null  未录制声音
+				 if(voiceStatus == null){
+					 voiceStatus = UserBizConstants.VOICE_STATUS_UNEXIST;
+				 }
+				 
+				 
 				 //获取年纪
 				 Date birthday = homePageLogout.getBirthday();
 				 //用工具类去转换
