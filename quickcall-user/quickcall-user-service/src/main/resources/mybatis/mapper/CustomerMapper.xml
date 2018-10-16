@@ -550,7 +550,7 @@
     </update>
     <!-- 设置用户头像或者昵称 -->
     <update id="customerSetHeardUrl" parameterType="Map"  >
-     update customer set head_portrait_url=#{headPortraitUrl},nick_name=#{nickName},token_code=#{tokenCode}
+     update customer set head_portrait_url=#{headPortraitUrl},nick_name=#{nickName}
      where phone=#{phone}
     </update>
 
