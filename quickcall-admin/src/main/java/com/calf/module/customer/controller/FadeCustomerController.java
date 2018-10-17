@@ -3,13 +3,22 @@ package com.calf.module.customer.controller;
 import com.calf.cn.controller.BaseController;
 import com.calf.cn.entity.DataTables;
 import com.calf.cn.service.BaseManager;
+import com.calf.cn.utils.SearchUtil;
+import com.calf.module.appconfig.entity.Banner;
 import com.calf.module.customer.entity.FadeCustomer;
+import org.apache.commons.lang.StringUtils;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 随机用户管理模块
@@ -17,6 +26,8 @@ import javax.servlet.http.HttpServletRequest;
  * @author duanjun
  * @date 2018-10-17 17:13
  */
+@Controller
+@RequestMapping("/fadeCustomer")
 public class FadeCustomerController implements BaseController<FadeCustomer> {
     private static final Logger log = LoggerFactory.getLogger(FadeCustomerController.class);
 
@@ -27,36 +38,48 @@ public class FadeCustomerController implements BaseController<FadeCustomer> {
 
     @Override
     public String home() {
-        return null;
+        return String.format(JSP_PATH, "list");
     }
 
     @Override
     public DataTables<FadeCustomer> initTable(HttpServletRequest request) {
-        return null;
+        Map<String, Object> parameters = SearchUtil.convertorEntitysToMap(request.getParameterMap());
+        String sEcho = (String) parameters.get("sEcho");
+        List<FadeCustomer> list = baseManager.query(FadeCustomer.class, parameters);
+        int total = baseManager.get("FadeCustomer.queryCount", parameters);
+        return new DataTables<>(sEcho, list, list.size(), total);
     }
 
     @Override
     public String addAndUpdateHome(Model model, String id) {
-        return null;
+        if (StringUtils.isNotBlank(id)) {
+            model.addAttribute("entity", baseManager.get("FadeCustomer.selectByPrimaryKey", new Object[]{Integer.valueOf(id)}));
+        }
+        return String.format(JSP_PATH, "edit");
     }
 
     @Override
     public int saveAdd(FadeCustomer entity) {
-        return 0;
+        Subject currentUser = SecurityUtils.getSubject();
+        entity.setCreateMan(currentUser.getPrincipal().toString());
+        entity.setModifyMan(currentUser.getPrincipal().toString());
+        return baseManager.insert(entity);
     }
 
     @Override
     public int delete(Long id) {
-        return 0;
+        return baseManager.delete(FadeCustomer.class, new Object[]{id.intValue()});
     }
 
     @Override
     public int saveUpdate(FadeCustomer entity) {
-        return 0;
+        Subject currentUser = SecurityUtils.getSubject();
+        entity.setModifyMan(currentUser.getPrincipal().toString());
+        return baseManager.update(entity);
     }
 
     @Override
     public int delete(String id) {
-        return 0;
+        return baseManager.delete(FadeCustomer.class, new Object[]{Integer.valueOf(id)});
     }
 }
