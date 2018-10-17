@@ -12,15 +12,29 @@ import java.io.Serializable;
  */
 public class FirstPageSkillinfoVO implements  Serializable{
 
-	private static final long serialVersionUID = -3078554028724442639L;
+	private static final long serialVersionUID = 1889010542071292716L;
 	/**技能名称*/
 	private String name ;
     /**技能ID*/
     private Long  skillId;
     
     private String  titleUrl;
+    /**技能ICON图片地址*/
+    private String  imageUrl;
     
     
+    
+    
+
+    /**技能ICON图片地址*/
+	public String getImageUrl() {
+		return imageUrl;
+	}
+
+	/**技能ICON图片地址*/
+	public void setImageUrl(String imageUrl) {
+		this.imageUrl = imageUrl;
+	}
 
 	public String getTitleUrl() {
 		return titleUrl;
