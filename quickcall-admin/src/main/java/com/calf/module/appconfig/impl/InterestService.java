@@ -7,6 +7,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -62,6 +63,13 @@ public class InterestService {
 		interest.setModifyMan(commonUtilService.getCurrUser());
 		interest.setModifyTime(new Date());
 		baseManager.update(interest);
+		return 0;
+	}
+
+	public int del(String id) {
+		if(StringUtils.isNotBlank(id)){
+			baseManager.delete(Interest.class, new Object[]{id});
+		}
 		return 0;
 	}
 

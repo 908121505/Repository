@@ -30,9 +30,9 @@
     where id = #{id,jdbcType=INTEGER}
   </select>
 
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+  <delete id="delete"  >
     delete from interest
-    where id = #{id,jdbcType=INTEGER}
+    where id = #{arg0,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="com.calf.module.appconfig.entity.Interest" >
     insert into interest (name, interest_describe, 

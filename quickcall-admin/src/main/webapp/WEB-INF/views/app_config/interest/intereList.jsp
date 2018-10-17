@@ -144,9 +144,10 @@
                  aoColumnDefs : [ {
 					"aTargets" : 7,
 					"mRender" : function(data,type, row) {
-						var detail = "";
+						var detail = "",del = '';
 						detail = "<a href='#' onclick='addAndUpdateRow(\""+ row.id+ "\")' data-toggle='modal' class='padding-right-small label label-success'><i class='glyphicon glyphicon-edit'></i>详情</a>";
-						return  detail;
+						del = "<a href='#' onclick='deleteRow(\"" + row.id + "\")' data-toggle='modal' class='label label label-danger'><i class='glyphicon glyphicon-trash'></i> 删除 </a>";
+						return  detail +del;
 					}
 			} ] 
 	            
@@ -163,6 +164,10 @@
 		function addAndUpdateRow(id){
 			$('#insertAndUpdate').addAndUpdateRow("interest/addAndUpdateHome.htm?id="+id);
 		}
+        //删除受影响的行数
+        function deleteRow(id) {
+            $('#myModal').deleteRow('interest/del.htm?id=' + id);
+        }
 			
 </script>
 		<!---dialog选项-->
