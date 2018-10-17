@@ -35,7 +35,7 @@ public class CheckAuthController implements BaseController<Customer> {
     @Autowired
     private BaseManager baseManager;
 
-    private static final String JSP_PATH = "check_auth/%s";
+    private static final String JSP_PATH = "customer/check_auth/%s";
 
     /**
      * 身份认证审核页面
