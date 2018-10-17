@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Param;
 
 import com.honglu.quickcall.user.facade.entity.Customer;
 import com.honglu.quickcall.user.facade.entity.in.HomePageLogout;
+import com.honglu.quickcall.user.facade.vo.SearchPersonListVO;
 
 public interface CustomerMapper {
 	int deleteByPrimaryKey(Long customerId);
@@ -54,8 +55,8 @@ public interface CustomerMapper {
 	 * @param limitCount
 	 * @return
 	 */
-	List<Customer> selectFuzzySearch(@Param("keyword") String keyword,
-			@Param("limitCount") Integer limitCount,@Param("customerId") Long customerId);
+	List<SearchPersonListVO> selectFuzzySearch(@Param("keyword") String keyword,@Param("customerId") Long customerId,
+			@Param("pageIndex") Integer pageIndex,@Param("pageSize") Integer pageSize);
 	
 	/**
 	 * 根据关键字精准搜索
@@ -63,6 +64,5 @@ public interface CustomerMapper {
 	 * @param limitCount
 	 * @return
 	 */
-	List<Customer> selectPreciseSearch(@Param("keyword") String keyword,
-			@Param("limitCount") Integer limitCount,@Param("customerId") Long customerId);
+	List<SearchPersonListVO> selectPreciseSearch(@Param("keyword") String keyword,@Param("customerId") Long customerId);
 }

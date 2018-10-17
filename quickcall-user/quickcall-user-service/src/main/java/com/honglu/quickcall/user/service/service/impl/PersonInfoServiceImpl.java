@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -19,10 +18,8 @@ import com.honglu.quickcall.account.facade.code.AccountBizReturnCode;
 import com.honglu.quickcall.common.api.exception.BizException;
 import com.honglu.quickcall.common.api.exception.RemoteException;
 import com.honglu.quickcall.common.api.exchange.CommonResponse;
-import com.honglu.quickcall.common.api.util.JSONUtil;
 import com.honglu.quickcall.common.api.util.JedisUtil;
 import com.honglu.quickcall.common.core.util.Detect;
-import com.honglu.quickcall.common.core.util.StringUtil;
 import com.honglu.quickcall.common.core.util.UUIDUtils;
 import com.honglu.quickcall.common.third.rongyun.models.CodeSuccessReslut;
 import com.honglu.quickcall.common.third.rongyun.util.RongYunUtil;
@@ -57,6 +54,7 @@ import com.honglu.quickcall.user.facade.exchange.request.ShowHomePageLogout;
 import com.honglu.quickcall.user.facade.vo.AttentionFansVO;
 import com.honglu.quickcall.user.facade.vo.InterestVO;
 import com.honglu.quickcall.user.facade.vo.OccupationVO;
+import com.honglu.quickcall.user.facade.vo.SearchPersonListVO;
 import com.honglu.quickcall.user.service.dao.CustomerInterestMapper;
 import com.honglu.quickcall.user.service.dao.CustomerMapper;
 import com.honglu.quickcall.user.service.dao.CustomerOccupationMapper;
@@ -209,33 +207,29 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 	 * @param params
 	 * @return
 	 */
-	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public CommonResponse searchPerson(SearchPersonRequest params){
 		CommonResponse commonResponse = new CommonResponse();
 		String keyword = params.getKeyword();
 		Pattern pattern = Pattern.compile("[0-9]{19}");
 		Long currentCustomer = params.getCustomerId();
-		List<Customer> customerList = null;
+		List<SearchPersonListVO> customerList = null;
 		if(pattern.matcher(keyword).matches()){
-			customerList = customerMapper.selectPreciseSearch(keyword,params.getLimitCount(),currentCustomer);
+			customerList = customerMapper.selectPreciseSearch(keyword,currentCustomer);
 		}
 		else{
-			customerList = customerMapper.selectFuzzySearch(keyword,params.getLimitCount(),currentCustomer);
+			customerList = customerMapper.selectFuzzySearch(keyword,currentCustomer,params.getPageIndex(),params.getPageSize());
 		}
-		List<Map> lm = new ArrayList<Map>();
-		for (Customer customer : customerList) {
+		for (SearchPersonListVO customer : customerList) {
 			Long anchorId = customer.getCustomerId();
-			Map m = JSONUtil.toMap(JSONUtil.toJson(customer));
 			int n = fansMapper.queryIsFollow(anchorId, currentCustomer);
 			int n1 = 0;
 			if(n != 0){
 				n1 = fansMapper.queryIsFollow(currentCustomer, anchorId);
 			}
-			m.put("isFollow", n);
-			m.put("isEveryFollow", n1&n);
-			lm.add(m);
+			customer.setIsFollow(n);
+			customer.setIsEveryFollow(n1&n);
 		}
-		commonResponse.setData(lm);
+		commonResponse.setData(customerList);
 		commonResponse.setCode(UserBizReturnCode.Success);
 		commonResponse.setMessage(UserBizReturnCode.Success.desc());
 		return commonResponse;

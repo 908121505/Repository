@@ -16,9 +16,11 @@ public class SearchPersonRequest extends UserCenterRequest{
 
 	private String keyword;
 	
-	private Integer limitCount;
-	
 	private Long customerId;
+	
+	private Integer pageIndex;
+	
+	private Integer pageSize;
 
 	public String getKeyword() {
 		return keyword;
@@ -27,20 +29,7 @@ public class SearchPersonRequest extends UserCenterRequest{
 	public void setKeyword(String keyword) {
 		this.keyword = keyword;
 	}
-
-	public Integer getLimitCount() {
-		return limitCount;
-	}
-
-	public void setLimitCount(Integer limitCount) {
-		this.limitCount = limitCount;
-	}
 	
-	@Override
-	public String getBizCode() {
-		return UserFunctionType.SEARCH_PERSON_LIST;
-	}
-
 	public Long getCustomerId() {
 		return customerId;
 	}
@@ -48,5 +37,28 @@ public class SearchPersonRequest extends UserCenterRequest{
 	public void setCustomerId(Long customerId) {
 		this.customerId = customerId;
 	}
+
+	public Integer getPageIndex() {
+		return pageIndex;
+	}
+
+	public void setPageIndex(Integer pageIndex) {
+		this.pageIndex = pageIndex;
+	}
+
+	public Integer getPageSize() {
+		return pageSize;
+	}
+
+	public void setPageSize(Integer pageSize) {
+		this.pageSize = pageSize;
+	}
+
+	@Override
+	public String getBizCode() {
+		return UserFunctionType.SEARCH_PERSON_LIST;
+	}
+
+	
 
 }
