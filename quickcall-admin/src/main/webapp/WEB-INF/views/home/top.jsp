@@ -3,7 +3,7 @@
     <div class="navbar navbar-default" role="navigation">
         <div class="navbar-header">
           <a href="welcome.htm" target="content">
-          	<span class="navbar-brand"><span class="fa fa-paper-plane"></span> Voice 后台管理系统</span>
+          	<span class="navbar-brand"><span class="fa fa-paper-plane"></span> 轻音互动 后台管理系统</span>
           </a>
 		</div>
 		
