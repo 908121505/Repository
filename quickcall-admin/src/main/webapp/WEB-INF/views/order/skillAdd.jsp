@@ -28,8 +28,8 @@
 					<div class="col-sm-8">
 						<input type="text" id="name" class="form-control"  name="name" value="${entity.name}"  maxlength="50">
 						<input type="hidden" id="id" class="form-control"  name="id" value="${entity.id}" >
-						<input type="hidden" id="skillBackGroungImg" class="form-control"  name="imageUrl" value="" >
-						<input type="hidden" id="skillTitleImg" class="form-control"  name="titleUrl" value="" >
+						<input type="hidden" id="skillBackGroungImg" class="form-control"  name="imageUrl" value="${entity.imageUrl}" >
+						<input type="hidden" id="skillTitleImg" class="form-control"  name="titleUrl" value="${entity.titleUrl}" >
 					</div>
 				</div>
 				<div class="form-group"  >
