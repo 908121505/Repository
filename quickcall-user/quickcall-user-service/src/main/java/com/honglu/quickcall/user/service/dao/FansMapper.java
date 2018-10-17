@@ -23,6 +23,13 @@ public interface FansMapper {
     Long queryFansNumByCustomerId(Long customerId);
     //根据customerId查询关注数量 
     int queryAttentionNumByCustomerId(Long customerId);
+    
+    /**
+     * 判断是否关注
+     * @param record
+     * @return
+     */
+    int queryIsFollow(@Param("anchorId")Long anchorId ,@Param("fansId")Long fansId);
 
     /**
      * 查询关注列表

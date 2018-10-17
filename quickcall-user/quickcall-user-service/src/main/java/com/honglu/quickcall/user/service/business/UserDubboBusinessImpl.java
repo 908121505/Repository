@@ -15,6 +15,7 @@ import com.honglu.quickcall.user.facade.business.UserDubboBusiness;
 import com.honglu.quickcall.user.facade.code.UserBizReturnCode;
 import com.honglu.quickcall.user.facade.code.UserFunctionType;
 import com.honglu.quickcall.user.facade.exchange.request.AddOrCancelFansRequest;
+import com.honglu.quickcall.user.facade.exchange.request.SearchPersonRequest;
 import com.honglu.quickcall.user.facade.exchange.request.CheckAttentionRequest;
 import com.honglu.quickcall.user.facade.exchange.request.GetSmsCodeRequest;
 import com.honglu.quickcall.user.facade.exchange.request.IsPhoneExistsRequest;
@@ -97,6 +98,9 @@ public class UserDubboBusinessImpl implements UserDubboBusiness {
             	break;
 			case UserFunctionType.SaveNicknameImage:// 保存昵称和头像
 				response = personInfoService.saveNicknameImage((SaveNickNameRequest) request);
+				break;
+			case UserFunctionType.SEARCH_PERSON_LIST:// 首页搜索用户列表
+				response = personInfoService.searchPerson((SearchPersonRequest) request);
 				break;
 			case UserFunctionType.SaveGender:// 保存性别
 				response = personInfoService.saveGender((SaveGenderRequest) request);

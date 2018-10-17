@@ -20,6 +20,7 @@ import com.honglu.quickcall.user.facade.exchange.request.SaveNickNameRequest;
 import com.honglu.quickcall.user.facade.exchange.request.SaveOccupationRequest;
 import com.honglu.quickcall.user.facade.exchange.request.SaveSignNameRequest;
 import com.honglu.quickcall.user.facade.exchange.request.ShowHomePageLogout;
+import com.honglu.quickcall.user.facade.exchange.request.SearchPersonRequest;
 import com.honglu.quickcall.user.web.service.UserCenterService;
 
 /**
@@ -31,7 +32,18 @@ public class AccountInfoController {
 
     @Autowired
     private  UserCenterService userCenterService;
-
+    
+    /**
+     * 首页搜索用户列表
+     * @param params
+     * @return
+     */
+    @RequestMapping(value = "/searchPersonList", method = RequestMethod.POST)
+    @ResponseBody
+    public WebResponseModel searchPersonList(SearchPersonRequest params){
+    	  WebResponseModel response = userCenterService.execute(params);
+          return response;
+    }
     /**
      *查询个人信息
      */

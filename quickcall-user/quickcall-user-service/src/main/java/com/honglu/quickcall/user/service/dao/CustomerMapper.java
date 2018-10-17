@@ -1,5 +1,7 @@
 package com.honglu.quickcall.user.service.dao;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Param;
 
 import com.honglu.quickcall.user.facade.entity.Customer;
@@ -45,5 +47,22 @@ public interface CustomerMapper {
 	 * @return
 	 */
 	Customer queryUserIdCardCertificationInfo(Long customerId);
-
+	
+	/**
+	 * 根据关键字模糊搜索
+	 * @param keyword
+	 * @param limitCount
+	 * @return
+	 */
+	List<Customer> selectFuzzySearch(@Param("keyword") String keyword,
+			@Param("limitCount") Integer limitCount,@Param("customerId") Long customerId);
+	
+	/**
+	 * 根据关键字精准搜索
+	 * @param keyword
+	 * @param limitCount
+	 * @return
+	 */
+	List<Customer> selectPreciseSearch(@Param("keyword") String keyword,
+			@Param("limitCount") Integer limitCount,@Param("customerId") Long customerId);
 }
