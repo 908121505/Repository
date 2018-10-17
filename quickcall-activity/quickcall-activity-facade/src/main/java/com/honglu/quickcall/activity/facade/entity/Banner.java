@@ -13,7 +13,7 @@ public class Banner {
 	/** 系统参数编号 **/
 	private Integer bannerId;
 
-	/** banner类型 **/
+	/** banner类型：1-首页顶部banner；2-首页中部banner；3-分类页banner；······ **/
 	private Byte bannerType;
 
 	/** 标题/说明 **/
@@ -21,6 +21,9 @@ public class Banner {
 
 	/** 图片 **/
 	private String imageUrl;
+
+	/** 点击跳转类型：0-不跳转；1-HTML页面；2-个人主页；3-分类页；····· **/
+	private Byte clickType;
 
 	/** 跳转URL连接 **/
 	private String url;
@@ -98,6 +101,14 @@ public class Banner {
 
 	public void setImageUrl(String imageUrl) {
 		this.imageUrl = imageUrl;
+	}
+
+	public Byte getClickType() {
+		return clickType;
+	}
+
+	public void setClickType(Byte clickType) {
+		this.clickType = clickType;
 	}
 
 	public String getUrl() {

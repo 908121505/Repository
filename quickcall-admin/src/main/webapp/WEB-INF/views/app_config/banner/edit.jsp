@@ -12,6 +12,16 @@
 				action="banner/save${empty entity?'Insert':'Update' }.htm"
 				role="form">
 				<div class="form-group">
+					<label class="col-sm-2 control-label">banner类型<font color="red">&nbsp;*</font></label>
+					<div class="col-sm-10">
+						<select class="form-control" id="bannerType" name="bannerType">
+							<option value="1" ${entity.bannerType=='1'?'selected':''}>首页顶部banner</option>
+							<option value="2" ${entity.bannerType=='2'?'selected':''}>首页中部banner</option>
+							<option value="3" ${entity.bannerType=='3'?'selected':''}>分类页banner</option>
+						</select>
+					</div>
+				</div>
+				<div class="form-group">
 					<label class="col-sm-2 control-label">标题<font color="red">&nbsp;*</font></label>
 					<div class="col-sm-10">
 						<input type="hidden" value="${entity.bannerId }" name="bannerId" /> 
@@ -20,10 +30,21 @@
 					</div>
 				</div>
 				<div class="form-group">
+					<label class="col-sm-2 control-label">跳转方式<font color="red">&nbsp;*</font></label>
+					<div class="col-sm-10">
+						<select class="form-control" id="clickType" name="clickType">
+							<option value="0" ${entity.clickType=='0'?'selected':''}>不跳转</option>
+							<option value="1" ${entity.clickType=='1'?'selected':''}>HTML页面</option>
+							<option value="2" ${entity.clickType=='2'?'selected':''}>个人主页</option>
+							<option value="3" ${entity.clickType=='3'?'selected':''}>分类页</option>
+						</select>
+					</div>
+				</div>
+				<div class="form-group">
 					<label class="col-sm-2 control-label">链接<font color="red">&nbsp;*</font></label>
 					<div class="col-sm-10">
 						<input type="text" class="form-control" id="banner_url" name="url" value="${entity.url }"><br>
-						<font color="red">(注：····· )</font>
+						<font color="red">(注：根据跳转方式输入相应的类容：HTML页面->url链接；个人主页->个人ID；分类页->类别ID)</font>
 					</div>
 				</div>
 				<div class="form-group">
@@ -37,14 +58,6 @@
 							<input type="radio" name="bannerStatus" value="0" ${entity.bannerStatus=='0'?'checked':'' }>
 							关闭
 						</label>
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="col-sm-2 control-label">banner类型<font color="red">&nbsp;*</font></label>
-					<div class="col-sm-10">
-						<select class="form-control" id="bannerType" name="bannerType">
-							<option value="1" ${entity.bannerType=='1'?'selected':''}>首页banner</option>
-						</select>
 					</div>
 				</div>
 				<div class="form-group">
@@ -139,14 +152,33 @@
 <script type="text/javascript">
 function check_fun(){
 	$("#tip").html("");
-	var b = true;
+
+	var title = $("#banner_title").val();
+    if(title == null || title.trim() == ''){
+        $("#tip").html("请输入标题");
+        return false;
+    }
+	var url = $("#banner_url").val();
+	if(url == null || url.trim() == ''){
+		if($("#clickType").val() == 1){
+			$("#tip").html("请输入HTML链接");
+			return false;
+		}
+        if($("#clickType").val() == 2){
+            $("#tip").html("请输入个人主页的主页ID");
+            return false;
+        }
+        if($("#clickType").val() == 3){
+            $("#tip").html("请输入分类页的类别ID");
+            return false;
+        }
+	}
+
 	var endTime = $("#banner_endTime").val();
 	var startTime = $("#banner_startTime").val();
 	var sort = $("#banner_sort").val();
 	var state = $('input[name="bannerStatus"]:checked').val();
 	var remark = $('input[name="remark"]').val();
-	var url = $("#banner_url").val();
-	var title = $("#banner_title").val();
 
     var versionRule = $("#appVersionRule").val();
     var version = $("#appVersion").val();
@@ -180,14 +212,6 @@ function check_fun(){
 	}
 	if(state == undefined){
 		$("#tip").html("请选择状态");
-		b = false;
-	}
-	if(url == null || url.trim() == ''){
-		$("#tip").html("请输入链接");
-		b = false;
-	}
-	if(title == null || title.trim() == ''){
-		$("#tip").html("请输入标题");
 		b = false;
 	}
 

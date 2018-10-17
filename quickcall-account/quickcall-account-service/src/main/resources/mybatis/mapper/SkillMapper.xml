@@ -237,7 +237,7 @@
   
   <!-- 获取全部技能分类 -->
   <select id="selectPartSkill" resultType="com.honglu.quickcall.account.facade.vo.FirstPageSkillinfoVO" >
-		SELECT
+<!-- 		SELECT
 			sk.id  as  skillId,
 			sk.name as  name,
 			sk.title_url  as  titleUrl
@@ -255,7 +255,16 @@
 			) tmp
 		LEFT JOIN skill sk ON sk.id = tmp.skill_id
 		ORDER BY
-			tmp.count DESC 
+			tmp.count DESC  -->
+		SELECT
+			id  as  skillId,
+			name as  name,
+			title_url  as  titleUrl,
+			image_url  as  imageUrl
+		FROM
+			skill  
+		ORDER BY
+			sort DESC ,create_time  DESC
   </select>
   <!-- 根据客户编号查询大V声音信息 -->
   <select id="getVoiceInfo" resultType="com.honglu.quickcall.account.facade.vo.VoiceVOCopy" >

@@ -64,7 +64,7 @@ public class InterestController implements BaseController<Interest> {
 
 	@Override
 	public int delete(String id) {
-		return 0;
+		return interestService.del(id);
 	}
 
 

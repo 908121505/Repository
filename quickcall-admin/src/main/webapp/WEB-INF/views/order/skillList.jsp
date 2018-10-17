@@ -115,6 +115,11 @@
 					sAjaxSource:"skill/initTable.htm",
 					aoColumns: [
 			            { 
+			              "data": "id",
+			              "sTitle":"技能ID",
+			              'sClass':"text-center"
+			            },
+			            { 
 			              "data": "name",
 			              "sTitle":"技能名称",
 			              'sClass':"text-center"
@@ -243,7 +248,7 @@
 		                   aoData.push({"name": "skillStatus", "value": $("#skillStatusQuery").val()});
 	                    },
 	                    aoColumnDefs : [ {
-							"aTargets" : 12,
+							"aTargets" : 13,
 							"mRender" : function(data,type, row) {
 								var detail = "";
 								detail = "<a href='#' onclick='addAndUpdateRow(\""+ row.id+ "\")' data-toggle='modal' class='padding-right-small label label-success'><i class='glyphicon glyphicon-edit'></i>详情</a>";

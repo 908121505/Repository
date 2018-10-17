@@ -11,7 +11,7 @@ import com.honglu.quickcall.common.api.exchange.AbstractRequest;
  */
 public class BannerRequest extends AbstractRequest {
 
-    /** banner类型 **/
+    /** banner类型：1-首页顶部banner；2-首页中部banner；3-分类页banner； **/
     private Byte bannerType;
     /**
      * 设备类型 0-所有,1-ios,2-andriod

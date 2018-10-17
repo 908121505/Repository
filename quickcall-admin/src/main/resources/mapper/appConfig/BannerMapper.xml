@@ -6,6 +6,7 @@
         <result column="banner_type" property="bannerType" jdbcType="TINYINT" />
         <result column="title" property="title" jdbcType="VARCHAR" />
         <result column="image_url" property="imageUrl" jdbcType="VARCHAR" />
+        <result column="click_type" property="clickType" jdbcType="TINYINT" />
         <result column="url" property="url" jdbcType="VARCHAR" />
         <result column="sort" property="sort" jdbcType="SMALLINT" />
         <result column="banner_status" property="bannerStatus" jdbcType="TINYINT" />
@@ -22,7 +23,7 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-		banner_id, banner_type, title, image_url, url, sort, banner_status,
+		banner_id, banner_type, title, image_url, click_type, url, sort, banner_status,
 		start_time, end_time, device_type, app_version, app_version_rule, remark,
 		create_time, modify_time, create_man, modify_man
 	</sql>
@@ -32,6 +33,7 @@
         <if test="title !=null">and title like concat('%',#{title},'%')</if>
         <if test="bannerStatus !=null">and banner_status = #{bannerStatus}</if>
         <if test="bannerType !=null and bannerType!=''">and banner_type = #{bannerType}</if>
+        <if test="clickType !=null and clickType!=''">and click_type = #{clickType}</if>
         <if test="startTime !=null and startTime!=''">and start_time <![CDATA[  >= ]]> #{startTime}</if>
         <if test="endTime !=null and endTime!=''">and end_time <![CDATA[  <= ]]> #{endTime}</if>
     </select>
@@ -44,6 +46,7 @@
         <if test="title !=null and title !=''">and title like concat('%',#{title},'%')</if>
         <if test="state !=null and state!=''">and state = #{state}</if>
         <if test="bannerType !=null and bannerType!=''">and banner_type = #{bannerType}</if>
+        <if test="clickType !=null and clickType!=''">and click_type = #{clickType}</if>
         <if test="startTime !=null and startTime!=''">and start_time <![CDATA[  >= ]]> #{startTime}</if>
         <if test="endTime !=null and endTime!=''">and end_time <![CDATA[  <= ]]> #{endTime}</if>
         <if test="bannerId !=null and bannerId!=''">and banner_id = #{bannerId}</if>
@@ -54,14 +57,14 @@
     <insert id="insert" parameterType="map">
 		INSERT INTO banner
 		(
-		  banner_type, title, image_url, url, sort, banner_status,
+		  banner_type, title, image_url, click_type, url, sort, banner_status,
 		  start_time, end_time, device_type, app_version, app_version_rule, remark,
           create_time, modify_time, create_man, modify_man
 		)
 		VALUES
 		(
 		  #{bannerType,jdbcType=TINYINT}, #{title,jdbcType=VARCHAR}, #{imageUrl,jdbcType=VARCHAR},
-		  #{url,jdbcType=VARCHAR}, #{sort,jdbcType=SMALLINT}, #{bannerStatus,jdbcType=TINYINT},
+          #{clickType,jdbcType=TINYINT}, #{url,jdbcType=VARCHAR}, #{sort,jdbcType=SMALLINT}, #{bannerStatus,jdbcType=TINYINT},
 		  #{startTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP}, #{deviceType,jdbcType=TINYINT},
 		  #{appVersion,jdbcType=VARCHAR}, #{appVersionRule,jdbcType=TINYINT}, #{remark,jdbcType=VARCHAR},
 		  NOW(), NOW(), #{createMan,jdbcType=VARCHAR}, #{modifyMan,jdbcType=VARCHAR}
@@ -89,6 +92,9 @@
             </if>
             <if test="imageUrl != null" >
                 image_url = #{imageUrl},
+            </if>
+            <if test="clickType != null" >
+                click_type = #{clickType},
             </if>
             <if test="url != null" >
                 url = #{url},

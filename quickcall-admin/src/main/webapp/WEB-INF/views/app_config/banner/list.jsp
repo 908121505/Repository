@@ -26,7 +26,9 @@
                             <div class="input-group-addon">banner类型</div>
                             <select class="form-control" id="bannerType_query" name="bannerType">
                                 <option value="">--请选择--</option>
-                                <option value="1" ${entity.bannerType=='1'?'selected':''}>首页banner</option>
+                                <option value="1" ${entity.bannerType=='1'?'selected':''}>首页顶部banner</option>
+                                <option value="2" ${entity.bannerType=='2'?'selected':''}>首页中部banner</option>
+                                <option value="3" ${entity.bannerType=='3'?'selected':''}>分类页banner</option>
                             </select>
                         </div>
                     </div>
@@ -89,6 +91,11 @@
                                 return getBannerType(data);
                             }
                         },
+                        {"data": "clickType", "sTitle": "跳转方式", 'sClass': "text-center", "sortable": false,
+                            "mRender": function (data, type, full) {
+                                return getClickType(data);
+                            }
+                        },
                         {"data": "startTime", "sTitle": "开始时间", 'sClass': "text-center", "sortable": false,
                             "mRender": function (data, type, full) {
                                 return formatDate(data);
@@ -130,7 +137,7 @@
                     },
                     aoColumnDefs: [
                         {
-                            "aTargets": 11, "mRender": function (data, type, row) {
+                            "aTargets": 12, "mRender": function (data, type, row) {
                                 var edit = "", del = "";
                                 <shiro:hasPermission name="banner:update">
                                 edit = "<a href='#' onclick='addAndUpdateRow(\"" + data + "\")' data-toggle='modal' class='padding-right-small label label-success'><i class='glyphicon glyphicon-edit'></i> 编辑</a>";
@@ -164,10 +171,26 @@
             /** 获取Banner类型 **/
             function getBannerType(data) {
                 if (data == "1") {
-                    return "首页banner";
-                } else {
-                    return "其他";
+                    return "首页顶部banner";
+                } else if (data == "2") {
+                    return "首页中部banner";
+                } else if (data == "3") {
+                    return "分类页banner";
                 }
+                return data;
+            }
+            /** 获取跳转方式 **/
+            function getClickType(data) {
+                if (data == "0") {
+                    return "不跳转";
+                } else if (data == "1") {
+                    return "HTML页面";
+                } else if (data == "2") {
+                    return "个人主页";
+                } else if (data == "3") {
+                    return "分类页";
+                }
+                return data;
             }
 
             /** 格式化日期 **/

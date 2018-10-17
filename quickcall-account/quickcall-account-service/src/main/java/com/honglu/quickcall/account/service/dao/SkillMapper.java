@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.honglu.quickcall.account.facade.entity.Skill;
 import com.honglu.quickcall.account.facade.vo.FirstPageSkillinfoVO;
-import com.honglu.quickcall.account.facade.vo.VoiceVO;
 import com.honglu.quickcall.account.facade.vo.VoiceVOCopy;
 
 public interface SkillMapper {
