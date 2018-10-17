@@ -33,7 +33,7 @@
 					</div>
 				</div>
 				<div class="form-group"  >
-					<label class="col-sm-4 control-label">最低价格</label>
+					<label class="col-sm-4 control-label">最低价格<font color="red">&nbsp;*</font></label>
 					<div class="col-sm-8">
 						<input type="text" id="minPrice" class="form-control" 
 							name="minPrice" value="${entity.minPrice}">
@@ -43,19 +43,19 @@
 				
 				
 				<div class="form-group" >
-					<label class="col-sm-4 control-label">最高价格<font color="red">&nbsp;*</font></label>
+					<label class="col-sm-4 control-label">最高价格<!-- <font color="red">&nbsp;*</font> --></label>
 					<div class="col-sm-8">
 						<input type="text" id="maxPrice" class="form-control" name="maxPrice" value="${entity.maxPrice}">
 					</div>
 				</div>
 				<div class="form-group" >
-					<label class="col-sm-4 control-label">价格步长<font color="red">&nbsp;*</font></label>
+					<label class="col-sm-4 control-label">价格步长<!-- <font color="red">&nbsp;*</font> --></label>
 					<div class="col-sm-8">
 						<input type="text" id="priceStep" class="form-control" name="priceStep" value="${entity.priceStep}">
 					</div>
 				</div>
 				<div class="form-group" >
-					<label class="col-sm-4 control-label">排序<font color="red">&nbsp;*</font></label>
+					<label class="col-sm-4 control-label">排序<!-- <font color="red">&nbsp;*</font> --></label>
 					<div class="col-sm-8">
 						<input type="text" id="sort" class="form-control" name="sort" value="${entity.priceStep}" >
 					</div>
@@ -161,7 +161,27 @@
 		
 		var b = true;
       
-			
+		var name =  $("#name").val();
+		if(name == null  || name.trim() == ''){
+			$("#tip").text("请输入技能名称");
+			return  false;
+		}
+		var minPrice =  $("#minPrice").val();
+		if(minPrice == null  || minPrice.trim() == ''){
+			$("#tip").text("请输入最低价格");
+			return  false;
+		}
+		var skillBackGroungImg =  $("#skillBackGroungImg").val();
+		if(skillBackGroungImg == null  || skillBackGroungImg.trim() == ''){
+			$("#tip").text("请上传项目背景图片");
+			return  false;
+		}
+		var skillTitleImg =  $("#skillTitleImg").val();
+		if(skillTitleImg == null  || skillTitleImg.trim() == ''){
+			$("#tip").text("请上传项目标题图片");
+			return  false;
+		}
+		
 	
 		return b;
 	}
