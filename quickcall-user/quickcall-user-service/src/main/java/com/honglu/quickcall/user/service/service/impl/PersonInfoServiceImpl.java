@@ -874,6 +874,7 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 			MySkillVO mySkillVO = new MySkillVO();
 			mySkillVO.setName(skill.getName());
 			mySkillVO.setImageUrl(skill.getImageUrl());
+			mySkillVO.setSkillId(skill.getId());
 			for (SkillReview skillReview : skillReviewList) {
 				if(skill.getId().equals(skillReview.getSkillId())){
 					mySkillVO.setAuditStatus(skillReview.getAuditStatus());
