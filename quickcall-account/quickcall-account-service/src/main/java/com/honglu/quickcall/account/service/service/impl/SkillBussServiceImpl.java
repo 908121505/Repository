@@ -22,16 +22,16 @@ import com.honglu.quickcall.account.facade.exchange.request.FirstPageDaVinfoRequ
 import com.honglu.quickcall.account.facade.exchange.request.FirstPageSkillinfoRequest;
 import com.honglu.quickcall.account.facade.exchange.request.SkillInfoRequest;
 import com.honglu.quickcall.account.facade.exchange.request.SkillUpdateRequest;
-import com.honglu.quickcall.account.facade.vo.FirstPageDaVinfoVO;
+import com.honglu.quickcall.account.facade.vo.DaVinfoListVO;
 import com.honglu.quickcall.account.facade.vo.FirstPageSkillinfoVO;
 import com.honglu.quickcall.account.facade.vo.SkillInfoVO;
 import com.honglu.quickcall.account.facade.vo.SkillVO;
 import com.honglu.quickcall.account.facade.vo.VoiceVO;
 import com.honglu.quickcall.account.facade.vo.VoiceVOCopy;
+import com.honglu.quickcall.account.service.bussService.CommonService;
+import com.honglu.quickcall.account.service.bussService.ISkillBussService;
 import com.honglu.quickcall.account.service.dao.ProductMapper;
 import com.honglu.quickcall.account.service.dao.SkillMapper;
-import com.honglu.quickcall.account.service.service.CommonService;
-import com.honglu.quickcall.account.service.service.ISkillBussService;
 import com.honglu.quickcall.common.api.code.BizCode;
 import com.honglu.quickcall.common.api.exception.BizException;
 import com.honglu.quickcall.common.api.exchange.CommonResponse;
@@ -202,22 +202,12 @@ public class SkillBussServiceImpl implements ISkillBussService {
 		if (request == null /*|| request.getCustomerId() == null*/) {
 			throw new BizException(AccountBizReturnCode.paramError, "查询首页大V列表参数异常");
 		}
-		Integer  pageIndex = request.getPageIndex();
-		if(pageIndex == null || pageIndex < 1 ){
-			pageIndex = 1;
-		}
-		
-		Integer  pageSize =  OrderSkillConstants.DEFAULT_PAGE_SIZE;
-		
-		Integer  pageIndexQuery =  (pageIndex -  1) * pageSize;
-		
-		Long  customerId =  request.getCustomerId();
-		Long  skillId = request.getSkillId();
-		if(skillId == null ||  skillId == 0){
-			skillId =  null ;
-		}
 		//首先查询所有的技能信息
-		List<FirstPageDaVinfoVO>   resultList =  productMapper.selectTotalDaVProduct(customerId,skillId,pageIndexQuery,pageSize);
+		List<DaVinfoListVO>   resultList =  null;
+		
+		
+		
+		
 		CommonResponse commonResponse = commonService.getCommonResponse();
 		commonResponse.setData(resultList);
 		LOGGER.info("用户编号为：" + request.getCustomerId() + "查询成功");

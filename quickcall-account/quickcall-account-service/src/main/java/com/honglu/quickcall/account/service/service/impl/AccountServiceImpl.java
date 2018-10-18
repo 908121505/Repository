@@ -12,9 +12,9 @@ import com.honglu.quickcall.account.facade.entity.Account;
 import com.honglu.quickcall.account.facade.entity.TradeDetail;
 import com.honglu.quickcall.account.facade.enums.AccountBusinessTypeEnum;
 import com.honglu.quickcall.account.facade.enums.TransferTypeEnum;
+import com.honglu.quickcall.account.service.bussService.AccountService;
 import com.honglu.quickcall.account.service.dao.AccountMapper;
 import com.honglu.quickcall.account.service.dao.TradeDetailMapper;
-import com.honglu.quickcall.account.service.service.AccountService;
 import com.honglu.quickcall.common.core.util.UUIDUtils;
 
 @Service
