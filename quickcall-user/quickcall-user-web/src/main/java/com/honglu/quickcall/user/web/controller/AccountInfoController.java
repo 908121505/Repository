@@ -22,6 +22,7 @@ import com.honglu.quickcall.user.facade.exchange.request.SaveOccupationRequest;
 import com.honglu.quickcall.user.facade.exchange.request.SaveSignNameRequest;
 import com.honglu.quickcall.user.facade.exchange.request.SearchPersonRequest;
 import com.honglu.quickcall.user.facade.exchange.request.ShowHomePageLogout;
+import com.honglu.quickcall.user.facade.exchange.request.queryMyskillRequest;
 import com.honglu.quickcall.user.web.service.UserCenterService;
 
 /**
@@ -183,6 +184,16 @@ public class AccountInfoController {
 	@RequestMapping(value = "/readAttention", method = RequestMethod.POST)
 	@ResponseBody
 	public WebResponseModel readAttention(ReadAttentionRequest params) {
+		WebResponseModel response = userCenterService.execute(params);
+		return response;
+	}
+	
+	/**
+	 * 我的技能
+	 */
+	@RequestMapping(value = "/mySkillList", method = RequestMethod.POST)
+	@ResponseBody
+	public WebResponseModel mySkillList(queryMyskillRequest params) {
 		WebResponseModel response = userCenterService.execute(params);
 		return response;
 	}

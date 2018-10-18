@@ -1,5 +1,7 @@
 package com.honglu.quickcall.user.service.dao;
 
+import java.util.List;
+
 import com.honglu.quickcall.user.facade.entity.Skill;
 
 public interface SkillMapper {
@@ -15,4 +17,5 @@ public interface SkillMapper {
 
     int updateByPrimaryKey(Skill record);
     
+    List<Skill> selectAllSkill();
 }

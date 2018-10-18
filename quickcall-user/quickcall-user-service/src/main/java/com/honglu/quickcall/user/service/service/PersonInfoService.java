@@ -16,6 +16,7 @@ import com.honglu.quickcall.user.facade.exchange.request.SaveOccupationRequest;
 import com.honglu.quickcall.user.facade.exchange.request.SaveSignNameRequest;
 import com.honglu.quickcall.user.facade.exchange.request.SearchPersonRequest;
 import com.honglu.quickcall.user.facade.exchange.request.ShowHomePageLogout;
+import com.honglu.quickcall.user.facade.exchange.request.queryMyskillRequest;
 
 /**
  * 
@@ -97,4 +98,12 @@ public interface PersonInfoService {
 	 * @return
 	 */
 	CommonResponse readAttention(ReadAttentionRequest params);
+	
+	/**
+	 * 首页查询用户列表
+	 * 
+	 * @param params
+	 * @return
+	 */
+	CommonResponse queryMySkill(queryMyskillRequest params);
 }
