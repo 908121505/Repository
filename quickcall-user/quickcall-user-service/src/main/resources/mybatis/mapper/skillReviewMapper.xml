@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.honglu.quickcall.user.service.dao.SkillReviewServiceDao">
+<mapper namespace="com.honglu.quickcall.user.service.dao.SkillReviewMapper">
 
-	<resultMap type="com.honglu.quickcall.user.facade.entity.SkillReview" id="skillReviewinfoMap">
+	<resultMap type="com.honglu.quickcall.user.facade.entity.SkillReview" id="skillReviewMap">
 		<id property="customerId" column="customer_id" javaType="java.lang.Long"></id>
 		<result property="skillId" column="skill_id" javaType="java.lang.Long"></result>
 		<result property="auditStatus" column="audit_status" javaType="java.lang.Integer"></result>
@@ -19,11 +19,11 @@
 
 	<!-- 通用查询结果列-->
 	<sql id="Base_Column_List">
-	customer_id,	skill_id,	audit_status,	skill_voice_url,	skill_voice_url_tmp,	is_audited,	create_time,	modify_time,	create_man,	modify_man,	remark
+customer_id,	skill_id,	audit_status,	skill_voice_url,	skill_voice_url_tmp,	is_audited,	create_time,	modify_time,	create_man,	modify_man,	remark
 	</sql>
 
 	<!-- 查询（根据主键ID查询） -->
-	<select id="getEntityById" resultMap="skillReviewinfoMap" parameterType="java.lang.Long">
+	<select id="getEntityById" resultMap="skillReviewMap" parameterType="java.lang.Long">
 		 SELECT
 		 <include refid="Base_Column_List" />
 		 FROM skill_review
@@ -31,10 +31,11 @@
 	</select>
 
 	<!-- 查询（根据主键ID查询） -->
-	<select id="getAll" resultMap="skillReviewinfoMap" parameterType="java.lang.Long">
+	<select id="findAll" resultMap="skillReviewMap" parameterType="java.lang.Long">
 		 SELECT
 		 <include refid="Base_Column_List" />
 		 FROM skill_review
+		 WHERE customer_id = #{customerId}
 	</select>
 
 	<!--删除：根据主键ID删除-->

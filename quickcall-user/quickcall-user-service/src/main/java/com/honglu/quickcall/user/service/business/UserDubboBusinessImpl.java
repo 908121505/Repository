@@ -39,6 +39,7 @@ import com.honglu.quickcall.user.facade.exchange.request.UserIdCardInfoRequest;
 import com.honglu.quickcall.user.facade.exchange.request.UserLoginRequest;
 import com.honglu.quickcall.user.facade.exchange.request.UserRegisterRequest;
 import com.honglu.quickcall.user.facade.exchange.request.UserUnreadMessageNumRequest;
+import com.honglu.quickcall.user.facade.exchange.request.queryMyskillRequest;
 import com.honglu.quickcall.user.service.service.CommonPersonService;
 import com.honglu.quickcall.user.service.service.PersonInfoService;
 import com.honglu.quickcall.user.service.service.UserMessageService;
@@ -141,6 +142,9 @@ public class UserDubboBusinessImpl implements UserDubboBusiness {
 				break;
 			case UserFunctionType.readAttention:
 				response = personInfoService.readAttention((ReadAttentionRequest) request);
+				break;
+			case UserFunctionType.QUERY_MY_SKILL://查询我的技能列表
+				response = personInfoService.queryMySkill((queryMyskillRequest) request);
 				break;
 			default:
 				throw new BizException(UserBizReturnCode.BizFunctionTypeNotMatch,

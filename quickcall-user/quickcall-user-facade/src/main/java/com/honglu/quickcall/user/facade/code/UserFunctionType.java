@@ -77,5 +77,8 @@ public interface UserFunctionType {
 
 	// 首页搜索用户
 	public static final String SEARCH_PERSON_LIST = "0011134";
+	
+	//查看我的技能列表
+	public static final String QUERY_MY_SKILL = "0011135";
 
 }
