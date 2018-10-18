@@ -26,10 +26,12 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 		resultVO.setSkillName("大V推荐");
 		resultVO.setSkillId(100000L);
 		List<DaVinfoVO> daVinfoList = new ArrayList<DaVinfoVO>();
+		String   coverUrl = "http://test-guanjia.oss-cn-shanghai.aliyuncs.com/voice/skill/1539668863932.png";
 		String  bussTagUrl = "http://test-guanjia.oss-cn-shanghai.aliyuncs.com/voice/skill/1539668863932.png";
 		String  categoryTagUrl = "http://test-guanjia.oss-cn-shanghai.aliyuncs.com/voice/skill/1539668869623.png";
+		
 		for (int i = 0; i < 6; i++) {
-			daVinfoList.add(getDaVinfoVO("半小时",bussTagUrl,categoryTagUrl));
+			daVinfoList.add(getDaVinfoVO("半小时",bussTagUrl,categoryTagUrl,coverUrl));
 		}
 		resultVO.setDaVinfoList(daVinfoList );
 		return resultVO;
@@ -42,30 +44,35 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 			String  unitName = "半小时" ;
 			String  bussTagUrl = "";
 			String  categoryTagUrl = "";
+			String  coverUrl = "";
 			DaVinfoListVO   listVO =  new DaVinfoListVO();
 			if(i == 0){
 				listVO.setSkillName("哄睡");
 				unitName = "次";
+				coverUrl = "http://test-guanjia.oss-cn-shanghai.aliyuncs.com/voice/skill/1539668863932.png";
 				bussTagUrl = "http://test-guanjia.oss-cn-shanghai.aliyuncs.com/voice/skill/1539668863932.png";
 				categoryTagUrl = "http://test-guanjia.oss-cn-shanghai.aliyuncs.com/voice/skill/1539668869623.png";
 			}else if ( i == 1){
 				listVO.setSkillName("叫醒");
 				unitName = "次";
+				coverUrl = "http://test-guanjia.oss-cn-shanghai.aliyuncs.com/voice/skill/1539682726634.png";
 				bussTagUrl = "http://test-guanjia.oss-cn-shanghai.aliyuncs.com/voice/skill/1539682726634.png";
 				categoryTagUrl = "http://test-guanjia.oss-cn-shanghai.aliyuncs.com/voice/skill/1539682729263.png";
 			}else if ( i == 2){
 				listVO.setSkillName("声优聊天");
+				coverUrl = "http://test-guanjia.oss-cn-shanghai.aliyuncs.com/voice/skill/1539744936508.png";
 				bussTagUrl = "http://test-guanjia.oss-cn-shanghai.aliyuncs.com/voice/skill/1539744936508.png";
 				categoryTagUrl = "http://test-guanjia.oss-cn-shanghai.aliyuncs.com/voice/skill/1539744942470.png";
 			}else if ( i == 3){
 				listVO.setSkillName("情感咨询");
+				coverUrl = "http://test-guanjia.oss-cn-shanghai.aliyuncs.com/voice/skill/1539744047494.png";
 				bussTagUrl = "http://test-guanjia.oss-cn-shanghai.aliyuncs.com/voice/skill/1539744047494.png";
 				categoryTagUrl = "http://test-guanjia.oss-cn-shanghai.aliyuncs.com/voice/skill/1539744942470.png";
 			}
 			listVO.setSkillId(1000L);
 			List<DaVinfoVO>  daVinfoList  =  new ArrayList<DaVinfoVO>();
 			for (int j = 0; j < 5; j++) {
-				daVinfoList.add(getDaVinfoVO(unitName,bussTagUrl,categoryTagUrl));
+				daVinfoList.add(getDaVinfoVO(unitName,bussTagUrl,categoryTagUrl,coverUrl));
 			}
 			listVO.setDaVinfoList(daVinfoList);
 			resultList.add(listVO);
@@ -76,7 +83,7 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 
 	
 	
-	private  DaVinfoVO  getDaVinfoVO(String  unitName,String  bussTagUrl,String  categoryTagUrl){
+	private  DaVinfoVO  getDaVinfoVO(String  unitName,String  bussTagUrl,String  categoryTagUrl,String coverUrl){
 		DaVinfoVO  infoVO = new DaVinfoVO();
 		infoVO.setAge(18);
 		infoVO.setBussTagUrl(bussTagUrl);
@@ -88,6 +95,7 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 		int rd=Math.random() >0.5?1:0; 
 		infoVO.setSex(rd);
 		infoVO.setUnitName(unitName);
+		infoVO.setCoverUrl(coverUrl);
 		return infoVO;
 	}
 
@@ -100,10 +108,11 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 	public List<DaVinfoVO> getDaVListBySkillId(Long  skillId) {
 		String  unitName = "半小时" ;
 		List<DaVinfoVO>   listVO =  new ArrayList<DaVinfoVO>();
-		String  bussTagUrl = "http://test-guanjia.oss-cn-shanghai.aliyuncs.com/voice/skill/1539744047494.png";
+		String  coverUrl = "http://test-guanjia.oss-cn-shanghai.aliyuncs.com/voice/skill/1539744047494.png";
+		String  bussTagUrl = "http://test-guanjia.oss-cn-shanghai.aliyuncs.com/voice/skill/1539744942470.png";
 		String  categoryTagUrl = "http://test-guanjia.oss-cn-shanghai.aliyuncs.com/voice/skill/1539744942470.png";
 		for (int j = 0; j < 5; j++) {
-			listVO.add(getDaVinfoVO(unitName,bussTagUrl,categoryTagUrl));
+			listVO.add(getDaVinfoVO(unitName,bussTagUrl,categoryTagUrl,coverUrl));
 		}
 		return  listVO;
 	}
