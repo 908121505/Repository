@@ -77,6 +77,9 @@ public interface UserFunctionType {
   /**保存大V声音信息*/
   public  static  final String SAVE_DV_VOICE_INFO = "0011133";
   
+  //首页搜索用户  
+  public static final String SEARCH_PERSON_LIST = "0011134";
+  
   
   
   
