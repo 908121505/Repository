@@ -49,10 +49,12 @@ import com.honglu.quickcall.user.facade.exchange.request.SaveInterestRequest;
 import com.honglu.quickcall.user.facade.exchange.request.SaveNickNameRequest;
 import com.honglu.quickcall.user.facade.exchange.request.SaveOccupationRequest;
 import com.honglu.quickcall.user.facade.exchange.request.SaveSignNameRequest;
+import com.honglu.quickcall.user.facade.exchange.request.SearchPersonRequest;
 import com.honglu.quickcall.user.facade.exchange.request.ShowHomePageLogout;
 import com.honglu.quickcall.user.facade.vo.AttentionFansVO;
 import com.honglu.quickcall.user.facade.vo.InterestVO;
 import com.honglu.quickcall.user.facade.vo.OccupationVO;
+import com.honglu.quickcall.user.facade.vo.SearchPersonListVO;
 import com.honglu.quickcall.user.service.dao.CustomerInterestMapper;
 import com.honglu.quickcall.user.service.dao.CustomerMapper;
 import com.honglu.quickcall.user.service.dao.CustomerOccupationMapper;
@@ -198,6 +200,39 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 			personHomePage.setOccupation(occupation);
 		} 
 		return personHomePage;
+	}
+	
+	/**
+	 * 首页搜索用户
+	 * @param params
+	 * @return
+	 */
+	public CommonResponse searchPerson(SearchPersonRequest params){
+		CommonResponse commonResponse = new CommonResponse();
+		String keyword = params.getKeyword();
+		Pattern pattern = Pattern.compile("[0-9]{19}");
+		Long currentCustomer = params.getCustomerId();
+		List<SearchPersonListVO> customerList = null;
+		if(pattern.matcher(keyword).matches()){
+			customerList = customerMapper.selectPreciseSearch(keyword,currentCustomer);
+		}
+		else{
+			customerList = customerMapper.selectFuzzySearch(keyword,currentCustomer,params.getPageIndex(),params.getPageSize());
+		}
+		for (SearchPersonListVO customer : customerList) {
+			Long anchorId = customer.getCustomerId();
+			int n = fansMapper.queryIsFollow(anchorId, currentCustomer);
+			int n1 = 0;
+			if(n != 0){
+				n1 = fansMapper.queryIsFollow(currentCustomer, anchorId);
+			}
+			customer.setIsFollow(n);
+			customer.setIsEveryFollow(n1&n);
+		}
+		commonResponse.setData(customerList);
+		commonResponse.setCode(UserBizReturnCode.Success);
+		commonResponse.setMessage(UserBizReturnCode.Success.desc());
+		return commonResponse;
 	}
 
 	/**

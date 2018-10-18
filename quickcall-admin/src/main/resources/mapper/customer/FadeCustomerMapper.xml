@@ -16,15 +16,14 @@
     id, nick_name, status, remark, create_time, modify_time, create_man, modify_man
   </sql>
 
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
-    select
-    <include refid="Base_Column_List" />
-    from fade_customer
-    where id = #{id,jdbcType=INTEGER}
+  <select id="selectByPrimaryKey" parameterType="map" resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List"/>
+    FROM fade_customer WHERE id = #{arg0}
   </select>
 
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
-    delete from fade_customer where id = #{id,jdbcType=INTEGER}
+  <delete id="delete" parameterType="map">
+    delete from fade_customer where id = #{arg0}
   </delete>
 
   <insert id="insert" parameterType="com.calf.module.customer.entity.FadeCustomer" >
@@ -33,7 +32,7 @@
            #{createMan,jdbcType=VARCHAR}, #{modifyMan,jdbcType=VARCHAR})
   </insert>
 
-  <update id="updateByPrimaryKeySelective" parameterType="com.calf.module.customer.entity.FadeCustomer" >
+  <update id="update" parameterType="com.calf.module.customer.entity.FadeCustomer" >
     update fade_customer
     <set >
       <if test="nickName != null" >
@@ -52,5 +51,22 @@
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+  <select id="queryCount" parameterType="map" resultType="int">
+    select count(id) from fade_customer where 1=1
+    <if test="nickName !=null">and nick_name like concat('%',#{nickName},'%')</if>
+    <if test="status !=null">and status = #{status}</if>
+  </select>
+
+  <select id="query" parameterType="map" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from
+    fade_customer where 1=1
+    <if test="nickName !=null">and nick_name like concat('%',#{nickName},'%')</if>
+    <if test="status !=null">and status = #{status}</if>
+    order by create_time desc
+    limit ${iDisplayStart},${iDisplayLength}
+  </select>
 
 </mapper>

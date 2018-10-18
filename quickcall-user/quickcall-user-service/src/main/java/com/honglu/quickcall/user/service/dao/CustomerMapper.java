@@ -1,9 +1,12 @@
 package com.honglu.quickcall.user.service.dao;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Param;
 
 import com.honglu.quickcall.user.facade.entity.Customer;
 import com.honglu.quickcall.user.facade.entity.in.HomePageLogout;
+import com.honglu.quickcall.user.facade.vo.SearchPersonListVO;
 
 public interface CustomerMapper {
 	int deleteByPrimaryKey(Long customerId);
@@ -45,5 +48,21 @@ public interface CustomerMapper {
 	 * @return
 	 */
 	Customer queryUserIdCardCertificationInfo(Long customerId);
-
+	
+	/**
+	 * 根据关键字模糊搜索
+	 * @param keyword
+	 * @param limitCount
+	 * @return
+	 */
+	List<SearchPersonListVO> selectFuzzySearch(@Param("keyword") String keyword,@Param("customerId") Long customerId,
+			@Param("pageIndex") Integer pageIndex,@Param("pageSize") Integer pageSize);
+	
+	/**
+	 * 根据关键字精准搜索
+	 * @param keyword
+	 * @param limitCount
+	 * @return
+	 */
+	List<SearchPersonListVO> selectPreciseSearch(@Param("keyword") String keyword,@Param("customerId") Long customerId);
 }

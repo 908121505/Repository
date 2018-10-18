@@ -13,6 +13,7 @@ import com.honglu.quickcall.user.facade.exchange.request.SaveInterestRequest;
 import com.honglu.quickcall.user.facade.exchange.request.SaveNickNameRequest;
 import com.honglu.quickcall.user.facade.exchange.request.SaveOccupationRequest;
 import com.honglu.quickcall.user.facade.exchange.request.SaveSignNameRequest;
+import com.honglu.quickcall.user.facade.exchange.request.SearchPersonRequest;
 import com.honglu.quickcall.user.facade.exchange.request.ShowHomePageLogout;
 
 /**
@@ -67,4 +68,10 @@ public interface PersonInfoService {
 	CommonResponse addOrCancelFans(AddOrCancelFansRequest request);
 	/**检查是否关注对方*/
 	CommonResponse checkAttention(CheckAttentionRequest request);
+	/**
+	 * 首页查询用户列表
+	 * @param params
+	 * @return
+	 */
+	CommonResponse searchPerson(SearchPersonRequest params);
 }

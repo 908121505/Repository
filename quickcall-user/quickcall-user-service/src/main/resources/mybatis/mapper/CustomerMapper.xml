@@ -63,6 +63,53 @@
     from customer
     where customer_id = #{customerId,jdbcType=BIGINT}
   </select>
+  
+  <select id="selectFuzzySearch" resultType="com.honglu.quickcall.user.facade.vo.SearchPersonListVO" >
+  	select * from (
+    select 
+    customer_id AS customerId,
+    nick_name AS nickName,
+    head_portrait_url AS headPortraitUrl,
+    sex,
+    type,
+    <![CDATA[ (YEAR(CURDATE())-YEAR(birthday))-(RIGHT(CURDATE(),5)<RIGHT(birthday,5)) AS age  ]]>
+    from customer
+    <where>
+         <!-- <if test="keyword != null and keyword != ''"> -->
+             nick_name LIKE concat('%',#{keyword},'%') and customer_id != #{customerId} 
+         <!-- </if> -->
+     </where>
+     order by
+             (case
+             when nick_name = #{keyword} then 1
+             when nick_name like concat(#{keyword},'%') then 2
+             when nick_name like concat('%',#{keyword}) then 3
+             when nick_name like concat('%',#{keyword},'%') then 4
+             else 0
+             end ) ) cus_temp 
+     <if test="pageIndex != null and pageSize != null">
+         LIMIT #{pageIndex},#{pageSize}
+     </if>
+  </select>
+  
+  <select id="selectPreciseSearch" resultType="com.honglu.quickcall.user.facade.vo.SearchPersonListVO" >
+    select 
+    customer_id AS customerId,
+    nick_name AS nickName,
+    head_portrait_url AS headPortraitUrl,
+    sex,
+    type,
+    <![CDATA[ (YEAR(CURDATE())-YEAR(birthday))-(RIGHT(CURDATE(),5)<RIGHT(birthday,5)) AS age  ]]>
+    from customer
+    <where>
+         <!-- <if test="keyword != null and keyword != ''"> -->
+             customer_id = #{keyword}
+         <!-- </if>
+         <if test="customerId != null"> -->
+         	and customer_id != #{customerId}
+         <!-- </if> -->
+     </where>
+  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
     delete from customer
     where customer_id = #{customerId,jdbcType=BIGINT}
