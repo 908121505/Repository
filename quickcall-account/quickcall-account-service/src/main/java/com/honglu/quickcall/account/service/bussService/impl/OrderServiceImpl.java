@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.honglu.quickcall.account.service.bussService.BarrageMessageService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,6 +71,8 @@ public class OrderServiceImpl implements IOrderService {
 //	private AccountMapper  accountMapper;
 	@Autowired
 	private AccountService  accountService;
+	@Autowired
+	private BarrageMessageService barrageMessageService;
 
 	
 	
@@ -345,6 +348,9 @@ public class OrderServiceImpl implements IOrderService {
 					accountService.outAccount(userId, payAmount,TransferTypeEnum.RECHARGE,AccountBusinessTypeEnum.PlaceOrder);
 					//发送消息 
 					commonService.pushMessage(PushAppMsgTypeEnum.NEW_ORDER, sellerId, userId);
+
+					// ADUAN 下单支付成功后 -- 发送弹幕消息
+					barrageMessageService.lpushMessage(orderId);
 				}else{
 					//返回余额不足状态  
 					throw new BizException(AccountBizReturnCode.ORDER_PAY_BALANCE_NOT_ENOUGH, "余额不足，无法支付");

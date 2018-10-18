@@ -13,6 +13,7 @@ import java.util.*;
 public class JedisUtil {
 	private final static Logger logger = LoggerFactory.getLogger(JedisUtil.class);
 	private static JedisPool pool;
+	private static JedisPool db2_pool;
 
 	private JedisUtil() {
 	}
@@ -39,6 +40,9 @@ public class JedisUtil {
 			} else {
 				pool = new JedisPool(poolConfig, host, port, timeout, pwd);
 			}
+
+			// 初始化redis数据库2的连接池
+			db2_pool = new JedisPool(poolConfig, host, port, timeout, pwd, 1);
 		} catch (IOException e) {
 			logger.error("读取redis配置文件出错", e);
 		} catch (Exception e) {
@@ -56,6 +60,10 @@ public class JedisUtil {
 
 	public static JedisPool getJedisPool() {
 		return pool;
+	}
+
+	public static JedisPool getJedisPoolDB2() {
+		return db2_pool;
 	}
 
 	public static void set(String key, String value) {
