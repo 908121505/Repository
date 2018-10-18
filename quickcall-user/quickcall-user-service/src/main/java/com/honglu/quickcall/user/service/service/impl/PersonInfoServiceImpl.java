@@ -22,6 +22,7 @@ import com.honglu.quickcall.common.api.exchange.CommonResponse;
 import com.honglu.quickcall.common.api.exchange.ResultUtils;
 import com.honglu.quickcall.common.api.util.JedisUtil;
 import com.honglu.quickcall.common.core.util.Detect;
+import com.honglu.quickcall.common.core.util.StringUtil;
 import com.honglu.quickcall.common.core.util.UUIDUtils;
 import com.honglu.quickcall.common.third.rongyun.models.CodeSuccessReslut;
 import com.honglu.quickcall.common.third.rongyun.util.RongYunUtil;
@@ -207,32 +208,37 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 
 	/**
 	 * 首页搜索用户
-	 * 
 	 * @param params
 	 * @return
 	 */
-	public CommonResponse searchPerson(SearchPersonRequest params) {
+	public CommonResponse searchPerson(SearchPersonRequest params){
 		CommonResponse commonResponse = new CommonResponse();
 		String keyword = params.getKeyword();
+		if(StringUtil.isBlank(keyword)){
+			throw new BizException(UserBizReturnCode.paramError, "搜索关键字不能为空");
+		}
 		Pattern pattern = Pattern.compile("[0-9]{19}");
 		Long currentCustomer = params.getCustomerId();
 		List<SearchPersonListVO> customerList = null;
-		if (pattern.matcher(keyword).matches()) {
-			customerList = customerMapper.selectPreciseSearch(keyword, currentCustomer);
-		} else {
-			customerList = customerMapper.selectFuzzySearch(keyword, currentCustomer, params.getPageIndex(),
-					params.getPageSize());
+		//匹配搜索关键字是模糊搜索还是精准搜索
+		if(pattern.matcher(keyword).matches()){
+			customerList = customerMapper.selectPreciseSearch(keyword,currentCustomer);
+		}
+		else{
+			customerList = customerMapper.selectFuzzySearch(keyword,currentCustomer,params.getPageIndex(),params.getPageSize());
 		}
 		for (SearchPersonListVO customer : customerList) {
 			Long anchorId = customer.getCustomerId();
 			int n = fansMapper.queryIsFollow(anchorId, currentCustomer);
 			int n1 = 0;
-			if (n != 0) {
+			if(n != 0){
 				n1 = fansMapper.queryIsFollow(currentCustomer, anchorId);
 			}
+			//把关注状态和互相关注状态放入对象
 			customer.setIsFollow(n);
-			customer.setIsEveryFollow(n1 & n);
+			customer.setIsEveryFollow(n1&n);
 		}
+		logger.info("用户编号为："+currentCustomer+"搜索关键字:"+keyword+" 成功");
 		commonResponse.setData(customerList);
 		commonResponse.setCode(UserBizReturnCode.Success);
 		commonResponse.setMessage(UserBizReturnCode.Success.desc());
