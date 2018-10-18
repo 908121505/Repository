@@ -5,20 +5,18 @@ import java.io.Serializable;
 /**   
  * Copyright © 2018 www.xiaoniu.com All rights reserved.
  * 
- * 功能描述：
+ * 功能描述：技能分类列表展示
  * @Package: com.honglu.quickcall.account.facade.vo 
  * @author: chenliuguang   
  * @date: 2018年9月23日 下午3:39:33 
  */
 public class FirstPageSkillinfoVO implements  Serializable{
 
-	private static final long serialVersionUID = 1889010542071292716L;
+	private static final long serialVersionUID = 4000182731863570309L;
 	/**技能名称*/
 	private String name ;
     /**技能ID*/
     private Long  skillId;
-    
-    private String  titleUrl;
     /**技能ICON图片地址*/
     private String  imageUrl;
     
@@ -36,13 +34,6 @@ public class FirstPageSkillinfoVO implements  Serializable{
 		this.imageUrl = imageUrl;
 	}
 
-	public String getTitleUrl() {
-		return titleUrl;
-	}
-
-	public void setTitleUrl(String titleUrl) {
-		this.titleUrl = titleUrl;
-	}
 
 	public String getName() {
 		return name;

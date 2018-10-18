@@ -14,6 +14,7 @@ import com.honglu.quickcall.account.facade.exchange.request.BindAliaccountReques
 import com.honglu.quickcall.account.facade.exchange.request.CancelOrderRequest;
 import com.honglu.quickcall.account.facade.exchange.request.ConfirmOrderRequest;
 import com.honglu.quickcall.account.facade.exchange.request.CreateUserAccountRequest;
+import com.honglu.quickcall.account.facade.exchange.request.DaVListBySkillIdRequest;
 import com.honglu.quickcall.account.facade.exchange.request.DetailOrderRequest;
 import com.honglu.quickcall.account.facade.exchange.request.DvConfirmRefundRequest;
 import com.honglu.quickcall.account.facade.exchange.request.DvReceiveOrderRequest;
@@ -32,10 +33,10 @@ import com.honglu.quickcall.account.facade.exchange.request.RechargeRequest;
 import com.honglu.quickcall.account.facade.exchange.request.SkillInfoRequest;
 import com.honglu.quickcall.account.facade.exchange.request.SkillUpdateRequest;
 import com.honglu.quickcall.account.facade.exchange.request.WhthdrawRequest;
-import com.honglu.quickcall.account.service.service.AliPayService;
-import com.honglu.quickcall.account.service.service.IOrderService;
-import com.honglu.quickcall.account.service.service.ISkillService;
-import com.honglu.quickcall.account.service.service.UserAccountService;
+import com.honglu.quickcall.account.service.bussService.AliPayService;
+import com.honglu.quickcall.account.service.bussService.IOrderService;
+import com.honglu.quickcall.account.service.bussService.ISkillBussService;
+import com.honglu.quickcall.account.service.bussService.UserAccountService;
 import com.honglu.quickcall.common.api.code.BizCode;
 import com.honglu.quickcall.common.api.exception.BaseException;
 import com.honglu.quickcall.common.api.exception.BizException;
@@ -55,7 +56,7 @@ public class AccountDubboBusinessImpl implements AccountDubboBusiness {
 	@Autowired
 	private AliPayService aliPayService;
 	@Autowired
-	private ISkillService skillService;
+	private ISkillBussService skillService;
 	@Autowired
 	private IOrderService orderService;
 
@@ -86,6 +87,10 @@ public class AccountDubboBusinessImpl implements AccountDubboBusiness {
 			/** 首页技能种类展示 */
 			case OrderRequestType.QUERY_SKILL_NAME_FOR_FIRST_PAGE:
 				response = skillService.getFirstPageSkillinfo((FirstPageSkillinfoRequest) request);
+				break;
+				/** 首页技能种类展示 */
+			case OrderRequestType.QUERY_DV_LIST_BY_TYPE:
+				response = skillService.getDaVListBySkillId((DaVListBySkillIdRequest) request);
 				break;
 			/////////////////////////////////////////////////////////////////
 			/** 获取主播开启产品 */

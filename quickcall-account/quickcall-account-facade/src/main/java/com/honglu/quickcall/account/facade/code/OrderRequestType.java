@@ -20,6 +20,8 @@ public interface OrderRequestType {
     public static final  String  QUERY_ORDER_FOR_FIRST_PAGE = "19003";
     /**首页查询项目分类*/
     public static final  String  QUERY_SKILL_NAME_FOR_FIRST_PAGE = "19004";
+    /**首页分类下的大V列表*/
+    public static final  String  QUERY_DV_LIST_BY_TYPE = "19005";
     
     
     

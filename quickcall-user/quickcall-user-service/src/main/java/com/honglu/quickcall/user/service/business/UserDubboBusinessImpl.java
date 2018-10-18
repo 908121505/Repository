@@ -15,7 +15,6 @@ import com.honglu.quickcall.user.facade.business.UserDubboBusiness;
 import com.honglu.quickcall.user.facade.code.UserBizReturnCode;
 import com.honglu.quickcall.user.facade.code.UserFunctionType;
 import com.honglu.quickcall.user.facade.exchange.request.AddOrCancelFansRequest;
-import com.honglu.quickcall.user.facade.exchange.request.SearchPersonRequest;
 import com.honglu.quickcall.user.facade.exchange.request.CheckAttentionRequest;
 import com.honglu.quickcall.user.facade.exchange.request.GetSmsCodeRequest;
 import com.honglu.quickcall.user.facade.exchange.request.IsPhoneExistsRequest;
@@ -23,6 +22,7 @@ import com.honglu.quickcall.user.facade.exchange.request.PersonInfoRequest;
 import com.honglu.quickcall.user.facade.exchange.request.QueryAttentionFansListRequest;
 import com.honglu.quickcall.user.facade.exchange.request.QueryInterestListRequest;
 import com.honglu.quickcall.user.facade.exchange.request.QueryOccupationListRequest;
+import com.honglu.quickcall.user.facade.exchange.request.ReadAttentionRequest;
 import com.honglu.quickcall.user.facade.exchange.request.SaveBirthRequest;
 import com.honglu.quickcall.user.facade.exchange.request.SaveCertificationRequest;
 import com.honglu.quickcall.user.facade.exchange.request.SaveDvVoiceRequest;
@@ -31,6 +31,7 @@ import com.honglu.quickcall.user.facade.exchange.request.SaveInterestRequest;
 import com.honglu.quickcall.user.facade.exchange.request.SaveNickNameRequest;
 import com.honglu.quickcall.user.facade.exchange.request.SaveOccupationRequest;
 import com.honglu.quickcall.user.facade.exchange.request.SaveSignNameRequest;
+import com.honglu.quickcall.user.facade.exchange.request.SearchPersonRequest;
 import com.honglu.quickcall.user.facade.exchange.request.SetHeardUrlRequest;
 import com.honglu.quickcall.user.facade.exchange.request.SetPwdRequest;
 import com.honglu.quickcall.user.facade.exchange.request.ShowHomePageLogout;
@@ -41,6 +42,7 @@ import com.honglu.quickcall.user.facade.exchange.request.UserUnreadMessageNumReq
 import com.honglu.quickcall.user.service.service.CommonPersonService;
 import com.honglu.quickcall.user.service.service.PersonInfoService;
 import com.honglu.quickcall.user.service.service.UserMessageService;
+
 @Component
 @Service("User.UserDubboBusiness")
 public class UserDubboBusinessImpl implements UserDubboBusiness {
@@ -84,18 +86,18 @@ public class UserDubboBusinessImpl implements UserDubboBusiness {
 			case UserFunctionType.getSmsCode:
 				response = commonPersonService.getSmsCode((GetSmsCodeRequest) request);
 				break;
-            case UserFunctionType.UNREAD_MESSAGE_NUM:
-                response=  userMessageService.queryUserUnreadMessageNum((UserUnreadMessageNumRequest)request);
-                break;
-            case UserFunctionType.USER_ID_CARD_CERTIFY_INFO:
-                response=  commonPersonService.queryUserIdCardCertificationInfo((UserIdCardInfoRequest)request);
-                break;
-            case UserFunctionType.SAVE_USER_CERTIFY_INFO:
-                response=  commonPersonService.saveUserCertificationInfo((SaveCertificationRequest)request);
-                break;
-            case UserFunctionType.SAVE_DV_VOICE_INFO:
-            	response=  commonPersonService.saveDvVoiceInfo((SaveDvVoiceRequest)request);
-            	break;
+			case UserFunctionType.UNREAD_MESSAGE_NUM:
+				response = userMessageService.queryUserUnreadMessageNum((UserUnreadMessageNumRequest) request);
+				break;
+			case UserFunctionType.USER_ID_CARD_CERTIFY_INFO:
+				response = commonPersonService.queryUserIdCardCertificationInfo((UserIdCardInfoRequest) request);
+				break;
+			case UserFunctionType.SAVE_USER_CERTIFY_INFO:
+				response = commonPersonService.saveUserCertificationInfo((SaveCertificationRequest) request);
+				break;
+			case UserFunctionType.SAVE_DV_VOICE_INFO:
+				response = commonPersonService.saveDvVoiceInfo((SaveDvVoiceRequest) request);
+				break;
 			case UserFunctionType.SaveNicknameImage:// 保存昵称和头像
 				response = personInfoService.saveNicknameImage((SaveNickNameRequest) request);
 				break;
@@ -115,19 +117,19 @@ public class UserDubboBusinessImpl implements UserDubboBusiness {
 				response = personInfoService.saveInterest((SaveInterestRequest) request);
 				break;
 			///////////////////////////////////////////////////////////////////////////
-			case UserFunctionType.QUERY_INTEREST_LIST://查询兴趣列表
+			case UserFunctionType.QUERY_INTEREST_LIST:// 查询兴趣列表
 				response = personInfoService.queryInterestList((QueryInterestListRequest) request);
 				break;
-			case UserFunctionType.QUERY_OCCUPATION_LIST://查询职业列表
+			case UserFunctionType.QUERY_OCCUPATION_LIST:// 查询职业列表
 				response = personInfoService.queryOccupationList((QueryOccupationListRequest) request);
 				break;
-			case UserFunctionType.QUERY_ATTENDTION_FANS_LIST://查询关注/粉丝列表
+			case UserFunctionType.QUERY_ATTENDTION_FANS_LIST:// 查询关注/粉丝列表
 				response = personInfoService.queryAttentionFansList((QueryAttentionFansListRequest) request);
 				break;
-			case UserFunctionType.ADD_OR_UPDATE_FANS://添加/取消关注
+			case UserFunctionType.ADD_OR_UPDATE_FANS:// 添加/取消关注
 				response = personInfoService.addOrCancelFans((AddOrCancelFansRequest) request);
 				break;
-			case UserFunctionType.CHECK_ATTENTION://判断是否关注对方
+			case UserFunctionType.CHECK_ATTENTION:// 判断是否关注对方
 				response = personInfoService.checkAttention((CheckAttentionRequest) request);
 				break;
 			///////////////////////////////////////////////////////////////////////////
@@ -136,6 +138,9 @@ public class UserDubboBusinessImpl implements UserDubboBusiness {
 				break;
 			case UserFunctionType.ShowHomePageLogout:// 大V主页，普通用户主页（客态）
 				response = personInfoService.showHomePageLogout((ShowHomePageLogout) request);
+				break;
+			case UserFunctionType.readAttention:
+				response = personInfoService.readAttention((ReadAttentionRequest) request);
 				break;
 			default:
 				throw new BizException(UserBizReturnCode.BizFunctionTypeNotMatch,

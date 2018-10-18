@@ -1,4 +1,4 @@
-package com.honglu.quickcall.account.service.service.impl;
+package com.honglu.quickcall.account.service.bussService.impl;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -18,20 +18,23 @@ import com.honglu.quickcall.account.facade.code.AccountBizReturnCode;
 import com.honglu.quickcall.account.facade.constants.OrderSkillConstants;
 import com.honglu.quickcall.account.facade.entity.Product;
 import com.honglu.quickcall.account.facade.entity.Skill;
+import com.honglu.quickcall.account.facade.exchange.request.DaVListBySkillIdRequest;
 import com.honglu.quickcall.account.facade.exchange.request.FirstPageDaVinfoRequest;
 import com.honglu.quickcall.account.facade.exchange.request.FirstPageSkillinfoRequest;
 import com.honglu.quickcall.account.facade.exchange.request.SkillInfoRequest;
 import com.honglu.quickcall.account.facade.exchange.request.SkillUpdateRequest;
-import com.honglu.quickcall.account.facade.vo.FirstPageDaVinfoVO;
+import com.honglu.quickcall.account.facade.vo.DaVinfoListVO;
+import com.honglu.quickcall.account.facade.vo.DaVinfoVO;
 import com.honglu.quickcall.account.facade.vo.FirstPageSkillinfoVO;
 import com.honglu.quickcall.account.facade.vo.SkillInfoVO;
 import com.honglu.quickcall.account.facade.vo.SkillVO;
 import com.honglu.quickcall.account.facade.vo.VoiceVO;
 import com.honglu.quickcall.account.facade.vo.VoiceVOCopy;
+import com.honglu.quickcall.account.service.bussService.CommonService;
+import com.honglu.quickcall.account.service.bussService.ISkillBussService;
 import com.honglu.quickcall.account.service.dao.ProductMapper;
 import com.honglu.quickcall.account.service.dao.SkillMapper;
-import com.honglu.quickcall.account.service.service.CommonService;
-import com.honglu.quickcall.account.service.service.ISkillService;
+import com.honglu.quickcall.account.service.service.IProductSkillService;
 import com.honglu.quickcall.common.api.code.BizCode;
 import com.honglu.quickcall.common.api.exception.BizException;
 import com.honglu.quickcall.common.api.exchange.CommonResponse;
@@ -48,8 +51,8 @@ import com.honglu.quickcall.common.core.util.UUIDUtils;
  * @date: 2018年9月22日 下午3:17:04
  */
 @Service
-public class SkillServiceImpl implements ISkillService {
-	private static final Logger LOGGER = LoggerFactory.getLogger(SkillServiceImpl.class);
+public class SkillBussServiceImpl implements ISkillBussService {
+	private static final Logger LOGGER = LoggerFactory.getLogger(SkillBussServiceImpl.class);
 	
 	@Autowired
 	private CommonService  commonService;
@@ -57,6 +60,8 @@ public class SkillServiceImpl implements ISkillService {
 	private SkillMapper  skillMapper;
 	@Autowired
 	private ProductMapper  productMapper;
+	@Autowired
+	private  IProductSkillService  productSkillService;
 
 	@Override
 	public CommonResponse querySkillInfoPersonal(SkillInfoRequest request) {
@@ -202,22 +207,14 @@ public class SkillServiceImpl implements ISkillService {
 		if (request == null /*|| request.getCustomerId() == null*/) {
 			throw new BizException(AccountBizReturnCode.paramError, "查询首页大V列表参数异常");
 		}
-		Integer  pageIndex = request.getPageIndex();
-		if(pageIndex == null || pageIndex < 1 ){
-			pageIndex = 1;
-		}
-		
-		Integer  pageSize =  OrderSkillConstants.DEFAULT_PAGE_SIZE;
-		
-		Integer  pageIndexQuery =  (pageIndex -  1) * pageSize;
-		
-		Long  customerId =  request.getCustomerId();
-		Long  skillId = request.getSkillId();
-		if(skillId == null ||  skillId == 0){
-			skillId =  null ;
-		}
 		//首先查询所有的技能信息
-		List<FirstPageDaVinfoVO>   resultList =  productMapper.selectTotalDaVProduct(customerId,skillId,pageIndexQuery,pageSize);
+		List<DaVinfoListVO>   resultList =  new  ArrayList<DaVinfoListVO>();
+		//资源位信息
+		DaVinfoListVO  resourceDaVinfoListVO =  productSkillService.getResourceDaVinfoList();
+		resultList.add(resourceDaVinfoListVO);
+		//飞标签位列表
+		List<DaVinfoListVO>   tagList  =  productSkillService.getTagDaVinfoList();
+		resultList.addAll(tagList);
 		CommonResponse commonResponse = commonService.getCommonResponse();
 		commonResponse.setData(resultList);
 		LOGGER.info("用户编号为：" + request.getCustomerId() + "查询成功");
@@ -227,10 +224,25 @@ public class SkillServiceImpl implements ISkillService {
 
 	@Override
 	public CommonResponse getFirstPageSkillinfo(FirstPageSkillinfoRequest request) {
-		if (request == null /*|| request.getCustomerId() == null*/) {
+		if (request == null ) {
 			throw new BizException(AccountBizReturnCode.paramError, "查询技能列表参数异常");
 		}
-		List<FirstPageSkillinfoVO>   resultList = skillMapper.selectPartSkill();
+		List<FirstPageSkillinfoVO>   resultList = productSkillService.selectPartSkill();
+		CommonResponse commonResponse = commonService.getCommonResponse();
+		commonResponse.setData(resultList);
+		LOGGER.info("用户编号为：" + request.getCustomerId() + "查询成功");
+		return commonResponse;
+	}
+
+
+
+	@Override
+	public CommonResponse getDaVListBySkillId(DaVListBySkillIdRequest request) {
+		if (request == null ) {
+			throw new BizException(AccountBizReturnCode.paramError, "查询技能大V参数异常");
+		}
+		Long  skillId = request.getSkillId();
+		List<DaVinfoVO>    resultList = productSkillService.getDaVListBySkillId(skillId);
 		CommonResponse commonResponse = commonService.getCommonResponse();
 		commonResponse.setData(resultList);
 		LOGGER.info("用户编号为：" + request.getCustomerId() + "查询成功");
