@@ -1,5 +1,6 @@
 package com.honglu.quickcall.account.service.bussService;
 
+import com.honglu.quickcall.account.facade.exchange.request.DaVListBySkillIdRequest;
 import com.honglu.quickcall.account.facade.exchange.request.FirstPageDaVinfoRequest;
 import com.honglu.quickcall.account.facade.exchange.request.FirstPageSkillinfoRequest;
 import com.honglu.quickcall.account.facade.exchange.request.SkillInfoRequest;
@@ -38,4 +39,11 @@ public interface ISkillBussService {
 	 * @param request
 	 */
 	public CommonResponse  getFirstPageSkillinfo(FirstPageSkillinfoRequest  request);
+	
+	/**
+	 * 根据技能ID获取该分类下的大V列表
+	 * @param request
+	 * @return
+	 */
+	public CommonResponse getDaVListBySkillId(DaVListBySkillIdRequest request);
 }

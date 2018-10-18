@@ -4,15 +4,21 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.honglu.quickcall.account.facade.vo.DaVinfoListVO;
 import com.honglu.quickcall.account.facade.vo.DaVinfoVO;
-import com.honglu.quickcall.account.service.service.IProductService;
+import com.honglu.quickcall.account.facade.vo.FirstPageSkillinfoVO;
+import com.honglu.quickcall.account.service.dao.SkillMapper;
+import com.honglu.quickcall.account.service.service.IProductSkillService;
 
 
-@Service("productService")
-public class ProductServiceImpl implements IProductService {
+@Service("productSkillService")
+public class ProductSkillServiceImpl implements IProductSkillService {
+	
+	@Autowired
+	private SkillMapper  skillMapper ;
 
 	@Override
 	public DaVinfoListVO getResourceDaVinfoList() {
@@ -83,6 +89,23 @@ public class ProductServiceImpl implements IProductService {
 		infoVO.setSex(rd);
 		infoVO.setUnitName(unitName);
 		return infoVO;
+	}
+
+	@Override
+	public List<FirstPageSkillinfoVO> selectPartSkill() {
+		return skillMapper.selectPartSkill();
+	}
+
+	@Override
+	public List<DaVinfoVO> getDaVListBySkillId(Long  skillId) {
+		String  unitName = "半小时" ;
+		List<DaVinfoVO>   listVO =  new ArrayList<DaVinfoVO>();
+		String  bussTagUrl = "http://test-guanjia.oss-cn-shanghai.aliyuncs.com/voice/skill/1539744047494.png";
+		String  categoryTagUrl = "http://test-guanjia.oss-cn-shanghai.aliyuncs.com/voice/skill/1539744942470.png";
+		for (int j = 0; j < 5; j++) {
+			listVO.add(getDaVinfoVO(unitName,bussTagUrl,categoryTagUrl));
+		}
+		return  listVO;
 	}
 	
 
