@@ -44,7 +44,7 @@
 	</delete>
 
 	<!-- 添加 -->
-	<insert id="saveEntity" parameterType="om.honglu.quickcall.user.facade.entity.SkillReview">
+	<insert id="saveEntity" parameterType="com.honglu.quickcall.user.facade.entity.SkillReview">
 		 INSERT INTO skill_review
  		(customer_id,skill_id,audit_status,skill_voice_url,skill_voice_url_tmp,is_audited,create_time,modify_time,create_man,modify_man,remark) 
 		 VALUES 
@@ -52,7 +52,7 @@
 	</insert>
 
 	<!-- 修 改-->
-	<update id="updateEntity" parameterType="om.honglu.quickcall.user.facade.entity.SkillReview">
+	<update id="updateEntity" parameterType="com.honglu.quickcall.user.facade.entity.SkillReview">
 		 UPDATE skill_review
  		 <set> 
 			<if test="skillId != null">
