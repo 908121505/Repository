@@ -31,7 +31,7 @@ import com.honglu.quickcall.account.facade.vo.VoiceVOCopy;
 import com.honglu.quickcall.account.service.dao.ProductMapper;
 import com.honglu.quickcall.account.service.dao.SkillMapper;
 import com.honglu.quickcall.account.service.service.CommonService;
-import com.honglu.quickcall.account.service.service.ISkillService;
+import com.honglu.quickcall.account.service.service.ISkillBussService;
 import com.honglu.quickcall.common.api.code.BizCode;
 import com.honglu.quickcall.common.api.exception.BizException;
 import com.honglu.quickcall.common.api.exchange.CommonResponse;
@@ -48,8 +48,8 @@ import com.honglu.quickcall.common.core.util.UUIDUtils;
  * @date: 2018年9月22日 下午3:17:04
  */
 @Service
-public class SkillServiceImpl implements ISkillService {
-	private static final Logger LOGGER = LoggerFactory.getLogger(SkillServiceImpl.class);
+public class SkillBussServiceImpl implements ISkillBussService {
+	private static final Logger LOGGER = LoggerFactory.getLogger(SkillBussServiceImpl.class);
 	
 	@Autowired
 	private CommonService  commonService;

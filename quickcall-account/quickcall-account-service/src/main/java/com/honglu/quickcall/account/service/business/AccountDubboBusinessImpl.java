@@ -34,7 +34,7 @@ import com.honglu.quickcall.account.facade.exchange.request.SkillUpdateRequest;
 import com.honglu.quickcall.account.facade.exchange.request.WhthdrawRequest;
 import com.honglu.quickcall.account.service.service.AliPayService;
 import com.honglu.quickcall.account.service.service.IOrderService;
-import com.honglu.quickcall.account.service.service.ISkillService;
+import com.honglu.quickcall.account.service.service.ISkillBussService;
 import com.honglu.quickcall.account.service.service.UserAccountService;
 import com.honglu.quickcall.common.api.code.BizCode;
 import com.honglu.quickcall.common.api.exception.BaseException;
@@ -55,7 +55,7 @@ public class AccountDubboBusinessImpl implements AccountDubboBusiness {
 	@Autowired
 	private AliPayService aliPayService;
 	@Autowired
-	private ISkillService skillService;
+	private ISkillBussService skillService;
 	@Autowired
 	private IOrderService orderService;
 
