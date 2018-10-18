@@ -14,7 +14,7 @@ import java.util.Date;
  */
 public class OrderDetailVO implements  Serializable{
 
-	private static final long serialVersionUID = -4211103935474073578L;
+	private static final long serialVersionUID = -2660437293102429026L;
 	/**主播ID*/
 	private Long  orderId;
 	/**对方客户编号*/
@@ -24,7 +24,9 @@ public class OrderDetailVO implements  Serializable{
 	/**对方头像*/
 	private String  anotherHeadPortraitUrl;
 	/**产品ID*/
-	private Long  productId; 
+	private Long  productId;
+	/**技能ID*/
+	private Long  skillId;
 	/**主播昵称*/
 	private String productName ;
 	/**产品价格*/
@@ -164,6 +166,14 @@ public class OrderDetailVO implements  Serializable{
 
 	public void setProductId(Long productId) {
 		this.productId = productId;
+	}
+
+	public Long getSkillId() {
+		return skillId;
+	}
+
+	public void setSkillId(Long skillId) {
+		this.skillId = skillId;
 	}
 
 	public String getProductName() {
