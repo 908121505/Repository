@@ -106,8 +106,8 @@ public class BarrageMessageServiceImpl implements BarrageMessageService {
             // 从缓存队列里面取数据
             try {
                 if (jedis.setnx(BARRAGE_MESSAGE_DISTRIBUTED_LOCK_REDIS_KEY, "1") == 1) {
-                    // 从队列里获取12个消息
-                    for (int i = 0; i < 12; i++) {
+                    // 从队列里获取5个消息
+                    for (int i = 0; i < 5; i++) {
                         String message = jedis.rpop(BARRAGE_MESSAGE_QUEUE_REDIS_KEY);
                         if (message == null) {
                             break;
