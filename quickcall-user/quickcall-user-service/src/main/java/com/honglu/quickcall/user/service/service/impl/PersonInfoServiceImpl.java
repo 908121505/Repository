@@ -15,9 +15,11 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import com.honglu.quickcall.account.facade.code.AccountBizReturnCode;
+import com.honglu.quickcall.common.api.code.BizCode;
 import com.honglu.quickcall.common.api.exception.BizException;
 import com.honglu.quickcall.common.api.exception.RemoteException;
 import com.honglu.quickcall.common.api.exchange.CommonResponse;
+import com.honglu.quickcall.common.api.exchange.ResultUtils;
 import com.honglu.quickcall.common.api.util.JedisUtil;
 import com.honglu.quickcall.common.core.util.Detect;
 import com.honglu.quickcall.common.core.util.UUIDUtils;
@@ -43,6 +45,7 @@ import com.honglu.quickcall.user.facade.exchange.request.PersonInfoRequest;
 import com.honglu.quickcall.user.facade.exchange.request.QueryAttentionFansListRequest;
 import com.honglu.quickcall.user.facade.exchange.request.QueryInterestListRequest;
 import com.honglu.quickcall.user.facade.exchange.request.QueryOccupationListRequest;
+import com.honglu.quickcall.user.facade.exchange.request.ReadAttentionRequest;
 import com.honglu.quickcall.user.facade.exchange.request.SaveBirthRequest;
 import com.honglu.quickcall.user.facade.exchange.request.SaveGenderRequest;
 import com.honglu.quickcall.user.facade.exchange.request.SaveInterestRequest;
@@ -198,36 +201,37 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 			// 查询职业 by accountId
 			List<Occupation> occupation = occupationMapper.selectByCustomerId(customerId);
 			personHomePage.setOccupation(occupation);
-		} 
+		}
 		return personHomePage;
 	}
-	
+
 	/**
 	 * 首页搜索用户
+	 * 
 	 * @param params
 	 * @return
 	 */
-	public CommonResponse searchPerson(SearchPersonRequest params){
+	public CommonResponse searchPerson(SearchPersonRequest params) {
 		CommonResponse commonResponse = new CommonResponse();
 		String keyword = params.getKeyword();
 		Pattern pattern = Pattern.compile("[0-9]{19}");
 		Long currentCustomer = params.getCustomerId();
 		List<SearchPersonListVO> customerList = null;
-		if(pattern.matcher(keyword).matches()){
-			customerList = customerMapper.selectPreciseSearch(keyword,currentCustomer);
-		}
-		else{
-			customerList = customerMapper.selectFuzzySearch(keyword,currentCustomer,params.getPageIndex(),params.getPageSize());
+		if (pattern.matcher(keyword).matches()) {
+			customerList = customerMapper.selectPreciseSearch(keyword, currentCustomer);
+		} else {
+			customerList = customerMapper.selectFuzzySearch(keyword, currentCustomer, params.getPageIndex(),
+					params.getPageSize());
 		}
 		for (SearchPersonListVO customer : customerList) {
 			Long anchorId = customer.getCustomerId();
 			int n = fansMapper.queryIsFollow(anchorId, currentCustomer);
 			int n1 = 0;
-			if(n != 0){
+			if (n != 0) {
 				n1 = fansMapper.queryIsFollow(currentCustomer, anchorId);
 			}
 			customer.setIsFollow(n);
-			customer.setIsEveryFollow(n1&n);
+			customer.setIsEveryFollow(n1 & n);
 		}
 		commonResponse.setData(customerList);
 		commonResponse.setCode(UserBizReturnCode.Success);
@@ -511,13 +515,14 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 					// 更新
 					// 存入职业ID
 					customerOccupation.setOccupationId(occupation);
-					customerOccupation.setModifyTime(new Date());// 更新修改时间
-					/*int nn = */customerOccupationMapper.updateByCustomerIdSelective(customerOccupation);
+					customerOccupation.setModifyTime(new Date());
+					// 更新修改时间
+					/* int nn = */customerOccupationMapper.updateByCustomerIdSelective(customerOccupation);
 				} else {
 					// 存入职业ID
 					customerOccupation.setOccupationId(occupation);
 					// 插入
-					/*int result = */customerOccupationMapper.insertSelective(customerOccupation);
+					/* int result = */customerOccupationMapper.insertSelective(customerOccupation);
 				}
 				commonResponse.setData(customerOccupation);
 				commonResponse.setCode(UserBizReturnCode.Success);
@@ -549,13 +554,12 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 				// 获取主页所有资料
 				homePageLogout = customerMapper.showHomePageLogout(params.getCustomerId());
 
-				
-				String   vVoiceUrl =  homePageLogout.getvVoiceUrl();
-				if(org.apache.commons.lang3.StringUtils.isBlank(vVoiceUrl)){
-					 homePageLogout.setvVoiceTime(homePageLogout.getVoiceTime());
-					 homePageLogout.setvVoiceUrl(homePageLogout.getVoiceUrl());
+				String vVoiceUrl = homePageLogout.getvVoiceUrl();
+				if (org.apache.commons.lang3.StringUtils.isBlank(vVoiceUrl)) {
+					homePageLogout.setvVoiceTime(homePageLogout.getVoiceTime());
+					homePageLogout.setvVoiceUrl(homePageLogout.getVoiceUrl());
 				}
-				 
+
 				Integer voiceStatus = homePageLogout.getVoiceStatus();
 				// voiceStatus == null 未录制声音
 				if (voiceStatus == null) {
@@ -821,6 +825,16 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 	public CommonResponse checkAttention(CheckAttentionRequest request) {
 		CommonResponse commonResponse = new CommonResponse();
 		return commonResponse;
+	}
+
+	@Override
+	public CommonResponse readAttention(ReadAttentionRequest params) {
+
+		if (params.getCustomerId() == null) {
+			throw new BizException(BizCode.ParamError, "用戶Id 不能为空");
+		}
+		fansMapper.updateReadAttention(params.getCustomerId());
+		return ResultUtils.resultSuccess();
 	}
 
 }
