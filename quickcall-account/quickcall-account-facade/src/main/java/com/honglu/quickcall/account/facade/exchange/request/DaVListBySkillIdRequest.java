@@ -7,18 +7,20 @@ import com.honglu.quickcall.common.api.exchange.AbstractRequest;
  * 
  * Copyright © 2018 www.xiaoniu.com All rights reserved.
  * 
- * 功能描述：首页大V技能展示
+ * 功能描述：查询某分类下大V列表
  * @Package: com.honglu.quickcall.account.facade.exchange.request 
  * @author: chenliuguang   
- * @date: 2018年9月22日 下午3:39:53
+ * @date: 2018年10月18日 下午2:17:51
  */
-public class FirstPageDaVinfoRequest  extends  AbstractRequest{
+public class DaVListBySkillIdRequest  extends  AbstractRequest{
     
 	
-	private static final long serialVersionUID = 8504198163263776145L;
+	private static final long serialVersionUID = -4331779888322189242L;
 	/**客户编号（预留暂时不用）*/
 	private Long  customerId;
-	
+	/**客户编号（预留暂时不用）*/
+	private Long  skillId;
+
 	public Long getCustomerId() {
 		return customerId;
 	}
@@ -26,14 +28,25 @@ public class FirstPageDaVinfoRequest  extends  AbstractRequest{
 		this.customerId = customerId;
 	}
 	
+	
+	
+	public Long getSkillId() {
+		return skillId;
+	}
+	public void setSkillId(Long skillId) {
+		this.skillId = skillId;
+	}
 	@Override
 	public String getBizCode() {
-		return  OrderRequestType.QUERY_ORDER_FOR_FIRST_PAGE;
+		return  OrderRequestType.QUERY_DV_LIST_BY_TYPE;
 	}
 	@Override
 	public String toString() {
-		return "FirstPageDaVinfoRequest [customerId=" + customerId + "]";
+		return "DaVListBySkillIdRequest [customerId=" + customerId + ", skillId=" + skillId + "]";
 	}
+	
+	
+	
 	
 	
 	

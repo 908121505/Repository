@@ -14,6 +14,7 @@ import com.honglu.quickcall.account.facade.exchange.request.BindAliaccountReques
 import com.honglu.quickcall.account.facade.exchange.request.CancelOrderRequest;
 import com.honglu.quickcall.account.facade.exchange.request.ConfirmOrderRequest;
 import com.honglu.quickcall.account.facade.exchange.request.CreateUserAccountRequest;
+import com.honglu.quickcall.account.facade.exchange.request.DaVListBySkillIdRequest;
 import com.honglu.quickcall.account.facade.exchange.request.DetailOrderRequest;
 import com.honglu.quickcall.account.facade.exchange.request.DvConfirmRefundRequest;
 import com.honglu.quickcall.account.facade.exchange.request.DvReceiveOrderRequest;
@@ -86,6 +87,10 @@ public class AccountDubboBusinessImpl implements AccountDubboBusiness {
 			/** 首页技能种类展示 */
 			case OrderRequestType.QUERY_SKILL_NAME_FOR_FIRST_PAGE:
 				response = skillService.getFirstPageSkillinfo((FirstPageSkillinfoRequest) request);
+				break;
+				/** 首页技能种类展示 */
+			case OrderRequestType.QUERY_DV_LIST_BY_TYPE:
+				response = skillService.getDaVListBySkillId((DaVListBySkillIdRequest) request);
 				break;
 			/////////////////////////////////////////////////////////////////
 			/** 获取主播开启产品 */

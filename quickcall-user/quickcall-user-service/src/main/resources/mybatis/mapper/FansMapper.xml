@@ -6,6 +6,8 @@
     <result column="anchor_id" property="anchorId" jdbcType="BIGINT" />
     <result column="fans_id" property="fansId" jdbcType="BIGINT" />
     <result column="attention_state" property="attentionState" jdbcType="TINYINT" />
+     <result column="read_state" property="readState"  />
+    
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
     <result column="create_man" property="createMan" jdbcType="VARCHAR" />
@@ -13,7 +15,7 @@
     <result column="remark" property="remark" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, anchor_id, fans_id, attention_state, create_time, modify_time, create_man, modify_man, 
+    id, anchor_id, fans_id,read_state, attention_state, create_time, modify_time, create_man, modify_man, 
     remark
   </sql>
   <select id="queryIsFollow" resultType="int" parameterType="map">
@@ -233,7 +235,10 @@
   
   
   
-  
+  <update id="updateReadAttention" parameterType="Map">
+  update fans set read_state=1
+  where anchor_id=#{customerId}
+  </update>
   
   
   
