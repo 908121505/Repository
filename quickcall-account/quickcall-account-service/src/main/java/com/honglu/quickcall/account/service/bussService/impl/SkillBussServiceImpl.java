@@ -32,6 +32,7 @@ import com.honglu.quickcall.account.service.bussService.CommonService;
 import com.honglu.quickcall.account.service.bussService.ISkillBussService;
 import com.honglu.quickcall.account.service.dao.ProductMapper;
 import com.honglu.quickcall.account.service.dao.SkillMapper;
+import com.honglu.quickcall.account.service.service.IProductService;
 import com.honglu.quickcall.common.api.code.BizCode;
 import com.honglu.quickcall.common.api.exception.BizException;
 import com.honglu.quickcall.common.api.exchange.CommonResponse;
@@ -57,6 +58,8 @@ public class SkillBussServiceImpl implements ISkillBussService {
 	private SkillMapper  skillMapper;
 	@Autowired
 	private ProductMapper  productMapper;
+	@Autowired
+	private  IProductService  productService;
 
 	@Override
 	public CommonResponse querySkillInfoPersonal(SkillInfoRequest request) {
@@ -203,9 +206,13 @@ public class SkillBussServiceImpl implements ISkillBussService {
 			throw new BizException(AccountBizReturnCode.paramError, "查询首页大V列表参数异常");
 		}
 		//首先查询所有的技能信息
-		List<DaVinfoListVO>   resultList =  null;
-		
-		
+		List<DaVinfoListVO>   resultList =  new  ArrayList<DaVinfoListVO>();
+		//资源位信息
+		DaVinfoListVO  resourceDaVinfoListVO =  productService.getResourceDaVinfoList();
+		resultList.add(resourceDaVinfoListVO);
+		//飞标签位列表
+		List<DaVinfoListVO>   tagList  =  productService.getTagDaVinfoList();
+		resultList.addAll(tagList);
 		
 		
 		CommonResponse commonResponse = commonService.getCommonResponse();

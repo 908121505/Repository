@@ -15,13 +15,9 @@ import com.honglu.quickcall.common.api.exchange.AbstractRequest;
 public class FirstPageDaVinfoRequest  extends  AbstractRequest{
     
 	
-	private static final long serialVersionUID = 5399424740787721828L;
+	private static final long serialVersionUID = 8504198163263776145L;
 	/**客户编号（预留暂时不用）*/
 	private Long  customerId;
-	/**技能ID*/
-	private Long  skillId;
-	/**当前页*/
-	private Integer  pageIndex;
 	
 	public Long getCustomerId() {
 		return customerId;
@@ -30,26 +26,15 @@ public class FirstPageDaVinfoRequest  extends  AbstractRequest{
 		this.customerId = customerId;
 	}
 	
-	public Long getSkillId() {
-		return skillId;
-	}
-	public void setSkillId(Long skillId) {
-		this.skillId = skillId;
-	}
-	
-	public Integer getPageIndex() {
-		return pageIndex;
-	}
-	public void setPageIndex(Integer pageIndex) {
-		this.pageIndex = pageIndex;
-	}
 	@Override
 	public String getBizCode() {
 		return  OrderRequestType.QUERY_ORDER_FOR_FIRST_PAGE;
 	}
 	@Override
 	public String toString() {
-		return "FirstPageDaVinfoRequest [customerId=" + customerId + ", skillId=" + skillId + ", pageIndex=" + pageIndex
-				+ "]";
+		return "FirstPageDaVinfoRequest [customerId=" + customerId + "]";
 	}
+	
+	
+	
 }

@@ -21,7 +21,7 @@ public class DaVinfoListVO implements  Serializable{
 	/**技能ID*/
 	private  Long   skillId;
 	/**大V技能列表*/
-	private List<DaVinfoVO>  DaVinfoList;
+	private List<DaVinfoVO>  daVinfoList;
 	
 	public String getSkillName() {
 		return skillName;
@@ -36,12 +36,12 @@ public class DaVinfoListVO implements  Serializable{
 		this.skillId = skillId;
 	}
 	public List<DaVinfoVO> getDaVinfoList() {
-		return DaVinfoList;
+		return daVinfoList;
 	}
 	public void setDaVinfoList(List<DaVinfoVO> daVinfoList) {
-		DaVinfoList = daVinfoList;
+		this.daVinfoList = daVinfoList;
 	}
-	
+
 	
 	
 	

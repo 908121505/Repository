@@ -54,7 +54,7 @@ public class SkillInfoController {
      */
     @RequestMapping(value = "/getFirstPageDaVinfo", method = RequestMethod.POST)
     @ResponseBody
-    public WebResponseModel getFirstPageDaVinfo(  /* @RequestBody */  FirstPageDaVinfoRequest params) {
+    public WebResponseModel getFirstPageDaVinfo(FirstPageDaVinfoRequest params) {
     	WebResponseModel response = orderInfoService.execute(params);
     	return response;
     }
