@@ -82,4 +82,6 @@ public class FadeCustomerController implements BaseController<FadeCustomer> {
     public int delete(String id) {
         return baseManager.delete(FadeCustomer.class, new Object[]{Integer.valueOf(id)});
     }
+
+
 }

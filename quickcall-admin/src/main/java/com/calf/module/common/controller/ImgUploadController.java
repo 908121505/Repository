@@ -216,4 +216,48 @@ public class ImgUploadController {
         return null;
     }
 
+    /**
+     * 随机用户头像上传文件
+     *
+     * @param id
+     * @param file
+     * @param request
+     * @return
+     * @throws IOException
+     */
+    @RequestMapping("/fadeCustomerHeadImg.htm")
+    @ResponseBody
+    public FileUpload fadeCustomerHeadImg(String id,
+                                        @RequestParam("appversionFile") MultipartFile file,
+                                        HttpServletRequest request) throws IOException {
+        FileUpload upload = new FileUpload("error", "随机用户头像上传文件失败", null);
+
+        if (file == null) {
+            upload.setMsg("请选择一个文件上传！");
+            return upload;
+        }
+        try {
+            //MultipartFile转换FILE
+            CommonsMultipartFile cf = (CommonsMultipartFile) file;
+            DiskFileItem fi = (DiskFileItem) cf.getFileItem();
+            String md5Str = MD5Utils.getMD5(fi.getStoreLocation());//对文件进行加密
+
+            String imgFolder = AliYunFilePaths.FADE_USER_UPLOAD_HEAD_IMG;
+            String fileName = System.currentTimeMillis() + "." + file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".") + 1);
+
+            //阿里云客户端
+            OSSClient ossClient = OSSUtil.getOSSClient();
+            //上传
+            boolean flag = OSSUtil.uploadInputStreamObject2OSS(ossClient, file.getInputStream(), fileName, imgFolder);
+            if (flag) {
+                upload.setResult("success");
+                upload.setMsg("上传文件成功！");
+                upload.setImgUrl(SFtpUtil.ossUrl + "/" + imgFolder + "/" + fileName);
+                upload.setMd5Str(md5Str);
+            }
+        } catch (Exception e) {
+            log.error("上传APP Banner图片失败：", e);
+        }
+        return upload;
+    }
 }
