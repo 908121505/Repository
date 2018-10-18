@@ -3,6 +3,7 @@
 <mapper namespace="com.honglu.quickcall.user.service.dao.CustomerMapper" >
   <resultMap id="BaseResultMap" type="com.honglu.quickcall.user.facade.entity.Customer" >
     <id column="customer_id" property="customerId" jdbcType="BIGINT" />
+    <result column="app_id" property="appId"/>
     <result column="phone" property="phone"  />
     <result column="real_name" property="realName" jdbcType="VARCHAR" />
     <result column="sex" property="sex"   />
@@ -49,7 +50,7 @@
     <result column="login_time" property="loginTime" jdbcType="TIMESTAMP" />
   </resultMap>
  <sql id="Base_Column_List" >
-        customer_id, phone, real_name, sex, nick_name, type, credentials_type, credentials_num, 
+        customer_id,app_id, phone, real_name, sex, nick_name, type, credentials_type, credentials_num, 
     interest_id, wechat_open_id, qq_open_id, microblog_open_id, occupation_id, front_portrait_url, 
     back_portrait_url, head_portrait_url, source, cust_status, cust_password, sign_name, 
     star_sign, birthday, voice_url, voice_time, v_voice_url, v_voice_url_tmp, v_voice_time_tmp, 
@@ -149,6 +150,9 @@
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="customerId != null" >
         customer_id,
+      </if>
+      <if test="appId != null and appId!=''" >
+        app_id,
       </if>
       <if test="phone != null" >
         phone,
@@ -274,6 +278,9 @@
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="customerId != null" >
         #{customerId,jdbcType=BIGINT},
+      </if>
+      <if test="appId != null and appId!=''" >
+        #{appId,jdbcType=VARCHAR},
       </if>
       <if test="phone != null" >
         #{phone,jdbcType=BIGINT},

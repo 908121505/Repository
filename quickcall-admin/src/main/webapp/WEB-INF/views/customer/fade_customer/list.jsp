@@ -57,7 +57,6 @@
                     aoColumns: [
                         {"data": "headPortraitUrl", "sTitle": "用户头像", 'sClass': "text-center", "sortable": false,
                             "mRender": function (data, type, full) {
-                            console.log(data);
                                 if(data){
                                     return "<img src='" + data + "' height='50px;'/>";
                                 }else{
@@ -116,8 +115,8 @@
             });
 
             //删除受影响的行数
-            function deleteRow(bannerId) {
-                $('#myModal').deleteRow('fadeCustomer/del.htm?bannerId=' + bannerId);
+            function deleteRow(id) {
+                $('#myModal').deleteRow('fadeCustomer/del.htm?id=' + id);
             }
 
             //增加或者修改受影响的行数
