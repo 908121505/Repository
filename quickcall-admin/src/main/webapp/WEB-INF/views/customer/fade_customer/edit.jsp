@@ -54,7 +54,7 @@
 					<label for="bannerFile_img" class="col-sm-2 control-label">图片</label>
 					<div class="col-sm-10">
 						<div class="col-sm-6">
-							<img src="${entity.headPortraitUrl }" alt="暂无图片，点击上传！" class="img-rounded" style="max-width: 100%; max-height: 300px;" id="bannerFile_img">
+							<img src="${empty entity.headPortraitUrl ? DEFAULT_IMG : entity.headPortraitUrl }" alt="暂无图片，点击上传！" class="img-rounded" style="max-width: 100%; max-height: 300px;" id="bannerFile_img">
 						</div>
 					</div>
 				</div>
