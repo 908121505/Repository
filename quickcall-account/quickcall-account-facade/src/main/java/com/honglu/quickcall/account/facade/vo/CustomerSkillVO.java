@@ -8,7 +8,7 @@ import java.util.List;
  * 
  * Copyright © 2018 www.xiaoniu.com All rights reserved.
  * 
- * 功能描述：
+ * 功能描述：客户技能信息
  * @Package: com.honglu.quickcall.account.facade.vo 
  * @author: chenliuguang   
  * @date: 2018年10月19日 下午3:44:13
@@ -21,6 +21,8 @@ public class CustomerSkillVO {
 	private String  skillItemName;
 	/**技能项ID(分类ID)*/
     private Long skillItemId;
+    /**服务单位（小时/半小时/次）*/
+    private String serviceUnit;
     /**已选中的价格*/
     private BigDecimal skillPrice;
     /**技能开关 1：开启  0：关闭*/
@@ -72,6 +74,12 @@ public class CustomerSkillVO {
 	}
 	public void setSkillItemId(Long skillItemId) {
 		this.skillItemId = skillItemId;
+	}
+	public String getServiceUnit() {
+		return serviceUnit;
+	}
+	public void setServiceUnit(String serviceUnit) {
+		this.serviceUnit = serviceUnit;
 	}
 	public BigDecimal getSkillPrice() {
 		return skillPrice;
