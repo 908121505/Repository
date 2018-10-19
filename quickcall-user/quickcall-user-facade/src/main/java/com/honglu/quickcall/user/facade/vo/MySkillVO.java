@@ -17,6 +17,14 @@ public class MySkillVO implements  Serializable{
 	private Integer auditStatus = 0;
 	//技能编号
 	private Long skillId;
+	
+	public MySkillVO (String name,String imageUrl,Integer auditStatus,Long skillId){
+		super();
+		this.name = name;
+		this.imageUrl = imageUrl;
+		this.auditStatus = auditStatus;
+		this.skillId = skillId;
+	}
 
 	public String getName() {
 		return name;

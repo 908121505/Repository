@@ -77,8 +77,11 @@
     from customer
     <where>
          <!-- <if test="keyword != null and keyword != ''"> -->
-             nick_name LIKE concat('%',#{keyword},'%') and customer_id != #{customerId} 
+             nick_name LIKE concat('%',#{keyword},'%')
          <!-- </if> -->
+         <if test="customerId != null">
+         	and customer_id != #{customerId}
+         </if>
      </where>
      order by
              (case
@@ -104,11 +107,11 @@
     from customer
     <where>
          <!-- <if test="keyword != null and keyword != ''"> -->
-             customer_id = #{keyword}
-         <!-- </if>
-         <if test="customerId != null"> -->
-         	and customer_id != #{customerId}
+             app_id = #{keyword}
          <!-- </if> -->
+         <if test="customerId != null">
+         	and customer_id != #{customerId}
+         </if>
      </where>
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
