@@ -17,6 +17,7 @@ import com.honglu.quickcall.account.facade.vo.FirstPageSkillIteminfoVO;
 import com.honglu.quickcall.account.service.dao.CustomerSkillMapper;
 import com.honglu.quickcall.account.service.dao.SkillMapper;
 import com.honglu.quickcall.account.service.service.IProductSkillService;
+import com.honglu.quickcall.common.api.util.JSONUtil;
 
 
 @Service("productSkillService")
@@ -162,7 +163,6 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 			skillVO.setServiceUnit(serviceUnit);
 			skillVO.setDiscontRateList(discontRateList );
 			skillVO.setDiscountRate(new BigDecimal(70));
-			skillVO.setReceiveStatus(Math.random() >0.5?1:0);
 			skillVO.setSkillItemId(1000L);
 			skillVO.setSkillItemName(skillItemName);
 			skillVO.setSkillPrice(new BigDecimal(10));
@@ -182,8 +182,11 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 		weekDataMap.put("saturday", 0);
 		weekDataMap.put("sunday", 1);
 		resultVO.setCustomerSkillList(resultList);
+		
 		resultVO.setEndServiceTime(new Date());
 		resultVO.setWeekDataMap(weekDataMap);
+//		String  json = JSONUtil.toJson(resultVO);
+//		System.out.println("============"+json);
 		return resultVO;
 	}
 	

@@ -1,6 +1,8 @@
 package com.honglu.quickcall.user.service.service.impl;
 
 import cn.jiguang.commom.utils.StringUtils;
+import com.honglu.quickcall.account.facade.code.AccountBizReturnCode;
+import com.honglu.quickcall.common.api.exception.BizException;
 import com.honglu.quickcall.common.api.exception.RemoteException;
 import com.honglu.quickcall.common.api.exchange.CommonResponse;
 import com.honglu.quickcall.common.api.util.JedisUtil;
@@ -9,10 +11,14 @@ import com.honglu.quickcall.common.third.rongyun.models.CodeSuccessReslut;
 import com.honglu.quickcall.common.third.rongyun.util.RongYunUtil;
 import com.honglu.quickcall.user.facade.code.UserBizReturnCode;
 import com.honglu.quickcall.user.facade.entity.Customer;
+import com.honglu.quickcall.user.facade.entity.CustomerInterest;
 import com.honglu.quickcall.user.facade.entity.SensitivityWord;
 import com.honglu.quickcall.user.facade.exchange.request.editprofile.*;
+import com.honglu.quickcall.user.service.dao.CustomerInterestMapper;
 import com.honglu.quickcall.user.service.dao.CustomerMapper;
+import com.honglu.quickcall.user.service.dao.InterestMapper;
 import com.honglu.quickcall.user.service.dao.SensitivityWordMapper;
+import com.honglu.quickcall.user.service.service.CustomerRedisManagement;
 import com.honglu.quickcall.user.service.service.EditProfileService;
 import com.honglu.quickcall.user.service.util.CommonUtil;
 import com.honglu.quickcall.user.service.util.JsonParseUtil;
@@ -39,6 +45,10 @@ public class EditProfileServiceImpl implements EditProfileService {
     private CustomerMapper customerMapper;
     @Autowired
     private SensitivityWordMapper sensitivityWordMapper;
+    @Autowired
+    private CustomerRedisManagement customerRedisManagement;
+    @Autowired
+    private CustomerInterestMapper customerInterestMapper;
 
     @Override
     public CommonResponse updateNickName(UpdateNickNameReq params) {
@@ -206,5 +216,38 @@ public class EditProfileServiceImpl implements EditProfileService {
     public CommonResponse updateAppearance(UpdateAppearanceReq params) {
         return null;
     }
+
+    @Override
+    public CommonResponse updateInterest(UpdateInterestReq params) {
+        CommonResponse commonResponse = new CommonResponse();
+        CustomerInterest customerInterest = new CustomerInterest();
+        customerInterest.setCustomerId(params.getCustomerId());
+
+        Customer customer = customerRedisManagement.getCustomer(params.getCustomerId());
+        String interests = params.getInterestId();
+        String[] interest = interests.split(",");
+        if (null != customer) {
+            // 更新customer_interest表
+            try {
+                // 如果customer_interest中间表有该用户，先删除该用户在此表的数据
+                customerInterestMapper.deleteByCustomerId(params.getCustomerId());
+
+                for (String str : interest) {
+                    customerInterest.setInterestId(Integer.parseInt(str));
+                    customerInterestMapper.insertSelective(customerInterest);
+                }
+                commonResponse.setData(customerInterest);
+                commonResponse.setCode(UserBizReturnCode.Success);
+                commonResponse.setMessage(UserBizReturnCode.Success.desc());
+                return commonResponse;
+            } catch (Exception e) {
+                logger.error("修改兴趣 异常",e);
+                throw new BizException(AccountBizReturnCode.JdbcError, "操作数据库异常");
+            }
+        } else {
+            throw new BizException(AccountBizReturnCode.JdbcError, "操作数据库异常");
+        }
+    }
+
 
 }

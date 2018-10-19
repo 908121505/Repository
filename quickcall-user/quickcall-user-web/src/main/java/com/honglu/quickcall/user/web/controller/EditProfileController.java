@@ -93,7 +93,7 @@ public class EditProfileController {
      * @return
      */
     @PostMapping(value = "/updateInterest")
-    public WebResponseModel updateInterest(@RequestBody UpdateAppearanceReq params) {
+    public WebResponseModel updateInterest(@RequestBody UpdateInterestReq params) {
         logger.info("修改兴趣 请求参数：" + params.toString());
         WebResponseModel response = userCenterService.execute(params);
         return response;
