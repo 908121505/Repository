@@ -25,8 +25,12 @@ public class MySkillVO implements  Serializable{
 	//技能支持申请状态
 	private Integer skillStatus;
 	
-	public MySkillVO (String name,String imageUrl,Integer auditStatus,Long skillId,Integer skillStatus ){
+	public MySkillVO(){
 		super();
+	}
+	
+	public MySkillVO (String name,String imageUrl,Integer auditStatus,Long skillId,Integer skillStatus ){
+		this();
 		this.name = name;
 		this.imageUrl = imageUrl;
 		this.auditStatus = auditStatus;

@@ -38,6 +38,12 @@ id,	skill_item_name,	skill_describe,	image_url,	sort,	skill_status,	create_time,
 		 FROM skill_item
 		 WHERE id = #{id}
 	</select>
+	
+	<select id="selectAllSkill" resultMap="skillItemMap" >
+		 SELECT
+		 <include refid="Base_Column_List" />
+		 FROM skill_item
+	</select>
 
 	<!--删除：根据主键ID删除-->
 	<delete id="deleteEntity" parameterType="java.lang.Long">

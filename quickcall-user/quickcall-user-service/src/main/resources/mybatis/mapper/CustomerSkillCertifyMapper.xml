@@ -40,6 +40,14 @@ certify_id,	customer_id,	skill_item_id,	audit_status,	skill_voice_url,	skill_voi
 		 FROM customer_skill_certify
 		 WHERE certify_id = #{certifyId}
 	</select>
+	
+	<!-- 查询该用户所有认证状态的技能 -->
+	<select id="selectAllSkillByCustomer" resultMap="customerSkillCertifyMap" parameterType="java.lang.Long">
+		 SELECT
+		 <include refid="Base_Column_List" />
+		 FROM customer_skill_certify
+		 WHERE customer_id = #{customerId}
+	</select>
 
 	<!--删除：根据主键ID删除-->
 	<delete id="deleteEntity" parameterType="java.lang.Integer">

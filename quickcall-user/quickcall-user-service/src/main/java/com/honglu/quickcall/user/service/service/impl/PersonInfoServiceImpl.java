@@ -33,6 +33,7 @@ import com.honglu.quickcall.user.facade.constants.UserBizConstants;
 import com.honglu.quickcall.user.facade.entity.Customer;
 import com.honglu.quickcall.user.facade.entity.CustomerInterest;
 import com.honglu.quickcall.user.facade.entity.CustomerOccupation;
+import com.honglu.quickcall.user.facade.entity.CustomerSkillCertify;
 import com.honglu.quickcall.user.facade.entity.Fans;
 import com.honglu.quickcall.user.facade.entity.Interest;
 import com.honglu.quickcall.user.facade.entity.Occupation;
@@ -67,12 +68,14 @@ import com.honglu.quickcall.user.facade.vo.SearchPersonListVO;
 import com.honglu.quickcall.user.service.dao.CustomerInterestMapper;
 import com.honglu.quickcall.user.service.dao.CustomerMapper;
 import com.honglu.quickcall.user.service.dao.CustomerOccupationMapper;
+import com.honglu.quickcall.user.service.dao.CustomerSkillCertifyMapper;
 import com.honglu.quickcall.user.service.dao.FansMapper;
 import com.honglu.quickcall.user.service.dao.InterestMapper;
 import com.honglu.quickcall.user.service.dao.OccupationMapper;
 import com.honglu.quickcall.user.service.dao.OrdersMapper;
 import com.honglu.quickcall.user.service.dao.ProductMapper;
 import com.honglu.quickcall.user.service.dao.SensitivityWordMapper;
+import com.honglu.quickcall.user.service.dao.SkillItemMapper;
 import com.honglu.quickcall.user.service.service.CustomerRedisManagement;
 import com.honglu.quickcall.user.service.service.PersonInfoService;
 import com.honglu.quickcall.user.service.util.CountAge;
@@ -104,6 +107,10 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 	private FansMapper fansMapper;
 	@Autowired
 	private OrdersMapper ordersMapper;
+	@Autowired
+	private SkillItemMapper skillItemMapper;
+	@Autowired
+	private CustomerSkillCertifyMapper customerSkillCertifyMapper;
 	/**
 	 * 中文、英文、数字、下划线校验 4-24位
 	 */
@@ -854,24 +861,33 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 			throw new BizException(BizCode.ParamError, "用戶Id 不能为空");
 		}
 		CommonResponse commonResponse = new CommonResponse();
-//		List<SkillItem> skillList = skillMapper.selectAllSkill();
-//		List<SkillReview> skillReviewList = skillReviewMapper.findAll(params.getCustomerId());
+//		List<SkillItem> skillList = skillItemMapper.selectAllSkill();
+//		List<CustomerSkillCertify> skillReviewList = customerSkillCertifyMapper.selectAllSkillByCustomer(params.getCustomerId());
 //		//已经解锁的技能列表
 //		List<MySkillVO> haveSkill = new ArrayList<MySkillVO>();
 //		//未解锁的技能列表
 //		List<MySkillVO> noHaveSkill = new ArrayList<MySkillVO>();
 //		boolean flag ;
+//		Map<String,Object> map = new HashMap<String,Object>();
 //		//区分解锁和不解锁的技能
-//		for (Skill skill : skillList) {
+//		for (SkillItem skill : skillList) {
 //			flag = true;
 //			MySkillVO mySkillVO = new MySkillVO();
-//			mySkillVO.setName(skill.getName());
+//			mySkillVO.setName(skill.getSkillItemName());
 //			mySkillVO.setImageUrl(skill.getImageUrl());
 //			mySkillVO.setSkillId(skill.getId());
-//			for (SkillReview skillReview : skillReviewList) {
-//				if(skill.getId().equals(skillReview.getSkillId())){
+//			mySkillVO.setSkillStatus(skill.getSkillStatus());
+//			for (CustomerSkillCertify skillReview : skillReviewList) {
+//				//判断认证的技能
+//				if(skill.getId().equals(skillReview.getSkillItemId())){
 //					mySkillVO.setAuditStatus(skillReview.getAuditStatus());
+//					//是否已经审核过
 //					if(skillReview.getIsAudited()==1){
+//						//审核状态不是待审核状态
+//						if(skillReview.getAuditStatus() != 1){
+//							mySkillVO.setSkillVoiceUrl(skillReview.getSkillVoiceUrl());
+//							mySkillVO.setSkillVoiceTime(skillReview.getSkillVoiceTime());
+//						}
 //						haveSkill.add(mySkillVO);
 //						flag = false;
 //						skillReviewList.remove(skillReview);
@@ -880,6 +896,7 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 //				}
 //			}
 //			if(flag){
+//				mySkillVO.setImageUrl(skill.getBlackImageUrl());
 //				noHaveSkill.add(mySkillVO);
 //			}
 //		}

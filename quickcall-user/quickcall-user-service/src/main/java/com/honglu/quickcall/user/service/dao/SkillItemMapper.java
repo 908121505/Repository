@@ -49,5 +49,12 @@ public interface SkillItemMapper{
 	 * 
 	 **/
 	int updateEntity( SkillItem record );
+	
+	/**
+	 * 
+	 * 查询所有技能
+	 * 
+	 **/
+	List<SkillItem>  selectAllSkill ();
 
 }
