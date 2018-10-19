@@ -140,17 +140,23 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 		skillPriceList.add(new BigDecimal(88));
 		for (int i = 0; i < 4; i++) {
 			String skillItemName  = null ;
+			String serviceUnit  = null ;
 			if(i == 0 ){
 				skillItemName = "哄睡";
+				serviceUnit = "次";
 			}else if(i == 1 ){
 				skillItemName = "叫醒";
+				serviceUnit = "次";
 			}else if(i == 2 ){
 				skillItemName = "声优聊天";
+				serviceUnit = "半小时";
 			}else if(i == 3 ){
 				skillItemName = "情感咨询";
+				serviceUnit = "小时";
 			}
 			CustomerSkillVO  skillVO =  new CustomerSkillVO();
 			skillVO.setCustomerSkillId(10000L);
+			skillVO.setServiceUnit(serviceUnit);
 			skillVO.setDiscontRateList(discontRateList );
 			skillVO.setDiscountRate(new BigDecimal(70));
 			skillVO.setEndServiceTime(new Date());

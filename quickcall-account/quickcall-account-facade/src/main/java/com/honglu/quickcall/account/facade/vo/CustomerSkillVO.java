@@ -21,6 +21,8 @@ public class CustomerSkillVO {
 	private String  skillItemName;
 	/**技能项ID(分类ID)*/
     private Long skillItemId;
+    /**服务单位（小时/半小时/次）*/
+    private String serviceUnit;
     /**已选中的价格*/
     private BigDecimal skillPrice;
     /**技能开关 1：开启  0：关闭*/
@@ -72,6 +74,12 @@ public class CustomerSkillVO {
 	}
 	public void setSkillItemId(Long skillItemId) {
 		this.skillItemId = skillItemId;
+	}
+	public String getServiceUnit() {
+		return serviceUnit;
+	}
+	public void setServiceUnit(String serviceUnit) {
+		this.serviceUnit = serviceUnit;
 	}
 	public BigDecimal getSkillPrice() {
 		return skillPrice;
