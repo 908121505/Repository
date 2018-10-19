@@ -2,15 +2,15 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.honglu.quickcall.user.service.dao.CustomerSkillMapper" >
   <resultMap id="BaseResultMap" type="com.honglu.quickcall.user.facade.entity.CustomerSkill" >
-    <id column="customer_skill_id" property="customerSkillId" jdbcType="BIGINT" />
+        <id column="customer_skill_id" property="customerSkillId" jdbcType="BIGINT" />
     <result column="certify_id" property="certifyId" jdbcType="BIGINT" />
     <result column="customer_id" property="customerId" jdbcType="BIGINT" />
     <result column="skill_item_id" property="skillItemId" jdbcType="BIGINT" />
-    <result column="product_name" property="productName" jdbcType="VARCHAR" />
+    <result column="skill_name" property="skillName" jdbcType="VARCHAR" />
     <result column="service_unit" property="serviceUnit" jdbcType="VARCHAR" />
-    <result column="product_price" property="productPrice" jdbcType="DECIMAL" />
+    <result column="skill_price" property="skillPrice" jdbcType="DECIMAL" />
     <result column="audit_status" property="auditStatus" jdbcType="TINYINT" />
-    <result column="product_status" property="productStatus" jdbcType="TINYINT" />
+    <result column="switch_status" property="switchStatus" jdbcType="TINYINT" />
     <result column="receive_status" property="receiveStatus" jdbcType="TINYINT" />
     <result column="discount_rate" property="discountRate" jdbcType="DECIMAL" />
     <result column="discount_price" property="discountPrice" jdbcType="DECIMAL" />
@@ -23,7 +23,7 @@
     <result column="sunday" property="sunday" jdbcType="TINYINT" />
     <result column="start_service_time" property="startServiceTime" jdbcType="TIMESTAMP" />
     <result column="end_service_time" property="endServiceTime" jdbcType="TIMESTAMP" />
-    <result column="product_describe" property="productDescribe" jdbcType="VARCHAR" />
+    <result column="skill_describe" property="skillDescribe" jdbcType="VARCHAR" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
     <result column="create_man" property="createMan" jdbcType="VARCHAR" />
@@ -32,15 +32,15 @@
   </resultMap>
   
   <sql id="Base_Column_List" >
-    customer_skill_id, certify_id, customer_id, skill_item_id, product_name, service_unit, 
-    product_price, audit_status, product_status, receive_status, discount_rate, discount_price, 
+   customer_skill_id, certify_id, customer_id, skill_item_id, skill_name, service_unit, 
+    skill_price, audit_status, switch_status, receive_status, discount_rate, discount_price, 
     monday, tuesday, wednesday, thursday, friday, saturday, sunday, start_service_time, 
-    end_service_time, product_describe, create_time, modify_time, create_man, modify_man, 
+    end_service_time, skill_describe, create_time, modify_time, create_man, modify_man, 
     remark
   </sql>
  
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
-    select 
+     select 
     <include refid="Base_Column_List" />
     from customer_skill
     where customer_skill_id = #{customerSkillId,jdbcType=BIGINT}
@@ -52,30 +52,30 @@
   
   
   <insert id="insert" parameterType="com.honglu.quickcall.user.facade.entity.CustomerSkill" >
-    insert into customer_skill (customer_skill_id, certify_id, customer_id, 
-      skill_item_id, product_name, service_unit, 
-      product_price, audit_status, product_status, 
+     insert into customer_skill (customer_skill_id, certify_id, customer_id, 
+      skill_item_id, skill_name, service_unit, 
+      skill_price, audit_status, switch_status, 
       receive_status, discount_rate, discount_price, 
       monday, tuesday, wednesday, 
       thursday, friday, saturday, 
       sunday, start_service_time, end_service_time, 
-      product_describe, create_time, modify_time, 
+      skill_describe, create_time, modify_time, 
       create_man, modify_man, remark
       )
     values (#{customerSkillId,jdbcType=BIGINT}, #{certifyId,jdbcType=BIGINT}, #{customerId,jdbcType=BIGINT}, 
-      #{skillItemId,jdbcType=BIGINT}, #{productName,jdbcType=VARCHAR}, #{serviceUnit,jdbcType=VARCHAR}, 
-      #{productPrice,jdbcType=DECIMAL}, #{auditStatus,jdbcType=TINYINT}, #{productStatus,jdbcType=TINYINT}, 
+      #{skillItemId,jdbcType=BIGINT}, #{skillName,jdbcType=VARCHAR}, #{serviceUnit,jdbcType=VARCHAR}, 
+      #{skillPrice,jdbcType=DECIMAL}, #{auditStatus,jdbcType=TINYINT}, #{switchStatus,jdbcType=TINYINT}, 
       #{receiveStatus,jdbcType=TINYINT}, #{discountRate,jdbcType=DECIMAL}, #{discountPrice,jdbcType=DECIMAL}, 
       #{monday,jdbcType=TINYINT}, #{tuesday,jdbcType=TINYINT}, #{wednesday,jdbcType=TINYINT}, 
       #{thursday,jdbcType=TINYINT}, #{friday,jdbcType=TINYINT}, #{saturday,jdbcType=TINYINT}, 
       #{sunday,jdbcType=TINYINT}, #{startServiceTime,jdbcType=TIMESTAMP}, #{endServiceTime,jdbcType=TIMESTAMP}, 
-      #{productDescribe,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{modifyTime,jdbcType=TIMESTAMP}, 
+      #{skillDescribe,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{modifyTime,jdbcType=TIMESTAMP}, 
       #{createMan,jdbcType=VARCHAR}, #{modifyMan,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.honglu.quickcall.user.facade.entity.CustomerSkill" >
    
-    insert into customer_skill
+     insert into customer_skill
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="customerSkillId != null" >
         customer_skill_id,
@@ -89,20 +89,20 @@
       <if test="skillItemId != null" >
         skill_item_id,
       </if>
-      <if test="productName != null" >
-        product_name,
+      <if test="skillName != null" >
+        skill_name,
       </if>
       <if test="serviceUnit != null" >
         service_unit,
       </if>
-      <if test="productPrice != null" >
-        product_price,
+      <if test="skillPrice != null" >
+        skill_price,
       </if>
       <if test="auditStatus != null" >
         audit_status,
       </if>
-      <if test="productStatus != null" >
-        product_status,
+      <if test="switchStatus != null" >
+        switch_status,
       </if>
       <if test="receiveStatus != null" >
         receive_status,
@@ -140,8 +140,8 @@
       <if test="endServiceTime != null" >
         end_service_time,
       </if>
-      <if test="productDescribe != null" >
-        product_describe,
+      <if test="skillDescribe != null" >
+        skill_describe,
       </if>
       <if test="createTime != null" >
         create_time,
@@ -172,20 +172,20 @@
       <if test="skillItemId != null" >
         #{skillItemId,jdbcType=BIGINT},
       </if>
-      <if test="productName != null" >
-        #{productName,jdbcType=VARCHAR},
+      <if test="skillName != null" >
+        #{skillName,jdbcType=VARCHAR},
       </if>
       <if test="serviceUnit != null" >
         #{serviceUnit,jdbcType=VARCHAR},
       </if>
-      <if test="productPrice != null" >
-        #{productPrice,jdbcType=DECIMAL},
+      <if test="skillPrice != null" >
+        #{skillPrice,jdbcType=DECIMAL},
       </if>
       <if test="auditStatus != null" >
         #{auditStatus,jdbcType=TINYINT},
       </if>
-      <if test="productStatus != null" >
-        #{productStatus,jdbcType=TINYINT},
+      <if test="switchStatus != null" >
+        #{switchStatus,jdbcType=TINYINT},
       </if>
       <if test="receiveStatus != null" >
         #{receiveStatus,jdbcType=TINYINT},
@@ -223,8 +223,8 @@
       <if test="endServiceTime != null" >
         #{endServiceTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="productDescribe != null" >
-        #{productDescribe,jdbcType=VARCHAR},
+      <if test="skillDescribe != null" >
+        #{skillDescribe,jdbcType=VARCHAR},
       </if>
       <if test="createTime != null" >
         #{createTime,jdbcType=TIMESTAMP},
@@ -257,20 +257,20 @@
       <if test="skillItemId != null" >
         skill_item_id = #{skillItemId,jdbcType=BIGINT},
       </if>
-      <if test="productName != null" >
-        product_name = #{productName,jdbcType=VARCHAR},
+      <if test="skillName != null" >
+        skill_name = #{skillName,jdbcType=VARCHAR},
       </if>
       <if test="serviceUnit != null" >
         service_unit = #{serviceUnit,jdbcType=VARCHAR},
       </if>
-      <if test="productPrice != null" >
-        product_price = #{productPrice,jdbcType=DECIMAL},
+      <if test="skillPrice != null" >
+        skill_price = #{skillPrice,jdbcType=DECIMAL},
       </if>
       <if test="auditStatus != null" >
         audit_status = #{auditStatus,jdbcType=TINYINT},
       </if>
-      <if test="productStatus != null" >
-        product_status = #{productStatus,jdbcType=TINYINT},
+      <if test="switchStatus != null" >
+        switch_status = #{switchStatus,jdbcType=TINYINT},
       </if>
       <if test="receiveStatus != null" >
         receive_status = #{receiveStatus,jdbcType=TINYINT},
@@ -308,8 +308,8 @@
       <if test="endServiceTime != null" >
         end_service_time = #{endServiceTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="productDescribe != null" >
-        product_describe = #{productDescribe,jdbcType=VARCHAR},
+      <if test="skillDescribe != null" >
+        skill_describe = #{skillDescribe,jdbcType=VARCHAR},
       </if>
       <if test="createTime != null" >
         create_time = #{createTime,jdbcType=TIMESTAMP},
@@ -334,11 +334,11 @@
     set certify_id = #{certifyId,jdbcType=BIGINT},
       customer_id = #{customerId,jdbcType=BIGINT},
       skill_item_id = #{skillItemId,jdbcType=BIGINT},
-      product_name = #{productName,jdbcType=VARCHAR},
+      skill_name = #{skillName,jdbcType=VARCHAR},
       service_unit = #{serviceUnit,jdbcType=VARCHAR},
-      product_price = #{productPrice,jdbcType=DECIMAL},
+      skill_price = #{skillPrice,jdbcType=DECIMAL},
       audit_status = #{auditStatus,jdbcType=TINYINT},
-      product_status = #{productStatus,jdbcType=TINYINT},
+      switch_status = #{switchStatus,jdbcType=TINYINT},
       receive_status = #{receiveStatus,jdbcType=TINYINT},
       discount_rate = #{discountRate,jdbcType=DECIMAL},
       discount_price = #{discountPrice,jdbcType=DECIMAL},
@@ -351,7 +351,7 @@
       sunday = #{sunday,jdbcType=TINYINT},
       start_service_time = #{startServiceTime,jdbcType=TIMESTAMP},
       end_service_time = #{endServiceTime,jdbcType=TIMESTAMP},
-      product_describe = #{productDescribe,jdbcType=VARCHAR},
+      skill_describe = #{skillDescribe,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       modify_time = #{modifyTime,jdbcType=TIMESTAMP},
       create_man = #{createMan,jdbcType=VARCHAR},
