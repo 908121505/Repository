@@ -1,18 +1,20 @@
 package com.honglu.quickcall.account.facade.vo;
 
 import java.math.BigDecimal;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 /**
  * 
  * Copyright © 2018 www.xiaoniu.com All rights reserved.
  * 
- * 功能描述：客户技能信息
+ * 功能描述：客户技能信息更新
  * @Package: com.honglu.quickcall.account.facade.vo 
  * @author: chenliuguang   
  * @date: 2018年10月19日 下午3:44:13
  */
-public class CustomerSkillVO {
+public class CustomerSkillUpdateVO {
 	
 	/**技能ID*/
 	private Long  customerSkillId;
@@ -22,17 +24,14 @@ public class CustomerSkillVO {
     private Long skillItemId;
     /**服务单位（小时/半小时/次）*/
     private String serviceUnit;
-    /**已选中的价格*/
+    /**选中的价格*/
     private BigDecimal skillPrice;
     /**技能开关 1：开启  0：关闭*/
     private Integer switchStatus;
-
-    /**已选中的折扣*/
+    /**接单开关 1：开启  0：关闭*/
+    private Integer receiveStatus;
+    /**选中的折扣*/
     private BigDecimal discountRate;
-    /**折扣列表*/
-    private List<BigDecimal>  discontRateList;
-    /**技能价格列表*/
-    private List<BigDecimal>  skillPriceList;
     
     
 	public Long getCustomerSkillId() {
@@ -71,24 +70,18 @@ public class CustomerSkillVO {
 	public void setSwitchStatus(Integer switchStatus) {
 		this.switchStatus = switchStatus;
 	}
-
+	public Integer getReceiveStatus() {
+		return receiveStatus;
+	}
+	public void setReceiveStatus(Integer receiveStatus) {
+		this.receiveStatus = receiveStatus;
+	}
 	public BigDecimal getDiscountRate() {
 		return discountRate;
 	}
 	public void setDiscountRate(BigDecimal discountRate) {
 		this.discountRate = discountRate;
 	}
-	public List<BigDecimal> getDiscontRateList() {
-		return discontRateList;
-	}
-	public void setDiscontRateList(List<BigDecimal> discontRateList) {
-		this.discontRateList = discontRateList;
-	}
-	public List<BigDecimal> getSkillPriceList() {
-		return skillPriceList;
-	}
-	public void setSkillPriceList(List<BigDecimal> skillPriceList) {
-		this.skillPriceList = skillPriceList;
-	}
+	
 	
 }

@@ -80,6 +80,9 @@ public interface UserFunctionType {
 	
 	//查看我的技能列表
 	public static final String QUERY_MY_SKILL = "0011135";
+	
+	//保存大V技能审核信息
+	public static final String SAVE_DV_SKILL_AUDIT = "0011136";
 
 	/**
 	 * 修改昵称

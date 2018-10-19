@@ -169,80 +169,24 @@
 
     </dependencies>
 
-    <profiles>
-        <profile>
-            <id>vpro</id>
-            <properties>
-                <package.environment>profiles/vpro</package.environment>
-            </properties>
-        </profile>
-        <profile>
-            <id>vtest01</id>
-            <properties>
-                <package.environment>profiles/vtest01</package.environment>
-            </properties>
-        </profile>
-        <profile>
-            <id>vdev</id>
-            <properties>
-                <package.environment>profiles/vdev</package.environment>
-            </properties>
-        </profile>
-    </profiles>
-
     <build>
+        <finalName>voice-task</finalName>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <includes>
+                    <include>*</include>
+                    <include>**/*</include>
+                </includes>
+                <filtering>false</filtering>
+            </resource>
+        </resources>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
         </plugins>
-
-        <resources>
-            <resource>
-                <directory>src/main/resources</directory>
-                <filtering>false</filtering>
-                <excludes>
-                    <exclude>profiles/**</exclude>
-                </excludes>
-            </resource>
-            <resource>
-                <directory>src/main/resources/${package.environment}</directory>
-                <filtering>true</filtering>
-                <excludes>
-                    <exclude>profiles/**</exclude>
-                </excludes>
-            </resource>
-        </resources>
     </build>
-
-    <repositories>
-        <repository>
-            <id>nexus-private-public</id>
-            <url>http://pre.xnshandai.net/nexus/content/groups/nexus_public/</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-                <updatePolicy>always</updatePolicy>
-                <checksumPolicy>fail</checksumPolicy>
-            </snapshots>
-        </repository>
-    </repositories>
-    <pluginRepositories>
-        <pluginRepository>
-            <id>nexus-private-public</id>
-            <url>http://pre.xnshandai.net/nexus/content/groups/nexus_public/</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-                <updatePolicy>always</updatePolicy>
-                <checksumPolicy>fail</checksumPolicy>
-            </snapshots>
-        </pluginRepository>
-    </pluginRepositories>
 
 </project>
