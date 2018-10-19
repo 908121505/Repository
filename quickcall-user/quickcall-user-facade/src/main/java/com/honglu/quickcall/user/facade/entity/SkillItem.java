@@ -3,147 +3,114 @@ package com.honglu.quickcall.user.facade.entity;
 import java.util.Date;
 
 public class SkillItem {
-   
-    private Long id;
 
-   
-    private String name;
+	private Long id;
 
-   
-    private String skillDescribe;
+	private String skillItemName;
 
-    
-    private String imageUrl;
+	private String skillDescribe;
 
-   
-    private Integer sort;
+	private String imageUrl;
 
-    private Integer skillStatus;
+	private Integer sort;
 
-    
-    private Date createTime;
+	private Integer skillStatus;
 
-   
-    private Date modifyTime;
+	private Date createTime;
 
-    
-    private String createMan;
+	private Date modifyTime;
 
-   
-    private String modifyMan;
+	private String createMan;
 
-    
-    private String remark;
+	private String modifyMan;
 
-   
-    public Long getId() {
-        return id;
-    }
+	private String remark;
 
-    
-    public void setId(Long id) {
-        this.id = id;
-    }
+	public Long getId() {
+		return id;
+	}
 
-    
-    public String getName() {
-        return name;
-    }
+	public void setId(Long id) {
+		this.id = id;
+	}
 
-    
-    public void setName(String name) {
-        this.name = name == null ? null : name.trim();
-    }
+	public String getSkillItemName() {
+		return skillItemName;
+	}
 
-   
-    public String getSkillDescribe() {
-        return skillDescribe;
-    }
+	public void setSkillItemName(String skillItemName) {
+		this.skillItemName = skillItemName;
+	}
 
-   
-    public void setSkillDescribe(String skillDescribe) {
-        this.skillDescribe = skillDescribe == null ? null : skillDescribe.trim();
-    }
+	public String getSkillDescribe() {
+		return skillDescribe;
+	}
 
-    
-    public String getImageUrl() {
-        return imageUrl;
-    }
+	public void setSkillDescribe(String skillDescribe) {
+		this.skillDescribe = skillDescribe == null ? null : skillDescribe.trim();
+	}
 
-    
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl == null ? null : imageUrl.trim();
-    }
+	public String getImageUrl() {
+		return imageUrl;
+	}
 
-    
-    public Integer getSort() {
-        return sort;
-    }
+	public void setImageUrl(String imageUrl) {
+		this.imageUrl = imageUrl == null ? null : imageUrl.trim();
+	}
 
-    
-    public void setSort(Integer sort) {
-        this.sort = sort;
-    }
+	public Integer getSort() {
+		return sort;
+	}
 
-    
+	public void setSort(Integer sort) {
+		this.sort = sort;
+	}
 
-   
-    public Integer getSkillStatus() {
-        return skillStatus;
-    }
+	public Integer getSkillStatus() {
+		return skillStatus;
+	}
 
-    
-    public void setSkillStatus(Integer skillStatus) {
-        this.skillStatus = skillStatus;
-    }
+	public void setSkillStatus(Integer skillStatus) {
+		this.skillStatus = skillStatus;
+	}
 
-    
-    public Date getCreateTime() {
-        return createTime;
-    }
+	public Date getCreateTime() {
+		return createTime;
+	}
 
-   
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
+	}
 
-    
-    public Date getModifyTime() {
-        return modifyTime;
-    }
+	public Date getModifyTime() {
+		return modifyTime;
+	}
 
-    
-    public void setModifyTime(Date modifyTime) {
-        this.modifyTime = modifyTime;
-    }
+	public void setModifyTime(Date modifyTime) {
+		this.modifyTime = modifyTime;
+	}
 
-    
-    public String getCreateMan() {
-        return createMan;
-    }
+	public String getCreateMan() {
+		return createMan;
+	}
 
-    
-    public void setCreateMan(String createMan) {
-        this.createMan = createMan == null ? null : createMan.trim();
-    }
+	public void setCreateMan(String createMan) {
+		this.createMan = createMan == null ? null : createMan.trim();
+	}
 
-    
-    public String getModifyMan() {
-        return modifyMan;
-    }
+	public String getModifyMan() {
+		return modifyMan;
+	}
 
-   
-    public void setModifyMan(String modifyMan) {
-        this.modifyMan = modifyMan == null ? null : modifyMan.trim();
-    }
+	public void setModifyMan(String modifyMan) {
+		this.modifyMan = modifyMan == null ? null : modifyMan.trim();
+	}
 
-  
-    public String getRemark() {
-        return remark;
-    }
+	public String getRemark() {
+		return remark;
+	}
 
-    
-    public void setRemark(String remark) {
-        this.remark = remark == null ? null : remark.trim();
-    }
+	public void setRemark(String remark) {
+		this.remark = remark == null ? null : remark.trim();
+	}
 }

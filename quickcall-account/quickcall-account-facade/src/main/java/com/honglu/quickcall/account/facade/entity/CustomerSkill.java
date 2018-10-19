@@ -12,7 +12,7 @@ import java.util.Date;
  * @date: 2018年10月19日 上午11:56:54
  */
 public class CustomerSkill {
-    private Long userSkillId;
+    private Long customerSkillId;
 
     private Long certifyId;
 
@@ -66,15 +66,17 @@ public class CustomerSkill {
 
     private String remark;
 
-    public Long getUserSkillId() {
-        return userSkillId;
-    }
+  
 
-    public void setUserSkillId(Long userSkillId) {
-        this.userSkillId = userSkillId;
-    }
+    public Long getCustomerSkillId() {
+		return customerSkillId;
+	}
 
-    public Long getCertifyId() {
+	public void setCustomerSkillId(Long customerSkillId) {
+		this.customerSkillId = customerSkillId;
+	}
+
+	public Long getCertifyId() {
         return certifyId;
     }
 

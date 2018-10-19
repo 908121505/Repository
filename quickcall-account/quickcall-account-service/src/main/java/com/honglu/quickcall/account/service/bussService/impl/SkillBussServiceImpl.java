@@ -18,14 +18,14 @@ import com.honglu.quickcall.account.facade.code.AccountBizReturnCode;
 import com.honglu.quickcall.account.facade.constants.OrderSkillConstants;
 import com.honglu.quickcall.account.facade.entity.Product;
 import com.honglu.quickcall.account.facade.entity.Skill;
-import com.honglu.quickcall.account.facade.exchange.request.DaVListBySkillIdRequest;
+import com.honglu.quickcall.account.facade.exchange.request.DaVListBySkillItemIdRequest;
 import com.honglu.quickcall.account.facade.exchange.request.FirstPageDaVinfoRequest;
 import com.honglu.quickcall.account.facade.exchange.request.FirstPageSkillinfoRequest;
 import com.honglu.quickcall.account.facade.exchange.request.SkillInfoRequest;
 import com.honglu.quickcall.account.facade.exchange.request.SkillUpdateRequest;
 import com.honglu.quickcall.account.facade.vo.DaVinfoListVO;
 import com.honglu.quickcall.account.facade.vo.DaVinfoVO;
-import com.honglu.quickcall.account.facade.vo.FirstPageSkillinfoVO;
+import com.honglu.quickcall.account.facade.vo.FirstPageSkillIteminfoVO;
 import com.honglu.quickcall.account.facade.vo.SkillInfoVO;
 import com.honglu.quickcall.account.facade.vo.SkillVO;
 import com.honglu.quickcall.account.facade.vo.VoiceVO;
@@ -223,11 +223,11 @@ public class SkillBussServiceImpl implements ISkillBussService {
 
 
 	@Override
-	public CommonResponse getFirstPageSkillinfo(FirstPageSkillinfoRequest request) {
+	public CommonResponse getFirstPageSkillItemInfo(FirstPageSkillinfoRequest request) {
 		if (request == null ) {
 			throw new BizException(AccountBizReturnCode.paramError, "查询技能列表参数异常");
 		}
-		List<FirstPageSkillinfoVO>   resultList = productSkillService.selectPartSkill();
+		List<FirstPageSkillIteminfoVO>   resultList = productSkillService.selectPartSkill();
 		CommonResponse commonResponse = commonService.getCommonResponse();
 		commonResponse.setData(resultList);
 		LOGGER.info("用户编号为：" + request.getCustomerId() + "查询成功");
@@ -237,12 +237,12 @@ public class SkillBussServiceImpl implements ISkillBussService {
 
 
 	@Override
-	public CommonResponse getDaVListBySkillId(DaVListBySkillIdRequest request) {
+	public CommonResponse getDaVListBySkillItemId(DaVListBySkillItemIdRequest request) {
 		if (request == null ) {
 			throw new BizException(AccountBizReturnCode.paramError, "查询技能大V参数异常");
 		}
-		Long  skillId = request.getSkillId();
-		List<DaVinfoVO>    resultList = productSkillService.getDaVListBySkillId(skillId);
+		Long  skillItemId = request.getSkillItemId();
+		List<DaVinfoVO>    resultList = productSkillService.getDaVListBySkillId(skillItemId);
 		CommonResponse commonResponse = commonService.getCommonResponse();
 		commonResponse.setData(resultList);
 		LOGGER.info("用户编号为：" + request.getCustomerId() + "查询成功");

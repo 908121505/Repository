@@ -236,7 +236,7 @@
   
   
   <!-- 获取全部技能分类 -->
-  <select id="selectPartSkill" resultType="com.honglu.quickcall.account.facade.vo.FirstPageSkillinfoVO" >
+  <select id="selectPartSkill" resultType="com.honglu.quickcall.account.facade.vo.FirstPageSkillIteminfoVO" >
 <!-- 		SELECT
 			sk.id  as  skillId,
 			sk.name as  name,

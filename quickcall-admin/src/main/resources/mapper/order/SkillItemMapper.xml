@@ -3,7 +3,7 @@
 <mapper namespace="SkillItem" >
   <resultMap id="BaseResultMap" type="com.calf.module.order.entity.SkillItem" >
     <id column="id" property="id" jdbcType="BIGINT" />
-    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="skill_item_name" property="skillItemName" jdbcType="VARCHAR" />
     <result column="skill_describe" property="skillDescribe" jdbcType="VARCHAR" />
     <result column="image_url" property="imageUrl" jdbcType="VARCHAR" />
     <result column="sort" property="sort" jdbcType="SMALLINT" />
@@ -17,7 +17,7 @@
 
 
   <sql id="Base_Column_List" >
-    id, name, skill_describe, image_url, sort, skill_status, create_time, 
+    id, skill_item_name, skill_describe, image_url, sort, skill_status, create_time, 
     modify_time, create_man, modify_man, remark
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
@@ -33,12 +33,12 @@
 
 
   <insert id="insert" parameterType="com.calf.module.order.entity.SkillItem" >
-    insert into skill_item (id, name, skill_describe, 
+    insert into skill_item (id, skill_item_name, skill_describe, 
       image_url, sort, 
       skill_status, create_time, modify_time, 
       create_man, modify_man, remark
       )
-    values (#{id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{skillDescribe,jdbcType=VARCHAR}, 
+    values (#{id,jdbcType=BIGINT}, #{skillItemName,jdbcType=VARCHAR}, #{skillDescribe,jdbcType=VARCHAR}, 
       #{imageUrl,jdbcType=VARCHAR}, #{sort,jdbcType=SMALLINT},
       #{skillStatus,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP}, #{modifyTime,jdbcType=TIMESTAMP}, 
       #{createMan,jdbcType=VARCHAR}, #{modifyMan,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}
@@ -52,8 +52,8 @@
       <if test="id != null" >
         id,
       </if>
-      <if test="name != null" >
-        name,
+      <if test="skillItemName != null" >
+        skill_item_name,
       </if>
       <if test="skillDescribe != null" >
         skill_describe,
@@ -88,8 +88,8 @@
       <if test="id != null" >
         #{id,jdbcType=BIGINT},
       </if>
-      <if test="name != null" >
-        #{name,jdbcType=VARCHAR},
+      <if test="skillItemName != null" >
+        #{skillItemName,jdbcType=VARCHAR},
       </if>
       <if test="skillDescribe != null" >
         #{skillDescribe,jdbcType=VARCHAR},
@@ -125,8 +125,8 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.calf.module.order.entity.SkillItem" >
     update skill_item
     <set >
-      <if test="name != null" >
-        name = #{name,jdbcType=VARCHAR},
+      <if test="skillItemName != null" >
+        skill_item_name = #{skillItemName,jdbcType=VARCHAR},
       </if>
       <if test="skillDescribe != null" >
         skill_describe = #{skillDescribe,jdbcType=VARCHAR},
@@ -163,7 +163,7 @@
   
   <update id="updateByPrimaryKey" parameterType="com.calf.module.order.entity.SkillItem" >
     update skill_item
-    set name = #{name,jdbcType=VARCHAR},
+    set skill_item_name = #{skillItemName,jdbcType=VARCHAR},
       skill_describe = #{skillDescribe,jdbcType=VARCHAR},
       image_url = #{imageUrl,jdbcType=VARCHAR},
       sort = #{sort,jdbcType=SMALLINT},
