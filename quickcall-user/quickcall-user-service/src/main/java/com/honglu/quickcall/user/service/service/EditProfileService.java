@@ -38,4 +38,10 @@ public interface EditProfileService {
      * @return
      */
     CommonResponse updateAppearance(UpdateAppearanceReq params);
+    /**
+     * 修改兴趣
+     * @param params
+     * @return
+     */
+    CommonResponse updateInterest(UpdateInterestReq params);
 }

@@ -101,5 +101,9 @@ public interface UserFunctionType {
 	 * 修改形象照
 	 */
 	String updateAppearance = "0011144";
+	/**
+	 * 修改兴趣
+	 */
+	String updateInterest = "0011145";
 
 }
