@@ -1,6 +1,7 @@
 package com.honglu.quickcall.user.facade.vo;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 public class MySkillVO implements  Serializable{
 
@@ -17,13 +18,26 @@ public class MySkillVO implements  Serializable{
 	private Integer auditStatus = 0;
 	//技能编号
 	private Long skillId;
+	//技能录制声音url
+	private String skillVoiceUrl;
+	//技能录制声音时间
+	private BigDecimal skillVoiceTime;
+	//技能支持申请状态
+	private Integer skillStatus;
 	
-	public MySkillVO (String name,String imageUrl,Integer auditStatus,Long skillId){
+	public MySkillVO (String name,String imageUrl,Integer auditStatus,Long skillId,Integer skillStatus ){
 		super();
 		this.name = name;
 		this.imageUrl = imageUrl;
 		this.auditStatus = auditStatus;
 		this.skillId = skillId;
+		this.skillStatus = skillStatus;
+	}
+	
+	public MySkillVO(String name,String imageUrl,Integer auditStatus,Long skillId,String skillVoiceUrl,BigDecimal skillVoiceTime,Integer skillStatus){
+		this(name,imageUrl,auditStatus,skillId,skillStatus);
+		this.skillVoiceUrl = skillVoiceUrl;
+		this.skillVoiceTime = skillVoiceTime;
 	}
 
 	public String getName() {
@@ -57,6 +71,31 @@ public class MySkillVO implements  Serializable{
 	public void setSkillId(Long skillId) {
 		this.skillId = skillId;
 	}
+
+	public String getSkillVoiceUrl() {
+		return skillVoiceUrl;
+	}
+
+	public void setSkillVoiceUrl(String skillVoiceUrl) {
+		this.skillVoiceUrl = skillVoiceUrl;
+	}
+
+	public Integer getSkillStatus() {
+		return skillStatus;
+	}
+
+	public void setSkillStatus(Integer skillStatus) {
+		this.skillStatus = skillStatus;
+	}
+
+	public BigDecimal getSkillVoiceTime() {
+		return skillVoiceTime;
+	}
+
+	public void setSkillVoiceTime(BigDecimal skillVoiceTime) {
+		this.skillVoiceTime = skillVoiceTime;
+	}
+
 
 	
 	

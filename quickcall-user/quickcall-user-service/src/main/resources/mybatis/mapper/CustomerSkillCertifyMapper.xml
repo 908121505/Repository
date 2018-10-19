@@ -9,9 +9,9 @@
 		<result property="skillItemId" column="skill_item_id" javaType="java.lang.Long"></result>
 		<result property="auditStatus" column="audit_status" javaType="java.lang.Integer"></result>
 		<result property="skillVoiceUrl" column="skill_voice_url" javaType="java.lang.String"></result>
-		<result property="skillVoiceTime" column="skill_voice_time" javaType="java.lang.String"></result>
+		<result property="skillVoiceTime" column="skill_voice_time" jdbcType="DECIMAL"></result>
 		<result property="skillVoiceUrlTmp" column="skill_voice_url_tmp" javaType="java.lang.String"></result>
-		<result property="skillVoiceTimeTmp" column="skill_voice_time_tmp" javaType="java.lang.String"></result>
+		<result property="skillVoiceTimeTmp" column="skill_voice_time_tmp" jdbcType="DECIMAL"></result>
 		<result property="isAudited" column="is_audited" javaType="java.lang.Integer"></result>
 		<result property="createTime" column="create_time" javaType="java.lang.String"></result>
 		<result property="modifyTime" column="modify_time" javaType="java.lang.String"></result>

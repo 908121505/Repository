@@ -1,5 +1,6 @@
 package com.honglu.quickcall.user.service.service.impl;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -887,24 +888,18 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 		List<MySkillVO> haveSkill = new ArrayList<MySkillVO>();
 		//未解锁的技能列表
 		List<MySkillVO> noHaveSkill = new ArrayList<MySkillVO>();
-		MySkillVO m1 = new MySkillVO("甜蜜互动","http://test-guanjia.oss-cn-shanghai.aliyuncs.com/voice/banner/1539583182452.png",1,1809221430063474300L);
-		MySkillVO m2 = new MySkillVO("午夜畅聊","http://test-guanjia.oss-cn-shanghai.aliyuncs.com/voice/banner/1539583354838.png",2,1809221430063474300L);
-		MySkillVO m3 = new MySkillVO("游戏互动","http://test-guanjia.oss-cn-shanghai.aliyuncs.com/voice/banner/1539583368153.png",1,1809221430063474300L);
-		MySkillVO m4 = new MySkillVO("哄睡","http://test-guanjia.oss-cn-shanghai.aliyuncs.com/voice/banner/1539583182452.png",0,1809221430063474300L);
-		MySkillVO m5 = new MySkillVO("声优聊天","http://test-guanjia.oss-cn-shanghai.aliyuncs.com/voice/banner/1539583182452.png",0,1809221430063474300L);
-		MySkillVO m6 = new MySkillVO("哄睡","http://test-guanjia.oss-cn-shanghai.aliyuncs.com/voice/banner/1539583182452.png",0,1809221430063474300L);
-		MySkillVO m7 = new MySkillVO("哄睡","http://test-guanjia.oss-cn-shanghai.aliyuncs.com/voice/banner/1539583182452.png",1,1809221430063474300L);
-		MySkillVO m8 = new MySkillVO("哄睡","http://test-guanjia.oss-cn-shanghai.aliyuncs.com/voice/banner/1539583182452.png",0,1809221430063474300L);
-		MySkillVO m9 = new MySkillVO("哄睡","http://test-guanjia.oss-cn-shanghai.aliyuncs.com/voice/banner/1539583182452.png",0,1809221430063474300L);
+		MySkillVO m1 = new MySkillVO("甜蜜互动","http://test-guanjia.oss-cn-shanghai.aliyuncs.com/voice/banner/1539583182452.png",1,1809221430063474300L,1);
+		MySkillVO m2 = new MySkillVO("午夜畅聊","http://test-guanjia.oss-cn-shanghai.aliyuncs.com/voice/banner/1539583354838.png",2,1809221430063474300L,"http://test-guanjia.oss-cn-shanghai.aliyuncs.com/voice/user/audio/db91943b9bb04d6b97127dce1a37a9fe.mp3",new BigDecimal(8.0),1);
+		MySkillVO m3 = new MySkillVO("游戏互动","http://test-guanjia.oss-cn-shanghai.aliyuncs.com/voice/banner/1539583368153.png",1,1809221430063474300L,1);
+		MySkillVO m4 = new MySkillVO("哄睡","http://test-guanjia.oss-cn-shanghai.aliyuncs.com/voice/banner/1539583182452.png",0,1809221430063474300L,0);
+		MySkillVO m5 = new MySkillVO("声优聊天","http://test-guanjia.oss-cn-shanghai.aliyuncs.com/voice/banner/1539583182452.png",0,1809221430063474300L,1);
+		MySkillVO m6 = new MySkillVO("哄睡","http://test-guanjia.oss-cn-shanghai.aliyuncs.com/voice/banner/1539583182452.png",0,1809221430063474300L,1);
 		haveSkill.add(m1);
 		haveSkill.add(m2);
 		noHaveSkill.add(m3);
 		noHaveSkill.add(m4);
 		noHaveSkill.add(m5);
 		noHaveSkill.add(m6);
-		noHaveSkill.add(m7);
-		noHaveSkill.add(m8);
-		noHaveSkill.add(m9);
 		Map<String,Object> map = new HashMap<String,Object>();
 		logger.info("用户编号为："+params.getCustomerId()+"查询我的技能成功");
 		map.put("unlockList", haveSkill);
