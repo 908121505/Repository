@@ -1,6 +1,5 @@
 package com.honglu.quickcall.account.facade.vo;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -17,8 +16,8 @@ public class CustomerSkillInfoVO {
 	
 	
 	private List<CustomerSkillVO>   customerSkillList;
-    /**服务结束时间*/
-    private Date endServiceTime;
+    /**服务结束时间字符串，格式10:00*/
+    private String endServiceTimeStr;
     /**每周数据*/
     private  HashMap<String, Integer>  weekDataMap; 
     /**接单开关1：开启  0 ：关闭*/
@@ -30,13 +29,11 @@ public class CustomerSkillInfoVO {
 	public void setReceiveStatus(Integer receiveStatus) {
 		this.receiveStatus = receiveStatus;
 	}
-    
-	
-	public Date getEndServiceTime() {
-		return endServiceTime;
+	public String getEndServiceTimeStr() {
+		return endServiceTimeStr;
 	}
-	public void setEndServiceTime(Date endServiceTime) {
-		this.endServiceTime = endServiceTime;
+	public void setEndServiceTimeStr(String endServiceTimeStr) {
+		this.endServiceTimeStr = endServiceTimeStr;
 	}
 	public HashMap<String, Integer> getWeekDataMap() {
 		return weekDataMap;
