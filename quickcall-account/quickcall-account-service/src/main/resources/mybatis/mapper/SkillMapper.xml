@@ -237,29 +237,10 @@
   
   <!-- 获取全部技能分类 -->
   <select id="selectPartSkill" resultType="com.honglu.quickcall.account.facade.vo.FirstPageSkillIteminfoVO" >
-<!-- 		SELECT
-			sk.id  as  skillId,
-			sk.name as  name,
-			sk.title_url  as  titleUrl
-		FROM
-			(
-				SELECT
-					count(1) AS count,
-					skill_id
-				FROM
-					product
-				WHERE
-					product_status = 1
-				GROUP BY
-					skill_id
-			) tmp
-		LEFT JOIN skill sk ON sk.id = tmp.skill_id
-		ORDER BY
-			tmp.count DESC  -->
+
 		SELECT
-			id  as  skillId,
-			name as  name,
-			title_url  as  titleUrl,
+			id  as  skillItemId,
+			name as  skillItemName,
 			image_url  as  imageUrl
 		FROM
 			skill  
