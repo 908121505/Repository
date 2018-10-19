@@ -26,13 +26,14 @@ public class CustomerSkillVO {
     private BigDecimal skillPrice;
     /**技能开关 1：开启  0：关闭*/
     private Integer switchStatus;
-
     /**已选中的折扣*/
     private BigDecimal discountRate;
     /**折扣列表*/
     private List<BigDecimal>  discontRateList;
     /**技能价格列表*/
     private List<BigDecimal>  skillPriceList;
+    /**服务单位列表*/
+    private List<String>  serviceUnitList;
     
     
 	public Long getCustomerSkillId() {
@@ -89,6 +90,12 @@ public class CustomerSkillVO {
 	}
 	public void setSkillPriceList(List<BigDecimal> skillPriceList) {
 		this.skillPriceList = skillPriceList;
+	}
+	public List<String> getServiceUnitList() {
+		return serviceUnitList;
+	}
+	public void setServiceUnitList(List<String> serviceUnitList) {
+		this.serviceUnitList = serviceUnitList;
 	}
 	
 }
