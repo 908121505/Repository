@@ -17,7 +17,7 @@ public class DaVinfoVO implements  Serializable{
 	/**客户Id*/
 	private Long  customerId;
 	/**用户技能ID*/
-	private Long  userSkillId; 
+	private Long  customerSkillId; 
 	/**运营标签URL*/
 	private String  bussTagUrl;
 	/**品类标签URL*/
@@ -46,12 +46,12 @@ public class DaVinfoVO implements  Serializable{
 	}
 	
 	
-	
-	public Long getUserSkillId() {
-		return userSkillId;
+
+	public Long getCustomerSkillId() {
+		return customerSkillId;
 	}
-	public void setUserSkillId(Long userSkillId) {
-		this.userSkillId = userSkillId;
+	public void setCustomerSkillId(Long customerSkillId) {
+		this.customerSkillId = customerSkillId;
 	}
 	public String getBussTagUrl() {
 		return bussTagUrl;

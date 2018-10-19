@@ -91,7 +91,7 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 		infoVO.setCustomerId(100L);
 		infoVO.setNickName("小陈");
 		infoVO.setPrice(new BigDecimal(40));
-		infoVO.setUserSkillId(1000L);
+		infoVO.setCustomerSkillId(1000L);
 		int rd=Math.random() >0.5?1:0; 
 		infoVO.setSex(rd);
 		infoVO.setUnitName(unitName);

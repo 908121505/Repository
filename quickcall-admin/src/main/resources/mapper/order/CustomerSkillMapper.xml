@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="CustomerSkill" >
   <resultMap id="BaseResultMap" type="com.calf.module.order.entity.CustomerSkill" >
-    <id column="user_skill_id" property="userSkillId" jdbcType="BIGINT" />
+    <id column="customer_skill_id" property="customerSkillId" jdbcType="BIGINT" />
     <result column="certify_id" property="certifyId" jdbcType="BIGINT" />
     <result column="customer_id" property="customerId" jdbcType="BIGINT" />
     <result column="skill_item_id" property="skillItemId" jdbcType="BIGINT" />
@@ -32,7 +32,7 @@
   </resultMap>
   
   <sql id="Base_Column_List" >
-    user_skill_id, certify_id, customer_id, skill_item_id, product_name, service_unit, 
+    customer_skill_id, certify_id, customer_id, skill_item_id, product_name, service_unit, 
     product_price, audit_status, product_status, receive_status, discount_rate, discount_price, 
     monday, tuesday, wednesday, thursday, friday, saturday, sunday, start_service_time, 
     end_service_time, product_describe, create_time, modify_time, create_man, modify_man, 
@@ -43,16 +43,16 @@
     select 
     <include refid="Base_Column_List" />
     from customer_skill
-    where user_skill_id = #{userSkillId,jdbcType=BIGINT}
+    where customer_skill_id = #{customerSkillId,jdbcType=BIGINT}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
     delete from customer_skill
-    where user_skill_id = #{userSkillId,jdbcType=BIGINT}
+    where customer_skill_id = #{customerSkillId,jdbcType=BIGINT}
   </delete>
   
   
   <insert id="insert" parameterType="com.calf.module.order.entity.CustomerSkill" >
-    insert into customer_skill (user_skill_id, certify_id, customer_id, 
+    insert into customer_skill (customer_skill_id, certify_id, customer_id, 
       skill_item_id, product_name, service_unit, 
       product_price, audit_status, product_status, 
       receive_status, discount_rate, discount_price, 
@@ -62,7 +62,7 @@
       product_describe, create_time, modify_time, 
       create_man, modify_man, remark
       )
-    values (#{userSkillId,jdbcType=BIGINT}, #{certifyId,jdbcType=BIGINT}, #{customerId,jdbcType=BIGINT}, 
+    values (#{customerSkillId,jdbcType=BIGINT}, #{certifyId,jdbcType=BIGINT}, #{customerId,jdbcType=BIGINT}, 
       #{skillItemId,jdbcType=BIGINT}, #{productName,jdbcType=VARCHAR}, #{serviceUnit,jdbcType=VARCHAR}, 
       #{productPrice,jdbcType=DECIMAL}, #{auditStatus,jdbcType=TINYINT}, #{productStatus,jdbcType=TINYINT}, 
       #{receiveStatus,jdbcType=TINYINT}, #{discountRate,jdbcType=DECIMAL}, #{discountPrice,jdbcType=DECIMAL}, 
@@ -77,8 +77,8 @@
    
     insert into customer_skill
     <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="userSkillId != null" >
-        user_skill_id,
+      <if test="customerSkillId != null" >
+        customer_skill_id,
       </if>
       <if test="certifyId != null" >
         certify_id,
@@ -160,8 +160,8 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="userSkillId != null" >
-        #{userSkillId,jdbcType=BIGINT},
+      <if test="customerSkillId != null" >
+        #{customerSkillId,jdbcType=BIGINT},
       </if>
       <if test="certifyId != null" >
         #{certifyId,jdbcType=BIGINT},
@@ -327,7 +327,7 @@
         remark = #{remark,jdbcType=VARCHAR},
       </if>
     </set>
-    where user_skill_id = #{userSkillId,jdbcType=BIGINT}
+    where customer_skill_id = #{customerSkillId,jdbcType=BIGINT}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.calf.module.order.entity.CustomerSkill" >
     update customer_skill
@@ -357,6 +357,6 @@
       create_man = #{createMan,jdbcType=VARCHAR},
       modify_man = #{modifyMan,jdbcType=VARCHAR},
       remark = #{remark,jdbcType=VARCHAR}
-    where user_skill_id = #{userSkillId,jdbcType=BIGINT}
+    where customer_skill_id = #{customerSkillId,jdbcType=BIGINT}
   </update>
 </mapper>
