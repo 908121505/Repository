@@ -96,6 +96,7 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 		infoVO.setSex(rd);
 		infoVO.setUnitName(unitName);
 		infoVO.setCoverUrl(coverUrl);
+		infoVO.setCurrencyName(Math.random() >0.5? "币":"元");
 		return infoVO;
 	}
 
