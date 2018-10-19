@@ -1,8 +1,6 @@
 package com.honglu.quickcall.account.facade.vo;
 
 import java.math.BigDecimal;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -28,8 +26,7 @@ public class CustomerSkillVO {
     private BigDecimal skillPrice;
     /**技能开关 1：开启  0：关闭*/
     private Integer switchStatus;
-    /**接单开关 1：开启  0：关闭*/
-    private Integer receiveStatus;
+
     /**已选中的折扣*/
     private BigDecimal discountRate;
     /**折扣列表*/
@@ -74,12 +71,7 @@ public class CustomerSkillVO {
 	public void setSwitchStatus(Integer switchStatus) {
 		this.switchStatus = switchStatus;
 	}
-	public Integer getReceiveStatus() {
-		return receiveStatus;
-	}
-	public void setReceiveStatus(Integer receiveStatus) {
-		this.receiveStatus = receiveStatus;
-	}
+
 	public BigDecimal getDiscountRate() {
 		return discountRate;
 	}

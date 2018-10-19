@@ -21,6 +21,15 @@ public class CustomerSkillInfoVO {
     private Date endServiceTime;
     /**每周数据*/
     private  HashMap<String, Integer>  weekDataMap; 
+    /**接单开关1：开启  0 ：关闭*/
+    private Integer  receiveStatus;
+    
+	public Integer getReceiveStatus() {
+		return receiveStatus;
+	}
+	public void setReceiveStatus(Integer receiveStatus) {
+		this.receiveStatus = receiveStatus;
+	}
     
 	
 	public Date getEndServiceTime() {

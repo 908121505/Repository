@@ -20,18 +20,19 @@ import com.honglu.quickcall.common.api.exchange.AbstractRequest;
 public class SkillUpdateRequest extends AbstractRequest {
 	
 	
-	private static final long serialVersionUID = -8126898390860808748L;
+	private static final long serialVersionUID = 7188782708444616090L;
 	private List<CustomerSkillUpdateVO>   customerSkillList;
     /**服务结束时间*/
-    private Date endServiceTime;
+    private String endServiceTime;
     /**每周数据*/
     private  HashMap<String, Integer>  weekDataMap; 
     
 	
-	public Date getEndServiceTime() {
+	
+	public String getEndServiceTime() {
 		return endServiceTime;
 	}
-	public void setEndServiceTime(Date endServiceTime) {
+	public void setEndServiceTime(String endServiceTime) {
 		this.endServiceTime = endServiceTime;
 	}
 	public HashMap<String, Integer> getWeekDataMap() {
