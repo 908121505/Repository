@@ -3,19 +3,14 @@ package com.honglu.quickcall.account.service.bussService.impl;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
 
 import com.honglu.quickcall.account.facade.code.AccountBizReturnCode;
-import com.honglu.quickcall.account.facade.constants.OrderSkillConstants;
 import com.honglu.quickcall.account.facade.entity.Product;
 import com.honglu.quickcall.account.facade.entity.Skill;
 import com.honglu.quickcall.account.facade.exchange.request.DaVListBySkillItemIdRequest;
@@ -23,13 +18,10 @@ import com.honglu.quickcall.account.facade.exchange.request.FirstPageDaVinfoRequ
 import com.honglu.quickcall.account.facade.exchange.request.FirstPageSkillinfoRequest;
 import com.honglu.quickcall.account.facade.exchange.request.SkillInfoRequest;
 import com.honglu.quickcall.account.facade.exchange.request.SkillUpdateRequest;
+import com.honglu.quickcall.account.facade.vo.CustomerSkillVO;
 import com.honglu.quickcall.account.facade.vo.DaVinfoListVO;
 import com.honglu.quickcall.account.facade.vo.DaVinfoVO;
 import com.honglu.quickcall.account.facade.vo.FirstPageSkillIteminfoVO;
-import com.honglu.quickcall.account.facade.vo.SkillInfoVO;
-import com.honglu.quickcall.account.facade.vo.SkillVO;
-import com.honglu.quickcall.account.facade.vo.VoiceVO;
-import com.honglu.quickcall.account.facade.vo.VoiceVOCopy;
 import com.honglu.quickcall.account.service.bussService.CommonService;
 import com.honglu.quickcall.account.service.bussService.ISkillBussService;
 import com.honglu.quickcall.account.service.dao.ProductMapper;
@@ -71,86 +63,15 @@ public class SkillBussServiceImpl implements ISkillBussService {
 		Long  customerId =  request.getCustomerId();
 		
 		//
+		List<CustomerSkillVO>  resultList =  new  ArrayList<CustomerSkillVO>();
+		resultList =  productSkillService.querySkillInfoPersonal(customerId);
 		
 		
-		
-		
-		
-		//首先查询所有的技能信息
-		SkillInfoVO  resultVO  = new SkillInfoVO();
-		
-		VoiceVOCopy   voiceQuery    = skillMapper.getVoiceInfo(customerId);
-		VoiceVO  voiceVO  = new VoiceVO(); 
-		if(voiceQuery == null){
-			voiceVO.setVoiceStatus(OrderSkillConstants.VOICE_STATUS_UNEXIST);
-		}else{
-			voiceVO.setVoiceStatus(voiceQuery.getVoiceStatus());
-		
-			BigDecimal  voiceTime =  voiceQuery.getVoiceTime();
-			if(voiceTime == null ||  voiceTime.compareTo(BigDecimal.ZERO)== 0){
-				voiceVO.setVoiceTime(voiceQuery.getVoiceTimeTmp());
-			}else{
-				voiceVO.setVoiceTime(voiceQuery.getVoiceTime());
-			}
-			String  voiceUrl =  voiceQuery.getVoiceUrl();
-			if(StringUtils.isBlank(voiceUrl)){
-				voiceVO.setVoiceUrl(voiceQuery.getVoiceUrlTmp());
-			}else{
-				voiceVO.setVoiceUrl(voiceQuery.getVoiceUrl());
-			}
-		}
-		resultVO.setVoiceVO(voiceVO);
-		
-		List<Skill>   skillList = skillMapper.selectTotalSkill();
-		List<Long>  skillIdList =  new ArrayList<Long>();
-		List<SkillVO>   resultList =  new  ArrayList<SkillVO>();
-		if(CollectionUtils.isEmpty(skillList)){
-			//结果为空直接返回
-		}else{
-			
-			
-			for (Skill skill : skillList) {
-				SkillVO  vo =  new SkillVO();
-				Long  skillId =  skill.getId();
-				skillIdList.add(skillId);
-				vo.setName(skill.getName());
-				vo.setProductStatus(OrderSkillConstants.PRODUCT_STATUS_UN_EFFECTIVE);
-				vo.setSkillId(skillId);
-				vo.setCurrPrice(skill.getMinPrice());
-				vo.setPriceList(commonService.getPriceList(skill));
-				resultList.add(vo);
-				
-			}
-			//
-			List<Product>  prodList = productMapper.selectListBySkillIdList(customerId ,skillIdList);
-			//查询结果为空，则该用户没有一个技能设置
-			if(CollectionUtils.isEmpty(prodList)){
-				
-			}else{
-				//查询结果不为空，则该用户已经设置了相关的技能
-				Map<Long, Product>  prodMap  = new HashMap<Long, Product>();
-				for (Product product : prodList) {
-					Long  pSkillId =  product.getSkillId();
-					prodMap.put(pSkillId, product);
-					
-				}
-				for (SkillVO skillVO : resultList) {
-					Long  skillId =  skillVO.getSkillId();
-					Product  product = prodMap.get(skillId);
-					if(product != null){
-						skillVO.setProductId(product.getProductId());
-						skillVO.setProductStatus(product.getProductStatus());
-						skillVO.setCurrPrice(product.getPrice());
-					}
-				}
-			}
-		}
-		
-		resultVO.setSkillVOList(resultList);
+
 		CommonResponse commonResponse = new CommonResponse();
 		commonResponse.setCode(BizCode.Success);
 		commonResponse.setMessage(BizCode.Success.desc());
-		commonResponse.setData(resultVO);
+		commonResponse.setData(resultList);
 		LOGGER.info("用户编号为：" + request.getCustomerId() + "查询成功");
 		return commonResponse;
 	}
