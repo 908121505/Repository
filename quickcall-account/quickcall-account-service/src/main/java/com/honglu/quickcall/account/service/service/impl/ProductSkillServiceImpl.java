@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.honglu.quickcall.account.facade.vo.DaVinfoListVO;
 import com.honglu.quickcall.account.facade.vo.DaVinfoVO;
-import com.honglu.quickcall.account.facade.vo.FirstPageSkillinfoVO;
+import com.honglu.quickcall.account.facade.vo.FirstPageSkillIteminfoVO;
 import com.honglu.quickcall.account.service.dao.SkillMapper;
 import com.honglu.quickcall.account.service.service.IProductSkillService;
 
@@ -101,7 +101,7 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 	}
 
 	@Override
-	public List<FirstPageSkillinfoVO> selectPartSkill() {
+	public List<FirstPageSkillIteminfoVO> selectPartSkill() {
 		return skillMapper.selectPartSkill();
 	}
 

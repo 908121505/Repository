@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.honglu.quickcall.account.facade.vo.DaVinfoListVO;
 import com.honglu.quickcall.account.facade.vo.DaVinfoVO;
-import com.honglu.quickcall.account.facade.vo.FirstPageSkillinfoVO;
+import com.honglu.quickcall.account.facade.vo.FirstPageSkillIteminfoVO;
 
 /**
  * 
@@ -33,7 +33,7 @@ public interface IProductSkillService {
 	 * 查询所有分类列表
 	 * @return
 	 */
-	List<FirstPageSkillinfoVO> selectPartSkill();
+	List<FirstPageSkillIteminfoVO> selectPartSkill();
 
 	/**
 	 * 获取某分类下的大V列表

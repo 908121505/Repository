@@ -10,13 +10,13 @@ import java.io.Serializable;
  * @author: chenliuguang   
  * @date: 2018年9月23日 下午3:39:33 
  */
-public class FirstPageSkillinfoVO implements  Serializable{
+public class FirstPageSkillIteminfoVO implements  Serializable{
 
-	private static final long serialVersionUID = 4000182731863570309L;
+	private static final long serialVersionUID = -9205076445420748026L;
 	/**技能名称*/
-	private String name ;
+	private String skillItemName ;
     /**技能ID*/
-    private Long  skillId;
+    private Long  skillItemId;
     /**技能ICON图片地址*/
     private String  imageUrl;
     
@@ -35,21 +35,25 @@ public class FirstPageSkillinfoVO implements  Serializable{
 	}
 
 
-	public String getName() {
-		return name;
+	
+
+	public String getSkillItemName() {
+		return skillItemName;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setSkillItemName(String skillItemName) {
+		this.skillItemName = skillItemName;
 	}
 
-	public Long getSkillId() {
-		return skillId;
+	public Long getSkillItemId() {
+		return skillItemId;
 	}
 
-	public void setSkillId(Long skillId) {
-		this.skillId = skillId;
+	public void setSkillItemId(Long skillItemId) {
+		this.skillItemId = skillItemId;
 	}
+
+	
     
     
     

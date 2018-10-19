@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.honglu.quickcall.account.facade.exchange.request.DaVListBySkillIdRequest;
+import com.honglu.quickcall.account.facade.exchange.request.DaVListBySkillItemIdRequest;
 import com.honglu.quickcall.account.facade.exchange.request.FirstPageDaVinfoRequest;
 import com.honglu.quickcall.account.facade.exchange.request.FirstPageSkillinfoRequest;
 import com.honglu.quickcall.account.facade.exchange.request.SkillInfoRequest;
@@ -79,7 +79,7 @@ public class SkillInfoController {
      */
     @RequestMapping(value = "/getDaVListByType", method = RequestMethod.POST)
     @ResponseBody
-    public WebResponseModel getDaVListBySkillId(DaVListBySkillIdRequest params) {
+    public WebResponseModel getDaVListBySkillId(DaVListBySkillItemIdRequest params) {
     	WebResponseModel response = orderInfoService.execute(params);
     	return response;
     }

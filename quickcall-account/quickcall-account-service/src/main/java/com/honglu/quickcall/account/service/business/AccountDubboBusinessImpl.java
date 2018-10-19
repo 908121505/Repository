@@ -60,11 +60,11 @@ public class AccountDubboBusinessImpl implements AccountDubboBusiness {
 				break;
 			/** 首页技能种类展示 */
 			case OrderRequestType.QUERY_SKILL_NAME_FOR_FIRST_PAGE:
-				response = skillService.getFirstPageSkillinfo((FirstPageSkillinfoRequest) request);
+				response = skillService.getFirstPageSkillItemInfo((FirstPageSkillinfoRequest) request);
 				break;
 				/** 首页技能种类展示 */
 			case OrderRequestType.QUERY_DV_LIST_BY_TYPE:
-				response = skillService.getDaVListBySkillId((DaVListBySkillIdRequest) request);
+				response = skillService.getDaVListBySkillItemId((DaVListBySkillItemIdRequest) request);
 				break;
 			/////////////////////////////////////////////////////////////////
 			/** 获取主播开启产品 */

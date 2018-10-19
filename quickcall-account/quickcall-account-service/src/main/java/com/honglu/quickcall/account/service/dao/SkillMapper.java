@@ -3,7 +3,7 @@ package com.honglu.quickcall.account.service.dao;
 import java.util.List;
 
 import com.honglu.quickcall.account.facade.entity.Skill;
-import com.honglu.quickcall.account.facade.vo.FirstPageSkillinfoVO;
+import com.honglu.quickcall.account.facade.vo.FirstPageSkillIteminfoVO;
 import com.honglu.quickcall.account.facade.vo.VoiceVOCopy;
 
 public interface SkillMapper {
@@ -22,7 +22,7 @@ public interface SkillMapper {
     
     List<Skill>  selectTotalSkill();
 
-	List<FirstPageSkillinfoVO> selectPartSkill();
+	List<FirstPageSkillIteminfoVO> selectPartSkill();
 
 	/**根据客户编号查询大V声音信息*/
 	VoiceVOCopy getVoiceInfo(Long customerId);
