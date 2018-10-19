@@ -70,7 +70,6 @@
             <version>1.2.3</version>
         </dependency>
 
-
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
@@ -122,7 +121,6 @@
             <version>2.9.8</version>
         </dependency>
 
-
         <dependency>
             <groupId>com.honglu.quickcall</groupId>
             <artifactId>quickcall-account-facade</artifactId>
@@ -147,11 +145,6 @@
             </exclusions>
             <version>2.8.4</version>
         </dependency>
-        <!--<dependency>-->
-        <!--<groupId>io.dubbo.springboot</groupId>-->
-        <!--<artifactId>spring-boot-starter-dubbo</artifactId>-->
-        <!--<version>1.0.0</version>-->
-        <!--</dependency>-->
         <dependency>
             <groupId>org.apache.zookeeper</groupId>
             <artifactId>zookeeper</artifactId>
@@ -209,13 +202,6 @@
             <version>3.2.10.Final</version>
         </dependency>
 
- <!--        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <version>1.16.10</version>
-        </dependency> -->
-
-
         <!-- 个推 -->
         <dependency>
             <groupId>com.gexin.platform</groupId>
@@ -232,18 +218,34 @@
             <artifactId>gexin-rp-fastjson</artifactId>
             <version>1.0.0.1</version>
         </dependency>
-
         <dependency>
             <groupId>com.gexin.platform</groupId>
             <artifactId>gexin-rp-sdk-base</artifactId>
             <version>4.0.0.22</version>
         </dependency>
-
         <dependency>
             <groupId>com.gexin.platform</groupId>
             <artifactId>gexin-rp-sdk-http</artifactId>
             <version>4.0.1.17</version>
         </dependency>
+
+        <!-- apollo 配置 -->
+        <dependency>
+            <groupId>com.ctrip.framework.apollo</groupId>
+            <artifactId>apollo-core</artifactId>
+            <version>0.11.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.ctrip.framework.apollo</groupId>
+            <artifactId>apollo-client</artifactId>
+            <version>0.11.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>19.0</version>
+        </dependency>
+
     </dependencies>
 
     <profiles>
@@ -294,7 +296,37 @@
     </build>
 
 
+
     <repositories>
+        <repository>
+            <id>nexus-private-public</id>
+            <url>http://pre.xnshandai.net/nexus/content/groups/nexus_public/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>always</updatePolicy>
+                <checksumPolicy>fail</checksumPolicy>
+            </snapshots>
+        </repository>
+    </repositories>
+    <pluginRepositories>
+        <pluginRepository>
+            <id>nexus-private-public</id>
+            <url>http://pre.xnshandai.net/nexus/content/groups/nexus_public/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>always</updatePolicy>
+                <checksumPolicy>fail</checksumPolicy>
+            </snapshots>
+        </pluginRepository>
+    </pluginRepositories>
+
+   <!-- <repositories>
         <repository>
             <id>nexus-local</id>
             <url>http://172.16.0.186:5000/nexus/content/groups/public</url>
@@ -317,5 +349,5 @@
                 <enabled>true</enabled>
             </snapshots>
         </pluginRepository>
-    </pluginRepositories>
+    </pluginRepositories>-->
 </project>
