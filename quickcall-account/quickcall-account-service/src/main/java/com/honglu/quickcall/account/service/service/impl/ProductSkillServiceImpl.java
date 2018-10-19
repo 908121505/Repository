@@ -2,7 +2,6 @@ package com.honglu.quickcall.account.service.service.impl;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -200,7 +199,7 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 		weekDataMap.put("sunday", 1);
 		resultVO.setCustomerSkillList(resultList);
 		
-		resultVO.setEndServiceTime(new Date());
+		resultVO.setEndServiceTimeStr("10:00");
 		resultVO.setWeekDataMap(weekDataMap);
 //		String  json = JSONUtil.toJson(resultVO);
 //		System.out.println("============"+json);
