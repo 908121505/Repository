@@ -1,8 +1,11 @@
 package com.honglu.quickcall.account.facade.exchange.request;
 
-import java.math.BigDecimal;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 
 import com.honglu.quickcall.account.facade.code.OrderRequestType;
+import com.honglu.quickcall.account.facade.vo.CustomerSkillUpdateVO;
 import com.honglu.quickcall.common.api.exchange.AbstractRequest;
 
 
@@ -17,55 +20,34 @@ import com.honglu.quickcall.common.api.exchange.AbstractRequest;
 public class SkillUpdateRequest extends AbstractRequest {
 	
 	
-	private static final long serialVersionUID = 4153471218651383096L;
-	/**客户编号*/
-	private Long  customerId;
-	/**产品ID,可为空，但是有了必须传入*/
-	private Long  productId;
-	/**技能ID*/
-	private Long  skillId;
-	/**产品状态1：开启  0：关闭*/
-	private Integer  productStatus;
-	/**单价*/
-	private BigDecimal  price;
-	/**服务时长(预留字段暂时不用)*/
-	private  Integer  serviceTime;
-	public Long getCustomerId() {
-		return customerId;
+	private static final long serialVersionUID = -8126898390860808748L;
+	private List<CustomerSkillUpdateVO>   customerSkillList;
+    /**服务结束时间*/
+    private Date endServiceTime;
+    /**每周数据*/
+    private  HashMap<String, Integer>  weekDataMap; 
+    
+	
+	public Date getEndServiceTime() {
+		return endServiceTime;
 	}
-	public void setCustomerId(Long customerId) {
-		this.customerId = customerId;
+	public void setEndServiceTime(Date endServiceTime) {
+		this.endServiceTime = endServiceTime;
 	}
-	public Long getProductId() {
-		return productId;
+	public HashMap<String, Integer> getWeekDataMap() {
+		return weekDataMap;
 	}
-	public void setProductId(Long productId) {
-		this.productId = productId;
+	public void setWeekDataMap(HashMap<String, Integer> weekDataMap) {
+		this.weekDataMap = weekDataMap;
 	}
-	public Long getSkillId() {
-		return skillId;
+	public List<CustomerSkillUpdateVO> getCustomerSkillList() {
+		return customerSkillList;
 	}
-	public void setSkillId(Long skillId) {
-		this.skillId = skillId;
+	public void setCustomerSkillList(List<CustomerSkillUpdateVO> customerSkillList) {
+		this.customerSkillList = customerSkillList;
 	}
-	public Integer getProductStatus() {
-		return productStatus;
-	}
-	public void setProductStatus(Integer productStatus) {
-		this.productStatus = productStatus;
-	}
-	public BigDecimal getPrice() {
-		return price;
-	}
-	public void setPrice(BigDecimal price) {
-		this.price = price;
-	}
-	public Integer getServiceTime() {
-		return serviceTime;
-	}
-	public void setServiceTime(Integer serviceTime) {
-		this.serviceTime = serviceTime;
-	}
+	
+	
 
 
 
@@ -76,9 +58,12 @@ public class SkillUpdateRequest extends AbstractRequest {
 	}
 	@Override
 	public String toString() {
-		return "SkillUpdateRequest [customerId=" + customerId + ", productId=" + productId + ", skillId=" + skillId
-				+ ", productStatus=" + productStatus + ", price=" + price + ", serviceTime=" + serviceTime + "]";
+		return "SkillUpdateRequest [customerSkillList=" + customerSkillList + ", endServiceTime=" + endServiceTime
+				+ ", weekDataMap=" + weekDataMap + "]";
 	}
+	
+	
+	
 
 
 
