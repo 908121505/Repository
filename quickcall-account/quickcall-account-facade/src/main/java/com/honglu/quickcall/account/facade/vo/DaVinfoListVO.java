@@ -17,23 +17,24 @@ public class DaVinfoListVO implements  Serializable{
 	
 	private static final long serialVersionUID = -7237402509909241201L;
 	/**技能名称*/
-	private  String   skillName;
+	private  String   skillItemName;
 	/**技能ID*/
-	private  Long   skillId;
+	private  Long   skillItemId;
 	/**大V技能列表*/
 	private List<DaVinfoVO>  daVinfoList;
 	
-	public String getSkillName() {
-		return skillName;
+	
+	public String getSkillItemName() {
+		return skillItemName;
 	}
-	public void setSkillName(String skillName) {
-		this.skillName = skillName;
+	public void setSkillItemName(String skillItemName) {
+		this.skillItemName = skillItemName;
 	}
-	public Long getSkillId() {
-		return skillId;
+	public Long getSkillItemId() {
+		return skillItemId;
 	}
-	public void setSkillId(Long skillId) {
-		this.skillId = skillId;
+	public void setSkillItemId(Long skillItemId) {
+		this.skillItemId = skillItemId;
 	}
 	public List<DaVinfoVO> getDaVinfoList() {
 		return daVinfoList;
