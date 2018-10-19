@@ -38,6 +38,7 @@ import com.honglu.quickcall.user.facade.entity.Occupation;
 import com.honglu.quickcall.user.facade.entity.Orders;
 import com.honglu.quickcall.user.facade.entity.Product;
 import com.honglu.quickcall.user.facade.entity.SensitivityWord;
+import com.honglu.quickcall.user.facade.entity.SkillItem;
 import com.honglu.quickcall.user.facade.entity.in.HomePageLogout;
 import com.honglu.quickcall.user.facade.entity.in.PersonHomePage;
 import com.honglu.quickcall.user.facade.entity.in.VProductTag;
@@ -852,7 +853,7 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 			throw new BizException(BizCode.ParamError, "用戶Id 不能为空");
 		}
 		CommonResponse commonResponse = new CommonResponse();
-//		List<Skill> skillList = skillMapper.selectAllSkill();
+//		List<SkillItem> skillList = skillMapper.selectAllSkill();
 //		List<SkillReview> skillReviewList = skillReviewMapper.findAll(params.getCustomerId());
 //		//已经解锁的技能列表
 //		List<MySkillVO> haveSkill = new ArrayList<MySkillVO>();
@@ -890,10 +891,20 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 		MySkillVO m2 = new MySkillVO("午夜畅聊","http://test-guanjia.oss-cn-shanghai.aliyuncs.com/voice/banner/1539583354838.png",2,1809221430063474300L);
 		MySkillVO m3 = new MySkillVO("游戏互动","http://test-guanjia.oss-cn-shanghai.aliyuncs.com/voice/banner/1539583368153.png",1,1809221430063474300L);
 		MySkillVO m4 = new MySkillVO("哄睡","http://test-guanjia.oss-cn-shanghai.aliyuncs.com/voice/banner/1539583182452.png",0,1809221430063474300L);
+		MySkillVO m5 = new MySkillVO("声优聊天","http://test-guanjia.oss-cn-shanghai.aliyuncs.com/voice/banner/1539583182452.png",0,1809221430063474300L);
+		MySkillVO m6 = new MySkillVO("哄睡","http://test-guanjia.oss-cn-shanghai.aliyuncs.com/voice/banner/1539583182452.png",0,1809221430063474300L);
+		MySkillVO m7 = new MySkillVO("哄睡","http://test-guanjia.oss-cn-shanghai.aliyuncs.com/voice/banner/1539583182452.png",1,1809221430063474300L);
+		MySkillVO m8 = new MySkillVO("哄睡","http://test-guanjia.oss-cn-shanghai.aliyuncs.com/voice/banner/1539583182452.png",0,1809221430063474300L);
+		MySkillVO m9 = new MySkillVO("哄睡","http://test-guanjia.oss-cn-shanghai.aliyuncs.com/voice/banner/1539583182452.png",0,1809221430063474300L);
 		haveSkill.add(m1);
 		haveSkill.add(m2);
 		noHaveSkill.add(m3);
 		noHaveSkill.add(m4);
+		noHaveSkill.add(m5);
+		noHaveSkill.add(m6);
+		noHaveSkill.add(m7);
+		noHaveSkill.add(m8);
+		noHaveSkill.add(m9);
 		Map<String,Object> map = new HashMap<String,Object>();
 		logger.info("用户编号为："+params.getCustomerId()+"查询我的技能成功");
 		map.put("unlockList", haveSkill);

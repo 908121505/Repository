@@ -3,6 +3,7 @@ package com.honglu.quickcall.account.service.service.impl;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -160,19 +161,31 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 			skillVO.setDiscontRateList(discontRateList );
 			skillVO.setDiscountRate(new BigDecimal(70));
 			skillVO.setEndServiceTime(new Date());
-			skillVO.setFriday(Math.random() >0.5?1:0);
-			skillVO.setMonday(Math.random() >0.5?1:0);
+//			skillVO.setFriday(Math.random() >0.5?1:0);
+//			skillVO.setMonday(Math.random() >0.5?1:0);
 			skillVO.setReceiveStatus(Math.random() >0.5?1:0);
-			skillVO.setSaturday(Math.random() >0.5?1:0);
+//			skillVO.setSaturday(Math.random() >0.5?1:0);
 			skillVO.setSkillItemId(1000L);
 			skillVO.setSkillItemName(skillItemName);
 			skillVO.setSkillPrice(new BigDecimal(10));
 			skillVO.setSkillPriceList(skillPriceList);
-			skillVO.setSunday(Math.random() >0.5?1:0);
+//			skillVO.setSunday(Math.random() >0.5?1:0);
 			skillVO.setSwitchStatus(Math.random() >0.5?1:0);
-			skillVO.setThursday(Math.random() >0.5?1:0);
-			skillVO.setTuesday(Math.random() >0.5?1:0);
-			skillVO.setWednesday(Math.random() >0.5?1:0);
+//			skillVO.setThursday(Math.random() >0.5?1:0);
+//			skillVO.setTuesday(Math.random() >0.5?1:0);
+//			skillVO.setWednesday(Math.random() >0.5?1:0);
+			
+			HashMap<String, Integer> weekDataMap = new HashMap<String, Integer>();
+			
+			weekDataMap.put("monday", 1);
+			weekDataMap.put("tuesday", 0);
+			weekDataMap.put("wednesday", 1);
+			weekDataMap.put("thursday", 0);
+			weekDataMap.put("friday", 1);
+			weekDataMap.put("saturday", 0);
+			weekDataMap.put("sunday", 1);
+			
+			skillVO.setWeekDataMap(weekDataMap );
 			resultList.add(skillVO);
 		}
 		return resultList;
