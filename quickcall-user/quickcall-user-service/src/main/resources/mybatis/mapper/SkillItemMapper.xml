@@ -7,7 +7,6 @@
     <result column="skill_describe" property="skillDescribe" jdbcType="VARCHAR" />
     <result column="image_url" property="imageUrl" jdbcType="VARCHAR" />
     <result column="sort" property="sort" jdbcType="SMALLINT" />
-    <result column="price_step" property="priceStep" jdbcType="SMALLINT" />
     <result column="skill_status" property="skillStatus" jdbcType="TINYINT" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
@@ -18,7 +17,7 @@
 
 
   <sql id="Base_Column_List" >
-    id, name, skill_describe, image_url, sort, price_step, skill_status, create_time, 
+    id, name, skill_describe, image_url, sort, skill_status, create_time, 
     modify_time, create_man, modify_man, remark
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
@@ -35,12 +34,12 @@
 
   <insert id="insert" parameterType="com.honglu.quickcall.user.facade.entity.SkillItem" >
     insert into skill_item (id, name, skill_describe, 
-      image_url, sort, price_step, 
+      image_url, sort, 
       skill_status, create_time, modify_time, 
       create_man, modify_man, remark
       )
     values (#{id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{skillDescribe,jdbcType=VARCHAR}, 
-      #{imageUrl,jdbcType=VARCHAR}, #{sort,jdbcType=SMALLINT}, #{priceStep,jdbcType=SMALLINT}, 
+      #{imageUrl,jdbcType=VARCHAR}, #{sort,jdbcType=SMALLINT},  
       #{skillStatus,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP}, #{modifyTime,jdbcType=TIMESTAMP}, 
       #{createMan,jdbcType=VARCHAR}, #{modifyMan,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}
       )
@@ -64,9 +63,6 @@
       </if>
       <if test="sort != null" >
         sort,
-      </if>
-      <if test="priceStep != null" >
-        price_step,
       </if>
       <if test="skillStatus != null" >
         skill_status,
@@ -102,9 +98,6 @@
       </if>
       <if test="sort != null" >
         #{sort,jdbcType=SMALLINT},
-      </if>
-      <if test="priceStep != null" >
-        #{priceStep,jdbcType=SMALLINT},
       </if>
       <if test="skillStatus != null" >
         #{skillStatus,jdbcType=TINYINT},
@@ -143,9 +136,6 @@
       <if test="sort != null" >
         sort = #{sort,jdbcType=SMALLINT},
       </if>
-      <if test="priceStep != null" >
-        price_step = #{priceStep,jdbcType=SMALLINT},
-      </if>
       <if test="skillStatus != null" >
         skill_status = #{skillStatus,jdbcType=TINYINT},
       </if>
@@ -175,7 +165,6 @@
       skill_describe = #{skillDescribe,jdbcType=VARCHAR},
       image_url = #{imageUrl,jdbcType=VARCHAR},
       sort = #{sort,jdbcType=SMALLINT},
-      price_step = #{priceStep,jdbcType=SMALLINT},
       skill_status = #{skillStatus,jdbcType=TINYINT},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       modify_time = #{modifyTime,jdbcType=TIMESTAMP},
