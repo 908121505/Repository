@@ -18,7 +18,7 @@ import com.honglu.quickcall.account.facade.exchange.request.FirstPageDaVinfoRequ
 import com.honglu.quickcall.account.facade.exchange.request.FirstPageSkillinfoRequest;
 import com.honglu.quickcall.account.facade.exchange.request.SkillInfoRequest;
 import com.honglu.quickcall.account.facade.exchange.request.SkillUpdateRequest;
-import com.honglu.quickcall.account.facade.vo.CustomerSkillVO;
+import com.honglu.quickcall.account.facade.vo.CustomerSkillInfoVO;
 import com.honglu.quickcall.account.facade.vo.DaVinfoListVO;
 import com.honglu.quickcall.account.facade.vo.DaVinfoVO;
 import com.honglu.quickcall.account.facade.vo.FirstPageSkillIteminfoVO;
@@ -63,15 +63,11 @@ public class SkillBussServiceImpl implements ISkillBussService {
 		Long  customerId =  request.getCustomerId();
 		
 		//
-		List<CustomerSkillVO>  resultList =  new  ArrayList<CustomerSkillVO>();
-		resultList =  productSkillService.querySkillInfoPersonal(customerId);
-		
-		
-
+		CustomerSkillInfoVO   resultVO =  productSkillService.querySkillInfoPersonal(customerId);
 		CommonResponse commonResponse = new CommonResponse();
 		commonResponse.setCode(BizCode.Success);
 		commonResponse.setMessage(BizCode.Success.desc());
-		commonResponse.setData(resultList);
+		commonResponse.setData(resultVO);
 		LOGGER.info("用户编号为：" + request.getCustomerId() + "查询成功");
 		return commonResponse;
 	}
