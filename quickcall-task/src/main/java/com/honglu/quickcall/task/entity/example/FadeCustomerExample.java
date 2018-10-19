@@ -1,4 +1,4 @@
-package com.honglu.quickcall.task.entity;
+package com.honglu.quickcall.task.entity.example;
 
 import java.util.ArrayList;
 import java.util.Date;

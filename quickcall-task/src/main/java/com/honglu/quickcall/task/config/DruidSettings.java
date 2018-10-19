@@ -1,4 +1,4 @@
-package com.honglu.quickcall.task.entity;
+package com.honglu.quickcall.task.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Profile;

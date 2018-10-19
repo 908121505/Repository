@@ -2,9 +2,8 @@ package com.honglu.quickcall.task.dao;
 
 import java.util.List;
 
-import com.honglu.quickcall.task.entity.FadeCustomer;
 import com.honglu.quickcall.task.entity.Skill;
-import com.honglu.quickcall.task.entity.SkillExample;
+import com.honglu.quickcall.task.entity.example.SkillExample;
 import org.apache.ibatis.annotations.Param;
 
 public interface SkillMapper {

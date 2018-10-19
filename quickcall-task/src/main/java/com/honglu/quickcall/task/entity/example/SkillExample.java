@@ -1,4 +1,4 @@
-package com.honglu.quickcall.task.entity;
+package com.honglu.quickcall.task.entity.example;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;

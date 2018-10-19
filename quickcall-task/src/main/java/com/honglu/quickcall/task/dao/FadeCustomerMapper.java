@@ -3,7 +3,7 @@ package com.honglu.quickcall.task.dao;
 import java.util.List;
 
 import com.honglu.quickcall.task.entity.FadeCustomer;
-import com.honglu.quickcall.task.entity.FadeCustomerExample;
+import com.honglu.quickcall.task.entity.example.FadeCustomerExample;
 import org.apache.ibatis.annotations.Param;
 
 public interface FadeCustomerMapper {
