@@ -15,11 +15,13 @@ import com.honglu.quickcall.common.api.exchange.AbstractRequest;
 public class DaVListBySkillIdRequest  extends  AbstractRequest{
     
 	
-	private static final long serialVersionUID = -4331779888322189242L;
+	private static final long serialVersionUID = 6557505373627777658L;
 	/**客户编号（预留暂时不用）*/
 	private Long  customerId;
 	/**客户编号（预留暂时不用）*/
-	private Long  skillId;
+	private Long  skillItemId;
+	/**当前页*/
+	private Integer  pageIndex;
 
 	public Long getCustomerId() {
 		return customerId;
@@ -30,20 +32,34 @@ public class DaVListBySkillIdRequest  extends  AbstractRequest{
 	
 	
 	
-	public Long getSkillId() {
-		return skillId;
+	public Long getSkillItemId() {
+		return skillItemId;
 	}
-	public void setSkillId(Long skillId) {
-		this.skillId = skillId;
+	public void setSkillItemId(Long skillItemId) {
+		this.skillItemId = skillItemId;
 	}
+	
+	
+	public Integer getPageIndex() {
+		return pageIndex;
+	}
+	public void setPageIndex(Integer pageIndex) {
+		this.pageIndex = pageIndex;
+	}
+	
+	
 	@Override
 	public String getBizCode() {
 		return  OrderRequestType.QUERY_DV_LIST_BY_TYPE;
 	}
 	@Override
 	public String toString() {
-		return "DaVListBySkillIdRequest [customerId=" + customerId + ", skillId=" + skillId + "]";
+		return "DaVListBySkillIdRequest [customerId=" + customerId + ", skillItemId=" + skillItemId + ", pageIndex="
+				+ pageIndex + "]";
 	}
+	
+	
+	
 	
 	
 	
