@@ -12,6 +12,8 @@ import java.util.Date;
  * @date: 2018年10月19日 上午11:56:54
  */
 public class CustomerSkill {
+	
+	
     private Long customerSkillId;
 
     private Long certifyId;
@@ -20,15 +22,15 @@ public class CustomerSkill {
 
     private Long skillItemId;
 
-    private String productName;
+    private String skillName;
 
     private String serviceUnit;
 
-    private BigDecimal productPrice;
+    private BigDecimal skillPrice;
 
     private Integer auditStatus;
 
-    private Integer productStatus;
+    private Integer switchStatus;
 
     private Integer receiveStatus;
 
@@ -54,7 +56,7 @@ public class CustomerSkill {
 
     private Date endServiceTime;
 
-    private String productDescribe;
+    private String skillDescribe;
 
     private Date createTime;
 
@@ -66,17 +68,15 @@ public class CustomerSkill {
 
     private String remark;
 
-  
-
     public Long getCustomerSkillId() {
-		return customerSkillId;
-	}
+        return customerSkillId;
+    }
 
-	public void setCustomerSkillId(Long customerSkillId) {
-		this.customerSkillId = customerSkillId;
-	}
+    public void setCustomerSkillId(Long customerSkillId) {
+        this.customerSkillId = customerSkillId;
+    }
 
-	public Long getCertifyId() {
+    public Long getCertifyId() {
         return certifyId;
     }
 
@@ -100,12 +100,12 @@ public class CustomerSkill {
         this.skillItemId = skillItemId;
     }
 
-    public String getProductName() {
-        return productName;
+    public String getSkillName() {
+        return skillName;
     }
 
-    public void setProductName(String productName) {
-        this.productName = productName == null ? null : productName.trim();
+    public void setSkillName(String skillName) {
+        this.skillName = skillName == null ? null : skillName.trim();
     }
 
     public String getServiceUnit() {
@@ -116,12 +116,12 @@ public class CustomerSkill {
         this.serviceUnit = serviceUnit == null ? null : serviceUnit.trim();
     }
 
-    public BigDecimal getProductPrice() {
-        return productPrice;
+    public BigDecimal getSkillPrice() {
+        return skillPrice;
     }
 
-    public void setProductPrice(BigDecimal productPrice) {
-        this.productPrice = productPrice;
+    public void setSkillPrice(BigDecimal skillPrice) {
+        this.skillPrice = skillPrice;
     }
 
     public Integer getAuditStatus() {
@@ -132,12 +132,12 @@ public class CustomerSkill {
         this.auditStatus = auditStatus;
     }
 
-    public Integer getProductStatus() {
-        return productStatus;
+    public Integer getSwitchStatus() {
+        return switchStatus;
     }
 
-    public void setProductStatus(Integer productStatus) {
-        this.productStatus = productStatus;
+    public void setSwitchStatus(Integer switchStatus) {
+        this.switchStatus = switchStatus;
     }
 
     public Integer getReceiveStatus() {
@@ -168,118 +168,147 @@ public class CustomerSkill {
         return monday;
     }
 
+    
     public void setMonday(Integer monday) {
         this.monday = monday;
     }
 
+    
     public Integer getTuesday() {
         return tuesday;
     }
 
+    
     public void setTuesday(Integer tuesday) {
         this.tuesday = tuesday;
     }
 
+    
     public Integer getWednesday() {
         return wednesday;
     }
 
+    
     public void setWednesday(Integer wednesday) {
         this.wednesday = wednesday;
     }
 
+    
     public Integer getThursday() {
         return thursday;
     }
 
+    
     public void setThursday(Integer thursday) {
         this.thursday = thursday;
     }
 
+    
     public Integer getFriday() {
         return friday;
     }
 
+    
     public void setFriday(Integer friday) {
         this.friday = friday;
     }
 
+   
     public Integer getSaturday() {
         return saturday;
     }
 
+    
     public void setSaturday(Integer saturday) {
         this.saturday = saturday;
     }
 
+    
     public Integer getSunday() {
         return sunday;
     }
 
+    
     public void setSunday(Integer sunday) {
         this.sunday = sunday;
     }
 
+   
     public Date getStartServiceTime() {
         return startServiceTime;
     }
 
+    
     public void setStartServiceTime(Date startServiceTime) {
         this.startServiceTime = startServiceTime;
     }
 
+   
     public Date getEndServiceTime() {
         return endServiceTime;
     }
 
+    
     public void setEndServiceTime(Date endServiceTime) {
         this.endServiceTime = endServiceTime;
     }
 
-    public String getProductDescribe() {
-        return productDescribe;
+    
+    public String getSkillDescribe() {
+        return skillDescribe;
     }
 
-    public void setProductDescribe(String productDescribe) {
-        this.productDescribe = productDescribe == null ? null : productDescribe.trim();
+    
+    public void setSkillDescribe(String skillDescribe) {
+        this.skillDescribe = skillDescribe == null ? null : skillDescribe.trim();
     }
 
+    
     public Date getCreateTime() {
         return createTime;
     }
 
+   
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
     }
 
+   
     public Date getModifyTime() {
         return modifyTime;
     }
 
+    
     public void setModifyTime(Date modifyTime) {
         this.modifyTime = modifyTime;
     }
 
+    
     public String getCreateMan() {
         return createMan;
     }
+
 
     public void setCreateMan(String createMan) {
         this.createMan = createMan == null ? null : createMan.trim();
     }
 
+ 
     public String getModifyMan() {
         return modifyMan;
     }
 
+   
     public void setModifyMan(String modifyMan) {
         this.modifyMan = modifyMan == null ? null : modifyMan.trim();
     }
 
+   
     public String getRemark() {
         return remark;
     }
 
+   
     public void setRemark(String remark) {
         this.remark = remark == null ? null : remark.trim();
     }

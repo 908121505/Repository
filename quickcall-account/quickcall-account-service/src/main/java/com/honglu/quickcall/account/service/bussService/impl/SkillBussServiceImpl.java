@@ -69,8 +69,14 @@ public class SkillBussServiceImpl implements ISkillBussService {
 			throw new BizException(AccountBizReturnCode.paramError, "查询技能信息参数异常");
 		}
 		Long  customerId =  request.getCustomerId();
-		//首先查询所有的技能信息
 		
+		//
+		
+		
+		
+		
+		
+		//首先查询所有的技能信息
 		SkillInfoVO  resultVO  = new SkillInfoVO();
 		
 		VoiceVOCopy   voiceQuery    = skillMapper.getVoiceInfo(customerId);
@@ -79,7 +85,6 @@ public class SkillBussServiceImpl implements ISkillBussService {
 			voiceVO.setVoiceStatus(OrderSkillConstants.VOICE_STATUS_UNEXIST);
 		}else{
 			voiceVO.setVoiceStatus(voiceQuery.getVoiceStatus());
-			
 		
 			BigDecimal  voiceTime =  voiceQuery.getVoiceTime();
 			if(voiceTime == null ||  voiceTime.compareTo(BigDecimal.ZERO)== 0){
