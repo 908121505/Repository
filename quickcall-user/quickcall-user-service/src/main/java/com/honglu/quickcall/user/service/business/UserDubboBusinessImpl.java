@@ -1,5 +1,7 @@
 package com.honglu.quickcall.user.service.business;
 
+import com.honglu.quickcall.user.facade.exchange.request.editprofile.*;
+import com.honglu.quickcall.user.service.service.EditProfileService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,6 +58,8 @@ public class UserDubboBusinessImpl implements UserDubboBusiness {
 	private PersonInfoService personInfoService;
 	@Autowired
 	private UserMessageService userMessageService;
+	@Autowired
+	private EditProfileService editProfileService;
 
 	@Override
 	public CommonResponse excute(AbstractRequest request) {
@@ -145,6 +149,21 @@ public class UserDubboBusinessImpl implements UserDubboBusiness {
 				break;
 			case UserFunctionType.QUERY_MY_SKILL://查询我的技能列表
 				response = personInfoService.queryMySkill((queryMyskillRequest) request);
+				break;
+			case UserFunctionType.updateNickname:
+				response = editProfileService.updateNickName((UpdateNickNameReq) request);
+				break;
+			case UserFunctionType.updateHeadPortrait:
+				response = editProfileService.updateHeadPortrait((UpdateHeadPortraitReq) request);
+				break;
+			case UserFunctionType.updateSignName:
+				response = editProfileService.updateSignName((UpdateSignNameReq) request);
+				break;
+			case UserFunctionType.updateStarSign:
+				response = editProfileService.updateStarSign((UpdateStarSignReq) request);
+				break;
+			case UserFunctionType.updateAppearance:
+				response = editProfileService.updateAppearance((UpdateAppearanceReq) request);
 				break;
 			default:
 				throw new BizException(UserBizReturnCode.BizFunctionTypeNotMatch,
