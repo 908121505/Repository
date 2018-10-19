@@ -81,4 +81,25 @@ public interface UserFunctionType {
 	//查看我的技能列表
 	public static final String QUERY_MY_SKILL = "0011135";
 
+	/**
+	 * 修改昵称
+	 */
+	String updateNickname = "0011140";
+	/**
+	 * 修改头像
+	 */
+	String updateHeadPortrait = "0011141";
+	/**
+	 * 修改个性签名
+	 */
+	String updateSignName = "0011142";
+	/**
+	 * 修改星座
+	 */
+	String updateStarSign = "0011143";
+	/**
+	 * 修改形象照
+	 */
+	String updateAppearance = "0011144";
+
 }
