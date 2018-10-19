@@ -13,11 +13,11 @@ import java.math.BigDecimal;
  */
 public class DaVinfoVO implements  Serializable{
 	
-	private static final long serialVersionUID = -4146002273762911512L;
+	private static final long serialVersionUID = 6078246456866990616L;
 	/**客户Id*/
 	private Long  customerId;
-	/**产品ID*/
-	private Long  productId; 
+	/**用户技能ID*/
+	private Long  customerSkillId; 
 	/**运营标签URL*/
 	private String  bussTagUrl;
 	/**品类标签URL*/
@@ -30,6 +30,8 @@ public class DaVinfoVO implements  Serializable{
     private Integer  age;
     /**单价*/
     private BigDecimal   price;
+    /**币种名称*/
+    private String  currencyName;
     /**服务单位名称*/
     private String unitName;
     /**主播封面URL*/
@@ -42,11 +44,14 @@ public class DaVinfoVO implements  Serializable{
 	public void setCustomerId(Long customerId) {
 		this.customerId = customerId;
 	}
-	public Long getProductId() {
-		return productId;
+	
+	
+
+	public Long getCustomerSkillId() {
+		return customerSkillId;
 	}
-	public void setProductId(Long productId) {
-		this.productId = productId;
+	public void setCustomerSkillId(Long customerSkillId) {
+		this.customerSkillId = customerSkillId;
 	}
 	public String getBussTagUrl() {
 		return bussTagUrl;
@@ -83,6 +88,12 @@ public class DaVinfoVO implements  Serializable{
 	}
 	public void setPrice(BigDecimal price) {
 		this.price = price;
+	}
+	public String getCurrencyName() {
+		return currencyName;
+	}
+	public void setCurrencyName(String currencyName) {
+		this.currencyName = currencyName;
 	}
 	public String getUnitName() {
 		return unitName;

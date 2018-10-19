@@ -39,4 +39,7 @@ public interface AccountFunctionType {
     
     //支付成功mq 测试
     String PaySuccessMqTest = "002304";
+
+    // 获取弹幕消息
+    String GET_BARRAGE_MESSAGE = "002305";
 }

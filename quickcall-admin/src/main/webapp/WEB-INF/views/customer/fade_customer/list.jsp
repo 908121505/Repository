@@ -55,6 +55,15 @@
                 var table = $('#example').initTable({
                     sAjaxSource: "fadeCustomer/initTable.htm",
                     aoColumns: [
+                        {"data": "headPortraitUrl", "sTitle": "用户头像", 'sClass': "text-center", "sortable": false,
+                            "mRender": function (data, type, full) {
+                                if(data){
+                                    return "<img src='" + data + "' height='50px;'/>";
+                                }else{
+                                    return "";
+                                }
+                            }
+                        },
                         {"data": "nickName", "sTitle": "用户昵称", 'sClass': "text-center", "sortable": false},
                         {"data": "remark", "sTitle": "备注", 'sClass': "text-center", "sortable": false},
                         {"data": "status", "sTitle": "状态", 'sClass': "text-center", "sortable": false,
@@ -84,7 +93,7 @@
                     },
                     aoColumnDefs: [
                         {
-                            "aTargets": 7, "mRender": function (data, type, row) {
+                            "aTargets": 8, "mRender": function (data, type, row) {
                                 var edit = "", del = "";
                                 <shiro:hasPermission name="fadeCustomer:update">
                                 edit = "<a href='#' onclick='addAndUpdateRow(\"" + data + "\")' data-toggle='modal' class='padding-right-small label label-success'><i class='glyphicon glyphicon-edit'></i> 编辑</a>";
@@ -106,8 +115,8 @@
             });
 
             //删除受影响的行数
-            function deleteRow(bannerId) {
-                $('#myModal').deleteRow('fadeCustomer/del.htm?bannerId=' + bannerId);
+            function deleteRow(id) {
+                $('#myModal').deleteRow('fadeCustomer/del.htm?id=' + id);
             }
 
             //增加或者修改受影响的行数

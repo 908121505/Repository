@@ -37,6 +37,27 @@
 						<input type="text" class="form-control" name="remark" value="${entity.remark }">
 					</div>
 				</div>
+				<div class="form-group">
+					<label class="col-sm-2 control-label">图片上传<c:if test="${entity eq null }"><font color="red">&nbsp;*</font></c:if>
+					</label>
+					<div class="col-sm-10">
+						<div class="input-group">
+							<input type="hidden" class="form-control" name="headPortraitUrl" id="headPortraitUrl_input" value="${entity.headPortraitUrl }">
+							<input type="file" class="form-control" id="appversionFile" name="appversionFile">
+							<span class="input-group-btn">
+								<button class="btn btn-success" type="button" id="uploadBanner">上传图片</button>
+							</span>
+						</div>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="bannerFile_img" class="col-sm-2 control-label">图片</label>
+					<div class="col-sm-10">
+						<div class="col-sm-6">
+							<img src="${empty entity.headPortraitUrl ? DEFAULT_IMG : entity.headPortraitUrl }" alt="暂无图片，点击上传！" class="img-rounded" style="max-width: 100%; max-height: 300px;" id="bannerFile_img">
+						</div>
+					</div>
+				</div>
 				<span id="tip" style="color: red;font-size: 14px;margin-left:20px; "></span>
 			</form>
 		</div>
@@ -63,5 +84,33 @@
 		return true;
 	}
 	$(function() {
+        $('#uploadBanner').click(function() {
+            var file = document.fadeCustomerForm.appversionFile.value;
+            if(file == ""){
+                $("#tip").html("请选择图片");
+                return false;
+            }
+            $.ajaxFileUpload({
+                type : "post",
+                dataType : "json",
+                fileElementId : 'appversionFile',
+                url : "upload/fadeCustomerHeadImg.htm",
+                data : {},
+                error : function(data) {
+                    alert("错误！");
+                },
+                success : function(data) {
+                    if (data.result = 'success') {
+                        console.info(data);
+                        alert("上传图片成功！");
+                        $('#headPortraitUrl_input').val(data.imgUrl);
+                        $('#bannerFile_img').attr("src", data.imgUrl);
+                        $("#tip").html("");
+                    } else {
+                        alert(data.msg);
+                    }
+                }
+            });
+        });
 	});
 </script>

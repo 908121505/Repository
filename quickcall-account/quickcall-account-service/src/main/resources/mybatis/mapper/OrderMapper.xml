@@ -481,6 +481,23 @@
 	WHERE  order_status in(#{orderStatus} ,#{orderStatusTwo})   and
 		buyer_id = #{buyerId}  and  seller_id =  #{sellerId}  
   </select>
-  
-  
+
+    <!-- 查询弹幕显示需要的订单消息 -->
+  <select id="queryBarrageOrderInfo" resultType="com.honglu.quickcall.account.facade.vo.OrderDetailVO"  >
+    SELECT
+      cu.nick_name  AS  anotherNickName,
+      cu.head_portrait_url  AS  anotherHeadPortraitUrl,
+      p.`name` AS  productName,
+      p.skill_id AS skillId,
+      p.price  AS  price,
+      od.order_num  AS  orderNum,
+      od.order_amounts  AS  orderAmounts,
+      od.order_time AS orderTime
+    FROM
+        orders od
+    LEFT JOIN customer cu ON od.seller_id = cu.customer_id
+    LEFT JOIN product  p  ON  od.product_id  =  p.product_id
+    WHERE
+        od.order_id =  #{orderId}
+  </select>
 </mapper>

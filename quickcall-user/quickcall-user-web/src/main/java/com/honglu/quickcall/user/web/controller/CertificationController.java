@@ -192,6 +192,35 @@ public class CertificationController {
         logger.info("userWeb.certification introduceAudioUpload response data : " + request);
         return response;
     }
+    
+    /**
+     * 大V技能声音审核
+     *
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "/skillAuditUpload", produces = "application/json;charset=UTF-8", method = RequestMethod.POST)
+    @ResponseBody
+    public WebResponseModel skillAuditUpload(HttpServletRequest request) {
+        logger.info("userWeb.certification skillAuditUpload request data : " + request);
+        String customerId = request.getParameter("customerId");
+//        if(StringUtils.isBlank(customerId)){
+//            WebResponseModel response = new WebResponseModel();
+//            response.setCode(UserBizReturnCode.paramError.code());
+//            response.setMsg("客户ID为空");
+//            return response;
+//        }
+//        WebResponseModel response = uploadFile(request, AliYunFilePaths.BIG_V_INTRODUCE_AUDIO);
+//        if("000000".equals(response.getCode())){
+//        	Long  skillId = Long.valueOf(request.getParameter("skillId"));
+//        
+//        }
+//        logger.info("userWeb.certification skillAuditUpload response data : " + response);
+        
+        WebResponseModel response = new WebResponseModel();
+        response.setCode(UserBizReturnCode.Success.code());
+        return response;
+    }
 
     /**
      * 上传文件

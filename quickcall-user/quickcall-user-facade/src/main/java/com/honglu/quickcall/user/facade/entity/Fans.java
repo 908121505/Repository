@@ -3,93 +3,103 @@ package com.honglu.quickcall.user.facade.entity;
 import java.util.Date;
 
 public class Fans {
-    private Long id;
+	private Long id;
 
-    private Long anchorId;
+	private Long anchorId;
 
-    private Long fansId;
+	private Long fansId;
 
-    private Integer attentionState;
+	private Integer attentionState;
 
-    private Date createTime;
+	private Integer readState;
 
-    private Date modifyTime;
+	private Date createTime;
 
-    private String createMan;
+	private Date modifyTime;
 
-    private String modifyMan;
+	private String createMan;
 
-    private String remark;
+	private String modifyMan;
 
-    public Long getId() {
-        return id;
-    }
+	private String remark;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+	public Long getId() {
+		return id;
+	}
 
-    public Long getAnchorId() {
-        return anchorId;
-    }
+	public void setId(Long id) {
+		this.id = id;
+	}
 
-    public void setAnchorId(Long anchorId) {
-        this.anchorId = anchorId;
-    }
+	public Long getAnchorId() {
+		return anchorId;
+	}
 
-    public Long getFansId() {
-        return fansId;
-    }
+	public void setAnchorId(Long anchorId) {
+		this.anchorId = anchorId;
+	}
 
-    public void setFansId(Long fansId) {
-        this.fansId = fansId;
-    }
+	public Long getFansId() {
+		return fansId;
+	}
 
-    public Integer getAttentionState() {
-        return attentionState;
-    }
+	public void setFansId(Long fansId) {
+		this.fansId = fansId;
+	}
 
-    public void setAttentionState(Integer attentionState) {
-        this.attentionState = attentionState;
-    }
+	public Integer getAttentionState() {
+		return attentionState;
+	}
 
-    public Date getCreateTime() {
-        return createTime;
-    }
+	public void setAttentionState(Integer attentionState) {
+		this.attentionState = attentionState;
+	}
 
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
+	public Date getCreateTime() {
+		return createTime;
+	}
 
-    public Date getModifyTime() {
-        return modifyTime;
-    }
+	public Integer getReadState() {
+		return readState;
+	}
 
-    public void setModifyTime(Date modifyTime) {
-        this.modifyTime = modifyTime;
-    }
+	public void setReadState(Integer readState) {
+		this.readState = readState;
+	}
 
-    public String getCreateMan() {
-        return createMan;
-    }
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
+	}
 
-    public void setCreateMan(String createMan) {
-        this.createMan = createMan == null ? null : createMan.trim();
-    }
+	public Date getModifyTime() {
+		return modifyTime;
+	}
 
-    public String getModifyMan() {
-        return modifyMan;
-    }
+	public void setModifyTime(Date modifyTime) {
+		this.modifyTime = modifyTime;
+	}
 
-    public void setModifyMan(String modifyMan) {
-        this.modifyMan = modifyMan == null ? null : modifyMan.trim();
-    }
+	public String getCreateMan() {
+		return createMan;
+	}
 
-    public String getRemark() {
-        return remark;
-    }
+	public void setCreateMan(String createMan) {
+		this.createMan = createMan == null ? null : createMan.trim();
+	}
 
-    public void setRemark(String remark) {
-        this.remark = remark == null ? null : remark.trim();
-    }
+	public String getModifyMan() {
+		return modifyMan;
+	}
+
+	public void setModifyMan(String modifyMan) {
+		this.modifyMan = modifyMan == null ? null : modifyMan.trim();
+	}
+
+	public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark == null ? null : remark.trim();
+	}
 }

@@ -1,47 +1,20 @@
 package com.honglu.quickcall.account.service.business;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.honglu.quickcall.account.facade.business.AccountDubboBusiness;
 import com.honglu.quickcall.account.facade.code.AccountFunctionType;
 import com.honglu.quickcall.account.facade.code.OrderRequestType;
-import com.honglu.quickcall.account.facade.exchange.request.AlipayNotifyRequest;
-import com.honglu.quickcall.account.facade.exchange.request.ApplayRefundRequest;
-import com.honglu.quickcall.account.facade.exchange.request.BindAliaccountRequest;
-import com.honglu.quickcall.account.facade.exchange.request.CancelOrderRequest;
-import com.honglu.quickcall.account.facade.exchange.request.ConfirmOrderRequest;
-import com.honglu.quickcall.account.facade.exchange.request.CreateUserAccountRequest;
-import com.honglu.quickcall.account.facade.exchange.request.DetailOrderRequest;
-import com.honglu.quickcall.account.facade.exchange.request.DvConfirmRefundRequest;
-import com.honglu.quickcall.account.facade.exchange.request.DvReceiveOrderRequest;
-import com.honglu.quickcall.account.facade.exchange.request.DvStartServiceRequest;
-import com.honglu.quickcall.account.facade.exchange.request.FirstPageDaVinfoRequest;
-import com.honglu.quickcall.account.facade.exchange.request.FirstPageSkillinfoRequest;
-import com.honglu.quickcall.account.facade.exchange.request.OrderDaVProductRequest;
-import com.honglu.quickcall.account.facade.exchange.request.OrderReceiveOrderListRequest;
-import com.honglu.quickcall.account.facade.exchange.request.OrderSaveRequest;
-import com.honglu.quickcall.account.facade.exchange.request.OrderSendOrderListRequest;
-import com.honglu.quickcall.account.facade.exchange.request.PayOrderRequest;
-import com.honglu.quickcall.account.facade.exchange.request.QueryAccountRequest;
-import com.honglu.quickcall.account.facade.exchange.request.QueryIngOrderCountRequest;
-import com.honglu.quickcall.account.facade.exchange.request.QueryRefundReasonRequest;
-import com.honglu.quickcall.account.facade.exchange.request.RechargeRequest;
-import com.honglu.quickcall.account.facade.exchange.request.SkillInfoRequest;
-import com.honglu.quickcall.account.facade.exchange.request.SkillUpdateRequest;
-import com.honglu.quickcall.account.facade.exchange.request.WhthdrawRequest;
-import com.honglu.quickcall.account.service.bussService.AliPayService;
-import com.honglu.quickcall.account.service.bussService.IOrderService;
-import com.honglu.quickcall.account.service.bussService.ISkillBussService;
-import com.honglu.quickcall.account.service.bussService.UserAccountService;
+import com.honglu.quickcall.account.facade.exchange.request.*;
+import com.honglu.quickcall.account.service.bussService.*;
 import com.honglu.quickcall.common.api.code.BizCode;
 import com.honglu.quickcall.common.api.exception.BaseException;
 import com.honglu.quickcall.common.api.exception.BizException;
 import com.honglu.quickcall.common.api.exchange.AbstractRequest;
 import com.honglu.quickcall.common.api.exchange.CommonResponse;
 import com.honglu.quickcall.user.facade.code.UserBizReturnCode;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
  * Created by len.song on 2017-12-18.
@@ -58,6 +31,8 @@ public class AccountDubboBusinessImpl implements AccountDubboBusiness {
 	private ISkillBussService skillService;
 	@Autowired
 	private IOrderService orderService;
+	@Autowired
+	private BarrageMessageService barrageMessageService;
 
 	@Override
 	public CommonResponse excute(AbstractRequest request) {
@@ -85,7 +60,11 @@ public class AccountDubboBusinessImpl implements AccountDubboBusiness {
 				break;
 			/** 首页技能种类展示 */
 			case OrderRequestType.QUERY_SKILL_NAME_FOR_FIRST_PAGE:
-				response = skillService.getFirstPageSkillinfo((FirstPageSkillinfoRequest) request);
+				response = skillService.getFirstPageSkillItemInfo((FirstPageSkillinfoRequest) request);
+				break;
+				/** 首页技能种类展示 */
+			case OrderRequestType.QUERY_DV_LIST_BY_TYPE:
+				response = skillService.getDaVListBySkillItemId((DaVListBySkillItemIdRequest) request);
 				break;
 			/////////////////////////////////////////////////////////////////
 			/** 获取主播开启产品 */
@@ -171,6 +150,10 @@ public class AccountDubboBusinessImpl implements AccountDubboBusiness {
 				break;
 			case AccountFunctionType.QueryAccount:
 				response = userAccountService.queryAccount((QueryAccountRequest) request);
+				break;
+			/** 获取弹幕消息 **/
+			case AccountFunctionType.GET_BARRAGE_MESSAGE:
+				response = barrageMessageService.rpopMessage((BarrageMessageRequest) request);
 				break;
 			default:
 

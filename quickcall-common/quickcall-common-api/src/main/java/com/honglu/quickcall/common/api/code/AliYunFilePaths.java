@@ -35,4 +35,8 @@ public class AliYunFilePaths {
      * 用户上传头像存储的路径
      **/
     public static final String USER_UPLOAD_HEAD_IMG = ROOT_PATH + "user/headimg";
+    /**
+     * 随机用户上传头像存储的路径
+     **/
+    public static final String FADE_USER_UPLOAD_HEAD_IMG = ROOT_PATH + "fadecustomer/headimg";
 }
