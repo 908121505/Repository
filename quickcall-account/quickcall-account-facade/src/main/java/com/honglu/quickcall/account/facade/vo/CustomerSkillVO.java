@@ -2,6 +2,7 @@ package com.honglu.quickcall.account.facade.vo;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -37,26 +38,10 @@ public class CustomerSkillVO {
     private Date endServiceTime;
     /**技能价格列表*/
     private List<BigDecimal>  skillPriceList;
-    /**周一状态 1：选中  0：未选中*/
-    private Integer monday;
-
-    /**周一状态 1：选中  0：未选中*/
-    private Integer tuesday;
-
-    /**周二状态 1：选中  0：未选中*/
-    private Integer wednesday;
-
-    /**周三状态 1：选中  0：未选中*/
-    private Integer thursday;
-
-    /**周四状态 1：选中  0：未选中*/
-    private Integer friday;
-
-    /**周五状态 1：选中  0：未选中*/
-    private Integer saturday;
-
-    /**周六状态 1：选中  0：未选中*/
-    private Integer sunday;
+    
+    /**每周数据*/
+    private  HashMap<String, Integer>  weekDataMap; 
+    
 	public Long getCustomerSkillId() {
 		return customerSkillId;
 	}
@@ -123,51 +108,13 @@ public class CustomerSkillVO {
 	public void setEndServiceTime(Date endServiceTime) {
 		this.endServiceTime = endServiceTime;
 	}
-	public Integer getMonday() {
-		return monday;
+	public HashMap<String, Integer> getWeekDataMap() {
+		return weekDataMap;
 	}
-	public void setMonday(Integer monday) {
-		this.monday = monday;
-	}
-	public Integer getTuesday() {
-		return tuesday;
-	}
-	public void setTuesday(Integer tuesday) {
-		this.tuesday = tuesday;
-	}
-	public Integer getWednesday() {
-		return wednesday;
-	}
-	public void setWednesday(Integer wednesday) {
-		this.wednesday = wednesday;
-	}
-	public Integer getThursday() {
-		return thursday;
-	}
-	public void setThursday(Integer thursday) {
-		this.thursday = thursday;
-	}
-	public Integer getFriday() {
-		return friday;
-	}
-	public void setFriday(Integer friday) {
-		this.friday = friday;
-	}
-	public Integer getSaturday() {
-		return saturday;
-	}
-	public void setSaturday(Integer saturday) {
-		this.saturday = saturday;
-	}
-	public Integer getSunday() {
-		return sunday;
-	}
-	public void setSunday(Integer sunday) {
-		this.sunday = sunday;
+	public void setWeekDataMap(HashMap<String, Integer> weekDataMap) {
+		this.weekDataMap = weekDataMap;
 	}
 	
 	
 	
-	
-    
 }
