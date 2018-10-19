@@ -162,7 +162,6 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 			skillVO.setServiceUnit(serviceUnit);
 			skillVO.setDiscontRateList(discontRateList );
 			skillVO.setDiscountRate(new BigDecimal(70));
-			skillVO.setEndServiceTime(new Date());
 			skillVO.setReceiveStatus(Math.random() >0.5?1:0);
 			skillVO.setSkillItemId(1000L);
 			skillVO.setSkillItemName(skillItemName);
