@@ -2,26 +2,35 @@ package com.honglu.quickcall.user.facade.entity;
 
 
 /**
- * 技能审核
+ * 用戶技能认证表bean
  * @author zhaozheyi
- * @date Thu Oct 18 14:40:43 CST 2018
+ * @date Fri Oct 19 11:38:50 CST 2018
  **/
-public class SkillReview {
+public class CustomerSkillCertify {
+
+	/**主键ID**/
+	private Integer certifyId;
 
 	/**用户编号**/
 	private Long customerId;
 
 	/**技能编号**/
-	private Long skillId;
+	private Long skillItemId;
 
-	/**技能审核状态（0：待审核，1：审核通过，2：审核失败）**/
+	/**技能审核状态（0：未解锁，1：待审核，2：审核通过，3：审核失败）**/
 	private Integer auditStatus;
 
 	/**技能声音url**/
 	private String skillVoiceUrl;
 
+	/**技能声音时长**/
+	private String skillVoiceTime;
+
 	/**技能审核声音url**/
 	private String skillVoiceUrlTmp;
+
+	/**技能审核声音时长**/
+	private String skillVoiceTimeTmp;
 
 	/**是否曾经已经审核通过（0：未通过，1：已通过）**/
 	private Integer isAudited;
@@ -42,16 +51,19 @@ public class SkillReview {
 	private String remark;
 
 
-	public SkillReview() {
+	public CustomerSkillCertify() {
 		super();
 	}
-	public SkillReview(Long customerId,Long skillId,Integer auditStatus,String skillVoiceUrl,String skillVoiceUrlTmp,Integer isAudited,String createTime,String modifyTime,String createMan,String modifyMan,String remark) {
+	public CustomerSkillCertify(Integer certifyId,Long customerId,Long skillItemId,Integer auditStatus,String skillVoiceUrl,String skillVoiceTime,String skillVoiceUrlTmp,String skillVoiceTimeTmp,Integer isAudited,String createTime,String modifyTime,String createMan,String modifyMan,String remark) {
 		super();
+		this.certifyId = certifyId;
 		this.customerId = customerId;
-		this.skillId = skillId;
+		this.skillItemId = skillItemId;
 		this.auditStatus = auditStatus;
 		this.skillVoiceUrl = skillVoiceUrl;
+		this.skillVoiceTime = skillVoiceTime;
 		this.skillVoiceUrlTmp = skillVoiceUrlTmp;
+		this.skillVoiceTimeTmp = skillVoiceTimeTmp;
 		this.isAudited = isAudited;
 		this.createTime = createTime;
 		this.modifyTime = modifyTime;
@@ -59,6 +71,14 @@ public class SkillReview {
 		this.modifyMan = modifyMan;
 		this.remark = remark;
 	}
+	public void setCertifyId(Integer certifyId){
+		this.certifyId = certifyId;
+	}
+
+	public Integer getCertifyId(){
+		return this.certifyId;
+	}
+
 	public void setCustomerId(Long customerId){
 		this.customerId = customerId;
 	}
@@ -67,12 +87,12 @@ public class SkillReview {
 		return this.customerId;
 	}
 
-	public void setSkillId(Long skillId){
-		this.skillId = skillId;
+	public void setSkillItemId(Long skillItemId){
+		this.skillItemId = skillItemId;
 	}
 
-	public Long getSkillId(){
-		return this.skillId;
+	public Long getSkillItemId(){
+		return this.skillItemId;
 	}
 
 	public void setAuditStatus(Integer auditStatus){
@@ -91,12 +111,28 @@ public class SkillReview {
 		return this.skillVoiceUrl;
 	}
 
+	public void setSkillVoiceTime(String skillVoiceTime){
+		this.skillVoiceTime = skillVoiceTime;
+	}
+
+	public String getSkillVoiceTime(){
+		return this.skillVoiceTime;
+	}
+
 	public void setSkillVoiceUrlTmp(String skillVoiceUrlTmp){
 		this.skillVoiceUrlTmp = skillVoiceUrlTmp;
 	}
 
 	public String getSkillVoiceUrlTmp(){
 		return this.skillVoiceUrlTmp;
+	}
+
+	public void setSkillVoiceTimeTmp(String skillVoiceTimeTmp){
+		this.skillVoiceTimeTmp = skillVoiceTimeTmp;
+	}
+
+	public String getSkillVoiceTimeTmp(){
+		return this.skillVoiceTimeTmp;
 	}
 
 	public void setIsAudited(Integer isAudited){

@@ -106,4 +106,5 @@ public interface PersonInfoService {
 	 * @return
 	 */
 	CommonResponse queryMySkill(queryMyskillRequest params);
+	
 }

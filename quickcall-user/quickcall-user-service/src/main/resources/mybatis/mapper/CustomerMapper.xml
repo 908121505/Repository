@@ -104,7 +104,7 @@
     from customer
     <where>
          <!-- <if test="keyword != null and keyword != ''"> -->
-             customer_id = #{keyword}
+             app_id = #{keyword}
          <!-- </if>
          <if test="customerId != null"> -->
          	and customer_id != #{customerId}
