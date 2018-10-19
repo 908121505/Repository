@@ -65,4 +65,6 @@ public interface CustomerMapper {
 	 * @return
 	 */
 	List<SearchPersonListVO> selectPreciseSearch(@Param("keyword") String keyword,@Param("customerId") Long customerId);
+
+	int selectCountByNickNameAndId(@Param("nickName") String nickName, @Param("customerId") String customerId);
 }
