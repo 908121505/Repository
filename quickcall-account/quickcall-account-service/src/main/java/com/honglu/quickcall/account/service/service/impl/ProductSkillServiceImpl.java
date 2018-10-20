@@ -2,18 +2,16 @@ package com.honglu.quickcall.account.service.service.impl;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
 
 import com.honglu.quickcall.account.facade.entity.CustomerSkill;
 import com.honglu.quickcall.account.facade.exchange.request.SkillUpdateRequest;
+import com.honglu.quickcall.account.facade.vo.CustomerSkillExtVO;
 import com.honglu.quickcall.account.facade.vo.CustomerSkillInfoVO;
 import com.honglu.quickcall.account.facade.vo.CustomerSkillVO;
 import com.honglu.quickcall.account.facade.vo.DaVinfoListVO;
@@ -169,31 +167,32 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 		
 		CustomerSkillInfoVO  resultVO = new CustomerSkillInfoVO();
 		
-		List<CustomerSkill>   skillList = customerSkillMapper.querySkillInfoPersonal(customerId);
-		
-		if(CollectionUtils.isEmpty(skillList)){
-			return null ;
-		}
-		
+//		List<CustomerSkill>   skillList = new ArrayList<CustomerSkill>();
+////		List<CustomerSkill>   skillList = customerSkillMapper.querySkillInfoPersonal(customerId);
+//		
+//		if(CollectionUtils.isEmpty(skillList)){
+//			return null ;
+//		}
+//		
 		HashMap<String, Integer> weekDataMap = new HashMap<String, Integer>();
-		String  serviceUnitStr =  null;
-		for (CustomerSkill skill : skillList) {
-			CustomerSkillVO   skillVO = new CustomerSkillVO();
-			BeanUtils.copyProperties(skill, skillVO);
-			if(weekDataMap.size() == 0){
-				weekDataMap.put("monday", skill.getMonday());
-				weekDataMap.put("tuesday", skill.getTuesday());
-				weekDataMap.put("wednesday", skill.getWednesday());
-				weekDataMap.put("thursday", skill.getThursday());
-				weekDataMap.put("friday", skill.getFriday());
-				weekDataMap.put("saturday", skill.getSaturday());
-				weekDataMap.put("sunday",skill.getSunday());
-				Date  endServiceTime  = skill.getEndServiceTime();
-				if(endServiceTime != null){
-					
-				}
-			}
-		}
+//		String  serviceUnitStr =  null;
+//		for (CustomerSkill skill : skillList) {
+//			CustomerSkillVO   skillVO = new CustomerSkillVO();
+//			BeanUtils.copyProperties(skill, skillVO);
+//			if(weekDataMap.size() == 0){
+//				weekDataMap.put("monday", skill.getMonday());
+//				weekDataMap.put("tuesday", skill.getTuesday());
+//				weekDataMap.put("wednesday", skill.getWednesday());
+//				weekDataMap.put("thursday", skill.getThursday());
+//				weekDataMap.put("friday", skill.getFriday());
+//				weekDataMap.put("saturday", skill.getSaturday());
+//				weekDataMap.put("sunday",skill.getSunday());
+//				Date  endServiceTime  = skill.getEndServiceTime();
+//				if(endServiceTime != null){
+//					
+//				}
+//			}
+//		}
 		
 		
 		
@@ -216,6 +215,8 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 		skillPriceList.add(new BigDecimal(30));
 		skillPriceList.add(new BigDecimal(66));
 		skillPriceList.add(new BigDecimal(88));
+		
+		
 		for (int i = 0; i < 4; i++) {
 			List<String> serviceUnitList = new ArrayList<String>();
 			
@@ -244,14 +245,25 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 			}
 			skillVO.setCustomerSkillId(10000L);
 			skillVO.setServiceUnit(serviceUnit);
-			skillVO.setDiscontRateList(discontRateList );
 			skillVO.setDiscountRate(new BigDecimal(70));
 			skillVO.setSkillItemId(1000L);
 			skillVO.setSkillItemName(skillItemName);
 			skillVO.setSkillPrice(new BigDecimal(10));
-			skillVO.setSkillPriceList(skillPriceList);
 			skillVO.setSwitchStatus(Math.random() >0.5?1:0);
-			skillVO.setServiceUnitList(serviceUnitList);
+			
+			
+			List<CustomerSkillExtVO> skillExtList = new ArrayList<CustomerSkillExtVO>();
+			
+			for (int j = 0; j < 2; j++) {
+				CustomerSkillExtVO  extVO = new CustomerSkillExtVO();
+				extVO.setDiscontRateList(discontRateList);
+				extVO.setServiceUnitList(serviceUnitList);
+				extVO.setSkillItemExtId(1000L);
+				extVO.setSkillPriceList(skillPriceList);
+				skillExtList.add(extVO);
+			}
+			
+			skillVO.setSkillExtList(skillExtList );
 			resultList.add(skillVO);
 		}
 		
@@ -264,6 +276,8 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 		weekDataMap.put("friday", 1);
 		weekDataMap.put("saturday", 0);
 		weekDataMap.put("sunday", 1);
+		
+		
 		resultVO.setCustomerSkillList(resultList);
 		
 		resultVO.setEndServiceTimeStr("10:00");
