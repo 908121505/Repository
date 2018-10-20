@@ -100,6 +100,13 @@ public interface PersonInfoService {
 	 */
 	CommonResponse saveCustomerSkillCertify(SaveSkillAuditRequest request);
 
+	/**
+	 * 查询个人中心数据接口
+	 *
+	 * @param request
+	 * @return
+	 */
+	CommonResponse queryCustomerCenter(CustomerCenterRequest request);
 
 	/**
 	 * 查询客户个人主页数据接口

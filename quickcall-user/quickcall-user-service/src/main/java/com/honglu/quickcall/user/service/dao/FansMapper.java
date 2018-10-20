@@ -29,7 +29,8 @@ public interface FansMapper {
 	/**
 	 * 判断是否关注
 	 * 
-	 * @param record
+	 * @param anchorId
+	 * @param fansId
 	 * @return
 	 */
 	int queryIsFollow(@Param("anchorId") Long anchorId, @Param("fansId") Long fansId);
@@ -61,14 +62,23 @@ public interface FansMapper {
 	List<AttentionFansVO> queryCustomerListByCustomerIdList(@Param("list") List<Long> customerIdList);
 
 	/**
-	 * 查询粉丝列表
+	 * 通过范围查询关注列表
+	 * 
+	 * @param fansId
+	 * @param customerId
+	 * @return
+	 */
+	List<Fans> queryFansListByAnchorIdList(@Param("list") List<Long> anchorId, @Param("customerId") Long customerId);
+
+	/**
+	 * 通过范围查询粉丝列表
 	 * 
 	 * @param fansId
 	 * @param customerId
 	 * @return
 	 */
 	List<Fans> queryFansListByFansIdList(@Param("list") List<Long> fansId, @Param("customerId") Long customerId);
-
+	
 	/**
 	 * 查询粉丝列表
 	 * 
