@@ -1,6 +1,5 @@
 package com.honglu.quickcall.user.service.service.impl;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -57,6 +56,7 @@ import com.honglu.quickcall.user.facade.exchange.request.SaveInterestRequest;
 import com.honglu.quickcall.user.facade.exchange.request.SaveNickNameRequest;
 import com.honglu.quickcall.user.facade.exchange.request.SaveOccupationRequest;
 import com.honglu.quickcall.user.facade.exchange.request.SaveSignNameRequest;
+import com.honglu.quickcall.user.facade.exchange.request.SaveSkillAuditRequest;
 import com.honglu.quickcall.user.facade.exchange.request.SearchPersonRequest;
 import com.honglu.quickcall.user.facade.exchange.request.ShowHomePageLogout;
 import com.honglu.quickcall.user.facade.exchange.request.queryMyskillRequest;
@@ -861,69 +861,105 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 			throw new BizException(BizCode.ParamError, "用戶Id 不能为空");
 		}
 		CommonResponse commonResponse = new CommonResponse();
-//		List<SkillItem> skillList = skillItemMapper.selectAllSkill();
-//		List<CustomerSkillCertify> skillReviewList = customerSkillCertifyMapper.selectAllSkillByCustomer(params.getCustomerId());
-//		//已经解锁的技能列表
-//		List<MySkillVO> haveSkill = new ArrayList<MySkillVO>();
-//		//未解锁的技能列表
-//		List<MySkillVO> noHaveSkill = new ArrayList<MySkillVO>();
-//		boolean flag ;
-//		Map<String,Object> map = new HashMap<String,Object>();
-//		//区分解锁和不解锁的技能
-//		for (SkillItem skill : skillList) {
-//			flag = true;
-//			MySkillVO mySkillVO = new MySkillVO();
-//			mySkillVO.setName(skill.getSkillItemName());
-//			mySkillVO.setImageUrl(skill.getImageUrl());
-//			mySkillVO.setSkillId(skill.getId());
-//			mySkillVO.setSkillStatus(skill.getSkillStatus());
-//			for (CustomerSkillCertify skillReview : skillReviewList) {
-//				//判断认证的技能
-//				if(skill.getId().equals(skillReview.getSkillItemId())){
-//					mySkillVO.setAuditStatus(skillReview.getAuditStatus());
-//					//是否已经审核过
-//					if(skillReview.getIsAudited()==1){
-//						//审核状态不是待审核状态
-//						if(skillReview.getAuditStatus() != 1){
-//							mySkillVO.setSkillVoiceUrl(skillReview.getSkillVoiceUrl());
-//							mySkillVO.setSkillVoiceTime(skillReview.getSkillVoiceTime());
-//						}
-//						haveSkill.add(mySkillVO);
-//						flag = false;
-//						skillReviewList.remove(skillReview);
-//						break;
-//					}
-//				}
-//			}
-//			if(flag){
-//				mySkillVO.setImageUrl(skill.getBlackImageUrl());
-//				noHaveSkill.add(mySkillVO);
-//			}
-//		}
-		
+		List<SkillItem> skillList = skillItemMapper.selectAllSkill();
+		List<CustomerSkillCertify> skillReviewList = customerSkillCertifyMapper.selectAllSkillByCustomer(params.getCustomerId());
 		//已经解锁的技能列表
 		List<MySkillVO> haveSkill = new ArrayList<MySkillVO>();
 		//未解锁的技能列表
 		List<MySkillVO> noHaveSkill = new ArrayList<MySkillVO>();
-		MySkillVO m1 = new MySkillVO("甜蜜互动","http://test-guanjia.oss-cn-shanghai.aliyuncs.com/voice/banner/1539583182452.png",1,1809221430063474300L,1);
-		MySkillVO m2 = new MySkillVO("午夜畅聊","http://test-guanjia.oss-cn-shanghai.aliyuncs.com/voice/banner/1539583354838.png",2,1809221430063474300L,"http://test-guanjia.oss-cn-shanghai.aliyuncs.com/voice/user/audio/db91943b9bb04d6b97127dce1a37a9fe.mp3",new BigDecimal(8.0),1);
-		MySkillVO m3 = new MySkillVO("游戏互动","http://test-guanjia.oss-cn-shanghai.aliyuncs.com/voice/banner/1539583368153.png",1,1809221430063474300L,1);
-		MySkillVO m4 = new MySkillVO("哄睡","http://test-guanjia.oss-cn-shanghai.aliyuncs.com/voice/banner/1539583182452.png",0,1809221430063474300L,0);
-		MySkillVO m5 = new MySkillVO("声优聊天","http://test-guanjia.oss-cn-shanghai.aliyuncs.com/voice/banner/1539583182452.png",0,1809221430063474300L,1);
-		MySkillVO m6 = new MySkillVO("哄睡","http://test-guanjia.oss-cn-shanghai.aliyuncs.com/voice/banner/1539583182452.png",0,1809221430063474300L,1);
-		haveSkill.add(m1);
-		haveSkill.add(m2);
-		noHaveSkill.add(m3);
-		noHaveSkill.add(m4);
-		noHaveSkill.add(m5);
-		noHaveSkill.add(m6);
+		boolean flag ;
 		Map<String,Object> map = new HashMap<String,Object>();
+		//区分解锁和不解锁的技能
+		for (SkillItem skill : skillList) {
+			flag = true;
+			MySkillVO mySkillVO = new MySkillVO();
+			mySkillVO.setName(skill.getSkillItemName());
+			mySkillVO.setImageUrl(skill.getImageUrl());
+			mySkillVO.setSkillId(skill.getId());
+			mySkillVO.setSkillStatus(skill.getSkillStatus());
+			for (CustomerSkillCertify skillReview : skillReviewList) {
+				//判断认证的技能
+				if(skill.getId().equals(skillReview.getSkillItemId())){
+					mySkillVO.setAuditStatus(skillReview.getAuditStatus());
+					//是否已经审核过
+					if(skillReview.getIsAudited()==1){
+						//审核状态不是待审核状态
+						if(skillReview.getAuditStatus() != 1){
+							mySkillVO.setSkillVoiceUrl(skillReview.getSkillVoiceUrl());
+							mySkillVO.setSkillVoiceTime(skillReview.getSkillVoiceTime());
+						}
+						haveSkill.add(mySkillVO);
+						flag = false;
+						skillReviewList.remove(skillReview);
+						break;
+					}
+				}
+			}
+			if(flag){
+				mySkillVO.setImageUrl(skill.getBlackImageUrl());
+				noHaveSkill.add(mySkillVO);
+			}
+		}
+		
+//		//已经解锁的技能列表
+//		List<MySkillVO> haveSkill = new ArrayList<MySkillVO>();
+//		//未解锁的技能列表
+//		List<MySkillVO> noHaveSkill = new ArrayList<MySkillVO>();
+//		MySkillVO m1 = new MySkillVO("甜蜜互动","http://test-guanjia.oss-cn-shanghai.aliyuncs.com/voice/banner/1539583182452.png",1,1809221430063474300L,1);
+//		MySkillVO m2 = new MySkillVO("午夜畅聊","http://test-guanjia.oss-cn-shanghai.aliyuncs.com/voice/banner/1539583354838.png",2,1809221430063474300L,"http://test-guanjia.oss-cn-shanghai.aliyuncs.com/voice/user/audio/db91943b9bb04d6b97127dce1a37a9fe.mp3",new BigDecimal(8.0),1);
+//		MySkillVO m3 = new MySkillVO("游戏互动","http://test-guanjia.oss-cn-shanghai.aliyuncs.com/voice/banner/1539583368153.png",1,1809221430063474300L,1);
+//		MySkillVO m4 = new MySkillVO("哄睡","http://test-guanjia.oss-cn-shanghai.aliyuncs.com/voice/banner/1539583182452.png",0,1809221430063474300L,0);
+//		MySkillVO m5 = new MySkillVO("声优聊天","http://test-guanjia.oss-cn-shanghai.aliyuncs.com/voice/banner/1539583182452.png",0,1809221430063474300L,1);
+//		MySkillVO m6 = new MySkillVO("哄睡","http://test-guanjia.oss-cn-shanghai.aliyuncs.com/voice/banner/1539583182452.png",0,1809221430063474300L,1);
+//		haveSkill.add(m1);
+//		haveSkill.add(m2);
+//		noHaveSkill.add(m3);
+//		noHaveSkill.add(m4);
+//		noHaveSkill.add(m5);
+//		noHaveSkill.add(m6);
+//		Map<String,Object> map = new HashMap<String,Object>();
 		logger.info("用户编号为："+params.getCustomerId()+"查询我的技能成功");
 		map.put("unlockList", haveSkill);
 		map.put("lockList", noHaveSkill);
 		commonResponse.setData(map);
 		commonResponse.setCode(UserBizReturnCode.Success);
 		commonResponse.setMessage(UserBizReturnCode.Success.desc());
+		return commonResponse;
+	}
+
+	@Override
+	public CommonResponse saveCustomerSkillCertify(SaveSkillAuditRequest params) {
+		CommonResponse commonResponse = new CommonResponse();
+		CustomerSkillCertify certifyNow = customerSkillCertifyMapper.selectSkillCertifyId(params.getCustomerId(),params.getSkillItemId());
+		
+		CustomerSkillCertify csc = new CustomerSkillCertify();
+		csc.setCustomerId(params.getCustomerId());
+		csc.setSkillItemId(params.getSkillItemId());
+		csc.setSkillVoiceUrlTmp(params.getSkillVoiceUrl());
+		csc.setSkillVoiceTimeTmp(params.getSkillVoiceTime());
+		csc.setAuditStatus(1);
+		//更改的数量
+		int n;
+		if(certifyNow != null ){
+			//如果是审核中不能进入本方法
+			if("1".equals(certifyNow.getAuditStatus())){
+				commonResponse.setCode(UserBizReturnCode.skillCertifyError);
+				commonResponse.setMessage(UserBizReturnCode.skillCertifyError.desc());
+				return commonResponse;
+			}
+			//更新操作
+			csc.setCertifyId(certifyNow.getCertifyId());
+			n = customerSkillCertifyMapper.updateEntity(csc);
+		}else{
+			//插入操作
+			n = customerSkillCertifyMapper.saveEntity(csc);
+		}
+		if(n > 0){
+			commonResponse.setCode(UserBizReturnCode.Success);
+			commonResponse.setMessage(UserBizReturnCode.Success.desc());
+		}else{
+			throw new BizException(AccountBizReturnCode.JdbcError, "操作数据库异常");
+		}
 		return commonResponse;
 	}
 	

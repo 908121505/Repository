@@ -48,6 +48,8 @@ public class UserBizReturnCode extends BizCode {
     
     public static final BizCode userIsExists=new UserBizReturnCode("userIsExists","542",MyServiceCode.USER,"绑定账户已存在");
     
+    public static final BizCode skillCertifyError=new UserBizReturnCode("skillCertifyError","551",MyServiceCode.USER,"审核中不能上传声音");
+    
     public static final BizCode CheckSignError = new UserBizReturnCode("CheckSignError","997", MyServiceCode.USER,"请求参数验签不正确");
     public static final BizCode BizFunctionTypeNotMatch=new UserBizReturnCode("BizFunctionTypeNotMatch","998",MyServiceCode.USER,"接口功能编码不匹配");
     public static final BizCode Unknown = new UserBizReturnCode("Unknown","999", MyServiceCode.USER,"未知异常");
