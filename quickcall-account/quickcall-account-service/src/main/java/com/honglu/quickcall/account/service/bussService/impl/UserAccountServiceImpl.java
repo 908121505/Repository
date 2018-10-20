@@ -55,7 +55,7 @@ public class UserAccountServiceImpl implements UserAccountService {
 	public CommonResponse queryAccount(QueryAccountRequest request) {
 		// TODO Auto-generated method stub
 		CommonResponse response = new CommonResponse();
-		Account account = accountMapper.queryAccount(request.getUserId());
+		Account account = accountMapper.queryAccount(request.getCustomerId());
 		response.setCode(BizCode.Success);
 		response.setMessage(BizCode.Success.desc());
 		response.setData(account);

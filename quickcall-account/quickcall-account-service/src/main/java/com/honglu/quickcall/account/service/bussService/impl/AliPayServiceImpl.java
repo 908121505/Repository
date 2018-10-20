@@ -64,7 +64,7 @@ public class AliPayServiceImpl implements AliPayService {
 		String xnPayType = "1";// 支付类型 1:支付宝APP, 2 :微信APP ,3:支付宝H5支付,4：微信H5支付
 		// String extData= "{\"phoneNum\":\"18217583747\"}";
 		String extData = "{\"accountId\":packet.getUserId()}";
-		String accountId = packet.getUserId() + "";
+		String accountId = packet.getCustomerId() + "";
 		String createIp = packet.getRemoteIp();// 请求ip
 		params += "appName=3&orderId=" + orderNo + "&orderDesc=" + orderDesc;
 		params += "&amount=" + amount + "&xnPayType=" + xnPayType + "&extData=" + extData + "&createIp=" + createIp
@@ -84,7 +84,7 @@ public class AliPayServiceImpl implements AliPayService {
 		}
 		// 插入充值信息
 		Recharge recharge = new Recharge();
-		recharge.setCustomerId(packet.getUserId());
+		recharge.setCustomerId(packet.getCustomerId());
 		recharge.setCreateDate(new Date());
 		recharge.setAmount(packet.getAmount());
 		recharge.setType(TradeTypeEnum.Pay.getType());// 1充值 2提现
@@ -99,19 +99,19 @@ public class AliPayServiceImpl implements AliPayService {
 	@Override
 	public CommonResponse whthdraw(WhthdrawRequest params) {
 
-		Account account = accountMapper.queryAccount(params.getUserId());
+		Account account = accountMapper.queryAccount(params.getCustomerId());
 		String errorMsg = null;
 		if (account.getRemainderAmounts().compareTo(params.getAmount()) == -1) {
 			return ResultUtils.resultParamEmpty("输入金额大于提现金额");
 		}
-		Aliacount aliacount = aliacountMapper.selectByPrimaryKey(params.getUserId() + "");
+		Aliacount aliacount = aliacountMapper.selectByPrimaryKey(params.getCustomerId() + "");
 		if (aliacount == null) {// 如果未绑定支付宝，将不发放奖励
 			return ResultUtils.resultParamEmpty("未绑定支付宝");
 		} else {
 			// 组装支付宝单批转账的数据
 			BigDecimal amount = params.getAmount();
 			String appPlatform = "3";// Voice
-			String customerId = params.getUserId() + "";
+			String customerId = params.getCustomerId() + "";
 			String outBizNo = UUIDUtils.getUUID();// 唯一的流水id
 			String payeeAccount = aliacount.getAccount();// 支付宝账号
 			String payeeRealName = aliacount.getRealname();// 支付宝真实姓名
@@ -127,7 +127,7 @@ public class AliPayServiceImpl implements AliPayService {
 			logger.info("支付宝返账 用户ID " + customerId + "返账 res:" + res);
 			JSONObject myJson = JSONObject.fromObject(res);
 			Recharge recharge = new Recharge();
-			recharge.setCustomerId(params.getUserId());
+			recharge.setCustomerId(params.getCustomerId());
 			recharge.setCreateDate(new Date());
 			recharge.setAmount(params.getAmount());
 			recharge.setType(TradeTypeEnum.Withdraw.getType());// 1充值 2提现
@@ -137,7 +137,7 @@ public class AliPayServiceImpl implements AliPayService {
 				recharge.setState(2);// 状态。1-申请支付，2-支付成功 3支付失败
 				// accountMapper.outAccount(params.getUserId(), params.getAmount(),
 				// TransferTypeEnum.REMAINDER.getType());
-				accountService.outAccount(params.getUserId(), params.getAmount(), TransferTypeEnum.REMAINDER,
+				accountService.outAccount(params.getCustomerId(), params.getAmount(), TransferTypeEnum.REMAINDER,
 						AccountBusinessTypeEnum.Withdraw);
 			} else {// 失败
 				recharge.setState(3);// 状态。1-申请支付，2-支付成功 3支付失败
@@ -153,13 +153,13 @@ public class AliPayServiceImpl implements AliPayService {
 
 	@Override
 	public CommonResponse bindAliaccount(BindAliaccountRequest params) {
-		Aliacount acliacount = aliacountMapper.selectByPrimaryKey(params.getUserId());
+		Aliacount acliacount = aliacountMapper.selectByPrimaryKey(params.getCustomerId());
 		if (params.getEtype() != null && params.getEtype() == 1) {
 			return ResultUtils.resultSuccess(acliacount);
 		} else {
 			Aliacount acount = new Aliacount();
 			acount.setAccount(params.getAccount());
-			acount.setAccountId(params.getUserId());
+			acount.setAccountId(params.getCustomerId());
 			acount.setRealname(params.getRealname());
 			if (acliacount == null) {// 没有支付宝账号走insert
 				aliacountMapper.insert(acount);
