@@ -21,6 +21,7 @@ import com.honglu.quickcall.account.service.dao.CustomerSkillMapper;
 import com.honglu.quickcall.account.service.dao.SkillMapper;
 import com.honglu.quickcall.account.service.service.IProductSkillService;
 import com.honglu.quickcall.common.api.util.DateUtils;
+import com.honglu.quickcall.common.api.util.JSONUtil;
 
 
 @Service("productSkillService")
@@ -217,7 +218,7 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 		skillPriceList.add(new BigDecimal(88));
 		
 		
-		for (int i = 0; i < 4; i++) {
+		for (int i = 0; i < 2; i++) {
 			List<String> serviceUnitList = new ArrayList<String>();
 			
 			
@@ -225,30 +226,22 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 			String skillItemName  = null ;
 			String serviceUnit  = null ;
 			if(i == 0 ){
-				skillItemName = "哄睡";
-				serviceUnit = "次";
-				serviceUnitList.add("次");
-			}else if(i == 1 ){
 				skillItemName = "叫醒";
 				serviceUnit = "次";
 				serviceUnitList.add("次");
-			}else if(i == 2 ){
+			}else if(i == 1 ){
 				skillItemName = "声优聊天";
 				serviceUnit = "半小时";
 				serviceUnitList.add("小时");
 				serviceUnitList.add("半小时");
-			}else if(i == 3 ){
-				skillItemName = "情感咨询";
-				serviceUnit = "小时";
-				serviceUnitList.add("小时");
-				serviceUnitList.add("半小时");
 			}
 			skillVO.setCustomerSkillId(10000L);
-			skillVO.setServiceUnit(serviceUnit);
-			skillVO.setDiscountRate(new BigDecimal(70));
+			skillVO.setOldSkillRange(1);
+			skillVO.setOldServiceUnit(serviceUnit);
+			skillVO.setOldDiscountRate(new BigDecimal(70));
 			skillVO.setSkillItemId(1000L);
 			skillVO.setSkillItemName(skillItemName);
-			skillVO.setSkillPrice(new BigDecimal(10));
+			skillVO.setOldSkillPrice(new BigDecimal(10));
 			skillVO.setSwitchStatus(Math.random() >0.5?1:0);
 			
 			
@@ -256,13 +249,13 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 			
 			for (int j = 0; j < 2; j++) {
 				CustomerSkillExtVO  extVO = new CustomerSkillExtVO();
-				extVO.setDiscontRateList(discontRateList);
-				extVO.setServiceUnitList(serviceUnitList);
+				extVO.setDiscontRateValue(new BigDecimal(2).multiply(new BigDecimal(j+1)));
+				extVO.setServiceUnitValue(i >0?"半小时":"小时");
 				extVO.setSkillItemExtId(1000L);
-				extVO.setSkillPriceList(skillPriceList);
+				extVO.setSkillRangeValue(j+1);
+				extVO.setSkillPriceValue(new BigDecimal(10).multiply(new BigDecimal(j+1)));
 				skillExtList.add(extVO);
 			}
-			
 			skillVO.setSkillExtList(skillExtList );
 			resultList.add(skillVO);
 		}
@@ -282,8 +275,8 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 		
 		resultVO.setEndServiceTimeStr("10:00");
 		resultVO.setWeekDataMap(weekDataMap);
-//		String  json = JSONUtil.toJson(resultVO);
-//		System.out.println("============"+json);
+		String  json = JSONUtil.toJson(resultVO);
+		System.out.println("============"+json);
 		return resultVO;
 	}
 

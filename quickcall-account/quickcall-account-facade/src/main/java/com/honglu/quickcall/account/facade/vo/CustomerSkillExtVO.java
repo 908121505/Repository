@@ -1,7 +1,6 @@
 package com.honglu.quickcall.account.facade.vo;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 /**
  * 
@@ -16,12 +15,14 @@ public class CustomerSkillExtVO {
 	
 	/**技能项扩展ID*/
 	private Long  skillItemExtId;
-    /**折扣列表*/
-    private List<BigDecimal>  discontRateList;
-    /**技能价格列表*/
-    private List<BigDecimal>  skillPriceList;
-    /**服务单位列表*/
-    private List<String>  serviceUnitList;
+    /**折扣*/
+    private BigDecimal  discontRateValue;
+    /**技能价格*/
+    private BigDecimal  skillPriceValue;
+    /**服务单位*/
+    private String  serviceUnitValue;
+    /**技能等级*/
+    private Integer  skillRangeValue;
     
     
 	public Long getSkillItemExtId() {
@@ -30,23 +31,34 @@ public class CustomerSkillExtVO {
 	public void setSkillItemExtId(Long skillItemExtId) {
 		this.skillItemExtId = skillItemExtId;
 	}
-	public List<BigDecimal> getDiscontRateList() {
-		return discontRateList;
+	public BigDecimal getDiscontRateValue() {
+		return discontRateValue;
 	}
-	public void setDiscontRateList(List<BigDecimal> discontRateList) {
-		this.discontRateList = discontRateList;
+	public void setDiscontRateValue(BigDecimal discontRateValue) {
+		this.discontRateValue = discontRateValue;
 	}
-	public List<BigDecimal> getSkillPriceList() {
-		return skillPriceList;
+	public BigDecimal getSkillPriceValue() {
+		return skillPriceValue;
 	}
-	public void setSkillPriceList(List<BigDecimal> skillPriceList) {
-		this.skillPriceList = skillPriceList;
+	public void setSkillPriceValue(BigDecimal skillPriceValue) {
+		this.skillPriceValue = skillPriceValue;
 	}
-	public List<String> getServiceUnitList() {
-		return serviceUnitList;
+	public String getServiceUnitValue() {
+		return serviceUnitValue;
 	}
-	public void setServiceUnitList(List<String> serviceUnitList) {
-		this.serviceUnitList = serviceUnitList;
+	public void setServiceUnitValue(String serviceUnitValue) {
+		this.serviceUnitValue = serviceUnitValue;
 	}
+	public Integer getSkillRangeValue() {
+		return skillRangeValue;
+	}
+	public void setSkillRangeValue(Integer skillRangeValue) {
+		this.skillRangeValue = skillRangeValue;
+	}
+
+	
+	
+    
+	
     
 }
