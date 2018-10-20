@@ -104,7 +104,6 @@ public class EditProfileServiceImpl implements EditProfileService {
             }
 
             JedisUtil.set(RedisKeyConstants.USER_CUSTOMER_INFO + params.getCustomerId(), JsonParseUtil.castToJson(customer));
-            commonResponse.setData(customer);
             commonResponse.setCode(UserBizReturnCode.Success);
             commonResponse.setMessage(UserBizReturnCode.Success.desc());
             return commonResponse;
@@ -141,7 +140,6 @@ public class EditProfileServiceImpl implements EditProfileService {
             // 头像上传要审核，先不放在redis中
 //            JedisUtil.set(RedisKeyConstants.USER_CUSTOMER_INFO + params.getCustomerId(), JsonParseUtil.castToJson(customer));
 
-            commonResponse.setData(customer);
             commonResponse.setCode(UserBizReturnCode.Success);
             commonResponse.setMessage(UserBizReturnCode.Success.desc());
             return commonResponse;
@@ -182,7 +180,6 @@ public class EditProfileServiceImpl implements EditProfileService {
         if (result > 0) {
             JedisUtil.set(RedisKeyConstants.USER_CUSTOMER_INFO + params.getCustomerId(),
                     JsonParseUtil.castToJson(customer));
-            commonResponse.setData(customer);
             commonResponse.setCode(UserBizReturnCode.Success);
             commonResponse.setMessage(UserBizReturnCode.Success.desc());
             return commonResponse;
@@ -197,8 +194,6 @@ public class EditProfileServiceImpl implements EditProfileService {
         Customer customer = customerMapper.selectByPrimaryKey(params.getCustomerId());
         // 获取新星座
         String newStarSign = params.getStarSign();
-        // 获取旧星座
-//        String oldStarSign = customer.getSignName();
         customer.setSignName(newStarSign);
 
         int result = customerMapper.updateByPrimaryKeySelective(customer);
@@ -206,7 +201,6 @@ public class EditProfileServiceImpl implements EditProfileService {
         if (result > 0) {
             JedisUtil.set(RedisKeyConstants.USER_CUSTOMER_INFO + params.getCustomerId(),
                     JsonParseUtil.castToJson(customer));
-            commonResponse.setData(customer);
             commonResponse.setCode(UserBizReturnCode.Success);
             commonResponse.setMessage(UserBizReturnCode.Success.desc());
             return commonResponse;
@@ -231,7 +225,6 @@ public class EditProfileServiceImpl implements EditProfileService {
             try {
                 customerAppearanceMapper.saveEntity(customerAppearance);
 
-                commonResponse.setData(customerAppearance);
                 commonResponse.setCode(UserBizReturnCode.Success);
                 commonResponse.setMessage(UserBizReturnCode.Success.desc());
                 return commonResponse;
@@ -262,7 +255,6 @@ public class EditProfileServiceImpl implements EditProfileService {
                     customerInterest.setInterestId(Integer.parseInt(str));
                     customerInterestMapper.insertSelective(customerInterest);
                 }
-                commonResponse.setData(customerInterest);
                 commonResponse.setCode(UserBizReturnCode.Success);
                 commonResponse.setMessage(UserBizReturnCode.Success.desc());
                 return commonResponse;
@@ -303,7 +295,6 @@ public class EditProfileServiceImpl implements EditProfileService {
         if (result > 0) {
             JedisUtil.set(RedisKeyConstants.USER_CUSTOMER_INFO + params.getCustomerId(),
                     JsonParseUtil.castToJson(customer));
-            commonResponse.setData(customer);
             commonResponse.setCode(UserBizReturnCode.Success);
             commonResponse.setMessage(UserBizReturnCode.Success.desc());
             return commonResponse;
@@ -325,7 +316,6 @@ public class EditProfileServiceImpl implements EditProfileService {
         if (result > 0) {
             JedisUtil.set(RedisKeyConstants.USER_CUSTOMER_INFO + params.getCustomerId(),
                     JsonParseUtil.castToJson(customer));
-            commonResponse.setData(customer);
             commonResponse.setCode(UserBizReturnCode.Success);
             commonResponse.setMessage(UserBizReturnCode.Success.desc());
             return commonResponse;
