@@ -536,6 +536,12 @@
         login_time = #{loginTime,jdbcType=TIMESTAMP},
       </if>
 
+      <if test="voiceIdentificationCard != null" >
+        voice_identification_card = #{voiceIdentificationCard,jdbcType=VARCHAR},
+      </if>
+      <if test="voiceIdentificationCardStatus != null" >
+        voice_identification_card_status = #{voiceIdentificationCardStatus,jdbcType=TINYINT},
+      </if>
       <if test="headPortraitStatus != null" >
         head_portrait_status = #{headPortraitStatus,jdbcType=TINYINT},
       </if>

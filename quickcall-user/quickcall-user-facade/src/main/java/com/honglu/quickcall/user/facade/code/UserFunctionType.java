@@ -112,15 +112,22 @@ public interface UserFunctionType {
 	 * 删除形象照
 	 */
 	String removeAppearance = "0011146";
+    /**
+     * 修改声鉴卡
+     */
+    String updateVoiceIdentificationCard = "0011147";
+    /**
+     * 删除声鉴卡
+     */
+    String removeVoiceIdentificationCard = "0011148";
 
-	/**
-	 * 个人中心接口
-	 */
-	String CUSTOMER_CENTER = "0011150";
+    /**
+     * 个人中心接口
+     */
+    String CUSTOMER_CENTER = "0011150";
 
-	/**
-	 * 客户主页接口
-	 */
-	String CUSTOMER_HOME = "0011151";
-
+    /**
+     * 客户主页接口
+     */
+    String CUSTOMER_HOME = "0011151";
 }

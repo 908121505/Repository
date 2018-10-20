@@ -184,6 +184,12 @@ public class UserDubboBusinessImpl implements UserDubboBusiness {
 			case UserFunctionType.CUSTOMER_HOME:
 				response = personInfoService.queryCustomerHome((CustomerHomeRequest) request);
 				break;
+			case UserFunctionType.updateVoiceIdentificationCard:
+				response = editProfileService.updateVoiceIdentificationCard((UpdateVoiceIdentificationCardReq) request);
+				break;
+			case UserFunctionType.removeVoiceIdentificationCard:
+				response = editProfileService.removeVoiceIdentificationCard((RemoveVoiceIdentificationCardReq) request);
+				break;
 			default:
 				throw new BizException(UserBizReturnCode.BizFunctionTypeNotMatch,
 						UserBizReturnCode.BizFunctionTypeNotMatch.desc());
