@@ -13,21 +13,11 @@ import java.util.List;
  */
 public class CustomerSkillExtVO {
 	
-	/**技能项扩展ID*/
-	private Long  skillItemExtId;
+
     /**技能等级*/
     private Integer  skillRangeValue;
     /**单位价格信息*/
     private List<SkillUnitPriceVO> unitPriceList ;
-    
-    
-	public Long getSkillItemExtId() {
-		return skillItemExtId;
-	}
-	public void setSkillItemExtId(Long skillItemExtId) {
-		this.skillItemExtId = skillItemExtId;
-	}
-	
 	
 	public Integer getSkillRangeValue() {
 		return skillRangeValue;

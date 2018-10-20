@@ -13,6 +13,8 @@ import java.math.BigDecimal;
  */
 public class SkillUnitPriceVO {
 	
+	/**技能项扩展ID*/
+	private Long  skillItemExtId;
 	/**服务单位*/
 	private String  unitName;
 	/**单位价格*/
@@ -29,6 +31,13 @@ public class SkillUnitPriceVO {
 	public void setUnitPrice(BigDecimal unitPrice) {
 		this.unitPrice = unitPrice;
 	}
+	public Long getSkillItemExtId() {
+		return skillItemExtId;
+	}
+	public void setSkillItemExtId(Long skillItemExtId) {
+		this.skillItemExtId = skillItemExtId;
+	}
+	
 	
     
 }

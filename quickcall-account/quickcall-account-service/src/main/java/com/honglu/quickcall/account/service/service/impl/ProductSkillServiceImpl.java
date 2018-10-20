@@ -221,7 +221,6 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 			for (int j = 0; j < 2; j++) {
 				
 				CustomerSkillExtVO  extVO = new CustomerSkillExtVO();
-				extVO.setSkillItemExtId(1000L);
 				extVO.setSkillRangeValue(j+1);
 				
 				//按次算
@@ -229,6 +228,7 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 				if(i == 0){
 					
 					SkillUnitPriceVO  up =  new SkillUnitPriceVO();
+					up.setSkillItemExtId(1111L);
 					up.setUnitName("次");
 					up.setUnitPrice(new BigDecimal(60));
 					unitPriceList.add(up);
@@ -240,10 +240,11 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 						if(k == 0){
 							up.setUnitName("半小时");
 							up.setUnitPrice(new BigDecimal(60));
+							up.setSkillItemExtId(3333L);
 						}else{
 							up.setUnitName("小时");
 							up.setUnitPrice(new BigDecimal(100));
-							
+							up.setSkillItemExtId(2222L);
 						}
 						unitPriceList.add(up);
 					}
