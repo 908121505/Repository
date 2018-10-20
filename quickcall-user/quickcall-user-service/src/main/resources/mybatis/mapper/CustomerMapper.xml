@@ -49,9 +49,9 @@
     <result column="device_id" property="deviceId" jdbcType="VARCHAR" />
     <result column="login_time" property="loginTime" jdbcType="TIMESTAMP" />
 
-    <result column="appearance" property="appearance" jdbcType="VARCHAR" />
-    <result column="appearance_status" property="appearanceStatus" jdbcType="VARCHAR" />
-    <result column="head_portrait_status" property="headPortraitStatus" jdbcType="VARCHAR" />
+    <result column="voice_identification_card" property="voiceIdentificationCard" jdbcType="VARCHAR" />
+    <result column="voice_identification_card_status" property="voiceIdentificationCardStatus" />
+    <result column="head_portrait_status" property="headPortraitStatus"  />
   </resultMap>
  <sql id="Base_Column_List" >
         customer_id,app_id, phone, real_name, sex, nick_name, type, credentials_type, credentials_num, 
@@ -60,7 +60,7 @@
     star_sign, birthday, voice_url, voice_time, v_voice_url, v_voice_url_tmp, v_voice_time_tmp, 
     v_voice_status, v_voice_time, v_status, identity_status, token_code, other_relation, 
     create_time, modify_time, create_man, modify_man, remark, app_channel_name, device_id, 
-    login_time,appearance,appearance_status,head_portrait_status
+    login_time,voice_identification_card,voice_identification_card_status,head_portrait_status
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
@@ -136,7 +136,7 @@
       identity_status, token_code, other_relation, 
       create_time, modify_time, create_man, 
       modify_man, remark, app_channel_name, 
-      device_id, login_time,appearance,appearance_status,head_portrait_status)
+      device_id, login_time,voice_identification_card,voice_identification_card_status,head_portrait_status)
     values (#{customerId,jdbcType=BIGINT}, #{phone,jdbcType=BIGINT}, #{realName,jdbcType=VARCHAR}, 
       #{sex,jdbcType=TINYINT}, #{nickName,jdbcType=VARCHAR}, #{type,jdbcType=TINYINT}, 
       #{credentialsType,jdbcType=TINYINT}, #{credentialsNum,jdbcType=VARCHAR}, #{interestId,jdbcType=INTEGER}, 
@@ -151,7 +151,7 @@
       #{createTime,jdbcType=TIMESTAMP}, #{modifyTime,jdbcType=TIMESTAMP}, #{createMan,jdbcType=VARCHAR}, 
       #{modifyMan,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{appChannelName,jdbcType=VARCHAR}, 
       #{deviceId,jdbcType=VARCHAR}, #{loginTime,jdbcType=TIMESTAMP},
-      #{appearance,jdbcType=VARCHAR},#{appearanceStatus,jdbcType=VARCHAR},#{headPortraitStatus,jdbcType=VARCHAR})
+      #{voiceIdentificationCard,jdbcType=TINYINT},#{voiceIdentificationCardStatus,jdbcType=VARCHAR},#{headPortraitStatus,jdbcType=TINYINT})
   </insert>
   <insert id="insertSelective" parameterType="com.honglu.quickcall.user.facade.entity.Customer" >
      insert into customer
@@ -536,14 +536,8 @@
         login_time = #{loginTime,jdbcType=TIMESTAMP},
       </if>
 
-      <if test="appearance != null" >
-        appearance = #{appearance,jdbcType=VARCHAR},
-      </if>
-      <if test="appearanceStatus != null" >
-        appearance_status = #{appearanceStatus,jdbcType=VARCHAR},
-      </if>
       <if test="headPortraitStatus != null" >
-        head_portrait_status = #{headPortraitStatus,jdbcType=VARCHAR},
+        head_portrait_status = #{headPortraitStatus,jdbcType=TINYINT},
       </if>
     </set>
     where customer_id = #{customerId,jdbcType=BIGINT}
