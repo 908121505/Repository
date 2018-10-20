@@ -256,7 +256,6 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 				skillExtList.add(extVO);
 			}
 			
-			
 			skillVO.setOldSkillItemExtId(2001L);
 			skillVO.setDiscontRateList(discontRateList);
 			skillVO.setSkillExtList(skillExtList );
@@ -274,7 +273,7 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 		weekDataMap.put("saturday", 0);
 		weekDataMap.put("sunday", 1);
 		
-		
+		resultVO.setReceiveStatus(1);
 		resultVO.setCustomerSkillList(resultList);
 		
 		resultVO.setEndServiceTimeStr("10:00");
