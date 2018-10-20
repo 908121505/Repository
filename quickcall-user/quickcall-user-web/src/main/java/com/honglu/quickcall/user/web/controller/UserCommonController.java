@@ -259,6 +259,28 @@ public class UserCommonController {
     }
 
     /**
+     * 个人中心接口
+     *
+     * @param params
+     * @return
+     */
+    @RequestMapping(value = "/customerCenter", method = RequestMethod.POST)
+    @ResponseBody
+    public WebResponseModel customerCenter(CustomerCenterRequest params) {
+        logger.info("userWeb.user.customerCenter.request.data : " + JSONObject.toJSONString(params));
+        WebResponseModel response = new WebResponseModel();
+        if (params.getCustomerId() == null) {
+            response.setCode(UserBizReturnCode.paramError.code());
+            response.setMsg(UserBizReturnCode.paramError.desc());
+            return response;
+        }
+        response = userCenterService.execute(params);
+        logger.info("userWeb.user.customerCenter.response.data : " + JSONObject.toJSONString(response));
+        return response;
+
+    }
+
+    /**
      * 客户个人主页接口
      *
      * @param params

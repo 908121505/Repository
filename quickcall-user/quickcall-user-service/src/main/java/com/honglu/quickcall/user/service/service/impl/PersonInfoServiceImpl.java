@@ -103,6 +103,7 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 	private CustomerSkillMapper customerSkillMapper;
 	@Autowired
 	private CustomerSkillCertifyMapper customerSkillCertifyMapper;
+
 	/**
 	 * 中文、英文、数字、下划线校验 4-24位
 	 */
@@ -218,6 +219,7 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 	 * @param params
 	 * @return
 	 */
+	@Override
 	public CommonResponse searchPerson(SearchPersonRequest params){
 		CommonResponse commonResponse = new CommonResponse();
 		String keyword = params.getKeyword();
@@ -958,7 +960,42 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 		return commonResponse;
 	}
 
-	
+	@Override
+	public CommonResponse queryCustomerCenter(CustomerCenterRequest request) {
+		Customer viewCustomer = customerMapper.selectByPrimaryKey(request.getCustomerId());
+		if (viewCustomer == null) {
+			return ResultUtils.resultDataNotExist("用户数据不存在");
+		}
+		CustomerCenterVO customerCenterVO = new CustomerCenterVO();
+		customerCenterVO.setCustomerId(request.getCustomerId());
+		customerCenterVO.setCustomerAppId(viewCustomer.getAppId());
+		customerCenterVO.setNickName(viewCustomer.getNickName());
+		customerCenterVO.setSex(viewCustomer.getSex());
+		if (viewCustomer.getBirthday() != null) {
+			customerCenterVO.setAge(CountAge.getAgeByBirth(viewCustomer.getBirthday()));
+		}
+
+		// 客户等级 ADUAN -- 待完成
+		customerCenterVO.setCustomerLevel(250);
+
+		customerCenterVO.setSignName(viewCustomer.getSignName());
+		customerCenterVO.setIdentityStatus(viewCustomer.getIdentityStatus());
+		customerCenterVO.setvStatus(viewCustomer.getvStatus());
+
+		// 查询关注数
+		customerCenterVO.setAttentionNum(fansMapper.queryAttentionNumByCustomerId(request.getCustomerId()));
+
+		// 查询粉丝数
+		customerCenterVO.setFansNum(fansMapper.queryFansNumByCustomerId(request.getCustomerId()).intValue());
+
+		// 查询充值、提现金额
+		Map<String, BigDecimal> customerMoney = customerMapper.queryCustomerAccountMoney(request.getCustomerId());
+		if(customerMoney != null) {
+			customerCenterVO.setRechargeAmounts(customerMoney.get("rechargeAmounts"));
+			customerCenterVO.setWithdrawAmounts(customerMoney.get("withdrawAmounts"));
+		}
+		return ResultUtils.resultSuccess(customerCenterVO);
+	}
 
 	@Override
 	public CommonResponse queryCustomerHome(CustomerHomeRequest request) {

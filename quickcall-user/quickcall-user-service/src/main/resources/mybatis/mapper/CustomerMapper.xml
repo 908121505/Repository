@@ -656,6 +656,13 @@
     where app_id=#{appId}
 
   </select>
-  
 
+  <!-- 查询客户的充值金额 + 提现金额 -->
+  <select id="queryCustomerAccountMoney" resultType="map">
+    SELECT
+      recharge_amounts as rechargeAmounts,
+      remainder_amounts + frozen_amounts as withdrawAmounts
+    FROM `account`
+    WHERE customer_id = #{customerId}
+  </select>
 </mapper>

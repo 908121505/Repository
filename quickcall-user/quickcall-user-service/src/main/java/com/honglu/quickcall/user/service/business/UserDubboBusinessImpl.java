@@ -176,6 +176,10 @@ public class UserDubboBusinessImpl implements UserDubboBusiness {
 			case UserFunctionType.removeAppearance:
 				response = editProfileService.removeAppearance((RemoveAppearanceReq) request);
 				break;
+			// 个人中心
+			case UserFunctionType.CUSTOMER_CENTER:
+				response = personInfoService.queryCustomerCenter((CustomerCenterRequest) request);
+				break;
 			// 客户主页
 			case UserFunctionType.CUSTOMER_HOME:
 				response = personInfoService.queryCustomerHome((CustomerHomeRequest) request);

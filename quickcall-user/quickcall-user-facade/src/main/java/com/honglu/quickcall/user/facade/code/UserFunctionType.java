@@ -114,8 +114,13 @@ public interface UserFunctionType {
 	String removeAppearance = "0011146";
 
 	/**
+	 * 个人中心接口
+	 */
+	String CUSTOMER_CENTER = "0011150";
+
+	/**
 	 * 客户主页接口
 	 */
-	String CUSTOMER_HOME = "0011150";
+	String CUSTOMER_HOME = "0011151";
 
 }
