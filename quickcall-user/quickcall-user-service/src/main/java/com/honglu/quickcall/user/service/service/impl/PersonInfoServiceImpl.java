@@ -942,7 +942,7 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 		int n;
 		if(certifyNow != null ){
 			//如果是审核中不能进入本方法
-			if("1".equals(certifyNow.getAuditStatus())){
+			if(certifyNow.getAuditStatus()==1){
 				commonResponse.setCode(UserBizReturnCode.skillCertifyError);
 				commonResponse.setMessage(UserBizReturnCode.skillCertifyError.desc());
 				return commonResponse;
