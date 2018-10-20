@@ -168,6 +168,9 @@ public class UserDubboBusinessImpl implements UserDubboBusiness {
 			case UserFunctionType.updateInterest:
 				response = editProfileService.updateInterest((UpdateInterestReq) request);
 				break;
+			case UserFunctionType.removeAppearance:
+				response = editProfileService.removeAppearance((RemoveAppearanceReq) request);
+				break;
 			default:
 				throw new BizException(UserBizReturnCode.BizFunctionTypeNotMatch,
 						UserBizReturnCode.BizFunctionTypeNotMatch.desc());

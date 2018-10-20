@@ -12,6 +12,15 @@ import com.honglu.quickcall.user.facade.exchange.UserCenterRequest;
 public class UpdateAppearanceReq extends UserCenterRequest {
 
     private Long customerId;
+    private String appearance;
+
+    public String getAppearance() {
+        return appearance;
+    }
+
+    public void setAppearance(String appearance) {
+        this.appearance = appearance;
+    }
 
     public Long getCustomerId() {
         return customerId;
@@ -21,9 +30,16 @@ public class UpdateAppearanceReq extends UserCenterRequest {
         this.customerId = customerId;
     }
 
+    @Override
+    public String toString() {
+        return "UpdateAppearanceReq{" +
+                "customerId=" + customerId +
+                ", appearance='" + appearance + '\'' +
+                '}';
+    }
 
     @Override
     public String getBizCode() {
-        return UserFunctionType.updateNickname;
+        return UserFunctionType.updateAppearance;
     }
 }

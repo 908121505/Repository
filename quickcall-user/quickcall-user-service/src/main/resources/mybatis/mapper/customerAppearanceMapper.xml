@@ -49,7 +49,7 @@ id,	customer_id,	appearance,	audit_status,	sort,	status,	create_time,	modify_tim
 		 INSERT INTO customer_appearance
  		(id,customer_id,appearance,audit_status,sort,status,create_time,modify_time,create_man,modify_man,remark) 
 		 VALUES 
- 		(#{id},#{customerId},#{appearance},#{auditStatus},#{sort},#{status},#{createTime},#{modifyTime},#{createMan},#{modifyMan},#{remark}) 
+ 		(#{id},#{customerId},#{appearance},#{auditStatus},#{sort},#{status},#{createTime},#{modifyTime},#{createMan},#{modifyMan},#{remark})
 	</insert>
 
 	<!-- 修 改-->

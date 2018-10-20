@@ -108,5 +108,8 @@ public interface UserFunctionType {
 	 * 修改兴趣
 	 */
 	String updateInterest = "0011145";
-
+	/**
+	 * 删除形象照
+	 */
+	String removeAppearance = "0011146";
 }

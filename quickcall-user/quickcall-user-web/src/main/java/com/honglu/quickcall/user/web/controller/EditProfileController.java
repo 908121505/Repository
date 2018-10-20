@@ -75,6 +75,18 @@ public class EditProfileController {
         return response;
     }
     /**
+     * 修改兴趣
+     *
+     * @param params
+     * @return
+     */
+    @PostMapping(value = "/updateInterest")
+    public WebResponseModel updateInterest(@RequestBody UpdateInterestReq params) {
+        logger.info("修改兴趣 请求参数：" + params.toString());
+        WebResponseModel response = userCenterService.execute(params);
+        return response;
+    }
+    /**
      * 修改形象照
      *
      * @param params
@@ -87,16 +99,41 @@ public class EditProfileController {
         return response;
     }
     /**
-     * 修改兴趣
+     * 删除形象照
      *
      * @param params
      * @return
      */
-    @PostMapping(value = "/updateInterest")
-    public WebResponseModel updateInterest(@RequestBody UpdateInterestReq params) {
-        logger.info("修改兴趣 请求参数：" + params.toString());
+    @PostMapping(value = "/removeAppearance")
+    public WebResponseModel removeAppearance(@RequestBody RemoveAppearanceReq params) {
+        logger.info("删除形象照 请求参数：" + params.toString());
         WebResponseModel response = userCenterService.execute(params);
         return response;
     }
+   /* *//**
+     * 修改声鉴卡
+     *
+     * @param params
+     * @return
+     *//*
+    @PostMapping(value = "/updateAppearance")
+    public WebResponseModel updateAppearance(@RequestBody UpdateAppearanceReq params) {
+        logger.info("修改形象照 请求参数：" + params.toString());
+        WebResponseModel response = userCenterService.execute(params);
+        return response;
+    }
+    *//**
+     * 删除声鉴卡
+     *
+     * @param params
+     * @return
+     *//*
+    @PostMapping(value = "/removeAppearance")
+    public WebResponseModel removeAppearance(@RequestBody RemoveAppearanceReq params) {
+        logger.info("修改形象照 请求参数：" + params.toString());
+        WebResponseModel response = userCenterService.execute(params);
+        return response;
+    }*/
+
 
 }

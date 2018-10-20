@@ -7,17 +7,16 @@ import com.honglu.quickcall.common.api.exception.RemoteException;
 import com.honglu.quickcall.common.api.exchange.CommonResponse;
 import com.honglu.quickcall.common.api.util.JedisUtil;
 import com.honglu.quickcall.common.core.util.Detect;
+import com.honglu.quickcall.common.core.util.UUIDUtils;
 import com.honglu.quickcall.common.third.rongyun.models.CodeSuccessReslut;
 import com.honglu.quickcall.common.third.rongyun.util.RongYunUtil;
 import com.honglu.quickcall.user.facade.code.UserBizReturnCode;
 import com.honglu.quickcall.user.facade.entity.Customer;
+import com.honglu.quickcall.user.facade.entity.CustomerAppearance;
 import com.honglu.quickcall.user.facade.entity.CustomerInterest;
 import com.honglu.quickcall.user.facade.entity.SensitivityWord;
 import com.honglu.quickcall.user.facade.exchange.request.editprofile.*;
-import com.honglu.quickcall.user.service.dao.CustomerInterestMapper;
-import com.honglu.quickcall.user.service.dao.CustomerMapper;
-import com.honglu.quickcall.user.service.dao.InterestMapper;
-import com.honglu.quickcall.user.service.dao.SensitivityWordMapper;
+import com.honglu.quickcall.user.service.dao.*;
 import com.honglu.quickcall.user.service.service.CustomerRedisManagement;
 import com.honglu.quickcall.user.service.service.EditProfileService;
 import com.honglu.quickcall.user.service.util.CommonUtil;
@@ -27,6 +26,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -37,6 +37,7 @@ import java.util.List;
  * @date 2018/10/18 13:44
  */
 @Service
+@Transactional
 public class EditProfileServiceImpl implements EditProfileService {
 
     private static final Logger logger = LoggerFactory.getLogger(PersonInfoServiceImpl.class);
@@ -49,6 +50,8 @@ public class EditProfileServiceImpl implements EditProfileService {
     private CustomerRedisManagement customerRedisManagement;
     @Autowired
     private CustomerInterestMapper customerInterestMapper;
+    @Autowired
+    private CustomerAppearanceMapper customerAppearanceMapper;
 
     @Override
     public CommonResponse updateNickName(UpdateNickNameReq params) {
@@ -214,7 +217,31 @@ public class EditProfileServiceImpl implements EditProfileService {
 
     @Override
     public CommonResponse updateAppearance(UpdateAppearanceReq params) {
-        return null;
+        CommonResponse commonResponse = new CommonResponse();
+
+        CustomerAppearance customerAppearance = new CustomerAppearance();
+        customerAppearance.setId(UUIDUtils.getId());
+        customerAppearance.setCustomerId(params.getCustomerId());
+        customerAppearance.setAppearance(params.getAppearance());
+        customerAppearance.setAuditStatus(0);
+
+        Customer customer = customerRedisManagement.getCustomer(params.getCustomerId());
+        if (null != customer) {
+            // 更新customer_appearance表
+            try {
+                customerAppearanceMapper.saveEntity(customerAppearance);
+
+                commonResponse.setData(customerAppearance);
+                commonResponse.setCode(UserBizReturnCode.Success);
+                commonResponse.setMessage(UserBizReturnCode.Success.desc());
+                return commonResponse;
+            } catch (Exception e) {
+                logger.error("修改形象照 异常",e);
+                throw new BizException(AccountBizReturnCode.JdbcError, "操作数据库异常");
+            }
+        } else {
+            throw new BizException(AccountBizReturnCode.JdbcError, "操作数据库异常");
+        }
     }
 
     @Override
@@ -229,7 +256,6 @@ public class EditProfileServiceImpl implements EditProfileService {
         if (null != customer) {
             // 更新customer_interest表
             try {
-                // 如果customer_interest中间表有该用户，先删除该用户在此表的数据
                 customerInterestMapper.deleteByCustomerId(params.getCustomerId());
 
                 for (String str : interest) {
@@ -249,5 +275,19 @@ public class EditProfileServiceImpl implements EditProfileService {
         }
     }
 
+    @Override
+    public CommonResponse removeAppearance(RemoveAppearanceReq params) {
+        CommonResponse commonResponse = new CommonResponse();
+        try {
+            customerAppearanceMapper.deleteEntity(params.getId());
 
+            commonResponse.setCode(UserBizReturnCode.Success);
+            commonResponse.setMessage(UserBizReturnCode.Success.desc());
+            return commonResponse;
+        } catch (Exception e) {
+            logger.error("删除形象照 异常",e);
+            throw new BizException(AccountBizReturnCode.JdbcError, "操作数据库异常");
+        }
+
+    }
 }

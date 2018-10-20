@@ -33,7 +33,7 @@ public interface CustomerAppearanceMapper{
 	 * 删除（根据主键ID删除）
 	 * 
 	 **/
-	int deleteEntity ( @Param("id") String id );
+	int deleteEntity ( @Param("id") long id );
 
 	/**
 	 * 
