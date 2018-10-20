@@ -3,9 +3,11 @@ package com.honglu.quickcall.account.web.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.context.annotation.RequestScope;
 
 import com.honglu.quickcall.account.facade.exchange.request.DaVListBySkillItemIdRequest;
 import com.honglu.quickcall.account.facade.exchange.request.FirstPageDaVinfoRequest;
@@ -41,7 +43,7 @@ public class SkillInfoController {
     */
     @RequestMapping(value = "/updateSkillInfo", method = RequestMethod.POST)
     @ResponseBody
-    public WebResponseModel updateSkillInfoPersonal(  SkillUpdateRequest params) {
+    public WebResponseModel updateSkillInfoPersonal(@RequestBody   SkillUpdateRequest params) {
     	WebResponseModel response = orderInfoService.execute(params);
     	return response;
     }

@@ -1,5 +1,6 @@
 package com.honglu.quickcall.user.service.service.impl;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -32,6 +33,7 @@ import com.honglu.quickcall.user.facade.constants.UserBizConstants;
 import com.honglu.quickcall.user.facade.entity.Customer;
 import com.honglu.quickcall.user.facade.entity.CustomerInterest;
 import com.honglu.quickcall.user.facade.entity.CustomerOccupation;
+import com.honglu.quickcall.user.facade.entity.CustomerSkillCertify;
 import com.honglu.quickcall.user.facade.entity.Fans;
 import com.honglu.quickcall.user.facade.entity.Interest;
 import com.honglu.quickcall.user.facade.entity.Occupation;
@@ -66,12 +68,14 @@ import com.honglu.quickcall.user.facade.vo.SearchPersonListVO;
 import com.honglu.quickcall.user.service.dao.CustomerInterestMapper;
 import com.honglu.quickcall.user.service.dao.CustomerMapper;
 import com.honglu.quickcall.user.service.dao.CustomerOccupationMapper;
+import com.honglu.quickcall.user.service.dao.CustomerSkillCertifyMapper;
 import com.honglu.quickcall.user.service.dao.FansMapper;
 import com.honglu.quickcall.user.service.dao.InterestMapper;
 import com.honglu.quickcall.user.service.dao.OccupationMapper;
 import com.honglu.quickcall.user.service.dao.OrdersMapper;
 import com.honglu.quickcall.user.service.dao.ProductMapper;
 import com.honglu.quickcall.user.service.dao.SensitivityWordMapper;
+import com.honglu.quickcall.user.service.dao.SkillItemMapper;
 import com.honglu.quickcall.user.service.service.CustomerRedisManagement;
 import com.honglu.quickcall.user.service.service.PersonInfoService;
 import com.honglu.quickcall.user.service.util.CountAge;
@@ -103,6 +107,10 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 	private FansMapper fansMapper;
 	@Autowired
 	private OrdersMapper ordersMapper;
+	@Autowired
+	private SkillItemMapper skillItemMapper;
+	@Autowired
+	private CustomerSkillCertifyMapper customerSkillCertifyMapper;
 	/**
 	 * 中文、英文、数字、下划线校验 4-24位
 	 */
@@ -853,24 +861,33 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 			throw new BizException(BizCode.ParamError, "用戶Id 不能为空");
 		}
 		CommonResponse commonResponse = new CommonResponse();
-//		List<SkillItem> skillList = skillMapper.selectAllSkill();
-//		List<SkillReview> skillReviewList = skillReviewMapper.findAll(params.getCustomerId());
+//		List<SkillItem> skillList = skillItemMapper.selectAllSkill();
+//		List<CustomerSkillCertify> skillReviewList = customerSkillCertifyMapper.selectAllSkillByCustomer(params.getCustomerId());
 //		//已经解锁的技能列表
 //		List<MySkillVO> haveSkill = new ArrayList<MySkillVO>();
 //		//未解锁的技能列表
 //		List<MySkillVO> noHaveSkill = new ArrayList<MySkillVO>();
 //		boolean flag ;
+//		Map<String,Object> map = new HashMap<String,Object>();
 //		//区分解锁和不解锁的技能
-//		for (Skill skill : skillList) {
+//		for (SkillItem skill : skillList) {
 //			flag = true;
 //			MySkillVO mySkillVO = new MySkillVO();
-//			mySkillVO.setName(skill.getName());
+//			mySkillVO.setName(skill.getSkillItemName());
 //			mySkillVO.setImageUrl(skill.getImageUrl());
 //			mySkillVO.setSkillId(skill.getId());
-//			for (SkillReview skillReview : skillReviewList) {
-//				if(skill.getId().equals(skillReview.getSkillId())){
+//			mySkillVO.setSkillStatus(skill.getSkillStatus());
+//			for (CustomerSkillCertify skillReview : skillReviewList) {
+//				//判断认证的技能
+//				if(skill.getId().equals(skillReview.getSkillItemId())){
 //					mySkillVO.setAuditStatus(skillReview.getAuditStatus());
+//					//是否已经审核过
 //					if(skillReview.getIsAudited()==1){
+//						//审核状态不是待审核状态
+//						if(skillReview.getAuditStatus() != 1){
+//							mySkillVO.setSkillVoiceUrl(skillReview.getSkillVoiceUrl());
+//							mySkillVO.setSkillVoiceTime(skillReview.getSkillVoiceTime());
+//						}
 //						haveSkill.add(mySkillVO);
 //						flag = false;
 //						skillReviewList.remove(skillReview);
@@ -879,6 +896,7 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 //				}
 //			}
 //			if(flag){
+//				mySkillVO.setImageUrl(skill.getBlackImageUrl());
 //				noHaveSkill.add(mySkillVO);
 //			}
 //		}
@@ -887,24 +905,18 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 		List<MySkillVO> haveSkill = new ArrayList<MySkillVO>();
 		//未解锁的技能列表
 		List<MySkillVO> noHaveSkill = new ArrayList<MySkillVO>();
-		MySkillVO m1 = new MySkillVO("甜蜜互动","http://test-guanjia.oss-cn-shanghai.aliyuncs.com/voice/banner/1539583182452.png",1,1809221430063474300L);
-		MySkillVO m2 = new MySkillVO("午夜畅聊","http://test-guanjia.oss-cn-shanghai.aliyuncs.com/voice/banner/1539583354838.png",2,1809221430063474300L);
-		MySkillVO m3 = new MySkillVO("游戏互动","http://test-guanjia.oss-cn-shanghai.aliyuncs.com/voice/banner/1539583368153.png",1,1809221430063474300L);
-		MySkillVO m4 = new MySkillVO("哄睡","http://test-guanjia.oss-cn-shanghai.aliyuncs.com/voice/banner/1539583182452.png",0,1809221430063474300L);
-		MySkillVO m5 = new MySkillVO("声优聊天","http://test-guanjia.oss-cn-shanghai.aliyuncs.com/voice/banner/1539583182452.png",0,1809221430063474300L);
-		MySkillVO m6 = new MySkillVO("哄睡","http://test-guanjia.oss-cn-shanghai.aliyuncs.com/voice/banner/1539583182452.png",0,1809221430063474300L);
-		MySkillVO m7 = new MySkillVO("哄睡","http://test-guanjia.oss-cn-shanghai.aliyuncs.com/voice/banner/1539583182452.png",1,1809221430063474300L);
-		MySkillVO m8 = new MySkillVO("哄睡","http://test-guanjia.oss-cn-shanghai.aliyuncs.com/voice/banner/1539583182452.png",0,1809221430063474300L);
-		MySkillVO m9 = new MySkillVO("哄睡","http://test-guanjia.oss-cn-shanghai.aliyuncs.com/voice/banner/1539583182452.png",0,1809221430063474300L);
+		MySkillVO m1 = new MySkillVO("甜蜜互动","http://test-guanjia.oss-cn-shanghai.aliyuncs.com/voice/banner/1539583182452.png",1,1809221430063474300L,1);
+		MySkillVO m2 = new MySkillVO("午夜畅聊","http://test-guanjia.oss-cn-shanghai.aliyuncs.com/voice/banner/1539583354838.png",2,1809221430063474300L,"http://test-guanjia.oss-cn-shanghai.aliyuncs.com/voice/user/audio/db91943b9bb04d6b97127dce1a37a9fe.mp3",new BigDecimal(8.0),1);
+		MySkillVO m3 = new MySkillVO("游戏互动","http://test-guanjia.oss-cn-shanghai.aliyuncs.com/voice/banner/1539583368153.png",1,1809221430063474300L,1);
+		MySkillVO m4 = new MySkillVO("哄睡","http://test-guanjia.oss-cn-shanghai.aliyuncs.com/voice/banner/1539583182452.png",0,1809221430063474300L,0);
+		MySkillVO m5 = new MySkillVO("声优聊天","http://test-guanjia.oss-cn-shanghai.aliyuncs.com/voice/banner/1539583182452.png",0,1809221430063474300L,1);
+		MySkillVO m6 = new MySkillVO("哄睡","http://test-guanjia.oss-cn-shanghai.aliyuncs.com/voice/banner/1539583182452.png",0,1809221430063474300L,1);
 		haveSkill.add(m1);
 		haveSkill.add(m2);
 		noHaveSkill.add(m3);
 		noHaveSkill.add(m4);
 		noHaveSkill.add(m5);
 		noHaveSkill.add(m6);
-		noHaveSkill.add(m7);
-		noHaveSkill.add(m8);
-		noHaveSkill.add(m9);
 		Map<String,Object> map = new HashMap<String,Object>();
 		logger.info("用户编号为："+params.getCustomerId()+"查询我的技能成功");
 		map.put("unlockList", haveSkill);

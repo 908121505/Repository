@@ -2,16 +2,59 @@ package com.honglu.quickcall.user.service.dao;
 
 import com.honglu.quickcall.user.facade.entity.SkillItem;
 
-public interface SkillItemMapper {
-    int deleteByPrimaryKey(Long id);
+import java.util.List;
 
-    int insert(SkillItem record);
+import org.apache.ibatis.annotations.Param;
 
-    int insertSelective(SkillItem record);
+/**
+ * SkillItemMapper数据库操作接口类bean
+ * @author zhaozheyi
+ * @date Fri Oct 19 17:40:14 CST 2018
+ **/
 
-    SkillItem selectByPrimaryKey(Long id);
+public interface SkillItemMapper{
 
-    int updateByPrimaryKeySelective(SkillItem record);
 
-    int updateByPrimaryKey(SkillItem record);
+	/**
+	 * 
+	 * 查询（根据主键ID查询）
+	 * 
+	 **/
+	SkillItem  getEntityById ( @Param("id") String id );
+
+	/**
+	 * 
+	 * 查询所有（根据主键ID查询）
+	 * 
+	 **/
+	List<SkillItem>  findAll ( @Param("id") String id );
+
+	/**
+	 * 
+	 * 删除（根据主键ID删除）
+	 * 
+	 **/
+	int deleteEntity ( @Param("id") String id );
+
+	/**
+	 * 
+	 * 添加
+	 * 
+	 **/
+	int saveEntity( SkillItem record );
+
+	/**
+	 * 
+	 * 修改 （匹配有值的字段）
+	 * 
+	 **/
+	int updateEntity( SkillItem record );
+	
+	/**
+	 * 
+	 * 查询所有技能
+	 * 
+	 **/
+	List<SkillItem>  selectAllSkill ();
+
 }

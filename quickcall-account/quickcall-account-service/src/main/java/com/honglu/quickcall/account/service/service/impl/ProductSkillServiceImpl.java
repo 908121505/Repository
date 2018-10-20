@@ -2,13 +2,13 @@ package com.honglu.quickcall.account.service.service.impl;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.honglu.quickcall.account.facade.vo.CustomerSkillInfoVO;
 import com.honglu.quickcall.account.facade.vo.CustomerSkillVO;
 import com.honglu.quickcall.account.facade.vo.DaVinfoListVO;
 import com.honglu.quickcall.account.facade.vo.DaVinfoVO;
@@ -125,9 +125,19 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 	}
 
 	@Override
-	public List<CustomerSkillVO> querySkillInfoPersonal(Long customerId) {
+	public CustomerSkillInfoVO querySkillInfoPersonal(Long customerId) {
 		
+		
+		//
+//		customerSkillMapper.selectByCustomerId(customerId);
+		
+		
+		
+		
+		
+		CustomerSkillInfoVO  resultVO = new CustomerSkillInfoVO();
 		List<CustomerSkillVO>   resultList =  new ArrayList<CustomerSkillVO>();
+		
 		
 		List<BigDecimal> discontRateList = new ArrayList<BigDecimal>();
 		discontRateList.add(new BigDecimal(75));
@@ -140,55 +150,60 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 		skillPriceList.add(new BigDecimal(66));
 		skillPriceList.add(new BigDecimal(88));
 		for (int i = 0; i < 4; i++) {
+			List<String> serviceUnitList = new ArrayList<String>();
+			
+			
+			CustomerSkillVO  skillVO =  new CustomerSkillVO();
 			String skillItemName  = null ;
 			String serviceUnit  = null ;
 			if(i == 0 ){
 				skillItemName = "哄睡";
 				serviceUnit = "次";
+				serviceUnitList.add("次");
 			}else if(i == 1 ){
 				skillItemName = "叫醒";
 				serviceUnit = "次";
+				serviceUnitList.add("次");
 			}else if(i == 2 ){
 				skillItemName = "声优聊天";
 				serviceUnit = "半小时";
+				serviceUnitList.add("小时");
+				serviceUnitList.add("半小时");
 			}else if(i == 3 ){
 				skillItemName = "情感咨询";
 				serviceUnit = "小时";
+				serviceUnitList.add("小时");
+				serviceUnitList.add("半小时");
 			}
-			CustomerSkillVO  skillVO =  new CustomerSkillVO();
 			skillVO.setCustomerSkillId(10000L);
 			skillVO.setServiceUnit(serviceUnit);
 			skillVO.setDiscontRateList(discontRateList );
 			skillVO.setDiscountRate(new BigDecimal(70));
-			skillVO.setEndServiceTime(new Date());
-//			skillVO.setFriday(Math.random() >0.5?1:0);
-//			skillVO.setMonday(Math.random() >0.5?1:0);
-			skillVO.setReceiveStatus(Math.random() >0.5?1:0);
-//			skillVO.setSaturday(Math.random() >0.5?1:0);
 			skillVO.setSkillItemId(1000L);
 			skillVO.setSkillItemName(skillItemName);
 			skillVO.setSkillPrice(new BigDecimal(10));
 			skillVO.setSkillPriceList(skillPriceList);
-//			skillVO.setSunday(Math.random() >0.5?1:0);
 			skillVO.setSwitchStatus(Math.random() >0.5?1:0);
-//			skillVO.setThursday(Math.random() >0.5?1:0);
-//			skillVO.setTuesday(Math.random() >0.5?1:0);
-//			skillVO.setWednesday(Math.random() >0.5?1:0);
-			
-			HashMap<String, Integer> weekDataMap = new HashMap<String, Integer>();
-			
-			weekDataMap.put("monday", 1);
-			weekDataMap.put("tuesday", 0);
-			weekDataMap.put("wednesday", 1);
-			weekDataMap.put("thursday", 0);
-			weekDataMap.put("friday", 1);
-			weekDataMap.put("saturday", 0);
-			weekDataMap.put("sunday", 1);
-			
-			skillVO.setWeekDataMap(weekDataMap );
+			skillVO.setServiceUnitList(serviceUnitList);
 			resultList.add(skillVO);
 		}
-		return resultList;
+		
+		HashMap<String, Integer> weekDataMap = new HashMap<String, Integer>();
+		
+		weekDataMap.put("monday", 1);
+		weekDataMap.put("tuesday", 0);
+		weekDataMap.put("wednesday", 1);
+		weekDataMap.put("thursday", 0);
+		weekDataMap.put("friday", 1);
+		weekDataMap.put("saturday", 0);
+		weekDataMap.put("sunday", 1);
+		resultVO.setCustomerSkillList(resultList);
+		
+		resultVO.setEndServiceTimeStr("10:00");
+		resultVO.setWeekDataMap(weekDataMap);
+//		String  json = JSONUtil.toJson(resultVO);
+//		System.out.println("============"+json);
+		return resultVO;
 	}
 	
 

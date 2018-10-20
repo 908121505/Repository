@@ -204,6 +204,7 @@ public class CertificationController {
     public WebResponseModel skillAuditUpload(HttpServletRequest request) {
         logger.info("userWeb.certification skillAuditUpload request data : " + request);
         String customerId = request.getParameter("customerId");
+        String  skillId = request.getParameter("skillId");
 //        if(StringUtils.isBlank(customerId)){
 //            WebResponseModel response = new WebResponseModel();
 //            response.setCode(UserBizReturnCode.paramError.code());
@@ -212,13 +213,14 @@ public class CertificationController {
 //        }
 //        WebResponseModel response = uploadFile(request, AliYunFilePaths.BIG_V_INTRODUCE_AUDIO);
 //        if("000000".equals(response.getCode())){
-//        	Long  skillId = Long.valueOf(request.getParameter("skillId"));
-//        
+//        	
 //        }
 //        logger.info("userWeb.certification skillAuditUpload response data : " + response);
         
         WebResponseModel response = new WebResponseModel();
         response.setCode(UserBizReturnCode.Success.code());
+        response.setMsg("成功");
+        response.setData("http://test-guanjia.oss-cn-shanghai.aliyuncs.com/user/idcard/f48a9af32b57420fb3b31266ed9d7061.gif");
         return response;
     }
 
