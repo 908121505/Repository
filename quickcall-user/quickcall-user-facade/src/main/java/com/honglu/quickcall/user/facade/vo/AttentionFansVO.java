@@ -23,6 +23,8 @@ public class AttentionFansVO {
     private Integer age;
     /**关注状态0：未关注  1：已关注*/
     private Integer attentionStatus;
+    //互相关注状态0：不是 1：互相关注
+    private Integer eachAttentionStatus;
 	public Long getCustomerId() {
 		return customerId;
 	}
@@ -58,6 +60,12 @@ public class AttentionFansVO {
 	}
 	public void setAttentionStatus(Integer attentionStatus) {
 		this.attentionStatus = attentionStatus;
+	}
+	public Integer getEachAttentionStatus() {
+		return eachAttentionStatus;
+	}
+	public void setEachAttentionStatus(Integer eachAttentionStatus) {
+		this.eachAttentionStatus = eachAttentionStatus;
 	}
     
     

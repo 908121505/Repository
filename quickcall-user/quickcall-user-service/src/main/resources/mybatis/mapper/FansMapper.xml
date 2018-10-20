@@ -177,11 +177,21 @@
   </select>
   
   
-  <!-- 查询粉丝信息列表 -->
-  <select id="queryFansListByFansIdList" resultMap="BaseResultMap"  >
+  <!-- 查询关注的人信息列表 -->
+  <select id="queryFansListByAnchorIdList" resultMap="BaseResultMap"  >
 		SELECT  <include refid="Base_Column_List"></include>    FROM  fans WHERE  fans_id  = #{customerId}   and  
 		
 		anchor_id in  
+		<foreach collection="list"  item="id"  open="("  close=")"  separator=",">
+		  #{id}
+		</foreach>
+  </select>
+  
+  <!-- 查询粉丝范围信息列表 -->
+  <select id="queryFansListByFansIdList" resultMap="BaseResultMap"  >
+		SELECT  <include refid="Base_Column_List"></include>    FROM  fans WHERE  anchor_id  = #{customerId}   and  
+		
+		fans_id in  
 		<foreach collection="list"  item="id"  open="("  close=")"  separator=",">
 		  #{id}
 		</foreach>

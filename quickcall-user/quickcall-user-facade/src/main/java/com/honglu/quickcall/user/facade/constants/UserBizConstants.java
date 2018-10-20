@@ -48,6 +48,15 @@ public interface UserBizConstants {
 	public static final  Integer  VOICE_STATUS_APPROVE_REFUSED = 3;
 	/**大V声音状态4：审核通过*/
 	public static final  Integer  VOICE_STATUS_APPROVE_PASS = 4;
+	
+	
+	//技能认证状态
+	//技能认证中
+	public static final Integer SKILL_CERTIFY_STATUS_AUDIT = 1 ;
+	//技能认证通过
+	public static final Integer SKILL_CERTIFY_STATUS_PASS = 2;
+	//技能认证拒绝
+	public static final Integer SKILL_CERTIFY_STATUS_REFUSED = 3;
 
 
 

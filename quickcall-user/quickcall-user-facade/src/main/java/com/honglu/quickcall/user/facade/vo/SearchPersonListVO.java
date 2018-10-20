@@ -2,6 +2,8 @@ package com.honglu.quickcall.user.facade.vo;
 
 import java.io.Serializable;
 
+import com.honglu.quickcall.user.facade.constants.UserBizConstants;
+
 /**
  * 首页搜索用户列表返回
  * @author zhaozheyi
@@ -15,11 +17,11 @@ public class SearchPersonListVO implements  Serializable{
 	/**
 	 * 是否关注
 	 */
-	private Integer isFollow;
+	private Integer isFollow = UserBizConstants.ATTENTION_STATUS_UN_ATTENED;;
 	/**
 	 * 互相关注
 	 */
-	private Integer isEveryFollow;
+	private Integer isEveryFollow = UserBizConstants.ATTENTION_STATUS_UN_ATTENED;
 	/**
 	 * 用户昵称
 	 */

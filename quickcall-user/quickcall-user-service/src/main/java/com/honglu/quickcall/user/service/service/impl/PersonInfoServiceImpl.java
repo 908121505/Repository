@@ -234,16 +234,30 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 		else{
 			customerList = customerMapper.selectFuzzySearch(keyword,currentCustomer,params.getPageIndex(),params.getPageSize());
 		}
-		for (SearchPersonListVO customer : customerList) {
-			Long anchorId = customer.getCustomerId();
-			int n = fansMapper.queryIsFollow(anchorId, currentCustomer);
-			int n1 = 0;
-			if(n != 0){
-				n1 = fansMapper.queryIsFollow(currentCustomer, anchorId);
+		
+		if(currentCustomer != null && customerList != null){
+			List<Long> ids = new ArrayList<>();
+			for (SearchPersonListVO customer : customerList) {
+				ids.add(customer.getCustomerId());
 			}
-			//把关注状态和互相关注状态放入对象
-			customer.setIsFollow(n);
-			customer.setIsEveryFollow(n1&n);
+			List<Fans> anchorList = fansMapper.queryFansListByAnchorIdList(ids, currentCustomer);
+			List<Fans> fansList = fansMapper.queryFansListByFansIdList(ids, currentCustomer);
+			HashMap<Long, Integer> anchorStatusMap = new HashMap<Long, Integer>();
+			HashMap<Long, Integer> fansStatusMap = new HashMap<Long, Integer>();
+			for (Fans fans : anchorList) {
+				anchorStatusMap.put(fans.getAnchorId(), fans.getAttentionState());
+			}
+			for (Fans fans : fansList) {
+				fansStatusMap.put(fans.getFansId(), fans.getAttentionState());
+			}
+			for (SearchPersonListVO customer : customerList) {
+				Long customerId = customer.getCustomerId();
+				int n = anchorStatusMap.get(customerId)==null?UserBizConstants.ATTENTION_STATUS_UN_ATTENED:anchorStatusMap.get(customerId);
+				int n1 = fansStatusMap.get(customerId)==null?UserBizConstants.ATTENTION_STATUS_UN_ATTENED:fansStatusMap.get(customerId);
+				//把关注状态和互相关注状态放入对象
+				customer.setIsFollow(n);
+				customer.setIsEveryFollow(n1&n);
+			}
 		}
 		logger.info("用户编号为："+currentCustomer+"搜索关键字:"+keyword+" 成功");
 		commonResponse.setData(customerList);
@@ -736,7 +750,7 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 					resultList = fansMapper.queryCustomerListByCustomerIdList(fansIdList);
 
 					// 获取
-					List<Fans> fansList = fansMapper.queryFansListByFansIdList(fansIdList, customerId);
+					List<Fans> fansList = fansMapper.queryFansListByAnchorIdList(fansIdList, customerId);
 
 					HashMap<Long, Integer> attentionStatusMap = new HashMap<Long, Integer>();
 					if (!CollectionUtils.isEmpty(fansList)) {
@@ -932,12 +946,12 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 		csc.setSkillItemId(params.getSkillItemId());
 		csc.setSkillVoiceUrlTmp(params.getSkillVoiceUrl());
 		csc.setSkillVoiceTimeTmp(params.getSkillVoiceTime());
-		csc.setAuditStatus(1);
+		csc.setAuditStatus(UserBizConstants.SKILL_CERTIFY_STATUS_AUDIT);
 		//更改的数量
 		int n;
 		if(certifyNow != null ){
 			//如果是审核中不能进入本方法
-			if(certifyNow.getAuditStatus()==1){
+			if(certifyNow.getAuditStatus()==UserBizConstants.SKILL_CERTIFY_STATUS_AUDIT){
 				commonResponse.setCode(UserBizReturnCode.skillCertifyError);
 				commonResponse.setMessage(UserBizReturnCode.skillCertifyError.desc());
 				return commonResponse;
