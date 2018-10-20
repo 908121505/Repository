@@ -122,7 +122,7 @@ public class EditProfileServiceImpl implements EditProfileService {
             customer.setHeadPortraitUrl(params.getHeadPortraitUrl());
         }
         //新上传头像状态默认为未审核
-        customer.setHeadPortraitStatus("0");
+        customer.setHeadPortraitStatus(0);
         int result = customerMapper.updateByPrimaryKeySelective(customer);
         logger.info("修改头像 updateHeadPortrait,更新数量" + result);
         if (result > 0) {
