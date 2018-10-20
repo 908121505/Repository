@@ -70,6 +70,10 @@ public class CustomerSkill {
 
     private String remark;
 
+    /**********扩展查询字段********/
+    private String skillVoiceUrl;
+    private BigDecimal skillVoiceTime;
+
     public Long getCustomerSkillId() {
         return customerSkillId;
     }
@@ -313,5 +317,21 @@ public class CustomerSkill {
    
     public void setRemark(String remark) {
         this.remark = remark == null ? null : remark.trim();
+    }
+
+    public String getSkillVoiceUrl() {
+        return skillVoiceUrl;
+    }
+
+    public void setSkillVoiceUrl(String skillVoiceUrl) {
+        this.skillVoiceUrl = skillVoiceUrl;
+    }
+
+    public BigDecimal getSkillVoiceTime() {
+        return skillVoiceTime;
+    }
+
+    public void setSkillVoiceTime(BigDecimal skillVoiceTime) {
+        this.skillVoiceTime = skillVoiceTime;
     }
 }

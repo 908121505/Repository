@@ -257,7 +257,26 @@ public class UserCommonController {
         return response;
     
     }
-    
-    
-    
+
+    /**
+     * 客户个人主页接口
+     *
+     * @param params
+     * @return
+     */
+    @RequestMapping(value = "/customerHome", method = RequestMethod.POST)
+    @ResponseBody
+    public WebResponseModel customerHome(CustomerHomeRequest params) {
+        logger.info("userWeb.user.customerHome.request.data : " + JSONObject.toJSONString(params));
+        WebResponseModel response = new WebResponseModel();
+        if (params.getViewCustomerId() == null) {
+            response.setCode(UserBizReturnCode.paramError.code());
+            response.setMsg(UserBizReturnCode.paramError.desc());
+            return response;
+        }
+        response = userCenterService.execute(params);
+        logger.info("userWeb.user.customerHome.response.data : " + JSONObject.toJSONString(response));
+        return response;
+
+    }
 }

@@ -17,11 +17,11 @@ import java.util.Map;
 /**
  * Created by len.song on 2018-01-29.
  */
-@Service("userForUserMqGatway")
+//@Service("userForUserMqGatway")
 public class UserForUserMqGatway {
     private final static Logger logger = LoggerFactory.getLogger(UserForUserMqGatway.class);
 
-    @Resource
+//    @Resource
     private AmqpTemplate amqpTemplate;
 
     
@@ -34,12 +34,12 @@ public class UserForUserMqGatway {
      * @param map
      */
     public void getHomePageFirstPage(Map<String,Object> map) {
-        logger.info("用户编号为{}，获取首页的第一页后，开始发送mq 进行剩余页数缓存..." + map.get("id"));
-
-        map.put("sendMqTime", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
-        map.put("mqtype", UserMqType.MQ_HOMEPAGE_CACHE_SUCCESS);
-        send("userCenter-mq-exchange", "queue_userCenter_homepage_common_key", map);
-        logger.info("用户编号为{}，获取首页的第一页后，发送mq成功..." + map.get("id"));
+//        logger.info("用户编号为{}，获取首页的第一页后，开始发送mq 进行剩余页数缓存..." + map.get("id"));
+//
+//        map.put("sendMqTime", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+//        map.put("mqtype", UserMqType.MQ_HOMEPAGE_CACHE_SUCCESS);
+//        send("userCenter-mq-exchange", "queue_userCenter_homepage_common_key", map);
+//        logger.info("用户编号为{}，获取首页的第一页后，发送mq成功..." + map.get("id"));
     }
 
 

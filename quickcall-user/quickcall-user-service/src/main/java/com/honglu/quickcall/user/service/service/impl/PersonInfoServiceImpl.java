@@ -1,13 +1,14 @@
 package com.honglu.quickcall.user.service.service.impl;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.math.BigDecimal;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.honglu.quickcall.user.facade.entity.*;
+import com.honglu.quickcall.user.facade.exchange.request.*;
+import com.honglu.quickcall.user.facade.vo.*;
+import com.honglu.quickcall.user.service.dao.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,17 +30,6 @@ import com.honglu.quickcall.common.third.rongyun.models.CodeSuccessReslut;
 import com.honglu.quickcall.common.third.rongyun.util.RongYunUtil;
 import com.honglu.quickcall.user.facade.code.UserBizReturnCode;
 import com.honglu.quickcall.user.facade.constants.UserBizConstants;
-import com.honglu.quickcall.user.facade.entity.Customer;
-import com.honglu.quickcall.user.facade.entity.CustomerInterest;
-import com.honglu.quickcall.user.facade.entity.CustomerOccupation;
-import com.honglu.quickcall.user.facade.entity.CustomerSkillCertify;
-import com.honglu.quickcall.user.facade.entity.Fans;
-import com.honglu.quickcall.user.facade.entity.Interest;
-import com.honglu.quickcall.user.facade.entity.Occupation;
-import com.honglu.quickcall.user.facade.entity.Orders;
-import com.honglu.quickcall.user.facade.entity.Product;
-import com.honglu.quickcall.user.facade.entity.SensitivityWord;
-import com.honglu.quickcall.user.facade.entity.SkillItem;
 import com.honglu.quickcall.user.facade.entity.in.HomePageLogout;
 import com.honglu.quickcall.user.facade.entity.in.PersonHomePage;
 import com.honglu.quickcall.user.facade.entity.in.VProductTag;
@@ -110,12 +100,17 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 	@Autowired
 	private SkillItemMapper skillItemMapper;
 	@Autowired
+	private CustomerSkillMapper customerSkillMapper;
+	@Autowired
 	private CustomerSkillCertifyMapper customerSkillCertifyMapper;
 	/**
 	 * 中文、英文、数字、下划线校验 4-24位
 	 */
 	private final static Pattern CH_EN_PATTERN = Pattern.compile("^[\\u4e00-\\u9fa5a-z\\d_]{4,24}$");
 	private static final Logger logger = LoggerFactory.getLogger(PersonInfoServiceImpl.class);
+
+    /** 用户默认的形象照 **/
+    private static String DEFAULT_CUSTOMER_APPEARANCE_URL = ResourceBundle.getBundle("thirdconfig").getString("DEFAULT_CUSTOMER_APPEARANCE_URL");
 
 	// 测试正则
 	// public static void main(String[] args) {
@@ -160,7 +155,7 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 	/**
 	 * @Title 查询详细展示信息
 	 * @modify liuyinkai
-	 * @param accountId
+	 * @param customerId
 	 * @return outPacket
 	 */
 	public PersonHomePage queryPersonal(Long customerId) {
@@ -900,7 +895,7 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 				noHaveSkill.add(mySkillVO);
 			}
 		}
-		
+
 //		//已经解锁的技能列表
 //		List<MySkillVO> haveSkill = new ArrayList<MySkillVO>();
 //		//未解锁的技能列表
@@ -931,7 +926,7 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 	public CommonResponse saveCustomerSkillCertify(SaveSkillAuditRequest params) {
 		CommonResponse commonResponse = new CommonResponse();
 		CustomerSkillCertify certifyNow = customerSkillCertifyMapper.selectSkillCertifyId(params.getCustomerId(),params.getSkillItemId());
-		
+
 		CustomerSkillCertify csc = new CustomerSkillCertify();
 		csc.setCustomerId(params.getCustomerId());
 		csc.setSkillItemId(params.getSkillItemId());
@@ -962,6 +957,74 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 		}
 		return commonResponse;
 	}
+
 	
-	
+
+	@Override
+	public CommonResponse queryCustomerHome(CustomerHomeRequest request) {
+		Customer viewCustomer = customerMapper.selectByPrimaryKey(request.getViewCustomerId());
+        if (viewCustomer == null) {
+            ResultUtils.resultDataNotExist("用户数据不存在");
+        }
+
+        CustomerHomeVO customerHomeVO = new CustomerHomeVO();
+        customerHomeVO.setLoginCustomerId(request.getLoginCustomerId());
+        customerHomeVO.setViewCustomerId(request.getViewCustomerId());
+        customerHomeVO.setCustomerAppId(viewCustomer.getAppId());
+        customerHomeVO.setNickName(viewCustomer.getNickName());
+        customerHomeVO.setSex(viewCustomer.getSex());
+        if (viewCustomer.getBirthday() != null) {
+            customerHomeVO.setAge(CountAge.getAgeByBirth(viewCustomer.getBirthday()));
+        }
+
+        // 客户等级 ADUAN -- 待完成
+        customerHomeVO.setCustomerLevel(250);
+
+        customerHomeVO.setSignName(viewCustomer.getSignName());
+        customerHomeVO.setStarSign(viewCustomer.getStarSign());
+        customerHomeVO.setIdentityStatus(viewCustomer.getIdentityStatus());
+        customerHomeVO.setvStatus(viewCustomer.getvStatus());
+
+        // 查询登录用户是否关注被查看的用户
+        if (request.getLoginCustomerId() != null && !Objects.equals(request.getLoginCustomerId(), request.getViewCustomerId())) {
+            int idFollow = fansMapper.queryIsFollow(request.getViewCustomerId(), request.getLoginCustomerId());
+            customerHomeVO.setAttentionStatus(Objects.equals(idFollow, 1) ? 1 : 0);
+        }
+
+        // 查询粉丝数
+        customerHomeVO.setFansNum(fansMapper.queryFansNumByCustomerId(request.getViewCustomerId()).intValue());
+
+        // 查询用户形象照列表 ADUAN -- 待完成
+        customerHomeVO.setAppearanceUrlList(Arrays.asList(DEFAULT_CUSTOMER_APPEARANCE_URL));
+
+        // 查询用户兴趣
+        customerHomeVO.setInterestList(customerInterestMapper.queryCustomerInterestList(request.getViewCustomerId()));
+
+        // 声鉴卡 -- ADUAN -- 待完成
+        customerHomeVO.setSoundGuideCard(DEFAULT_CUSTOMER_APPEARANCE_URL);
+
+        // 查询用户技能 -- 条件是大V
+        List<CustomerHomeVO.CustomerSkill> skillList = new ArrayList<>();
+        if (Objects.equals(viewCustomer.getvStatus(), 2)) {
+            List<CustomerSkill> customerSkills = customerSkillMapper.selectCustomerAuditedSkill(request.getViewCustomerId());
+            for (CustomerSkill bean : customerSkills) {
+                CustomerHomeVO.CustomerSkill customerSkill = customerHomeVO.new CustomerSkill();
+                customerSkill.setSkillId(bean.getSkillItemId());
+                customerSkill.setSkillName(bean.getSkillName());
+                customerSkill.setSkillVoiceUrl(bean.getSkillVoiceUrl());
+                customerSkill.setSkillVoiceTime(bean.getSkillVoiceTime());
+
+                // ADUAN -- 技能价格、价格单位、声量、标签 -- 未完成
+                customerSkill.setSkillPrice(new BigDecimal(20));
+                customerSkill.setServiceUnit("半小时");
+                customerSkill.setSkillVolume(250);
+                customerSkill.setCustomerLabel(Arrays.asList("暖男", "搞笑", "帅气"));
+
+                skillList.add(customerSkill);
+            }
+        }
+        customerHomeVO.setSkillList(skillList);
+
+		return ResultUtils.resultSuccess(customerHomeVO);
+	}
 }

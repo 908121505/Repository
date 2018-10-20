@@ -1,5 +1,6 @@
 package com.honglu.quickcall.user.service.business;
 
+import com.honglu.quickcall.user.facade.exchange.request.*;
 import com.honglu.quickcall.user.facade.exchange.request.editprofile.*;
 import com.honglu.quickcall.user.service.service.EditProfileService;
 import org.slf4j.Logger;
@@ -174,6 +175,10 @@ public class UserDubboBusinessImpl implements UserDubboBusiness {
 				break;
 			case UserFunctionType.removeAppearance:
 				response = editProfileService.removeAppearance((RemoveAppearanceReq) request);
+				break;
+			// 客户主页
+			case UserFunctionType.CUSTOMER_HOME:
+				response = personInfoService.queryCustomerHome((CustomerHomeRequest) request);
 				break;
 			default:
 				throw new BizException(UserBizReturnCode.BizFunctionTypeNotMatch,
