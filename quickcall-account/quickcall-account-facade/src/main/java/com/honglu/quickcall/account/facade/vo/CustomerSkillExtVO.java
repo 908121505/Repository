@@ -1,6 +1,6 @@
 package com.honglu.quickcall.account.facade.vo;
 
-import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * 
@@ -15,14 +15,10 @@ public class CustomerSkillExtVO {
 	
 	/**技能项扩展ID*/
 	private Long  skillItemExtId;
-    /**折扣*/
-    private BigDecimal  discontRateValue;
-    /**技能价格*/
-    private BigDecimal  skillPriceValue;
-    /**服务单位*/
-    private String  serviceUnitValue;
     /**技能等级*/
     private Integer  skillRangeValue;
+    /**单位价格信息*/
+    private List<SkillUnitPriceVO> unitPriceList ;
     
     
 	public Long getSkillItemExtId() {
@@ -31,32 +27,24 @@ public class CustomerSkillExtVO {
 	public void setSkillItemExtId(Long skillItemExtId) {
 		this.skillItemExtId = skillItemExtId;
 	}
-	public BigDecimal getDiscontRateValue() {
-		return discontRateValue;
-	}
-	public void setDiscontRateValue(BigDecimal discontRateValue) {
-		this.discontRateValue = discontRateValue;
-	}
-	public BigDecimal getSkillPriceValue() {
-		return skillPriceValue;
-	}
-	public void setSkillPriceValue(BigDecimal skillPriceValue) {
-		this.skillPriceValue = skillPriceValue;
-	}
-	public String getServiceUnitValue() {
-		return serviceUnitValue;
-	}
-	public void setServiceUnitValue(String serviceUnitValue) {
-		this.serviceUnitValue = serviceUnitValue;
-	}
+	
+	
 	public Integer getSkillRangeValue() {
 		return skillRangeValue;
 	}
 	public void setSkillRangeValue(Integer skillRangeValue) {
 		this.skillRangeValue = skillRangeValue;
 	}
-
+	public List<SkillUnitPriceVO> getUnitPriceList() {
+		return unitPriceList;
+	}
+	public void setUnitPriceList(List<SkillUnitPriceVO> unitPriceList) {
+		this.unitPriceList = unitPriceList;
+	}
 	
+	
+	
+
 	
     
 	
