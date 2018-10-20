@@ -20,15 +20,22 @@ public interface CustomerSkillCertifyMapper{
 	 * 查询（根据主键ID查询）
 	 * 
 	 **/
-	CustomerSkillCertify  getEntityById ( @Param("id") String id );
+	CustomerSkillCertify  getEntityById ( @Param("id") Integer id );
 
 	/**
 	 * 
 	 * 查询所有（根据主键ID查询）
 	 * 
 	 **/
-	List<CustomerSkillCertify>  findAll ( @Param("id") String id );
-
+	List<CustomerSkillCertify>  findAll ( @Param("id") Integer id );
+	
+	/**
+	 * 
+	 * 查询所有（根据主键ID查询）
+	 * 
+	 **/
+	List<CustomerSkillCertify>  selectAllSkillByCustomer ( @Param("customerId") Long customerId );
+	
 	/**
 	 * 
 	 * 删除（根据主键ID删除）

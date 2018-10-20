@@ -2,7 +2,6 @@ package com.honglu.quickcall.account.service.service.impl;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -17,7 +16,6 @@ import com.honglu.quickcall.account.facade.vo.FirstPageSkillIteminfoVO;
 import com.honglu.quickcall.account.service.dao.CustomerSkillMapper;
 import com.honglu.quickcall.account.service.dao.SkillMapper;
 import com.honglu.quickcall.account.service.service.IProductSkillService;
-import com.honglu.quickcall.common.api.util.JSONUtil;
 
 
 @Service("productSkillService")
@@ -129,8 +127,17 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 	@Override
 	public CustomerSkillInfoVO querySkillInfoPersonal(Long customerId) {
 		
+		
+		//
+//		customerSkillMapper.selectByCustomerId(customerId);
+		
+		
+		
+		
+		
 		CustomerSkillInfoVO  resultVO = new CustomerSkillInfoVO();
 		List<CustomerSkillVO>   resultList =  new ArrayList<CustomerSkillVO>();
+		
 		
 		List<BigDecimal> discontRateList = new ArrayList<BigDecimal>();
 		discontRateList.add(new BigDecimal(75));
@@ -143,22 +150,31 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 		skillPriceList.add(new BigDecimal(66));
 		skillPriceList.add(new BigDecimal(88));
 		for (int i = 0; i < 4; i++) {
+			List<String> serviceUnitList = new ArrayList<String>();
+			
+			
+			CustomerSkillVO  skillVO =  new CustomerSkillVO();
 			String skillItemName  = null ;
 			String serviceUnit  = null ;
 			if(i == 0 ){
 				skillItemName = "哄睡";
 				serviceUnit = "次";
+				serviceUnitList.add("次");
 			}else if(i == 1 ){
 				skillItemName = "叫醒";
 				serviceUnit = "次";
+				serviceUnitList.add("次");
 			}else if(i == 2 ){
 				skillItemName = "声优聊天";
 				serviceUnit = "半小时";
+				serviceUnitList.add("小时");
+				serviceUnitList.add("半小时");
 			}else if(i == 3 ){
 				skillItemName = "情感咨询";
 				serviceUnit = "小时";
+				serviceUnitList.add("小时");
+				serviceUnitList.add("半小时");
 			}
-			CustomerSkillVO  skillVO =  new CustomerSkillVO();
 			skillVO.setCustomerSkillId(10000L);
 			skillVO.setServiceUnit(serviceUnit);
 			skillVO.setDiscontRateList(discontRateList );
@@ -168,7 +184,7 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 			skillVO.setSkillPrice(new BigDecimal(10));
 			skillVO.setSkillPriceList(skillPriceList);
 			skillVO.setSwitchStatus(Math.random() >0.5?1:0);
-			
+			skillVO.setServiceUnitList(serviceUnitList);
 			resultList.add(skillVO);
 		}
 		
@@ -183,7 +199,7 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 		weekDataMap.put("sunday", 1);
 		resultVO.setCustomerSkillList(resultList);
 		
-		resultVO.setEndServiceTime(new Date());
+		resultVO.setEndServiceTimeStr("10:00");
 		resultVO.setWeekDataMap(weekDataMap);
 //		String  json = JSONUtil.toJson(resultVO);
 //		System.out.println("============"+json);

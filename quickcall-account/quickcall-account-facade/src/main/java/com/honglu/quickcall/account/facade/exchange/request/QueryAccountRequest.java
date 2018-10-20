@@ -4,19 +4,16 @@ import com.honglu.quickcall.account.facade.code.AccountFunctionType;
 import com.honglu.quickcall.common.api.exchange.AbstractRequest;
 
 public class QueryAccountRequest extends AbstractRequest {
-     
-	private Long userId;
-	
-	
-	public Long getUserId() {
-		return userId;
+
+	private Long customerId;
+
+	public Long getCustomerId() {
+		return customerId;
 	}
 
-
-	public void setUserId(Long userId) {
-		this.userId = userId;
+	public void setCustomerId(Long customerId) {
+		this.customerId = customerId;
 	}
-
 
 	@Override
 	public String getBizCode() {

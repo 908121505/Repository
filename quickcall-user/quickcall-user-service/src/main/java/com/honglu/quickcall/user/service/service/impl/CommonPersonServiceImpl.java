@@ -1,6 +1,7 @@
 package com.honglu.quickcall.user.service.service.impl;
 
 import java.text.MessageFormat;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Objects;
 import java.util.Random;
@@ -193,8 +194,8 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 
 		}
 
-		int row = customerMapper.customerSetHeardUrl(params.getTel(), params.getHeadPortraitUrl(),
-				params.getNickName());
+		int row = customerMapper.customerSetHeardUrl(params.getTel(), params.getHeadPortraitUrl(), params.getNickName(),
+				params.getSex());
 		if (row <= 0) {
 			throw new BizException(BizCode.ParamError, "设置昵称头像失败");
 		}
@@ -274,9 +275,30 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 		return customer;
 	}
 
-	public int randomFour() {
+	/**
+	 * 随机四位数
+	 * 
+	 * @return
+	 */
+	private int randomFour() {
 		Random rand = new Random();
 		int num = rand.nextInt(9999) + 1000;
+		return num;
+	}
+
+	/**
+	 * 随机八-十位 appId
+	 * 
+	 * @return
+	 */
+	private static String randomAppId() {
+		String[] appIdList = { "13140000", "131400000", "1314000000", "52000000", "520000000", "5200000000", "66666666",
+				"666666666", "6666666666", "88888888", "888888888", "8888888888" };
+		Random rand = new Random();
+		String num = rand.nextInt(999000000) + 1000000 + (rand.nextInt(10) + "");
+		while (Arrays.asList(appIdList).contains(num)) {
+			num = rand.nextInt(999000000) + 1000000 + (rand.nextInt(10) + "");
+		}
 		return num;
 	}
 
@@ -450,24 +472,24 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 		}
 
 		// 大V认证时 -- 判断大V身份认证状态
-        if (Objects.equals(request.getCertifyType(), 2)) {
-            if (!Objects.equals(customer.getIdentityStatus(), 2)) {
-                if (Objects.equals(customer.getIdentityStatus(), 1)) {
-                    return ResultUtils.resultDuplicateOperation("身份认证正在审核中，请等待审核通过后再进行大V认证");
-                }
-                return ResultUtils.resultDuplicateOperation("请先进行身份认证");
-            }
+		if (Objects.equals(request.getCertifyType(), 2)) {
+			if (!Objects.equals(customer.getIdentityStatus(), 2)) {
+				if (Objects.equals(customer.getIdentityStatus(), 1)) {
+					return ResultUtils.resultDuplicateOperation("身份认证正在审核中，请等待审核通过后再进行大V认证");
+				}
+				return ResultUtils.resultDuplicateOperation("请先进行身份认证");
+			}
 
-            // 申请大V不校验是否在审核中
-            if (Objects.equals(customer.getvStatus(), 1)) {
-                return ResultUtils.resultDuplicateOperation("大V认证正在审核中");
-            }
-            if (Objects.equals(customer.getvStatus(), 2)) {
-                return ResultUtils.resultDuplicateOperation("大V认证已通过");
-            }
-            certifyCustomer.setvStatus(1);// 更新状态为：审核中
-            certifyCustomer.setVoiceUrl(request.getVoiceUrl());
-        }
+			// 申请大V不校验是否在审核中
+			if (Objects.equals(customer.getvStatus(), 1)) {
+				return ResultUtils.resultDuplicateOperation("大V认证正在审核中");
+			}
+			if (Objects.equals(customer.getvStatus(), 2)) {
+				return ResultUtils.resultDuplicateOperation("大V认证已通过");
+			}
+			certifyCustomer.setvStatus(1);// 更新状态为：审核中
+			certifyCustomer.setVoiceUrl(request.getVoiceUrl());
+		}
 
 		// 如果声音时长为null，sql不会更新
 		certifyCustomer.setVoiceTime(request.getVoiceTime());

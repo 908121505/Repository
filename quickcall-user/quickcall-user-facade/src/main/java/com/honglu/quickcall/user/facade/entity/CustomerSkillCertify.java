@@ -1,5 +1,6 @@
 package com.honglu.quickcall.user.facade.entity;
 
+import java.math.BigDecimal;
 
 /**
  * 用戶技能认证表bean
@@ -24,13 +25,13 @@ public class CustomerSkillCertify {
 	private String skillVoiceUrl;
 
 	/**技能声音时长**/
-	private String skillVoiceTime;
+	private BigDecimal skillVoiceTime;
 
 	/**技能审核声音url**/
 	private String skillVoiceUrlTmp;
 
 	/**技能审核声音时长**/
-	private String skillVoiceTimeTmp;
+	private BigDecimal skillVoiceTimeTmp;
 
 	/**是否曾经已经审核通过（0：未通过，1：已通过）**/
 	private Integer isAudited;
@@ -54,16 +55,16 @@ public class CustomerSkillCertify {
 	public CustomerSkillCertify() {
 		super();
 	}
-	public CustomerSkillCertify(Integer certifyId,Long customerId,Long skillItemId,Integer auditStatus,String skillVoiceUrl,String skillVoiceTime,String skillVoiceUrlTmp,String skillVoiceTimeTmp,Integer isAudited,String createTime,String modifyTime,String createMan,String modifyMan,String remark) {
+	public CustomerSkillCertify(Integer certifyId,Long customerId,Long skillItemId,Integer auditStatus,String skillVoiceUrl,BigDecimal skillVoiceTime,String skillVoiceUrlTmp,BigDecimal skillVoiceTimeTmp,Integer isAudited,String createTime,String modifyTime,String createMan,String modifyMan,String remark) {
 		super();
 		this.certifyId = certifyId;
 		this.customerId = customerId;
 		this.skillItemId = skillItemId;
 		this.auditStatus = auditStatus;
 		this.skillVoiceUrl = skillVoiceUrl;
-		this.skillVoiceTime = skillVoiceTime;
+		this.setSkillVoiceTime(skillVoiceTime);
 		this.skillVoiceUrlTmp = skillVoiceUrlTmp;
-		this.skillVoiceTimeTmp = skillVoiceTimeTmp;
+		this.setSkillVoiceTimeTmp(skillVoiceTimeTmp);
 		this.isAudited = isAudited;
 		this.createTime = createTime;
 		this.modifyTime = modifyTime;
@@ -111,28 +112,12 @@ public class CustomerSkillCertify {
 		return this.skillVoiceUrl;
 	}
 
-	public void setSkillVoiceTime(String skillVoiceTime){
-		this.skillVoiceTime = skillVoiceTime;
-	}
-
-	public String getSkillVoiceTime(){
-		return this.skillVoiceTime;
-	}
-
 	public void setSkillVoiceUrlTmp(String skillVoiceUrlTmp){
 		this.skillVoiceUrlTmp = skillVoiceUrlTmp;
 	}
 
 	public String getSkillVoiceUrlTmp(){
 		return this.skillVoiceUrlTmp;
-	}
-
-	public void setSkillVoiceTimeTmp(String skillVoiceTimeTmp){
-		this.skillVoiceTimeTmp = skillVoiceTimeTmp;
-	}
-
-	public String getSkillVoiceTimeTmp(){
-		return this.skillVoiceTimeTmp;
 	}
 
 	public void setIsAudited(Integer isAudited){
@@ -181,6 +166,18 @@ public class CustomerSkillCertify {
 
 	public String getRemark(){
 		return this.remark;
+	}
+	public BigDecimal getSkillVoiceTime() {
+		return skillVoiceTime;
+	}
+	public void setSkillVoiceTime(BigDecimal skillVoiceTime) {
+		this.skillVoiceTime = skillVoiceTime;
+	}
+	public BigDecimal getSkillVoiceTimeTmp() {
+		return skillVoiceTimeTmp;
+	}
+	public void setSkillVoiceTimeTmp(BigDecimal skillVoiceTimeTmp) {
+		this.skillVoiceTimeTmp = skillVoiceTimeTmp;
 	}
 
 }
