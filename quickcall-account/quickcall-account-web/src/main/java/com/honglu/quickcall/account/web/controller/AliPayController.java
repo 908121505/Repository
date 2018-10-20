@@ -40,7 +40,7 @@ public class AliPayController extends BaseController {
 	public WebResponseModel recharge(HttpServletRequest request, RechargeRequest params) {
 		logger.info("accountWeb.pay.recharge.request.data : " + JSONObject.toJSONString(params));
 		WebResponseModel response = new WebResponseModel();
-		if (params.getAmount() == null || params.getUserId() == null) {
+		if (params.getAmount() == null || params.getCustomerId() == null) {
 			response.setCode(AccountBizReturnCode.paramError.code());
 			response.setMsg(AccountBizReturnCode.paramError.desc());
 			return response;
@@ -60,7 +60,7 @@ public class AliPayController extends BaseController {
 	public WebResponseModel whthdraw(WhthdrawRequest params) {
 		logger.info("accountWeb.pay.whthdraw.request.data : " + JSONObject.toJSONString(params));
 		WebResponseModel response = new WebResponseModel();
-		if (params.getAmount() == null || params.getUserId() == null) {
+		if (params.getAmount() == null || params.getCustomerId() == null) {
 			response.setCode(AccountBizReturnCode.paramError.code());
 			response.setMsg(AccountBizReturnCode.paramError.desc());
 			return response;
@@ -78,7 +78,7 @@ public class AliPayController extends BaseController {
 	public WebResponseModel queryAccount(QueryAccountRequest params) {
 		logger.info("accountWeb.pay.queryAccount.request.data : " + JSONObject.toJSONString(params));
 		WebResponseModel response = new WebResponseModel();
-		if (params.getUserId() == null) {
+		if (params.getCustomerId() == null) {
 			response.setCode(AccountBizReturnCode.paramError.code());
 			response.setMsg(AccountBizReturnCode.paramError.desc());
 			return response;
@@ -96,7 +96,7 @@ public class AliPayController extends BaseController {
 	public WebResponseModel bindAliaccount(BindAliaccountRequest params) {
 		logger.info("accountWeb.pay.bindAliaccount.request.data : " + JSONObject.toJSONString(params));
 		WebResponseModel response = new WebResponseModel();
-		if (params.getUserId() == null) {
+		if (params.getCustomerId() == null) {
 			response.setCode(AccountBizReturnCode.paramError.code());
 			response.setMsg(AccountBizReturnCode.paramError.desc());
 			return response;
