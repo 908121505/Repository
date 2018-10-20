@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.honglu.quickcall.user.service.dao.CustomerAppearanceMapper">
+
+	<resultMap type="com.honglu.quickcall.user.facade.entity.CustomerAppearance" id="customerAppearanceMap">
+		<id property="id" column="id" javaType="java.lang.String"></id>
+		<result property="customerId" column="customer_id" javaType="java.lang.Long"></result>
+		<result property="appearance" column="appearance" javaType="java.lang.String"></result>
+		<result property="appearanceStatus" column="appearance_status" javaType="java.lang.String"></result>
+		<result property="sequence" column="sequence" javaType="java.lang.String"></result>
+		<result property="status" column="status" javaType="java.lang.String"></result>
+		<result property="createTime" column="create_time" javaType="java.lang.String"></result>
+		<result property="modifyTime" column="modify_time" javaType="java.lang.String"></result>
+		<result property="createMan" column="create_man" javaType="java.lang.String"></result>
+		<result property="modifyMan" column="modify_man" javaType="java.lang.String"></result>
+		<result property="remark" column="remark" javaType="java.lang.String"></result>
+	</resultMap>
+
+	<!-- 通用查询结果列-->
+	<sql id="Base_Column_List">
+id,	customer_id,	appearance,	appearance_status,	sequence,	status,	create_time,	modify_time,	create_man,	modify_man,	remark
+	</sql>
+
+	<!-- 查询（根据主键ID查询） -->
+	<select id="getEntityById" resultMap="customerAppearanceMap" parameterType="java.lang.String">
+		 SELECT
+		 <include refid="Base_Column_List" />
+		 FROM customer_appearance
+		 WHERE id = #{id}
+	</select>
+
+	<!-- 查询（根据主键ID查询） -->
+	<select id="findAll" resultMap="customerAppearanceMap" parameterType="java.lang.String">
+		 SELECT
+		 <include refid="Base_Column_List" />
+		 FROM customer_appearance
+		 WHERE id = #{id}
+	</select>
+
+	<!--删除：根据主键ID删除-->
+	<delete id="deleteEntity" parameterType="java.lang.String">
+		 DELETE FROM customer_appearance
+		 WHERE id = #{id}
+	</delete>
+
+	<!-- 添加 -->
+	<insert id="saveEntity" parameterType="com.honglu.quickcall.user.facade.entity.CustomerAppearance">
+		 INSERT INTO customer_appearance
+ 		(id,customer_id,appearance,appearance_status,sequence,status,create_time,modify_time,create_man,modify_man,remark) 
+		 VALUES 
+ 		(#{id},#{customerId},#{appearance},#{appearanceStatus},#{sequence},#{status},#{createTime},#{modifyTime},#{createMan},#{modifyMan},#{remark}) 
+	</insert>
+
+	<!-- 修 改-->
+	<update id="updateEntity" parameterType="com.honglu.quickcall.user.facade.entity.CustomerAppearance">
+		 UPDATE customer_appearance
+ 		 <set> 
+			<if test="customerId != null">
+				 customer_id = #{customerId},
+			</if>
+			<if test="appearance != null">
+				 appearance = #{appearance},
+			</if>
+			<if test="appearanceStatus != null">
+				 appearance_status = #{appearanceStatus},
+			</if>
+			<if test="sequence != null">
+				 sequence = #{sequence},
+			</if>
+			<if test="status != null">
+				 status = #{status},
+			</if>
+			<if test="createTime != null">
+				 create_time = #{createTime},
+			</if>
+			<if test="modifyTime != null">
+				 modify_time = #{modifyTime},
+			</if>
+			<if test="createMan != null">
+				 create_man = #{createMan},
+			</if>
+			<if test="modifyMan != null">
+				 modify_man = #{modifyMan},
+			</if>
+			<if test="remark != null">
+				 remark = #{remark},
+			</if>
+
+ 		 </set>
+		 WHERE id = #{id}
+	</update>
+
+</mapper>
