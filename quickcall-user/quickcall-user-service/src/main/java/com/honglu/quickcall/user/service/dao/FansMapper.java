@@ -29,7 +29,8 @@ public interface FansMapper {
 	/**
 	 * 判断是否关注
 	 * 
-	 * @param record
+	 * @param anchorId
+	 * @param fansId
 	 * @return
 	 */
 	int queryIsFollow(@Param("anchorId") Long anchorId, @Param("fansId") Long fansId);

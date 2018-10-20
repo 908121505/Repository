@@ -122,7 +122,7 @@ public class EditProfileServiceImpl implements EditProfileService {
             customer.setHeadPortraitUrl(params.getHeadPortraitUrl());
         }
         //新上传头像状态默认为未审核
-        customer.setHeadPortraitStatus("0");
+        customer.setHeadPortraitStatus(0);
         int result = customerMapper.updateByPrimaryKeySelective(customer);
         logger.info("修改头像 updateHeadPortrait,更新数量" + result);
         if (result > 0) {
@@ -289,5 +289,49 @@ public class EditProfileServiceImpl implements EditProfileService {
             throw new BizException(AccountBizReturnCode.JdbcError, "操作数据库异常");
         }
 
+    }
+
+    @Override
+    public CommonResponse updateVoiceIdentificationCard(UpdateVoiceIdentificationCardReq params) {
+        CommonResponse commonResponse = new CommonResponse();
+        Customer customer = customerMapper.selectByPrimaryKey(params.getCustomerId());
+        customer.setVoiceIdentificationCard(params.getVoiceIdentificationCard());
+        customer.setVoiceIdentificationCardStatus(0);
+
+        int result = customerMapper.updateByPrimaryKeySelective(customer);
+        logger.info("修改声鉴卡 ,更新数量" + result);
+        if (result > 0) {
+            JedisUtil.set(RedisKeyConstants.USER_CUSTOMER_INFO + params.getCustomerId(),
+                    JsonParseUtil.castToJson(customer));
+            commonResponse.setData(customer);
+            commonResponse.setCode(UserBizReturnCode.Success);
+            commonResponse.setMessage(UserBizReturnCode.Success.desc());
+            return commonResponse;
+        } else {
+            logger.error("修改声鉴卡异常");
+            throw new RemoteException(UserBizReturnCode.paramError, "参数错误，修改失败");
+        }
+    }
+
+    @Override
+    public CommonResponse removeVoiceIdentificationCard(RemoveVoiceIdentificationCardReq params) {
+        CommonResponse commonResponse = new CommonResponse();
+        Customer customer = customerMapper.selectByPrimaryKey(params.getCustomerId());
+        customer.setVoiceIdentificationCard("");
+        customer.setVoiceIdentificationCardStatus(0);
+
+        int result = customerMapper.updateByPrimaryKeySelective(customer);
+        logger.info("删除声鉴卡 ,更新数量" + result);
+        if (result > 0) {
+            JedisUtil.set(RedisKeyConstants.USER_CUSTOMER_INFO + params.getCustomerId(),
+                    JsonParseUtil.castToJson(customer));
+            commonResponse.setData(customer);
+            commonResponse.setCode(UserBizReturnCode.Success);
+            commonResponse.setMessage(UserBizReturnCode.Success.desc());
+            return commonResponse;
+        } else {
+            logger.error("删除声鉴卡异常");
+            throw new RemoteException(UserBizReturnCode.paramError, "参数错误，修改失败");
+        }
     }
 }

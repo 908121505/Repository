@@ -45,9 +45,22 @@ public interface EditProfileService {
      */
     CommonResponse updateInterest(UpdateInterestReq params);
     /**
-     * 修改兴趣
+     * 删除形象照
      * @param params
      * @return
      */
     CommonResponse removeAppearance(RemoveAppearanceReq params);
+    /**
+     * 修改声鉴卡
+     * @param params
+     * @return
+     */
+    CommonResponse updateVoiceIdentificationCard(UpdateVoiceIdentificationCardReq params);
+    /**
+     * 删除声鉴卡
+     * @param params
+     * @return
+     */
+    CommonResponse removeVoiceIdentificationCard(RemoveVoiceIdentificationCardReq params);
+
 }

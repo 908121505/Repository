@@ -88,31 +88,31 @@ public class Customer {
 	/** 大V声音审核状态1：待审核（审核中） 2：审核拒绝 3.审核通过 4.修改之后待审核 5.修改之后审核拒绝 6.修改之后审核通过 */
 	private Integer voiceStatus;
 
-	private String appearance;
-	private String appearanceStatus;
-	private String headPortraitStatus;
+	private String voiceIdentificationCard;
+	private Integer voiceIdentificationCardStatus;
+	private Integer headPortraitStatus;
 
-	public String getAppearance() {
-		return appearance;
+	public String getVoiceIdentificationCard() {
+		return voiceIdentificationCard;
 	}
 
-	public void setAppearance(String appearance) {
-		this.appearance = appearance;
+	public void setVoiceIdentificationCard(String voiceIdentificationCard) {
+		this.voiceIdentificationCard = voiceIdentificationCard;
 	}
 
-	public String getAppearanceStatus() {
-		return appearanceStatus;
+	public Integer getVoiceIdentificationCardStatus() {
+		return voiceIdentificationCardStatus;
 	}
 
-	public void setAppearanceStatus(String appearanceStatus) {
-		this.appearanceStatus = appearanceStatus;
+	public void setVoiceIdentificationCardStatus(Integer voiceIdentificationCardStatus) {
+		this.voiceIdentificationCardStatus = voiceIdentificationCardStatus;
 	}
 
-	public String getHeadPortraitStatus() {
+	public Integer getHeadPortraitStatus() {
 		return headPortraitStatus;
 	}
 
-	public void setHeadPortraitStatus(String headPortraitStatus) {
+	public void setHeadPortraitStatus(Integer headPortraitStatus) {
 		this.headPortraitStatus = headPortraitStatus;
 	}
 

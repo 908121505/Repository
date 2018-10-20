@@ -1,6 +1,8 @@
 package com.honglu.quickcall.user.service.dao;
 
+import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 
@@ -72,4 +74,11 @@ public interface CustomerMapper {
 			@Param("customerId") Long customerId);
 
 	int selectCountByNickNameAndId(@Param("nickName") String nickName, @Param("customerId") String customerId);
+
+	/**
+	 * 查询客户的充值金额 + 提现金额
+	 * @param customerId
+	 * @return rechargeAmounts 充值金额；withdrawAmounts 提现金额
+	 */
+    Map<String, BigDecimal> queryCustomerAccountMoney(@Param("customerId") Long customerId);
 }
