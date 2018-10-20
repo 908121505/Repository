@@ -4,12 +4,12 @@
 <mapper namespace="com.honglu.quickcall.user.service.dao.CustomerAppearanceMapper">
 
 	<resultMap type="com.honglu.quickcall.user.facade.entity.CustomerAppearance" id="customerAppearanceMap">
-		<id property="id" column="id" javaType="java.lang.String"></id>
+		<id property="id" column="id" javaType="java.lang.Long"></id>
 		<result property="customerId" column="customer_id" javaType="java.lang.Long"></result>
 		<result property="appearance" column="appearance" javaType="java.lang.String"></result>
-		<result property="appearanceStatus" column="appearance_status" javaType="java.lang.String"></result>
-		<result property="sequence" column="sequence" javaType="java.lang.String"></result>
-		<result property="status" column="status" javaType="java.lang.String"></result>
+		<result property="auditStatus" column="audit_status" javaType="java.lang.Integer"></result>
+		<result property="sort" column="sort" javaType="java.lang.Integer"></result>
+		<result property="status" column="status" javaType="java.lang.Integer"></result>
 		<result property="createTime" column="create_time" javaType="java.lang.String"></result>
 		<result property="modifyTime" column="modify_time" javaType="java.lang.String"></result>
 		<result property="createMan" column="create_man" javaType="java.lang.String"></result>
@@ -19,11 +19,11 @@
 
 	<!-- 通用查询结果列-->
 	<sql id="Base_Column_List">
-id,	customer_id,	appearance,	appearance_status,	sequence,	status,	create_time,	modify_time,	create_man,	modify_man,	remark
+id,	customer_id,	appearance,	audit_status,	sort,	status,	create_time,	modify_time,	create_man,	modify_man,	remark
 	</sql>
 
 	<!-- 查询（根据主键ID查询） -->
-	<select id="getEntityById" resultMap="customerAppearanceMap" parameterType="java.lang.String">
+	<select id="getEntityById" resultMap="customerAppearanceMap" parameterType="java.lang.Long">
 		 SELECT
 		 <include refid="Base_Column_List" />
 		 FROM customer_appearance
@@ -31,7 +31,7 @@ id,	customer_id,	appearance,	appearance_status,	sequence,	status,	create_time,	m
 	</select>
 
 	<!-- 查询（根据主键ID查询） -->
-	<select id="findAll" resultMap="customerAppearanceMap" parameterType="java.lang.String">
+	<select id="findAll" resultMap="customerAppearanceMap" parameterType="java.lang.Long">
 		 SELECT
 		 <include refid="Base_Column_List" />
 		 FROM customer_appearance
@@ -39,7 +39,7 @@ id,	customer_id,	appearance,	appearance_status,	sequence,	status,	create_time,	m
 	</select>
 
 	<!--删除：根据主键ID删除-->
-	<delete id="deleteEntity" parameterType="java.lang.String">
+	<delete id="deleteEntity" parameterType="java.lang.Long">
 		 DELETE FROM customer_appearance
 		 WHERE id = #{id}
 	</delete>
@@ -47,9 +47,9 @@ id,	customer_id,	appearance,	appearance_status,	sequence,	status,	create_time,	m
 	<!-- 添加 -->
 	<insert id="saveEntity" parameterType="com.honglu.quickcall.user.facade.entity.CustomerAppearance">
 		 INSERT INTO customer_appearance
- 		(id,customer_id,appearance,appearance_status,sequence,status,create_time,modify_time,create_man,modify_man,remark) 
+ 		(id,customer_id,appearance,audit_status,sort,status,create_time,modify_time,create_man,modify_man,remark) 
 		 VALUES 
- 		(#{id},#{customerId},#{appearance},#{appearanceStatus},#{sequence},#{status},#{createTime},#{modifyTime},#{createMan},#{modifyMan},#{remark}) 
+ 		(#{id},#{customerId},#{appearance},#{auditStatus},#{sort},#{status},#{createTime},#{modifyTime},#{createMan},#{modifyMan},#{remark}) 
 	</insert>
 
 	<!-- 修 改-->
@@ -62,11 +62,11 @@ id,	customer_id,	appearance,	appearance_status,	sequence,	status,	create_time,	m
 			<if test="appearance != null">
 				 appearance = #{appearance},
 			</if>
-			<if test="appearanceStatus != null">
-				 appearance_status = #{appearanceStatus},
+			<if test="auditStatus != null">
+				 audit_status = #{auditStatus},
 			</if>
-			<if test="sequence != null">
-				 sequence = #{sequence},
+			<if test="sort != null">
+				 sort = #{sort},
 			</if>
 			<if test="status != null">
 				 status = #{status},

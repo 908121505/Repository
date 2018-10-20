@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * CustomerAppearanceMapper数据库操作接口类bean
  * @author luoyanchong
- * @date Sat Oct 20 11:28:42 CST 2018
+ * @date Sat Oct 20 14:52:09 CST 2018
  **/
 
 public interface CustomerAppearanceMapper{

@@ -4,12 +4,12 @@ package com.honglu.quickcall.user.facade.entity;
 /**
  * 客户形象照表bean
  * @author luoyanchong
- * @date Sat Oct 20 11:28:42 CST 2018
+ * @date Sat Oct 20 14:52:09 CST 2018
  **/
 public class CustomerAppearance {
 
-	/**主键ID**/
-	private String id;
+	/**主键id(15位时间+4位随机数)**/
+	private Long id;
 
 	/**客户ID**/
 	private Long customerId;
@@ -17,14 +17,14 @@ public class CustomerAppearance {
 	/**形象照**/
 	private String appearance;
 
-	/**形象照审核状态 0=待审核,1=已通过,2=已拒绝**/
-	private String appearanceStatus;
+	/**审核状态 0=待审核,1=已通过,2=已拒绝**/
+	private Integer auditStatus;
 
-	/**排序)**/
-	private String sequence;
+	/**排序（暂时没用）**/
+	private Integer sort;
 
-	/**状态**/
-	private String status;
+	/**状态（0=不可用，1=可用）**/
+	private Integer status;
 
 	/**创建时间**/
 	private String createTime;
@@ -45,13 +45,13 @@ public class CustomerAppearance {
 	public CustomerAppearance() {
 		super();
 	}
-	public CustomerAppearance(String id,Long customerId,String appearance,String appearanceStatus,String sequence,String status,String createTime,String modifyTime,String createMan,String modifyMan,String remark) {
+	public CustomerAppearance(Long id,Long customerId,String appearance,Integer auditStatus,Integer sort,Integer status,String createTime,String modifyTime,String createMan,String modifyMan,String remark) {
 		super();
 		this.id = id;
 		this.customerId = customerId;
 		this.appearance = appearance;
-		this.appearanceStatus = appearanceStatus;
-		this.sequence = sequence;
+		this.auditStatus = auditStatus;
+		this.sort = sort;
 		this.status = status;
 		this.createTime = createTime;
 		this.modifyTime = modifyTime;
@@ -59,11 +59,11 @@ public class CustomerAppearance {
 		this.modifyMan = modifyMan;
 		this.remark = remark;
 	}
-	public void setId(String id){
+	public void setId(Long id){
 		this.id = id;
 	}
 
-	public String getId(){
+	public Long getId(){
 		return this.id;
 	}
 
@@ -83,27 +83,27 @@ public class CustomerAppearance {
 		return this.appearance;
 	}
 
-	public void setAppearanceStatus(String appearanceStatus){
-		this.appearanceStatus = appearanceStatus;
+	public void setAuditStatus(Integer auditStatus){
+		this.auditStatus = auditStatus;
 	}
 
-	public String getAppearanceStatus(){
-		return this.appearanceStatus;
+	public Integer getAuditStatus(){
+		return this.auditStatus;
 	}
 
-	public void setSequence(String sequence){
-		this.sequence = sequence;
+	public void setSort(Integer sort){
+		this.sort = sort;
 	}
 
-	public String getSequence(){
-		return this.sequence;
+	public Integer getSort(){
+		return this.sort;
 	}
 
-	public void setStatus(String status){
+	public void setStatus(Integer status){
 		this.status = status;
 	}
 
-	public String getStatus(){
+	public Integer getStatus(){
 		return this.status;
 	}
 
