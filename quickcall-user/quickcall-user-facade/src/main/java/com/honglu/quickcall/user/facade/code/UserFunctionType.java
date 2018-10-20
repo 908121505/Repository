@@ -121,6 +121,7 @@ public interface UserFunctionType {
      */
     String removeVoiceIdentificationCard = "0011148";
 
+
     /**
      * 个人中心接口
      */
