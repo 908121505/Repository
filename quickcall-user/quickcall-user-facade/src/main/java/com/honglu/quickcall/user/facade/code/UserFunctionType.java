@@ -112,4 +112,10 @@ public interface UserFunctionType {
 	 * 删除形象照
 	 */
 	String removeAppearance = "0011146";
+
+	/**
+	 * 客户主页接口
+	 */
+	String CUSTOMER_HOME = "0011150";
+
 }

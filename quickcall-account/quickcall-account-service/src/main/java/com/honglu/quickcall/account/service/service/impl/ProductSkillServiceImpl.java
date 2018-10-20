@@ -17,6 +17,7 @@ import com.honglu.quickcall.account.facade.vo.CustomerSkillVO;
 import com.honglu.quickcall.account.facade.vo.DaVinfoListVO;
 import com.honglu.quickcall.account.facade.vo.DaVinfoVO;
 import com.honglu.quickcall.account.facade.vo.FirstPageSkillIteminfoVO;
+import com.honglu.quickcall.account.facade.vo.SkillUnitPriceVO;
 import com.honglu.quickcall.account.service.dao.CustomerSkillMapper;
 import com.honglu.quickcall.account.service.dao.SkillMapper;
 import com.honglu.quickcall.account.service.service.IProductSkillService;
@@ -168,39 +169,9 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 		
 		CustomerSkillInfoVO  resultVO = new CustomerSkillInfoVO();
 		
-//		List<CustomerSkill>   skillList = new ArrayList<CustomerSkill>();
-////		List<CustomerSkill>   skillList = customerSkillMapper.querySkillInfoPersonal(customerId);
-//		
-//		if(CollectionUtils.isEmpty(skillList)){
-//			return null ;
-//		}
-//		
+
+
 		HashMap<String, Integer> weekDataMap = new HashMap<String, Integer>();
-//		String  serviceUnitStr =  null;
-//		for (CustomerSkill skill : skillList) {
-//			CustomerSkillVO   skillVO = new CustomerSkillVO();
-//			BeanUtils.copyProperties(skill, skillVO);
-//			if(weekDataMap.size() == 0){
-//				weekDataMap.put("monday", skill.getMonday());
-//				weekDataMap.put("tuesday", skill.getTuesday());
-//				weekDataMap.put("wednesday", skill.getWednesday());
-//				weekDataMap.put("thursday", skill.getThursday());
-//				weekDataMap.put("friday", skill.getFriday());
-//				weekDataMap.put("saturday", skill.getSaturday());
-//				weekDataMap.put("sunday",skill.getSunday());
-//				Date  endServiceTime  = skill.getEndServiceTime();
-//				if(endServiceTime != null){
-//					
-//				}
-//			}
-//		}
-		
-		
-		
-		
-		
-		
-		
 		
 		
 		List<CustomerSkillVO>   resultList =  new ArrayList<CustomerSkillVO>();
@@ -231,7 +202,7 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 				serviceUnitList.add("次");
 			}else if(i == 1 ){
 				skillItemName = "声优聊天";
-				serviceUnit = "半小时";
+				serviceUnit = "次";
 				serviceUnitList.add("小时");
 				serviceUnitList.add("半小时");
 			}
@@ -248,15 +219,47 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 			List<CustomerSkillExtVO> skillExtList = new ArrayList<CustomerSkillExtVO>();
 			
 			for (int j = 0; j < 2; j++) {
+				
 				CustomerSkillExtVO  extVO = new CustomerSkillExtVO();
-				extVO.setDiscontRateValue(new BigDecimal(2).multiply(new BigDecimal(j+1)));
-				extVO.setServiceUnitValue(i >0?"半小时":"小时");
-				extVO.setSkillItemExtId(1000L);
 				extVO.setSkillRangeValue(j+1);
-				extVO.setSkillPriceValue(new BigDecimal(10).multiply(new BigDecimal(j+1)));
+				
+				//按次算
+				List<SkillUnitPriceVO> unitPriceList = new ArrayList<>();
+				if(i == 0){
+					
+					SkillUnitPriceVO  up =  new SkillUnitPriceVO();
+					up.setSkillItemExtId(1111L);
+					up.setUnitName("次");
+					up.setUnitPrice(new BigDecimal(60));
+					unitPriceList.add(up);
+					
+					
+				}else{
+					for (int k = 0; k < 2; k++) {
+						SkillUnitPriceVO  up =  new SkillUnitPriceVO();
+						if(k == 0){
+							up.setUnitName("半小时");
+							up.setUnitPrice(new BigDecimal(60));
+							up.setSkillItemExtId(3333L);
+						}else{
+							up.setUnitName("小时");
+							up.setUnitPrice(new BigDecimal(100));
+							up.setSkillItemExtId(2222L);
+						}
+						unitPriceList.add(up);
+					}
+					
+					
+				}
+				
+				extVO.setUnitPriceList(unitPriceList );
 				skillExtList.add(extVO);
 			}
+			
+			skillVO.setOldSkillItemExtId(2001L);
+			skillVO.setDiscontRateList(discontRateList);
 			skillVO.setSkillExtList(skillExtList );
+			skillVO.setSkillType(i == 1 ? 1 : 2);
 			resultList.add(skillVO);
 		}
 		
@@ -270,7 +273,7 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 		weekDataMap.put("saturday", 0);
 		weekDataMap.put("sunday", 1);
 		
-		
+		resultVO.setReceiveStatus(1);
 		resultVO.setCustomerSkillList(resultList);
 		
 		resultVO.setEndServiceTimeStr("10:00");

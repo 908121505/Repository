@@ -348,7 +348,7 @@
   </select>
 
   <select id="selectOneSkillPrice" resultType="java.math.BigDecimal" >
-    select ext_value
+    select skill_ext_price
     from skill_item_ext
     where skill_item_id=#{skillId} and ext_type=1
     limit 0,1

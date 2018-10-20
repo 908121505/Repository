@@ -22,6 +22,7 @@ public class CustomerSkillInfoVO {
     private  HashMap<String, Integer>  weekDataMap; 
     /**接单开关1：开启  0 ：关闭*/
     private Integer  receiveStatus;
+
     
 	public Integer getReceiveStatus() {
 		return receiveStatus;

@@ -20,6 +20,8 @@ public class CustomerSkillVO {
 	private String  skillItemName;
 	/**技能项ID(分类ID)*/
     private Long skillItemId;
+    /**已选中ID*/
+    private Long  oldSkillItemExtId;
     /**已选中等级*/
     private Integer oldSkillRange;
     /**服务单位（小时/半小时/次）*/
@@ -30,8 +32,15 @@ public class CustomerSkillVO {
     private Integer switchStatus;
     /**已选中的折扣*/
     private BigDecimal oldDiscountRate;
+    /**折扣列表*/
+    private List<BigDecimal> discontRateList ;
     /**分类项列表*/
     private List<CustomerSkillExtVO>  skillExtList;
+    
+    
+    
+    /**技能类型1：按次算     2：按时长算*/
+    private  Integer  skillType;
     
     
 	public Long getCustomerSkillId() {
@@ -91,6 +100,30 @@ public class CustomerSkillVO {
 	public void setOldSkillRange(Integer oldSkillRange) {
 		this.oldSkillRange = oldSkillRange;
 	}
+	
+	public List<BigDecimal> getDiscontRateList() {
+		return discontRateList;
+	}
+	public void setDiscontRateList(List<BigDecimal> discontRateList) {
+		this.discontRateList = discontRateList;
+	}
+	public Integer getSkillType() {
+		return skillType;
+	}
+	public void setSkillType(Integer skillType) {
+		this.skillType = skillType;
+	}
+	
+	
+	public Long getOldSkillItemExtId() {
+		return oldSkillItemExtId;
+	}
+	public void setOldSkillItemExtId(Long oldSkillItemExtId) {
+		this.oldSkillItemExtId = oldSkillItemExtId;
+	}
+	
+	
+	
 	
 	
 	

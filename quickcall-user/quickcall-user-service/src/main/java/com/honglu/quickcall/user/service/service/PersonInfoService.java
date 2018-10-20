@@ -1,23 +1,7 @@
 package com.honglu.quickcall.user.service.service;
 
 import com.honglu.quickcall.common.api.exchange.CommonResponse;
-import com.honglu.quickcall.user.facade.exchange.request.AddOrCancelFansRequest;
-import com.honglu.quickcall.user.facade.exchange.request.CheckAttentionRequest;
-import com.honglu.quickcall.user.facade.exchange.request.PersonInfoRequest;
-import com.honglu.quickcall.user.facade.exchange.request.QueryAttentionFansListRequest;
-import com.honglu.quickcall.user.facade.exchange.request.QueryInterestListRequest;
-import com.honglu.quickcall.user.facade.exchange.request.QueryOccupationListRequest;
-import com.honglu.quickcall.user.facade.exchange.request.ReadAttentionRequest;
-import com.honglu.quickcall.user.facade.exchange.request.SaveBirthRequest;
-import com.honglu.quickcall.user.facade.exchange.request.SaveGenderRequest;
-import com.honglu.quickcall.user.facade.exchange.request.SaveInterestRequest;
-import com.honglu.quickcall.user.facade.exchange.request.SaveNickNameRequest;
-import com.honglu.quickcall.user.facade.exchange.request.SaveOccupationRequest;
-import com.honglu.quickcall.user.facade.exchange.request.SaveSignNameRequest;
-import com.honglu.quickcall.user.facade.exchange.request.SaveSkillAuditRequest;
-import com.honglu.quickcall.user.facade.exchange.request.SearchPersonRequest;
-import com.honglu.quickcall.user.facade.exchange.request.ShowHomePageLogout;
-import com.honglu.quickcall.user.facade.exchange.request.queryMyskillRequest;
+import com.honglu.quickcall.user.facade.exchange.request.*;
 
 /**
  * 
@@ -107,13 +91,20 @@ public interface PersonInfoService {
 	 * @return
 	 */
 	CommonResponse queryMySkill(queryMyskillRequest params);
-	
+
 	/**
 	 * 保存我的技能认证信息
-	 * 
+	 *
 	 * @param request
 	 * @return
 	 */
 	CommonResponse saveCustomerSkillCertify(SaveSkillAuditRequest request);
-	
+
+
+	/**
+	 * 查询客户个人主页数据接口
+	 * @param request
+	 * @return
+	 */
+	CommonResponse queryCustomerHome(CustomerHomeRequest request);
 }
