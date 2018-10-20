@@ -38,6 +38,13 @@ public interface CustomerSkillCertifyMapper{
 	
 	/**
 	 * 
+	 * 查询主播技能认证
+	 * 
+	 **/
+	CustomerSkillCertify  selectSkillCertifyId ( @Param("customerId") Long customerId ,@Param("skillItemId") Long skillItemId );
+	
+	/**
+	 * 
 	 * 删除（根据主键ID删除）
 	 * 
 	 **/

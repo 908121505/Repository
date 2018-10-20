@@ -9,6 +9,7 @@ import com.honglu.quickcall.user.facade.code.UserBizReturnCode;
 import com.honglu.quickcall.user.facade.constants.UserBizConstants;
 import com.honglu.quickcall.user.facade.exchange.request.SaveCertificationRequest;
 import com.honglu.quickcall.user.facade.exchange.request.SaveDvVoiceRequest;
+import com.honglu.quickcall.user.facade.exchange.request.SaveSkillAuditRequest;
 import com.honglu.quickcall.user.facade.exchange.request.UserIdCardInfoRequest;
 import com.honglu.quickcall.user.web.service.UserCenterService;
 import org.apache.commons.lang3.StringUtils;
@@ -204,23 +205,27 @@ public class CertificationController {
     public WebResponseModel skillAuditUpload(HttpServletRequest request) {
         logger.info("userWeb.certification skillAuditUpload request data : " + request);
         String customerId = request.getParameter("customerId");
-        String  skillId = request.getParameter("skillId");
-//        if(StringUtils.isBlank(customerId)){
-//            WebResponseModel response = new WebResponseModel();
-//            response.setCode(UserBizReturnCode.paramError.code());
-//            response.setMsg("客户ID为空");
-//            return response;
-//        }
-//        WebResponseModel response = uploadFile(request, AliYunFilePaths.BIG_V_INTRODUCE_AUDIO);
-//        if("000000".equals(response.getCode())){
-//        	
-//        }
-//        logger.info("userWeb.certification skillAuditUpload response data : " + response);
+        String  skillItemId = request.getParameter("skillItemId");
+        String  skillVoiceTime = request.getParameter("skillVoiceTime");
+        if(StringUtils.isBlank(customerId)){
+            WebResponseModel response = new WebResponseModel();
+            response.setCode(UserBizReturnCode.paramError.code());
+            response.setMsg("客户ID为空");
+            return response;
+        }
+        //上传技能声音文件
+        WebResponseModel response = uploadFile(request, AliYunFilePaths.CUSTOMER_SKILL_CERTIFY_AUDIO);
+        if("000000".equals(response.getCode())){
+        	SaveSkillAuditRequest params = new SaveSkillAuditRequest();
+        	params.setCustomerId(Long.valueOf(customerId));
+        	params.setSkillItemId(Long.valueOf(skillItemId));
+        	params.setSkillVoiceTime(new BigDecimal(skillVoiceTime).setScale(1, BigDecimal.ROUND_HALF_UP));
+        	params.setSkillVoiceUrl(response.getData());
+        	//调用保存技能认证服务
+        	response = userCenterService.execute(params);
+        }
+        logger.info("userWeb.certification skillAuditUpload response data : " + response);
         
-        WebResponseModel response = new WebResponseModel();
-        response.setCode(UserBizReturnCode.Success.code());
-        response.setMsg("成功");
-        response.setData("http://test-guanjia.oss-cn-shanghai.aliyuncs.com/user/idcard/f48a9af32b57420fb3b31266ed9d7061.gif");
         return response;
     }
 

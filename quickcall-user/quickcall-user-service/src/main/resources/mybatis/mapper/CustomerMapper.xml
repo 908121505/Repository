@@ -654,4 +654,14 @@
   </select>
 
 
+  <select id="selectByAppId" parameterType="Map" resultMap="BaseResultMap">
+
+    select 
+    <include refid="Base_Column_List" />
+    from customer
+    where app_id=#{appId}
+
+  </select>
+  
+
 </mapper>

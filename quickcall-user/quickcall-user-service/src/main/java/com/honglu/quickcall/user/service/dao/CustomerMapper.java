@@ -17,6 +17,8 @@ public interface CustomerMapper {
 
 	Customer selectByPrimaryKey(Long customerId);
 
+	Customer selectByAppId(@Param("appId") String appId);
+
 	int updateByPrimaryKeySelective(Customer record);
 
 	int updateByPrimaryKey(Customer record);
