@@ -194,6 +194,19 @@ public class DateUtils {
     	cal.add(Calendar.MINUTE, minutes);
     	return   cal.getTime()  ;
     }
+    /**
+     * 获取当前天在每周的第几天(例如周一就是第一天，周日是第七天)
+     * @return
+     */
+    public static int getDayOfWeek()  {
+    	Calendar  cal =  Calendar.getInstance();
+    	Integer   dayIndex =  cal.get(Calendar.DAY_OF_WEEK);
+    	if(dayIndex == 1){
+    		return 7;
+    	}else{
+    		return dayIndex - 1 ;
+    	}
+    }
     
     
     

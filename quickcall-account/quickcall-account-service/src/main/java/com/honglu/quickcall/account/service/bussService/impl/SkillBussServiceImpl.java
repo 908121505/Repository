@@ -68,10 +68,10 @@ public class SkillBussServiceImpl implements ISkillBussService {
 		if (request == null /*|| request.getCustomerId() == null*/) {
 			throw new BizException(AccountBizReturnCode.paramError, "更改技能参数异常");
 		}
-		
-		 CommonResponse commonResponse = new CommonResponse();
-		 commonResponse.setCode(BizCode.Success);
-		 commonResponse.setMessage(BizCode.Success.desc());
+		productSkillService.updateSkillInfoPersonal(request);
+		CommonResponse commonResponse = new CommonResponse();
+		commonResponse.setCode(BizCode.Success);
+		commonResponse.setMessage(BizCode.Success.desc());
 		LOGGER.info("用户编号为：" + "" + "修改成功");
 		return commonResponse;
 	}

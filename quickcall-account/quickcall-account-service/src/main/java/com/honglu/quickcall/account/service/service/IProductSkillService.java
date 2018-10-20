@@ -2,6 +2,7 @@ package com.honglu.quickcall.account.service.service;
 
 import java.util.List;
 
+import com.honglu.quickcall.account.facade.exchange.request.SkillUpdateRequest;
 import com.honglu.quickcall.account.facade.vo.CustomerSkillInfoVO;
 import com.honglu.quickcall.account.facade.vo.DaVinfoListVO;
 import com.honglu.quickcall.account.facade.vo.DaVinfoVO;
@@ -48,6 +49,12 @@ public interface IProductSkillService {
 	 * @return
 	 */
 	CustomerSkillInfoVO querySkillInfoPersonal(Long customerId);
+
+	/**
+	 * 
+	 * @param request
+	 */
+	void updateSkillInfoPersonal(SkillUpdateRequest request);
 	
 	
 	

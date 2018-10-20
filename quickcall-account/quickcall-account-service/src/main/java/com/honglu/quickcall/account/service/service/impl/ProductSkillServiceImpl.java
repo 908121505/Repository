@@ -2,12 +2,18 @@ package com.honglu.quickcall.account.service.service.impl;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
+import com.honglu.quickcall.account.facade.entity.CustomerSkill;
+import com.honglu.quickcall.account.facade.exchange.request.SkillUpdateRequest;
 import com.honglu.quickcall.account.facade.vo.CustomerSkillInfoVO;
 import com.honglu.quickcall.account.facade.vo.CustomerSkillVO;
 import com.honglu.quickcall.account.facade.vo.DaVinfoListVO;
@@ -16,6 +22,7 @@ import com.honglu.quickcall.account.facade.vo.FirstPageSkillIteminfoVO;
 import com.honglu.quickcall.account.service.dao.CustomerSkillMapper;
 import com.honglu.quickcall.account.service.dao.SkillMapper;
 import com.honglu.quickcall.account.service.service.IProductSkillService;
+import com.honglu.quickcall.common.api.util.DateUtils;
 
 
 @Service("productSkillService")
@@ -123,19 +130,79 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 		}
 		return  listVO;
 	}
+	
+	
+	
+	public  void   getNewCustomerSkillInfoVO(CustomerSkill  skill,CustomerSkillInfoVO  infoVO){
+		Date   currTime =  new Date();
+		int  dayIndex = DateUtils.getDayOfWeek();
+		//当前是周一，则周一之后的都是默认值
+		if(dayIndex == 1 ){
+			
+		}else if (dayIndex  == 2){
+			
+		}else if(dayIndex == 3){
+			
+		}else if(dayIndex == 4){
+			
+		}else if(dayIndex == 5){
+			
+		}else if(dayIndex == 6){
+			
+		}else if(dayIndex == 7){
+			
+		}
+		
+		
+	}
+	
+	
+
+	
+	
+	
 
 	@Override
 	public CustomerSkillInfoVO querySkillInfoPersonal(Long customerId) {
 		
 		
-		//
-//		customerSkillMapper.selectByCustomerId(customerId);
-		
-		
-		
-		
 		
 		CustomerSkillInfoVO  resultVO = new CustomerSkillInfoVO();
+		
+		List<CustomerSkill>   skillList = customerSkillMapper.querySkillInfoPersonal(customerId);
+		
+		if(CollectionUtils.isEmpty(skillList)){
+			return null ;
+		}
+		
+		HashMap<String, Integer> weekDataMap = new HashMap<String, Integer>();
+		String  serviceUnitStr =  null;
+		for (CustomerSkill skill : skillList) {
+			CustomerSkillVO   skillVO = new CustomerSkillVO();
+			BeanUtils.copyProperties(skill, skillVO);
+			if(weekDataMap.size() == 0){
+				weekDataMap.put("monday", skill.getMonday());
+				weekDataMap.put("tuesday", skill.getTuesday());
+				weekDataMap.put("wednesday", skill.getWednesday());
+				weekDataMap.put("thursday", skill.getThursday());
+				weekDataMap.put("friday", skill.getFriday());
+				weekDataMap.put("saturday", skill.getSaturday());
+				weekDataMap.put("sunday",skill.getSunday());
+				Date  endServiceTime  = skill.getEndServiceTime();
+				if(endServiceTime != null){
+					
+				}
+			}
+		}
+		
+		
+		
+		
+		
+		
+		
+		
+		
 		List<CustomerSkillVO>   resultList =  new ArrayList<CustomerSkillVO>();
 		
 		
@@ -188,7 +255,7 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 			resultList.add(skillVO);
 		}
 		
-		HashMap<String, Integer> weekDataMap = new HashMap<String, Integer>();
+		
 		
 		weekDataMap.put("monday", 1);
 		weekDataMap.put("tuesday", 0);
@@ -204,6 +271,12 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 //		String  json = JSONUtil.toJson(resultVO);
 //		System.out.println("============"+json);
 		return resultVO;
+	}
+
+	@Override
+	public void updateSkillInfoPersonal(SkillUpdateRequest request) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 
