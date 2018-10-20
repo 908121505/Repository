@@ -20,20 +20,18 @@ public class CustomerSkillVO {
 	private String  skillItemName;
 	/**技能项ID(分类ID)*/
     private Long skillItemId;
+    /**已选中等级*/
+    private Integer oldSkillRange;
     /**服务单位（小时/半小时/次）*/
-    private String serviceUnit;
+    private String oldServiceUnit;
     /**已选中的价格*/
-    private BigDecimal skillPrice;
+    private BigDecimal oldSkillPrice;
     /**技能开关 1：开启  0：关闭*/
     private Integer switchStatus;
     /**已选中的折扣*/
-    private BigDecimal discountRate;
-    /**折扣列表*/
-    private List<BigDecimal>  discontRateList;
-    /**技能价格列表*/
-    private List<BigDecimal>  skillPriceList;
-    /**服务单位列表*/
-    private List<String>  serviceUnitList;
+    private BigDecimal oldDiscountRate;
+    /**分类项列表*/
+    private List<CustomerSkillExtVO>  skillExtList;
     
     
 	public Long getCustomerSkillId() {
@@ -54,18 +52,7 @@ public class CustomerSkillVO {
 	public void setSkillItemId(Long skillItemId) {
 		this.skillItemId = skillItemId;
 	}
-	public String getServiceUnit() {
-		return serviceUnit;
-	}
-	public void setServiceUnit(String serviceUnit) {
-		this.serviceUnit = serviceUnit;
-	}
-	public BigDecimal getSkillPrice() {
-		return skillPrice;
-	}
-	public void setSkillPrice(BigDecimal skillPrice) {
-		this.skillPrice = skillPrice;
-	}
+	
 	public Integer getSwitchStatus() {
 		return switchStatus;
 	}
@@ -73,29 +60,39 @@ public class CustomerSkillVO {
 		this.switchStatus = switchStatus;
 	}
 
-	public BigDecimal getDiscountRate() {
-		return discountRate;
+	
+	public String getOldServiceUnit() {
+		return oldServiceUnit;
 	}
-	public void setDiscountRate(BigDecimal discountRate) {
-		this.discountRate = discountRate;
+	public void setOldServiceUnit(String oldServiceUnit) {
+		this.oldServiceUnit = oldServiceUnit;
 	}
-	public List<BigDecimal> getDiscontRateList() {
-		return discontRateList;
+	public BigDecimal getOldSkillPrice() {
+		return oldSkillPrice;
 	}
-	public void setDiscontRateList(List<BigDecimal> discontRateList) {
-		this.discontRateList = discontRateList;
+	public void setOldSkillPrice(BigDecimal oldSkillPrice) {
+		this.oldSkillPrice = oldSkillPrice;
 	}
-	public List<BigDecimal> getSkillPriceList() {
-		return skillPriceList;
+	public BigDecimal getOldDiscountRate() {
+		return oldDiscountRate;
 	}
-	public void setSkillPriceList(List<BigDecimal> skillPriceList) {
-		this.skillPriceList = skillPriceList;
+	public void setOldDiscountRate(BigDecimal oldDiscountRate) {
+		this.oldDiscountRate = oldDiscountRate;
 	}
-	public List<String> getServiceUnitList() {
-		return serviceUnitList;
+	public List<CustomerSkillExtVO> getSkillExtList() {
+		return skillExtList;
 	}
-	public void setServiceUnitList(List<String> serviceUnitList) {
-		this.serviceUnitList = serviceUnitList;
+	public void setSkillExtList(List<CustomerSkillExtVO> skillExtList) {
+		this.skillExtList = skillExtList;
 	}
+	public Integer getOldSkillRange() {
+		return oldSkillRange;
+	}
+	public void setOldSkillRange(Integer oldSkillRange) {
+		this.oldSkillRange = oldSkillRange;
+	}
+	
+	
+	
 	
 }

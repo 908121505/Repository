@@ -245,6 +245,7 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 		}
 		customer = new Customer();
 		customer.setCustomerId(UUIDUtils.getId());
+		customer.setAppId(randomAppId());
 		customer.setCreateTime(new Date());
 		customer.setMicroblogOpenId(request.getMicroblogOpenId());
 		customer.setQqOpenId(request.getQqOpenId());
@@ -287,16 +288,17 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 	}
 
 	/**
-	 * 随机八-十位 appId
+	 * 随机八-十位 appId 并排除已有appId
 	 * 
 	 * @return
 	 */
-	private static String randomAppId() {
+	private String randomAppId() {
 		String[] appIdList = { "13140000", "131400000", "1314000000", "52000000", "520000000", "5200000000", "66666666",
 				"666666666", "6666666666", "88888888", "888888888", "8888888888" };
 		Random rand = new Random();
 		String num = rand.nextInt(999000000) + 1000000 + (rand.nextInt(10) + "");
-		while (Arrays.asList(appIdList).contains(num)) {
+		// 数据库不存在相同appId 且排除以上靓号
+		while (customerMapper.selectByAppId(num) != null || Arrays.asList(appIdList).contains(num)) {
 			num = rand.nextInt(999000000) + 1000000 + (rand.nextInt(10) + "");
 		}
 		return num;

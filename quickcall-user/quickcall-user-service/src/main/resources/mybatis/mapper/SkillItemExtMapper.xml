@@ -2,10 +2,14 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="SkillItemExtMapper" >
   <resultMap id="BaseResultMap" type="com.honglu.quickcall.user.facade.entity.SkillItemExt" >
-    <id column="id" property="id" jdbcType="INTEGER" />
+     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="skill_item_id" property="skillItemId" jdbcType="BIGINT" />
-    <result column="ext_type" property="extType" jdbcType="TINYINT" />
-    <result column="ext_value" property="extValue" jdbcType="DECIMAL" />
+    <result column="skill_ext_type" property="skillExtType" jdbcType="TINYINT" />
+    <result column="skill_ext_range" property="skillExtRange" jdbcType="TINYINT" />
+    <result column="skill_ext_unit" property="skillExtUnit" jdbcType="TINYINT" />
+    <result column="skill_ext_price" property="skillExtPrice" jdbcType="DECIMAL" />
+    <result column="skill_ext_status" property="skillExtStatus" jdbcType="TINYINT" />
+    <result column="skill_ext_discont" property="skillExtDiscont" jdbcType="DECIMAL" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
     <result column="create_man" property="createMan" jdbcType="VARCHAR" />
@@ -15,7 +19,8 @@
  
  
   <sql id="Base_Column_List" >
-    id, skill_item_id, ext_type, ext_value, create_time, modify_time, create_man, modify_man, 
+    id, skill_item_id, skill_ext_type, skill_ext_range, skill_ext_unit, skill_ext_price, 
+    skill_ext_status, skill_ext_discont, create_time, modify_time, create_man, modify_man, 
     remark
   </sql>
 
@@ -33,14 +38,16 @@
   
   
   <insert id="insert" parameterType="com.honglu.quickcall.user.facade.entity.SkillItemExt" >
-    insert into skill_item_ext (id, skill_item_id, ext_type, 
-      ext_value, create_time, modify_time, 
-      create_man, modify_man, remark
-      )
-    values (#{id,jdbcType=INTEGER}, #{skillItemId,jdbcType=BIGINT}, #{extType,jdbcType=TINYINT}, 
-      #{extValue,jdbcType=DECIMAL}, #{createTime,jdbcType=TIMESTAMP}, #{modifyTime,jdbcType=TIMESTAMP}, 
-      #{createMan,jdbcType=VARCHAR}, #{modifyMan,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}
-      )
+       insert into skill_item_ext (id, skill_item_id, skill_ext_type, 
+      skill_ext_range, skill_ext_unit, skill_ext_price, 
+      skill_ext_status, skill_ext_discont, create_time, 
+      modify_time, create_man, modify_man, 
+      remark)
+    values (#{id,jdbcType=INTEGER}, #{skillItemId,jdbcType=BIGINT}, #{skillExtType,jdbcType=TINYINT}, 
+      #{skillExtRange,jdbcType=TINYINT}, #{skillExtUnit,jdbcType=TINYINT}, #{skillExtPrice,jdbcType=DECIMAL}, 
+      #{skillExtStatus,jdbcType=TINYINT}, #{skillExtDiscont,jdbcType=DECIMAL}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{modifyTime,jdbcType=TIMESTAMP}, #{createMan,jdbcType=VARCHAR}, #{modifyMan,jdbcType=VARCHAR}, 
+      #{remark,jdbcType=VARCHAR})
   </insert>
   
   
@@ -53,11 +60,23 @@
       <if test="skillItemId != null" >
         skill_item_id,
       </if>
-      <if test="extType != null" >
-        ext_type,
+      <if test="skillExtType != null" >
+        skill_ext_type,
       </if>
-      <if test="extValue != null" >
-        ext_value,
+      <if test="skillExtRange != null" >
+        skill_ext_range,
+      </if>
+      <if test="skillExtUnit != null" >
+        skill_ext_unit,
+      </if>
+      <if test="skillExtPrice != null" >
+        skill_ext_price,
+      </if>
+      <if test="skillExtStatus != null" >
+        skill_ext_status,
+      </if>
+      <if test="skillExtDiscont != null" >
+        skill_ext_discont,
       </if>
       <if test="createTime != null" >
         create_time,
@@ -82,11 +101,23 @@
       <if test="skillItemId != null" >
         #{skillItemId,jdbcType=BIGINT},
       </if>
-      <if test="extType != null" >
-        #{extType,jdbcType=TINYINT},
+      <if test="skillExtType != null" >
+        #{skillExtType,jdbcType=TINYINT},
       </if>
-      <if test="extValue != null" >
-        #{extValue,jdbcType=DECIMAL},
+      <if test="skillExtRange != null" >
+        #{skillExtRange,jdbcType=TINYINT},
+      </if>
+      <if test="skillExtUnit != null" >
+        #{skillExtUnit,jdbcType=TINYINT},
+      </if>
+      <if test="skillExtPrice != null" >
+        #{skillExtPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="skillExtStatus != null" >
+        #{skillExtStatus,jdbcType=TINYINT},
+      </if>
+      <if test="skillExtDiscont != null" >
+        #{skillExtDiscont,jdbcType=DECIMAL},
       </if>
       <if test="createTime != null" >
         #{createTime,jdbcType=TIMESTAMP},
@@ -113,11 +144,23 @@
       <if test="skillItemId != null" >
         skill_item_id = #{skillItemId,jdbcType=BIGINT},
       </if>
-      <if test="extType != null" >
-        ext_type = #{extType,jdbcType=TINYINT},
+      <if test="skillExtType != null" >
+        skill_ext_type = #{skillExtType,jdbcType=TINYINT},
       </if>
-      <if test="extValue != null" >
-        ext_value = #{extValue,jdbcType=DECIMAL},
+      <if test="skillExtRange != null" >
+        skill_ext_range = #{skillExtRange,jdbcType=TINYINT},
+      </if>
+      <if test="skillExtUnit != null" >
+        skill_ext_unit = #{skillExtUnit,jdbcType=TINYINT},
+      </if>
+      <if test="skillExtPrice != null" >
+        skill_ext_price = #{skillExtPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="skillExtStatus != null" >
+        skill_ext_status = #{skillExtStatus,jdbcType=TINYINT},
+      </if>
+      <if test="skillExtDiscont != null" >
+        skill_ext_discont = #{skillExtDiscont,jdbcType=DECIMAL},
       </if>
       <if test="createTime != null" >
         create_time = #{createTime,jdbcType=TIMESTAMP},
@@ -137,13 +180,15 @@
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  
-  
   <update id="updateByPrimaryKey" parameterType="com.honglu.quickcall.user.facade.entity.SkillItemExt" >
     update skill_item_ext
     set skill_item_id = #{skillItemId,jdbcType=BIGINT},
-      ext_type = #{extType,jdbcType=TINYINT},
-      ext_value = #{extValue,jdbcType=DECIMAL},
+      skill_ext_type = #{skillExtType,jdbcType=TINYINT},
+      skill_ext_range = #{skillExtRange,jdbcType=TINYINT},
+      skill_ext_unit = #{skillExtUnit,jdbcType=TINYINT},
+      skill_ext_price = #{skillExtPrice,jdbcType=DECIMAL},
+      skill_ext_status = #{skillExtStatus,jdbcType=TINYINT},
+      skill_ext_discont = #{skillExtDiscont,jdbcType=DECIMAL},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       modify_time = #{modifyTime,jdbcType=TIMESTAMP},
       create_man = #{createMan,jdbcType=VARCHAR},

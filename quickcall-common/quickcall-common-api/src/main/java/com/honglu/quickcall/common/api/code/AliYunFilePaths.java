@@ -39,4 +39,8 @@ public class AliYunFilePaths {
      * 随机用户上传头像存储的路径
      **/
     public static final String FADE_USER_UPLOAD_HEAD_IMG = ROOT_PATH + "fadecustomer/headimg";
+    /**
+     * 大V技能认证声音文件存放路径
+     */
+    public static final String CUSTOMER_SKILL_CERTIFY_AUDIO = ROOT_PATH + "user/skillVoice";
 }

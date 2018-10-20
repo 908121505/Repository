@@ -48,19 +48,73 @@ certify_id,	customer_id,	skill_item_id,	audit_status,	skill_voice_url,	skill_voi
 		 FROM customer_skill_certify
 		 WHERE customer_id = #{customerId}
 	</select>
+	
+	<select id="selectSkillCertifyId" resultMap="customerSkillCertifyMap" parameterType="java.util.Map">
+		SELECT <include refid="Base_Column_List" />
+		from customer_skill_certify 
+		where customer_id = #{customerId} and skill_item_id = #{skillItemId}
+	</select>
 
 	<!--删除：根据主键ID删除-->
 	<delete id="deleteEntity" parameterType="java.lang.Integer">
 		 DELETE FROM customer_skill_certify
 		 WHERE certify_id = #{certifyId}
 	</delete>
-
 	<!-- 添加 -->
 	<insert id="saveEntity" parameterType="com.honglu.quickcall.user.facade.entity.CustomerSkillCertify">
 		 INSERT INTO customer_skill_certify
- 		(certify_id,customer_id,skill_item_id,audit_status,skill_voice_url,skill_voice_time,skill_voice_url_tmp,skill_voice_time_tmp,is_audited,create_time,modify_time,create_man,modify_man,remark) 
-		 VALUES 
- 		(#{certifyId},#{customerId},#{skillItemId},#{auditStatus},#{skillVoiceUrl},#{skillVoiceTime},#{skillVoiceUrlTmp},#{skillVoiceTimeTmp},#{isAudited},#{createTime},#{modifyTime},#{createMan},#{modifyMan},#{remark}) 
+		 <trim prefix="(" suffix=")" suffixOverrides=",">
+		 	<if test="customerId != null">
+		 		customer_id,
+		 	</if>
+		 	<if test="skillItemId != null">
+		 		skill_item_id,
+		 	</if>
+		 	<if test="auditStatus != null">
+		 		audit_status,
+		 	</if>
+		 	<if test="skillVoiceUrl != null">
+		 		skill_voice_url,
+		 	</if>
+		 	<if test="skillVoiceTime != null">
+		 		skill_voice_time,
+		 	</if>
+		 	<if test="skillVoiceUrlTmp != null">
+		 		skill_voice_url_tmp,
+		 	</if>
+		 	<if test="skillVoiceTimeTmp != null">
+		 		skill_voice_time_tmp,
+		 	</if>
+		 	<if test="isAudited != null">
+		 		is_audited,
+		 	</if>
+		 </trim>
+		 <trim prefix="values (" suffix=")" suffixOverrides=",">
+		 	<if test="customerId != null">
+		 		#{customerId},
+		 	</if>
+		 	<if test="skillItemId != null">
+		 		#{skillItemId},
+		 	</if>
+		 	<if test="auditStatus != null">
+		 		#{auditStatus},
+		 	</if>
+		 	<if test="skillVoiceUrl != null">
+		 		#{skillVoiceUrl},
+		 	</if>
+		 	<if test="skillVoiceTime != null">
+		 		#{skillVoiceTime},
+		 	</if>
+		 	<if test="skillVoiceUrlTmp != null">
+		 		#{skillVoiceUrlTmp},
+		 	</if>
+		 	<if test="skillVoiceTimeTmp != null">
+		 		#{skillVoiceTimeTmp},
+		 	</if>
+		 	<if test="isAudited != null">
+		 		#{isAudited},
+		 	</if>
+		 </trim>
 	</insert>
 
 	<!-- 修 改-->

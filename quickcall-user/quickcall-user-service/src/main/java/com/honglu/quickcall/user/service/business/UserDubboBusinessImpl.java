@@ -33,6 +33,7 @@ import com.honglu.quickcall.user.facade.exchange.request.SaveInterestRequest;
 import com.honglu.quickcall.user.facade.exchange.request.SaveNickNameRequest;
 import com.honglu.quickcall.user.facade.exchange.request.SaveOccupationRequest;
 import com.honglu.quickcall.user.facade.exchange.request.SaveSignNameRequest;
+import com.honglu.quickcall.user.facade.exchange.request.SaveSkillAuditRequest;
 import com.honglu.quickcall.user.facade.exchange.request.SearchPersonRequest;
 import com.honglu.quickcall.user.facade.exchange.request.SetHeardUrlRequest;
 import com.honglu.quickcall.user.facade.exchange.request.SetPwdRequest;
@@ -149,6 +150,9 @@ public class UserDubboBusinessImpl implements UserDubboBusiness {
 				break;
 			case UserFunctionType.QUERY_MY_SKILL://查询我的技能列表
 				response = personInfoService.queryMySkill((queryMyskillRequest) request);
+				break;
+			case UserFunctionType.SAVE_DV_SKILL_AUDIT:
+				response = personInfoService.saveCustomerSkillCertify((SaveSkillAuditRequest) request);
 				break;
 			case UserFunctionType.updateNickname:
 				response = editProfileService.updateNickName((UpdateNickNameReq) request);

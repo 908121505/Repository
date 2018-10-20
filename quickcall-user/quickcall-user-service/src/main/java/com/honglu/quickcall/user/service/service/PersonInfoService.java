@@ -14,6 +14,7 @@ import com.honglu.quickcall.user.facade.exchange.request.SaveInterestRequest;
 import com.honglu.quickcall.user.facade.exchange.request.SaveNickNameRequest;
 import com.honglu.quickcall.user.facade.exchange.request.SaveOccupationRequest;
 import com.honglu.quickcall.user.facade.exchange.request.SaveSignNameRequest;
+import com.honglu.quickcall.user.facade.exchange.request.SaveSkillAuditRequest;
 import com.honglu.quickcall.user.facade.exchange.request.SearchPersonRequest;
 import com.honglu.quickcall.user.facade.exchange.request.ShowHomePageLogout;
 import com.honglu.quickcall.user.facade.exchange.request.queryMyskillRequest;
@@ -106,5 +107,13 @@ public interface PersonInfoService {
 	 * @return
 	 */
 	CommonResponse queryMySkill(queryMyskillRequest params);
+	
+	/**
+	 * 保存我的技能认证信息
+	 * 
+	 * @param request
+	 * @return
+	 */
+	CommonResponse saveCustomerSkillCertify(SaveSkillAuditRequest request);
 	
 }
