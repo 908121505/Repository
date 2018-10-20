@@ -26,7 +26,7 @@ public interface CustomerMapper {
 	int customerSetPwd(@Param("phone") String phone, @Param("passWord") String passWord);
 
 	int customerSetHeardUrl(@Param("phone") String phone, @Param("headPortraitUrl") String headPortraitUrl,
-			@Param("nickName") String nickName);
+			@Param("nickName") String nickName, @Param("sex") Integer sex);
 
 	/**
 	 * 更新性别,生日
@@ -48,23 +48,26 @@ public interface CustomerMapper {
 	 * @return
 	 */
 	Customer queryUserIdCardCertificationInfo(Long customerId);
-	
+
 	/**
 	 * 根据关键字模糊搜索
+	 * 
 	 * @param keyword
 	 * @param limitCount
 	 * @return
 	 */
-	List<SearchPersonListVO> selectFuzzySearch(@Param("keyword") String keyword,@Param("customerId") Long customerId,
-			@Param("pageIndex") Integer pageIndex,@Param("pageSize") Integer pageSize);
-	
+	List<SearchPersonListVO> selectFuzzySearch(@Param("keyword") String keyword, @Param("customerId") Long customerId,
+			@Param("pageIndex") Integer pageIndex, @Param("pageSize") Integer pageSize);
+
 	/**
 	 * 根据关键字精准搜索
+	 * 
 	 * @param keyword
 	 * @param limitCount
 	 * @return
 	 */
-	List<SearchPersonListVO> selectPreciseSearch(@Param("keyword") String keyword,@Param("customerId") Long customerId);
+	List<SearchPersonListVO> selectPreciseSearch(@Param("keyword") String keyword,
+			@Param("customerId") Long customerId);
 
 	int selectCountByNickNameAndId(@Param("nickName") String nickName, @Param("customerId") String customerId);
 }

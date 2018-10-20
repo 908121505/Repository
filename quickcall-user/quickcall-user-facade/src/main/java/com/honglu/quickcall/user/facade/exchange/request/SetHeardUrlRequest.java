@@ -4,12 +4,20 @@ import com.honglu.quickcall.user.facade.code.UserFunctionType;
 import com.honglu.quickcall.user.facade.exchange.UserCenterRequest;
 
 public class SetHeardUrlRequest extends UserCenterRequest {
-      private String tel;
-      private String nickName;
-      private String headPortraitUrl;
-      private Long  customerId;
-      
-      
+	private String tel;
+	private String nickName;
+	private String headPortraitUrl;
+	private Long customerId;
+	private Integer sex;// 1男 0女
+
+	public Integer getSex() {
+		return sex;
+	}
+
+	public void setSex(Integer sex) {
+		this.sex = sex;
+	}
+
 	public Long getCustomerId() {
 		return customerId;
 	}
