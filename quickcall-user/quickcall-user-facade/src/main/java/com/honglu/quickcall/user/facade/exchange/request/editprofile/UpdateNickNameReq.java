@@ -4,7 +4,7 @@ import com.honglu.quickcall.user.facade.code.UserFunctionType;
 import com.honglu.quickcall.user.facade.exchange.UserCenterRequest;
 
 /**
- * Description: 修改昵称请求参数
+ * Description: 修改昵称
  *
  * @author chenpeng
  * @date 2018/10/18 11:31

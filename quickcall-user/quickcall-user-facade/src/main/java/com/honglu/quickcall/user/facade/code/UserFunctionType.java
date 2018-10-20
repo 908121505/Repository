@@ -117,5 +117,13 @@ public interface UserFunctionType {
 	 * 客户主页接口
 	 */
 	String CUSTOMER_HOME = "0011150";
+    /**
+     * 修改声鉴卡
+     */
+    String updateVoiceIdentificationCard = "0011147";
+    /**
+     * 删除声鉴卡
+     */
+    String removeVoiceIdentificationCard = "0011148";
 
 }

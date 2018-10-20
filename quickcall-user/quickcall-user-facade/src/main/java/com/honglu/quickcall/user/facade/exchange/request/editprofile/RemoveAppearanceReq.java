@@ -4,7 +4,7 @@ import com.honglu.quickcall.user.facade.code.UserFunctionType;
 import com.honglu.quickcall.user.facade.exchange.UserCenterRequest;
 
 /**
- * Description: 修改形象照
+ * Description: 删除形象照
  *
  * @author chenpeng
  * @date 2018/10/18 17:19
