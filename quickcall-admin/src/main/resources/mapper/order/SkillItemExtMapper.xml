@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="SkillItemExt" >
   <resultMap id="BaseResultMap" type="com.calf.module.order.entity.SkillItemExt" >
-    <id column="id" property="id" jdbcType="INTEGER" />
+    <id column="id" property="id" jdbcType="BIGINT" />
     <result column="skill_item_id" property="skillItemId" jdbcType="BIGINT" />
     <result column="skill_ext_type" property="skillExtType" jdbcType="TINYINT" />
     <result column="skill_ext_range" property="skillExtRange" jdbcType="TINYINT" />
@@ -28,12 +28,12 @@
     select 
     <include refid="Base_Column_List" />
     from skill_item_ext
-    where id = #{id,jdbcType=INTEGER}
+    where id = #{id,jdbcType=BIGINT}
   </select>
   
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from skill_item_ext
-    where id = #{id,jdbcType=INTEGER}
+    where id = #{id,jdbcType=BIGINT}
   </delete>
   
   
@@ -43,7 +43,7 @@
       skill_ext_status, skill_ext_discont, create_time, 
       modify_time, create_man, modify_man, 
       remark)
-    values (#{id,jdbcType=INTEGER}, #{skillItemId,jdbcType=BIGINT}, #{skillExtType,jdbcType=TINYINT}, 
+    values (#{id,jdbcType=BIGINT}, #{skillItemId,jdbcType=BIGINT}, #{skillExtType,jdbcType=TINYINT},
       #{skillExtRange,jdbcType=TINYINT}, #{skillExtUnit,jdbcType=TINYINT}, #{skillExtPrice,jdbcType=DECIMAL}, 
       #{skillExtStatus,jdbcType=TINYINT}, #{skillExtDiscont,jdbcType=DECIMAL}, #{createTime,jdbcType=TIMESTAMP}, 
       #{modifyTime,jdbcType=TIMESTAMP}, #{createMan,jdbcType=VARCHAR}, #{modifyMan,jdbcType=VARCHAR}, 
@@ -94,7 +94,7 @@
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
-        #{id,jdbcType=INTEGER},
+        #{id,jdbcType=BIGINT},
       </if>
       <if test="skillItemId != null" >
         #{skillItemId,jdbcType=BIGINT},
@@ -176,7 +176,7 @@
         remark = #{remark,jdbcType=VARCHAR},
       </if>
     </set>
-    where id = #{id,jdbcType=INTEGER}
+    where id = #{id,jdbcType=BIGINT}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.calf.module.order.entity.SkillItemExt" >
     update skill_item_ext
@@ -192,6 +192,41 @@
       create_man = #{createMan,jdbcType=VARCHAR},
       modify_man = #{modifyMan,jdbcType=VARCHAR},
       remark = #{remark,jdbcType=VARCHAR}
-    where id = #{id,jdbcType=INTEGER}
+    where id = #{id,jdbcType=BIGINT}
   </update>
+
+  <select id="selectPageList" resultMap="BaseResultMap" parameterType="map" >
+    select
+    <include refid="Base_Column_List" />
+    from skill_item_ext
+    where  1 = 1
+    <if test="skillExtStatus != null" >
+      and  skill_ext_status = #{skillExtStatus}
+    </if>
+    <if test="skillItemId != null" >
+      and  skill_item_id = #{skillItemId}
+    </if>
+    LIMIT ${iDisplayStart},${iDisplayLength}
+  </select>
+
+  <select id="slectCount" resultType="java.lang.Integer" parameterType="map" >
+    select
+    count(1)
+    from skill_item_ext
+    where  1= 1
+    <if test="skillExtStatus != null" >
+      and  skill_ext_status = #{skillExtStatus}
+    </if>
+    <if test="skillItemId != null" >
+      and  skill_item_id = #{skillItemId}
+    </if>
+  </select>
+
+  <select id="getSkillItemExtBySkillItemId" resultMap="BaseResultMap" parameterType="map" >
+    select
+    <include refid="Base_Column_List" />
+    from skill_item_ext
+    WHERE skill_item_id = #{skillItemId}
+  </select>
+
 </mapper>

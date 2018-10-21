@@ -21,10 +21,14 @@ public class CustomerSkill {
     private Long customerId;
 
     private Long skillItemId;
+    
+    private Long skillItemExtId;
 
     private String skillName;
 
     private String serviceUnit;
+    
+    private Integer skillRange;
 
     private BigDecimal skillPrice;
 
@@ -51,26 +55,8 @@ public class CustomerSkill {
     private Integer saturday;
 
     private Integer sunday;
-    
-    
-    private Date mondayEndTime;
 
-    private Date tuesdayEndTime;
-
-    private Date wednesdayEndTime;
-
-    private Date thursdayEndTime;
-
-    private Date fridayEndTime;
-
-    private Date saturdayEndTime;
-
-    private Date sundayEndTime;
-
-
-    private Date startServiceTime;
-
-    private Date endServiceTime;
+    private Date endTimeStr;
 
     private String skillDescribe;
 
@@ -250,24 +236,6 @@ public class CustomerSkill {
     }
 
    
-    public Date getStartServiceTime() {
-        return startServiceTime;
-    }
-
-    
-    public void setStartServiceTime(Date startServiceTime) {
-        this.startServiceTime = startServiceTime;
-    }
-
-   
-    public Date getEndServiceTime() {
-        return endServiceTime;
-    }
-
-    
-    public void setEndServiceTime(Date endServiceTime) {
-        this.endServiceTime = endServiceTime;
-    }
 
     
     public String getSkillDescribe() {
@@ -329,61 +297,35 @@ public class CustomerSkill {
         this.remark = remark == null ? null : remark.trim();
     }
 
-	public Date getMondayEndTime() {
-		return mondayEndTime;
+	public Integer getSkillRange() {
+		return skillRange;
 	}
 
-	public void setMondayEndTime(Date mondayEndTime) {
-		this.mondayEndTime = mondayEndTime;
+	public void setSkillRange(Integer skillRange) {
+		this.skillRange = skillRange;
 	}
 
-	public Date getTuesdayEndTime() {
-		return tuesdayEndTime;
+	public Date getEndTimeStr() {
+		return endTimeStr;
 	}
 
-	public void setTuesdayEndTime(Date tuesdayEndTime) {
-		this.tuesdayEndTime = tuesdayEndTime;
+	public void setEndTimeStr(Date endTimeStr) {
+		this.endTimeStr = endTimeStr;
 	}
 
-	public Date getWednesdayEndTime() {
-		return wednesdayEndTime;
+	public Long getSkillItemExtId() {
+		return skillItemExtId;
 	}
 
-	public void setWednesdayEndTime(Date wednesdayEndTime) {
-		this.wednesdayEndTime = wednesdayEndTime;
+	public void setSkillItemExtId(Long skillItemExtId) {
+		this.skillItemExtId = skillItemExtId;
 	}
+	
+	
 
-	public Date getThursdayEndTime() {
-		return thursdayEndTime;
-	}
-
-	public void setThursdayEndTime(Date thursdayEndTime) {
-		this.thursdayEndTime = thursdayEndTime;
-	}
-
-	public Date getFridayEndTime() {
-		return fridayEndTime;
-	}
-
-	public void setFridayEndTime(Date fridayEndTime) {
-		this.fridayEndTime = fridayEndTime;
-	}
-
-	public Date getSaturdayEndTime() {
-		return saturdayEndTime;
-	}
-
-	public void setSaturdayEndTime(Date saturdayEndTime) {
-		this.saturdayEndTime = saturdayEndTime;
-	}
-
-	public Date getSundayEndTime() {
-		return sundayEndTime;
-	}
-
-	public void setSundayEndTime(Date sundayEndTime) {
-		this.sundayEndTime = sundayEndTime;
-	}
+	
+    
+	
     
     
 }

@@ -1,7 +1,5 @@
 package com.honglu.quickcall.account.facade.vo;
 
-import java.util.List;
-
 /**
  * 
  * Copyright © 2018 www.xiaoniu.com All rights reserved.
@@ -15,21 +13,18 @@ import java.util.List;
 public class CustomerSkillRequestVO {
 
 	private Long customerSkillId;
-	private List<Long> skillItemExtIdList;
+	private Long skillItemExtId;
 	private Long skillItemId;
 	private Integer switchStatus;
+	
+	
 	public Long getCustomerSkillId() {
 		return customerSkillId;
 	}
 	public void setCustomerSkillId(Long customerSkillId) {
 		this.customerSkillId = customerSkillId;
 	}
-	public List<Long> getSkillItemExtIdList() {
-		return skillItemExtIdList;
-	}
-	public void setSkillItemExtIdList(List<Long> skillItemExtIdList) {
-		this.skillItemExtIdList = skillItemExtIdList;
-	}
+	
 	public Long getSkillItemId() {
 		return skillItemId;
 	}
@@ -42,6 +37,14 @@ public class CustomerSkillRequestVO {
 	public void setSwitchStatus(Integer switchStatus) {
 		this.switchStatus = switchStatus;
 	}
+	public Long getSkillItemExtId() {
+		return skillItemExtId;
+	}
+	public void setSkillItemExtId(Long skillItemExtId) {
+		this.skillItemExtId = skillItemExtId;
+	}
+	
+	
 
 	
 

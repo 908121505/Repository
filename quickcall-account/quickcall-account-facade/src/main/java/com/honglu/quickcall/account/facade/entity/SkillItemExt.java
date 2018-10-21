@@ -14,7 +14,7 @@ import java.util.Date;
  */
 public class SkillItemExt {
    
-    private Integer id;
+    private Long id;
 
    
     private Long skillItemId;
@@ -25,7 +25,7 @@ public class SkillItemExt {
     private Integer skillExtRange;
 
     
-    private Integer skillExtUnit;
+    private String skillExtUnit;
 
     
     private BigDecimal skillExtPrice;
@@ -51,12 +51,12 @@ public class SkillItemExt {
     private String remark;
 
     
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
     
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -81,12 +81,12 @@ public class SkillItemExt {
     }
 
  
-    public Integer getSkillExtUnit() {
+    public String getSkillExtUnit() {
         return skillExtUnit;
     }
 
     
-    public void setSkillExtUnit(Integer skillExtUnit) {
+    public void setSkillExtUnit(String skillExtUnit) {
         this.skillExtUnit = skillExtUnit;
     }
 
