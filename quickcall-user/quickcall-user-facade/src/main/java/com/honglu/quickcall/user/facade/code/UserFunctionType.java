@@ -132,4 +132,9 @@ public interface UserFunctionType {
 	 * 客户主页接口
 	 */
 	String CUSTOMER_HOME = "0011151";
+
+	/**
+	 * 我的等级页面接口
+	 */
+	String CUSTOMER_LEVEL = "0011152";
 }

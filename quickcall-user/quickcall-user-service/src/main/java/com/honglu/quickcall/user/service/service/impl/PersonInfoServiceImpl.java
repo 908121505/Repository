@@ -921,25 +921,26 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 
 	@Override
 	public CommonResponse queryCustomerCenter(CustomerCenterRequest request) {
-		Customer viewCustomer = customerMapper.selectByPrimaryKey(request.getCustomerId());
-		if (viewCustomer == null) {
+		Customer customer = customerMapper.selectByPrimaryKey(request.getCustomerId());
+		if (customer == null) {
 			return ResultUtils.resultDataNotExist("用户数据不存在");
 		}
 		CustomerCenterVO customerCenterVO = new CustomerCenterVO();
 		customerCenterVO.setCustomerId(request.getCustomerId());
-		customerCenterVO.setCustomerAppId(viewCustomer.getAppId());
-		customerCenterVO.setNickName(viewCustomer.getNickName());
-		customerCenterVO.setSex(viewCustomer.getSex());
-		if (viewCustomer.getBirthday() != null) {
-			customerCenterVO.setAge(CountAge.getAgeByBirth(viewCustomer.getBirthday()));
+		customerCenterVO.setCustomerAppId(customer.getAppId());
+		customerCenterVO.setNickName(customer.getNickName());
+		customerCenterVO.setHeadPortraitUrl(customer.getHeadPortraitUrl());
+		customerCenterVO.setSex(customer.getSex());
+		if (customer.getBirthday() != null) {
+			customerCenterVO.setAge(CountAge.getAgeByBirth(customer.getBirthday()));
 		}
 
 		// 客户等级 ADUAN -- 待完成
 		customerCenterVO.setCustomerLevel(250);
 
-		customerCenterVO.setSignName(viewCustomer.getSignName());
-		customerCenterVO.setIdentityStatus(viewCustomer.getIdentityStatus());
-		customerCenterVO.setvStatus(viewCustomer.getvStatus());
+		customerCenterVO.setSignName(customer.getSignName());
+		customerCenterVO.setIdentityStatus(customer.getIdentityStatus());
+		customerCenterVO.setvStatus(customer.getvStatus());
 
 		// 查询关注数
 		customerCenterVO.setAttentionNum(fansMapper.queryAttentionNumByCustomerId(request.getCustomerId()));
@@ -1026,5 +1027,29 @@ public class PersonInfoServiceImpl implements PersonInfoService {
         customerHomeVO.setSkillList(skillList);
 
 		return ResultUtils.resultSuccess(customerHomeVO);
+	}
+
+	@Override
+	public CommonResponse queryCustomerLevel(CustomerLevelRequest request) {
+		Customer customer = customerMapper.selectByPrimaryKey(request.getCustomerId());
+		if (customer == null) {
+			return ResultUtils.resultDataNotExist("用户数据不存在");
+		}
+		CustomerLevelVO customerLevelVO = new CustomerLevelVO();
+		customerLevelVO.setCustomerId(request.getCustomerId());
+		customerLevelVO.setCustomerAppId(customer.getAppId());
+		customerLevelVO.setNickName(customer.getNickName());
+		customerLevelVO.setHeadPortraitUrl(customer.getHeadPortraitUrl());
+
+		// ADUAN -- 待完成 -- 客户等级、等级特权、如何升级
+		customerLevelVO.setCustomerLevel(80);
+		customerLevelVO.setNextLevel(81);
+		customerLevelVO.setNeedExperienceNum(3000);
+
+		// 查询等级特权
+
+		// 查询如何升级
+
+		return ResultUtils.resultSuccess(customerLevelVO);
 	}
 }

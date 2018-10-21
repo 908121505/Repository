@@ -11,8 +11,8 @@ import java.util.List;
  * @date 2018-10-20 11:37
  */
 public class CustomerCenterVO implements Serializable {
-    private static final long serialVersionUID = -6466254607869951965L;
 
+    private static final long serialVersionUID = -1209835663261243685L;
     /**
      * 客户ID
      */
@@ -25,6 +25,10 @@ public class CustomerCenterVO implements Serializable {
      * 用户昵称
      */
     private String nickName;
+    /**
+     * 用户头像
+     */
+    private String headPortraitUrl;
     /**
      * 用户性别：0=女,1=男
      */
@@ -88,6 +92,14 @@ public class CustomerCenterVO implements Serializable {
 
     public void setNickName(String nickName) {
         this.nickName = nickName;
+    }
+
+    public String getHeadPortraitUrl() {
+        return headPortraitUrl;
+    }
+
+    public void setHeadPortraitUrl(String headPortraitUrl) {
+        this.headPortraitUrl = headPortraitUrl;
     }
 
     public Integer getSex() {
@@ -176,6 +188,7 @@ public class CustomerCenterVO implements Serializable {
                 "customerId=" + customerId +
                 ", customerAppId='" + customerAppId + '\'' +
                 ", nickName='" + nickName + '\'' +
+                ", headPortraitUrl='" + headPortraitUrl + '\'' +
                 ", sex=" + sex +
                 ", age=" + age +
                 ", customerLevel=" + customerLevel +

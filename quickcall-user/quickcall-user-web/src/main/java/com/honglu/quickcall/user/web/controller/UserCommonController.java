@@ -2,6 +2,7 @@ package com.honglu.quickcall.user.web.controller;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.honglu.quickcall.user.facade.exchange.request.*;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,15 +23,6 @@ import com.honglu.quickcall.common.api.util.RedisKeyConstants;
 import com.honglu.quickcall.common.core.util.UUIDUtils;
 import com.honglu.quickcall.common.third.OSS.OSSUtil;
 import com.honglu.quickcall.user.facade.code.UserBizReturnCode;
-import com.honglu.quickcall.user.facade.exchange.request.BindVXorQQRequest;
-import com.honglu.quickcall.user.facade.exchange.request.CustomerCenterRequest;
-import com.honglu.quickcall.user.facade.exchange.request.CustomerHomeRequest;
-import com.honglu.quickcall.user.facade.exchange.request.GetSmsCodeRequest;
-import com.honglu.quickcall.user.facade.exchange.request.IsPhoneExistsRequest;
-import com.honglu.quickcall.user.facade.exchange.request.SetHeardUrlRequest;
-import com.honglu.quickcall.user.facade.exchange.request.SetPwdRequest;
-import com.honglu.quickcall.user.facade.exchange.request.UserLoginRequest;
-import com.honglu.quickcall.user.facade.exchange.request.UserRegisterRequest;
 import com.honglu.quickcall.user.web.service.UserCenterService;
 
 /**
@@ -323,6 +315,29 @@ public class UserCommonController {
 		}
 		response = userCenterService.execute(params);
 		logger.info("userWeb.user.customerHome.response.data : " + JSONObject.toJSONString(response));
+		return response;
+
+	}
+
+
+	/**
+	 * 我的等级页面 -- 接口
+	 *
+	 * @param params
+	 * @return
+	 */
+	@RequestMapping(value = "/customerLevel", method = RequestMethod.POST)
+	@ResponseBody
+	public WebResponseModel customerLevel(CustomerLevelRequest params) {
+		logger.info("userWeb.user.customerLevel.request.data : " + JSONObject.toJSONString(params));
+		WebResponseModel response = new WebResponseModel();
+		if (params.getCustomerId() == null) {
+			response.setCode(UserBizReturnCode.paramError.code());
+			response.setMsg(UserBizReturnCode.paramError.desc());
+			return response;
+		}
+		response = userCenterService.execute(params);
+		logger.info("userWeb.user.customerLevel.response.data : " + JSONObject.toJSONString(response));
 		return response;
 
 	}

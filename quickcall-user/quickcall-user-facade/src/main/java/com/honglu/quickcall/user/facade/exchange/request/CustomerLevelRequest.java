@@ -4,14 +4,14 @@ import com.honglu.quickcall.user.facade.code.UserFunctionType;
 import com.honglu.quickcall.user.facade.exchange.UserCenterRequest;
 
 /**
- * 个人中心请求对象
+ * 我的等级页面 -- 请求对象
  *
  * @author duanjun
  * @date 2018-10-20 11:18
  */
-public class CustomerCenterRequest extends UserCenterRequest {
+public class CustomerLevelRequest extends UserCenterRequest {
 
-    private static final long serialVersionUID = 3883427321472184400L;
+    private static final long serialVersionUID = 7197264269962415046L;
     /**
      * 客户ID
      */
@@ -19,7 +19,7 @@ public class CustomerCenterRequest extends UserCenterRequest {
 
     @Override
     public String getBizCode() {
-        return UserFunctionType.CUSTOMER_CENTER;
+        return UserFunctionType.CUSTOMER_LEVEL;
     }
 
     public Long getCustomerId() {
