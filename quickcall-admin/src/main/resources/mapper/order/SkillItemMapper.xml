@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="SkillItem" >
   <resultMap id="BaseResultMap" type="com.calf.module.order.entity.SkillItem" >
-    <id column="id" property="id" jdbcType="BIGINT" />
+    <id column="id" property="id" jdbcType="BIGINT" javaType="string" />
     <result column="skill_item_name" property="skillItemName" jdbcType="VARCHAR" />
     <result column="skill_describe" property="skillDescribe" jdbcType="VARCHAR" />
     <result column="image_url" property="imageUrl" jdbcType="VARCHAR" />
@@ -13,6 +13,7 @@
     <result column="create_man" property="createMan" jdbcType="VARCHAR" />
     <result column="modify_man" property="modifyMan" jdbcType="VARCHAR" />
     <result column="remark" property="remark" jdbcType="VARCHAR" />
+
   </resultMap>
 
 
@@ -175,6 +176,40 @@
       remark = #{remark,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
+
+  <select id="selectPageList" resultMap="BaseResultMap" parameterType="map" >
+    select
+    <include refid="Base_Column_List" />
+    from skill_item
+    where  1 = 1
+    <if test="skillStatus != null" >
+      and  skill_status = #{skillStatus}
+    </if>
+    <if test="name != null" >
+      and  skill_item_name like  concat( '%',#{name},'%')
+    </if>
+    LIMIT ${iDisplayStart},${iDisplayLength}
+  </select>
+
+  <select id="slectCount" resultType="java.lang.Integer" parameterType="map" >
+    select
+    count(1)
+    from skill_item
+    where  1= 1
+    <if test="skillStatus != null" >
+      and  skill_status = #{skillStatus}
+    </if>
+    <if test="name != null" >
+      and  skill_item_name like  concat( '%',#{name},'%')
+    </if>
+  </select>
+
+  <delete id="delete" parameterType="map">
+    delete from skill_item where id = #{arg0}
+  </delete>
+
+
+
 
   <!-- 查询所有消息技能数据 -->
   <select id="selectAllValidData" resultMap="BaseResultMap">

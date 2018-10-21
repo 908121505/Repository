@@ -1,5 +1,7 @@
 package com.honglu.quickcall.account.facade.vo;
 
+import java.math.BigDecimal;
+
 /**
  * 
  * Copyright © 2018 www.xiaoniu.com All rights reserved.
@@ -16,6 +18,8 @@ public class CustomerSkillRequestVO {
 	private Long skillItemExtId;
 	private Long skillItemId;
 	private Integer switchStatus;
+	private BigDecimal  discountRate;
+	
 	
 	
 	public Long getCustomerSkillId() {
@@ -43,6 +47,13 @@ public class CustomerSkillRequestVO {
 	public void setSkillItemExtId(Long skillItemExtId) {
 		this.skillItemExtId = skillItemExtId;
 	}
+	public BigDecimal getDiscountRate() {
+		return discountRate;
+	}
+	public void setDiscountRate(BigDecimal discountRate) {
+		this.discountRate = discountRate;
+	}
+	
 	
 	
 

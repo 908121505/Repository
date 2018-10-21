@@ -26,23 +26,36 @@
 				<div class="form-group">
 					<label class="col-sm-4 control-label">技能名称<font color="red">&nbsp;*</font></label>
 					<div class="col-sm-8">
-						<input type="text" id="name" class="form-control"  name="name" value="${entity.name}"  maxlength="50">
+						<input type="text" id="skillItemName" class="form-control"  name="skillItemName" value="${entity.skillItemName}"  maxlength="50">
 						<input type="hidden" id="id" class="form-control"  name="id" value="${entity.id}" >
 						<input type="hidden" id="skillBackGroungImg" class="form-control"  name="imageUrl" value="${entity.imageUrl}" >
-						<input type="hidden" id="skillTitleImg" class="form-control"  name="titleUrl" value="${entity.titleUrl}" >
 					</div>
 				</div>
 				<div class="form-group"  >
-					<label class="col-sm-4 control-label">最低价格<font color="red">&nbsp;*</font></label>
+					<label class="col-sm-4 control-label">描述<font color="red">&nbsp;*</font></label>
 					<div class="col-sm-8">
-						<input type="text" id="minPrice" class="form-control" 
-							name="minPrice" value="${entity.minPrice}">
+						<input type="text" id="skillDescribe" class="form-control"
+							name="skillDescribe" value="${entity.skillDescribe}">
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label class="col-sm-2 control-label">状态<font color="red">&nbsp;*</font></label>
+					<div class="col-sm-10">
+						<label class="checkbox-inline">
+							<input type="radio" name="skillStatus" value="1" ${empty entity or entity.skillStatus=='1'?'checked':'' }>
+							不可用
+						</label>
+						<label class="checkbox-inline">
+							<input type="radio" name="skillStatus" value="0" ${entity.skillStatus=='0'?'checked':'' }>
+							可用
+						</label>
 					</div>
 				</div>
 				
 				
 				
-				<div class="form-group" >
+				<%--<div class="form-group" >
 					<label class="col-sm-4 control-label">最高价格<!-- <font color="red">&nbsp;*</font> --></label>
 					<div class="col-sm-8">
 						<input type="text" id="maxPrice" class="form-control" name="maxPrice" value="${entity.maxPrice}">
@@ -53,11 +66,11 @@
 					<div class="col-sm-8">
 						<input type="text" id="priceStep" class="form-control" name="priceStep" value="${entity.priceStep}">
 					</div>
-				</div>
+				</div>--%>
 				<div class="form-group" >
 					<label class="col-sm-4 control-label">排序<!-- <font color="red">&nbsp;*</font> --></label>
 					<div class="col-sm-8">
-						<input type="text" id="sort" class="form-control" name="sort" value="${entity.priceStep}" >
+						<input type="text" id="sort" class="form-control" name="sort" value="${entity.sort}" >
 					</div>
 				</div>
 				
@@ -84,7 +97,7 @@
 				
 				
 				
-				<div class="form-group">
+			<%--	<div class="form-group">
 					<label class="col-sm-4 control-label">标题背景图片上传<c:if test="${entity eq null }"><font color="red">&nbsp;*</font></c:if>
 					</label>
 					<div class="col-sm-8">
@@ -103,7 +116,7 @@
 							<img src="${entity.titleUrl }" alt="暂无图片，点击上传！" class="img-rounded" style="max-width: 100%; max-height: 300px;" id="skillFile_img1">
 						</div>
 					</div>
-				</div>
+				</div>--%>
 				
 				
 			</form>
@@ -161,26 +174,26 @@
 		
 		var b = true;
       
-		var name =  $("#name").val();
+		var name =  $("#skillItemName").val();
 		if(name == null  || name.trim() == ''){
 			$("#tip").text("请输入技能名称");
 			return  false;
 		}
-		var minPrice =  $("#minPrice").val();
+		/*var minPrice =  $("#minPrice").val();
 		if(minPrice == null  || minPrice.trim() == ''){
 			$("#tip").text("请输入最低价格");
 			return  false;
-		}
+		}*/
 		var skillBackGroungImg =  $("#skillBackGroungImg").val();
 		if(skillBackGroungImg == null  || skillBackGroungImg.trim() == ''){
 			$("#tip").text("请上传项目背景图片");
 			return  false;
 		}
-		var skillTitleImg =  $("#skillTitleImg").val();
+		/*var skillTitleImg =  $("#skillTitleImg").val();
 		if(skillTitleImg == null  || skillTitleImg.trim() == ''){
 			$("#tip").text("请上传项目标题图片");
 			return  false;
-		}
+		}*/
 		
 	
 		return b;
