@@ -348,13 +348,15 @@
     set certify_id = #{certifyId,jdbcType=BIGINT},
       customer_id = #{customerId,jdbcType=BIGINT},
       skill_item_id = #{skillItemId,jdbcType=BIGINT},
+      skill_item_ext_id = #{skillItemExtId,jdbcType=BIGINT},
       skill_name = #{skillName,jdbcType=VARCHAR},
       service_unit = #{serviceUnit,jdbcType=VARCHAR},
       skill_price = #{skillPrice,jdbcType=DECIMAL},
-      audit_status = #{auditStatus,jdbcType=TINYINT},
+      skill_status = #{skillStatus,jdbcType=TINYINT},
       switch_status = #{switchStatus,jdbcType=TINYINT},
       receive_status = #{receiveStatus,jdbcType=TINYINT},
       discount_rate = #{discountRate,jdbcType=DECIMAL},
+      skill_range = #{skillRange,jdbcType=TINYINT},
       discount_price = #{discountPrice,jdbcType=DECIMAL},
       monday = #{monday,jdbcType=TINYINT},
       tuesday = #{tuesday,jdbcType=TINYINT},
@@ -363,14 +365,7 @@
       friday = #{friday,jdbcType=TINYINT},
       saturday = #{saturday,jdbcType=TINYINT},
       sunday = #{sunday,jdbcType=TINYINT},
-      start_service_time = #{startServiceTime,jdbcType=TIMESTAMP},
-      monday_end_time = #{mondayEndTime,jdbcType=TIMESTAMP},
-      tuesday_end_time = #{tuesdayEndTime,jdbcType=TIMESTAMP},
-      wednesday_end_time = #{wednesdayEndTime,jdbcType=TIMESTAMP},
-      thursday_end_time = #{thursdayEndTime,jdbcType=TIMESTAMP},
-      friday_end_time = #{fridayEndTime,jdbcType=TIMESTAMP},
-      saturday_end_time = #{saturdayEndTime,jdbcType=TIMESTAMP},
-      sunday_end_time = #{sundayEndTime,jdbcType=TIMESTAMP},
+      end_time_str = #{endTimeStr,jdbcType=VARCHAR},
       skill_describe = #{skillDescribe,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       modify_time = #{modifyTime,jdbcType=TIMESTAMP},
@@ -387,4 +382,33 @@
     from customer_skill
     where customer_id = #{customerId,jdbcType=BIGINT}
   </select>
+  
+  
+  	<update id="batchUpdate" >
+		<foreach collection="list" item="skill" >
+	update 
+		customer_skill
+    set 
+      skill_item_id = #{skill.skillItemId,jdbcType=BIGINT},
+      skill_item_ext_id = #{skill.skillItemExtId,jdbcType=BIGINT},
+      service_unit = #{skill.serviceUnit,jdbcType=VARCHAR},
+      skill_price = #{skill.skillPrice,jdbcType=DECIMAL},
+      switch_status = #{skill.switchStatus,jdbcType=TINYINT},
+      receive_status = #{skill.receiveStatus,jdbcType=TINYINT},
+      discount_rate = #{skill.discountRate,jdbcType=DECIMAL},
+      skill_range = #{skill.skillRange,jdbcType=TINYINT},
+      discount_price = #{skill.discountPrice,jdbcType=DECIMAL},
+      monday = #{skill.monday,jdbcType=TINYINT},
+      tuesday = #{skill.tuesday,jdbcType=TINYINT},
+      wednesday = #{skill.wednesday,jdbcType=TINYINT},
+      thursday = #{skill.thursday,jdbcType=TINYINT},
+      friday = #{skill.friday,jdbcType=TINYINT},
+      saturday = #{skill.saturday,jdbcType=TINYINT},
+      sunday = #{skill.sunday,jdbcType=TINYINT},
+      end_time_str = #{skill.endTimeStr,jdbcType=VARCHAR},
+      modify_time = #{skill.modifyTime,jdbcType=TIMESTAMP}
+    where 
+    	customer_skill_id = #{skill.customerSkillId,jdbcType=BIGINT} ;
+		</foreach>
+	</update>
 </mapper>

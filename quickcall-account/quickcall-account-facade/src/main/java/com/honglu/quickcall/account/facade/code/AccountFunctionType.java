@@ -20,7 +20,11 @@ public interface AccountFunctionType {
     String WechatNotify = "002004";
     //绑定支付宝
     String BindAliaccount= "002005";
-    
+    //苹果内购充值
+    String APPLY_PAY_RECHARGE = "002006";
+    //苹果内购回调验证
+    String APPLY_PAY_NOTIFY = "002007";
+
    
 
     //账户相关操作从 002200 - 002299
