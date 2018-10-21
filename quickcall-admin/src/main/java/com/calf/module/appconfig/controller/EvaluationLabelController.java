@@ -18,6 +18,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
@@ -78,7 +80,7 @@ public class EvaluationLabelController implements BaseController<EvaluationLabel
 
     @Override
     @MethodLog(operType = "新增")
-    @RequiresPermissions(value = {"evaluationLabel:add"}, logical = Logical.OR)
+    @RequiresPermissions(value = {"evaluationLabel:add"})
     public int saveAdd(EvaluationLabel entity) {
         Subject currentUser = SecurityUtils.getSubject();
         if (StringUtils.isNotBlank(entity.getLabelName())) {
@@ -95,7 +97,7 @@ public class EvaluationLabelController implements BaseController<EvaluationLabel
     }
 
     @Override
-    @RequiresPermissions(value = {"evaluationLabel:update"}, logical = Logical.OR)
+    @RequiresPermissions(value = {"evaluationLabel:update"})
     public int saveUpdate(EvaluationLabel entity) {
         if (StringUtils.isNotBlank(entity.getLabelName())) {
             entity.setLabelName(entity.getLabelName().trim());//去除前后空格
@@ -107,7 +109,44 @@ public class EvaluationLabelController implements BaseController<EvaluationLabel
     }
 
     @Override
-    public int delete(String id) {
-        return 0;
+    @RequiresPermissions(value = {"evaluationLabel:delete"})
+    public int delete(String labelId) {
+        return baseManager.delete(EvaluationLabel.class, new Object[]{labelId});
+    }
+
+    /**
+     * 校验数据
+     * @param entity
+     * @return
+     */
+    @RequestMapping(value = "/checkData.htm", method = RequestMethod.POST)
+    @ResponseBody
+    public Map<String, String> checkData(EvaluationLabel entity) {
+        Map<String, String> result = new HashMap<>();
+        result.put("code", "1");
+
+        // 查询该标签名字是否被使用了
+        Map<String, Object> params = new HashMap<>();
+        params.put("labelName", entity.getLabelName());
+        params.put("labelId", entity.getLabelId());
+        int total = baseManager.get("EvaluationLabel.countCheckData", params);
+        if(total > 0){
+            result.put("msg", "标签名称【" + entity.getLabelName() + "】已经存在");
+            return result;
+        }
+
+        // 新增时 -- 判断技能标签数量是否大于20
+        if (entity.getLabelId() == null) {
+            params = new HashMap<>();
+            params.put("skillItemId", entity.getSkillItemId());
+            total = baseManager.get("EvaluationLabel.countCheckData", params);
+            if (total >= 20) {
+                result.put("msg", "该技能类型已经存在20个标签了，不能再新增了");
+                return result;
+            }
+        }
+
+        result.put("code", "0");
+        return result;
     }
 }

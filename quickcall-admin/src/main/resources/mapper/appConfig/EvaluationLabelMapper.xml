@@ -81,4 +81,18 @@
         order by create_time desc
         limit ${iDisplayStart},${iDisplayLength}
     </select>
+
+    <delete id="delete" parameterType="map">
+		DELETE FROM evaluation_label WHERE label_id = #{arg0}
+	</delete>
+
+    <!-- 查询校验数据 -->
+    <select id="countCheckData" parameterType="map" resultType="int">
+        select count(label_id)
+        from evaluation_label
+        where 1=1
+        <if test="labelId != null">and label_id != #{labelId}</if>
+        <if test="skillItemId != null">and skill_item_id = #{skillItemId}</if>
+        <if test="labelName != null and labelName != ''">and label_name = #{labelName}</if>
+    </select>
 </mapper>

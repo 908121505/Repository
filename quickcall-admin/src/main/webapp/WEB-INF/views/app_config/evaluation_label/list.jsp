@@ -100,11 +100,14 @@
                     aoColumnDefs: [
                         <shiro:hasPermission name="evaluationLabel:update">
                         {"aTargets": 8, "mRender": function (data, type, row) {
-                                var edit = "";
+                                var edit = "", del = "";
                                 <shiro:hasPermission name="evaluationLabel:update">
                                 edit = "<a href='#' onclick='addAndUpdateRow(\"" + data + "\")' data-toggle='modal' class='padding-right-small label label-success'><i class='glyphicon glyphicon-edit'></i> 编辑</a>";
                                 </shiro:hasPermission>
-                                return edit;
+                                <shiro:hasPermission name="evaluationLabel:delete">
+                                del = "<a href='#' onclick='deleteRow(\"" + data + "\")' data-toggle='modal' class='label label label-danger'><i class='glyphicon glyphicon-trash'></i> 删除 </a>";
+                                </shiro:hasPermission>
+                                return edit + "&nbsp;" + del;
                             }
                         }
                         </shiro:hasPermission>
@@ -117,6 +120,12 @@
 
             });
 
+
+            //删除受影响的行数
+            function deleteRow(labelId) {
+                $('#myModal').deleteRow('evaluationLabel/del.htm?labelId=' + labelId);
+            }
+
             //增加或者修改受影响的行数
             function addAndUpdateRow(labelId) {
                 $('#evaluationLabelInsertAndUpdate').addAndUpdateRow("evaluationLabel/addAndUpdateHome.htm?labelId=" + labelId);
@@ -124,10 +133,12 @@
 
             /** 获取性别 **/
             function getCustomerSex(data) {
-                if (data == "1") {
-                    return "男";
-                } else if (data == "0") {
+                if (data == "0") {
                     return "女";
+                } else if (data == "1") {
+                    return "男";
+                } else if (data == "2") {
+                    return "所有";
                 }
                 return data;
             }
@@ -185,6 +196,7 @@
         </script>
         <!---dialog选项-->
         <div>
+            <jsp:include page="/WEB-INF/views/common/delete_dialog.jsp"/>
             <div class="modal fade" id="evaluationLabelInsertAndUpdate" tabindex="-1"
                  role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
             </div>
