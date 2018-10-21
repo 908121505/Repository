@@ -9,7 +9,7 @@
     <result column="skill_name" property="skillName" jdbcType="VARCHAR" />
     <result column="service_unit" property="serviceUnit" jdbcType="VARCHAR" />
     <result column="skill_price" property="skillPrice" jdbcType="DECIMAL" />
-    <result column="audit_status" property="auditStatus" jdbcType="TINYINT" />
+    <result column="skill_status" property="skillStatus" jdbcType="TINYINT" />
     <result column="switch_status" property="switchStatus" jdbcType="TINYINT" />
     <result column="receive_status" property="receiveStatus" jdbcType="TINYINT" />
     <result column="discount_rate" property="discountRate" jdbcType="DECIMAL" />
@@ -38,7 +38,7 @@
   
   <sql id="Base_Column_List" >
    customer_skill_id, certify_id, customer_id, skill_item_id, skill_name, service_unit, 
-    skill_price, audit_status, switch_status, receive_status, discount_rate, discount_price, 
+    skill_price, skill_status, switch_status, receive_status, discount_rate, discount_price, 
     monday, tuesday, wednesday, thursday, friday, saturday, sunday, start_service_time, 
     end_service_time, skill_describe, create_time, modify_time, create_man, modify_man, 
     remark
@@ -59,7 +59,7 @@
   <insert id="insert" parameterType="com.honglu.quickcall.user.facade.entity.CustomerSkill" >
      insert into customer_skill (customer_skill_id, certify_id, customer_id, 
       skill_item_id, skill_name, service_unit, 
-      skill_price, audit_status, switch_status, 
+      skill_price, skill_status, switch_status, 
       receive_status, discount_rate, discount_price, 
       monday, tuesday, wednesday, 
       thursday, friday, saturday, 
@@ -69,7 +69,7 @@
       )
     values (#{customerSkillId,jdbcType=BIGINT}, #{certifyId,jdbcType=BIGINT}, #{customerId,jdbcType=BIGINT}, 
       #{skillItemId,jdbcType=BIGINT}, #{skillName,jdbcType=VARCHAR}, #{serviceUnit,jdbcType=VARCHAR}, 
-      #{skillPrice,jdbcType=DECIMAL}, #{auditStatus,jdbcType=TINYINT}, #{switchStatus,jdbcType=TINYINT}, 
+      #{skillPrice,jdbcType=DECIMAL}, #{skillStatus,jdbcType=TINYINT}, #{switchStatus,jdbcType=TINYINT}, 
       #{receiveStatus,jdbcType=TINYINT}, #{discountRate,jdbcType=DECIMAL}, #{discountPrice,jdbcType=DECIMAL}, 
       #{monday,jdbcType=TINYINT}, #{tuesday,jdbcType=TINYINT}, #{wednesday,jdbcType=TINYINT}, 
       #{thursday,jdbcType=TINYINT}, #{friday,jdbcType=TINYINT}, #{saturday,jdbcType=TINYINT}, 
@@ -103,8 +103,8 @@
       <if test="skillPrice != null" >
         skill_price,
       </if>
-      <if test="auditStatus != null" >
-        audit_status,
+      <if test="skillStatus != null" >
+        skill_status,
       </if>
       <if test="switchStatus != null" >
         switch_status,
@@ -186,8 +186,8 @@
       <if test="skillPrice != null" >
         #{skillPrice,jdbcType=DECIMAL},
       </if>
-      <if test="auditStatus != null" >
-        #{auditStatus,jdbcType=TINYINT},
+      <if test="skillStatus != null" >
+        #{skillStatus,jdbcType=TINYINT},
       </if>
       <if test="switchStatus != null" >
         #{switchStatus,jdbcType=TINYINT},
@@ -271,8 +271,8 @@
       <if test="skillPrice != null" >
         skill_price = #{skillPrice,jdbcType=DECIMAL},
       </if>
-      <if test="auditStatus != null" >
-        audit_status = #{auditStatus,jdbcType=TINYINT},
+      <if test="skillStatus != null" >
+        skill_status = #{skillStatus,jdbcType=TINYINT},
       </if>
       <if test="switchStatus != null" >
         switch_status = #{switchStatus,jdbcType=TINYINT},
@@ -342,7 +342,7 @@
       skill_name = #{skillName,jdbcType=VARCHAR},
       service_unit = #{serviceUnit,jdbcType=VARCHAR},
       skill_price = #{skillPrice,jdbcType=DECIMAL},
-      audit_status = #{auditStatus,jdbcType=TINYINT},
+      skill_status = #{skillStatus,jdbcType=TINYINT},
       switch_status = #{switchStatus,jdbcType=TINYINT},
       receive_status = #{receiveStatus,jdbcType=TINYINT},
       discount_rate = #{discountRate,jdbcType=DECIMAL},
