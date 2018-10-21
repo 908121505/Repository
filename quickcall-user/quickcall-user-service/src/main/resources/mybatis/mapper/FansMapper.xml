@@ -157,23 +157,40 @@
 			fs.anchor_id AS customerId,
 			ct.head_portrait_url AS headPortraitUrl,
 		    ct.nick_name  AS  nickName,
-		    (YEAR(NOW()) - YEAR(ct.birthday)) AS  age,
+		    <![CDATA[ (YEAR(CURDATE())-YEAR(ct.birthday))-(RIGHT(CURDATE(),5)<RIGHT(ct.birthday,5)) AS age  ]]>,
 		    ct.sex    AS sex,
-		    fs.attention_state  AS  attentionStatus
+		    fs.attention_state  AS  attentionStatus,
+		    ct.type AS type,
+		    (IFNULL(fs.attention_state,0))&amp;(IFNULL(fs1.attention_state,0)) AS eachAttentionStatus 
 		FROM
 			fans fs
-		LEFT JOIN customer ct ON fs.anchor_id = ct.customer_id
+		LEFT JOIN customer ct ON fs.anchor_id = ct.customer_id 
+		LEFT JOIN fans fs1 ON fs.anchor_id = fs1.fans_id and fs.fans_id = fs1.anchor_id 
 		WHERE
-			fans_id = #{customerId}  and   fs.attention_state = #{attentionStatus}
+			fs.fans_id = #{customerId}  and   fs.attention_state = #{attentionStatus}
   </select>
   
   
   
   
   
-  <!-- 查询粉丝Id -->
-  <select id="queryFansIdListByCustomerId" resultType="java.lang.Long"  >
-		SELECT  fans_id    FROM  fans WHERE   anchor_id = #{customerId}  and  attention_state  = #{attentionStatus}
+  <!-- 查询粉丝列表 -->
+  <select id="queryFansIdListByCustomerId" resultType="com.honglu.quickcall.user.facade.vo.AttentionFansVO"  >
+		SELECT
+			fs.fans_id AS customerId,
+			ct.head_portrait_url AS headPortraitUrl,
+		    ct.nick_name  AS  nickName,
+		    <![CDATA[ (YEAR(CURDATE())-YEAR(ct.birthday))-(RIGHT(CURDATE(),5)<RIGHT(ct.birthday,5)) AS age  ]]>,
+		    ct.sex    AS sex,
+		    fs.attention_state  AS  attentionStatus,
+		    ct.type AS type,
+		    (IFNULL(fs.attention_state,0))&amp;(IFNULL(fs1.attention_state,0)) AS eachAttentionStatus 
+		FROM
+			fans fs
+		LEFT JOIN customer ct ON fs.fans_id = ct.customer_id 
+		LEFT JOIN fans fs1 ON fs.anchor_id = fs1.fans_id and fs.fans_id = fs1.anchor_id 
+		WHERE
+			fs.anchor_id = #{customerId}  and   fs.attention_state = #{attentionStatus}
   </select>
   
   
@@ -203,7 +220,8 @@
 			head_portrait_url AS headPortraitUrl,
 			nick_name AS nickName,
 			(YEAR (NOW()) - YEAR (birthday)) AS age,
-			sex AS sex 
+			sex AS sex,
+			type AS type  
 		FROM  customer
 		where
 		customer_id in

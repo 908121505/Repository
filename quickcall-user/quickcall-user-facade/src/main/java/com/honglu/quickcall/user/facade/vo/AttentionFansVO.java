@@ -25,6 +25,9 @@ public class AttentionFansVO {
     private Integer attentionStatus;
     //互相关注状态0：不是 1：互相关注
     private Integer eachAttentionStatus;
+    //是否大V
+    private Integer type;
+    
 	public Long getCustomerId() {
 		return customerId;
 	}
@@ -66,6 +69,12 @@ public class AttentionFansVO {
 	}
 	public void setEachAttentionStatus(Integer eachAttentionStatus) {
 		this.eachAttentionStatus = eachAttentionStatus;
+	}
+	public Integer getType() {
+		return type;
+	}
+	public void setType(Integer type) {
+		this.type = type;
 	}
     
     
