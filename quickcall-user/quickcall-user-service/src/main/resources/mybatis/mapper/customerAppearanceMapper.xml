@@ -105,6 +105,7 @@ id,	customer_id,	audit_appearance,	appearance,	type,	audit_status,	sort,	status,
 		FROM customer_appearance
 		WHERE customer_id = #{customerId}
 		AND type = #{type}
+		AND status = 1
 		AND audit_appearance IS NOT NULL
 		AND audit_appearance != ''
 		ORDER BY create_time DESC
