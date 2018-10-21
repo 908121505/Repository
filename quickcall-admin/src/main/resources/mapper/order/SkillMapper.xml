@@ -36,6 +36,10 @@
     where id = #{id,jdbcType=INTEGER}
   </delete>
 
+  <delete id="delete" parameterType="map">
+    delete from skill where id = #{arg0}
+  </delete>
+
   <insert id="insert" parameterType="com.calf.module.order.entity.Skill" >
     insert into skill (id, name, skill_describe, 
       min_price, max_price, image_url, title_url, 
@@ -239,7 +243,6 @@
      <if test="name != null" >
         and  name like  concat( '%',#{name},'%')
      </if>
-    
   </select>
   
   

@@ -120,7 +120,7 @@
 			              'sClass':"text-center"
 			            },
 			            { 
-			              "data": "name",
+			              "data": "skillItemName",
 			              "sTitle":"技能名称",
 			              'sClass':"text-center"
 			            },
@@ -137,7 +137,12 @@
 			            	   
 			              } 
 			            },
-			            { 
+						{
+							"data": "skillDescribe",
+							"sTitle": "描述",
+                            'sClass':"text-center"
+						},
+			         /*   {
 			               "data": "titleUrl",
 			               "sTitle":"标题背景图片",
 			               'sClass':"text-center",
@@ -149,8 +154,8 @@
 			            	   }
 			            	   
 			              } 
-			            },
-			            { 
+			            },*/
+			        /*    {
 			                "data": "minPrice",
 			                "sTitle":"最低价格",
 			                'sClass':"text-center",
@@ -164,7 +169,7 @@
                             "data": "priceStep",
                             "sTitle":"价格步长",
                             'sClass':"text-center",
-                        },
+                        },*/
                         {
                             "data": "skillStatus",
                             "sTitle":"状态",
@@ -248,11 +253,12 @@
 		                   aoData.push({"name": "skillStatus", "value": $("#skillStatusQuery").val()});
 	                    },
 	                    aoColumnDefs : [ {
-							"aTargets" : 13,
+							"aTargets" : 10,
 							"mRender" : function(data,type, row) {
-								var detail = "";
+								var detail = "",del = "";
 								detail = "<a href='#' onclick='addAndUpdateRow(\""+ row.id+ "\")' data-toggle='modal' class='padding-right-small label label-success'><i class='glyphicon glyphicon-edit'></i>详情</a>";
-								return  detail;
+                                del = "<a href='#' onclick='deleteRow(\""+ row.id+ "\")' data-toggle='modal' class='padding-right-small label label-success'><i class='glyphicon glyphicon-edit'></i>删除</a>";
+								return  detail+"&nbsp;"+del;
 							}
 						} ]
 		            
@@ -267,6 +273,10 @@
 			function addAndUpdateRow(id){
 				$('#insertAndUpdate').addAndUpdateRow("skill/addAndUpdateHome.htm?id="+id);
 			}
+
+        function deleteRow(id){
+            $('#myModal').deleteRow('skill/delete.htm?id='+id);
+        }
 </script>
 		<!---dialog选项-->
 		<div>
