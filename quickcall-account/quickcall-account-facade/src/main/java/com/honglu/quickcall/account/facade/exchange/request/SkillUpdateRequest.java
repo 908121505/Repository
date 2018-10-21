@@ -18,7 +18,7 @@ import com.honglu.quickcall.common.api.exchange.AbstractRequest;
 public class SkillUpdateRequest extends AbstractRequest {
 
 	
-	private static final long serialVersionUID = 605272342830573700L;
+	private static final long serialVersionUID = 7279476978703182695L;
 	private List<CustomerSkillRequestVO> customerSkillList;
 	private String endServiceTimeStr;
 	private Integer receiveStatus;
@@ -29,6 +29,7 @@ public class SkillUpdateRequest extends AbstractRequest {
 	private Integer thursday;
 	private Integer friday;
 	private Integer monday;
+	private Long  customerId;
 
 	public List<CustomerSkillRequestVO> getCustomerSkillList() {
 		return customerSkillList;
@@ -108,6 +109,16 @@ public class SkillUpdateRequest extends AbstractRequest {
 
 	public Integer getMonday() {
 		return monday;
+	}
+	
+	
+
+	public Long getCustomerId() {
+		return customerId;
+	}
+
+	public void setCustomerId(Long customerId) {
+		this.customerId = customerId;
 	}
 
 	@Override
