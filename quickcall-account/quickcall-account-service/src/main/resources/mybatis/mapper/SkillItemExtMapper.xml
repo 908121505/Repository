@@ -30,6 +30,7 @@
     from skill_item_ext
     where id = #{id,jdbcType=INTEGER}
   </select>
+
   
   
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
@@ -198,4 +199,12 @@
       remark = #{remark,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
+  
+  
+    <select id="querySkillItemExtList" resultMap="BaseResultMap" parameterType="map" >
+    select 
+    <include refid="Base_Column_List" />
+    from skill_item_ext
+    where id = #{skillItemId,jdbcType=INTEGER}  and   skill_ext_type = #{skillExtType,jdbcType=INTEGER}
+  </select>
 </mapper>
