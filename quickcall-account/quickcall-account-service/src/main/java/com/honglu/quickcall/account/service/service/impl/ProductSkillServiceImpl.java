@@ -360,11 +360,11 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 						if (k == 0) {
 							up.setUnitName("半小时");
 							up.setUnitPrice(new BigDecimal(60 * (k+1)));
-							up.setSkillItemExtId(3333L);
+							up.setSkillItemExtId(new Long(3333+k));
 						} else {
 							up.setUnitName("小时");
 							up.setUnitPrice(new BigDecimal(100* (k+1)));
-							up.setSkillItemExtId(2222L);
+							up.setSkillItemExtId(new Long(2222+k));
 						}
 						unitPriceList.add(up);
 					}
@@ -376,7 +376,13 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 			}
 
 			List<Long> oldSkillItemExtIdList = new ArrayList<Long>();
-			oldSkillItemExtIdList.add(1111L);
+			if(i == 0){
+				oldSkillItemExtIdList.add(1111L);
+			}else{
+				oldSkillItemExtIdList.add(3333L);
+				oldSkillItemExtIdList.add(2222L);
+				
+			}
 			skillVO.setOldSkillItemExtIdList(oldSkillItemExtIdList);
 			skillVO.setDiscontRateList(discontRateList);
 			skillVO.setSkillExtList(skillExtList);
