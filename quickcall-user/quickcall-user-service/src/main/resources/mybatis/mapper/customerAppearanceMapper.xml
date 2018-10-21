@@ -110,4 +110,35 @@ id,	customer_id,	audit_appearance,	appearance,	type,	audit_status,	sort,	status,
 		AND audit_appearance != ''
 		ORDER BY create_time DESC
 	</select>
+	<!-- 查询（根据用户id和类型查询） -->
+	<select id="selectByCustomerIdAndType" resultMap="customerAppearanceMap">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM customer_appearance
+		WHERE customer_id = #{customerId} and type = #{type}
+	</select>
+
+	<insert id="insertAppearance" parameterType="com.honglu.quickcall.user.facade.entity.CustomerAppearance">
+		INSERT INTO customer_appearance
+		(id,customer_id,audit_appearance,type)
+		VALUES
+		(#{id},#{customerId},#{auditAppearance},#{type})
+	</insert>
+
+	<update id="updateAppearance" parameterType="com.honglu.quickcall.user.facade.entity.CustomerAppearance">
+		UPDATE customer_appearance
+		<set>
+
+			<if test="auditAppearance != null">
+				audit_appearance = #{auditAppearance},
+			</if>
+			<if test="appearance != null">
+				appearance = #{appearance},
+			</if>
+
+				modify_time = now()
+
+		</set>
+		WHERE id = #{id}
+	</update>
 </mapper>

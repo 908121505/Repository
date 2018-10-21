@@ -32,7 +32,7 @@ public class CustomerSkill {
 
     private BigDecimal skillPrice;
 
-    private Integer auditStatus;
+    private Integer skillStatus;
 
     private Integer switchStatus;
 
@@ -56,7 +56,7 @@ public class CustomerSkill {
 
     private Integer sunday;
 
-    private Date endTimeStr;
+    private String endTimeStr;
 
     private String skillDescribe;
 
@@ -70,7 +70,17 @@ public class CustomerSkill {
 
     private String remark;
 
-    public Long getCustomerSkillId() {
+    
+    
+    public Integer getSkillStatus() {
+		return skillStatus;
+	}
+
+	public void setSkillStatus(Integer skillStatus) {
+		this.skillStatus = skillStatus;
+	}
+
+	public Long getCustomerSkillId() {
         return customerSkillId;
     }
 
@@ -126,13 +136,6 @@ public class CustomerSkill {
         this.skillPrice = skillPrice;
     }
 
-    public Integer getAuditStatus() {
-        return auditStatus;
-    }
-
-    public void setAuditStatus(Integer auditStatus) {
-        this.auditStatus = auditStatus;
-    }
 
     public Integer getSwitchStatus() {
         return switchStatus;
@@ -305,11 +308,11 @@ public class CustomerSkill {
 		this.skillRange = skillRange;
 	}
 
-	public Date getEndTimeStr() {
+	public String getEndTimeStr() {
 		return endTimeStr;
 	}
 
-	public void setEndTimeStr(Date endTimeStr) {
+	public void setEndTimeStr(String endTimeStr) {
 		this.endTimeStr = endTimeStr;
 	}
 

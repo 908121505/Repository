@@ -56,4 +56,15 @@ public interface CustomerAppearanceMapper{
 	 * @return
 	 */
 	List<String> queryCustomerAuditedAppearance(@Param("customerId") Long customerId, @Param("type") Integer type);
+	/**
+	 *
+	 * 查询（根据主键ID查询）
+	 *
+	 **/
+	CustomerAppearance  selectByCustomerIdAndType ( @Param("customerId") Long customerId, @Param("type") Integer type );
+
+	int insertAppearance(CustomerAppearance record);
+
+	int updateAppearance(CustomerAppearance record);
+
 }

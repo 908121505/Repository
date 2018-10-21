@@ -68,8 +68,8 @@
   <select id="selectFuzzySearch" resultType="com.honglu.quickcall.user.facade.vo.SearchPersonListVO" >
   	select customerId,nickName,headPortraitUrl,sex,type,age
   	 <if test="customerId != null">
-  	 	,IFNULL(fs.attention_state,0) AS isFollow,
-  	 	(IFNULL(fs.attention_state,0))&amp;(IFNULL(fs1.attention_state,0)) AS isEveryFollow 
+  	 	,IFNULL(fs.attention_state,0) AS attentionStatus,
+  	 	(IFNULL(fs.attention_state,0))&amp;(IFNULL(fs1.attention_state,0)) AS eachAttentionStatus 
   	 </if>
   	 from (
     select 
@@ -78,7 +78,7 @@
     head_portrait_url AS headPortraitUrl,
     sex,
     type,
-    <![CDATA[ (YEAR(CURDATE())-YEAR(birthday))-(RIGHT(CURDATE(),5)<RIGHT(birthday,5)) AS age  ]]>
+    <![CDATA[ TIMESTAMPDIFF(YEAR, birthday, CURDATE()) AS age  ]]>
     from customer
     <where>
          <!-- <if test="keyword != null and keyword != ''"> -->
@@ -112,10 +112,10 @@
     head_portrait_url AS headPortraitUrl,
     sex,
     type,
-    <![CDATA[ (YEAR(CURDATE())-YEAR(birthday))-(RIGHT(CURDATE(),5)<RIGHT(birthday,5)) AS age  ]]>
+    <![CDATA[ TIMESTAMPDIFF(YEAR, birthday, CURDATE()) AS age  ]]>
     <if test="customerId != null">
-  	 	,IFNULL(fs.attention_state,0) AS isFollow,
-  	 	(IFNULL(fs.attention_state,0))&amp;(IFNULL(fs1.attention_state,0)) AS isEveryFollow 
+  	 	,IFNULL(fs.attention_state,0) AS attentionStatus,
+  	 	(IFNULL(fs.attention_state,0))&amp;(IFNULL(fs1.attention_state,0)) AS eachAttentionStatus 
   	 </if>
     from customer cus
     <if test="customerId != null">

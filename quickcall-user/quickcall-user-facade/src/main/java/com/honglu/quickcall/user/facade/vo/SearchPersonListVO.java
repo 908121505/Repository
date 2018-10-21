@@ -17,11 +17,11 @@ public class SearchPersonListVO implements  Serializable{
 	/**
 	 * 是否关注
 	 */
-	private Integer isFollow = UserBizConstants.ATTENTION_STATUS_UN_ATTENED;;
+	private Integer attentionStatus = UserBizConstants.ATTENTION_STATUS_UN_ATTENED;;
 	/**
 	 * 互相关注
 	 */
-	private Integer isEveryFollow = UserBizConstants.ATTENTION_STATUS_UN_ATTENED;
+	private Integer eachAttentionStatus = UserBizConstants.ATTENTION_STATUS_UN_ATTENED;
 	/**
 	 * 用户昵称
 	 */
@@ -47,17 +47,17 @@ public class SearchPersonListVO implements  Serializable{
 	 */
 	private Integer age;
 	
-	public Integer getIsFollow() {
-		return isFollow;
+	public Integer getAttentionStatus() {
+		return attentionStatus;
 	}
-	public void setIsFollow(Integer isFollow) {
-		this.isFollow = isFollow;
+	public void setAttentionStatus(Integer attentionStatus) {
+		this.attentionStatus = attentionStatus;
 	}
-	public Integer getIsEveryFollow() {
-		return isEveryFollow;
+	public Integer getEachAttentionStatus() {
+		return eachAttentionStatus;
 	}
-	public void setIsEveryFollow(Integer isEveryFollow) {
-		this.isEveryFollow = isEveryFollow;
+	public void setEachAttentionStatus(Integer eachAttentionStatus) {
+		this.eachAttentionStatus = eachAttentionStatus;
 	}
 	public String getNickName() {
 		return nickName;

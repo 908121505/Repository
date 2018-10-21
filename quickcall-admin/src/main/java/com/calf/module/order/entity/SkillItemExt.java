@@ -1,5 +1,7 @@
 package com.calf.module.order.entity;
 
+import com.google.common.base.Objects;
+
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -13,8 +15,10 @@ import java.util.Date;
  * @date: 2018年10月20日 下午2:44:42
  */
 public class SkillItemExt {
-   
-    private Integer id;
+
+    public SkillItemExt(){ }
+
+    private Long id;
 
    
     private Long skillItemId;
@@ -50,17 +54,15 @@ public class SkillItemExt {
     
     private String remark;
 
-    
-    public Integer getId() {
+
+    public Long getId() {
         return id;
     }
 
-    
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-   
     public Long getSkillItemId() {
         return skillItemId;
     }
@@ -174,5 +176,39 @@ public class SkillItemExt {
 
     public void setSkillExtType(Integer skillExtType) {
         this.skillExtType = skillExtType;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        SkillItemExt that = (SkillItemExt) o;
+        return Objects.equal(skillItemId, that.skillItemId) &&
+                Objects.equal(skillExtRange, that.skillExtRange) &&
+                Objects.equal(skillExtUnit, that.skillExtUnit);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(skillItemId, skillExtRange, skillExtUnit);
+    }
+
+    @Override
+    public String toString() {
+        return "SkillItemExt{" +
+                "id=" + id +
+                ", skillItemId=" + skillItemId +
+                ", skillExtType=" + skillExtType +
+                ", skillExtRange=" + skillExtRange +
+                ", skillExtUnit=" + skillExtUnit +
+                ", skillExtPrice=" + skillExtPrice +
+                ", skillExtStatus=" + skillExtStatus +
+                ", skillExtDiscont=" + skillExtDiscont +
+                ", createTime=" + createTime +
+                ", modifyTime=" + modifyTime +
+                ", createMan='" + createMan + '\'' +
+                ", modifyMan='" + modifyMan + '\'' +
+                ", remark='" + remark + '\'' +
+                '}';
     }
 }
