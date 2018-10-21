@@ -1,5 +1,7 @@
 package com.honglu.quickcall.account.facade.vo;
 
+import java.util.List;
+
 /**
  * 
  * Copyright © 2018 www.xiaoniu.com All rights reserved.
@@ -12,41 +14,35 @@ package com.honglu.quickcall.account.facade.vo;
  */
 public class CustomerSkillRequestVO {
 
-	private int customerSkillId;
-	private int skillItemExtId;
-	private int skillItemId;
-	private int switchStatus;
-
-	public void setCustomerSkillId(int customerSkillId) {
-		this.customerSkillId = customerSkillId;
-	}
-
-	public int getCustomerSkillId() {
+	private Long customerSkillId;
+	private List<Long> skillItemExtIdList;
+	private Long skillItemId;
+	private Integer switchStatus;
+	public Long getCustomerSkillId() {
 		return customerSkillId;
 	}
-
-	public void setSkillItemExtId(int skillItemExtId) {
-		this.skillItemExtId = skillItemExtId;
+	public void setCustomerSkillId(Long customerSkillId) {
+		this.customerSkillId = customerSkillId;
 	}
-
-	public int getSkillItemExtId() {
-		return skillItemExtId;
+	public List<Long> getSkillItemExtIdList() {
+		return skillItemExtIdList;
 	}
-
-	public void setSkillItemId(int skillItemId) {
-		this.skillItemId = skillItemId;
+	public void setSkillItemExtIdList(List<Long> skillItemExtIdList) {
+		this.skillItemExtIdList = skillItemExtIdList;
 	}
-
-	public int getSkillItemId() {
+	public Long getSkillItemId() {
 		return skillItemId;
 	}
-
-	public void setSwitchStatus(int switchStatus) {
+	public void setSkillItemId(Long skillItemId) {
+		this.skillItemId = skillItemId;
+	}
+	public Integer getSwitchStatus() {
+		return switchStatus;
+	}
+	public void setSwitchStatus(Integer switchStatus) {
 		this.switchStatus = switchStatus;
 	}
 
-	public int getSwitchStatus() {
-		return switchStatus;
-	}
+	
 
 }
