@@ -175,4 +175,13 @@
       remark = #{remark,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
+
+  <!-- 查询所有消息技能数据 -->
+  <select id="selectAllValidData" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from skill_item
+    where skill_status=1
+    order by create_time desc
+  </select>
 </mapper>
