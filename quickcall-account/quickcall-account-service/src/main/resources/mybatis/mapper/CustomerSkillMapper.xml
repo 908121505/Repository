@@ -22,7 +22,13 @@
     <result column="saturday" property="saturday" jdbcType="TINYINT" />
     <result column="sunday" property="sunday" jdbcType="TINYINT" />
     <result column="start_service_time" property="startServiceTime" jdbcType="TIMESTAMP" />
-    <result column="end_service_time" property="endServiceTime" jdbcType="TIMESTAMP" />
+    <result column="monday_end_time" property="mondayEndTime" jdbcType="TIMESTAMP" />
+    <result column="tuesday_end_time" property="tuesdayEndTime" jdbcType="TIMESTAMP" />
+    <result column="wednesday_end_time" property="wednesdayEndTime" jdbcType="TIMESTAMP" />
+    <result column="thursday_end_time" property="thursdayEndTime" jdbcType="TIMESTAMP" />
+    <result column="friday_end_time" property="fridayEndTime" jdbcType="TIMESTAMP" />
+    <result column="saturday_end_time" property="saturdayEndTime" jdbcType="TIMESTAMP" />
+    <result column="sunday_end_time" property="sundayEndTime" jdbcType="TIMESTAMP" />
     <result column="skill_describe" property="skillDescribe" jdbcType="VARCHAR" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
@@ -32,11 +38,12 @@
   </resultMap>
   
   <sql id="Base_Column_List" >
-   customer_skill_id, certify_id, customer_id, skill_item_id, skill_name, service_unit, 
+  customer_skill_id, certify_id, customer_id, skill_item_id, skill_name, service_unit, 
     skill_price, audit_status, switch_status, receive_status, discount_rate, discount_price, 
     monday, tuesday, wednesday, thursday, friday, saturday, sunday, start_service_time, 
-    end_service_time, skill_describe, create_time, modify_time, create_man, modify_man, 
-    remark
+    monday_end_time, tuesday_end_time, wednesday_end_time, thursday_end_time, friday_end_time, 
+    saturday_end_time, sunday_end_time, skill_describe, create_time, modify_time, create_man, 
+    modify_man, remark
   </sql>
  
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
@@ -59,7 +66,9 @@
       receive_status, discount_rate, discount_price, 
       monday, tuesday, wednesday, 
       thursday, friday, saturday, 
-      sunday, start_service_time, end_service_time, 
+      sunday, start_service_time, monday_end_time, 
+      tuesday_end_time, wednesday_end_time, thursday_end_time, 
+      friday_end_time, saturday_end_time, sunday_end_time, 
       skill_describe, create_time, modify_time, 
       create_man, modify_man, remark
       )
@@ -69,14 +78,16 @@
       #{receiveStatus,jdbcType=TINYINT}, #{discountRate,jdbcType=DECIMAL}, #{discountPrice,jdbcType=DECIMAL}, 
       #{monday,jdbcType=TINYINT}, #{tuesday,jdbcType=TINYINT}, #{wednesday,jdbcType=TINYINT}, 
       #{thursday,jdbcType=TINYINT}, #{friday,jdbcType=TINYINT}, #{saturday,jdbcType=TINYINT}, 
-      #{sunday,jdbcType=TINYINT}, #{startServiceTime,jdbcType=TIMESTAMP}, #{endServiceTime,jdbcType=TIMESTAMP}, 
+      #{sunday,jdbcType=TINYINT}, #{startServiceTime,jdbcType=TIMESTAMP}, #{mondayEndTime,jdbcType=TIMESTAMP}, 
+      #{tuesdayEndTime,jdbcType=TIMESTAMP}, #{wednesdayEndTime,jdbcType=TIMESTAMP}, #{thursdayEndTime,jdbcType=TIMESTAMP}, 
+      #{fridayEndTime,jdbcType=TIMESTAMP}, #{saturdayEndTime,jdbcType=TIMESTAMP}, #{sundayEndTime,jdbcType=TIMESTAMP}, 
       #{skillDescribe,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{modifyTime,jdbcType=TIMESTAMP}, 
       #{createMan,jdbcType=VARCHAR}, #{modifyMan,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.honglu.quickcall.account.facade.entity.CustomerSkill" >
    
-    insert into customer_skill
+        insert into customer_skill
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="customerSkillId != null" >
         customer_skill_id,
@@ -138,8 +149,26 @@
       <if test="startServiceTime != null" >
         start_service_time,
       </if>
-      <if test="endServiceTime != null" >
-        end_service_time,
+      <if test="mondayEndTime != null" >
+        monday_end_time,
+      </if>
+      <if test="tuesdayEndTime != null" >
+        tuesday_end_time,
+      </if>
+      <if test="wednesdayEndTime != null" >
+        wednesday_end_time,
+      </if>
+      <if test="thursdayEndTime != null" >
+        thursday_end_time,
+      </if>
+      <if test="fridayEndTime != null" >
+        friday_end_time,
+      </if>
+      <if test="saturdayEndTime != null" >
+        saturday_end_time,
+      </if>
+      <if test="sundayEndTime != null" >
+        sunday_end_time,
       </if>
       <if test="skillDescribe != null" >
         skill_describe,
@@ -221,8 +250,26 @@
       <if test="startServiceTime != null" >
         #{startServiceTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="endServiceTime != null" >
-        #{endServiceTime,jdbcType=TIMESTAMP},
+      <if test="mondayEndTime != null" >
+        #{mondayEndTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="tuesdayEndTime != null" >
+        #{tuesdayEndTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="wednesdayEndTime != null" >
+        #{wednesdayEndTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="thursdayEndTime != null" >
+        #{thursdayEndTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="fridayEndTime != null" >
+        #{fridayEndTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="saturdayEndTime != null" >
+        #{saturdayEndTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="sundayEndTime != null" >
+        #{sundayEndTime,jdbcType=TIMESTAMP},
       </if>
       <if test="skillDescribe != null" >
         #{skillDescribe,jdbcType=VARCHAR},
@@ -247,7 +294,7 @@
 
 
   <update id="updateByPrimaryKeySelective" parameterType="com.honglu.quickcall.account.facade.entity.CustomerSkill" >
-    update customer_skill
+     update customer_skill
     <set >
       <if test="certifyId != null" >
         certify_id = #{certifyId,jdbcType=BIGINT},
@@ -306,8 +353,26 @@
       <if test="startServiceTime != null" >
         start_service_time = #{startServiceTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="endServiceTime != null" >
-        end_service_time = #{endServiceTime,jdbcType=TIMESTAMP},
+      <if test="mondayEndTime != null" >
+        monday_end_time = #{mondayEndTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="tuesdayEndTime != null" >
+        tuesday_end_time = #{tuesdayEndTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="wednesdayEndTime != null" >
+        wednesday_end_time = #{wednesdayEndTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="thursdayEndTime != null" >
+        thursday_end_time = #{thursdayEndTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="fridayEndTime != null" >
+        friday_end_time = #{fridayEndTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="saturdayEndTime != null" >
+        saturday_end_time = #{saturdayEndTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="sundayEndTime != null" >
+        sunday_end_time = #{sundayEndTime,jdbcType=TIMESTAMP},
       </if>
       <if test="skillDescribe != null" >
         skill_describe = #{skillDescribe,jdbcType=VARCHAR},
@@ -330,8 +395,11 @@
     </set>
     where customer_skill_id = #{customerSkillId,jdbcType=BIGINT}
   </update>
+  
+  
+  
   <update id="updateByPrimaryKey" parameterType="com.honglu.quickcall.account.facade.entity.CustomerSkill" >
-   update customer_skill
+    update customer_skill
     set certify_id = #{certifyId,jdbcType=BIGINT},
       customer_id = #{customerId,jdbcType=BIGINT},
       skill_item_id = #{skillItemId,jdbcType=BIGINT},
@@ -351,7 +419,13 @@
       saturday = #{saturday,jdbcType=TINYINT},
       sunday = #{sunday,jdbcType=TINYINT},
       start_service_time = #{startServiceTime,jdbcType=TIMESTAMP},
-      end_service_time = #{endServiceTime,jdbcType=TIMESTAMP},
+      monday_end_time = #{mondayEndTime,jdbcType=TIMESTAMP},
+      tuesday_end_time = #{tuesdayEndTime,jdbcType=TIMESTAMP},
+      wednesday_end_time = #{wednesdayEndTime,jdbcType=TIMESTAMP},
+      thursday_end_time = #{thursdayEndTime,jdbcType=TIMESTAMP},
+      friday_end_time = #{fridayEndTime,jdbcType=TIMESTAMP},
+      saturday_end_time = #{saturdayEndTime,jdbcType=TIMESTAMP},
+      sunday_end_time = #{sundayEndTime,jdbcType=TIMESTAMP},
       skill_describe = #{skillDescribe,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       modify_time = #{modifyTime,jdbcType=TIMESTAMP},

@@ -28,6 +28,7 @@
     from customer_skill_ext
     where cust_skill_ext_id = #{custSkillExtId,jdbcType=BIGINT}
   </select>
+
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
    
     delete from customer_skill_ext
@@ -170,4 +171,12 @@
       remark = #{remark,jdbcType=VARCHAR}
     where cust_skill_ext_id = #{custSkillExtId,jdbcType=BIGINT}
   </update>
+  
+  
+  <select id="queryCustomerSkillExtList" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from customer_skill_ext
+    where cust_skill_ext_id = #{custSkillExtId,jdbcType=BIGINT}
+  </select>
 </mapper>

@@ -30,7 +30,7 @@ public class CustomerSkill {
 
     private BigDecimal skillPrice;
 
-    private Byte auditStatus;
+    private Byte skillStatus;
 
     private Byte switchStatus;
 
@@ -130,12 +130,12 @@ public class CustomerSkill {
         this.skillPrice = skillPrice;
     }
 
-    public Byte getAuditStatus() {
-        return auditStatus;
+    public Byte getskillStatus() {
+        return skillStatus;
     }
 
-    public void setAuditStatus(Byte auditStatus) {
-        this.auditStatus = auditStatus;
+    public void setskillStatus(Byte skillStatus) {
+        this.skillStatus = skillStatus;
     }
 
     public Byte getSwitchStatus() {
