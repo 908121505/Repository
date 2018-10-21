@@ -2,9 +2,9 @@ package com.honglu.quickcall.user.facade.entity;
 
 
 /**
- * 客户形象照表bean
+ * 客户相关照片表bean
  * @author luoyanchong
- * @date Sat Oct 20 14:52:09 CST 2018
+ * @date Sun Oct 21 11:10:37 CST 2018
  **/
 public class CustomerAppearance {
 
@@ -14,8 +14,14 @@ public class CustomerAppearance {
 	/**客户ID**/
 	private Long customerId;
 
-	/**形象照**/
+	/**待审核照片**/
+	private String auditAppearance;
+
+	/**照片（正在使用的）**/
 	private String appearance;
+
+	/**0=形象照,1=头像照,2=声鉴卡**/
+	private Integer type;
 
 	/**审核状态 0=待审核,1=已通过,2=已拒绝**/
 	private Integer auditStatus;
@@ -45,11 +51,13 @@ public class CustomerAppearance {
 	public CustomerAppearance() {
 		super();
 	}
-	public CustomerAppearance(Long id,Long customerId,String appearance,Integer auditStatus,Integer sort,Integer status,String createTime,String modifyTime,String createMan,String modifyMan,String remark) {
+	public CustomerAppearance(Long id,Long customerId,String auditAppearance,String appearance,Integer type,Integer auditStatus,Integer sort,Integer status,String createTime,String modifyTime,String createMan,String modifyMan,String remark) {
 		super();
 		this.id = id;
 		this.customerId = customerId;
+		this.auditAppearance = auditAppearance;
 		this.appearance = appearance;
+		this.type = type;
 		this.auditStatus = auditStatus;
 		this.sort = sort;
 		this.status = status;
@@ -75,12 +83,28 @@ public class CustomerAppearance {
 		return this.customerId;
 	}
 
+	public void setAuditAppearance(String auditAppearance){
+		this.auditAppearance = auditAppearance;
+	}
+
+	public String getAuditAppearance(){
+		return this.auditAppearance;
+	}
+
 	public void setAppearance(String appearance){
 		this.appearance = appearance;
 	}
 
 	public String getAppearance(){
 		return this.appearance;
+	}
+
+	public void setType(Integer type){
+		this.type = type;
+	}
+
+	public Integer getType(){
+		return this.type;
 	}
 
 	public void setAuditStatus(Integer auditStatus){

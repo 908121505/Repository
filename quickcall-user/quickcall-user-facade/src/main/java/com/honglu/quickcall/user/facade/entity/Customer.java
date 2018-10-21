@@ -88,33 +88,6 @@ public class Customer {
 	/** 大V声音审核状态1：待审核（审核中） 2：审核拒绝 3.审核通过 4.修改之后待审核 5.修改之后审核拒绝 6.修改之后审核通过 */
 	private Integer voiceStatus;
 
-	private String voiceIdentificationCard;
-	private Integer voiceIdentificationCardStatus;
-	private Integer headPortraitStatus;
-
-	public String getVoiceIdentificationCard() {
-		return voiceIdentificationCard;
-	}
-
-	public void setVoiceIdentificationCard(String voiceIdentificationCard) {
-		this.voiceIdentificationCard = voiceIdentificationCard;
-	}
-
-	public Integer getVoiceIdentificationCardStatus() {
-		return voiceIdentificationCardStatus;
-	}
-
-	public void setVoiceIdentificationCardStatus(Integer voiceIdentificationCardStatus) {
-		this.voiceIdentificationCardStatus = voiceIdentificationCardStatus;
-	}
-
-	public Integer getHeadPortraitStatus() {
-		return headPortraitStatus;
-	}
-
-	public void setHeadPortraitStatus(Integer headPortraitStatus) {
-		this.headPortraitStatus = headPortraitStatus;
-	}
 
 	public BigDecimal getvVoiceTimeTmp() {
 		return vVoiceTimeTmp;

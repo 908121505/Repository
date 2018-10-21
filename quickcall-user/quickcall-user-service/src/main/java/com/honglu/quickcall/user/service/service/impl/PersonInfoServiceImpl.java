@@ -103,6 +103,8 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 	private CustomerSkillMapper customerSkillMapper;
 	@Autowired
 	private CustomerSkillCertifyMapper customerSkillCertifyMapper;
+	@Autowired
+	private CustomerAppearanceMapper customerAppearanceMapper;
 
 	/**
 	 * 中文、英文、数字、下划线校验 4-24位
@@ -988,14 +990,16 @@ public class PersonInfoServiceImpl implements PersonInfoService {
         // 查询粉丝数
         customerHomeVO.setFansNum(fansMapper.queryFansNumByCustomerId(request.getViewCustomerId()).intValue());
 
-        // 查询用户形象照列表 ADUAN -- 待完成
-        customerHomeVO.setAppearanceUrlList(Arrays.asList(DEFAULT_CUSTOMER_APPEARANCE_URL));
+        // 查询用户形象照列表
+		List<String> appearanceList = customerAppearanceMapper.queryCustomerAuditedAppearance(request.getViewCustomerId(), 0);
+        customerHomeVO.setAppearanceUrlList(appearanceList.isEmpty() ? Arrays.asList(DEFAULT_CUSTOMER_APPEARANCE_URL): appearanceList);
 
         // 查询用户兴趣
         customerHomeVO.setInterestList(customerInterestMapper.queryCustomerInterestList(request.getViewCustomerId()));
 
-        // 声鉴卡 -- ADUAN -- 待完成
-        customerHomeVO.setSoundGuideCard(DEFAULT_CUSTOMER_APPEARANCE_URL);
+        // 查询声鉴卡
+		List<String> soundGuideCard = customerAppearanceMapper.queryCustomerAuditedAppearance(request.getViewCustomerId(), 2);
+        customerHomeVO.setSoundGuideCard(soundGuideCard.isEmpty() ? null : soundGuideCard.get(0));
 
         // 查询用户技能 -- 条件是大V
         List<CustomerHomeVO.CustomerSkill> skillList = new ArrayList<>();
@@ -1008,11 +1012,13 @@ public class PersonInfoServiceImpl implements PersonInfoService {
                 customerSkill.setSkillVoiceUrl(bean.getSkillVoiceUrl());
                 customerSkill.setSkillVoiceTime(bean.getSkillVoiceTime());
 
-                // ADUAN -- 技能价格、价格单位、声量、标签 -- 未完成
+                // ADUAN -- 技能价格、价格单位、标签 -- 未完成
                 customerSkill.setSkillPrice(new BigDecimal(20));
                 customerSkill.setServiceUnit("半小时");
-                customerSkill.setSkillVolume(250);
                 customerSkill.setCustomerLabel(Arrays.asList("暖男", "搞笑", "帅气"));
+
+                // ADUAN -- 声量 -- 后期在做
+                customerSkill.setSkillVolume(250);
 
                 skillList.add(customerSkill);
             }

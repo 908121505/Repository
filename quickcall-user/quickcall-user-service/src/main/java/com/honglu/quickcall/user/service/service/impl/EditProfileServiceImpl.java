@@ -113,42 +113,6 @@ public class EditProfileServiceImpl implements EditProfileService {
     }
 
     @Override
-    public CommonResponse updateHeadPortrait(UpdateHeadPortraitReq params) {
-        CommonResponse commonResponse = new CommonResponse();
-        Customer customer = customerMapper.selectByPrimaryKey(params.getCustomerId());
-
-        if (StringUtils.isNotEmpty(params.getHeadPortraitUrl())) {
-            customer.setHeadPortraitUrl(params.getHeadPortraitUrl());
-        }
-        //新上传头像状态默认为未审核
-        customer.setHeadPortraitStatus(0);
-        int result = customerMapper.updateByPrimaryKeySelective(customer);
-        logger.info("修改头像 updateHeadPortrait,更新数量" + result);
-        if (result > 0) {
-
-            // 刷新融云用户信息
-            CodeSuccessReslut reslut = RongYunUtil.refreshUser(String.valueOf(customer.getCustomerId()),
-                    customer.getNickName(), customer.getHeadPortraitUrl());
-            // 刷新失败
-            if (reslut.getCode() != 200) {
-                logger.error("刷新融云用户信息失败，用户id为：" + String.valueOf(customer.getCustomerId()) + "失败原因为："
-                        + reslut.getErrorMessage());
-            } else {
-                logger.info("刷新融云用户信息成功！");
-            }
-
-            // 头像上传要审核，先不放在redis中
-//            JedisUtil.set(RedisKeyConstants.USER_CUSTOMER_INFO + params.getCustomerId(), JsonParseUtil.castToJson(customer));
-
-            commonResponse.setCode(UserBizReturnCode.Success);
-            commonResponse.setMessage(UserBizReturnCode.Success.desc());
-            return commonResponse;
-        } else {
-            throw new RemoteException(UserBizReturnCode.paramError, "参数错误，修改失败");
-        }
-    }
-
-    @Override
     public CommonResponse updateSignName(UpdateSignNameReq params) {
         CommonResponse commonResponse = new CommonResponse();
         Customer customer = customerMapper.selectByPrimaryKey(params.getCustomerId());
@@ -210,34 +174,6 @@ public class EditProfileServiceImpl implements EditProfileService {
     }
 
     @Override
-    public CommonResponse updateAppearance(UpdateAppearanceReq params) {
-        CommonResponse commonResponse = new CommonResponse();
-
-        CustomerAppearance customerAppearance = new CustomerAppearance();
-        customerAppearance.setId(UUIDUtils.getId());
-        customerAppearance.setCustomerId(params.getCustomerId());
-        customerAppearance.setAppearance(params.getAppearance());
-        customerAppearance.setAuditStatus(0);
-
-        Customer customer = customerRedisManagement.getCustomer(params.getCustomerId());
-        if (null != customer) {
-            // 更新customer_appearance表
-            try {
-                customerAppearanceMapper.saveEntity(customerAppearance);
-
-                commonResponse.setCode(UserBizReturnCode.Success);
-                commonResponse.setMessage(UserBizReturnCode.Success.desc());
-                return commonResponse;
-            } catch (Exception e) {
-                logger.error("修改形象照 异常",e);
-                throw new BizException(AccountBizReturnCode.JdbcError, "操作数据库异常");
-            }
-        } else {
-            throw new BizException(AccountBizReturnCode.JdbcError, "操作数据库异常");
-        }
-    }
-
-    @Override
     public CommonResponse updateInterest(UpdateInterestReq params) {
         CommonResponse commonResponse = new CommonResponse();
         CustomerInterest customerInterest = new CustomerInterest();
@@ -268,6 +204,57 @@ public class EditProfileServiceImpl implements EditProfileService {
     }
 
     @Override
+    public CommonResponse updateHeadPortrait(UpdateHeadPortraitReq params) {
+        CommonResponse commonResponse = new CommonResponse();
+
+        CustomerAppearance customerAppearance = new CustomerAppearance();
+        customerAppearance.setAuditAppearance(params.getHeadPortraitUrl());
+        customerAppearance.setCustomerId(params.getCustomerId());
+        //新上传头像状态默认为未审核
+        customerAppearance.setAuditStatus(0);
+
+        //要先判断表中是否存在次用户头像记录
+        // TODO: 2018/10/21  created by chenpeng
+
+        int result = customerAppearanceMapper.saveEntity(customerAppearance);
+        logger.info("修改头像 updateHeadPortrait,更新数量" + result);
+        if (result > 0) {
+            commonResponse.setCode(UserBizReturnCode.Success);
+            commonResponse.setMessage(UserBizReturnCode.Success.desc());
+            return commonResponse;
+        } else {
+            throw new RemoteException(UserBizReturnCode.paramError, "参数错误，修改失败");
+        }
+    }
+    @Override
+    public CommonResponse updateAppearance(UpdateAppearanceReq params) {
+        CommonResponse commonResponse = new CommonResponse();
+
+        CustomerAppearance customerAppearance = new CustomerAppearance();
+        customerAppearance.setId(UUIDUtils.getId());
+        customerAppearance.setCustomerId(params.getCustomerId());
+        customerAppearance.setAuditAppearance(params.getAppearance());
+        customerAppearance.setAuditStatus(0);
+
+        //查询用户是否存在
+        Customer customer = customerRedisManagement.getCustomer(params.getCustomerId());
+        if (null != customer) {
+            // 更新customer_appearance表
+            try {
+                customerAppearanceMapper.saveEntity(customerAppearance);
+
+                commonResponse.setCode(UserBizReturnCode.Success);
+                commonResponse.setMessage(UserBizReturnCode.Success.desc());
+                return commonResponse;
+            } catch (Exception e) {
+                logger.error("修改形象照 异常",e);
+                throw new BizException(AccountBizReturnCode.JdbcError, "操作数据库异常");
+            }
+        } else {
+            throw new BizException(AccountBizReturnCode.JdbcError, "操作数据库异常");
+        }
+    }
+    @Override
     public CommonResponse removeAppearance(RemoveAppearanceReq params) {
         CommonResponse commonResponse = new CommonResponse();
         try {
@@ -286,15 +273,19 @@ public class EditProfileServiceImpl implements EditProfileService {
     @Override
     public CommonResponse updateVoiceIdentificationCard(UpdateVoiceIdentificationCardReq params) {
         CommonResponse commonResponse = new CommonResponse();
-        Customer customer = customerMapper.selectByPrimaryKey(params.getCustomerId());
-        customer.setVoiceIdentificationCard(params.getVoiceIdentificationCard());
-        customer.setVoiceIdentificationCardStatus(0);
 
-        int result = customerMapper.updateByPrimaryKeySelective(customer);
+        CustomerAppearance customerAppearance = new CustomerAppearance();
+        customerAppearance.setAuditAppearance(params.getVoiceIdentificationCard());
+        customerAppearance.setCustomerId(params.getCustomerId());
+        //新上传声鉴卡状态默认为未审核
+        customerAppearance.setAuditStatus(0);
+
+        //要先判断表中是否存在次用户头像记录
+        // TODO: 2018/10/21  created by chenpeng
+
+        int result = customerAppearanceMapper.saveEntity(customerAppearance);
         logger.info("修改声鉴卡 ,更新数量" + result);
         if (result > 0) {
-            JedisUtil.set(RedisKeyConstants.USER_CUSTOMER_INFO + params.getCustomerId(),
-                    JsonParseUtil.castToJson(customer));
             commonResponse.setCode(UserBizReturnCode.Success);
             commonResponse.setMessage(UserBizReturnCode.Success.desc());
             return commonResponse;
@@ -307,21 +298,15 @@ public class EditProfileServiceImpl implements EditProfileService {
     @Override
     public CommonResponse removeVoiceIdentificationCard(RemoveVoiceIdentificationCardReq params) {
         CommonResponse commonResponse = new CommonResponse();
-        Customer customer = customerMapper.selectByPrimaryKey(params.getCustomerId());
-        customer.setVoiceIdentificationCard("");
-        customer.setVoiceIdentificationCardStatus(0);
+        try {
+            customerAppearanceMapper.deleteEntity(params.getId());
 
-        int result = customerMapper.updateByPrimaryKeySelective(customer);
-        logger.info("删除声鉴卡 ,更新数量" + result);
-        if (result > 0) {
-            JedisUtil.set(RedisKeyConstants.USER_CUSTOMER_INFO + params.getCustomerId(),
-                    JsonParseUtil.castToJson(customer));
             commonResponse.setCode(UserBizReturnCode.Success);
             commonResponse.setMessage(UserBizReturnCode.Success.desc());
             return commonResponse;
-        } else {
-            logger.error("删除声鉴卡异常");
-            throw new RemoteException(UserBizReturnCode.paramError, "参数错误，修改失败");
+        } catch (Exception e) {
+            logger.error("删除声鉴卡 异常",e);
+            throw new BizException(AccountBizReturnCode.JdbcError, "操作数据库异常");
         }
     }
 }

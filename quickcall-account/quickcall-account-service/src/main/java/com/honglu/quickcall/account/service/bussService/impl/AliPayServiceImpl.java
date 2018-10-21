@@ -90,7 +90,7 @@ public class AliPayServiceImpl implements AliPayService {
 		recharge.setType(TradeTypeEnum.Pay.getType());// 1充值 2提现
 		recharge.setOrdersn(orderNo);
 		recharge.setState(1);// 状态。1-申请支付，2-支付成功 3支付失败
-		recharge.setRechargeType(1);// 充值类型。1为支付宝，2为微信
+		recharge.setRechargeType(1);// 充值类型。1为支付宝，2为微信 3为苹果内购
 		rechargeMapper.insertSelective(recharge);
 		return ResultUtils.resultSuccess(result);
 
