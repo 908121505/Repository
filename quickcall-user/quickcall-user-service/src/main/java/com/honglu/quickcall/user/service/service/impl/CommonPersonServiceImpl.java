@@ -34,6 +34,7 @@ import com.honglu.quickcall.common.third.rongyun.util.RongYunUtil;
 import com.honglu.quickcall.user.facade.code.UserBizReturnCode;
 import com.honglu.quickcall.user.facade.constants.UserBizConstants;
 import com.honglu.quickcall.user.facade.entity.Customer;
+import com.honglu.quickcall.user.facade.exchange.request.BindVXorQQRequest;
 import com.honglu.quickcall.user.facade.exchange.request.GetSmsCodeRequest;
 import com.honglu.quickcall.user.facade.exchange.request.IsPhoneExistsRequest;
 import com.honglu.quickcall.user.facade.exchange.request.SaveCertificationRequest;
@@ -516,4 +517,30 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 		customerMapper.updateByPrimaryKeySelective(record);
 		return ResultUtils.resultSuccess();
 	}
+
+	@Override
+	public CommonResponse bindVXorQQ(BindVXorQQRequest request) {
+
+		Customer param = new Customer();
+		Customer customer = new Customer();
+
+		// QQ判断
+		if (StringUtils.isNotBlank(request.getQqOpenId())) {
+			param.setQqOpenId(request.getQqOpenId());
+
+		} // 微信判断
+		else if (StringUtils.isNotBlank(request.getWechatOpenId())) {
+			param.setWechatOpenId(request.getWechatOpenId());
+		}
+		// 判断是否已存在用户
+		customer = customerMapper.login(param);
+		param.setCustomerId(request.getCustomerId());
+		if (customer != null) {
+			logger.info("绑定账号已存在，不能绑定");
+			throw new BizException(BizCode.ParamError, "绑定账号已存在，不能绑定");
+		}
+		int row = customerMapper.updateByPrimaryKeySelective(param);
+		return ResultUtils.resultSuccess();
+	}
+
 }
