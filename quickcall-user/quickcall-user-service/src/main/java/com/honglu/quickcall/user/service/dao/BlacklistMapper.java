@@ -2,6 +2,10 @@ package com.honglu.quickcall.user.service.dao;
 
 
 import com.honglu.quickcall.user.facade.entity.Blacklist;
+import com.honglu.quickcall.user.facade.vo.BlacklistVo;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 public interface BlacklistMapper {
 
@@ -53,4 +57,6 @@ public interface BlacklistMapper {
      * @mbggenerated Sun Oct 21 19:35:51 CST 2018
      */
     int updateByPrimaryKey(Blacklist record);
+
+    List<BlacklistVo> selectListByCustomerId(@Param("customerId") Long customerId);
 }

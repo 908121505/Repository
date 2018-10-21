@@ -310,4 +310,24 @@
       remark = #{remark,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
+
+
+  <select id="selectListByCustomerId" resultType="com.honglu.quickcall.user.facade.vo.BlacklistVo" >
+
+    SELECT
+    b.id,
+    b.`customer_id` customerId,
+    b.`black_customer_id` blackCustomerId,
+    DATE_FORMAT(b.`create_time`,'%Y-%m-%d %H:%i:%s') createTime,
+    c.`nick_name` nickName,
+    IFNULL(a.`appearance`,c.`head_portrait_url`) headPortraitUrl
+    FROM
+    blacklist b
+    LEFT JOIN customer c
+    ON b.`black_customer_id` = c.`customer_id`
+    LEFT JOIN (SELECT * FROM customer_appearance a WHERE a.`type` = 1) a
+    ON b.`black_customer_id` = a.`customer_id`
+    WHERE b.`customer_id` = #{customerId}
+
+  </select>
 </mapper>

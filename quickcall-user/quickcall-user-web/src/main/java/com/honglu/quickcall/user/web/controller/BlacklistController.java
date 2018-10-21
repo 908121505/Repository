@@ -1,8 +1,8 @@
 package com.honglu.quickcall.user.web.controller;
 
 import com.honglu.quickcall.common.api.exchange.WebResponseModel;
+import com.honglu.quickcall.user.facade.exchange.request.editprofile.QueryBlacklistReq;
 import com.honglu.quickcall.user.facade.exchange.request.editprofile.RemoveBlacklistReq;
-import com.honglu.quickcall.user.facade.exchange.request.editprofile.RemoveVoiceIdentificationCardReq;
 import com.honglu.quickcall.user.web.service.UserCenterService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,6 +25,19 @@ public class BlacklistController {
 
     @Autowired
     private UserCenterService userCenterService;
+
+    /**
+     * 查询黑名单列表
+     *
+     * @param params
+     * @return
+     */
+    @PostMapping(value = "/queryBlacklist")
+    public WebResponseModel queryBlacklist(@RequestBody QueryBlacklistReq params) {
+        logger.info("查询黑名单 请求参数：" + params.toString());
+        WebResponseModel response = userCenterService.execute(params);
+        return response;
+    }
 
     /**
      * 删除黑名单

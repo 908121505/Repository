@@ -142,6 +142,11 @@ public interface UserFunctionType {
 	 * 删除黑名单
 	 */
 	String removeBlacklist = "0011160";
+	/**
+	 * 查询黑名单
+	 */
+	String queryBlacklist = "0011161";
+
 
 
 }
