@@ -317,34 +317,31 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 		skillPriceList.add(new BigDecimal(66));
 		skillPriceList.add(new BigDecimal(88));
 
+		//0：按次     1：半小时/一小时
 		for (int i = 0; i < 2; i++) {
-			List<String> serviceUnitList = new ArrayList<String>();
 
 			CustomerSkillVO skillVO = new CustomerSkillVO();
 			String skillItemName = null;
-			String serviceUnit = null;
+//			String serviceUnit = null;
 			if (i == 0) {
 				skillItemName = "叫醒";
-				serviceUnit = "次";
-				serviceUnitList.add("次");
+//				serviceUnit = "次";
 			} else if (i == 1) {
 				skillItemName = "声优聊天";
-				serviceUnit = "次";
-				serviceUnitList.add("小时");
-				serviceUnitList.add("半小时");
+//				serviceUnit = "次";
 			}
 			skillVO.setCustomerSkillId(10000L);
 			skillVO.setOldSkillRange(1);
-			skillVO.setOldServiceUnit(serviceUnit);
-			skillVO.setOldDiscountRate(new BigDecimal(70));
+//			skillVO.setOldServiceUnit(serviceUnit);
+			skillVO.setOldDiscountRate(new BigDecimal(7.5));
 			skillVO.setSkillItemId(1000L);
 			skillVO.setSkillItemName(skillItemName);
-			skillVO.setOldSkillPrice(new BigDecimal(10));
-			skillVO.setSwitchStatus(Math.random() > 0.5 ? 1 : 0);
+//			skillVO.setOldSkillPrice(new BigDecimal(10));
+			skillVO.setSwitchStatus(i > 0.5 ? 1 : 0);
 
 			List<CustomerSkillExtVO> skillExtList = new ArrayList<CustomerSkillExtVO>();
 
-			for (int j = 0; j < 2; j++) {
+			for (int j = 0; j < 3; j++) {
 
 				CustomerSkillExtVO extVO = new CustomerSkillExtVO();
 				extVO.setSkillRangeValue(j + 1);
@@ -352,13 +349,11 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 				// 按次算
 				List<SkillUnitPriceVO> unitPriceList = new ArrayList<>();
 				if (i == 0) {
-
 					SkillUnitPriceVO up = new SkillUnitPriceVO();
 					up.setSkillItemExtId(1111L);
 					up.setUnitName("次");
-					up.setUnitPrice(new BigDecimal(60));
+					up.setUnitPrice(new BigDecimal(11));
 					unitPriceList.add(up);
-
 				} else {
 					for (int k = 0; k < 2; k++) {
 						SkillUnitPriceVO up = new SkillUnitPriceVO();
@@ -382,11 +377,10 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 
 			List<Long> oldSkillItemExtIdList = new ArrayList<Long>();
 			oldSkillItemExtIdList.add(1111L);
-			oldSkillItemExtIdList.add(2222L);
 			skillVO.setOldSkillItemExtIdList(oldSkillItemExtIdList);
 			skillVO.setDiscontRateList(discontRateList);
 			skillVO.setSkillExtList(skillExtList);
-			skillVO.setSkillType(i == 1 ? 1 : 2);
+			skillVO.setSkillType(i == 0 ? 1 : 2);
 			resultList.add(skillVO);
 		}
 

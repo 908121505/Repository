@@ -21,6 +21,8 @@ public class CustomerSkill {
     private Long customerId;
 
     private Long skillItemId;
+    
+    private Long skillItemExtId;
 
     private String skillName;
 
@@ -310,6 +312,16 @@ public class CustomerSkill {
 	public void setEndTimeStr(Date endTimeStr) {
 		this.endTimeStr = endTimeStr;
 	}
+
+	public Long getSkillItemExtId() {
+		return skillItemExtId;
+	}
+
+	public void setSkillItemExtId(Long skillItemExtId) {
+		this.skillItemExtId = skillItemExtId;
+	}
+	
+	
 
 	
     
