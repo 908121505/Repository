@@ -99,4 +99,14 @@ id,	customer_id,	audit_appearance,	appearance,	type,	audit_status,	sort,	status,
 		 WHERE id = #{id}
 	</update>
 
+	<!-- 据类型查询用户审核通过的照片 -->
+	<select id="queryCustomerAuditedAppearance" resultType="string">
+		SELECT audit_appearance
+		FROM customer_appearance
+		WHERE customer_id = #{customerId}
+		AND type = #{type}
+		AND audit_appearance IS NOT NULL
+		AND audit_appearance != ''
+		ORDER BY create_time DESC
+	</select>
 </mapper>

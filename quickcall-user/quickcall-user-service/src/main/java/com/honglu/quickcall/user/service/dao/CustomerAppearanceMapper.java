@@ -49,4 +49,11 @@ public interface CustomerAppearanceMapper{
 	 **/
 	int updateEntity( CustomerAppearance record );
 
+	/**
+	 * 根据类型查询用户审核通过的照片
+	 * @param customerId
+	 * @param type
+	 * @return
+	 */
+	List<String> queryCustomerAuditedAppearance(@Param("customerId") Long customerId, @Param("type") Integer type);
 }
