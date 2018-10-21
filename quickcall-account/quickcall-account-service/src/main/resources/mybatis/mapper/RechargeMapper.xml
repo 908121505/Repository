@@ -199,8 +199,14 @@
     </set>
     where   ordersn = #{ordersn,jdbcType=VARCHAR}
   </update>
-  
-  
-  
-  
+
+  <select id="selectByOrderNo" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select
+    <include refid="Base_Column_List" />
+    from recharge
+    where ordersn = #{ordersn,jdbcType=VARCHAR}
+  </select>
+
+
+
 </mapper>

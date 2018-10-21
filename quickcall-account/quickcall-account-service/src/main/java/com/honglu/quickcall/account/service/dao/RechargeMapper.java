@@ -16,4 +16,7 @@ public interface RechargeMapper {
     int updateByPrimaryKey(Recharge record);
     
     int updateByOrderNo(Recharge record);
+
+    Recharge selectByOrderNo(String orderNo);
+
 }
