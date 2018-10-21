@@ -307,15 +307,12 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 		List<CustomerSkillVO> resultList = new ArrayList<CustomerSkillVO>();
 
 		List<BigDecimal> discontRateList = new ArrayList<BigDecimal>();
-		discontRateList.add(new BigDecimal(75));
-		discontRateList.add(new BigDecimal(75));
-		discontRateList.add(new BigDecimal(100));
+		discontRateList.add(new BigDecimal(7.5));
+		discontRateList.add(new BigDecimal(10));
 		List<BigDecimal> skillPriceList = new ArrayList<BigDecimal>();
 		skillPriceList.add(new BigDecimal(10));
-		skillPriceList.add(new BigDecimal(15));
-		skillPriceList.add(new BigDecimal(30));
-		skillPriceList.add(new BigDecimal(66));
-		skillPriceList.add(new BigDecimal(88));
+		skillPriceList.add(new BigDecimal(1.5));
+		skillPriceList.add(new BigDecimal(3));
 
 		//0：按次     1：半小时/一小时
 		for (int i = 0; i < 2; i++) {
