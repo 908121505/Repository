@@ -11,20 +11,20 @@ import com.honglu.quickcall.user.facade.exchange.UserCenterRequest;
  */
 public class RemoveVoiceIdentificationCardReq extends UserCenterRequest {
 
-    private Long customerId;
+    private Long id;
 
-    public Long getCustomerId() {
-        return customerId;
+    public Long getId() {
+        return id;
     }
 
-    public void setCustomerId(Long customerId) {
-        this.customerId = customerId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     @Override
     public String toString() {
         return "RemoveVoiceIdentificationCardReq{" +
-                "customerId=" + customerId +
+                "id=" + id +
                 '}';
     }
 

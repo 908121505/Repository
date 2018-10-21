@@ -6,7 +6,9 @@
 	<resultMap type="com.honglu.quickcall.user.facade.entity.CustomerAppearance" id="customerAppearanceMap">
 		<id property="id" column="id" javaType="java.lang.Long"></id>
 		<result property="customerId" column="customer_id" javaType="java.lang.Long"></result>
+		<result property="auditAppearance" column="audit_appearance" javaType="java.lang.String"></result>
 		<result property="appearance" column="appearance" javaType="java.lang.String"></result>
+		<result property="type" column="type" javaType="java.lang.Integer"></result>
 		<result property="auditStatus" column="audit_status" javaType="java.lang.Integer"></result>
 		<result property="sort" column="sort" javaType="java.lang.Integer"></result>
 		<result property="status" column="status" javaType="java.lang.Integer"></result>
@@ -19,7 +21,7 @@
 
 	<!-- 通用查询结果列-->
 	<sql id="Base_Column_List">
-id,	customer_id,	appearance,	audit_status,	sort,	status,	create_time,	modify_time,	create_man,	modify_man,	remark
+id,	customer_id,	audit_appearance,	appearance,	type,	audit_status,	sort,	status,	create_time,	modify_time,	create_man,	modify_man,	remark
 	</sql>
 
 	<!-- 查询（根据主键ID查询） -->
@@ -47,9 +49,9 @@ id,	customer_id,	appearance,	audit_status,	sort,	status,	create_time,	modify_tim
 	<!-- 添加 -->
 	<insert id="saveEntity" parameterType="com.honglu.quickcall.user.facade.entity.CustomerAppearance">
 		 INSERT INTO customer_appearance
- 		(id,customer_id,appearance,audit_status,sort,status,create_time,modify_time,create_man,modify_man,remark) 
+ 		(id,customer_id,audit_appearance,appearance,type,audit_status,sort,status,create_time,modify_time,create_man,modify_man,remark) 
 		 VALUES 
- 		(#{id},#{customerId},#{appearance},#{auditStatus},#{sort},#{status},#{createTime},#{modifyTime},#{createMan},#{modifyMan},#{remark})
+ 		(#{id},#{customerId},#{auditAppearance},#{appearance},#{type},#{auditStatus},#{sort},#{status},#{createTime},#{modifyTime},#{createMan},#{modifyMan},#{remark}) 
 	</insert>
 
 	<!-- 修 改-->
@@ -59,8 +61,14 @@ id,	customer_id,	appearance,	audit_status,	sort,	status,	create_time,	modify_tim
 			<if test="customerId != null">
 				 customer_id = #{customerId},
 			</if>
+			<if test="auditAppearance != null">
+				 audit_appearance = #{auditAppearance},
+			</if>
 			<if test="appearance != null">
 				 appearance = #{appearance},
+			</if>
+			<if test="type != null">
+				 type = #{type},
 			</if>
 			<if test="auditStatus != null">
 				 audit_status = #{auditStatus},

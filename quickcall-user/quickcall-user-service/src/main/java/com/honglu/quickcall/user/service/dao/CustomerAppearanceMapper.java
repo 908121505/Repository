@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * CustomerAppearanceMapper数据库操作接口类bean
  * @author luoyanchong
- * @date Sat Oct 20 14:52:09 CST 2018
+ * @date Sun Oct 21 11:10:37 CST 2018
  **/
 
 public interface CustomerAppearanceMapper{
@@ -33,7 +33,7 @@ public interface CustomerAppearanceMapper{
 	 * 删除（根据主键ID删除）
 	 * 
 	 **/
-	int deleteEntity ( @Param("id") long id );
+	int deleteEntity ( @Param("id") Long id );
 
 	/**
 	 * 
