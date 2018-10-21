@@ -256,7 +256,11 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 				skillExtList.add(extVO);
 			}
 			
-			skillVO.setOldSkillItemExtId(2001L);
+			
+			List<Long>   oldSkillItemExtIdList = new ArrayList<Long>();
+			oldSkillItemExtIdList.add(1111L);
+			oldSkillItemExtIdList.add(2222L);
+			skillVO.setOldSkillItemExtIdList(oldSkillItemExtIdList);
 			skillVO.setDiscontRateList(discontRateList);
 			skillVO.setSkillExtList(skillExtList );
 			skillVO.setSkillType(i == 1 ? 1 : 2);

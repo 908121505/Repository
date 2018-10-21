@@ -20,8 +20,13 @@ public class CustomerSkillVO {
 	private String  skillItemName;
 	/**技能项ID(分类ID)*/
     private Long skillItemId;
-    /**已选中ID*/
-    private Long  oldSkillItemExtId;
+//    /**已选中ID*/
+//    private Long  oldSkillItemExtId;
+    
+    /**已选中ID 列表*/
+    private  List<Long>   oldSkillItemExtIdList;
+    
+    
     /**已选中等级*/
     private Integer oldSkillRange;
     /**服务单位（小时/半小时/次）*/
@@ -113,14 +118,15 @@ public class CustomerSkillVO {
 	public void setSkillType(Integer skillType) {
 		this.skillType = skillType;
 	}
-	
-	
-	public Long getOldSkillItemExtId() {
-		return oldSkillItemExtId;
+	public List<Long> getOldSkillItemExtIdList() {
+		return oldSkillItemExtIdList;
 	}
-	public void setOldSkillItemExtId(Long oldSkillItemExtId) {
-		this.oldSkillItemExtId = oldSkillItemExtId;
+	public void setOldSkillItemExtIdList(List<Long> oldSkillItemExtIdList) {
+		this.oldSkillItemExtIdList = oldSkillItemExtIdList;
 	}
+	
+
+	
 	
 	
 	
