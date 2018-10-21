@@ -18,9 +18,11 @@ public interface UserFunctionType {
 	String setHeardUrl = "001005";
 	// 发送短信
 	String getSmsCode = "001006";
+	// 绑定微信或者QQ
+	String bindVXorQQ = "001007";
 
 	// 阅读关注(底部tab 点击关注)
-	String readAttention = "001007";
+	String readAttention = "001008";
 	// 系统相关 001300 - 001350
 	String MarketOnOff = "001300";
 	String AppConfig = "001301";
@@ -77,11 +79,11 @@ public interface UserFunctionType {
 
 	// 首页搜索用户
 	public static final String SEARCH_PERSON_LIST = "0011134";
-	
-	//查看我的技能列表
+
+	// 查看我的技能列表
 	public static final String QUERY_MY_SKILL = "0011135";
-	
-	//保存大V技能审核信息
+
+	// 保存大V技能审核信息
 	public static final String SAVE_DV_SKILL_AUDIT = "0011136";
 
 	/**
@@ -112,23 +114,27 @@ public interface UserFunctionType {
 	 * 删除形象照
 	 */
 	String removeAppearance = "0011146";
-    /**
-     * 修改声鉴卡
-     */
-    String updateVoiceIdentificationCard = "0011147";
-    /**
-     * 删除声鉴卡
-     */
-    String removeVoiceIdentificationCard = "0011148";
+	/**
+	 * 修改声鉴卡
+	 */
+	String updateVoiceIdentificationCard = "0011147";
+	/**
+	 * 删除声鉴卡
+	 */
+	String removeVoiceIdentificationCard = "0011148";
 
+	/**
+	 * 个人中心接口
+	 */
+	String CUSTOMER_CENTER = "0011150";
 
-    /**
-     * 个人中心接口
-     */
-    String CUSTOMER_CENTER = "0011150";
+	/**
+	 * 客户主页接口
+	 */
+	String CUSTOMER_HOME = "0011151";
 
-    /**
-     * 客户主页接口
-     */
-    String CUSTOMER_HOME = "0011151";
+	/**
+	 * 我的等级页面接口
+	 */
+	String CUSTOMER_LEVEL = "0011152";
 }

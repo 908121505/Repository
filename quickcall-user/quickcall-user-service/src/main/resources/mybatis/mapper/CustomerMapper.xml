@@ -66,14 +66,19 @@
   </select>
   
   <select id="selectFuzzySearch" resultType="com.honglu.quickcall.user.facade.vo.SearchPersonListVO" >
-  	select * from (
+  	select customerId,nickName,headPortraitUrl,sex,type,age
+  	 <if test="customerId != null">
+  	 	,IFNULL(fs.attention_state,0) AS isFollow,
+  	 	(IFNULL(fs.attention_state,0))&amp;(IFNULL(fs1.attention_state,0)) AS isEveryFollow 
+  	 </if>
+  	 from (
     select 
     customer_id AS customerId,
     nick_name AS nickName,
     head_portrait_url AS headPortraitUrl,
     sex,
     type,
-    <![CDATA[ (YEAR(CURDATE())-YEAR(birthday))-(RIGHT(CURDATE(),5)<RIGHT(birthday,5)) AS age  ]]>
+    <![CDATA[ TIMESTAMPDIFF(YEAR, birthday, CURDATE()) AS age  ]]>
     from customer
     <where>
          <!-- <if test="keyword != null and keyword != ''"> -->
@@ -91,6 +96,10 @@
              when nick_name like concat('%',#{keyword},'%') then 4
              else 0
              end ) ) cus_temp 
+     <if test="customerId != null">
+	     LEFT JOIN fans fs ON fs.anchor_id = cus_temp.customerId and fs.fans_id = #{customerId}
+		 LEFT JOIN fans fs1 ON fs.anchor_id = fs1.fans_id and fs1.anchor_id = fs.fans_id 
+	 </if>
      <if test="pageIndex != null and pageSize != null">
          LIMIT #{pageIndex},#{pageSize}
      </if>
@@ -103,8 +112,16 @@
     head_portrait_url AS headPortraitUrl,
     sex,
     type,
-    <![CDATA[ (YEAR(CURDATE())-YEAR(birthday))-(RIGHT(CURDATE(),5)<RIGHT(birthday,5)) AS age  ]]>
-    from customer
+    <![CDATA[ TIMESTAMPDIFF(YEAR, birthday, CURDATE()) AS age  ]]>
+    <if test="customerId != null">
+  	 	,IFNULL(fs.attention_state,0) AS isFollow,
+  	 	(IFNULL(fs.attention_state,0))&amp;(IFNULL(fs1.attention_state,0)) AS isEveryFollow 
+  	 </if>
+    from customer cus
+    <if test="customerId != null">
+	     LEFT JOIN fans fs ON fs.anchor_id = cus.customer_id and fs.fans_id = #{customerId}
+		 LEFT JOIN fans fs1 ON fs.anchor_id = fs1.fans_id and fs1.anchor_id = fs.fans_id 
+	 </if>
     <where>
          <!-- <if test="keyword != null and keyword != ''"> -->
              app_id = #{keyword}

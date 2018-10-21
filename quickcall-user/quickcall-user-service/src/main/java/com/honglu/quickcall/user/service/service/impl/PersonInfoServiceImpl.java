@@ -103,6 +103,8 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 	private CustomerSkillMapper customerSkillMapper;
 	@Autowired
 	private CustomerSkillCertifyMapper customerSkillCertifyMapper;
+	@Autowired
+	private CustomerAppearanceMapper customerAppearanceMapper;
 
 	/**
 	 * 中文、英文、数字、下划线校验 4-24位
@@ -237,30 +239,6 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 			customerList = customerMapper.selectFuzzySearch(keyword,currentCustomer,params.getPageIndex(),params.getPageSize());
 		}
 		
-		if(currentCustomer != null && customerList != null){
-			List<Long> ids = new ArrayList<>();
-			for (SearchPersonListVO customer : customerList) {
-				ids.add(customer.getCustomerId());
-			}
-			List<Fans> anchorList = fansMapper.queryFansListByAnchorIdList(ids, currentCustomer);
-			List<Fans> fansList = fansMapper.queryFansListByFansIdList(ids, currentCustomer);
-			HashMap<Long, Integer> anchorStatusMap = new HashMap<Long, Integer>();
-			HashMap<Long, Integer> fansStatusMap = new HashMap<Long, Integer>();
-			for (Fans fans : anchorList) {
-				anchorStatusMap.put(fans.getAnchorId(), fans.getAttentionState());
-			}
-			for (Fans fans : fansList) {
-				fansStatusMap.put(fans.getFansId(), fans.getAttentionState());
-			}
-			for (SearchPersonListVO customer : customerList) {
-				Long customerId = customer.getCustomerId();
-				int n = anchorStatusMap.get(customerId)==null?UserBizConstants.ATTENTION_STATUS_UN_ATTENED:anchorStatusMap.get(customerId);
-				int n1 = fansStatusMap.get(customerId)==null?UserBizConstants.ATTENTION_STATUS_UN_ATTENED:fansStatusMap.get(customerId);
-				//把关注状态和互相关注状态放入对象
-				customer.setIsFollow(n);
-				customer.setIsEveryFollow(n1&n);
-			}
-		}
 		logger.info("用户编号为："+currentCustomer+"搜索关键字:"+keyword+" 成功");
 		commonResponse.setData(customerList);
 		commonResponse.setCode(UserBizReturnCode.Success);
@@ -738,41 +716,8 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 						UserBizConstants.ATTENTION_STATUS_ATTENED);
 			} else if (UserBizConstants.QUERY_FANS_LIST_TYPE == type) {
 				// 查询粉丝列表
-				// resultList
-				// =fansMapper.queryFansListByCustomerId(customerId,UserBizConstants.ATTENTION_STATUS_ATTENED);
-				// 粉丝ID
-				List<Long> fansIdList = fansMapper.queryFansIdListByCustomerId(customerId,
+				resultList = fansMapper.queryFansIdListByCustomerId(customerId,
 						UserBizConstants.ATTENTION_STATUS_ATTENED);
-
-				if (CollectionUtils.isEmpty(fansIdList)) {
-
-				} else {
-
-					// 获取
-					resultList = fansMapper.queryCustomerListByCustomerIdList(fansIdList);
-
-					// 获取
-					List<Fans> fansList = fansMapper.queryFansListByAnchorIdList(fansIdList, customerId);
-
-					HashMap<Long, Integer> attentionStatusMap = new HashMap<Long, Integer>();
-					if (!CollectionUtils.isEmpty(fansList)) {
-						for (Fans fans : fansList) {
-							Long anchorId = fans.getAnchorId();
-							attentionStatusMap.put(anchorId, fans.getAttentionState());
-						}
-					}
-
-					for (AttentionFansVO vo : resultList) {
-						Long custId = vo.getCustomerId();
-						Integer attentionStatus = attentionStatusMap.get(custId);
-						if (attentionStatus == null) {
-							attentionStatus = UserBizConstants.ATTENTION_STATUS_UN_ATTENED;
-						}
-						vo.setAttentionStatus(attentionStatus);
-					}
-
-				}
-
 			}
 			commonResponse.setData(resultList);
 			commonResponse.setCode(UserBizReturnCode.Success);
@@ -976,25 +921,26 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 
 	@Override
 	public CommonResponse queryCustomerCenter(CustomerCenterRequest request) {
-		Customer viewCustomer = customerMapper.selectByPrimaryKey(request.getCustomerId());
-		if (viewCustomer == null) {
+		Customer customer = customerMapper.selectByPrimaryKey(request.getCustomerId());
+		if (customer == null) {
 			return ResultUtils.resultDataNotExist("用户数据不存在");
 		}
 		CustomerCenterVO customerCenterVO = new CustomerCenterVO();
 		customerCenterVO.setCustomerId(request.getCustomerId());
-		customerCenterVO.setCustomerAppId(viewCustomer.getAppId());
-		customerCenterVO.setNickName(viewCustomer.getNickName());
-		customerCenterVO.setSex(viewCustomer.getSex());
-		if (viewCustomer.getBirthday() != null) {
-			customerCenterVO.setAge(CountAge.getAgeByBirth(viewCustomer.getBirthday()));
+		customerCenterVO.setCustomerAppId(customer.getAppId());
+		customerCenterVO.setNickName(customer.getNickName());
+		customerCenterVO.setHeadPortraitUrl(customer.getHeadPortraitUrl());
+		customerCenterVO.setSex(customer.getSex());
+		if (customer.getBirthday() != null) {
+			customerCenterVO.setAge(CountAge.getAgeByBirth(customer.getBirthday()));
 		}
 
 		// 客户等级 ADUAN -- 待完成
 		customerCenterVO.setCustomerLevel(250);
 
-		customerCenterVO.setSignName(viewCustomer.getSignName());
-		customerCenterVO.setIdentityStatus(viewCustomer.getIdentityStatus());
-		customerCenterVO.setvStatus(viewCustomer.getvStatus());
+		customerCenterVO.setSignName(customer.getSignName());
+		customerCenterVO.setIdentityStatus(customer.getIdentityStatus());
+		customerCenterVO.setvStatus(customer.getvStatus());
 
 		// 查询关注数
 		customerCenterVO.setAttentionNum(fansMapper.queryAttentionNumByCustomerId(request.getCustomerId()));
@@ -1045,14 +991,16 @@ public class PersonInfoServiceImpl implements PersonInfoService {
         // 查询粉丝数
         customerHomeVO.setFansNum(fansMapper.queryFansNumByCustomerId(request.getViewCustomerId()).intValue());
 
-        // 查询用户形象照列表 ADUAN -- 待完成
-        customerHomeVO.setAppearanceUrlList(Arrays.asList(DEFAULT_CUSTOMER_APPEARANCE_URL));
+        // 查询用户形象照列表
+		List<String> appearanceList = customerAppearanceMapper.queryCustomerAuditedAppearance(request.getViewCustomerId(), 0);
+        customerHomeVO.setAppearanceUrlList(appearanceList.isEmpty() ? Arrays.asList(DEFAULT_CUSTOMER_APPEARANCE_URL): appearanceList);
 
         // 查询用户兴趣
         customerHomeVO.setInterestList(customerInterestMapper.queryCustomerInterestList(request.getViewCustomerId()));
 
-        // 声鉴卡 -- ADUAN -- 待完成
-        customerHomeVO.setSoundGuideCard(DEFAULT_CUSTOMER_APPEARANCE_URL);
+        // 查询声鉴卡
+		List<String> soundGuideCard = customerAppearanceMapper.queryCustomerAuditedAppearance(request.getViewCustomerId(), 2);
+        customerHomeVO.setSoundGuideCard(soundGuideCard.isEmpty() ? null : soundGuideCard.get(0));
 
         // 查询用户技能 -- 条件是大V
         List<CustomerHomeVO.CustomerSkill> skillList = new ArrayList<>();
@@ -1065,11 +1013,13 @@ public class PersonInfoServiceImpl implements PersonInfoService {
                 customerSkill.setSkillVoiceUrl(bean.getSkillVoiceUrl());
                 customerSkill.setSkillVoiceTime(bean.getSkillVoiceTime());
 
-                // ADUAN -- 技能价格、价格单位、声量、标签 -- 未完成
+                // ADUAN -- 技能价格、价格单位、标签 -- 未完成
                 customerSkill.setSkillPrice(new BigDecimal(20));
                 customerSkill.setServiceUnit("半小时");
-                customerSkill.setSkillVolume(250);
                 customerSkill.setCustomerLabel(Arrays.asList("暖男", "搞笑", "帅气"));
+
+                // ADUAN -- 声量 -- 后期在做
+                customerSkill.setSkillVolume(250);
 
                 skillList.add(customerSkill);
             }
@@ -1077,5 +1027,29 @@ public class PersonInfoServiceImpl implements PersonInfoService {
         customerHomeVO.setSkillList(skillList);
 
 		return ResultUtils.resultSuccess(customerHomeVO);
+	}
+
+	@Override
+	public CommonResponse queryCustomerLevel(CustomerLevelRequest request) {
+		Customer customer = customerMapper.selectByPrimaryKey(request.getCustomerId());
+		if (customer == null) {
+			return ResultUtils.resultDataNotExist("用户数据不存在");
+		}
+		CustomerLevelVO customerLevelVO = new CustomerLevelVO();
+		customerLevelVO.setCustomerId(request.getCustomerId());
+		customerLevelVO.setCustomerAppId(customer.getAppId());
+		customerLevelVO.setNickName(customer.getNickName());
+		customerLevelVO.setHeadPortraitUrl(customer.getHeadPortraitUrl());
+
+		// ADUAN -- 待完成 -- 客户等级、等级特权、如何升级
+		customerLevelVO.setCustomerLevel(80);
+		customerLevelVO.setNextLevel(81);
+		customerLevelVO.setNeedExperienceNum(3000);
+
+		// 查询等级特权
+
+		// 查询如何升级
+
+		return ResultUtils.resultSuccess(customerLevelVO);
 	}
 }

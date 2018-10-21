@@ -17,17 +17,18 @@ import com.honglu.quickcall.common.api.exchange.AbstractRequest;
  */
 public class SkillUpdateRequest extends AbstractRequest {
 
-	private static final long serialVersionUID = 3434120973694242155L;
+	
+	private static final long serialVersionUID = 605272342830573700L;
 	private List<CustomerSkillRequestVO> customerSkillList;
 	private String endServiceTimeStr;
-	private int receiveStatus;
-	private int sunday;
-	private int saturday;
-	private int tuesday;
-	private int wednesday;
-	private int thursday;
-	private int friday;
-	private int monday;
+	private Integer receiveStatus;
+	private Integer sunday;
+	private Integer saturday;
+	private Integer tuesday;
+	private Integer wednesday;
+	private Integer thursday;
+	private Integer friday;
+	private Integer monday;
 
 	public List<CustomerSkillRequestVO> getCustomerSkillList() {
 		return customerSkillList;
@@ -45,67 +46,67 @@ public class SkillUpdateRequest extends AbstractRequest {
 		return endServiceTimeStr;
 	}
 
-	public void setReceiveStatus(int receiveStatus) {
+	public void setReceiveStatus(Integer receiveStatus) {
 		this.receiveStatus = receiveStatus;
 	}
 
-	public int getReceiveStatus() {
+	public Integer getReceiveStatus() {
 		return receiveStatus;
 	}
 
-	public void setSunday(int sunday) {
+	public void setSunday(Integer sunday) {
 		this.sunday = sunday;
 	}
 
-	public int getSunday() {
+	public Integer getSunday() {
 		return sunday;
 	}
 
-	public void setSaturday(int saturday) {
+	public void setSaturday(Integer saturday) {
 		this.saturday = saturday;
 	}
 
-	public int getSaturday() {
+	public Integer getSaturday() {
 		return saturday;
 	}
 
-	public void setTuesday(int tuesday) {
+	public void setTuesday(Integer tuesday) {
 		this.tuesday = tuesday;
 	}
 
-	public int getTuesday() {
+	public Integer getTuesday() {
 		return tuesday;
 	}
 
-	public void setWednesday(int wednesday) {
+	public void setWednesday(Integer wednesday) {
 		this.wednesday = wednesday;
 	}
 
-	public int getWednesday() {
+	public Integer getWednesday() {
 		return wednesday;
 	}
 
-	public void setThursday(int thursday) {
+	public void setThursday(Integer thursday) {
 		this.thursday = thursday;
 	}
 
-	public int getThursday() {
+	public Integer getThursday() {
 		return thursday;
 	}
 
-	public void setFriday(int friday) {
+	public void setFriday(Integer friday) {
 		this.friday = friday;
 	}
 
-	public int getFriday() {
+	public Integer getFriday() {
 		return friday;
 	}
 
-	public void setMonday(int monday) {
+	public void setMonday(Integer monday) {
 		this.monday = monday;
 	}
 
-	public int getMonday() {
+	public Integer getMonday() {
 		return monday;
 	}
 

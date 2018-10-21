@@ -114,4 +114,11 @@ public interface PersonInfoService {
 	 * @return
 	 */
 	CommonResponse queryCustomerHome(CustomerHomeRequest request);
+
+	/**
+	 * 我的等级页面 -- 展示数据接口
+	 * @param request
+	 * @return
+	 */
+	CommonResponse queryCustomerLevel(CustomerLevelRequest request);
 }

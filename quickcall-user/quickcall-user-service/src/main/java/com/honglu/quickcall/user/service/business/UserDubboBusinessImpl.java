@@ -1,8 +1,6 @@
 package com.honglu.quickcall.user.service.business;
 
 import com.honglu.quickcall.user.facade.exchange.request.*;
-import com.honglu.quickcall.user.facade.exchange.request.editprofile.*;
-import com.honglu.quickcall.user.service.service.EditProfileService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,34 +15,17 @@ import com.honglu.quickcall.common.api.exchange.CommonResponse;
 import com.honglu.quickcall.user.facade.business.UserDubboBusiness;
 import com.honglu.quickcall.user.facade.code.UserBizReturnCode;
 import com.honglu.quickcall.user.facade.code.UserFunctionType;
-import com.honglu.quickcall.user.facade.exchange.request.AddOrCancelFansRequest;
-import com.honglu.quickcall.user.facade.exchange.request.CheckAttentionRequest;
-import com.honglu.quickcall.user.facade.exchange.request.GetSmsCodeRequest;
-import com.honglu.quickcall.user.facade.exchange.request.IsPhoneExistsRequest;
-import com.honglu.quickcall.user.facade.exchange.request.PersonInfoRequest;
-import com.honglu.quickcall.user.facade.exchange.request.QueryAttentionFansListRequest;
-import com.honglu.quickcall.user.facade.exchange.request.QueryInterestListRequest;
-import com.honglu.quickcall.user.facade.exchange.request.QueryOccupationListRequest;
-import com.honglu.quickcall.user.facade.exchange.request.ReadAttentionRequest;
-import com.honglu.quickcall.user.facade.exchange.request.SaveBirthRequest;
-import com.honglu.quickcall.user.facade.exchange.request.SaveCertificationRequest;
-import com.honglu.quickcall.user.facade.exchange.request.SaveDvVoiceRequest;
-import com.honglu.quickcall.user.facade.exchange.request.SaveGenderRequest;
-import com.honglu.quickcall.user.facade.exchange.request.SaveInterestRequest;
-import com.honglu.quickcall.user.facade.exchange.request.SaveNickNameRequest;
-import com.honglu.quickcall.user.facade.exchange.request.SaveOccupationRequest;
-import com.honglu.quickcall.user.facade.exchange.request.SaveSignNameRequest;
-import com.honglu.quickcall.user.facade.exchange.request.SaveSkillAuditRequest;
-import com.honglu.quickcall.user.facade.exchange.request.SearchPersonRequest;
-import com.honglu.quickcall.user.facade.exchange.request.SetHeardUrlRequest;
-import com.honglu.quickcall.user.facade.exchange.request.SetPwdRequest;
-import com.honglu.quickcall.user.facade.exchange.request.ShowHomePageLogout;
-import com.honglu.quickcall.user.facade.exchange.request.UserIdCardInfoRequest;
-import com.honglu.quickcall.user.facade.exchange.request.UserLoginRequest;
-import com.honglu.quickcall.user.facade.exchange.request.UserRegisterRequest;
-import com.honglu.quickcall.user.facade.exchange.request.UserUnreadMessageNumRequest;
-import com.honglu.quickcall.user.facade.exchange.request.queryMyskillRequest;
+import com.honglu.quickcall.user.facade.exchange.request.editprofile.RemoveAppearanceReq;
+import com.honglu.quickcall.user.facade.exchange.request.editprofile.RemoveVoiceIdentificationCardReq;
+import com.honglu.quickcall.user.facade.exchange.request.editprofile.UpdateAppearanceReq;
+import com.honglu.quickcall.user.facade.exchange.request.editprofile.UpdateHeadPortraitReq;
+import com.honglu.quickcall.user.facade.exchange.request.editprofile.UpdateInterestReq;
+import com.honglu.quickcall.user.facade.exchange.request.editprofile.UpdateNickNameReq;
+import com.honglu.quickcall.user.facade.exchange.request.editprofile.UpdateSignNameReq;
+import com.honglu.quickcall.user.facade.exchange.request.editprofile.UpdateStarSignReq;
+import com.honglu.quickcall.user.facade.exchange.request.editprofile.UpdateVoiceIdentificationCardReq;
 import com.honglu.quickcall.user.service.service.CommonPersonService;
+import com.honglu.quickcall.user.service.service.EditProfileService;
 import com.honglu.quickcall.user.service.service.PersonInfoService;
 import com.honglu.quickcall.user.service.service.UserMessageService;
 
@@ -149,7 +130,7 @@ public class UserDubboBusinessImpl implements UserDubboBusiness {
 			case UserFunctionType.readAttention:
 				response = personInfoService.readAttention((ReadAttentionRequest) request);
 				break;
-			case UserFunctionType.QUERY_MY_SKILL://查询我的技能列表
+			case UserFunctionType.QUERY_MY_SKILL:// 查询我的技能列表
 				response = personInfoService.queryMySkill((queryMyskillRequest) request);
 				break;
 			case UserFunctionType.SAVE_DV_SKILL_AUDIT:
@@ -184,11 +165,18 @@ public class UserDubboBusinessImpl implements UserDubboBusiness {
 			case UserFunctionType.CUSTOMER_HOME:
 				response = personInfoService.queryCustomerHome((CustomerHomeRequest) request);
 				break;
+			// 客户等级
+			case UserFunctionType.CUSTOMER_LEVEL:
+				response = personInfoService.queryCustomerLevel((CustomerLevelRequest) request);
+				break;
 			case UserFunctionType.updateVoiceIdentificationCard:
 				response = editProfileService.updateVoiceIdentificationCard((UpdateVoiceIdentificationCardReq) request);
 				break;
 			case UserFunctionType.removeVoiceIdentificationCard:
 				response = editProfileService.removeVoiceIdentificationCard((RemoveVoiceIdentificationCardReq) request);
+				break;
+			case UserFunctionType.bindVXorQQ:
+				response = commonPersonService.bindVXorQQ((BindVXorQQRequest) request);
 				break;
 			default:
 				throw new BizException(UserBizReturnCode.BizFunctionTypeNotMatch,

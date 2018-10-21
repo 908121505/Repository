@@ -50,7 +50,7 @@ public interface FansMapper {
 	 * @param customerId
 	 * @return
 	 */
-	List<Long> queryFansIdListByCustomerId(@Param("customerId") Long customerId,
+	List<AttentionFansVO> queryFansIdListByCustomerId(@Param("customerId") Long customerId,
 			@Param("attentionStatus") Integer attentionStatus);
 
 	/**

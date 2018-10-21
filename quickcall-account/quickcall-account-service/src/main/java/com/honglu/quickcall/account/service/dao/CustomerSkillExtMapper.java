@@ -25,4 +25,8 @@ public interface CustomerSkillExtMapper {
 
     /**根据用户技能ID列表查询扩展性信息*/
 	List<CustomerSkillExt> queryCustomerSkillExtList(List<Long> skillIdList);
+
+
+	/**获取选中的数据*/
+	List<CustomerSkillExt> querySelectInfo(Long customerSkilId);
 }
