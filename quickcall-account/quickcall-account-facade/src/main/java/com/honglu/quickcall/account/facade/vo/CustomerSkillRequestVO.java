@@ -18,6 +18,8 @@ public class CustomerSkillRequestVO {
 	private List<Long> skillItemExtIdList;
 	private Long skillItemId;
 	private Integer switchStatus;
+	
+	
 	public Long getCustomerSkillId() {
 		return customerSkillId;
 	}

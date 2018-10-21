@@ -2,20 +2,22 @@ package com.honglu.quickcall.account.service.service.impl;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import com.honglu.quickcall.account.facade.entity.CustomerSkill;
 import com.honglu.quickcall.account.facade.entity.CustomerSkillExt;
+import com.honglu.quickcall.account.facade.entity.SkillItemExt;
 import com.honglu.quickcall.account.facade.exchange.request.SkillUpdateRequest;
 import com.honglu.quickcall.account.facade.vo.CustomerSkillExtVO;
 import com.honglu.quickcall.account.facade.vo.CustomerSkillInfoVO;
+import com.honglu.quickcall.account.facade.vo.CustomerSkillRequestVO;
 import com.honglu.quickcall.account.facade.vo.CustomerSkillVO;
 import com.honglu.quickcall.account.facade.vo.DaVinfoListVO;
 import com.honglu.quickcall.account.facade.vo.DaVinfoVO;
@@ -23,6 +25,7 @@ import com.honglu.quickcall.account.facade.vo.FirstPageSkillIteminfoVO;
 import com.honglu.quickcall.account.facade.vo.SkillUnitPriceVO;
 import com.honglu.quickcall.account.service.dao.CustomerSkillExtMapper;
 import com.honglu.quickcall.account.service.dao.CustomerSkillMapper;
+import com.honglu.quickcall.account.service.dao.SkillItemExtMapper;
 import com.honglu.quickcall.account.service.dao.SkillMapper;
 import com.honglu.quickcall.account.service.service.IProductSkillService;
 import com.honglu.quickcall.common.api.util.DateUtils;
@@ -37,6 +40,8 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 	private CustomerSkillMapper customerSkillMapper;
 	@Autowired
 	private CustomerSkillExtMapper customerSkillExtMapper;
+	@Autowired
+	private SkillItemExtMapper skillItemExtMapper;
 
 	@Override
 	public DaVinfoListVO getResourceDaVinfoList() {
@@ -134,47 +139,124 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 		return listVO;
 	}
 
+	@SuppressWarnings("null")
 	public void getNewCustomerSkillInfoVO(CustomerSkill skill, CustomerSkillInfoVO skillVO) {
-		Date currTime = new Date();
 		int dayIndex = DateUtils.getDayOfWeek();
 		HashMap<String, Integer> weekDataMap = new HashMap<String, Integer>();
-		Date   endTime =  null ;
-		
+		String endTimeStr = null;
+
+//		weekDataMap.put("monday", 0);
+//		weekDataMap.put("tuesday", 0);
+//		weekDataMap.put("wednesday", 0);
+//		weekDataMap.put("thursday", 0);
+//		weekDataMap.put("friday", 0);
+//		weekDataMap.put("saturday", 0);
+//		weekDataMap.put("sunday", 0);
 		// 当前是周一，则周一之后的都是默认值
 		if (dayIndex == 1) {
 			weekDataMap.put("monday", skill.getMonday());
-			endTime = skill.getMondayEndTime();
 		} else if (dayIndex == 2) {
 			weekDataMap.put("tuesday", skill.getTuesday());
-			endTime = skill.getTuesdayEndTime();
-
 		} else if (dayIndex == 3) {
-
 			weekDataMap.put("wednesday", skill.getWednesday());
-			endTime = skill.getWednesdayEndTime();
 		} else if (dayIndex == 4) {
 			weekDataMap.put("thursday", skill.getThursday());
-			endTime = skill.getThursdayEndTime();
-
 		} else if (dayIndex == 5) {
 			weekDataMap.put("friday", skill.getFriday());
-			endTime = skill.getFridayEndTime();
-
 		} else if (dayIndex == 6) {
 			weekDataMap.put("saturday", skill.getSaturday());
-			endTime = skill.getSaturdayEndTime();
-
 		} else if (dayIndex == 7) {
 			weekDataMap.put("sunday", skill.getSunday());
-			endTime = skill.getSundayEndTime();
 		}
-		if(endTime != null){
-			Calendar  cal =  Calendar.getInstance();
-			cal.setTime(endTime);
-			int  hourStr = cal.get(Calendar.HOUR_OF_DAY);
-			skillVO.setEndServiceTimeStr(hourStr + ":00");
+		
+		if(StringUtils.isNotBlank(endTimeStr)){
+			if(!"2359".equals(endTimeStr)){
+				String  startStr =  endTimeStr.substring(0, 2);
+				String  endStr =  endTimeStr.substring(2, 4);
+				skillVO.setEndServiceTimeStr(startStr + ":"+endStr);
+			}
+		}
+		
+	}
+	
+	
+	public static void main(String[] args) {
+		String  str = "2359";
+		System.out.println(str.substring(0, 2));
+		System.out.println(str.substring(2, 4));
+	}
+
+	/**
+	 * 获取技能可选项
+	 * @param skillItemId
+	 * @param skillVO
+	 */
+	public void getSkillExtList(Long skillItemId,CustomerSkillVO skillVO) {
+		List<CustomerSkillExtVO> resultList = new ArrayList<CustomerSkillExtVO>();
+		List<SkillItemExt> skillItemExtList = skillItemExtMapper.querySkillItemExtList(skillItemId, 1);
+		if (CollectionUtils.isEmpty(skillItemExtList)) {
+			return;
+		}
+		HashMap<Integer, List<SkillUnitPriceVO>> itemExtMap = new HashMap<Integer, List<SkillUnitPriceVO>>();
+		List<BigDecimal> discontRateList = new ArrayList<BigDecimal>();
+		for (SkillItemExt itemExt : skillItemExtList) {
+			Integer  type = itemExt.getSkillExtType();
+			//需要使用常量进行限制
+			if(type == 2){
+				discontRateList.add(itemExt.getSkillExtDiscont());
+				continue ;
+			}
+			List<SkillUnitPriceVO> list = null;
+			Integer skillExtRange = itemExt.getSkillExtRange();
+			if (itemExtMap.containsKey(skillExtRange)) {
+				list = itemExtMap.get(skillExtRange);
+			} else {
+				list = new ArrayList<SkillUnitPriceVO>();
+			}
+			SkillUnitPriceVO unitPriceVO = new SkillUnitPriceVO();
+
+			unitPriceVO.setSkillItemExtId(itemExt.getId());
+			unitPriceVO.setUnitName(itemExt.getSkillExtUnit());
+			unitPriceVO.setUnitPrice(itemExt.getSkillExtPrice());
+			list.add(unitPriceVO);
+			itemExtMap.put(skillExtRange, list);
 		}
 
+		for (Map.Entry<Integer, List<SkillUnitPriceVO>> entry : itemExtMap.entrySet()) {
+			CustomerSkillExtVO extVO = new CustomerSkillExtVO();
+			extVO.setSkillRangeValue(entry.getKey());
+			extVO.setUnitPriceList(entry.getValue());
+			resultList.add(extVO);
+		}
+		
+		
+		skillVO.setDiscontRateList(discontRateList);
+		skillVO.setSkillExtList(resultList);
+	}
+	
+	
+	public void getOldDataInfo(Long customerSkilId,CustomerSkillVO skillVO) {
+		
+		
+		List<CustomerSkillExt>   skillExtList = customerSkillExtMapper.querySelectInfo(customerSkilId);
+		if(CollectionUtils.isEmpty(skillExtList)){
+			return  ;
+		}
+		
+		List<Long> oldSkillItemExtIdList = new ArrayList<Long>();
+		for (CustomerSkillExt cse : skillExtList) {
+			oldSkillItemExtIdList.add(cse.getSkillItemExtId());
+		}
+		skillVO.setSkillType(2);//TODO  定义常量
+		if(skillExtList.size() == 1){
+			String  serviceUnit = skillExtList.get(0).getServiceUnit() ;
+			skillVO.setOldServiceUnit(serviceUnit);
+			if("次".equals(serviceUnit)){//TODO  定义常量
+				skillVO.setSkillType(1);//TODO  定义常量
+			}
+			skillVO.setOldSkillPrice(skillExtList.get(0).getSkillPrice());
+		}
+		skillVO.setOldSkillItemExtIdList(oldSkillItemExtIdList);
 	}
 
 	public CustomerSkillInfoVO querySkillInfoPersonalExt(Long customerId) {
@@ -186,31 +268,32 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 		if (CollectionUtils.isEmpty(custSkillList)) {
 			return resultVO;
 		}
-
-		//
 		Integer receiveStatus = null;
 		List<Long> skillIdList = new ArrayList<Long>();
-
+		List<CustomerSkillVO> customerSkillList = new ArrayList<CustomerSkillVO>();
 		for (CustomerSkill custSkill : custSkillList) {
+			CustomerSkillVO skillVO = new CustomerSkillVO();
 			if (receiveStatus == null) {
 				receiveStatus = custSkill.getReceiveStatus();
 				resultVO.setReceiveStatus(receiveStatus);
 				getNewCustomerSkillInfoVO(custSkill, resultVO);
 			}
+
 			skillIdList.add(custSkill.getCustomerSkillId());
+			skillVO.setCustomerSkillId(custSkill.getCustomerSkillId());
+			skillVO.setOldDiscountRate(custSkill.getDiscountRate());
+			skillVO.setOldSkillRange(custSkill.getSkillRange());
+			getOldDataInfo(custSkill.getCustomerSkillId(), skillVO);
+			skillVO.setSkillItemName(custSkill.getSkillName());
+			skillVO.setSwitchStatus(custSkill.getSwitchStatus());
+			// 根据技能ID获取可选技能信息
+			Long skillItemId = custSkill.getSkillItemId();
+			getSkillExtList(skillItemId,skillVO);
+			skillVO.setSkillItemId(skillItemId);
+			customerSkillList.add(skillVO);
+
 		}
-
-		//获取技能等级+单价+单位信息列表
-		List<CustomerSkillExt> skillExtList = customerSkillExtMapper.queryCustomerSkillExtList(skillIdList);
-
-		
-		
-//		resultVO.setCustomerSkillList(customerSkillList);
-		
-		
-		
-		
-		
+		resultVO.setCustomerSkillList(customerSkillList);
 		return resultVO;
 	}
 
@@ -281,11 +364,11 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 						SkillUnitPriceVO up = new SkillUnitPriceVO();
 						if (k == 0) {
 							up.setUnitName("半小时");
-							up.setUnitPrice(new BigDecimal(60));
+							up.setUnitPrice(new BigDecimal(60 * (k+1)));
 							up.setSkillItemExtId(3333L);
 						} else {
 							up.setUnitName("小时");
-							up.setUnitPrice(new BigDecimal(100));
+							up.setUnitPrice(new BigDecimal(100* (k+1)));
 							up.setSkillItemExtId(2222L);
 						}
 						unitPriceList.add(up);
@@ -327,7 +410,21 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 
 	@Override
 	public void updateSkillInfoPersonal(SkillUpdateRequest request) {
-		// TODO Auto-generated method stub
+		
+		
+		List<CustomerSkillRequestVO>  list = request.getCustomerSkillList();
+		if(CollectionUtils.isEmpty(list)){
+			return ;
+		}
+		
+		
+		for (CustomerSkillRequestVO csrv : list) {
+			
+			csrv.getCustomerSkillId();
+			
+		}
+		
+		
 
 	}
 

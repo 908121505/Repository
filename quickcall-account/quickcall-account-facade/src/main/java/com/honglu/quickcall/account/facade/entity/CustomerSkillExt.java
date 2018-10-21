@@ -17,6 +17,8 @@ public class CustomerSkillExt {
     private Long custSkillExtId;
 
     private Long customerSkillId;
+    
+    private Long skillItemExtId;
 
    
     private String serviceUnit;
@@ -28,6 +30,8 @@ public class CustomerSkillExt {
 
    
     private BigDecimal discountPrice;
+    
+    private Integer  switchStatus;
 
    
     private Date createTime;
@@ -153,4 +157,28 @@ public class CustomerSkillExt {
     public void setRemark(String remark) {
         this.remark = remark == null ? null : remark.trim();
     }
+
+
+	public Long getSkillItemExtId() {
+		return skillItemExtId;
+	}
+
+
+	public void setSkillItemExtId(Long skillItemExtId) {
+		this.skillItemExtId = skillItemExtId;
+	}
+
+
+	public Integer getSwitchStatus() {
+		return switchStatus;
+	}
+
+
+	public void setSwitchStatus(Integer switchStatus) {
+		this.switchStatus = switchStatus;
+	}
+	
+	
+    
+    
 }
