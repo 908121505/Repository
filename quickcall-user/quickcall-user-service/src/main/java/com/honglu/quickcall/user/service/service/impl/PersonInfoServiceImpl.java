@@ -1069,11 +1069,13 @@ public class PersonInfoServiceImpl implements PersonInfoService {
                 customerSkill.setSkillVoiceUrl(bean.getSkillVoiceUrl());
                 customerSkill.setSkillVoiceTime(bean.getSkillVoiceTime());
 
-                // ADUAN -- 技能价格、价格单位、声量、标签 -- 未完成
+                // ADUAN -- 技能价格、价格单位、标签 -- 未完成
                 customerSkill.setSkillPrice(new BigDecimal(20));
                 customerSkill.setServiceUnit("半小时");
-                customerSkill.setSkillVolume(250);
                 customerSkill.setCustomerLabel(Arrays.asList("暖男", "搞笑", "帅气"));
+
+                // ADUAN -- 声量 -- 后期在做
+                customerSkill.setSkillVolume(250);
 
                 skillList.add(customerSkill);
             }
