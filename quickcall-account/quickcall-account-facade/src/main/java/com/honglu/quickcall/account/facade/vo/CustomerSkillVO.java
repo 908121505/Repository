@@ -41,9 +41,6 @@ public class CustomerSkillVO {
     private List<BigDecimal> discontRateList ;
     /**分类项列表*/
     private List<CustomerSkillExtVO>  skillExtList;
-    
-    
-    
     /**技能类型1：按次算     2：按时长算*/
     private  Integer  skillType;
     

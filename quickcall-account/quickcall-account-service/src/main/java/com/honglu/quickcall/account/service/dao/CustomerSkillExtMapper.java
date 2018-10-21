@@ -1,5 +1,7 @@
 package com.honglu.quickcall.account.service.dao;
 
+import java.util.List;
+
 import com.honglu.quickcall.account.facade.entity.CustomerSkillExt;
 
 public interface CustomerSkillExtMapper {
@@ -19,4 +21,8 @@ public interface CustomerSkillExtMapper {
 
    
     int updateByPrimaryKey(CustomerSkillExt record);
+
+
+    /**根据用户技能ID列表查询扩展性信息*/
+	List<CustomerSkillExt> queryCustomerSkillExtList(List<Long> skillIdList);
 }

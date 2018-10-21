@@ -51,6 +51,22 @@ public class CustomerSkill {
     private Integer saturday;
 
     private Integer sunday;
+    
+    
+    private Date mondayEndTime;
+
+    private Date tuesdayEndTime;
+
+    private Date wednesdayEndTime;
+
+    private Date thursdayEndTime;
+
+    private Date fridayEndTime;
+
+    private Date saturdayEndTime;
+
+    private Date sundayEndTime;
+
 
     private Date startServiceTime;
 
@@ -312,4 +328,62 @@ public class CustomerSkill {
     public void setRemark(String remark) {
         this.remark = remark == null ? null : remark.trim();
     }
+
+	public Date getMondayEndTime() {
+		return mondayEndTime;
+	}
+
+	public void setMondayEndTime(Date mondayEndTime) {
+		this.mondayEndTime = mondayEndTime;
+	}
+
+	public Date getTuesdayEndTime() {
+		return tuesdayEndTime;
+	}
+
+	public void setTuesdayEndTime(Date tuesdayEndTime) {
+		this.tuesdayEndTime = tuesdayEndTime;
+	}
+
+	public Date getWednesdayEndTime() {
+		return wednesdayEndTime;
+	}
+
+	public void setWednesdayEndTime(Date wednesdayEndTime) {
+		this.wednesdayEndTime = wednesdayEndTime;
+	}
+
+	public Date getThursdayEndTime() {
+		return thursdayEndTime;
+	}
+
+	public void setThursdayEndTime(Date thursdayEndTime) {
+		this.thursdayEndTime = thursdayEndTime;
+	}
+
+	public Date getFridayEndTime() {
+		return fridayEndTime;
+	}
+
+	public void setFridayEndTime(Date fridayEndTime) {
+		this.fridayEndTime = fridayEndTime;
+	}
+
+	public Date getSaturdayEndTime() {
+		return saturdayEndTime;
+	}
+
+	public void setSaturdayEndTime(Date saturdayEndTime) {
+		this.saturdayEndTime = saturdayEndTime;
+	}
+
+	public Date getSundayEndTime() {
+		return sundayEndTime;
+	}
+
+	public void setSundayEndTime(Date sundayEndTime) {
+		this.sundayEndTime = sundayEndTime;
+	}
+    
+    
 }
