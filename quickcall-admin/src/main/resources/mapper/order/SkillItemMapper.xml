@@ -123,7 +123,7 @@
   </insert>
 
 
-  <update id="updateByPrimaryKeySelective" parameterType="map" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.calf.module.order.entity.SkillItem" >
     update skill_item
     <set >
       <if test="skillItemName != null" >
@@ -210,4 +210,13 @@
 
 
 
+
+  <!-- 查询所有消息技能数据 -->
+  <select id="selectAllValidData" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from skill_item
+    where skill_status=1
+    order by create_time desc
+  </select>
 </mapper>

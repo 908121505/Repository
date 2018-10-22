@@ -11,8 +11,8 @@ import java.util.List;
  * @date 2018-10-20 11:37
  */
 public class CustomerHomeVO implements Serializable {
-    private static final long serialVersionUID = -3988077621764825382L;
 
+    private static final long serialVersionUID = -3988077621764825382L;
     /**
      * 登录客户ID
      */
@@ -98,6 +98,10 @@ public class CustomerHomeVO implements Serializable {
          */
         private String skillName;
         /**
+         * 技能背景图
+         */
+        private String skillImageUrl;
+        /**
          * 技能声音Url
          */
         private String skillVoiceUrl;
@@ -136,6 +140,14 @@ public class CustomerHomeVO implements Serializable {
 
         public void setSkillName(String skillName) {
             this.skillName = skillName;
+        }
+
+        public String getSkillImageUrl() {
+            return skillImageUrl;
+        }
+
+        public void setSkillImageUrl(String skillImageUrl) {
+            this.skillImageUrl = skillImageUrl;
         }
 
         public String getSkillVoiceUrl() {

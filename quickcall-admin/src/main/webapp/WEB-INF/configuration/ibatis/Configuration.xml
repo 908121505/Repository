@@ -35,6 +35,7 @@
 
         <!-- APP配置 -->
         <typeAlias type="com.calf.module.appconfig.entity.Banner" alias="Banner"/>
+        <typeAlias type="com.calf.module.appconfig.entity.EvaluationLabel" alias="EvaluationLabel"/>
 
     </typeAliases>
 </configuration>

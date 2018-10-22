@@ -22,8 +22,11 @@ public class BizCode extends AbstractCodedEnum{
     public static final BizCode UnIdent;
     public static final BizCode ActivityUnBegin;
     public static final BizCode ActivityIsEnd;
-    private ServiceCode serviceCode;
     public static final BizCode ActivityIsNotExist;
+    public static final BizCode ChargeOrderSaveFail;
+    public static final BizCode ChargeOrderFail;
+
+    private ServiceCode serviceCode;
 
     public BizCode() {
 
@@ -63,6 +66,12 @@ public class BizCode extends AbstractCodedEnum{
         ActivityUnBegin = new BizCode("ActivityUnBegin", "695", ServiceCode.Default, "活动未开始");
         ActivityIsEnd = new BizCode("ActivityIsEnd", "694", ServiceCode.Default, "活动已结束");
         ActivityIsNotExist = new BizCode("ActivityIsNotExist", "699", ServiceCode.Default, "活动不存在");
+
+        /**
+         * 300 开头，与支付订单相关
+         */
+        ChargeOrderSaveFail = new BizCode("ChargeOrderSaveFail", "301", ServiceCode.Default, "保存充值订单失败");
+        ChargeOrderFail = new BizCode("ChargeOrderFail", "302", ServiceCode.Default, "充值失败");
 
     }
 }

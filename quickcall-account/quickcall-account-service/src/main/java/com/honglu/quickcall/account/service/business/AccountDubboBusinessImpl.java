@@ -33,6 +33,8 @@ public class AccountDubboBusinessImpl implements AccountDubboBusiness {
 	private IOrderService orderService;
 	@Autowired
 	private BarrageMessageService barrageMessageService;
+	@Autowired
+	private ApplePayService applePayService;
 
 	@Override
 	public CommonResponse excute(AbstractRequest request) {
@@ -128,7 +130,19 @@ public class AccountDubboBusinessImpl implements AccountDubboBusiness {
 				response = orderService.queryRefundReason((QueryRefundReasonRequest) request);
 				break;
 
-		   /////////////////////////////////订单相关结束///////////////////////////////////
+		    /////////////////////////////////订单相关结束///////////////////////////////////
+
+			/////////////////////////////////充值相关结束///////////////////////////////////
+			case AccountFunctionType.APPLY_PAY_RECHARGE:
+				//苹果内购充值
+				response = applePayService.createOrder((ApplePayRequest) request);
+				break;
+			case AccountFunctionType.APPLY_PAY_NOTIFY:
+				//苹果内购回调验证
+				response = applePayService.applePurchase((ApplePurchaseRequest) request);
+				break;
+			/////////////////////////////////充值相关结束///////////////////////////////////
+
 			case AccountFunctionType.CreateUserAccount:
 				// 创建账户
 				response = userAccountService.createAccount((CreateUserAccountRequest) request);
