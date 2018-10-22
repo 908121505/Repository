@@ -10,7 +10,7 @@ import java.math.BigDecimal;
 public class CustomerSkillCertify {
 
 	/**主键ID**/
-	private Integer certifyId;
+	private Long certifyId;
 
 	/**用户编号**/
 	private Long customerId;
@@ -55,7 +55,7 @@ public class CustomerSkillCertify {
 	public CustomerSkillCertify() {
 		super();
 	}
-	public CustomerSkillCertify(Integer certifyId,Long customerId,Long skillItemId,Integer auditStatus,String skillVoiceUrl,BigDecimal skillVoiceTime,String skillVoiceUrlTmp,BigDecimal skillVoiceTimeTmp,Integer isAudited,String createTime,String modifyTime,String createMan,String modifyMan,String remark) {
+	public CustomerSkillCertify(Long certifyId,Long customerId,Long skillItemId,Integer auditStatus,String skillVoiceUrl,BigDecimal skillVoiceTime,String skillVoiceUrlTmp,BigDecimal skillVoiceTimeTmp,Integer isAudited,String createTime,String modifyTime,String createMan,String modifyMan,String remark) {
 		super();
 		this.certifyId = certifyId;
 		this.customerId = customerId;
@@ -72,11 +72,11 @@ public class CustomerSkillCertify {
 		this.modifyMan = modifyMan;
 		this.remark = remark;
 	}
-	public void setCertifyId(Integer certifyId){
+	public void setCertifyId(Long certifyId){
 		this.certifyId = certifyId;
 	}
 
-	public Integer getCertifyId(){
+	public Long getCertifyId(){
 		return this.certifyId;
 	}
 

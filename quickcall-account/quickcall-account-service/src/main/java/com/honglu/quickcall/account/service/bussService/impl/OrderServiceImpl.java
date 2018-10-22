@@ -25,20 +25,22 @@ import com.honglu.quickcall.account.facade.exchange.request.DetailOrderRequest;
 import com.honglu.quickcall.account.facade.exchange.request.DvConfirmRefundRequest;
 import com.honglu.quickcall.account.facade.exchange.request.DvReceiveOrderRequest;
 import com.honglu.quickcall.account.facade.exchange.request.DvStartServiceRequest;
-import com.honglu.quickcall.account.facade.exchange.request.OrderDaVProductRequest;
+import com.honglu.quickcall.account.facade.exchange.request.OrderDaVSkillRequest;
 import com.honglu.quickcall.account.facade.exchange.request.OrderReceiveOrderListRequest;
 import com.honglu.quickcall.account.facade.exchange.request.OrderSaveRequest;
 import com.honglu.quickcall.account.facade.exchange.request.OrderSendOrderListRequest;
 import com.honglu.quickcall.account.facade.exchange.request.PayOrderRequest;
 import com.honglu.quickcall.account.facade.exchange.request.QueryIngOrderCountRequest;
 import com.honglu.quickcall.account.facade.exchange.request.QueryRefundReasonRequest;
-import com.honglu.quickcall.account.facade.vo.OrderDaVProductVO;
+import com.honglu.quickcall.account.facade.vo.OrderDaVSkillVO;
 import com.honglu.quickcall.account.facade.vo.OrderDetailVO;
 import com.honglu.quickcall.account.facade.vo.OrderReceiveOrderListVO;
 import com.honglu.quickcall.account.facade.vo.OrderSendOrderListVO;
+import com.honglu.quickcall.account.facade.vo.OrderSkillItemVO;
 import com.honglu.quickcall.account.service.bussService.AccountService;
 import com.honglu.quickcall.account.service.bussService.CommonService;
 import com.honglu.quickcall.account.service.bussService.IOrderService;
+import com.honglu.quickcall.account.service.dao.CustomerSkillMapper;
 import com.honglu.quickcall.account.service.dao.OrderMapper;
 import com.honglu.quickcall.account.service.dao.ProductMapper;
 import com.honglu.quickcall.common.api.exception.BizException;
@@ -72,6 +74,8 @@ public class OrderServiceImpl implements IOrderService {
 	@Autowired
 	private AccountService  accountService;
 	@Autowired
+	private CustomerSkillMapper  customerSkillMapper;
+	@Autowired
 	private BarrageMessageService barrageMessageService;
 
 	
@@ -80,15 +84,49 @@ public class OrderServiceImpl implements IOrderService {
 	
 	
 	@Override
-	public CommonResponse queryDaVProduct(OrderDaVProductRequest request) {
+	public CommonResponse queryDaVSkill(OrderDaVSkillRequest request) {
 		if (request == null || request.getCustomerId() == null) {
 			throw new BizException(AccountBizReturnCode.paramError, "查询技能信息参数异常");
 		}
-		LOGGER.info("======>>>>>queryDaVProduct()入参："+request.toString());
-		Long  customerId =  request.getCustomerId();
-		List<OrderDaVProductVO>  resultList =  productMapper.selectDaVPersonalProduct(customerId);
+		LOGGER.info("======>>>>>queryDaVSkill()入参："+request.toString());
+//		List<OrderDaVSkillVO>  resultList =  new ArrayList<OrderDaVSkillVO>();
+//		Long  customerId =  request.getCustomerId();
+//		List<OrderDaVSkillVO>  resultList =  customerSkillMapper.selectDaVSkill(customerId);
+		
+		OrderDaVSkillVO  skill =  new OrderDaVSkillVO();
+		skill.setHeadPortraitUrl("http://test-guanjia.oss-cn-shanghai.aliyuncs.com/voice/user/headimg/c2bb9b11facd4ef98126d3a0ab495cd4.jpg");
+		skill.setNickName("测试");
+		skill.setServiceId(1000L);
+		List<OrderSkillItemVO> custSkillList = new  ArrayList<>();
+	
+		for (int i = 0; i < 3; i++) {
+			OrderSkillItemVO  vo =  new OrderSkillItemVO();
+			vo.setPrice(new BigDecimal(10 *(i +1)));
+			vo.setUserSkillItemId(1000L);
+			String  serviceUnit  = null ;
+			String  skillItemName  = "哄睡" ;
+			if(i == 0){
+				skillItemName  = "哄睡" ;
+				serviceUnit = "半小时";
+			}else if (i == 1){
+				skillItemName  = "情感咨询" ;
+				serviceUnit = "小时";
+				
+			}else{
+				skillItemName  = "叫醒" ;
+				serviceUnit = "次";
+				
+			}
+			vo.setServiceUnit(serviceUnit);
+			vo.setSkillItemName(skillItemName);
+			custSkillList.add(vo);
+		}
+		skill.setCustSkillList(custSkillList );
+		
+		
+		
 		CommonResponse commonResponse = commonService.getCommonResponse();
-		commonResponse.setData(resultList);
+		commonResponse.setData(skill);
 		LOGGER.info("======>>>>>用户编号为：" + request.getCustomerId() + "查询成功");
 		return commonResponse;
 	}
@@ -111,14 +149,14 @@ public class OrderServiceImpl implements IOrderService {
 		
 		Long  sellerId =  request.getSellerId() ;
 		record.setOrderId(orderId);
-		record.setBuyerId(customerId);
+//		record.setBuyerId(customerId);
 		record.setCreateTime(new Date());
 		Integer  orderNum =  request.getOrderNum();
 		BigDecimal  price =  request.getPrice();
 		BigDecimal orderAmounts = new BigDecimal(orderNum).multiply(price);
-		record.setProductId(request.getProductId());
+//		record.setProductId(request.getProductId());
 		record.setOrderAmounts(orderAmounts);
-		record.setSellerId(sellerId);
+//		record.setSellerId(sellerId);
 		record.setOrderNum(orderNum);
 		record.setOrderStatus(OrderSkillConstants.ORDER_STATUS_NOT_PAY);
 		record.setOrderTime(new Date());
@@ -248,9 +286,9 @@ public class OrderServiceImpl implements IOrderService {
 				commonService.updateOrder(orderId, orderStatus,null);
 				//金额不为空，说明需要退款给用户
 				if(payAmount != null){
-					Long  buyerId =  order.getBuyerId();
+//					Long  buyerId =  order.getBuyerId();
 //					accountMapper.inAccount(buyerId, payAmount,TransferTypeEnum.RECHARGE.getType());
-					accountService.inAccount(buyerId, payAmount,TransferTypeEnum.RECHARGE,AccountBusinessTypeEnum.OrderRefund);
+//					accountService.inAccount(buyerId, payAmount,TransferTypeEnum.RECHARGE,AccountBusinessTypeEnum.OrderRefund);
 				}
 			}
 		}
@@ -335,8 +373,8 @@ public class OrderServiceImpl implements IOrderService {
 		Order  order = orderMapper.selectByPrimaryKey(orderId);
 		if(order != null){
 			BigDecimal  payAmount =  order.getOrderAmounts();
-			Long  userId =  order.getBuyerId();
-			Long  sellerId =  order.getSellerId();
+			Long  userId =  order.getOrderId();
+			Long  sellerId =  order.getOrderId();
 			//判断余额是否充足
 			Account account=accountService.queryAccount(userId);
 			//消费用户的充值金额
@@ -419,8 +457,8 @@ public class OrderServiceImpl implements IOrderService {
 				//只有进行中才能进行退款
 				throw new BizException(AccountBizReturnCode.ORDER_STATUS_ERROR, "订单状态异常");
 			}
-			Long  sellerId =  order.getSellerId();//主播ID
-			Long  userId =  order.getBuyerId();
+			Long  sellerId =  order.getOrderId();//主播ID
+			Long  userId =  order.getOrderId();
 			if(OrderSkillConstants.REQUEST_REFUND_TYPE_REFUND == type ){
 				//退款理由
 				String  refundReason = request.getRefundReason();
@@ -477,7 +515,7 @@ public class OrderServiceImpl implements IOrderService {
 			}else{
 				newOrderStatus = OrderSkillConstants.ORDER_STATUS_CUST_REFUSE_DV_START_SERVICE;
 				//退钱给用户
-				Long  customerId =  order.getBuyerId();
+				Long  customerId =  order.getCustomerId();
 				BigDecimal   payAmount =  order.getOrderAmounts();
 				accountService.inAccount(customerId, payAmount, TransferTypeEnum.RECHARGE,AccountBusinessTypeEnum.OrderRefund);
 			}
@@ -527,7 +565,7 @@ public class OrderServiceImpl implements IOrderService {
 			}else {
 				newOrderStatus = OrderSkillConstants.ORDER_STATUS_PAYED_DV_REFUSE;
 				BigDecimal  payAmount = order.getOrderAmounts();
-				Long   buyerId =  order.getBuyerId();
+				Long   buyerId =  order.getCustomerId();
 				accountService.inAccount(buyerId, payAmount, TransferTypeEnum.RECHARGE,AccountBusinessTypeEnum.OrderRefund);
 			}
 			commonService.updateOrder(orderId, newOrderStatus,null);
@@ -610,7 +648,7 @@ public class OrderServiceImpl implements IOrderService {
 			commonService.updateOrder(orderId, newOrderStatus,null);
 			//大V同意退款
 			if(OrderSkillConstants.REQUEST_DV_REFUND_TYPE_YES == type ){
-				Long  customerId =  order.getBuyerId();
+				Long  customerId =  order.getCustomerId();
 				BigDecimal  payAmount = order.getOrderAmounts();
 				//大V同意退款，对消费客户入账
 				accountService.inAccount(customerId, payAmount,TransferTypeEnum.RECHARGE,AccountBusinessTypeEnum.OrderRefund);

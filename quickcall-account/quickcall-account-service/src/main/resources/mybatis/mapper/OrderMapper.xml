@@ -2,27 +2,33 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.honglu.quickcall.account.service.dao.OrderMapper" >
   <resultMap id="BaseResultMap" type="com.honglu.quickcall.account.facade.entity.Order" >
-    <id column="order_id" property="orderId" jdbcType="BIGINT" />
+   <id column="order_id" property="orderId" jdbcType="BIGINT" />
+    <result column="order_no" property="orderNo" jdbcType="BIGINT" />
+    <result column="customer_skill_id" property="customerSkillId" jdbcType="BIGINT" />
+    <result column="customer_id" property="customerId" jdbcType="BIGINT" />
+    <result column="service_id" property="serviceId" jdbcType="BIGINT" />
     <result column="trade_id" property="tradeId" jdbcType="BIGINT" />
-    <result column="product_id" property="productId" jdbcType="BIGINT" />
-    <result column="buyer_id" property="buyerId" jdbcType="BIGINT" />
-    <result column="seller_id" property="sellerId" jdbcType="BIGINT" />
-    <result column="order_describe" property="orderDescribe" jdbcType="VARCHAR" />
-    <result column="order_num" property="orderNum" jdbcType="INTEGER" />
-    <result column="order_amounts" property="orderAmounts" jdbcType="DECIMAL" />
     <result column="payment_type" property="paymentType" jdbcType="TINYINT" />
-    <result column="confirm_time" property="confirmTime" jdbcType="TIMESTAMP" />
+    <result column="order_num" property="orderNum" jdbcType="INTEGER" />
+    <result column="service_unit" property="serviceUnit" jdbcType="VARCHAR" />
+    <result column="service_price" property="servicePrice" jdbcType="DECIMAL" />
+    <result column="order_amounts" property="orderAmounts" jdbcType="DECIMAL" />
+    <result column="discount_rate" property="discountRate" jdbcType="DECIMAL" />
+    <result column="cust_cancel_time" property="custCancelTime" jdbcType="TIMESTAMP" />
+    <result column="system_cancel_time" property="systemCancelTime" jdbcType="TIMESTAMP" />
+    <result column="receive_order_time" property="receiveOrderTime" jdbcType="TIMESTAMP" />
+    <result column="start_service_time" property="startServiceTime" jdbcType="TIMESTAMP" />
+    <result column="appay_end_time" property="appayEndTime" jdbcType="TIMESTAMP" />
     <result column="start_time" property="startTime" jdbcType="TIMESTAMP" />
     <result column="end_time" property="endTime" jdbcType="TIMESTAMP" />
     <result column="order_time" property="orderTime" jdbcType="TIMESTAMP" />
-    <result column="finish_time" property="finishTime" jdbcType="TIMESTAMP" />
     <result column="order_status" property="orderStatus" jdbcType="TINYINT" />
-    <result column="refund_reason" property="refundReason" jdbcType="VARCHAR" />
     <result column="payment_time" property="paymentTime" jdbcType="TIMESTAMP" />
-    <result column="consign_time" property="consignTime" jdbcType="TIMESTAMP" />
-    <result column="buyer_is_evaluate" property="buyerIsEvaluate" jdbcType="TINYINT" />
-    <result column="buyer_message" property="buyerMessage" jdbcType="VARCHAR" />
-    <result column="buyer_evaluate" property="buyerEvaluate" jdbcType="VARCHAR" />
+    <result column="customer_is_evaluate" property="customerIsEvaluate" jdbcType="TINYINT" />
+    <result column="customer_message" property="customerMessage" jdbcType="VARCHAR" />
+    <result column="evaluate_start" property="evaluateStart" jdbcType="INTEGER" />
+    <result column="customer_evaluate" property="customerEvaluate" jdbcType="VARCHAR" />
+    <result column="order_describe" property="orderDescribe" jdbcType="VARCHAR" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
     <result column="create_man" property="createMan" jdbcType="VARCHAR" />
@@ -34,10 +40,12 @@
   
   
   <sql id="Base_Column_List" >
-    order_id, trade_id, product_id, buyer_id, seller_id, order_describe, order_num, order_amounts, 
-    payment_type, confirm_time, start_time, end_time, order_time, finish_time, order_status, 
-    refund_reason, payment_time, consign_time, buyer_is_evaluate, buyer_message, buyer_evaluate, 
-    create_time, modify_time, create_man, modify_man, remark
+    order_id, order_no, customer_skill_id, customer_id, service_id, trade_id, payment_type, 
+    order_num, service_unit, service_price, order_amounts, discount_rate, cust_cancel_time, 
+    system_cancel_time, receive_order_time, start_service_time, appay_end_time, start_time, 
+    end_time, order_time, order_status, payment_time, customer_is_evaluate, customer_message, 
+    evaluate_start, customer_evaluate, order_describe, create_time, modify_time, create_man, 
+    modify_man, remark
   </sql>
 
 
@@ -56,59 +64,84 @@
 
 
   <insert id="insert" parameterType="com.honglu.quickcall.account.facade.entity.Order" >
-    insert into orders (order_id, trade_id, product_id, 
-      buyer_id, seller_id, order_describe, 
-      order_num, order_amounts, payment_type, 
-      confirm_time, start_time, end_time, 
-      order_time, finish_time, order_status, 
-      refund_reason, payment_time, consign_time, 
-      buyer_is_evaluate, buyer_message, buyer_evaluate, 
+    insert into order (order_id, order_no, customer_skill_id, 
+      customer_id, service_id, trade_id, 
+      payment_type, order_num, service_unit, 
+      service_price, order_amounts, discount_rate, 
+      cust_cancel_time, system_cancel_time, receive_order_time, 
+      start_service_time, appay_end_time, start_time, 
+      end_time, order_time, order_status, 
+      payment_time, customer_is_evaluate, customer_message, 
+      evaluate_start, customer_evaluate, order_describe, 
       create_time, modify_time, create_man, 
       modify_man, remark)
-    values (#{orderId,jdbcType=BIGINT}, #{tradeId,jdbcType=BIGINT}, #{productId,jdbcType=BIGINT}, 
-      #{buyerId,jdbcType=BIGINT}, #{sellerId,jdbcType=BIGINT}, #{orderDescribe,jdbcType=VARCHAR}, 
-      #{orderNum,jdbcType=INTEGER}, #{orderAmounts,jdbcType=DECIMAL}, #{paymentType,jdbcType=TINYINT}, 
-      #{confirmTime,jdbcType=TIMESTAMP}, #{startTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP}, 
-      #{orderTime,jdbcType=TIMESTAMP}, #{finishTime,jdbcType=TIMESTAMP}, #{orderStatus,jdbcType=TINYINT}, 
-      #{refundReason,jdbcType=VARCHAR}, #{paymentTime,jdbcType=TIMESTAMP}, #{consignTime,jdbcType=TIMESTAMP}, 
-      #{buyerIsEvaluate,jdbcType=TINYINT}, #{buyerMessage,jdbcType=VARCHAR}, #{buyerEvaluate,jdbcType=VARCHAR}, 
+    values (#{orderId,jdbcType=BIGINT}, #{orderNo,jdbcType=BIGINT}, #{customerSkillId,jdbcType=BIGINT}, 
+      #{customerId,jdbcType=BIGINT}, #{serviceId,jdbcType=BIGINT}, #{tradeId,jdbcType=BIGINT}, 
+      #{paymentType,jdbcType=TINYINT}, #{orderNum,jdbcType=INTEGER}, #{serviceUnit,jdbcType=VARCHAR}, 
+      #{servicePrice,jdbcType=DECIMAL}, #{orderAmounts,jdbcType=DECIMAL}, #{discountRate,jdbcType=DECIMAL}, 
+      #{custCancelTime,jdbcType=TIMESTAMP}, #{systemCancelTime,jdbcType=TIMESTAMP}, #{receiveOrderTime,jdbcType=TIMESTAMP}, 
+      #{startServiceTime,jdbcType=TIMESTAMP}, #{appayEndTime,jdbcType=TIMESTAMP}, #{startTime,jdbcType=TIMESTAMP}, 
+      #{endTime,jdbcType=TIMESTAMP}, #{orderTime,jdbcType=TIMESTAMP}, #{orderStatus,jdbcType=TINYINT}, 
+      #{paymentTime,jdbcType=TIMESTAMP}, #{customerIsEvaluate,jdbcType=TINYINT}, #{customerMessage,jdbcType=VARCHAR}, 
+      #{evaluateStart,jdbcType=INTEGER}, #{customerEvaluate,jdbcType=VARCHAR}, #{orderDescribe,jdbcType=VARCHAR}, 
       #{createTime,jdbcType=TIMESTAMP}, #{modifyTime,jdbcType=TIMESTAMP}, #{createMan,jdbcType=VARCHAR}, 
       #{modifyMan,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR})
   </insert>
   
   
   <insert id="insertSelective" parameterType="com.honglu.quickcall.account.facade.entity.Order" >
-    insert into orders
+  insert into order
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="orderId != null" >
         order_id,
       </if>
+      <if test="orderNo != null" >
+        order_no,
+      </if>
+      <if test="customerSkillId != null" >
+        customer_skill_id,
+      </if>
+      <if test="customerId != null" >
+        customer_id,
+      </if>
+      <if test="serviceId != null" >
+        service_id,
+      </if>
       <if test="tradeId != null" >
         trade_id,
-      </if>
-      <if test="productId != null" >
-        product_id,
-      </if>
-      <if test="buyerId != null" >
-        buyer_id,
-      </if>
-      <if test="sellerId != null" >
-        seller_id,
-      </if>
-      <if test="orderDescribe != null" >
-        order_describe,
-      </if>
-      <if test="orderNum != null" >
-        order_num,
-      </if>
-      <if test="orderAmounts != null" >
-        order_amounts,
       </if>
       <if test="paymentType != null" >
         payment_type,
       </if>
-      <if test="confirmTime != null" >
-        confirm_time,
+      <if test="orderNum != null" >
+        order_num,
+      </if>
+      <if test="serviceUnit != null" >
+        service_unit,
+      </if>
+      <if test="servicePrice != null" >
+        service_price,
+      </if>
+      <if test="orderAmounts != null" >
+        order_amounts,
+      </if>
+      <if test="discountRate != null" >
+        discount_rate,
+      </if>
+      <if test="custCancelTime != null" >
+        cust_cancel_time,
+      </if>
+      <if test="systemCancelTime != null" >
+        system_cancel_time,
+      </if>
+      <if test="receiveOrderTime != null" >
+        receive_order_time,
+      </if>
+      <if test="startServiceTime != null" >
+        start_service_time,
+      </if>
+      <if test="appayEndTime != null" >
+        appay_end_time,
       </if>
       <if test="startTime != null" >
         start_time,
@@ -119,29 +152,26 @@
       <if test="orderTime != null" >
         order_time,
       </if>
-      <if test="finishTime != null" >
-        finish_time,
-      </if>
       <if test="orderStatus != null" >
         order_status,
-      </if>
-      <if test="refundReason != null" >
-        refund_reason,
       </if>
       <if test="paymentTime != null" >
         payment_time,
       </if>
-      <if test="consignTime != null" >
-        consign_time,
+      <if test="customerIsEvaluate != null" >
+        customer_is_evaluate,
       </if>
-      <if test="buyerIsEvaluate != null" >
-        buyer_is_evaluate,
+      <if test="customerMessage != null" >
+        customer_message,
       </if>
-      <if test="buyerMessage != null" >
-        buyer_message,
+      <if test="evaluateStart != null" >
+        evaluate_start,
       </if>
-      <if test="buyerEvaluate != null" >
-        buyer_evaluate,
+      <if test="customerEvaluate != null" >
+        customer_evaluate,
+      </if>
+      <if test="orderDescribe != null" >
+        order_describe,
       </if>
       <if test="createTime != null" >
         create_time,
@@ -163,32 +193,53 @@
       <if test="orderId != null" >
         #{orderId,jdbcType=BIGINT},
       </if>
+      <if test="orderNo != null" >
+        #{orderNo,jdbcType=BIGINT},
+      </if>
+      <if test="customerSkillId != null" >
+        #{customerSkillId,jdbcType=BIGINT},
+      </if>
+      <if test="customerId != null" >
+        #{customerId,jdbcType=BIGINT},
+      </if>
+      <if test="serviceId != null" >
+        #{serviceId,jdbcType=BIGINT},
+      </if>
       <if test="tradeId != null" >
         #{tradeId,jdbcType=BIGINT},
-      </if>
-      <if test="productId != null" >
-        #{productId,jdbcType=BIGINT},
-      </if>
-      <if test="buyerId != null" >
-        #{buyerId,jdbcType=BIGINT},
-      </if>
-      <if test="sellerId != null" >
-        #{sellerId,jdbcType=BIGINT},
-      </if>
-      <if test="orderDescribe != null" >
-        #{orderDescribe,jdbcType=VARCHAR},
-      </if>
-      <if test="orderNum != null" >
-        #{orderNum,jdbcType=INTEGER},
-      </if>
-      <if test="orderAmounts != null" >
-        #{orderAmounts,jdbcType=DECIMAL},
       </if>
       <if test="paymentType != null" >
         #{paymentType,jdbcType=TINYINT},
       </if>
-      <if test="confirmTime != null" >
-        #{confirmTime,jdbcType=TIMESTAMP},
+      <if test="orderNum != null" >
+        #{orderNum,jdbcType=INTEGER},
+      </if>
+      <if test="serviceUnit != null" >
+        #{serviceUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="servicePrice != null" >
+        #{servicePrice,jdbcType=DECIMAL},
+      </if>
+      <if test="orderAmounts != null" >
+        #{orderAmounts,jdbcType=DECIMAL},
+      </if>
+      <if test="discountRate != null" >
+        #{discountRate,jdbcType=DECIMAL},
+      </if>
+      <if test="custCancelTime != null" >
+        #{custCancelTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="systemCancelTime != null" >
+        #{systemCancelTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="receiveOrderTime != null" >
+        #{receiveOrderTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="startServiceTime != null" >
+        #{startServiceTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="appayEndTime != null" >
+        #{appayEndTime,jdbcType=TIMESTAMP},
       </if>
       <if test="startTime != null" >
         #{startTime,jdbcType=TIMESTAMP},
@@ -199,29 +250,26 @@
       <if test="orderTime != null" >
         #{orderTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="finishTime != null" >
-        #{finishTime,jdbcType=TIMESTAMP},
-      </if>
       <if test="orderStatus != null" >
         #{orderStatus,jdbcType=TINYINT},
-      </if>
-      <if test="refundReason != null" >
-        #{refundReason,jdbcType=VARCHAR},
       </if>
       <if test="paymentTime != null" >
         #{paymentTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="consignTime != null" >
-        #{consignTime,jdbcType=TIMESTAMP},
+      <if test="customerIsEvaluate != null" >
+        #{customerIsEvaluate,jdbcType=TINYINT},
       </if>
-      <if test="buyerIsEvaluate != null" >
-        #{buyerIsEvaluate,jdbcType=TINYINT},
+      <if test="customerMessage != null" >
+        #{customerMessage,jdbcType=VARCHAR},
       </if>
-      <if test="buyerMessage != null" >
-        #{buyerMessage,jdbcType=VARCHAR},
+      <if test="evaluateStart != null" >
+        #{evaluateStart,jdbcType=INTEGER},
       </if>
-      <if test="buyerEvaluate != null" >
-        #{buyerEvaluate,jdbcType=VARCHAR},
+      <if test="customerEvaluate != null" >
+        #{customerEvaluate,jdbcType=VARCHAR},
+      </if>
+      <if test="orderDescribe != null" >
+        #{orderDescribe,jdbcType=VARCHAR},
       </if>
       <if test="createTime != null" >
         #{createTime,jdbcType=TIMESTAMP},
@@ -245,34 +293,55 @@
 
 
   <update id="updateByPrimaryKeySelective" parameterType="com.honglu.quickcall.account.facade.entity.Order" >
-    update orders
+    update order
     <set >
+      <if test="orderNo != null" >
+        order_no = #{orderNo,jdbcType=BIGINT},
+      </if>
+      <if test="customerSkillId != null" >
+        customer_skill_id = #{customerSkillId,jdbcType=BIGINT},
+      </if>
+      <if test="customerId != null" >
+        customer_id = #{customerId,jdbcType=BIGINT},
+      </if>
+      <if test="serviceId != null" >
+        service_id = #{serviceId,jdbcType=BIGINT},
+      </if>
       <if test="tradeId != null" >
         trade_id = #{tradeId,jdbcType=BIGINT},
-      </if>
-      <if test="productId != null" >
-        product_id = #{productId,jdbcType=BIGINT},
-      </if>
-      <if test="buyerId != null" >
-        buyer_id = #{buyerId,jdbcType=BIGINT},
-      </if>
-      <if test="sellerId != null" >
-        seller_id = #{sellerId,jdbcType=BIGINT},
-      </if>
-      <if test="orderDescribe != null" >
-        order_describe = #{orderDescribe,jdbcType=VARCHAR},
-      </if>
-      <if test="orderNum != null" >
-        order_num = #{orderNum,jdbcType=INTEGER},
-      </if>
-      <if test="orderAmounts != null" >
-        order_amounts = #{orderAmounts,jdbcType=DECIMAL},
       </if>
       <if test="paymentType != null" >
         payment_type = #{paymentType,jdbcType=TINYINT},
       </if>
-      <if test="confirmTime != null" >
-        confirm_time = #{confirmTime,jdbcType=TIMESTAMP},
+      <if test="orderNum != null" >
+        order_num = #{orderNum,jdbcType=INTEGER},
+      </if>
+      <if test="serviceUnit != null" >
+        service_unit = #{serviceUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="servicePrice != null" >
+        service_price = #{servicePrice,jdbcType=DECIMAL},
+      </if>
+      <if test="orderAmounts != null" >
+        order_amounts = #{orderAmounts,jdbcType=DECIMAL},
+      </if>
+      <if test="discountRate != null" >
+        discount_rate = #{discountRate,jdbcType=DECIMAL},
+      </if>
+      <if test="custCancelTime != null" >
+        cust_cancel_time = #{custCancelTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="systemCancelTime != null" >
+        system_cancel_time = #{systemCancelTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="receiveOrderTime != null" >
+        receive_order_time = #{receiveOrderTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="startServiceTime != null" >
+        start_service_time = #{startServiceTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="appayEndTime != null" >
+        appay_end_time = #{appayEndTime,jdbcType=TIMESTAMP},
       </if>
       <if test="startTime != null" >
         start_time = #{startTime,jdbcType=TIMESTAMP},
@@ -283,29 +352,26 @@
       <if test="orderTime != null" >
         order_time = #{orderTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="finishTime != null" >
-        finish_time = #{finishTime,jdbcType=TIMESTAMP},
-      </if>
       <if test="orderStatus != null" >
         order_status = #{orderStatus,jdbcType=TINYINT},
-      </if>
-      <if test="refundReason != null" >
-        refund_reason = #{refundReason,jdbcType=VARCHAR},
       </if>
       <if test="paymentTime != null" >
         payment_time = #{paymentTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="consignTime != null" >
-        consign_time = #{consignTime,jdbcType=TIMESTAMP},
+      <if test="customerIsEvaluate != null" >
+        customer_is_evaluate = #{customerIsEvaluate,jdbcType=TINYINT},
       </if>
-      <if test="buyerIsEvaluate != null" >
-        buyer_is_evaluate = #{buyerIsEvaluate,jdbcType=TINYINT},
+      <if test="customerMessage != null" >
+        customer_message = #{customerMessage,jdbcType=VARCHAR},
       </if>
-      <if test="buyerMessage != null" >
-        buyer_message = #{buyerMessage,jdbcType=VARCHAR},
+      <if test="evaluateStart != null" >
+        evaluate_start = #{evaluateStart,jdbcType=INTEGER},
       </if>
-      <if test="buyerEvaluate != null" >
-        buyer_evaluate = #{buyerEvaluate,jdbcType=VARCHAR},
+      <if test="customerEvaluate != null" >
+        customer_evaluate = #{customerEvaluate,jdbcType=VARCHAR},
+      </if>
+      <if test="orderDescribe != null" >
+        order_describe = #{orderDescribe,jdbcType=VARCHAR},
       </if>
       <if test="createTime != null" >
         create_time = #{createTime,jdbcType=TIMESTAMP},
@@ -329,27 +395,33 @@
   
   
   <update id="updateByPrimaryKey" parameterType="com.honglu.quickcall.account.facade.entity.Order" >
-    update orders
-    set trade_id = #{tradeId,jdbcType=BIGINT},
-      product_id = #{productId,jdbcType=BIGINT},
-      buyer_id = #{buyerId,jdbcType=BIGINT},
-      seller_id = #{sellerId,jdbcType=BIGINT},
-      order_describe = #{orderDescribe,jdbcType=VARCHAR},
-      order_num = #{orderNum,jdbcType=INTEGER},
-      order_amounts = #{orderAmounts,jdbcType=DECIMAL},
+   update order
+    set order_no = #{orderNo,jdbcType=BIGINT},
+      customer_skill_id = #{customerSkillId,jdbcType=BIGINT},
+      customer_id = #{customerId,jdbcType=BIGINT},
+      service_id = #{serviceId,jdbcType=BIGINT},
+      trade_id = #{tradeId,jdbcType=BIGINT},
       payment_type = #{paymentType,jdbcType=TINYINT},
-      confirm_time = #{confirmTime,jdbcType=TIMESTAMP},
+      order_num = #{orderNum,jdbcType=INTEGER},
+      service_unit = #{serviceUnit,jdbcType=VARCHAR},
+      service_price = #{servicePrice,jdbcType=DECIMAL},
+      order_amounts = #{orderAmounts,jdbcType=DECIMAL},
+      discount_rate = #{discountRate,jdbcType=DECIMAL},
+      cust_cancel_time = #{custCancelTime,jdbcType=TIMESTAMP},
+      system_cancel_time = #{systemCancelTime,jdbcType=TIMESTAMP},
+      receive_order_time = #{receiveOrderTime,jdbcType=TIMESTAMP},
+      start_service_time = #{startServiceTime,jdbcType=TIMESTAMP},
+      appay_end_time = #{appayEndTime,jdbcType=TIMESTAMP},
       start_time = #{startTime,jdbcType=TIMESTAMP},
       end_time = #{endTime,jdbcType=TIMESTAMP},
       order_time = #{orderTime,jdbcType=TIMESTAMP},
-      finish_time = #{finishTime,jdbcType=TIMESTAMP},
       order_status = #{orderStatus,jdbcType=TINYINT},
-      refund_reason = #{refundReason,jdbcType=VARCHAR},
       payment_time = #{paymentTime,jdbcType=TIMESTAMP},
-      consign_time = #{consignTime,jdbcType=TIMESTAMP},
-      buyer_is_evaluate = #{buyerIsEvaluate,jdbcType=TINYINT},
-      buyer_message = #{buyerMessage,jdbcType=VARCHAR},
-      buyer_evaluate = #{buyerEvaluate,jdbcType=VARCHAR},
+      customer_is_evaluate = #{customerIsEvaluate,jdbcType=TINYINT},
+      customer_message = #{customerMessage,jdbcType=VARCHAR},
+      evaluate_start = #{evaluateStart,jdbcType=INTEGER},
+      customer_evaluate = #{customerEvaluate,jdbcType=VARCHAR},
+      order_describe = #{orderDescribe,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       modify_time = #{modifyTime,jdbcType=TIMESTAMP},
       create_man = #{createMan,jdbcType=VARCHAR},

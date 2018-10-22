@@ -11,14 +11,6 @@ import com.honglu.quickcall.user.facade.exchange.request.*;
 public interface PersonInfoService {
 
 	/**
-	 * 根据用户id 获取用户信息
-	 *
-	 * @param params
-	 * @return
-	 */
-	CommonResponse queryPersonInfo(PersonInfoRequest params);
-
-	/**
 	 * 保存昵称/头像
 	 */
 	CommonResponse saveNicknameImage(SaveNickNameRequest params);
@@ -47,11 +39,6 @@ public interface PersonInfoService {
 	 * 保存职业
 	 */
 	CommonResponse saveOccupation(SaveOccupationRequest params);
-
-	/**
-	 * 大V主页，普通用户主页（客态）
-	 */
-	CommonResponse showHomePageLogout(ShowHomePageLogout params);
 
 	/** 查询兴趣列表 */
 	CommonResponse queryInterestList(QueryInterestListRequest request);

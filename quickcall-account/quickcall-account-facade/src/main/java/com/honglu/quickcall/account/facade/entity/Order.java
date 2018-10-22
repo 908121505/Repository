@@ -3,36 +3,65 @@ package com.honglu.quickcall.account.facade.entity;
 import java.math.BigDecimal;
 import java.util.Date;
 
+/**
+ * 
+ * Copyright © 2018 www.xiaoniu.com All rights reserved.
+ * 
+ * 功能描述：订单信息
+ * @Package: com.honglu.quickcall.user.facade.entity 
+ * @author: chenliuguang   
+ * @date: 2018年10月22日 上午10:18:06
+ */
 public class Order {
-    
     private Long orderId;
+
+   
+    private Long orderNo;
+
+    
+    private Long customerSkillId;
+
+   
+    private Long customerId;
+
+    
+    private Long serviceId;
 
     
     private Long tradeId;
 
     
-    private Long productId;
-
-    
-    private Long buyerId;
-
-   
-    private Long sellerId;
-
-   
-    private String orderDescribe;
-
-   
-    private Integer orderNum;
-
-   
-    private BigDecimal orderAmounts;
-
-    
     private Integer paymentType;
 
     
-    private Date confirmTime;
+    private Integer orderNum;
+
+    
+    private String serviceUnit;
+
+   
+    private BigDecimal servicePrice;
+
+    
+    private BigDecimal orderAmounts;
+
+    
+    private BigDecimal discountRate;
+
+    
+    private Date custCancelTime;
+
+    
+    private Date systemCancelTime;
+
+    
+    private Date receiveOrderTime;
+
+   
+    private Date startServiceTime;
+
+    
+    private Date appayEndTime;
 
     
     private Date startTime;
@@ -40,32 +69,29 @@ public class Order {
     
     private Date endTime;
 
-   
+    
     private Date orderTime;
-
-   
-    private Date finishTime;
 
     
     private Integer orderStatus;
 
    
-    private String refundReason;
-
-    
     private Date paymentTime;
 
     
-    private Date consignTime;
+    private Integer customerIsEvaluate;
 
     
-    private Integer buyerIsEvaluate;
-
-   
-    private String buyerMessage;
+    private String customerMessage;
 
     
-    private String buyerEvaluate;
+    private Integer evaluateStart;
+
+    
+    private String customerEvaluate;
+
+    
+    private String orderDescribe;
 
     
     private Date createTime;
@@ -73,7 +99,7 @@ public class Order {
     
     private Date modifyTime;
 
-    
+   
     private String createMan;
 
     
@@ -93,6 +119,46 @@ public class Order {
     }
 
     
+    public Long getOrderNo() {
+        return orderNo;
+    }
+
+   
+    public void setOrderNo(Long orderNo) {
+        this.orderNo = orderNo;
+    }
+
+    
+    public Long getCustomerSkillId() {
+        return customerSkillId;
+    }
+
+    
+    public void setCustomerSkillId(Long customerSkillId) {
+        this.customerSkillId = customerSkillId;
+    }
+
+    
+    public Long getCustomerId() {
+        return customerId;
+    }
+
+    
+    public void setCustomerId(Long customerId) {
+        this.customerId = customerId;
+    }
+
+    
+    public Long getServiceId() {
+        return serviceId;
+    }
+
+    
+    public void setServiceId(Long serviceId) {
+        this.serviceId = serviceId;
+    }
+
+   
     public Long getTradeId() {
         return tradeId;
     }
@@ -100,65 +166,6 @@ public class Order {
     
     public void setTradeId(Long tradeId) {
         this.tradeId = tradeId;
-    }
-
-   
-    public Long getProductId() {
-        return productId;
-    }
-
-    
-    public void setProductId(Long productId) {
-        this.productId = productId;
-    }
-
-    
-    public Long getBuyerId() {
-        return buyerId;
-    }
-
-    
-    public void setBuyerId(Long buyerId) {
-        this.buyerId = buyerId;
-    }
-
-    
-    public Long getSellerId() {
-        return sellerId;
-    }
-
-    public void setSellerId(Long sellerId) {
-        this.sellerId = sellerId;
-    }
-
-   
-    public String getOrderDescribe() {
-        return orderDescribe;
-    }
-
-    
-    public void setOrderDescribe(String orderDescribe) {
-        this.orderDescribe = orderDescribe == null ? null : orderDescribe.trim();
-    }
-
-    
-    public Integer getOrderNum() {
-        return orderNum;
-    }
-
-   
-    public void setOrderNum(Integer orderNum) {
-        this.orderNum = orderNum;
-    }
-
-    
-    public BigDecimal getOrderAmounts() {
-        return orderAmounts;
-    }
-
-    
-    public void setOrderAmounts(BigDecimal orderAmounts) {
-        this.orderAmounts = orderAmounts;
     }
 
     
@@ -172,154 +179,235 @@ public class Order {
     }
 
     
-    public Date getConfirmTime() {
-        return confirmTime;
-    }
-
-   
-    public void setConfirmTime(Date confirmTime) {
-        this.confirmTime = confirmTime;
+    public Integer getOrderNum() {
+        return orderNum;
     }
 
     
+    public void setOrderNum(Integer orderNum) {
+        this.orderNum = orderNum;
+    }
+
+    
+    public String getServiceUnit() {
+        return serviceUnit;
+    }
+
+    
+    public void setServiceUnit(String serviceUnit) {
+        this.serviceUnit = serviceUnit == null ? null : serviceUnit.trim();
+    }
+
+   
+    public BigDecimal getServicePrice() {
+        return servicePrice;
+    }
+
+   
+    public void setServicePrice(BigDecimal servicePrice) {
+        this.servicePrice = servicePrice;
+    }
+
+    
+    public BigDecimal getOrderAmounts() {
+        return orderAmounts;
+    }
+
+    
+    public void setOrderAmounts(BigDecimal orderAmounts) {
+        this.orderAmounts = orderAmounts;
+    }
+
+   
+    public BigDecimal getDiscountRate() {
+        return discountRate;
+    }
+
+
+    public void setDiscountRate(BigDecimal discountRate) {
+        this.discountRate = discountRate;
+    }
+
+
+    public Date getCustCancelTime() {
+        return custCancelTime;
+    }
+
+
+    public void setCustCancelTime(Date custCancelTime) {
+        this.custCancelTime = custCancelTime;
+    }
+
+  
+    public Date getSystemCancelTime() {
+        return systemCancelTime;
+    }
+
+
+    public void setSystemCancelTime(Date systemCancelTime) {
+        this.systemCancelTime = systemCancelTime;
+    }
+
+  
+    public Date getReceiveOrderTime() {
+        return receiveOrderTime;
+    }
+
+  
+    public void setReceiveOrderTime(Date receiveOrderTime) {
+        this.receiveOrderTime = receiveOrderTime;
+    }
+
+
+    public Date getStartServiceTime() {
+        return startServiceTime;
+    }
+
+
+    public void setStartServiceTime(Date startServiceTime) {
+        this.startServiceTime = startServiceTime;
+    }
+
+
+    public Date getAppayEndTime() {
+        return appayEndTime;
+    }
+
+ 
+    public void setAppayEndTime(Date appayEndTime) {
+        this.appayEndTime = appayEndTime;
+    }
+
+
     public Date getStartTime() {
         return startTime;
     }
 
-   
+  
     public void setStartTime(Date startTime) {
         this.startTime = startTime;
     }
 
-  
+ 
     public Date getEndTime() {
         return endTime;
     }
 
-    
+  
     public void setEndTime(Date endTime) {
         this.endTime = endTime;
     }
 
-    
+
     public Date getOrderTime() {
         return orderTime;
     }
+
 
     public void setOrderTime(Date orderTime) {
         this.orderTime = orderTime;
     }
 
-    public Date getFinishTime() {
-        return finishTime;
-    }
-
-    
-    public void setFinishTime(Date finishTime) {
-        this.finishTime = finishTime;
-    }
-
-   
+  
     public Integer getOrderStatus() {
         return orderStatus;
     }
 
-   
+
     public void setOrderStatus(Integer orderStatus) {
         this.orderStatus = orderStatus;
     }
 
-   
-    public String getRefundReason() {
-        return refundReason;
-    }
 
-   
-    public void setRefundReason(String refundReason) {
-        this.refundReason = refundReason == null ? null : refundReason.trim();
-    }
-
-   
     public Date getPaymentTime() {
         return paymentTime;
     }
 
-   
+ 
     public void setPaymentTime(Date paymentTime) {
         this.paymentTime = paymentTime;
     }
 
-    
-    public Date getConsignTime() {
-        return consignTime;
+ 
+    public Integer getCustomerIsEvaluate() {
+        return customerIsEvaluate;
     }
 
-    
-    public void setConsignTime(Date consignTime) {
-        this.consignTime = consignTime;
+
+    public void setCustomerIsEvaluate(Integer customerIsEvaluate) {
+        this.customerIsEvaluate = customerIsEvaluate;
     }
 
-    
-    public Integer getBuyerIsEvaluate() {
-        return buyerIsEvaluate;
+
+    public String getCustomerMessage() {
+        return customerMessage;
     }
 
-   
-    public void setBuyerIsEvaluate(Integer buyerIsEvaluate) {
-        this.buyerIsEvaluate = buyerIsEvaluate;
+    public void setCustomerMessage(String customerMessage) {
+        this.customerMessage = customerMessage == null ? null : customerMessage.trim();
     }
 
-    
-    public String getBuyerMessage() {
-        return buyerMessage;
+
+    public Integer getEvaluateStart() {
+        return evaluateStart;
     }
 
-    
-    public void setBuyerMessage(String buyerMessage) {
-        this.buyerMessage = buyerMessage == null ? null : buyerMessage.trim();
+ 
+    public void setEvaluateStart(Integer evaluateStart) {
+        this.evaluateStart = evaluateStart;
     }
 
-   
-    public String getBuyerEvaluate() {
-        return buyerEvaluate;
+
+    public String getCustomerEvaluate() {
+        return customerEvaluate;
     }
 
-   
-    public void setBuyerEvaluate(String buyerEvaluate) {
-        this.buyerEvaluate = buyerEvaluate == null ? null : buyerEvaluate.trim();
+
+    public void setCustomerEvaluate(String customerEvaluate) {
+        this.customerEvaluate = customerEvaluate == null ? null : customerEvaluate.trim();
     }
 
-   
+
+    public String getOrderDescribe() {
+        return orderDescribe;
+    }
+
+ 
+    public void setOrderDescribe(String orderDescribe) {
+        this.orderDescribe = orderDescribe == null ? null : orderDescribe.trim();
+    }
+
+ 
     public Date getCreateTime() {
         return createTime;
     }
 
-    
+ 
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
     }
 
-    
+   
     public Date getModifyTime() {
         return modifyTime;
     }
 
-    
+ 
     public void setModifyTime(Date modifyTime) {
         this.modifyTime = modifyTime;
     }
 
-    
+  
     public String getCreateMan() {
         return createMan;
     }
 
-    
+
     public void setCreateMan(String createMan) {
         this.createMan = createMan == null ? null : createMan.trim();
     }
 
-   
+ 
     public String getModifyMan() {
         return modifyMan;
     }
@@ -329,12 +417,12 @@ public class Order {
         this.modifyMan = modifyMan == null ? null : modifyMan.trim();
     }
 
-    
+  
     public String getRemark() {
         return remark;
     }
 
-   
+    
     public void setRemark(String remark) {
         this.remark = remark == null ? null : remark.trim();
     }

@@ -43,10 +43,6 @@ public class UserDubboBusinessImpl implements UserDubboBusiness {
 		CommonResponse response = new CommonResponse();
 		try {
 			switch (request.getBizCode()) {
-			case UserFunctionType.PersonInfo:// 查看个人信息
-				response = personInfoService.queryPersonInfo((PersonInfoRequest) request);
-				break;
-
 			case UserFunctionType.CheckPhone:
 				response = commonPersonService.regUserExist((IsPhoneExistsRequest) request);
 				break;
@@ -115,9 +111,6 @@ public class UserDubboBusinessImpl implements UserDubboBusiness {
 			case UserFunctionType.SaveOccupation:// 保存职业
 				response = personInfoService.saveOccupation((SaveOccupationRequest) request);
 				break;
-			case UserFunctionType.ShowHomePageLogout:// 大V主页，普通用户主页（客态）
-				response = personInfoService.showHomePageLogout((ShowHomePageLogout) request);
-				break;
 			case UserFunctionType.readAttention:
 				response = personInfoService.readAttention((ReadAttentionRequest) request);
 				break;
@@ -174,6 +167,9 @@ public class UserDubboBusinessImpl implements UserDubboBusiness {
 				break;
 			case UserFunctionType.queryBlacklist:
 				response = blacklistService.queryBlacklist((QueryBlacklistReq) request);
+				break;
+			case UserFunctionType.saveBlacklist:
+				response = blacklistService.saveBlacklist((SaveBlacklistReq) request);
 				break;
 			default:
 				throw new BizException(UserBizReturnCode.BizFunctionTypeNotMatch,

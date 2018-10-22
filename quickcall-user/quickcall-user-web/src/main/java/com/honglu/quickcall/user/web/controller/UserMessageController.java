@@ -1,13 +1,9 @@
 package com.honglu.quickcall.user.web.controller;
 
-import com.alibaba.fastjson.JSONObject;
 import com.honglu.quickcall.common.api.exchange.WebResponseModel;
 import com.honglu.quickcall.user.facade.code.UserBizReturnCode;
-import com.honglu.quickcall.user.facade.exchange.request.IsPhoneExistsRequest;
-import com.honglu.quickcall.user.facade.exchange.request.PersonInfoRequest;
 import com.honglu.quickcall.user.facade.exchange.request.UserUnreadMessageNumRequest;
 import com.honglu.quickcall.user.web.service.UserCenterService;
-import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

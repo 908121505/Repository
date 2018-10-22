@@ -34,7 +34,7 @@
                     <label class="col-sm-3 control-label">标签名称<font color="red">&nbsp;*</font></label>
                     <div class="col-sm-8">
                         <input type="hidden" name="labelId" id="labelId" value="${entity.labelId }"/>
-                        <input type="text" class="form-control" name="labelName" id="label_name" maxlength="6" value="${entity.labelName }">
+                        <input type="text" class="form-control" name="labelName" id="label_name" maxlength="4" value="${entity.labelName }">
                     </div>
                 </div>
                 <div class="form-group">

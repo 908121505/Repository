@@ -6,21 +6,24 @@
 	<resultMap type="com.honglu.quickcall.user.facade.entity.SkillItem" id="skillItemMap">
 		<id property="id" column="id" javaType="java.lang.Long"></id>
 		<result property="skillItemName" column="skill_item_name" javaType="java.lang.String"></result>
-		<result property="skillDescribe" column="skill_describe" javaType="java.lang.String"></result>
 		<result property="imageUrl" column="image_url" javaType="java.lang.String"></result>
+		<result property="blackImageUrl" column="black_image_url" javaType="java.lang.String"></result>
+		<result property="lockIcon" column="lock_icon" javaType="java.lang.String"></result>
+		<result property="unlockIcon" column="unlock_icon" javaType="java.lang.String"></result>
+		<result property="backColor" column="back_color" javaType="java.lang.String"></result>
 		<result property="sort" column="sort" javaType="java.lang.Integer"></result>
 		<result property="skillStatus" column="skill_status" javaType="java.lang.Integer"></result>
+		<result property="skillDescribe" column="skill_describe" javaType="java.lang.String"></result>
 		<result property="createTime" column="create_time" javaType="java.lang.String"></result>
 		<result property="modifyTime" column="modify_time" javaType="java.lang.String"></result>
 		<result property="createMan" column="create_man" javaType="java.lang.String"></result>
 		<result property="modifyMan" column="modify_man" javaType="java.lang.String"></result>
 		<result property="remark" column="remark" javaType="java.lang.String"></result>
-		<result property="blackImageUrl" column="black_image_url" javaType="java.lang.String"></result>
 	</resultMap>
 
 	<!-- 通用查询结果列-->
 	<sql id="Base_Column_List">
-id,	skill_item_name,	skill_describe,	image_url,	sort,	skill_status,	create_time,	modify_time,	create_man,	modify_man,	remark,	black_image_url
+id,	skill_item_name,	image_url,	black_image_url,	lock_icon,	unlock_icon,	back_color,	sort,	skill_status,	skill_describe,	create_time,	modify_time,	create_man,	modify_man,	remark
 	</sql>
 
 	<!-- 查询（根据主键ID查询） -->

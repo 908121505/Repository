@@ -4,7 +4,7 @@ package com.honglu.quickcall.user.facade.entity;
 /**
  * 大V技能项信息表bean
  * @author zhaozheyi
- * @date Fri Oct 19 17:40:14 CST 2018
+ * @date Mon Oct 22 10:05:40 CST 2018
  **/
 public class SkillItem {
 
@@ -14,17 +14,29 @@ public class SkillItem {
 	/**技能项名称**/
 	private String skillItemName;
 
-	/**描述**/
-	private String skillDescribe;
-
 	/**背景图链接**/
 	private String imageUrl;
+
+	/**未解锁背景图链接**/
+	private String blackImageUrl;
+
+	/**未解锁后的图标**/
+	private String lockIcon;
+
+	/**解锁图标**/
+	private String unlockIcon;
+
+	/**背景颜色编码（例如：#CCC）**/
+	private String backColor;
 
 	/**显示排序**/
 	private Integer sort;
 
 	/**状态(0=不可用，1=可用)**/
 	private Integer skillStatus;
+
+	/**描述**/
+	private String skillDescribe;
 
 	/**创建时间**/
 	private String createTime;
@@ -41,27 +53,27 @@ public class SkillItem {
 	/**备注**/
 	private String remark;
 
-	/**未解锁背景图链接**/
-	private String blackImageUrl;
-
 
 	public SkillItem() {
 		super();
 	}
-	public SkillItem(Long id,String skillItemName,String skillDescribe,String imageUrl,Integer sort,Integer skillStatus,String createTime,String modifyTime,String createMan,String modifyMan,String remark,String blackImageUrl) {
+	public SkillItem(Long id,String skillItemName,String imageUrl,String blackImageUrl,String lockIcon,String unlockIcon,String backColor,Integer sort,Integer skillStatus,String skillDescribe,String createTime,String modifyTime,String createMan,String modifyMan,String remark) {
 		super();
 		this.id = id;
 		this.skillItemName = skillItemName;
-		this.skillDescribe = skillDescribe;
 		this.imageUrl = imageUrl;
+		this.blackImageUrl = blackImageUrl;
+		this.lockIcon = lockIcon;
+		this.unlockIcon = unlockIcon;
+		this.backColor = backColor;
 		this.sort = sort;
 		this.skillStatus = skillStatus;
+		this.skillDescribe = skillDescribe;
 		this.createTime = createTime;
 		this.modifyTime = modifyTime;
 		this.createMan = createMan;
 		this.modifyMan = modifyMan;
 		this.remark = remark;
-		this.blackImageUrl = blackImageUrl;
 	}
 	public void setId(Long id){
 		this.id = id;
@@ -79,20 +91,44 @@ public class SkillItem {
 		return this.skillItemName;
 	}
 
-	public void setSkillDescribe(String skillDescribe){
-		this.skillDescribe = skillDescribe;
-	}
-
-	public String getSkillDescribe(){
-		return this.skillDescribe;
-	}
-
 	public void setImageUrl(String imageUrl){
 		this.imageUrl = imageUrl;
 	}
 
 	public String getImageUrl(){
 		return this.imageUrl;
+	}
+
+	public void setBlackImageUrl(String blackImageUrl){
+		this.blackImageUrl = blackImageUrl;
+	}
+
+	public String getBlackImageUrl(){
+		return this.blackImageUrl;
+	}
+
+	public void setLockIcon(String lockIcon){
+		this.lockIcon = lockIcon;
+	}
+
+	public String getLockIcon(){
+		return this.lockIcon;
+	}
+
+	public void setUnlockIcon(String unlockIcon){
+		this.unlockIcon = unlockIcon;
+	}
+
+	public String getUnlockIcon(){
+		return this.unlockIcon;
+	}
+
+	public void setBackColor(String backColor){
+		this.backColor = backColor;
+	}
+
+	public String getBackColor(){
+		return this.backColor;
 	}
 
 	public void setSort(Integer sort){
@@ -109,6 +145,14 @@ public class SkillItem {
 
 	public Integer getSkillStatus(){
 		return this.skillStatus;
+	}
+
+	public void setSkillDescribe(String skillDescribe){
+		this.skillDescribe = skillDescribe;
+	}
+
+	public String getSkillDescribe(){
+		return this.skillDescribe;
 	}
 
 	public void setCreateTime(String createTime){
@@ -149,14 +193,6 @@ public class SkillItem {
 
 	public String getRemark(){
 		return this.remark;
-	}
-
-	public void setBlackImageUrl(String blackImageUrl){
-		this.blackImageUrl = blackImageUrl;
-	}
-
-	public String getBlackImageUrl(){
-		return this.blackImageUrl;
 	}
 
 }

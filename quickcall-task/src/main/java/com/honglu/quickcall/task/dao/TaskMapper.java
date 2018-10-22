@@ -5,9 +5,8 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
+import com.honglu.quickcall.account.facade.entity.Order;
 import org.apache.ibatis.annotations.Param;
-
-import com.honglu.quickcall.task.entity.Order;
 
 /**
  * 异步任务Mapper
@@ -29,33 +28,7 @@ public interface TaskMapper {
      * @return
      */
     String getCustomerDeviceId(Long customerId);
-    
-    
-    /**
-     * 获取已经过期的订单ID列表
-     * @param orderStatus
-     * @param endTime
-     * @return
-     */
-    List<Long>   queryPayOverTimeOrderIdList(@Param("orderStatus") Integer  orderStatus,@Param("endTime")  Date  endTime);
-    
-    
-    /**
-     * 根据订单ID，批量修改订单状态
-     * @param orderStatus
-     * @param orderIdList
-     */
-    void   batchUpdateOrderStatus(@Param("orderStatus") Integer  orderStatus,@Param("list")  List<Long>  orderIdList);
 
-    /**
-     * 获取未按照时间接单订单ID列表
-     * @param orderStatus
-     * @param endTime
-     * @return
-     */
-	List<Order> queryReceiveOverTimeOrderIdList(@Param("orderStatus") Integer  orderStatus,@Param("endTime")  Date  endTime);
-	
-	
 	/**
 	 * 入账
 	 * 

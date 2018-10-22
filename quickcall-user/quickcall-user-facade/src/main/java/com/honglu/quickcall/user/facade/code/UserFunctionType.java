@@ -32,9 +32,6 @@ public interface UserFunctionType {
 	 */
 	String PUSH_APP_MSG = "001310";
 
-	// 查看用户信息
-	String PersonInfo = "0011128";
-
 	/**
 	 * 未读消息数量查询
 	 */
@@ -60,8 +57,6 @@ public interface UserFunctionType {
 	String SaveInterest = "0011123";
 	// 保存职业
 	String SaveOccupation = "0011124";
-	// 大V主页，普通用户主页（客态）
-	String ShowHomePageLogout = "0011126";
 
 	/** 查询兴趣列表 */
 	public static final String QUERY_INTEREST_LIST = "0011127";
@@ -146,7 +141,10 @@ public interface UserFunctionType {
 	 * 查询黑名单
 	 */
 	String queryBlacklist = "0011161";
-
+	/**
+	 * 添加黑名单
+	 */
+	String saveBlacklist = "0011162";
 
 
 }
