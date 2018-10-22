@@ -124,14 +124,14 @@ public class ApplePayServiceImpl implements ApplePayService {
             if (verifyResult == null) {
                 return ResultUtils.result(BizCode.DataNotExist);
             }
-            // 苹果验证有返回结果
-            String sandboxOrOnline = "online";
+            // 苹果验证有返回结果 online：0， sandbox：1
+            Integer sandboxOrOnline = 0;
             LOGGER.info("苹果支付返回验证结果verifyResult：{}", verifyResult);
             JSONObject job = JSONObject.parseObject(verifyResult);
             String states = job.getString("status");
             // 是沙盒环境，应沙盒测试，否则执行下面
             if ("21007".equals(states)) {
-                sandboxOrOnline = "sandbox";
+                sandboxOrOnline = 1;
                 // 2.再沙盒测试 ，发送平台验证
                 verifyResult = IosVerifyUtil.buyAppVerify(applePurchaseRequest.getAppReceipt(), 0);
                 LOGGER.info("苹果支付返回验证结果verifyResult：{}", verifyResult);
@@ -159,23 +159,35 @@ public class ApplePayServiceImpl implements ApplePayService {
                     transaction_id = returnJson.getString("transaction_id");
                     data = returnJson;
                 }
-                /************************************************ +自己的业务逻辑 **********************************************************/
+                /***************************************** +自己的业务逻辑 ********************************************/
+                //单号一致
+                if(!applePurchaseRequest.getTradeNo().equalsIgnoreCase(transaction_id)){
+                    LOGGER.error("单号不一致，请求单号transNo：{}，返回单号transaction_id：{}"
+                            , applePurchaseRequest.getTradeNo(), transaction_id);
+                    return ResultUtils.result(BizCode.DataNotExist);
+                }
+                //充值单去重
+                Recharge rechargeVO = rechargeMapper.selectByOrderNo(applePurchaseRequest.getOrderId());
+                if(RechargeStateEnum.PAY_SUCCESS.getType().equals(rechargeVO.getState())){
+                    LOGGER.warn("单号已充值成功，请勿重复操作，请求单号transNo：{}，充值单号：{}"
+                            , applePurchaseRequest.getTradeNo(),applePurchaseRequest.getOrderId());
+                    return ResultUtils.resultSuccess();
+                }
 
-                //TODO 单号一致，金额一致
                 // 1. 更新订单状态为成功
                 Recharge recharge = new Recharge();
                 recharge.setFinishDate(new Date());
                 recharge.setState(RechargeStateEnum.PAY_SUCCESS.getType());
                 recharge.setAlipayordersn(applePurchaseRequest.getTradeNo());
                 recharge.setOrdersn(applePurchaseRequest.getOrderId());
+                recharge.setTokenPackage(sandboxOrOnline);
                 rechargeMapper.updateByOrderNo(recharge);
 
                 // 2. 账户充值操作
-                Recharge rechargeVO = rechargeMapper.selectByOrderNo(applePurchaseRequest.getOrderId());
                 accountService.inAccount(rechargeVO.getCustomerId(), rechargeVO.getAmount(), TransferTypeEnum.RECHARGE,
                     AccountBusinessTypeEnum.Recharge);
                 return ResultUtils.resultSuccess();
-                /************************************************ +自己的业务逻辑end **********************************************************/
+                /**************************************** +自己的业务逻辑end ******************************************/
 
             } else {
                 Recharge recharge = new Recharge();
