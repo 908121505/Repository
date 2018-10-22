@@ -764,6 +764,7 @@ public class PersonInfoServiceImpl implements PersonInfoService {
         customerHomeVO.setViewCustomerId(request.getViewCustomerId());
         customerHomeVO.setCustomerAppId(viewCustomer.getAppId());
         customerHomeVO.setNickName(viewCustomer.getNickName());
+		customerHomeVO.setHeadPortraitUrl(viewCustomer.getHeadPortraitUrl());
         customerHomeVO.setSex(viewCustomer.getSex());
         if (viewCustomer.getBirthday() != null) {
             customerHomeVO.setAge(CountAge.getAgeByBirth(viewCustomer.getBirthday()));
