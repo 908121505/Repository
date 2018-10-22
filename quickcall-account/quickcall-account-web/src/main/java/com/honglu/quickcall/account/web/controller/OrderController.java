@@ -14,7 +14,7 @@ import com.honglu.quickcall.account.facade.exchange.request.DetailOrderRequest;
 import com.honglu.quickcall.account.facade.exchange.request.DvConfirmRefundRequest;
 import com.honglu.quickcall.account.facade.exchange.request.DvReceiveOrderRequest;
 import com.honglu.quickcall.account.facade.exchange.request.DvStartServiceRequest;
-import com.honglu.quickcall.account.facade.exchange.request.OrderDaVProductRequest;
+import com.honglu.quickcall.account.facade.exchange.request.OrderDaVSkillRequest;
 import com.honglu.quickcall.account.facade.exchange.request.OrderReceiveOrderListRequest;
 import com.honglu.quickcall.account.facade.exchange.request.OrderSaveRequest;
 import com.honglu.quickcall.account.facade.exchange.request.OrderSendOrderListRequest;
@@ -38,7 +38,7 @@ public class OrderController {
      */
     @RequestMapping(value = "/dvProduct", method = RequestMethod.POST)
     @ResponseBody
-    public WebResponseModel queryDaVProduct(/*  @RequestBody  */OrderDaVProductRequest params) {
+    public WebResponseModel queryDaVProduct(/*  @RequestBody  */OrderDaVSkillRequest params) {
     	WebResponseModel response = orderInfoService.execute(params);
         return response;
     }

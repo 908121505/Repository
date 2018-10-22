@@ -71,7 +71,7 @@ public class AccountDubboBusinessImpl implements AccountDubboBusiness {
 			/////////////////////////////////////////////////////////////////
 			/** 获取主播开启产品 */
 			case OrderRequestType.ORDER_DAV_PRODUCT_LIST:
-				response = orderService.queryDaVProduct((OrderDaVProductRequest) request);
+				response = orderService.queryDaVSkill((OrderDaVSkillRequest) request);
 				break;
 			/** 用户下单 */
 			case OrderRequestType.ORDER_SAVE:

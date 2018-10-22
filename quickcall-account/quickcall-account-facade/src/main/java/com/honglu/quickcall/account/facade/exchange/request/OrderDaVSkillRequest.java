@@ -12,7 +12,7 @@ import com.honglu.quickcall.common.api.exchange.AbstractRequest;
  * @author: chenliuguang   
  * @date: 2018年9月22日 下午3:39:53
  */
-public class OrderDaVProductRequest extends AbstractRequest {
+public class OrderDaVSkillRequest extends AbstractRequest {
     
 	
 	private static final long serialVersionUID = -8443725563523486638L;
