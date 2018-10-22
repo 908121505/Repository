@@ -15,6 +15,46 @@ public class SkillItemVo {
 
     private String remark;
 
+    private String lockIcon;
+
+    private String unlockIcon;
+
+    private String backColor;
+
+    private String fontColor;
+
+    public String getFontColor() {
+        return fontColor;
+    }
+
+    public void setFontColor(String fontColor) {
+        this.fontColor = fontColor;
+    }
+
+    public String getLockIcon() {
+        return lockIcon;
+    }
+
+    public void setLockIcon(String lockIcon) {
+        this.lockIcon = lockIcon;
+    }
+
+    public String getUnlockIcon() {
+        return unlockIcon;
+    }
+
+    public void setUnlockIcon(String unlockIcon) {
+        this.unlockIcon = unlockIcon;
+    }
+
+    public String getBackColor() {
+        return backColor;
+    }
+
+    public void setBackColor(String backColor) {
+        this.backColor = backColor;
+    }
+
     public String getId() {
         return id;
     }
