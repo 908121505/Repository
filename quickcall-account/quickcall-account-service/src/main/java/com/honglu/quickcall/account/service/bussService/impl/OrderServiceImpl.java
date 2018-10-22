@@ -5,8 +5,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.honglu.quickcall.account.facade.entity.EvaluationLabel;
 import com.honglu.quickcall.account.facade.exchange.request.*;
 import com.honglu.quickcall.account.facade.vo.*;
+import com.honglu.quickcall.account.service.dao.SkillItemMapper;
 import com.honglu.quickcall.common.api.exchange.ResultUtils;
 import com.honglu.quickcall.common.api.util.DateUtils;
 
@@ -59,6 +61,8 @@ public class OrderServiceImpl implements IOrderService {
 	private CustomerSkillMapper  customerSkillMapper;
 	@Autowired
 	private BarrageMessageService barrageMessageService;
+	@Autowired
+	private SkillItemMapper skillItemMapper;
 
 	
 	
@@ -723,7 +727,8 @@ public class OrderServiceImpl implements IOrderService {
         orderEvaluationVo.setNickName(orderDetailVO.getNickName());
         orderEvaluationVo.setHeadPortraitUrl(orderDetailVO.getHeadPortraitUrl());
 
-
+        // 查询技能评价标签
+        List<EvaluationLabel> labelList = skillItemMapper.queryEvaluationLabel(orderDetailVO.getSkillItemId(), orderDetailVO.getSex());
 
         return ResultUtils.resultSuccess(orderEvaluationVo);
     }

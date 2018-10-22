@@ -553,10 +553,10 @@
   <!-- 查询弹幕显示需要的订单消息 -->
   <select id="queryBarrageOrderInfo" resultType="com.honglu.quickcall.account.facade.vo.OrderDetailVO"  >
     SELECT
-        cu.nick_name AS anotherNickName,
-        cu.head_portrait_url AS anotherHeadPortraitUrl,
-        cs.skill_name AS productName,
-        cs.skill_item_id AS skillId,
+        cu.nick_name AS nickName,
+        cu.head_portrait_url AS headPortraitUrl,
+        cs.skill_name AS skillName,
+        cs.skill_item_id AS skillItemId,
         cs.skill_price AS price,
         od.order_num AS orderNum,
         od.order_amounts AS orderAmounts,
@@ -573,14 +573,14 @@
   <!-- 查询订单评价页面需要的数据 -->
   <select id="queryEvaluationData" resultType="com.honglu.quickcall.account.facade.vo.OrderDetailVO"  >
     SELECT
-        cu.nick_name AS anotherNickName,
-        cu.head_portrait_url AS anotherHeadPortraitUrl,
+        cu.nick_name AS nickName,
+        cu.head_portrait_url AS headPortraitUrl,
         cu.sex AS sex,
-        cs.skill_name AS productName,
-        cs.skill_item_id AS skillId
+        cs.skill_name AS skillName,
+        cs.skill_item_id AS skillItemId
     FROM
         `order` od
-    LEFT JOIN customer cu ON cu.customer_id = od.customer_id
+    LEFT JOIN customer cu ON cu.customer_id = od.service_id
     LEFT JOIN customer_skill cs ON cs.customer_skill_id = od.customer_skill_id
     WHERE
         od.order_id =  #{orderId}
