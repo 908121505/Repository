@@ -71,6 +71,7 @@ public class CustomerSkill {
     private String remark;
 
     /**********扩展查询字段********/
+    private String skillImageUrl;
     private String skillVoiceUrl;
     private BigDecimal skillVoiceTime;
 
@@ -317,6 +318,22 @@ public class CustomerSkill {
    
     public void setRemark(String remark) {
         this.remark = remark == null ? null : remark.trim();
+    }
+
+    public Byte getSkillStatus() {
+        return skillStatus;
+    }
+
+    public void setSkillStatus(Byte skillStatus) {
+        this.skillStatus = skillStatus;
+    }
+
+    public String getSkillImageUrl() {
+        return skillImageUrl;
+    }
+
+    public void setSkillImageUrl(String skillImageUrl) {
+        this.skillImageUrl = skillImageUrl;
     }
 
     public String getSkillVoiceUrl() {

@@ -137,4 +137,16 @@ public interface UserFunctionType {
 	 * 我的等级页面接口
 	 */
 	String CUSTOMER_LEVEL = "0011152";
+
+	/**
+	 * 删除黑名单
+	 */
+	String removeBlacklist = "0011160";
+	/**
+	 * 查询黑名单
+	 */
+	String queryBlacklist = "0011161";
+
+
+
 }

@@ -1,6 +1,8 @@
 package com.honglu.quickcall.user.service.business;
 
 import com.honglu.quickcall.user.facade.exchange.request.*;
+import com.honglu.quickcall.user.facade.exchange.request.editprofile.*;
+import com.honglu.quickcall.user.service.service.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,19 +17,6 @@ import com.honglu.quickcall.common.api.exchange.CommonResponse;
 import com.honglu.quickcall.user.facade.business.UserDubboBusiness;
 import com.honglu.quickcall.user.facade.code.UserBizReturnCode;
 import com.honglu.quickcall.user.facade.code.UserFunctionType;
-import com.honglu.quickcall.user.facade.exchange.request.editprofile.RemoveAppearanceReq;
-import com.honglu.quickcall.user.facade.exchange.request.editprofile.RemoveVoiceIdentificationCardReq;
-import com.honglu.quickcall.user.facade.exchange.request.editprofile.UpdateAppearanceReq;
-import com.honglu.quickcall.user.facade.exchange.request.editprofile.UpdateHeadPortraitReq;
-import com.honglu.quickcall.user.facade.exchange.request.editprofile.UpdateInterestReq;
-import com.honglu.quickcall.user.facade.exchange.request.editprofile.UpdateNickNameReq;
-import com.honglu.quickcall.user.facade.exchange.request.editprofile.UpdateSignNameReq;
-import com.honglu.quickcall.user.facade.exchange.request.editprofile.UpdateStarSignReq;
-import com.honglu.quickcall.user.facade.exchange.request.editprofile.UpdateVoiceIdentificationCardReq;
-import com.honglu.quickcall.user.service.service.CommonPersonService;
-import com.honglu.quickcall.user.service.service.EditProfileService;
-import com.honglu.quickcall.user.service.service.PersonInfoService;
-import com.honglu.quickcall.user.service.service.UserMessageService;
 
 @Component
 @Service("User.UserDubboBusiness")
@@ -43,6 +32,8 @@ public class UserDubboBusinessImpl implements UserDubboBusiness {
 	private UserMessageService userMessageService;
 	@Autowired
 	private EditProfileService editProfileService;
+	@Autowired
+	private BlacklistService blacklistService;
 
 	@Override
 	public CommonResponse excute(AbstractRequest request) {
@@ -177,6 +168,12 @@ public class UserDubboBusinessImpl implements UserDubboBusiness {
 				break;
 			case UserFunctionType.bindVXorQQ:
 				response = commonPersonService.bindVXorQQ((BindVXorQQRequest) request);
+				break;
+			case UserFunctionType.removeBlacklist:
+				response = blacklistService.removeBlacklist((RemoveBlacklistReq) request);
+				break;
+			case UserFunctionType.queryBlacklist:
+				response = blacklistService.queryBlacklist((QueryBlacklistReq) request);
 				break;
 			default:
 				throw new BizException(UserBizReturnCode.BizFunctionTypeNotMatch,
