@@ -3,6 +3,7 @@ package com.honglu.quickcall.user.web.controller;
 import com.honglu.quickcall.common.api.exchange.WebResponseModel;
 import com.honglu.quickcall.user.facade.exchange.request.editprofile.QueryBlacklistReq;
 import com.honglu.quickcall.user.facade.exchange.request.editprofile.RemoveBlacklistReq;
+import com.honglu.quickcall.user.facade.exchange.request.editprofile.SaveBlacklistReq;
 import com.honglu.quickcall.user.web.service.UserCenterService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,6 +49,18 @@ public class BlacklistController {
     @PostMapping(value = "/removeBlacklist")
     public WebResponseModel removeBlacklist(@RequestBody RemoveBlacklistReq params) {
         logger.info("删除黑名单 请求参数：" + params.toString());
+        WebResponseModel response = userCenterService.execute(params);
+        return response;
+    }
+    /**
+     * 添加黑名单
+     *
+     * @param params
+     * @return
+     */
+    @PostMapping(value = "/saveBlacklist")
+    public WebResponseModel saveBlacklist(@RequestBody SaveBlacklistReq params) {
+        logger.info("添加黑名单 请求参数：" + params.toString());
         WebResponseModel response = userCenterService.execute(params);
         return response;
     }
