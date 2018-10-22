@@ -129,6 +129,14 @@ public class AccountDubboBusinessImpl implements AccountDubboBusiness {
 			case OrderRequestType.QUERY_REFUND_REASON:
 				response = orderService.queryRefundReason((QueryRefundReasonRequest) request);
 				break;
+			/** 订单评价页面 **/
+			case OrderRequestType.ORDER_EVALUATION:
+				response = orderService.orderEvaluation((OrderEvaluationRequest) request);
+				break;
+			/** 提交订单评价 **/
+			case OrderRequestType.ORDER_EVALUATION_SUBMIT:
+				response = orderService.submitOrderEvaluation((OrderEvaluationSubmitRequest) request);
+				break;
 
 		    /////////////////////////////////订单相关结束///////////////////////////////////
 

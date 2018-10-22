@@ -548,21 +548,39 @@
 		buyer_id = #{buyerId}  and  seller_id =  #{sellerId}  
   </select>
 
-    <!-- 查询弹幕显示需要的订单消息 -->
+
+  <!-- 查询弹幕显示需要的订单消息 -->
   <select id="queryBarrageOrderInfo" resultType="com.honglu.quickcall.account.facade.vo.OrderDetailVO"  >
     SELECT
-      cu.nick_name  AS  anotherNickName,
-      cu.head_portrait_url  AS  anotherHeadPortraitUrl,
-      p.`name` AS  productName,
-      p.skill_id AS skillId,
-      p.price  AS  price,
-      od.order_num  AS  orderNum,
-      od.order_amounts  AS  orderAmounts,
-      od.order_time AS orderTime
+        cu.nick_name AS anotherNickName,
+        cu.head_portrait_url AS anotherHeadPortraitUrl,
+        cs.skill_name AS productName,
+        cs.skill_item_id AS skillId,
+        cs.skill_price AS price,
+        od.order_num AS orderNum,
+        od.order_amounts AS orderAmounts,
+        od.order_time AS orderTime
     FROM
-        orders od
-    LEFT JOIN customer cu ON od.seller_id = cu.customer_id
-    LEFT JOIN product  p  ON  od.product_id  =  p.product_id
+        `order` od
+    LEFT JOIN customer cu ON cu.customer_id = od.customer_id
+    LEFT JOIN customer_skill cs ON cs.customer_skill_id = od.customer_skill_id
+    WHERE
+        od.order_id =  #{orderId}
+  </select>
+
+
+  <!-- 查询订单评价页面需要的数据 -->
+  <select id="queryEvaluationData" resultType="com.honglu.quickcall.account.facade.vo.OrderDetailVO"  >
+    SELECT
+        cu.nick_name AS anotherNickName,
+        cu.head_portrait_url AS anotherHeadPortraitUrl,
+        cu.sex AS sex,
+        cs.skill_name AS productName,
+        cs.skill_item_id AS skillId
+    FROM
+        `order` od
+    LEFT JOIN customer cu ON cu.customer_id = od.customer_id
+    LEFT JOIN customer_skill cs ON cs.customer_skill_id = od.customer_skill_id
     WHERE
         od.order_id =  #{orderId}
   </select>

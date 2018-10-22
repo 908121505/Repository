@@ -48,4 +48,11 @@ public interface OrderMapper {
 	 * @return
 	 */
 	OrderDetailVO queryBarrageOrderInfo(@Param("orderId") Long orderId);
+
+	/**
+	 * 查询评价页面需要的数据
+	 * @param orderId
+	 * @return
+	 */
+	OrderDetailVO queryEvaluationData(@Param("orderId") Long orderId);
 }
