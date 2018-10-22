@@ -7,7 +7,7 @@ import com.honglu.quickcall.account.facade.exchange.request.DetailOrderRequest;
 import com.honglu.quickcall.account.facade.exchange.request.DvConfirmRefundRequest;
 import com.honglu.quickcall.account.facade.exchange.request.DvReceiveOrderRequest;
 import com.honglu.quickcall.account.facade.exchange.request.DvStartServiceRequest;
-import com.honglu.quickcall.account.facade.exchange.request.OrderDaVProductRequest;
+import com.honglu.quickcall.account.facade.exchange.request.OrderDaVSkillRequest;
 import com.honglu.quickcall.account.facade.exchange.request.OrderReceiveOrderListRequest;
 import com.honglu.quickcall.account.facade.exchange.request.OrderSaveRequest;
 import com.honglu.quickcall.account.facade.exchange.request.OrderSendOrderListRequest;
@@ -30,7 +30,7 @@ public interface IOrderService {
      * 获取主播开启产品
      * @param request
      */
-	public CommonResponse  queryDaVProduct(OrderDaVProductRequest  request);
+	public CommonResponse  queryDaVSkill(OrderDaVSkillRequest  request);
 	/**
 	 * 用户下单
 	 * @param request

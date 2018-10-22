@@ -6,7 +6,7 @@ import org.apache.ibatis.annotations.Param;
 
 import com.honglu.quickcall.account.facade.entity.Product;
 import com.honglu.quickcall.account.facade.vo.FirstPageDaVinfoVO;
-import com.honglu.quickcall.account.facade.vo.OrderDaVProductVO;
+import com.honglu.quickcall.account.facade.vo.OrderDaVSkillVO;
 
 public interface ProductMapper {
 
@@ -29,7 +29,7 @@ public interface ProductMapper {
 	List<FirstPageDaVinfoVO> selectTotalDaVProduct(@Param("customerId")  Long customerId,@Param("skillId")  Long skillId,@Param("pageIndex")  Integer pageIndex,@Param("pageSize")  Integer pageSize);
 
 	
-	List<OrderDaVProductVO> selectDaVPersonalProduct(@Param("customerId") Long customerId);
+	List<OrderDaVSkillVO> selectDaVPersonalProduct(@Param("customerId") Long customerId);
 
 
 	

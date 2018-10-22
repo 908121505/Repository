@@ -25,20 +25,22 @@ import com.honglu.quickcall.account.facade.exchange.request.DetailOrderRequest;
 import com.honglu.quickcall.account.facade.exchange.request.DvConfirmRefundRequest;
 import com.honglu.quickcall.account.facade.exchange.request.DvReceiveOrderRequest;
 import com.honglu.quickcall.account.facade.exchange.request.DvStartServiceRequest;
-import com.honglu.quickcall.account.facade.exchange.request.OrderDaVProductRequest;
+import com.honglu.quickcall.account.facade.exchange.request.OrderDaVSkillRequest;
 import com.honglu.quickcall.account.facade.exchange.request.OrderReceiveOrderListRequest;
 import com.honglu.quickcall.account.facade.exchange.request.OrderSaveRequest;
 import com.honglu.quickcall.account.facade.exchange.request.OrderSendOrderListRequest;
 import com.honglu.quickcall.account.facade.exchange.request.PayOrderRequest;
 import com.honglu.quickcall.account.facade.exchange.request.QueryIngOrderCountRequest;
 import com.honglu.quickcall.account.facade.exchange.request.QueryRefundReasonRequest;
-import com.honglu.quickcall.account.facade.vo.OrderDaVProductVO;
+import com.honglu.quickcall.account.facade.vo.OrderDaVSkillVO;
 import com.honglu.quickcall.account.facade.vo.OrderDetailVO;
 import com.honglu.quickcall.account.facade.vo.OrderReceiveOrderListVO;
 import com.honglu.quickcall.account.facade.vo.OrderSendOrderListVO;
+import com.honglu.quickcall.account.facade.vo.OrderSkillItemVO;
 import com.honglu.quickcall.account.service.bussService.AccountService;
 import com.honglu.quickcall.account.service.bussService.CommonService;
 import com.honglu.quickcall.account.service.bussService.IOrderService;
+import com.honglu.quickcall.account.service.dao.CustomerSkillMapper;
 import com.honglu.quickcall.account.service.dao.OrderMapper;
 import com.honglu.quickcall.account.service.dao.ProductMapper;
 import com.honglu.quickcall.common.api.exception.BizException;
@@ -72,6 +74,8 @@ public class OrderServiceImpl implements IOrderService {
 	@Autowired
 	private AccountService  accountService;
 	@Autowired
+	private CustomerSkillMapper  customerSkillMapper;
+	@Autowired
 	private BarrageMessageService barrageMessageService;
 
 	
@@ -80,15 +84,49 @@ public class OrderServiceImpl implements IOrderService {
 	
 	
 	@Override
-	public CommonResponse queryDaVProduct(OrderDaVProductRequest request) {
+	public CommonResponse queryDaVSkill(OrderDaVSkillRequest request) {
 		if (request == null || request.getCustomerId() == null) {
 			throw new BizException(AccountBizReturnCode.paramError, "查询技能信息参数异常");
 		}
-		LOGGER.info("======>>>>>queryDaVProduct()入参："+request.toString());
-		Long  customerId =  request.getCustomerId();
-		List<OrderDaVProductVO>  resultList =  productMapper.selectDaVPersonalProduct(customerId);
+		LOGGER.info("======>>>>>queryDaVSkill()入参："+request.toString());
+//		List<OrderDaVSkillVO>  resultList =  new ArrayList<OrderDaVSkillVO>();
+//		Long  customerId =  request.getCustomerId();
+//		List<OrderDaVSkillVO>  resultList =  customerSkillMapper.selectDaVSkill(customerId);
+		
+		OrderDaVSkillVO  skill =  new OrderDaVSkillVO();
+		skill.setHeadPortraitUrl("http://test-guanjia.oss-cn-shanghai.aliyuncs.com/voice/user/headimg/c2bb9b11facd4ef98126d3a0ab495cd4.jpg");
+		skill.setNickName("测试");
+		skill.setServiceId(1000L);
+		List<OrderSkillItemVO> custSkillList = new  ArrayList<>();
+	
+		for (int i = 0; i < 3; i++) {
+			OrderSkillItemVO  vo =  new OrderSkillItemVO();
+			vo.setPrice(new BigDecimal(10 *(i +1)));
+			vo.setUserSkillItemId(1000L);
+			String  serviceUnit  = null ;
+			String  skillItemName  = "哄睡" ;
+			if(i == 0){
+				skillItemName  = "哄睡" ;
+				serviceUnit = "半小时";
+			}else if (i == 1){
+				skillItemName  = "情感咨询" ;
+				serviceUnit = "小时";
+				
+			}else{
+				skillItemName  = "叫醒" ;
+				serviceUnit = "次";
+				
+			}
+			vo.setServiceUnit(serviceUnit);
+			vo.setSkillItemName(skillItemName);
+			custSkillList.add(vo);
+		}
+		skill.setCustSkillList(custSkillList );
+		
+		
+		
 		CommonResponse commonResponse = commonService.getCommonResponse();
-		commonResponse.setData(resultList);
+		commonResponse.setData(skill);
 		LOGGER.info("======>>>>>用户编号为：" + request.getCustomerId() + "查询成功");
 		return commonResponse;
 	}
