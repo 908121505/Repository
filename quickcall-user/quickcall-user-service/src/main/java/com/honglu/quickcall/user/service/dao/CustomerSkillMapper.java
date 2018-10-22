@@ -25,4 +25,12 @@ public interface CustomerSkillMapper {
      * @return
      */
     List<CustomerSkill> selectCustomerAuditedSkill(@Param("customerId") Long customerId);
+
+    /**
+     * 查询客户技能 热度评价标签
+     * @param customerId
+     * @param skillItemId
+     * @return
+     */
+    List<String> selectCustomerSkillHotLabel(@Param("customerId") Long customerId, @Param("skillItemId") Long skillItemId);
 }

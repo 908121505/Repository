@@ -811,10 +811,11 @@ public class PersonInfoServiceImpl implements PersonInfoService {
                 customerSkill.setSkillVoiceUrl(bean.getSkillVoiceUrl());
                 customerSkill.setSkillVoiceTime(bean.getSkillVoiceTime());
 
-                // ADUAN -- 技能价格、价格单位、标签 -- 未完成
-                customerSkill.setSkillPrice(new BigDecimal(20));
-                customerSkill.setServiceUnit("半小时");
-                customerSkill.setCustomerLabel(Arrays.asList("暖男", "搞笑", "帅气"));
+                // 价格显示折扣后的价格
+                customerSkill.setSkillPrice(bean.getDiscountPrice());
+                customerSkill.setServiceUnit(bean.getServiceUnit());
+                // 查询技能评价标签
+                customerSkill.setCustomerLabel(customerSkillMapper.selectCustomerSkillHotLabel(request.getViewCustomerId(), bean.getSkillItemId()));
 
                 // ADUAN -- 声量 -- 后期在做
                 customerSkill.setSkillVolume(250);
