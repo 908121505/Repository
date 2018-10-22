@@ -17,6 +17,8 @@ import com.honglu.quickcall.user.facade.entity.CustomerAppearance;
 import com.honglu.quickcall.user.facade.entity.CustomerInterest;
 import com.honglu.quickcall.user.facade.entity.SensitivityWord;
 import com.honglu.quickcall.user.facade.exchange.request.editprofile.*;
+import com.honglu.quickcall.user.facade.vo.BlacklistVo;
+import com.honglu.quickcall.user.facade.vo.InterestVO;
 import com.honglu.quickcall.user.service.dao.*;
 import com.honglu.quickcall.user.service.service.CustomerRedisManagement;
 import com.honglu.quickcall.user.service.service.EditProfileService;
@@ -54,6 +56,8 @@ public class EditProfileServiceImpl implements EditProfileService {
     private CustomerInterestMapper customerInterestMapper;
     @Autowired
     private CustomerAppearanceMapper customerAppearanceMapper;
+    @Autowired
+    private InterestMapper interestMapper;
 
     @Override
     public CommonResponse updateNickName(UpdateNickNameReq params) {
@@ -364,5 +368,20 @@ public class EditProfileServiceImpl implements EditProfileService {
             throw new BizException(UserBizReturnCode.jdbcError, "操作数据库异常");
         }
 
+    }
+
+    @Override
+    public CommonResponse queryInterestList(QueryInterestListReq params) {
+        CommonResponse commonResponse = new CommonResponse();
+        try {
+            List<InterestVO> interestList = interestMapper.selectInterestList();
+
+            commonResponse.setData(interestList);
+            commonResponse.setCode(UserBizReturnCode.Success);
+            commonResponse.setMessage(UserBizReturnCode.Success.desc());
+        } catch (Exception e) {
+            logger.error("查询兴趣列表异常，异常信息：", e);
+        }
+        return commonResponse;
     }
 }
