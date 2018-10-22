@@ -175,6 +175,9 @@ public class UserDubboBusinessImpl implements UserDubboBusiness {
 			case UserFunctionType.queryBlacklist:
 				response = blacklistService.queryBlacklist((QueryBlacklistReq) request);
 				break;
+			case UserFunctionType.saveBlacklist:
+				response = blacklistService.saveBlacklist((SaveBlacklistReq) request);
+				break;
 			default:
 				throw new BizException(UserBizReturnCode.BizFunctionTypeNotMatch,
 						UserBizReturnCode.BizFunctionTypeNotMatch.desc());

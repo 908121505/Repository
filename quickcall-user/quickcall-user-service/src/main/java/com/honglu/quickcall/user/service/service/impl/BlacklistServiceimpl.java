@@ -2,9 +2,12 @@ package com.honglu.quickcall.user.service.service.impl;
 
 import com.honglu.quickcall.common.api.exception.BizException;
 import com.honglu.quickcall.common.api.exchange.CommonResponse;
+import com.honglu.quickcall.common.core.util.UUIDUtils;
 import com.honglu.quickcall.user.facade.code.UserBizReturnCode;
+import com.honglu.quickcall.user.facade.entity.Blacklist;
 import com.honglu.quickcall.user.facade.exchange.request.editprofile.QueryBlacklistReq;
 import com.honglu.quickcall.user.facade.exchange.request.editprofile.RemoveBlacklistReq;
+import com.honglu.quickcall.user.facade.exchange.request.editprofile.SaveBlacklistReq;
 import com.honglu.quickcall.user.facade.vo.BlacklistVo;
 import com.honglu.quickcall.user.service.dao.BlacklistMapper;
 import com.honglu.quickcall.user.service.service.BlacklistService;
@@ -15,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Description: 黑名单管理
@@ -64,5 +68,32 @@ public class BlacklistServiceimpl implements BlacklistService {
         commonResponse.setCode(UserBizReturnCode.Success);
         commonResponse.setMessage(UserBizReturnCode.Success.desc());
         return commonResponse;
+    }
+
+    @Override
+    public CommonResponse saveBlacklist(SaveBlacklistReq params) {
+        CommonResponse commonResponse = new CommonResponse();
+        if(params.getCustomerId() == null){
+            throw new BizException(UserBizReturnCode.paramError, "customerId不能为空");
+        }
+        if(params.getBlackCustomerId() == null){
+            throw new BizException(UserBizReturnCode.paramError, "blackCustomerId不能为空");
+        }
+
+        Blacklist Blacklist = new Blacklist();
+        Blacklist.setId(UUIDUtils.getId());
+        Blacklist.setCustomerId(params.getCustomerId());
+        Blacklist.setBlackCustomerId(params.getBlackCustomerId());
+
+        int result = blacklistMapper.insertSelective(Blacklist);
+        logger.info("添加黑名单 saveBlacklist,更新数量" + result);
+        if (result > 0) {
+            commonResponse.setCode(UserBizReturnCode.Success);
+            commonResponse.setMessage(UserBizReturnCode.Success.desc());
+            return commonResponse;
+        } else {
+            logger.error("添加黑名单 异常");
+            throw new BizException(UserBizReturnCode.jdbcError, "操作数据库异常");
+        }
     }
 }
