@@ -743,6 +743,30 @@ public class OrderServiceImpl implements IOrderService {
 
     @Override
     public CommonResponse submitOrderEvaluation(OrderEvaluationSubmitRequest request) {
-        return null;
+		// 保存订单表评价信息
+		Order evaluationInfo = new Order();
+		evaluationInfo.setOrderId(request.getOrderId());
+		evaluationInfo.setEvaluateStart(request.getEvaluateStart());
+		evaluationInfo.setCustomerEvaluate(request.getEvaluateContent());
+		orderMapper.saveEvaluationInfo(evaluationInfo);
+
+		// 如果选择了标签，保存评价的标签
+		if(request.getLabelIds() != null && request.getLabelIds().length > 0){
+			// 查询订单的服务方ID
+			OrderDetailVO orderDetailVO = orderMapper.queryEvaluationData(request.getOrderId());
+			List<EvaluationLabel> list = new ArrayList<>();
+			for(Integer labelId : request.getLabelIds()){
+				EvaluationLabel label = new EvaluationLabel();
+				label.setEvaluationId(UUIDUtils.getId());
+				label.setCustomerId(orderDetailVO.getServiceId());
+				label.setSkillItemId(orderDetailVO.getSkillItemId());
+				label.setOrderId(request.getOrderId());
+				label.setLabelId(labelId);
+				list.add(label);
+			}
+			orderMapper.saveEvaluationLabels(list);
+		}
+
+        return ResultUtils.resultSuccess();
     }
 }

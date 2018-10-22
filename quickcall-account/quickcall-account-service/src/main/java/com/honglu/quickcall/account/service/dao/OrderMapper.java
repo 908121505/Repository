@@ -2,6 +2,7 @@ package com.honglu.quickcall.account.service.dao;
 
 import java.util.List;
 
+import com.honglu.quickcall.account.facade.entity.EvaluationLabel;
 import org.apache.ibatis.annotations.Param;
 
 import com.honglu.quickcall.account.facade.entity.Order;
@@ -55,4 +56,17 @@ public interface OrderMapper {
 	 * @return
 	 */
 	OrderDetailVO queryEvaluationData(@Param("orderId") Long orderId);
+
+	/**
+	 * 保存订单表评价信息
+	 * @param evaluationInfo
+	 * @return
+	 */
+	int saveEvaluationInfo(Order evaluationInfo);
+
+	/**
+	 * 保存评价标签
+	 * @param list
+	 */
+	void saveEvaluationLabels(List<EvaluationLabel> list);
 }

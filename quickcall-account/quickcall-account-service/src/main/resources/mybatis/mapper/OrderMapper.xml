@@ -577,7 +577,8 @@
         cu.head_portrait_url AS headPortraitUrl,
         cu.sex AS sex,
         cs.skill_name AS skillName,
-        cs.skill_item_id AS skillItemId
+        cs.skill_item_id AS skillItemId,
+        od.service_id as serviceId
     FROM
         `order` od
     LEFT JOIN customer cu ON cu.customer_id = od.service_id
@@ -585,4 +586,19 @@
     WHERE
         od.order_id =  #{orderId}
   </select>
+
+  <!-- 保存评价信息 -->
+  <update id="saveEvaluationInfo" parameterType="com.honglu.quickcall.account.facade.entity.Order">
+    update `order` set modify_time = NOW(), customer_is_evaluate = 1,
+    evaluate_start = #{evaluateStart}, customer_evaluate = #{customerEvaluate}
+    where order_id = #{orderId}
+  </update>
+
+  <!-- 保存评价标签 -->
+  <insert id="saveEvaluationLabels" parameterType="list">
+    insert into order_evaluation_label(evaluation_id,customer_id,skill_item_id,order_id,label_id) values
+    <foreach collection="list" index="index" item="item" separator=",">
+      (#{item.evaluationId},#{item.customerId},#{item.skillItemId},#{item.orderId},#{item.labelId})
+    </foreach>
+  </insert>
 </mapper>

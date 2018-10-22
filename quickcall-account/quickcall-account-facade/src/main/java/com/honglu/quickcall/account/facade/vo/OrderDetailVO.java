@@ -16,7 +16,8 @@ public class OrderDetailVO implements  Serializable{
 
 	/**订单ID*/
 	private Long  orderId;
-	/**对方客户编号*/
+	/**服务方编号*/
+	private Long  serviceId;
 	private Long  customerId;
 	/**对方头像*/
 	private String  headPortraitUrl;
@@ -66,6 +67,15 @@ public class OrderDetailVO implements  Serializable{
 	public void setOrderId(Long orderId) {
 		this.orderId = orderId;
 	}
+
+	public Long getServiceId() {
+		return serviceId;
+	}
+
+	public void setServiceId(Long serviceId) {
+		this.serviceId = serviceId;
+	}
+
 	public Long getCustomerId() {
 		return customerId;
 	}
