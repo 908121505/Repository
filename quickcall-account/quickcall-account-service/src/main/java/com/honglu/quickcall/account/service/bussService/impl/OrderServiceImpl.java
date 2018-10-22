@@ -187,6 +187,14 @@ public class OrderServiceImpl implements IOrderService {
 		LOGGER.info("======>>>>>queryReceiveOrderList()入参："+request.toString());
 		Long  customerId =  request.getCustomerId();
 		List<OrderReceiveOrderListVO>  resultList =  orderMapper.queryReceiveOrderList(customerId);
+		
+		if(!CollectionUtils.isEmpty(resultList)){
+			for (OrderReceiveOrderListVO info : resultList) {
+				info.setCountDownSeconds(1200L);
+			}
+		}
+			
+		
 		CommonResponse commonResponse = commonService.getCommonResponse();
 		commonResponse.setData(resultList);
 		LOGGER.info("======>>>>>查询收到的订单，用户编号为：" + request.getCustomerId() + "查询成功");
@@ -211,8 +219,10 @@ public class OrderServiceImpl implements IOrderService {
 		Long  customerId =  request.getCustomerId();
 		List<OrderSendOrderListVO>  resultList =  orderMapper.querySendOrderList(customerId);
 		if(!CollectionUtils.isEmpty(resultList)){
-			Date  currDateTime =  new Date();
-//			for (OrderSendOrderListVO info : resultList) {
+			
+//			Date  currDateTime =  new Date();
+			for (OrderSendOrderListVO info : resultList) {
+				info.setCountDownSeconds(1200L);
 //				Integer   orderStatus  = info.getOrderStatus();
 //				if(OrderSkillConstants.ORDER_STATUS_NOT_PAY ==  orderStatus){
 //					Date  orderTime =  info.getOrderTime();
@@ -236,7 +246,7 @@ public class OrderServiceImpl implements IOrderService {
 //						info.setOrderStatus(OrderSkillConstants.ORDER_STATUS_CANCEL_PAYED_DV_RECEIVE_OVER_TIME);
 //					}
 //					
-//				}
+				}
 //			}
 		}
 		

@@ -125,8 +125,8 @@
 			              'sClass':"text-center"
 			            },
 			            { 
-			               "data": "imageUrl",
-			               "sTitle":"背景图片",
+			               "data": "lockIcon",
+			               "sTitle":"未解锁图片",
 			               'sClass':"text-center",
 			               "mRender": function(data, type, full) { 
 			            	   if(data==''||data==null){
@@ -137,6 +137,50 @@
 			            	   
 			              } 
 			            },
+                        {
+                            "data": "unlockIcon",
+                            "sTitle":"解锁图片",
+                            'sClass':"text-center",
+                            "mRender": function(data, type, full) {
+                                if(data==''||data==null){
+                                    return	"--";
+                                }else{
+                                    return "<img src='" + data + "' height='50px;'/>";
+                                }
+
+                            }
+                        },
+                        {
+                            "data": "backColor",
+                            "sTitle":"背景颜色",
+                            'sClass':"text-center",
+                            "mRender": function(data, type, full) {
+                                if(data==''||data==null){
+                                    return	"--";
+                                }else{
+                                    return "<div style=\"background-color:"+data+";\">\n" +
+                                        "                    <br>背影颜色\n" +
+                                        "                </div>\n"
+                                }
+
+                            }
+                        },
+                        {
+                            "data": "fontColor",
+                            "sTitle":"字体颜色",
+                            'sClass':"text-center",
+                            "mRender": function(data, type, full) {
+                                if(data==''||data==null){
+                                    return	"--";
+                                }else{
+                                    return "<div style=\"background-color:"+data+";\">\n" +
+                                        "                    <br>背影颜色\n" +
+                                        "                </div>\n"
+                                }
+
+                            }
+                        },
+
 						{
 							"data": "skillDescribe",
 							"sTitle": "描述",
@@ -253,7 +297,7 @@
 		                   aoData.push({"name": "skillStatus", "value": $("#skillStatusQuery").val()});
 	                    },
 	                    aoColumnDefs : [ {
-							"aTargets" : 10,
+							"aTargets" : 13,
 							"mRender" : function(data,type, row) {
 								var detail = "",del = "";
 								detail = "<a href='#' onclick='addAndUpdateRow(\""+ row.id+ "\")' data-toggle='modal' class='padding-right-small label label-success'><i class='glyphicon glyphicon-edit'></i>详情</a>";
