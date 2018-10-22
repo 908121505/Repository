@@ -805,7 +805,8 @@ public class PersonInfoServiceImpl implements PersonInfoService {
                 CustomerHomeVO.CustomerSkill customerSkill = customerHomeVO.new CustomerSkill();
                 customerSkill.setSkillId(bean.getSkillItemId());
                 customerSkill.setSkillName(bean.getSkillName());
-				customerSkill.setSkillImageUrl(bean.getSkillImageUrl());
+				customerSkill.setSkillBackColor(bean.getSkillBackColor());
+				customerSkill.setSkillFontColor(bean.getSkillFontColor());
                 customerSkill.setSkillVoiceUrl(bean.getSkillVoiceUrl());
                 customerSkill.setSkillVoiceTime(bean.getSkillVoiceTime());
 

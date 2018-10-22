@@ -98,9 +98,13 @@ public class CustomerHomeVO implements Serializable {
          */
         private String skillName;
         /**
-         * 技能背景图
+         * 技能背景颜色
          */
-        private String skillImageUrl;
+        private String skillBackColor;
+        /**
+         * 技能背字体色
+         */
+        private String skillFontColor;
         /**
          * 技能声音Url
          */
@@ -142,12 +146,20 @@ public class CustomerHomeVO implements Serializable {
             this.skillName = skillName;
         }
 
-        public String getSkillImageUrl() {
-            return skillImageUrl;
+        public String getSkillBackColor() {
+            return skillBackColor;
         }
 
-        public void setSkillImageUrl(String skillImageUrl) {
-            this.skillImageUrl = skillImageUrl;
+        public void setSkillBackColor(String skillBackColor) {
+            this.skillBackColor = skillBackColor;
+        }
+
+        public String getSkillFontColor() {
+            return skillFontColor;
+        }
+
+        public void setSkillFontColor(String skillFontColor) {
+            this.skillFontColor = skillFontColor;
         }
 
         public String getSkillVoiceUrl() {
@@ -203,6 +215,8 @@ public class CustomerHomeVO implements Serializable {
             return "CustomerSkill{" +
                     "skillId=" + skillId +
                     ", skillName='" + skillName + '\'' +
+                    ", skillBackColor='" + skillBackColor + '\'' +
+                    ", skillFontColor='" + skillFontColor + '\'' +
                     ", skillVoiceUrl='" + skillVoiceUrl + '\'' +
                     ", skillVoiceTime=" + skillVoiceTime +
                     ", skillPrice=" + skillPrice +
