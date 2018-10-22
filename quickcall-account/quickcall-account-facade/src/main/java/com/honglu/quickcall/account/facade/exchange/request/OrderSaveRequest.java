@@ -26,6 +26,8 @@ public class OrderSaveRequest extends AbstractRequest {
 	private Integer  orderNum;
 	/**下单备注*/
 	private String  remark;
+	/**预约时间*/
+	private String  appointTimeStr;
 
 	public Long getCustomerId() {
 		return customerId;
@@ -76,17 +78,24 @@ public class OrderSaveRequest extends AbstractRequest {
 		this.remark = remark;
 	}
 
+	public String getAppointTimeStr() {
+		return appointTimeStr;
+	}
+	
+	
+	public void setAppointTimeStr(String appointTimeStr) {
+		this.appointTimeStr = appointTimeStr;
+	}
 
 	@Override
 	public String getBizCode() {
 		return OrderRequestType.ORDER_SAVE;
 	}
 
+	
+	
 
-	@Override
-	public String toString() {
-		return "OrderSaveRequest [customerId=" + customerId + ", serviceId=" + serviceId + ", customerSkillId="
-				+ customerSkillId + ", orderNum=" + orderNum + ", remark=" + remark + "]";
-	}
+
+
 
 }
