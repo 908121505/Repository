@@ -8,6 +8,8 @@ import java.util.List;
 import com.honglu.quickcall.account.facade.exchange.request.*;
 import com.honglu.quickcall.account.facade.vo.*;
 import com.honglu.quickcall.common.api.exchange.ResultUtils;
+import com.honglu.quickcall.common.api.util.DateUtils;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -346,6 +348,13 @@ public class OrderServiceImpl implements IOrderService {
 //				}
 //			}
 		}
+		
+		if(orderDetail != null){
+			Date  birthday  =  orderDetail.getBirthday();
+			int   age = DateUtils.getAgeByBirth(birthday);
+			orderDetail.setAge(age);
+		}
+		
 		CommonResponse commonResponse = commonService.getCommonResponse();
 		commonResponse.setData(orderDetail);
 		LOGGER.info("======>>>>>查询发送的订单，用户编号为：" + orderId + "查询成功");
@@ -711,8 +720,8 @@ public class OrderServiceImpl implements IOrderService {
 
         OrderEvaluationVo orderEvaluationVo = new OrderEvaluationVo();
         orderEvaluationVo.setOrderId(request.getOrderId());
-        orderEvaluationVo.setNickName(orderDetailVO.getAnotherNickName());
-        orderEvaluationVo.setHeadPortraitUrl(orderDetailVO.getAnotherHeadPortraitUrl());
+        orderEvaluationVo.setNickName(orderDetailVO.getNickName());
+        orderEvaluationVo.setHeadPortraitUrl(orderDetailVO.getHeadPortraitUrl());
 
 
 

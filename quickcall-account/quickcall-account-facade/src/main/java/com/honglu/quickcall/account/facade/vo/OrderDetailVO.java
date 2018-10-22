@@ -57,7 +57,7 @@ public class OrderDetailVO implements  Serializable{
 	private Date  endTime;
 	
 	
-	private Long  customerSkillId ;
+	private Long  skillItemId ;
 	
 	
 	public Long getOrderId() {
@@ -174,11 +174,11 @@ public class OrderDetailVO implements  Serializable{
 	public void setEndTime(Date endTime) {
 		this.endTime = endTime;
 	}
-	public Long getCustomerSkillId() {
-		return customerSkillId;
+	public Long getSkillItemId() {
+		return skillItemId;
 	}
-	public void setCustomerSkillId(Long customerSkillId) {
-		this.customerSkillId = customerSkillId;
+	public void setSkillItemId(Long skillItemId) {
+		this.skillItemId = skillItemId;
 	}
 	
 	
