@@ -14,7 +14,6 @@ import java.util.Date;
  */
 public class OrderDetailVO implements  Serializable{
 
-	private static final long serialVersionUID = -2660437293102429026L;
 	/**订单ID*/
 	private Long  orderId;
 	/**对方客户编号*/
@@ -27,7 +26,7 @@ public class OrderDetailVO implements  Serializable{
 	private String  nickName;
 	
 	/**年龄*/
-	private int   birthday;
+	private Date   birthday;
 	/**年龄*/
 	private int   age;
 	/**性别*/
@@ -56,6 +55,11 @@ public class OrderDetailVO implements  Serializable{
 	private Date  startTime;
 	/**结束时间*/
 	private Date  endTime;
+	
+	
+	private Long  customerSkillId ;
+	
+	
 	public Long getOrderId() {
 		return orderId;
 	}
@@ -86,10 +90,10 @@ public class OrderDetailVO implements  Serializable{
 	public void setNickName(String nickName) {
 		this.nickName = nickName;
 	}
-	public int getBirthday() {
+	public Date getBirthday() {
 		return birthday;
 	}
-	public void setBirthday(int birthday) {
+	public void setBirthday(Date birthday) {
 		this.birthday = birthday;
 	}
 	public int getAge() {
@@ -169,6 +173,12 @@ public class OrderDetailVO implements  Serializable{
 	}
 	public void setEndTime(Date endTime) {
 		this.endTime = endTime;
+	}
+	public Long getCustomerSkillId() {
+		return customerSkillId;
+	}
+	public void setCustomerSkillId(Long customerSkillId) {
+		this.customerSkillId = customerSkillId;
 	}
 	
 	
