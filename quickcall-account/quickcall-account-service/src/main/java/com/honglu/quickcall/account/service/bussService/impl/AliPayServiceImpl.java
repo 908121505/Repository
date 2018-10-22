@@ -61,7 +61,7 @@ public class AliPayServiceImpl implements AliPayService {
 		String orderNo = UUIDUtils.getUUID();// 订单
 		String orderDesc = "支付宝充值";
 		String amount = packet.getAmount() + "";// 交易金额
-		String xnPayType = "1";// 支付类型 1:支付宝APP, 2 :微信APP ,3:支付宝H5支付,4：微信H5支付
+		String xnPayType = packet.getPayType() + "";// 支付类型 1:支付宝APP, 2 :微信APP ,3:支付宝H5支付,4：微信H5支付
 		// String extData= "{\"phoneNum\":\"18217583747\"}";
 		String extData = "{\"accountId\":packet.getUserId()}";
 		String accountId = packet.getCustomerId() + "";
@@ -90,7 +90,7 @@ public class AliPayServiceImpl implements AliPayService {
 		recharge.setType(TradeTypeEnum.Pay.getType());// 1充值 2提现
 		recharge.setOrdersn(orderNo);
 		recharge.setState(1);// 状态。1-申请支付，2-支付成功 3支付失败
-		recharge.setRechargeType(1);// 充值类型。1为支付宝，2为微信 3为苹果内购
+		recharge.setRechargeType(packet.getPayType());// 充值类型。1为支付宝，2为微信 3为苹果内购
 		rechargeMapper.insertSelective(recharge);
 		return ResultUtils.resultSuccess(result);
 
