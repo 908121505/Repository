@@ -30,29 +30,29 @@ public class CustomerSkill {
 
     private BigDecimal skillPrice;
 
-    private Integer skillStatus;
+    private Byte skillStatus;
 
-    private Integer switchStatus;
+    private Byte switchStatus;
 
-    private Integer receiveStatus;
+    private Byte receiveStatus;
 
     private BigDecimal discountRate;
 
     private BigDecimal discountPrice;
 
-    private Integer monday;
+    private Byte monday;
 
-    private Integer tuesday;
+    private Byte tuesday;
 
-    private Integer wednesday;
+    private Byte wednesday;
 
-    private Integer thursday;
+    private Byte thursday;
 
-    private Integer friday;
+    private Byte friday;
 
-    private Integer saturday;
+    private Byte saturday;
 
-    private Integer sunday;
+    private Byte sunday;
 
     private Date startServiceTime;
 
@@ -112,7 +112,7 @@ public class CustomerSkill {
     }
 
     public void setSkillName(String skillName) {
-        this.skillName = skillName;
+        this.skillName = skillName == null ? null : skillName.trim();
     }
 
     public String getServiceUnit() {
@@ -120,7 +120,7 @@ public class CustomerSkill {
     }
 
     public void setServiceUnit(String serviceUnit) {
-        this.serviceUnit = serviceUnit;
+        this.serviceUnit = serviceUnit == null ? null : serviceUnit.trim();
     }
 
     public BigDecimal getSkillPrice() {
@@ -131,27 +131,19 @@ public class CustomerSkill {
         this.skillPrice = skillPrice;
     }
 
-    public Integer getSkillStatus() {
-        return skillStatus;
-    }
-
-    public void setSkillStatus(Integer skillStatus) {
-        this.skillStatus = skillStatus;
-    }
-
-    public Integer getSwitchStatus() {
+    public Byte getSwitchStatus() {
         return switchStatus;
     }
 
-    public void setSwitchStatus(Integer switchStatus) {
+    public void setSwitchStatus(Byte switchStatus) {
         this.switchStatus = switchStatus;
     }
 
-    public Integer getReceiveStatus() {
+    public Byte getReceiveStatus() {
         return receiveStatus;
     }
 
-    public void setReceiveStatus(Integer receiveStatus) {
+    public void setReceiveStatus(Byte receiveStatus) {
         this.receiveStatus = receiveStatus;
     }
 
@@ -171,124 +163,161 @@ public class CustomerSkill {
         this.discountPrice = discountPrice;
     }
 
-    public Integer getMonday() {
+    public Byte getMonday() {
         return monday;
     }
 
-    public void setMonday(Integer monday) {
+    
+    public void setMonday(Byte monday) {
         this.monday = monday;
     }
 
-    public Integer getTuesday() {
+    
+    public Byte getTuesday() {
         return tuesday;
     }
 
-    public void setTuesday(Integer tuesday) {
+    
+    public void setTuesday(Byte tuesday) {
         this.tuesday = tuesday;
     }
 
-    public Integer getWednesday() {
+    
+    public Byte getWednesday() {
         return wednesday;
     }
 
-    public void setWednesday(Integer wednesday) {
+    
+    public void setWednesday(Byte wednesday) {
         this.wednesday = wednesday;
     }
 
-    public Integer getThursday() {
+    
+    public Byte getThursday() {
         return thursday;
     }
 
-    public void setThursday(Integer thursday) {
+    
+    public void setThursday(Byte thursday) {
         this.thursday = thursday;
     }
 
-    public Integer getFriday() {
+    
+    public Byte getFriday() {
         return friday;
     }
 
-    public void setFriday(Integer friday) {
+    
+    public void setFriday(Byte friday) {
         this.friday = friday;
     }
 
-    public Integer getSaturday() {
+   
+    public Byte getSaturday() {
         return saturday;
     }
 
-    public void setSaturday(Integer saturday) {
+    
+    public void setSaturday(Byte saturday) {
         this.saturday = saturday;
     }
 
-    public Integer getSunday() {
+    
+    public Byte getSunday() {
         return sunday;
     }
 
-    public void setSunday(Integer sunday) {
+    
+    public void setSunday(Byte sunday) {
         this.sunday = sunday;
     }
 
+   
     public Date getStartServiceTime() {
         return startServiceTime;
     }
 
+    
     public void setStartServiceTime(Date startServiceTime) {
         this.startServiceTime = startServiceTime;
     }
 
+   
     public Date getEndServiceTime() {
         return endServiceTime;
     }
 
+    
     public void setEndServiceTime(Date endServiceTime) {
         this.endServiceTime = endServiceTime;
     }
 
+    
     public String getSkillDescribe() {
         return skillDescribe;
     }
 
+    
     public void setSkillDescribe(String skillDescribe) {
-        this.skillDescribe = skillDescribe;
+        this.skillDescribe = skillDescribe == null ? null : skillDescribe.trim();
     }
 
+    
     public Date getCreateTime() {
         return createTime;
     }
 
+   
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
     }
 
+   
     public Date getModifyTime() {
         return modifyTime;
     }
 
+    
     public void setModifyTime(Date modifyTime) {
         this.modifyTime = modifyTime;
     }
 
+    
     public String getCreateMan() {
         return createMan;
     }
 
+
     public void setCreateMan(String createMan) {
-        this.createMan = createMan;
+        this.createMan = createMan == null ? null : createMan.trim();
     }
 
+ 
     public String getModifyMan() {
         return modifyMan;
     }
 
+   
     public void setModifyMan(String modifyMan) {
-        this.modifyMan = modifyMan;
+        this.modifyMan = modifyMan == null ? null : modifyMan.trim();
     }
 
+   
     public String getRemark() {
         return remark;
     }
 
+   
     public void setRemark(String remark) {
-        this.remark = remark;
+        this.remark = remark == null ? null : remark.trim();
+    }
+
+    public Byte getSkillStatus() {
+        return skillStatus;
+    }
+
+    public void setSkillStatus(Byte skillStatus) {
+        this.skillStatus = skillStatus;
     }
 
     public String getSkillImageUrl() {
