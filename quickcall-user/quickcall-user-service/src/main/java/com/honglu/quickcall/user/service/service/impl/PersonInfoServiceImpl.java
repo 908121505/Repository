@@ -756,7 +756,7 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 	public CommonResponse queryCustomerHome(CustomerHomeRequest request) {
 		Customer viewCustomer = customerMapper.selectByPrimaryKey(request.getViewCustomerId());
         if (viewCustomer == null) {
-            ResultUtils.resultDataNotExist("用户数据不存在");
+            return ResultUtils.resultDataNotExist("用户数据不存在");
         }
 
         CustomerHomeVO customerHomeVO = new CustomerHomeVO();
@@ -805,7 +805,8 @@ public class PersonInfoServiceImpl implements PersonInfoService {
                 CustomerHomeVO.CustomerSkill customerSkill = customerHomeVO.new CustomerSkill();
                 customerSkill.setSkillId(bean.getSkillItemId());
                 customerSkill.setSkillName(bean.getSkillName());
-				customerSkill.setSkillImageUrl(bean.getSkillImageUrl());
+				customerSkill.setSkillBackColor(bean.getSkillBackColor());
+				customerSkill.setSkillFontColor(bean.getSkillFontColor());
                 customerSkill.setSkillVoiceUrl(bean.getSkillVoiceUrl());
                 customerSkill.setSkillVoiceTime(bean.getSkillVoiceTime());
 

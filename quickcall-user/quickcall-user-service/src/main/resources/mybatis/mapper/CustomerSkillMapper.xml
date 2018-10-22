@@ -31,7 +31,8 @@
     <result column="remark" property="remark" jdbcType="VARCHAR" />
 
     <!-- 扩展查询字段 -->
-    <result column="skill_image_url" property="skillImageUrl" jdbcType="VARCHAR" />
+    <result column="skill_back_color" property="skillBackColor" jdbcType="VARCHAR" />
+    <result column="skill_font_color" property="skillFontColor" jdbcType="VARCHAR" />
     <result column="skill_voice_url" property="skillVoiceUrl" jdbcType="VARCHAR" />
     <result column="skill_voice_time" property="skillVoiceTime" jdbcType="DECIMAL" />
 
@@ -373,14 +374,15 @@
         t.skill_name,
         t2.skill_voice_url,
         t2.skill_voice_time,
-        t3.image_url as skill_image_url
+        t3.back_color as skill_back_color,
+        t3.font_color as skill_font_color
     FROM
         customer_skill t
     LEFT JOIN customer_skill_certify t2 ON t2.certify_id = t.certify_id
-    LEFT JOIN skill_item t3 ON t3.id = t.certify_id = t.skill_item_id
+    LEFT JOIN skill_item t3 ON t3.id = t.skill_item_id
     WHERE
         t.customer_id = #{customerId}
-    AND t.is_audited = 1
+    AND t.skill_status = 1
     ORDER BY t.create_time ASC
   </select>
 </mapper>

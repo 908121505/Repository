@@ -1,7 +1,7 @@
 package com.honglu.quickcall.account.facade.enums;
 
 public enum TransferTypeEnum {
-	RECHARGE(1, "可用金额"), REMAINDER(2, "提现金额");
+	RECHARGE(1, "可用金额"), REMAINDER(2, "提现金额"), FROZEN(3, "冻结金额");
 
 	private Integer type;
 	private String desc;

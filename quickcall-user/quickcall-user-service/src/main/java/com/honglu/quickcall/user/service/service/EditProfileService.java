@@ -39,6 +39,12 @@ public interface EditProfileService {
      */
     CommonResponse updateAppearance(UpdateAppearanceReq params);
     /**
+     * 查询兴趣列表
+     * @param params
+     * @return
+     */
+    CommonResponse queryInterestList(QueryInterestListReq params);
+    /**
      * 修改兴趣
      * @param params
      * @return
@@ -62,5 +68,6 @@ public interface EditProfileService {
      * @return
      */
     CommonResponse removeVoiceIdentificationCard(RemoveVoiceIdentificationCardReq params);
+
 
 }

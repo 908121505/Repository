@@ -102,6 +102,10 @@ public interface UserFunctionType {
 	 */
 	String updateAppearance = "0011144";
 	/**
+	 * 查询兴趣列表
+	 */
+	String queryInterestList = "0011149";
+	/**
 	 * 修改兴趣
 	 */
 	String updateInterest = "0011145";
