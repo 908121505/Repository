@@ -16,7 +16,8 @@ public class OrderDetailVO implements  Serializable{
 
 	/**订单ID*/
 	private Long  orderId;
-	/**对方客户编号*/
+	/**服务方编号*/
+	private Long  serviceId;
 	private Long  customerId;
 	/**对方头像*/
 	private String  headPortraitUrl;
@@ -58,9 +59,14 @@ public class OrderDetailVO implements  Serializable{
 	
 	
 	private Long  skillItemId ;
+
 	
 	/**倒计时秒数*/
 	private Long  countDownSeconds; 
+
+	private Long  customerIsEvaluate ;
+
+
 	
 	
 	
@@ -77,6 +83,15 @@ public class OrderDetailVO implements  Serializable{
 	public void setOrderId(Long orderId) {
 		this.orderId = orderId;
 	}
+
+	public Long getServiceId() {
+		return serviceId;
+	}
+
+	public void setServiceId(Long serviceId) {
+		this.serviceId = serviceId;
+	}
+
 	public Long getCustomerId() {
 		return customerId;
 	}
@@ -191,8 +206,12 @@ public class OrderDetailVO implements  Serializable{
 	public void setSkillItemId(Long skillItemId) {
 		this.skillItemId = skillItemId;
 	}
-	
-	
 
+	public Long getCustomerIsEvaluate() {
+		return customerIsEvaluate;
+	}
 
+	public void setCustomerIsEvaluate(Long customerIsEvaluate) {
+		this.customerIsEvaluate = customerIsEvaluate;
+	}
 }

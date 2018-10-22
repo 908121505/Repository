@@ -4,7 +4,6 @@ package com.honglu.quickcall.account.web.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.honglu.quickcall.account.facade.exchange.request.*;
 import com.honglu.quickcall.user.facade.code.UserBizReturnCode;
-import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -218,9 +217,13 @@ public class OrderController {
     public WebResponseModel orderEvaluationSubmit(OrderEvaluationSubmitRequest params) {
         LOGGER.info("orderWeb order orderEvaluationSubmit request data : " + JSONObject.toJSONString(params));
         WebResponseModel response = new WebResponseModel();
+        response.setCode(UserBizReturnCode.paramError.code());
         if (params.getOrderId() == null || params.getCustomerId() == null) {
-            response.setCode(UserBizReturnCode.paramError.code());
             response.setMsg(UserBizReturnCode.paramError.desc());
+            return response;
+        }
+        if(params.getLabelIds() != null && params.getLabelIds().length > 3){
+            response.setMsg("最多选择3个标签");
             return response;
         }
         response = orderInfoService.execute(params);

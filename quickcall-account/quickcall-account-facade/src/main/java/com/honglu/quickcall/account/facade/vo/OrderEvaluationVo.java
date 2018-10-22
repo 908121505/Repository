@@ -34,7 +34,8 @@ public class OrderEvaluationVo implements Serializable {
     /**
      * 评价标签
      */
-    public class EvaluationLabel{
+    public class EvaluationLabel implements Serializable{
+        private static final long serialVersionUID = -5168753120800412L;
         /**
          * 标签Id
          */

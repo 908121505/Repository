@@ -11,7 +11,6 @@ import com.honglu.quickcall.common.api.exchange.AbstractRequest;
  */
 public class OrderEvaluationSubmitRequest extends AbstractRequest {
 
-    private static final long serialVersionUID = 6541742576228485039L;
     /**
      * 订单ID
      */
@@ -24,6 +23,10 @@ public class OrderEvaluationSubmitRequest extends AbstractRequest {
      * 评价星级
      */
     private Integer evaluateStart;
+    /**
+     * 评价类容
+     */
+    private String evaluateContent;
     /**
      * 评价标签ID
      */
@@ -56,6 +59,14 @@ public class OrderEvaluationSubmitRequest extends AbstractRequest {
 
     public void setEvaluateStart(Integer evaluateStart) {
         this.evaluateStart = evaluateStart;
+    }
+
+    public String getEvaluateContent() {
+        return evaluateContent;
+    }
+
+    public void setEvaluateContent(String evaluateContent) {
+        this.evaluateContent = evaluateContent;
     }
 
     public Integer[] getLabelIds() {

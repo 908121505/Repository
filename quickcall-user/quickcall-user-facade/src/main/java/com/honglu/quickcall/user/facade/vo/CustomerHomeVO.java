@@ -12,7 +12,7 @@ import java.util.List;
  */
 public class CustomerHomeVO implements Serializable {
 
-    private static final long serialVersionUID = -3988077621764825382L;
+    private static final long serialVersionUID = -9023978444720261334L;
     /**
      * 登录客户ID
      */
@@ -29,6 +29,10 @@ public class CustomerHomeVO implements Serializable {
      * 用户昵称
      */
     private String nickName;
+    /**
+     * 用户头像
+     */
+    private String headPortraitUrl;
     /**
      * 用户性别：0=女,1=男
      */
@@ -266,6 +270,14 @@ public class CustomerHomeVO implements Serializable {
 
     public void setNickName(String nickName) {
         this.nickName = nickName;
+    }
+
+    public String getHeadPortraitUrl() {
+        return headPortraitUrl;
+    }
+
+    public void setHeadPortraitUrl(String headPortraitUrl) {
+        this.headPortraitUrl = headPortraitUrl;
     }
 
     public Integer getSex() {

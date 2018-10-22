@@ -5,8 +5,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.honglu.quickcall.account.facade.entity.EvaluationLabel;
 import com.honglu.quickcall.account.facade.exchange.request.*;
 import com.honglu.quickcall.account.facade.vo.*;
+import com.honglu.quickcall.account.service.dao.SkillItemMapper;
 import com.honglu.quickcall.common.api.exchange.ResultUtils;
 import com.honglu.quickcall.common.api.util.DateUtils;
 
@@ -59,6 +61,8 @@ public class OrderServiceImpl implements IOrderService {
 	private CustomerSkillMapper  customerSkillMapper;
 	@Autowired
 	private BarrageMessageService barrageMessageService;
+	@Autowired
+	private SkillItemMapper skillItemMapper;
 
 	
 	
@@ -715,7 +719,7 @@ public class OrderServiceImpl implements IOrderService {
     public CommonResponse orderEvaluation(OrderEvaluationRequest request) {
         // 根据订单Id查询评价页面需要的数据
         OrderDetailVO orderDetailVO = orderMapper.queryEvaluationData(request.getOrderId());
-        if(orderDetailVO == null){
+        if (orderDetailVO == null) {
             return ResultUtils.resultDataNotExist("订单信息不存在");
         }
 
@@ -724,13 +728,51 @@ public class OrderServiceImpl implements IOrderService {
         orderEvaluationVo.setNickName(orderDetailVO.getNickName());
         orderEvaluationVo.setHeadPortraitUrl(orderDetailVO.getHeadPortraitUrl());
 
-
-
+        // 查询技能评价标签
+        List<EvaluationLabel> labelList = skillItemMapper.queryEvaluationLabel(orderDetailVO.getSkillItemId(), orderDetailVO.getSex());
+        List<OrderEvaluationVo.EvaluationLabel> labelLists = new ArrayList<>();
+        for (EvaluationLabel bean : labelList){
+            OrderEvaluationVo.EvaluationLabel label = orderEvaluationVo.new EvaluationLabel();
+            label.setLabelId(bean.getLabelId());
+            label.setLabelName(bean.getLabelName());
+            label.setBorderColor(bean.getBorderColor());
+            labelLists.add(label);
+        }
+        orderEvaluationVo.setEvaluationLabelList(labelLists);
         return ResultUtils.resultSuccess(orderEvaluationVo);
     }
 
     @Override
     public CommonResponse submitOrderEvaluation(OrderEvaluationSubmitRequest request) {
-        return null;
+		// 保存订单表评价信息
+		Order evaluationInfo = new Order();
+		evaluationInfo.setOrderId(request.getOrderId());
+		evaluationInfo.setEvaluateStart(request.getEvaluateStart());
+		evaluationInfo.setCustomerEvaluate(request.getEvaluateContent());
+		orderMapper.saveEvaluationInfo(evaluationInfo);
+
+		// 如果选择了标签，保存评价的标签
+		if(request.getLabelIds() != null && request.getLabelIds().length > 0){
+			// 查询订单的服务方ID
+			OrderDetailVO orderDetailVO = orderMapper.queryEvaluationData(request.getOrderId());
+			if(orderDetailVO.getCustomerIsEvaluate() == 1){
+				// 删除旧的评价标签
+				orderMapper.deleteEvaluationLabels(request.getOrderId());
+			}
+
+			List<EvaluationLabel> list = new ArrayList<>();
+			for(Integer labelId : request.getLabelIds()){
+				EvaluationLabel label = new EvaluationLabel();
+				label.setEvaluationId(UUIDUtils.getId());
+				label.setCustomerId(orderDetailVO.getServiceId());
+				label.setSkillItemId(orderDetailVO.getSkillItemId());
+				label.setOrderId(request.getOrderId());
+				label.setLabelId(labelId);
+				list.add(label);
+			}
+			orderMapper.saveEvaluationLabels(list);
+		}
+
+        return ResultUtils.resultSuccess();
     }
 }
