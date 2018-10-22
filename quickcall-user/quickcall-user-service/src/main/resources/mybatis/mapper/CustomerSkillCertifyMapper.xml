@@ -4,7 +4,7 @@
 <mapper namespace="com.honglu.quickcall.user.service.dao.CustomerSkillCertifyMapper">
 
 	<resultMap type="com.honglu.quickcall.user.facade.entity.CustomerSkillCertify" id="customerSkillCertifyMap">
-		<id property="certifyId" column="certify_id" javaType="java.lang.Integer"></id>
+		<id property="certifyId" column="certify_id" javaType="java.lang.Long"></id>
 		<result property="customerId" column="customer_id" javaType="java.lang.Long"></result>
 		<result property="skillItemId" column="skill_item_id" javaType="java.lang.Long"></result>
 		<result property="auditStatus" column="audit_status" javaType="java.lang.Integer"></result>
@@ -64,6 +64,9 @@ certify_id,	customer_id,	skill_item_id,	audit_status,	skill_voice_url,	skill_voi
 	<insert id="saveEntity" parameterType="com.honglu.quickcall.user.facade.entity.CustomerSkillCertify">
 		 INSERT INTO customer_skill_certify
 		 <trim prefix="(" suffix=")" suffixOverrides=",">
+		 	<if test="certifyId != null">
+		 		certify_id,
+		 	</if>
 		 	<if test="customerId != null">
 		 		customer_id,
 		 	</if>
@@ -90,6 +93,9 @@ certify_id,	customer_id,	skill_item_id,	audit_status,	skill_voice_url,	skill_voi
 		 	</if>
 		 </trim>
 		 <trim prefix="values (" suffix=")" suffixOverrides=",">
+		 	<if test="certifyId != null">
+		 		#{certifyId},
+		 	</if>
 		 	<if test="customerId != null">
 		 		#{customerId},
 		 	</if>

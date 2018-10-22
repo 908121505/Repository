@@ -908,6 +908,7 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 			n = customerSkillCertifyMapper.updateEntity(csc);
 		}else{
 			//插入操作
+			csc.setCertifyId(UUIDUtils.getId());
 			n = customerSkillCertifyMapper.saveEntity(csc);
 		}
 		if(n > 0){
