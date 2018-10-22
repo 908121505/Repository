@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.honglu.quickcall.common.api.exchange.WebResponseModel;
 import com.honglu.quickcall.user.facade.exchange.request.AddOrCancelFansRequest;
 import com.honglu.quickcall.user.facade.exchange.request.CheckAttentionRequest;
-import com.honglu.quickcall.user.facade.exchange.request.PersonInfoRequest;
 import com.honglu.quickcall.user.facade.exchange.request.QueryAttentionFansListRequest;
 import com.honglu.quickcall.user.facade.exchange.request.QueryInterestListRequest;
 import com.honglu.quickcall.user.facade.exchange.request.QueryOccupationListRequest;
@@ -21,7 +20,6 @@ import com.honglu.quickcall.user.facade.exchange.request.SaveNickNameRequest;
 import com.honglu.quickcall.user.facade.exchange.request.SaveOccupationRequest;
 import com.honglu.quickcall.user.facade.exchange.request.SaveSignNameRequest;
 import com.honglu.quickcall.user.facade.exchange.request.SearchPersonRequest;
-import com.honglu.quickcall.user.facade.exchange.request.ShowHomePageLogout;
 import com.honglu.quickcall.user.facade.exchange.request.queryMyskillRequest;
 import com.honglu.quickcall.user.web.service.UserCenterService;
 
@@ -44,16 +42,6 @@ public class AccountInfoController {
 	@RequestMapping(value = "/searchPersonList", method = RequestMethod.POST)
 	@ResponseBody
 	public WebResponseModel searchPersonList(SearchPersonRequest params) {
-		WebResponseModel response = userCenterService.execute(params);
-		return response;
-	}
-
-	/**
-	 * 查询个人信息
-	 */
-	@RequestMapping(value = "/queryPersonInfo", method = RequestMethod.POST)
-	@ResponseBody
-	public WebResponseModel queryPersonInfo(PersonInfoRequest params) {
 		WebResponseModel response = userCenterService.execute(params);
 		return response;
 	}
@@ -134,16 +122,6 @@ public class AccountInfoController {
 	@RequestMapping(value = "/queryOccupationList", method = RequestMethod.POST)
 	@ResponseBody
 	public WebResponseModel queryOccupationList(QueryOccupationListRequest params) {
-		WebResponseModel response = userCenterService.execute(params);
-		return response;
-	}
-
-	/**
-	 * 大V主页，普通用户主页（客态）
-	 */
-	@RequestMapping(value = "/showHomePageLogout", method = RequestMethod.POST)
-	@ResponseBody
-	public WebResponseModel showHomePageLogout(ShowHomePageLogout params) {
 		WebResponseModel response = userCenterService.execute(params);
 		return response;
 	}

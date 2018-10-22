@@ -30,29 +30,29 @@ public class CustomerSkill {
 
     private BigDecimal skillPrice;
 
-    private Byte skillStatus;
+    private Integer skillStatus;
 
-    private Byte switchStatus;
+    private Integer switchStatus;
 
-    private Byte receiveStatus;
+    private Integer receiveStatus;
 
     private BigDecimal discountRate;
 
     private BigDecimal discountPrice;
 
-    private Byte monday;
+    private Integer monday;
 
-    private Byte tuesday;
+    private Integer tuesday;
 
-    private Byte wednesday;
+    private Integer wednesday;
 
-    private Byte thursday;
+    private Integer thursday;
 
-    private Byte friday;
+    private Integer friday;
 
-    private Byte saturday;
+    private Integer saturday;
 
-    private Byte sunday;
+    private Integer sunday;
 
     private Date startServiceTime;
 
@@ -131,19 +131,19 @@ public class CustomerSkill {
         this.skillPrice = skillPrice;
     }
 
-    public Byte getSwitchStatus() {
+    public Integer getSwitchStatus() {
         return switchStatus;
     }
 
-    public void setSwitchStatus(Byte switchStatus) {
+    public void setSwitchStatus(Integer switchStatus) {
         this.switchStatus = switchStatus;
     }
 
-    public Byte getReceiveStatus() {
+    public Integer getReceiveStatus() {
         return receiveStatus;
     }
 
-    public void setReceiveStatus(Byte receiveStatus) {
+    public void setReceiveStatus(Integer receiveStatus) {
         this.receiveStatus = receiveStatus;
     }
 
@@ -163,72 +163,72 @@ public class CustomerSkill {
         this.discountPrice = discountPrice;
     }
 
-    public Byte getMonday() {
+    public Integer getMonday() {
         return monday;
     }
 
     
-    public void setMonday(Byte monday) {
+    public void setMonday(Integer monday) {
         this.monday = monday;
     }
 
     
-    public Byte getTuesday() {
+    public Integer getTuesday() {
         return tuesday;
     }
 
     
-    public void setTuesday(Byte tuesday) {
+    public void setTuesday(Integer tuesday) {
         this.tuesday = tuesday;
     }
 
     
-    public Byte getWednesday() {
+    public Integer getWednesday() {
         return wednesday;
     }
 
     
-    public void setWednesday(Byte wednesday) {
+    public void setWednesday(Integer wednesday) {
         this.wednesday = wednesday;
     }
 
     
-    public Byte getThursday() {
+    public Integer getThursday() {
         return thursday;
     }
 
     
-    public void setThursday(Byte thursday) {
+    public void setThursday(Integer thursday) {
         this.thursday = thursday;
     }
 
     
-    public Byte getFriday() {
+    public Integer getFriday() {
         return friday;
     }
 
     
-    public void setFriday(Byte friday) {
+    public void setFriday(Integer friday) {
         this.friday = friday;
     }
 
    
-    public Byte getSaturday() {
+    public Integer getSaturday() {
         return saturday;
     }
 
     
-    public void setSaturday(Byte saturday) {
+    public void setSaturday(Integer saturday) {
         this.saturday = saturday;
     }
 
     
-    public Byte getSunday() {
+    public Integer getSunday() {
         return sunday;
     }
 
     
-    public void setSunday(Byte sunday) {
+    public void setSunday(Integer sunday) {
         this.sunday = sunday;
     }
 
@@ -312,11 +312,11 @@ public class CustomerSkill {
         this.remark = remark == null ? null : remark.trim();
     }
 
-    public Byte getSkillStatus() {
+    public Integer getSkillStatus() {
         return skillStatus;
     }
 
-    public void setSkillStatus(Byte skillStatus) {
+    public void setSkillStatus(Integer skillStatus) {
         this.skillStatus = skillStatus;
     }
 
@@ -343,4 +343,5 @@ public class CustomerSkill {
     public void setSkillVoiceTime(BigDecimal skillVoiceTime) {
         this.skillVoiceTime = skillVoiceTime;
     }
+
 }
