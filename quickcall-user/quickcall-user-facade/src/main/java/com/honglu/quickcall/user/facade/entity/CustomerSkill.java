@@ -343,6 +343,4 @@ public class CustomerSkill {
     public void setSkillVoiceTime(BigDecimal skillVoiceTime) {
         this.skillVoiceTime = skillVoiceTime;
     }
-
-
 }
