@@ -718,7 +718,7 @@ public class OrderServiceImpl implements IOrderService {
     public CommonResponse orderEvaluation(OrderEvaluationRequest request) {
         // 根据订单Id查询评价页面需要的数据
         OrderDetailVO orderDetailVO = orderMapper.queryEvaluationData(request.getOrderId());
-        if(orderDetailVO == null){
+        if (orderDetailVO == null) {
             return ResultUtils.resultDataNotExist("订单信息不存在");
         }
 
@@ -729,7 +729,15 @@ public class OrderServiceImpl implements IOrderService {
 
         // 查询技能评价标签
         List<EvaluationLabel> labelList = skillItemMapper.queryEvaluationLabel(orderDetailVO.getSkillItemId(), orderDetailVO.getSex());
-
+        List<OrderEvaluationVo.EvaluationLabel> labelLists = new ArrayList<>();
+        for (EvaluationLabel bean : labelList){
+            OrderEvaluationVo.EvaluationLabel label = orderEvaluationVo.new EvaluationLabel();
+            label.setLabelId(bean.getLabelId());
+            label.setLabelName(bean.getLabelName());
+            label.setBorderColor(bean.getBorderColor());
+            labelLists.add(label);
+        }
+        orderEvaluationVo.setEvaluationLabelList(labelLists);
         return ResultUtils.resultSuccess(orderEvaluationVo);
     }
 
