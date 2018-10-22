@@ -754,6 +754,11 @@ public class OrderServiceImpl implements IOrderService {
 		if(request.getLabelIds() != null && request.getLabelIds().length > 0){
 			// 查询订单的服务方ID
 			OrderDetailVO orderDetailVO = orderMapper.queryEvaluationData(request.getOrderId());
+			if(orderDetailVO.getCustomerIsEvaluate() == 1){
+				// 删除旧的评价标签
+				orderMapper.deleteEvaluationLabels(request.getOrderId());
+			}
+
 			List<EvaluationLabel> list = new ArrayList<>();
 			for(Integer labelId : request.getLabelIds()){
 				EvaluationLabel label = new EvaluationLabel();

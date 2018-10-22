@@ -68,5 +68,12 @@ public interface OrderMapper {
 	 * 保存评价标签
 	 * @param list
 	 */
-	void saveEvaluationLabels(List<EvaluationLabel> list);
+	int saveEvaluationLabels(List<EvaluationLabel> list);
+
+	/**
+	 * 删除旧的评价标签
+	 * @param orderId
+	 * @return
+	 */
+	int deleteEvaluationLabels(@Param("orderId") Long orderId);
 }

@@ -59,7 +59,8 @@ public class OrderDetailVO implements  Serializable{
 	
 	
 	private Long  skillItemId ;
-	
+	private Long  customerIsEvaluate ;
+
 	
 	public Long getOrderId() {
 		return orderId;
@@ -190,8 +191,12 @@ public class OrderDetailVO implements  Serializable{
 	public void setSkillItemId(Long skillItemId) {
 		this.skillItemId = skillItemId;
 	}
-	
-	
 
+	public Long getCustomerIsEvaluate() {
+		return customerIsEvaluate;
+	}
 
+	public void setCustomerIsEvaluate(Long customerIsEvaluate) {
+		this.customerIsEvaluate = customerIsEvaluate;
+	}
 }
