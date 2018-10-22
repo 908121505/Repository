@@ -131,14 +131,6 @@ public class CustomerSkill {
         this.skillPrice = skillPrice;
     }
 
-    public Byte getskillStatus() {
-        return skillStatus;
-    }
-
-    public void setskillStatus(Byte skillStatus) {
-        this.skillStatus = skillStatus;
-    }
-
     public Byte getSwitchStatus() {
         return switchStatus;
     }
