@@ -1,19 +1,6 @@
 package com.honglu.quickcall.account.service.bussService;
 
-import com.honglu.quickcall.account.facade.exchange.request.ApplayRefundRequest;
-import com.honglu.quickcall.account.facade.exchange.request.CancelOrderRequest;
-import com.honglu.quickcall.account.facade.exchange.request.ConfirmOrderRequest;
-import com.honglu.quickcall.account.facade.exchange.request.DetailOrderRequest;
-import com.honglu.quickcall.account.facade.exchange.request.DvConfirmRefundRequest;
-import com.honglu.quickcall.account.facade.exchange.request.DvReceiveOrderRequest;
-import com.honglu.quickcall.account.facade.exchange.request.DvStartServiceRequest;
-import com.honglu.quickcall.account.facade.exchange.request.OrderDaVSkillRequest;
-import com.honglu.quickcall.account.facade.exchange.request.OrderReceiveOrderListRequest;
-import com.honglu.quickcall.account.facade.exchange.request.OrderSaveRequest;
-import com.honglu.quickcall.account.facade.exchange.request.OrderSendOrderListRequest;
-import com.honglu.quickcall.account.facade.exchange.request.PayOrderRequest;
-import com.honglu.quickcall.account.facade.exchange.request.QueryIngOrderCountRequest;
-import com.honglu.quickcall.account.facade.exchange.request.QueryRefundReasonRequest;
+import com.honglu.quickcall.account.facade.exchange.request.*;
 import com.honglu.quickcall.common.api.exchange.CommonResponse;
 
 /**
@@ -134,23 +121,19 @@ public interface IOrderService {
 	 * @param request
 	 */
 	public CommonResponse  queryRefundReason(QueryRefundReasonRequest  request);
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
+	/**
+	 * 订单评价页面
+	 * @param request
+	 * @return
+	 */
+	CommonResponse orderEvaluation(OrderEvaluationRequest request);
+
+	/**
+	 * 提交订单评价
+	 * @param request
+	 * @return
+	 */
+	CommonResponse submitOrderEvaluation(OrderEvaluationSubmitRequest request);
+
 }

@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.honglu.quickcall.account.facade.exchange.request.*;
+import com.honglu.quickcall.account.facade.vo.*;
+import com.honglu.quickcall.common.api.exchange.ResultUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,25 +21,6 @@ import com.honglu.quickcall.account.facade.entity.CustomerSkill;
 import com.honglu.quickcall.account.facade.entity.Order;
 import com.honglu.quickcall.account.facade.enums.AccountBusinessTypeEnum;
 import com.honglu.quickcall.account.facade.enums.TransferTypeEnum;
-import com.honglu.quickcall.account.facade.exchange.request.ApplayRefundRequest;
-import com.honglu.quickcall.account.facade.exchange.request.CancelOrderRequest;
-import com.honglu.quickcall.account.facade.exchange.request.ConfirmOrderRequest;
-import com.honglu.quickcall.account.facade.exchange.request.DetailOrderRequest;
-import com.honglu.quickcall.account.facade.exchange.request.DvConfirmRefundRequest;
-import com.honglu.quickcall.account.facade.exchange.request.DvReceiveOrderRequest;
-import com.honglu.quickcall.account.facade.exchange.request.DvStartServiceRequest;
-import com.honglu.quickcall.account.facade.exchange.request.OrderDaVSkillRequest;
-import com.honglu.quickcall.account.facade.exchange.request.OrderReceiveOrderListRequest;
-import com.honglu.quickcall.account.facade.exchange.request.OrderSaveRequest;
-import com.honglu.quickcall.account.facade.exchange.request.OrderSendOrderListRequest;
-import com.honglu.quickcall.account.facade.exchange.request.PayOrderRequest;
-import com.honglu.quickcall.account.facade.exchange.request.QueryIngOrderCountRequest;
-import com.honglu.quickcall.account.facade.exchange.request.QueryRefundReasonRequest;
-import com.honglu.quickcall.account.facade.vo.OrderDaVSkillVO;
-import com.honglu.quickcall.account.facade.vo.OrderDetailVO;
-import com.honglu.quickcall.account.facade.vo.OrderReceiveOrderListVO;
-import com.honglu.quickcall.account.facade.vo.OrderSendOrderListVO;
-import com.honglu.quickcall.account.facade.vo.OrderSkillItemVO;
 import com.honglu.quickcall.account.service.bussService.AccountService;
 import com.honglu.quickcall.account.service.bussService.BarrageMessageService;
 import com.honglu.quickcall.account.service.bussService.CommonService;
@@ -720,4 +704,26 @@ public class OrderServiceImpl implements IOrderService {
 	}
 
 
+    @Override
+    public CommonResponse orderEvaluation(OrderEvaluationRequest request) {
+        // 根据订单Id查询评价页面需要的数据
+        OrderDetailVO orderDetailVO = orderMapper.queryEvaluationData(request.getOrderId());
+        if(orderDetailVO == null){
+            return ResultUtils.resultDataNotExist("订单信息不存在");
+        }
+
+        OrderEvaluationVo orderEvaluationVo = new OrderEvaluationVo();
+        orderEvaluationVo.setOrderId(request.getOrderId());
+        orderEvaluationVo.setNickName(orderDetailVO.getAnotherNickName());
+        orderEvaluationVo.setHeadPortraitUrl(orderDetailVO.getAnotherHeadPortraitUrl());
+
+
+
+        return ResultUtils.resultSuccess(orderEvaluationVo);
+    }
+
+    @Override
+    public CommonResponse submitOrderEvaluation(OrderEvaluationSubmitRequest request) {
+        return null;
+    }
 }

@@ -66,6 +66,11 @@ public interface OrderRequestType {
     public static final  String  QUERY_ING_ORDER_COUNT = "19051";
     /**查询退款原因*/
     public static final  String  QUERY_REFUND_REASON = "19052";
-    
-    
+
+
+    /**订单评价页面获取数据**/
+    String  ORDER_EVALUATION = "19060";
+    /**订单评价提交获取数据**/
+    String  ORDER_EVALUATION_SUBMIT = "19061";
+
 }
