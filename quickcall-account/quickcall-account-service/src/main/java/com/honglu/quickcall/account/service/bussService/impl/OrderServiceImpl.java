@@ -43,7 +43,6 @@ import com.honglu.quickcall.account.service.bussService.CommonService;
 import com.honglu.quickcall.account.service.bussService.IOrderService;
 import com.honglu.quickcall.account.service.dao.CustomerSkillMapper;
 import com.honglu.quickcall.account.service.dao.OrderMapper;
-import com.honglu.quickcall.account.service.dao.ProductMapper;
 import com.honglu.quickcall.common.api.exception.BizException;
 import com.honglu.quickcall.common.api.exchange.CommonResponse;
 import com.honglu.quickcall.common.core.util.UUIDUtils;
@@ -64,8 +63,6 @@ public class OrderServiceImpl implements IOrderService {
 	
 	@Autowired
 	private CommonService  commonService;
-	@Autowired
-	private ProductMapper  productMapper;
 	@Autowired
 	private OrderMapper  orderMapper;
 //	@Autowired
