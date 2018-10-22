@@ -72,7 +72,7 @@ public class CommonServiceImpl implements CommonService {
 		record.setOrderId(orderId);
 		record.setModifyTime(new Date());
 		if(StringUtils.isNotBlank(refundReason)){
-			record.setRefundReason(refundReason);
+//			record.setRefundReason(refundReason);
 		}
 		//修改订单状态为：已支付
 		orderMapper.updateByPrimaryKeySelective(record);

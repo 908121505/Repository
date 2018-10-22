@@ -33,8 +33,6 @@ import com.honglu.quickcall.common.api.util.JSONUtil;
 @Service("productSkillService")
 public class ProductSkillServiceImpl implements IProductSkillService {
 
-	@Autowired
-	private SkillItemMapper skillMapper;
 	
 	@Autowired
 	private SkillItemMapper skillItemMapper;
@@ -160,11 +158,7 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 	}
 	
 	
-	public static void main(String[] args) {
-		String  str = "2359";
-		System.out.println(str.substring(0, 2));
-		System.out.println(str.substring(2, 4));
-	}
+
 
 	/**
 	 * 获取技能可选项
@@ -215,32 +209,10 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 	}
 	
 	
-//	public void getOldDataInfo(Long customerSkilId,CustomerSkillVO skillVO) {
-//		
-//		
-//		CustomerSkillExt   skillExtList =  .querySelectInfo(customerSkilId);
-//		if(CollectionUtils.isEmpty(skillExtList)){
-//			return  ;
-//		}
-//		
-//		List<Long> oldSkillItemExtIdList = new ArrayList<Long>();
-//		for (CustomerSkillExt cse : skillExtList) {
-//			oldSkillItemExtIdList.add(cse.getSkillItemExtId());
-//		}
-//		skillVO.setSkillType(2);//TODO  定义常量
-//		if(skillExtList.size() == 1){
-//			String  serviceUnit = skillExtList.get(0).getServiceUnit() ;
-//			skillVO.setOldServiceUnit(serviceUnit);
-//			if("次".equals(serviceUnit)){//TODO  定义常量
-//				skillVO.setSkillType(1);//TODO  定义常量
-//			}
-//			skillVO.setOldSkillPrice(skillExtList.get(0).getSkillPrice());
-//		}
-//		skillVO.setOldSkillItemExtId(oldSkillItemExtIdList);
-//	}
+
 
 //	@Override
-	public CustomerSkillInfoVO querySkillInfoPersonalExt(Long customerId) {
+	public CustomerSkillInfoVO querySkillInfoPersonal(Long customerId) {
 
 		CustomerSkillInfoVO resultVO = new CustomerSkillInfoVO();
 		// 获取用户技能列表信息
@@ -277,8 +249,8 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 		return resultVO;
 	}
 
-	@Override
-	public CustomerSkillInfoVO querySkillInfoPersonal(Long customerId) {
+//	@Override
+	public CustomerSkillInfoVO querySkillInfoPersonalExt(Long customerId) {
 
 		CustomerSkillInfoVO resultVO = new CustomerSkillInfoVO();
 

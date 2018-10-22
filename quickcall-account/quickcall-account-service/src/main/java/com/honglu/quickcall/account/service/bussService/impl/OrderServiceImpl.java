@@ -111,14 +111,14 @@ public class OrderServiceImpl implements IOrderService {
 		
 		Long  sellerId =  request.getSellerId() ;
 		record.setOrderId(orderId);
-		record.setBuyerId(customerId);
+//		record.setBuyerId(customerId);
 		record.setCreateTime(new Date());
 		Integer  orderNum =  request.getOrderNum();
 		BigDecimal  price =  request.getPrice();
 		BigDecimal orderAmounts = new BigDecimal(orderNum).multiply(price);
-		record.setProductId(request.getProductId());
+//		record.setProductId(request.getProductId());
 		record.setOrderAmounts(orderAmounts);
-		record.setSellerId(sellerId);
+//		record.setSellerId(sellerId);
 		record.setOrderNum(orderNum);
 		record.setOrderStatus(OrderSkillConstants.ORDER_STATUS_NOT_PAY);
 		record.setOrderTime(new Date());
@@ -248,9 +248,9 @@ public class OrderServiceImpl implements IOrderService {
 				commonService.updateOrder(orderId, orderStatus,null);
 				//金额不为空，说明需要退款给用户
 				if(payAmount != null){
-					Long  buyerId =  order.getBuyerId();
+//					Long  buyerId =  order.getBuyerId();
 //					accountMapper.inAccount(buyerId, payAmount,TransferTypeEnum.RECHARGE.getType());
-					accountService.inAccount(buyerId, payAmount,TransferTypeEnum.RECHARGE,AccountBusinessTypeEnum.OrderRefund);
+//					accountService.inAccount(buyerId, payAmount,TransferTypeEnum.RECHARGE,AccountBusinessTypeEnum.OrderRefund);
 				}
 			}
 		}
@@ -335,8 +335,8 @@ public class OrderServiceImpl implements IOrderService {
 		Order  order = orderMapper.selectByPrimaryKey(orderId);
 		if(order != null){
 			BigDecimal  payAmount =  order.getOrderAmounts();
-			Long  userId =  order.getBuyerId();
-			Long  sellerId =  order.getSellerId();
+			Long  userId =  order.getOrderId();
+			Long  sellerId =  order.getOrderId();
 			//判断余额是否充足
 			Account account=accountService.queryAccount(userId);
 			//消费用户的充值金额
@@ -419,8 +419,8 @@ public class OrderServiceImpl implements IOrderService {
 				//只有进行中才能进行退款
 				throw new BizException(AccountBizReturnCode.ORDER_STATUS_ERROR, "订单状态异常");
 			}
-			Long  sellerId =  order.getSellerId();//主播ID
-			Long  userId =  order.getBuyerId();
+			Long  sellerId =  order.getOrderId();//主播ID
+			Long  userId =  order.getOrderId();
 			if(OrderSkillConstants.REQUEST_REFUND_TYPE_REFUND == type ){
 				//退款理由
 				String  refundReason = request.getRefundReason();
@@ -477,7 +477,7 @@ public class OrderServiceImpl implements IOrderService {
 			}else{
 				newOrderStatus = OrderSkillConstants.ORDER_STATUS_CUST_REFUSE_DV_START_SERVICE;
 				//退钱给用户
-				Long  customerId =  order.getBuyerId();
+				Long  customerId =  order.getCustomerId();
 				BigDecimal   payAmount =  order.getOrderAmounts();
 				accountService.inAccount(customerId, payAmount, TransferTypeEnum.RECHARGE,AccountBusinessTypeEnum.OrderRefund);
 			}
@@ -527,7 +527,7 @@ public class OrderServiceImpl implements IOrderService {
 			}else {
 				newOrderStatus = OrderSkillConstants.ORDER_STATUS_PAYED_DV_REFUSE;
 				BigDecimal  payAmount = order.getOrderAmounts();
-				Long   buyerId =  order.getBuyerId();
+				Long   buyerId =  order.getCustomerId();
 				accountService.inAccount(buyerId, payAmount, TransferTypeEnum.RECHARGE,AccountBusinessTypeEnum.OrderRefund);
 			}
 			commonService.updateOrder(orderId, newOrderStatus,null);
@@ -610,7 +610,7 @@ public class OrderServiceImpl implements IOrderService {
 			commonService.updateOrder(orderId, newOrderStatus,null);
 			//大V同意退款
 			if(OrderSkillConstants.REQUEST_DV_REFUND_TYPE_YES == type ){
-				Long  customerId =  order.getBuyerId();
+				Long  customerId =  order.getCustomerId();
 				BigDecimal  payAmount = order.getOrderAmounts();
 				//大V同意退款，对消费客户入账
 				accountService.inAccount(customerId, payAmount,TransferTypeEnum.RECHARGE,AccountBusinessTypeEnum.OrderRefund);

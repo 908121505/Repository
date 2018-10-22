@@ -1,4 +1,4 @@
-package com.honglu.quickcall.account.facade.entity;
+package com.honglu.quickcall.user.facade.entity;
 
 import java.math.BigDecimal;
 import java.util.Date;

@@ -205,6 +205,6 @@
     select 
     <include refid="Base_Column_List" />
     from skill_item_ext
-    where id = #{skillItemId,jdbcType=INTEGER}  and   skill_ext_type = #{skillExtType,jdbcType=INTEGER}
+    where skill_item_id = #{skillItemId,jdbcType=INTEGER}  and   skill_ext_type = #{skillExtType,jdbcType=INTEGER}
   </select>
 </mapper>
