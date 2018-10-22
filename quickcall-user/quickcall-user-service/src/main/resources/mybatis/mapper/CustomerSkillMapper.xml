@@ -380,7 +380,7 @@
     LEFT JOIN skill_item t3 ON t3.id = t.certify_id = t.skill_item_id
     WHERE
         t.customer_id = #{customerId}
-    AND t.is_audited = 1
+    AND t.skill_status = 1
     ORDER BY t.create_time ASC
   </select>
 </mapper>
