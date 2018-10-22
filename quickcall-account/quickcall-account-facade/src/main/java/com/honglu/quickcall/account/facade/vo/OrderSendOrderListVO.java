@@ -41,6 +41,10 @@ public class OrderSendOrderListVO implements  Serializable{
 	private String skillItemName ;
 	/**技能ICON*/
 	private String  icon;
+	
+	/**倒计时秒数*/
+	private Long  countDownSeconds; 
+	
 	public Long getOrderId() {
 		return orderId;
 	}
@@ -108,6 +112,12 @@ public class OrderSendOrderListVO implements  Serializable{
 	}
 	public void setIcon(String icon) {
 		this.icon = icon;
+	}
+	public Long getCountDownSeconds() {
+		return countDownSeconds;
+	}
+	public void setCountDownSeconds(Long countDownSeconds) {
+		this.countDownSeconds = countDownSeconds;
 	}
 	
 
