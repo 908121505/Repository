@@ -830,7 +830,7 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 			flag = true;
 			MySkillVO mySkillVO = new MySkillVO();
 			mySkillVO.setName(skill.getSkillItemName());
-			mySkillVO.setImageUrl(skill.getImageUrl());
+			mySkillVO.setImageUrl(skill.getUnlockIcon());
 			mySkillVO.setSkillId(skill.getId());
 			mySkillVO.setSkillStatus(skill.getSkillStatus());
 			for (CustomerSkillCertify skillReview : skillReviewList) {
@@ -852,7 +852,7 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 				}
 			}
 			if(flag){
-				mySkillVO.setImageUrl(skill.getBlackImageUrl());
+				mySkillVO.setImageUrl(skill.getLockIcon());
 				noHaveSkill.add(mySkillVO);
 			}
 		}
