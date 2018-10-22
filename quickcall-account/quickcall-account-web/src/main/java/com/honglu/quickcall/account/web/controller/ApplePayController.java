@@ -12,7 +12,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -26,9 +25,9 @@ import javax.servlet.http.HttpServletRequest;
  */
 @Controller
 @RequestMapping("/apple-pay")
-public class ApplyPayController extends BaseController {
+public class ApplePayController extends BaseController {
 
-	private static Logger LOGGER = LoggerFactory.getLogger(ApplyPayController.class);
+	private static Logger LOGGER = LoggerFactory.getLogger(ApplePayController.class);
 
 	@Autowired
 	private AccountCenterService accountCenterService;
@@ -38,7 +37,7 @@ public class ApplyPayController extends BaseController {
 	 */
 	@RequestMapping(value = "/recharge", method = RequestMethod.POST)
 	@ResponseBody
-	public WebResponseModel recharge(HttpServletRequest request, @RequestBody ApplePayRequest params) {
+	public WebResponseModel recharge(HttpServletRequest request, ApplePayRequest params) {
 		LOGGER.info("accountWeb.apply-pay.recharge.request.data : {}", JSONObject.toJSONString(params));
 		WebResponseModel response = new WebResponseModel();
 		if (params.getAmount() == null || params.getCustomerId() == null) {
@@ -58,7 +57,7 @@ public class ApplyPayController extends BaseController {
 	 */
 	@RequestMapping(value = "/notify", method = RequestMethod.POST)
 	@ResponseBody
-	public WebResponseModel notify(@RequestBody ApplePurchaseRequest params) {
+	public WebResponseModel notify(HttpServletRequest request, ApplePurchaseRequest params) {
 		LOGGER.info("accountWeb.apply-pay.notify.request.data : {}", JSONObject.toJSONString(params));
 		WebResponseModel response = new WebResponseModel();
 		if (StringUtils.isBlank(params.getOrderId())

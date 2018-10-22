@@ -756,7 +756,7 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 	public CommonResponse queryCustomerHome(CustomerHomeRequest request) {
 		Customer viewCustomer = customerMapper.selectByPrimaryKey(request.getViewCustomerId());
         if (viewCustomer == null) {
-            ResultUtils.resultDataNotExist("用户数据不存在");
+            return ResultUtils.resultDataNotExist("用户数据不存在");
         }
 
         CustomerHomeVO customerHomeVO = new CustomerHomeVO();
