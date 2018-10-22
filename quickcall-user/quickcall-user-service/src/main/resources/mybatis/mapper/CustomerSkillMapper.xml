@@ -372,6 +372,8 @@
    SELECT
         t.skill_item_id,
         t.skill_name,
+        t.discount_price,
+        t.service_unit,
         t2.skill_voice_url,
         t2.skill_voice_time,
         t3.back_color as skill_back_color,
@@ -384,5 +386,16 @@
         t.customer_id = #{customerId}
     AND t.skill_status = 1
     ORDER BY t.create_time ASC
+  </select>
+
+  <!-- 查询客户技能评价热度的评价标签 -->
+  <select id="selectCustomerSkillHotLabel" resultType="string">
+      SELECT l.label_name
+      FROM order_evaluation_label e
+      INNER JOIN evaluation_label l on l.label_id = e.label_id
+      WHERE e.customer_id=#{customerId} AND e.skill_item_id=#{skillItemId}
+      GROUP BY e.label_id
+      ORDER BY count(e.label_id) desc , e.evaluation_time desc
+      LIMIT 0,3
   </select>
 </mapper>
