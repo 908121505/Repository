@@ -353,6 +353,7 @@ public class OrderServiceImpl implements IOrderService {
 			Date  birthday  =  orderDetail.getBirthday();
 			int   age = DateUtils.getAgeByBirth(birthday);
 			orderDetail.setAge(age);
+			orderDetail.setCountDownSeconds(1200L);
 		}
 		
 		CommonResponse commonResponse = commonService.getCommonResponse();

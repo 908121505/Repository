@@ -60,30 +60,39 @@ public interface OrderSkillConstants {
 	public static final Integer  ORDER_STATUS_DAV_REFUSED_RECEIVE = 8 ;
 	/**订单状态10.待开始（大V接单）;*/
 	public static final Integer  ORDER_STATUS_WAITING_START = 10 ;//
-	/**订单状态12.取消（大V接单后用户自主取消）;*/
-	public static final Integer  ORDER_STATUS_CANCEL_BEFORE_DAV_START = 12 ;
-	/**订单状态14.取消（待开始5分钟大V未发起开始服务）*/
-	public static final Integer  ORDER_STATUS_CANCEL_NOT_START = 14 ;
-	/**订单状态16.待开始(大V发起开始服务)*/
-	public static final Integer  ORDER_STATUS_DA_APPAY_START_SERVICE = 16 ;
-	/**订单状态18.取消（大V发起开始服务用户自主取消）;*/
-	public static final Integer  ORDER_STATUS_CANCLE_USER_SELF_BEFORE_SERVICE = 18 ;
-	/**订单状态20.取消（大V发起开始服务用户5分钟未接）;*/
-	public static final Integer  ORDER_STATUS_CANCEL_USER_NOT_ACCEPCT = 20 ;
-	/**订单状态22.取消（大V接单，大V同一时间其它订单取消）;*/
-	public static final Integer  ORDER_STATUS_CANCEL_DAV_START_ONE_ORDER = 22 ;
-	/**订单状态24.进行中（大V发起开始服务用户5分钟内同意）;*/
-	public static final Integer  ORDER_STATUS_GOING_USER_ACCEPCT = 24 ;
-	/**订单状态26.进行中（用户发起完成服务）*/
-	public static final Integer  ORDER_STATUS_GOING_USRE_APPAY_FINISH = 26 ;
+	/**订单状态12.取消（大V接单，大V同一时间其它订单取消）;*/
+	public static final Integer  ORDER_STATUS_CANCEL_DAV_START_ONE_ORDER = 12 ;
+	/**订单状态14.取消（大V接单后用户自主取消）;*/
+	public static final Integer  ORDER_STATUS_CANCEL_BEFORE_DAV_START = 14 ;
+	/**订单状态16.取消（待开始5分钟大V未发起开始服务）*/
+	public static final Integer  ORDER_STATUS_CANCEL_NOT_START = 16 ;
+	/**订单状态18.待开始(大V发起开始服务)*/
+	public static final Integer  ORDER_STATUS_WAITING_START_DA_APPAY_START_SERVICE = 18 ;
+	/**订单状态20.取消（大V发起开始服务用户自主取消）;*/
+	public static final Integer  ORDER_STATUS_CANCLE_USER_SELF_BEFORE_SERVICE = 20 ;
+	/**订单状态22.取消（大V发起开始服务用户5分钟未接）;*/
+	public static final Integer  ORDER_STATUS_CANCEL_USER_NOT_ACCEPCT = 22 ;
+	/**订单状态24.进行中（大V发起开始服务用户5分钟内同意，叫醒特享）;*/
+	public static final Integer  ORDER_STATUS_GOING_WAITING_START = 24 ;
+	/**订单状态26.进行中（大V发起开始服务用户5分钟内同意）;*/
+	public static final Integer  ORDER_STATUS_GOING_USER_ACCEPCT = 26 ;
 	/**订单状态28.进行中（大V发起完成服务）*/
 	public static final Integer  ORDER_STATUS_GOING_DAV_APPAY_FINISH = 28 ;
 	/**订单状态30.已完成（用户同意对方）*/
 	public static final Integer  ORDER_STATUS_FINISHED_USER_ACCEPCT = 30 ;
-	/**订单状态32.已完成（订单开始12小时系统自动完成）*/
-	public static final Integer  ORDER_STATUS_FINISHED_SYSTEM_AFTER_12HOURS = 32 ;
-	/**订单状态34.已完成（用户评价完成）*/
-	public static final Integer  ORDER_STATUS_FINISHED_AND_PINGJIA = 34 ;
+	/**订单状态32.已完成（大V发起已完成服务，12小时客户不响应自动完成）*/
+	public static final Integer  ORDER_STATUS_FINISH_DV_FINISH = 32 ;
+	/**订单状态34.进行中（用户发起完成服务）*/
+	public static final Integer  ORDER_STATUS_GOING_USRE_APPAY_FINISH = 34 ;
+	/**订单状态36.已完成（大V在服务时间外完成）;*/
+	public static final Integer  ORDER_STATUS_FINISH_DAV_FINISH_AFTER_SERVICE_TIME = 36 ;
+	/**订单状态38.已完成（订单开始12小时系统自动完成）*/
+	public static final Integer  ORDER_STATUS_FINISH_BOTH_NO_OPERATE = 38 ;
+	/**订单状态40.已完成（用户评价完成）*/
+	public static final Integer  ORDER_STATUS_FINISHED_AND_PINGJIA = 40 ;
+	
+	
+	
 	/**订单状态18.订单完成（正常完成）;*/
 	public static final Integer  ORDER_STATUS_END = 18 ;
 	

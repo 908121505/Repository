@@ -59,7 +59,18 @@ public class OrderDetailVO implements  Serializable{
 	
 	private Long  skillItemId ;
 	
+	/**倒计时秒数*/
+	private Long  countDownSeconds; 
 	
+	
+	
+	
+	public Long getCountDownSeconds() {
+		return countDownSeconds;
+	}
+	public void setCountDownSeconds(Long countDownSeconds) {
+		this.countDownSeconds = countDownSeconds;
+	}
 	public Long getOrderId() {
 		return orderId;
 	}
