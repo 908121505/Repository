@@ -1,8 +1,6 @@
 package com.honglu.quickcall.account.facade.vo;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
-import java.util.Date;
 
 /**   
  * Copyright © 2018 www.xiaoniu.com All rights reserved.

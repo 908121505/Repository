@@ -1,7 +1,5 @@
 package com.honglu.quickcall.account.facade.exchange.request;
 
-import java.math.BigDecimal;
-
 import com.honglu.quickcall.account.facade.code.OrderRequestType;
 import com.honglu.quickcall.common.api.exchange.AbstractRequest;
 
@@ -16,6 +14,7 @@ import com.honglu.quickcall.common.api.exchange.AbstractRequest;
  */
 public class OrderSaveRequest extends AbstractRequest {
     
+	private static final long serialVersionUID = 597617894361707509L;
 	/**客户编号*/
 	private Long  customerId;
 	/**大V编号*/
