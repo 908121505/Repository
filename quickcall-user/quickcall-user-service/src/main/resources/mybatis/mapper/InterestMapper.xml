@@ -152,4 +152,12 @@
   <select id="selectInterestList" resultType="com.honglu.quickcall.user.facade.vo.InterestVO"  >
     SELECT  id  AS  id ,  name  AS  name   FROM  interest  
   </select>
+
+  <select id="selectInterestListByCustomerId" resultType="com.honglu.quickcall.user.facade.vo.InterestVO">
+    SELECT i.id,c.customer_id as customerId, i.name
+    FROM customer_interest c
+    LEFT JOIN interest i
+    ON c.`interest_id` = i.id
+    WHERE c.`customer_id` = #{customerId}
+  </select>
 </mapper>

@@ -1,5 +1,6 @@
 package com.honglu.quickcall.user.service.business;
 
+import com.honglu.quickcall.user.facade.exchange.request.editprofile.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,19 +46,6 @@ import com.honglu.quickcall.user.facade.exchange.request.UserLoginRequest;
 import com.honglu.quickcall.user.facade.exchange.request.UserRegisterRequest;
 import com.honglu.quickcall.user.facade.exchange.request.UserUnreadMessageNumRequest;
 import com.honglu.quickcall.user.facade.exchange.request.queryMyskillRequest;
-import com.honglu.quickcall.user.facade.exchange.request.editprofile.QueryBlacklistReq;
-import com.honglu.quickcall.user.facade.exchange.request.editprofile.QueryInterestListReq;
-import com.honglu.quickcall.user.facade.exchange.request.editprofile.RemoveAppearanceReq;
-import com.honglu.quickcall.user.facade.exchange.request.editprofile.RemoveBlacklistReq;
-import com.honglu.quickcall.user.facade.exchange.request.editprofile.RemoveVoiceIdentificationCardReq;
-import com.honglu.quickcall.user.facade.exchange.request.editprofile.SaveBlacklistReq;
-import com.honglu.quickcall.user.facade.exchange.request.editprofile.UpdateAppearanceReq;
-import com.honglu.quickcall.user.facade.exchange.request.editprofile.UpdateHeadPortraitReq;
-import com.honglu.quickcall.user.facade.exchange.request.editprofile.UpdateInterestReq;
-import com.honglu.quickcall.user.facade.exchange.request.editprofile.UpdateNickNameReq;
-import com.honglu.quickcall.user.facade.exchange.request.editprofile.UpdateSignNameReq;
-import com.honglu.quickcall.user.facade.exchange.request.editprofile.UpdateStarSignReq;
-import com.honglu.quickcall.user.facade.exchange.request.editprofile.UpdateVoiceIdentificationCardReq;
 import com.honglu.quickcall.user.service.service.BlacklistService;
 import com.honglu.quickcall.user.service.service.CommonPersonService;
 import com.honglu.quickcall.user.service.service.DelateService;
@@ -222,6 +210,15 @@ public class UserDubboBusinessImpl implements UserDubboBusiness {
 				break;
 			case UserFunctionType.saveBlacklist:
 				response = blacklistService.saveBlacklist((SaveBlacklistReq) request);
+				break;
+			case UserFunctionType.updateGender:
+				response = editProfileService.updateGender((UpdateGenderReq) request);
+				break;
+			case UserFunctionType.updateBirthday:
+				response = editProfileService.updateBirthday((UpdateBirthdayReq) request);
+				break;
+			case UserFunctionType.queryUserEditInfo:
+				response = editProfileService.queryUserEditInfo((QueryUserEditInfoReq) request);
 				break;
 			case UserFunctionType.getAllDelate:
 				response = delateService.getAllDelatesExcludeOther();

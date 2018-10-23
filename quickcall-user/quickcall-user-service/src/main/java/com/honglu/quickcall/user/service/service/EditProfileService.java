@@ -69,5 +69,25 @@ public interface EditProfileService {
      */
     CommonResponse removeVoiceIdentificationCard(RemoveVoiceIdentificationCardReq params);
 
-
+    /**
+     * 修改性别
+     *
+     * @param params
+     * @return
+     */
+    CommonResponse updateGender(UpdateGenderReq params);
+    /**
+     * 修改年龄
+     *
+     * @param params
+     * @return
+     */
+    CommonResponse updateBirthday(UpdateBirthdayReq params);
+    /**
+     * 编辑资料页面，查询用户信息
+     *
+     * @param params
+     * @return
+     */
+    CommonResponse queryUserEditInfo(QueryUserEditInfoReq params);
 }

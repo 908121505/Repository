@@ -144,4 +144,16 @@ id,	customer_id,	audit_appearance,	appearance,	type,	audit_status,	sort,	status,
 		</set>
 		WHERE id = #{id}
 	</update>
+
+
+	<select id="selectAppearanceVOByCustomerIdAndType" resultType="com.honglu.quickcall.user.facade.vo.AppearanceVO">
+		SELECT
+		  id,
+		  customer_id as customerId,
+		  audit_appearance AS auditAppearance,
+		  appearance,
+		  audit_status AS auditStatus
+		FROM customer_appearance
+		WHERE customer_id = #{customerId} and type = #{type}
+	</select>
 </mapper>

@@ -609,4 +609,18 @@
       WHERE
       customer_id = #{customerId}
   </update>
+
+  <select id="queryUserEditInfo" resultType="com.honglu.quickcall.user.facade.vo.UserEditInfoVO">
+   SELECT
+    customer_id AS customerId,
+    sex AS gender,
+    nick_name AS nickName,
+    sign_name AS signName,
+    star_sign AS starSign,
+    birthday,
+    identity_status as identityStatus
+  FROM
+  customer
+  where customer_id = #{customerId}
+  </select>
 </mapper>

@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.honglu.quickcall.account.facade.entity.Order;
+import com.honglu.quickcall.user.facade.vo.UserEditInfoVO;
 import org.apache.ibatis.annotations.Param;
 
 import com.honglu.quickcall.user.facade.entity.Customer;
@@ -76,4 +77,12 @@ public interface CustomerMapper {
 	 * @return
 	 */
 	int updateCustomerExperienceAndLevel(@Param("customerId") Long customerId, @Param("experience") Integer experience);
+
+
+	/**
+	 * 编辑资料页面 查询用户数据
+	 * @param customerId
+	 * @return
+	 */
+	UserEditInfoVO queryUserEditInfo(@Param("customerId") Long customerId);
 }
