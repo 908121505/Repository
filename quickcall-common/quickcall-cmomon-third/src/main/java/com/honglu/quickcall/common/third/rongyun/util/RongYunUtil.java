@@ -134,7 +134,7 @@ public class RongYunUtil {
 	 */
 	public static void sendSystemMessage(Long toCustomerId, String content) {
 		Long fromUserId = Long.parseLong(SYSTEM_COSTOMER_ID);
-		sendMessage("系统消息", fromUserId, toCustomerId, content, 1);
+		sendMessage("系统消息", fromUserId, toCustomerId, content, 1, null);
 	}
 
 	/**
@@ -148,7 +148,7 @@ public class RongYunUtil {
 	 */
 	public static void sendActivityMessage(Long toCustomerId, String content) {
 		Long fromUserId = Long.parseLong(ACTIVITY_COSTOMER_ID);
-		sendMessage("活动消息", fromUserId, toCustomerId, content, 1);
+		sendMessage("活动消息", fromUserId, toCustomerId, content, 1, null);
 	}
 
 	/**
@@ -162,7 +162,7 @@ public class RongYunUtil {
 	 */
 	public static void sendOrderMessage(Long toCustomerId, String content) {
 		Long fromUserId = Long.parseLong(ORDER_COSTOMER_ID);
-		sendMessage("订单消息", fromUserId, toCustomerId, content, 1);
+		sendMessage("订单消息", fromUserId, toCustomerId, content, 1, null);
 	}
 
 	/**
@@ -183,13 +183,14 @@ public class RongYunUtil {
 	 */
 	public static void sendFansMessage(Long fromUserId, String nickName, String headPortraitUrl, Long toCustomerId,
 			String content, Integer sex) {
-
+		sendMessage(nickName, fromUserId, toCustomerId, content, sex, headPortraitUrl);
 	}
 
-	private static void sendMessage(String nickName, Long fromUserId, Long toCustomerId, String content, Integer sex) {
+	private static void sendMessage(String nickName, Long fromUserId, Long toCustomerId, String content, Integer sex,
+			String headPortraitUrl) {
 
 		Long otherId = toCustomerId;
-		SendUser sendUser = new SendUser(nickName, null, sex, otherId);
+		SendUser sendUser = new SendUser(nickName, headPortraitUrl, sex, otherId);
 		RongYunPushBean rongYunPushBean = new RongYunPushBean(1, content, 1, 0, 10, fromUserId, otherId, 1, sendUser,
 				System.currentTimeMillis());
 		String jsonString = JSON.toJSONString(rongYunPushBean);
