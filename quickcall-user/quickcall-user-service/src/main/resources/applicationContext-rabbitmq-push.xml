@@ -9,8 +9,11 @@
                 http://www.springframework.org/schema/rabbit/spring-rabbit-1.4.xsd">
                    
    <!-- 连接服务配置   需要确认publisher-confirms="true" -->
-   <rabbit:connection-factory id="RconnectionFactory" host="${mq.host}" username="${mq.username}"
-                              password="${mq.password}" port="${mq.port}" />
+   <rabbit:connection-factory id="RconnectionFactory"
+                              host="${mq.host}"
+                              username="${mq.username}"
+                              password="${mq.password}"
+                              port="${mq.port}" />
 
    <rabbit:admin connection-factory="RconnectionFactory"/>
 
@@ -40,8 +43,7 @@
    <!-- 死信队列转发到的普通队列 -->
    <rabbit:queue name="dead" />
    <rabbit:queue name="paydead" />
-   <rabbit:direct-exchange name="dead-letter-exchange"
-                           durable="true" auto-delete="false" id="dead-letter-exchange">
+   <rabbit:direct-exchange name="dead-letter-exchange" durable="true" auto-delete="false" id="dead-letter-exchange">
       <rabbit:bindings>
          <rabbit:binding queue="dead"/>
          <rabbit:binding queue="paydead"/>

@@ -11,8 +11,12 @@
             http://www.springframework.org/schema/task
                 http://www.springframework.org/schema/task/spring-task-4.1.xsd">
     <!-- 连接服务配置  -->
-    <rabbit:connection-factory id="RCconnectionFactory" host="${mq.host}" username="${mq.username}"
-                               password="${mq.password}" port="${mq.port}"  />
+    <rabbit:connection-factory id="RCconnectionFactory"
+                               host="${mq.host}"
+                               username="${mq.username}"
+                               password="${mq.password}"
+                               port="${mq.port}"  />
+
     <rabbit:admin connection-factory="RCconnectionFactory"/>
 
 
@@ -39,7 +43,6 @@
     <rabbit:listener-container connection-factory="RCconnectionFactory" acknowledge="manual" task-executor="taskExecutor">
         <rabbit:listener queues="queue_accountCenter_pay" ref="accountUserPayLitener"/>
         <rabbit:listener queues="queue_userCenter_homepage_common" ref="userFromUserMqLitener"/>
-
     </rabbit:listener-container>
 
      <bean id="accountUserPayLitener"  class="com.honglu.quickcall.user.service.mq.pull.UserCenterMqPayListener" />
