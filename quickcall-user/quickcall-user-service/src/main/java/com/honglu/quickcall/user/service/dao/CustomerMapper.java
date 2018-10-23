@@ -78,10 +78,9 @@ public interface CustomerMapper {
 	int updateCustomerExperienceAndLevel(@Param("customerId") Long customerId, @Param("experience") Integer experience);
 
 	/**
-	 * 查询客户距离下一级所需经验值
+	 * 查询等级累计经验值
 	 * @param customerLevel
-	 * @param cumulateExperience
 	 * @return
 	 */
-	Integer getNeedExperienceNum(@Param("customerLevel") Integer customerLevel, @Param("cumulateExperience") Integer cumulateExperience);
+	Integer getGradeExperienceByLevelNo(@Param("customerLevel") Integer customerLevel);
 }

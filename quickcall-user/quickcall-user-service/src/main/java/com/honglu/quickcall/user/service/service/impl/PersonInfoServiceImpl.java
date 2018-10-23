@@ -841,8 +841,16 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 		customerLevelVO.setHeadPortraitUrl(customer.getHeadPortraitUrl());
 		customerLevelVO.setCustomerLevel(customer.getCustomerLevel());
 		customerLevelVO.setCustomerExperience(customer.getCumulateExperience());
-		// 查询距离下一级所需经验值
-		customerLevelVO.setNeedExperienceNum(customerMapper.getNeedExperienceNum(customer.getCustomerLevel(), customer.getCumulateExperience()));
+
+		// 查询当前等级经验值
+		Integer currentLevelExperience = customerMapper.getGradeExperienceByLevelNo(customer.getCustomerLevel());
+		customerLevelVO.setCustomerExperience(currentLevelExperience);
+		// 查询下一等级经验值
+		Integer nextLevelExperience = customerMapper.getGradeExperienceByLevelNo(customer.getCustomerLevel());
+		customerLevelVO.setNextLevelExperience(nextLevelExperience);
+
+		// 距离下一级所需经验值
+		customerLevelVO.setNeedExperienceNum(nextLevelExperience - customer.getCumulateExperience());
 
 		// 查询等级特权 ADUAN -- 一期不做
 
