@@ -24,18 +24,14 @@ public class SkillItemExtService {
     private CommonUtilService commonUtilService;
 
 
-    public DataTables<SkillItemExtVo> getSkillItemExtPageList(HttpServletRequest request) {
+    @SuppressWarnings("unchecked")
+	public DataTables<SkillItemExtVo> getSkillItemExtPageList(HttpServletRequest request) {
         HashMap<String, Object> parameters = (HashMap<String, Object>) SearchUtil.convertorEntitysToMap(request.getParameterMap());
-        Map<String, Object> paramMap = new HashMap<String, Object>();
 
-        paramMap.put("skillItemId", parameters.get("skillItemId"));
-        paramMap.put("iDisplayStart", parameters.get("iDisplayStart"));
-        paramMap.put("iDisplayLength", parameters.get("iDisplayLength"));
-        paramMap.put("skillExtStatus", parameters.get("skillExtStatus"));
-        List<SkillItemExtVo> skillList = baseManager.query("SkillItemExt.selectPageList", paramMap);
+        List<SkillItemExtVo> skillList = baseManager.query("SkillItemExt.selectPageList", parameters);
 
         String sEcho = (String) parameters.get("sEcho");
-        int total = baseManager.get("SkillItemExt.slectCount", paramMap);
+        int total = baseManager.get("SkillItemExt.slectCount", parameters);
         return new DataTables<SkillItemExtVo>(sEcho, skillList, skillList.size(), total);
     }
 

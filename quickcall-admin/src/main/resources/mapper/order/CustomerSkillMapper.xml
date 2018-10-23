@@ -45,6 +45,12 @@
     from customer_skill
     where customer_skill_id = #{customerSkillId,jdbcType=BIGINT}
   </select>
+  
+  <select id="selectCustomerSkillExist" resultType="java.lang.Integer">
+  	select count(*) from customer_skill 
+  	where customer_id = #{customerId} and skill_item_id = #{skillItemId}
+  </select>
+  
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
     delete from customer_skill
     where customer_skill_id = #{customerSkillId,jdbcType=BIGINT}
@@ -73,7 +79,7 @@
       #{createMan,jdbcType=VARCHAR}, #{modifyMan,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}
       )
   </insert>
-  <insert id="insertSelective" parameterType="com.calf.module.order.entity.CustomerSkill" >
+  <insert id="insertSelective" parameterType="map" >
    
      insert into customer_skill
     <trim prefix="(" suffix=")" suffixOverrides="," >

@@ -34,6 +34,7 @@ public class SkillItemExt {
     
     private BigDecimal skillExtPrice;
 
+    private Integer skillExtThreshold;
     
     private Integer skillExtStatus;
     
@@ -177,6 +178,13 @@ public class SkillItemExt {
     public void setSkillExtType(Integer skillExtType) {
         this.skillExtType = skillExtType;
     }
+    public Integer getSkillExtThreshold() {
+		return skillExtThreshold;
+	}
+
+	public void setSkillExtThreshold(Integer skillExtThreshold) {
+		this.skillExtThreshold = skillExtThreshold;
+	}
 
     @Override
     public boolean equals(Object o) {
@@ -211,4 +219,5 @@ public class SkillItemExt {
                 ", remark='" + remark + '\'' +
                 '}';
     }
+
 }
