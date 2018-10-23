@@ -211,8 +211,8 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 	
 
 
-//	@Override
-	public CustomerSkillInfoVO querySkillInfoPersonalExt(Long customerId) {
+	@Override
+	public CustomerSkillInfoVO querySkillInfoPersonal(Long customerId) {
 
 		CustomerSkillInfoVO resultVO = new CustomerSkillInfoVO();
 		// 获取用户技能列表信息
@@ -249,8 +249,8 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 		return resultVO;
 	}
 
-	@Override
-	public CustomerSkillInfoVO querySkillInfoPersonal(Long customerId) {
+//	@Override
+	public CustomerSkillInfoVO querySkillInfoPersonalExt(Long customerId) {
 
 		CustomerSkillInfoVO resultVO = new CustomerSkillInfoVO();
 
