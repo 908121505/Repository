@@ -250,6 +250,22 @@
                             }
                         }
                     },
+                    {
+                        "data": "skillType",
+                        "sTitle": "技能类型",
+                        'sClass': "text-center",
+                        "mRender": function (data, type, full) {
+                            /* if(data==''||data==null){
+                                return	"--";
+                            }else */
+                            if (data == 1) {
+                                return "<font color='red'>不可重复接单类型</font>";
+                            } else if (data == 2) {
+                                return "<font color='red'>可重复接单类型</font>";
+                            }
+                        }
+                    },
+
 
                     {
                         "data": "remark",
@@ -319,7 +335,7 @@
                     aoData.push({"name": "skillStatus", "value": $("#skillStatusQuery").val()});
                 },
                 aoColumnDefs: [{
-                    "aTargets": 13,
+                    "aTargets": 14,
                     "mRender": function (data, type, row) {
 
                         var detail = "", del = "", status;
