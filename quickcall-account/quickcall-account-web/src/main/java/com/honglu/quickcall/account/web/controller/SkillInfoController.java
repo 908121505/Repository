@@ -3,10 +3,13 @@ package com.honglu.quickcall.account.web.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.context.annotation.RequestScope;
 
+import com.honglu.quickcall.account.facade.exchange.request.DaVListBySkillItemIdRequest;
 import com.honglu.quickcall.account.facade.exchange.request.FirstPageDaVinfoRequest;
 import com.honglu.quickcall.account.facade.exchange.request.FirstPageSkillinfoRequest;
 import com.honglu.quickcall.account.facade.exchange.request.SkillInfoRequest;
@@ -28,7 +31,7 @@ public class SkillInfoController {
      */
     @RequestMapping(value = "/getSkillInfo", method = RequestMethod.POST)
     @ResponseBody
-    public WebResponseModel querySkillInfoPersonal( /* @RequestBody */ SkillInfoRequest params) {
+    public WebResponseModel querySkillInfoPersonal(SkillInfoRequest params) {
     	WebResponseModel response = orderInfoService.execute(params);
         return response;
     }
@@ -40,7 +43,7 @@ public class SkillInfoController {
     */
     @RequestMapping(value = "/updateSkillInfo", method = RequestMethod.POST)
     @ResponseBody
-    public WebResponseModel updateSkillInfoPersonal(  /* @RequestBody */ SkillUpdateRequest params) {
+    public WebResponseModel updateSkillInfoPersonal(@RequestBody   SkillUpdateRequest params) {
     	WebResponseModel response = orderInfoService.execute(params);
     	return response;
     }
@@ -54,7 +57,7 @@ public class SkillInfoController {
      */
     @RequestMapping(value = "/getFirstPageDaVinfo", method = RequestMethod.POST)
     @ResponseBody
-    public WebResponseModel getFirstPageDaVinfo(  /* @RequestBody */  FirstPageDaVinfoRequest params) {
+    public WebResponseModel getFirstPageDaVinfo(FirstPageDaVinfoRequest params) {
     	WebResponseModel response = orderInfoService.execute(params);
     	return response;
     }
@@ -65,7 +68,20 @@ public class SkillInfoController {
      */
     @RequestMapping(value = "/getFirstPageSkillinfo", method = RequestMethod.POST)
     @ResponseBody
-    public WebResponseModel getFirstPageSkillinfo( /* @RequestBody */ FirstPageSkillinfoRequest params) {
+    public WebResponseModel getFirstPageSkillinfo(FirstPageSkillinfoRequest params) {
+    	WebResponseModel response = orderInfoService.execute(params);
+    	return response;
+    }
+    
+    
+    /**
+     * 根据技能ID获取该分类下的大V列表
+     * @param params
+     * @return
+     */
+    @RequestMapping(value = "/getDaVListByType", method = RequestMethod.POST)
+    @ResponseBody
+    public WebResponseModel getDaVListBySkillId(DaVListBySkillItemIdRequest params) {
     	WebResponseModel response = orderInfoService.execute(params);
     	return response;
     }

@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="SkillItemExt" >
+  <resultMap id="BaseResultMap" type="com.calf.module.order.entity.SkillItemExt" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="skill_item_id" property="skillItemId" jdbcType="BIGINT" />
+    <result column="skill_ext_type" property="skillExtType" jdbcType="TINYINT" />
+    <result column="skill_ext_range" property="skillExtRange" jdbcType="TINYINT" />
+    <result column="skill_ext_unit" property="skillExtUnit" jdbcType="TINYINT" />
+    <result column="skill_ext_price" property="skillExtPrice" jdbcType="DECIMAL" />
+    <result column="skill_ext_status" property="skillExtStatus" jdbcType="TINYINT" />
+    <result column="skill_ext_discont" property="skillExtDiscont" jdbcType="DECIMAL" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+    <result column="create_man" property="createMan" jdbcType="VARCHAR" />
+    <result column="modify_man" property="modifyMan" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    id, skill_item_id, skill_ext_type, skill_ext_range, skill_ext_unit, skill_ext_price, 
+    skill_ext_status, skill_ext_discont, create_time, modify_time, create_man, modify_man, 
+    remark
+  </sql>
+
+
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from skill_item_ext
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from skill_item_ext
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  
+  
+  <insert id="insert" parameterType="com.calf.module.order.entity.SkillItemExt" >
+      insert into skill_item_ext (id, skill_item_id, skill_ext_type, 
+      skill_ext_range, skill_ext_unit, skill_ext_price, 
+      skill_ext_status, skill_ext_discont, create_time, 
+      modify_time, create_man, modify_man, 
+      remark)
+    values (#{id,jdbcType=BIGINT}, #{skillItemId,jdbcType=BIGINT}, #{skillExtType,jdbcType=TINYINT},
+      #{skillExtRange,jdbcType=TINYINT}, #{skillExtUnit,jdbcType=TINYINT}, #{skillExtPrice,jdbcType=DECIMAL}, 
+      #{skillExtStatus,jdbcType=TINYINT}, #{skillExtDiscont,jdbcType=DECIMAL}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{modifyTime,jdbcType=TIMESTAMP}, #{createMan,jdbcType=VARCHAR}, #{modifyMan,jdbcType=VARCHAR}, 
+      #{remark,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.calf.module.order.entity.SkillItemExt" >
+    insert into skill_item_ext
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="skillItemId != null" >
+        skill_item_id,
+      </if>
+      <if test="skillExtType != null" >
+        skill_ext_type,
+      </if>
+      <if test="skillExtRange != null" >
+        skill_ext_range,
+      </if>
+      <if test="skillExtUnit != null" >
+        skill_ext_unit,
+      </if>
+      <if test="skillExtPrice != null" >
+        skill_ext_price,
+      </if>
+      <if test="skillExtStatus != null" >
+        skill_ext_status,
+      </if>
+      <if test="skillExtDiscont != null" >
+        skill_ext_discont,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="modifyTime != null" >
+        modify_time,
+      </if>
+      <if test="createMan != null" >
+        create_man,
+      </if>
+      <if test="modifyMan != null" >
+        modify_man,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="skillItemId != null" >
+        #{skillItemId,jdbcType=BIGINT},
+      </if>
+      <if test="skillExtType != null" >
+        #{skillExtType,jdbcType=TINYINT},
+      </if>
+      <if test="skillExtRange != null" >
+        #{skillExtRange,jdbcType=TINYINT},
+      </if>
+      <if test="skillExtUnit != null" >
+        #{skillExtUnit,jdbcType=TINYINT},
+      </if>
+      <if test="skillExtPrice != null" >
+        #{skillExtPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="skillExtStatus != null" >
+        #{skillExtStatus,jdbcType=TINYINT},
+      </if>
+      <if test="skillExtDiscont != null" >
+        #{skillExtDiscont,jdbcType=DECIMAL},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyTime != null" >
+        #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createMan != null" >
+        #{createMan,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyMan != null" >
+        #{modifyMan,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+
+
+  <update id="updateByPrimaryKeySelective" parameterType="com.calf.module.order.entity.SkillItemExt" >
+    update skill_item_ext
+    <set >
+      <if test="skillItemId != null" >
+        skill_item_id = #{skillItemId,jdbcType=BIGINT},
+      </if>
+      <if test="skillExtType != null" >
+        skill_ext_type = #{skillExtType,jdbcType=TINYINT},
+      </if>
+      <if test="skillExtRange != null" >
+        skill_ext_range = #{skillExtRange,jdbcType=TINYINT},
+      </if>
+      <if test="skillExtUnit != null" >
+        skill_ext_unit = #{skillExtUnit,jdbcType=TINYINT},
+      </if>
+      <if test="skillExtPrice != null" >
+        skill_ext_price = #{skillExtPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="skillExtStatus != null" >
+        skill_ext_status = #{skillExtStatus,jdbcType=TINYINT},
+      </if>
+      <if test="skillExtDiscont != null" >
+        skill_ext_discont = #{skillExtDiscont,jdbcType=DECIMAL},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyTime != null" >
+        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createMan != null" >
+        create_man = #{createMan,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyMan != null" >
+        modify_man = #{modifyMan,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.calf.module.order.entity.SkillItemExt" >
+    update skill_item_ext
+    set skill_item_id = #{skillItemId,jdbcType=BIGINT},
+      skill_ext_type = #{skillExtType,jdbcType=TINYINT},
+      skill_ext_range = #{skillExtRange,jdbcType=TINYINT},
+      skill_ext_unit = #{skillExtUnit,jdbcType=TINYINT},
+      skill_ext_price = #{skillExtPrice,jdbcType=DECIMAL},
+      skill_ext_status = #{skillExtStatus,jdbcType=TINYINT},
+      skill_ext_discont = #{skillExtDiscont,jdbcType=DECIMAL},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      create_man = #{createMan,jdbcType=VARCHAR},
+      modify_man = #{modifyMan,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+  <select id="selectPageList" resultMap="BaseResultMap" parameterType="map" >
+    select
+    <include refid="Base_Column_List" />
+    from skill_item_ext
+    where  1 = 1
+    <if test="skillExtStatus != null" >
+      and  skill_ext_status = #{skillExtStatus}
+    </if>
+    <if test="skillItemId != null" >
+      and  skill_item_id = #{skillItemId}
+    </if>
+    LIMIT ${iDisplayStart},${iDisplayLength}
+  </select>
+
+  <select id="slectCount" resultType="java.lang.Integer" parameterType="map" >
+    select
+    count(1)
+    from skill_item_ext
+    where  1= 1
+    <if test="skillExtStatus != null" >
+      and  skill_ext_status = #{skillExtStatus}
+    </if>
+    <if test="skillItemId != null" >
+      and  skill_item_id = #{skillItemId}
+    </if>
+  </select>
+
+  <select id="getSkillItemExtBySkillItemId" resultMap="BaseResultMap" parameterType="map" >
+    select
+    <include refid="Base_Column_List" />
+    from skill_item_ext
+    WHERE skill_item_id = #{skillItemId}
+  </select>
+
+</mapper>

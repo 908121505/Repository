@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.honglu.quickcall.user.service.dao.SkillItemMapper">
+
+	<resultMap type="com.honglu.quickcall.user.facade.entity.SkillItem" id="skillItemMap">
+		<id property="id" column="id" javaType="java.lang.Long"></id>
+		<result property="skillItemName" column="skill_item_name" javaType="java.lang.String"></result>
+		<result property="imageUrl" column="image_url" javaType="java.lang.String"></result>
+		<result property="blackImageUrl" column="black_image_url" javaType="java.lang.String"></result>
+		<result property="lockIcon" column="lock_icon" javaType="java.lang.String"></result>
+		<result property="unlockIcon" column="unlock_icon" javaType="java.lang.String"></result>
+		<result property="backColor" column="back_color" javaType="java.lang.String"></result>
+		<result property="sort" column="sort" javaType="java.lang.Integer"></result>
+		<result property="skillStatus" column="skill_status" javaType="java.lang.Integer"></result>
+		<result property="skillDescribe" column="skill_describe" javaType="java.lang.String"></result>
+		<result property="createTime" column="create_time" javaType="java.lang.String"></result>
+		<result property="modifyTime" column="modify_time" javaType="java.lang.String"></result>
+		<result property="createMan" column="create_man" javaType="java.lang.String"></result>
+		<result property="modifyMan" column="modify_man" javaType="java.lang.String"></result>
+		<result property="remark" column="remark" javaType="java.lang.String"></result>
+	</resultMap>
+
+	<!-- 通用查询结果列-->
+	<sql id="Base_Column_List">
+id,	skill_item_name,	image_url,	black_image_url,	lock_icon,	unlock_icon,	back_color,	sort,	skill_status,	skill_describe,	create_time,	modify_time,	create_man,	modify_man,	remark
+	</sql>
+
+	<!-- 查询（根据主键ID查询） -->
+	<select id="getEntityById" resultMap="skillItemMap" parameterType="java.lang.Long">
+		 SELECT
+		 <include refid="Base_Column_List" />
+		 FROM skill_item
+		 WHERE id = #{id}
+	</select>
+
+	<!-- 查询（根据主键ID查询） -->
+	<select id="findAll" resultMap="skillItemMap" parameterType="java.lang.Long">
+		 SELECT
+		 <include refid="Base_Column_List" />
+		 FROM skill_item
+		 WHERE id = #{id}
+	</select>
+	
+	<select id="selectAllSkill" resultMap="skillItemMap" >
+		 SELECT
+		 <include refid="Base_Column_List" />
+		 FROM skill_item
+	</select>
+
+	<!--删除：根据主键ID删除-->
+	<delete id="deleteEntity" parameterType="java.lang.Long">
+		 DELETE FROM skill_item
+		 WHERE id = #{id}
+	</delete>
+
+	<!-- 添加 -->
+	<insert id="saveEntity" parameterType="com.honglu.quickcall.user.facade.entity.SkillItem">
+		 INSERT INTO skill_item
+ 		(id,skill_item_name,skill_describe,image_url,sort,skill_status,create_time,modify_time,create_man,modify_man,remark,black_image_url) 
+		 VALUES 
+ 		(#{id},#{skillItemName},#{skillDescribe},#{imageUrl},#{sort},#{skillStatus},#{createTime},#{modifyTime},#{createMan},#{modifyMan},#{remark},#{blackImageUrl}) 
+	</insert>
+
+	<!-- 修 改-->
+	<update id="updateEntity" parameterType="com.honglu.quickcall.user.facade.entity.SkillItem">
+		 UPDATE skill_item
+ 		 <set> 
+			<if test="skillItemName != null">
+				 skill_item_name = #{skillItemName},
+			</if>
+			<if test="skillDescribe != null">
+				 skill_describe = #{skillDescribe},
+			</if>
+			<if test="imageUrl != null">
+				 image_url = #{imageUrl},
+			</if>
+			<if test="sort != null">
+				 sort = #{sort},
+			</if>
+			<if test="skillStatus != null">
+				 skill_status = #{skillStatus},
+			</if>
+			<if test="createTime != null">
+				 create_time = #{createTime},
+			</if>
+			<if test="modifyTime != null">
+				 modify_time = #{modifyTime},
+			</if>
+			<if test="createMan != null">
+				 create_man = #{createMan},
+			</if>
+			<if test="modifyMan != null">
+				 modify_man = #{modifyMan},
+			</if>
+			<if test="remark != null">
+				 remark = #{remark},
+			</if>
+			<if test="blackImageUrl != null">
+				 black_image_url = #{blackImageUrl},
+			</if>
+
+ 		 </set>
+		 WHERE id = #{id}
+	</update>
+
+</mapper>

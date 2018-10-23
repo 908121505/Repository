@@ -7,6 +7,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.google.common.base.Strings;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -49,13 +50,14 @@ public class SkillService {
 		paramMap.put("id", id);
 		Skill  skill = baseManager.get("Skill.selectByPrimaryKey",  paramMap);
 		model.addAttribute("entity", skill);
+
 	}
 
 	public int saveAdd(SkillVO entity) {
-		//根据名称获取公司信息
+		//根据名称获取技能信息
 		Skill  skill =  new Skill();
-		Long  id = UUIDUtils.getId();
 		BeanUtils.copyProperties(entity, skill);
+		Long  id = UUIDUtils.getId();
 		skill.setId(id+"");
 		skill.setCreateMan(commonUtilService.getCurrUser());
 		skill.setSkillStatus(0);//有效
@@ -73,10 +75,9 @@ public class SkillService {
 		return 0;
 	}
 
-	
-	
-	
-	
+	public int delete(String id){
+		baseManager.delete(Skill.class,new Object[]{id});
+		return 0;
+	}
 
-	
 }

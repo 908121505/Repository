@@ -3,6 +3,10 @@
         "http://mybatis.org/dtd/mybatis-3-config.dtd">
 
 <configuration>
+    <settings>
+        <setting name="cacheEnabled" value="true"/>
+    </settings>
+
     <typeAliases>
         <!-- common -->
         <typeAlias type="com.calf.module.common.entity.Ztree" alias="ZTree"/>
@@ -31,6 +35,7 @@
 
         <!-- APP配置 -->
         <typeAlias type="com.calf.module.appconfig.entity.Banner" alias="Banner"/>
+        <typeAlias type="com.calf.module.appconfig.entity.EvaluationLabel" alias="EvaluationLabel"/>
 
     </typeAliases>
 </configuration>

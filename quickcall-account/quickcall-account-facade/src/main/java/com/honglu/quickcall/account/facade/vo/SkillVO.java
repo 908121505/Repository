@@ -11,6 +11,18 @@ public class SkillVO {
     private String name;
     /**价格列表*/
     private List<BigDecimal>  priceList;
+    /**已设置金额*/
+    private BigDecimal  currPrice;
+    
+    
+    
+    
+	public BigDecimal getCurrPrice() {
+		return currPrice;
+	}
+	public void setCurrPrice(BigDecimal currPrice) {
+		this.currPrice = currPrice;
+	}
 	public Long getSkillId() {
 		return skillId;
 	}

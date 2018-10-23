@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.honglu.quickcall.user.service.dao.CustomerSkillCertifyMapper">
+
+	<resultMap type="com.honglu.quickcall.user.facade.entity.CustomerSkillCertify" id="customerSkillCertifyMap">
+		<id property="certifyId" column="certify_id" javaType="java.lang.Long"></id>
+		<result property="customerId" column="customer_id" javaType="java.lang.Long"></result>
+		<result property="skillItemId" column="skill_item_id" javaType="java.lang.Long"></result>
+		<result property="auditStatus" column="audit_status" javaType="java.lang.Integer"></result>
+		<result property="skillVoiceUrl" column="skill_voice_url" javaType="java.lang.String"></result>
+		<result property="skillVoiceTime" column="skill_voice_time" jdbcType="DECIMAL"></result>
+		<result property="skillVoiceUrlTmp" column="skill_voice_url_tmp" javaType="java.lang.String"></result>
+		<result property="skillVoiceTimeTmp" column="skill_voice_time_tmp" jdbcType="DECIMAL"></result>
+		<result property="isAudited" column="is_audited" javaType="java.lang.Integer"></result>
+		<result property="createTime" column="create_time" javaType="java.lang.String"></result>
+		<result property="modifyTime" column="modify_time" javaType="java.lang.String"></result>
+		<result property="createMan" column="create_man" javaType="java.lang.String"></result>
+		<result property="modifyMan" column="modify_man" javaType="java.lang.String"></result>
+		<result property="remark" column="remark" javaType="java.lang.String"></result>
+	</resultMap>
+
+	<!-- 通用查询结果列-->
+	<sql id="Base_Column_List">
+certify_id,	customer_id,	skill_item_id,	audit_status,	skill_voice_url,	skill_voice_time,	skill_voice_url_tmp,	skill_voice_time_tmp,	is_audited,	create_time,	modify_time,	create_man,	modify_man,	remark
+	</sql>
+
+	<!-- 查询（根据主键ID查询） -->
+	<select id="getEntityById" resultMap="customerSkillCertifyMap" parameterType="java.lang.Integer">
+		 SELECT
+		 <include refid="Base_Column_List" />
+		 FROM customer_skill_certify
+		 WHERE certify_id = #{certifyId}
+	</select>
+
+	<!-- 查询（根据主键ID查询） -->
+	<select id="findAll" resultMap="customerSkillCertifyMap" parameterType="java.lang.Integer">
+		 SELECT
+		 <include refid="Base_Column_List" />
+		 FROM customer_skill_certify
+		 WHERE certify_id = #{certifyId}
+	</select>
+	
+	<!-- 查询该用户所有认证状态的技能 -->
+	<select id="selectAllSkillByCustomer" resultMap="customerSkillCertifyMap" parameterType="java.lang.Long">
+		 SELECT
+		 <include refid="Base_Column_List" />
+		 FROM customer_skill_certify
+		 WHERE customer_id = #{customerId}
+	</select>
+	
+	<select id="selectSkillCertifyId" resultMap="customerSkillCertifyMap" parameterType="java.util.Map">
+		SELECT <include refid="Base_Column_List" />
+		from customer_skill_certify 
+		where customer_id = #{customerId} and skill_item_id = #{skillItemId}
+	</select>
+
+	<!--删除：根据主键ID删除-->
+	<delete id="deleteEntity" parameterType="java.lang.Integer">
+		 DELETE FROM customer_skill_certify
+		 WHERE certify_id = #{certifyId}
+	</delete>
+	<!-- 添加 -->
+	<insert id="saveEntity" parameterType="com.honglu.quickcall.user.facade.entity.CustomerSkillCertify">
+		 INSERT INTO customer_skill_certify
+		 <trim prefix="(" suffix=")" suffixOverrides=",">
+		 	<if test="certifyId != null">
+		 		certify_id,
+		 	</if>
+		 	<if test="customerId != null">
+		 		customer_id,
+		 	</if>
+		 	<if test="skillItemId != null">
+		 		skill_item_id,
+		 	</if>
+		 	<if test="auditStatus != null">
+		 		audit_status,
+		 	</if>
+		 	<if test="skillVoiceUrl != null">
+		 		skill_voice_url,
+		 	</if>
+		 	<if test="skillVoiceTime != null">
+		 		skill_voice_time,
+		 	</if>
+		 	<if test="skillVoiceUrlTmp != null">
+		 		skill_voice_url_tmp,
+		 	</if>
+		 	<if test="skillVoiceTimeTmp != null">
+		 		skill_voice_time_tmp,
+		 	</if>
+		 	<if test="isAudited != null">
+		 		is_audited,
+		 	</if>
+		 </trim>
+		 <trim prefix="values (" suffix=")" suffixOverrides=",">
+		 	<if test="certifyId != null">
+		 		#{certifyId},
+		 	</if>
+		 	<if test="customerId != null">
+		 		#{customerId},
+		 	</if>
+		 	<if test="skillItemId != null">
+		 		#{skillItemId},
+		 	</if>
+		 	<if test="auditStatus != null">
+		 		#{auditStatus},
+		 	</if>
+		 	<if test="skillVoiceUrl != null">
+		 		#{skillVoiceUrl},
+		 	</if>
+		 	<if test="skillVoiceTime != null">
+		 		#{skillVoiceTime},
+		 	</if>
+		 	<if test="skillVoiceUrlTmp != null">
+		 		#{skillVoiceUrlTmp},
+		 	</if>
+		 	<if test="skillVoiceTimeTmp != null">
+		 		#{skillVoiceTimeTmp},
+		 	</if>
+		 	<if test="isAudited != null">
+		 		#{isAudited},
+		 	</if>
+		 </trim>
+	</insert>
+
+	<!-- 修 改-->
+	<update id="updateEntity" parameterType="com.honglu.quickcall.user.facade.entity.CustomerSkillCertify">
+		 UPDATE customer_skill_certify
+ 		 <set> 
+			<if test="customerId != null">
+				 customer_id = #{customerId},
+			</if>
+			<if test="skillItemId != null">
+				 skill_item_id = #{skillItemId},
+			</if>
+			<if test="auditStatus != null">
+				 audit_status = #{auditStatus},
+			</if>
+			<if test="skillVoiceUrl != null">
+				 skill_voice_url = #{skillVoiceUrl},
+			</if>
+			<if test="skillVoiceTime != null">
+				 skill_voice_time = #{skillVoiceTime},
+			</if>
+			<if test="skillVoiceUrlTmp != null">
+				 skill_voice_url_tmp = #{skillVoiceUrlTmp},
+			</if>
+			<if test="skillVoiceTimeTmp != null">
+				 skill_voice_time_tmp = #{skillVoiceTimeTmp},
+			</if>
+			<if test="isAudited != null">
+				 is_audited = #{isAudited},
+			</if>
+			<if test="createTime != null">
+				 create_time = #{createTime},
+			</if>
+			<if test="modifyTime != null">
+				 modify_time = #{modifyTime},
+			</if>
+			<if test="createMan != null">
+				 create_man = #{createMan},
+			</if>
+			<if test="modifyMan != null">
+				 modify_man = #{modifyMan},
+			</if>
+			<if test="remark != null">
+				 remark = #{remark},
+			</if>
+
+ 		 </set>
+		 WHERE certify_id = #{certifyId}
+	</update>
+
+</mapper>

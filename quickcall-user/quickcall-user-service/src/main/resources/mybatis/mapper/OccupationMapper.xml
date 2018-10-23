@@ -16,8 +16,8 @@
     id, name, occu_describe, type, create_time, modify_time, create_man, modify_man, 
     remark
   </sql>
-  <select id="selectByCustomerId" resultType="java.lang.String" parameterType="java.lang.Long" >
-    SELECT DISTINCT o.name FROM customer c 
+  <select id="selectByCustomerId" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    SELECT DISTINCT o.name,o.id FROM customer c 
     LEFT JOIN customer_occupation co ON c.customer_id=co.customer_id
 	LEFT JOIN occupation o ON co.occupation_id=o.id 
 	WHERE c.customer_id=#{customerId}
@@ -145,4 +145,13 @@
       remark = #{remark,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
+  
+  
+  
+    <select id="selectOccupationList" resultType="com.honglu.quickcall.user.facade.vo.OccupationVO"  >
+    select  id  AS  id ,  name  AS  name  from occupation
+  </select>
+  
+  
+  
 </mapper>

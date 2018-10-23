@@ -1,79 +1,52 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.honglu.quickcall.task.dao.TaskMapper" >
+<mapper namespace="com.honglu.quickcall.task.dao.TaskMapper">
 
-	<!-- 订单返回结果集 -->
-	<resultMap id="OrderResultMap" type="com.honglu.quickcall.account.facade.entity.Order" >
-		<result column="buyer_id" property="buyerId" jdbcType="BIGINT" />
-		<result column="seller_id" property="sellerId" jdbcType="BIGINT" />
-	</resultMap>
+    <!-- 订单返回结果集 -->
+    <resultMap id="OrderResultMap" type="com.honglu.quickcall.account.facade.entity.Order">
+        <result column="customer_id" property="customerId" jdbcType="BIGINT"/>
+        <result column="service_id" property="serviceId" jdbcType="BIGINT"/>
+    </resultMap>
 
-	<!-- 查询五分钟即将开始服务的订单 -->
-	<select id="queryWillBeStartMessage" resultMap="OrderResultMap" >
+    <!-- 查询五分钟即将开始服务的订单 -->
+    <select id="queryWillBeStartMessage" resultMap="OrderResultMap">
 		SELECT
-		buyer_id, seller_id
+		customer_id, service_id
 		FROM orders WHERE 1 =1
 		and order_status in (2,3)
 		and start_time <![CDATA[  >= ]]> date_format(date_add(now(), interval 4 minute), '%Y-%m-%d %H:%i:00')
 		and start_time <![CDATA[  <= ]]> date_format(date_add(now(), interval 6 minute), '%Y-%m-%d %H:%i:00')
 	</select>
 
-	<!-- 查询五分钟即将开始服务的订单 -->
-	<select id="getCustomerDeviceId" resultType="java.lang.String" parameterType="java.lang.Long">
+    <!-- 查询五分钟即将开始服务的订单 -->
+    <select id="getCustomerDeviceId" resultType="java.lang.String" parameterType="java.lang.Long">
 		SELECT device_id FROM customer WHERE customer_id=#{customerId}
 	</select>
-	
-	
-	<!-- 查询未支付即将支付过期的订单ID列表 -->
-	<select id="queryPayOverTimeOrderIdList" resultType="java.lang.Long" parameterType="map">
-		SELECT  order_id AS  orderId  FROM  orders  WHERE  order_status  = #{orderStatus}  AND   order_time <![CDATA[  < ]]>  #{endTime}
-	</select>
-	
-	
-	<update id="batchUpdateOrderStatus"   >
-		UPDATE 
-			orders
-		SET 
-			order_status = #{orderStatus},
-			modify_man = 'sys_job',
-			modify_time = NOW()
-		WHERE
-			order_id IN
-		<foreach collection="list" item="id"  open="("  close=")"  separator="," >
-		        #{id}
-		</foreach>
-	</update>
-	
-	<!-- 查询已支付且大V未接受订单ID列表 -->
-	<select id="queryReceiveOverTimeOrderIdList" resultType="com.honglu.quickcall.task.entity.Order" parameterType="map">
-		SELECT  order_id AS  orderId  FROM  orders  WHERE  order_status  = #{orderStatus}  AND   payment_time <![CDATA[  < ]]>  #{endTime}
-	</select>
-	
-	
-	   <!-- 入账 -->
-   <update id="inAccount" parameterType="Map">
-    
-    update account set 
-    <if test="type==1">
-    recharge_amounts=recharge_amounts+#{amount}
-    </if>
-    <if test="type==2">
-    remainder_amounts=remainder_amounts+#{amount}
-    </if>
-    where customer_id = #{userId}
-   
-   </update>
-  
-   <!-- 出账 -->
-   <update id="outAccount" parameterType="Map">
-    update account set
-    <if test="type==1">
-    recharge_amounts=recharge_amounts-#{amount}
-    </if>
-    <if test="type==2">
-    remainder_amounts=remainder_amounts-#{amount}
-    </if>
-    where customer_id = #{userId}
-   </update>
-	
+
+    <!-- 入账 -->
+    <update id="inAccount" parameterType="Map">
+
+        update account set
+        <if test="type==1">
+            recharge_amounts=recharge_amounts+#{amount}
+        </if>
+        <if test="type==2">
+            remainder_amounts=remainder_amounts+#{amount}
+        </if>
+        where customer_id = #{userId}
+
+    </update>
+
+    <!-- 出账 -->
+    <update id="outAccount" parameterType="Map">
+        update account set
+        <if test="type==1">
+            recharge_amounts=recharge_amounts-#{amount}
+        </if>
+        <if test="type==2">
+            remainder_amounts=remainder_amounts-#{amount}
+        </if>
+        where customer_id = #{userId}
+    </update>
+
 </mapper>

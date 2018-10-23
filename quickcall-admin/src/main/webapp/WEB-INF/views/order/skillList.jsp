@@ -115,13 +115,18 @@
 					sAjaxSource:"skill/initTable.htm",
 					aoColumns: [
 			            { 
-			              "data": "name",
+			              "data": "id",
+			              "sTitle":"技能ID",
+			              'sClass':"text-center"
+			            },
+			            { 
+			              "data": "skillItemName",
 			              "sTitle":"技能名称",
 			              'sClass':"text-center"
 			            },
 			            { 
-			               "data": "imageUrl",
-			               "sTitle":"背景图片",
+			               "data": "lockIcon",
+			               "sTitle":"未解锁图片",
 			               'sClass':"text-center",
 			               "mRender": function(data, type, full) { 
 			            	   if(data==''||data==null){
@@ -132,7 +137,69 @@
 			            	   
 			              } 
 			            },
-			            { 
+                        {
+                            "data": "unlockIcon",
+                            "sTitle":"解锁图片",
+                            'sClass':"text-center",
+                            "mRender": function(data, type, full) {
+                                if(data==''||data==null){
+                                    return	"--";
+                                }else{
+                                    return "<img src='" + data + "' height='50px;'/>";
+                                }
+
+                            }
+                        },
+                        {
+                            "data": "backColor",
+                            "sTitle":"背景颜色",
+                            'sClass':"text-center",
+                            "mRender": function(data, type, full) {
+                                if(data==''||data==null){
+                                    return	"--";
+                                }else{
+                                    return "<div style=\"background-color:"+data+";\">\n" +
+                                        "                    <br>背影颜色\n" +
+                                        "                </div>\n"
+                                }
+
+                            }
+                        },
+                        {
+                            "data": "fontColor",
+                            "sTitle":"字体颜色",
+                            'sClass':"text-center",
+                            "mRender": function(data, type, full) {
+                                if(data==''||data==null){
+                                    return	"--";
+                                }else{
+                                    return "<div style=\"background-color:"+data+";\">\n" +
+                                        "                    <br>背影颜色\n" +
+                                        "                </div>\n"
+                                }
+
+                            }
+                        },
+
+						{
+							"data": "skillDescribe",
+							"sTitle": "描述",
+                            'sClass':"text-center"
+						},
+			         /*   {
+			               "data": "titleUrl",
+			               "sTitle":"标题背景图片",
+			               'sClass':"text-center",
+			               "mRender": function(data, type, full) { 
+			            	   if(data==''||data==null){
+	   	                             return	"--";
+			            	   }else{
+				            	return "<img src='" + data + "' height='50px;'/>"; 
+			            	   }
+			            	   
+			              } 
+			            },*/
+			        /*    {
 			                "data": "minPrice",
 			                "sTitle":"最低价格",
 			                'sClass':"text-center",
@@ -146,7 +213,7 @@
                             "data": "priceStep",
                             "sTitle":"价格步长",
                             'sClass':"text-center",
-                        },
+                        },*/
                         {
                             "data": "skillStatus",
                             "sTitle":"状态",
@@ -230,11 +297,12 @@
 		                   aoData.push({"name": "skillStatus", "value": $("#skillStatusQuery").val()});
 	                    },
 	                    aoColumnDefs : [ {
-							"aTargets" : 11,
+							"aTargets" : 13,
 							"mRender" : function(data,type, row) {
-								var detail = "";
+								var detail = "",del = "";
 								detail = "<a href='#' onclick='addAndUpdateRow(\""+ row.id+ "\")' data-toggle='modal' class='padding-right-small label label-success'><i class='glyphicon glyphicon-edit'></i>详情</a>";
-								return  detail;
+                                del = "<a href='#' onclick='deleteRow(\""+ row.id+ "\")' data-toggle='modal' class='padding-right-small label label-success'><i class='glyphicon glyphicon-edit'></i>删除</a>";
+								return  detail+"&nbsp;"+del;
 							}
 						} ]
 		            
@@ -249,6 +317,10 @@
 			function addAndUpdateRow(id){
 				$('#insertAndUpdate').addAndUpdateRow("skill/addAndUpdateHome.htm?id="+id);
 			}
+
+        function deleteRow(id){
+            $('#myModal').deleteRow('skill/delete.htm?id='+id);
+        }
 </script>
 		<!---dialog选项-->
 		<div>

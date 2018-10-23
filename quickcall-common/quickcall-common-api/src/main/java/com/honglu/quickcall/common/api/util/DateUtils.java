@@ -194,7 +194,47 @@ public class DateUtils {
     	cal.add(Calendar.MINUTE, minutes);
     	return   cal.getTime()  ;
     }
+    /**
+     * 获取当前天在每周的第几天(例如周一就是第一天，周日是第七天)
+     * @return
+     */
+    public static int getDayOfWeek()  {
+    	Calendar  cal =  Calendar.getInstance();
+    	Integer   dayIndex =  cal.get(Calendar.DAY_OF_WEEK);
+    	if(dayIndex == 1){
+    		return 7;
+    	}else{
+    		return dayIndex - 1 ;
+    	}
+    }
     
+    
+    public static int getAgeByBirth(Date birthday) {
+        int age = 0;
+        if(birthday == null ){
+        	return age ;
+        }
+        
+        try {
+            Calendar now = Calendar.getInstance();
+            now.setTime(new Date());// 当前时间
+
+            Calendar birth = Calendar.getInstance();
+            birth.setTime(birthday);
+
+            if (birth.after(now)) {//如果传入的时间，在当前时间的后面，返回0岁
+                age = 0;
+            } else {
+                age = now.get(Calendar.YEAR) - birth.get(Calendar.YEAR);
+                if (now.get(Calendar.DAY_OF_YEAR) > birth.get(Calendar.DAY_OF_YEAR)) {
+                    age += 1;
+                }
+            }
+            return age;
+        } catch (Exception e) {//兼容性更强,异常后返回数据
+           return 0;
+        }
+    }
     
     
 

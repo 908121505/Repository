@@ -50,42 +50,68 @@ public interface OrderSkillConstants {
 	
 	
 	
-	/**订单状态1.下单未支付（已下单，未支付）; */
-	public static final Integer  ORDER_STATUS_NOT_PAY = 1 ;
-	/**订单状态2.支付之前取消*/
-	public static final Integer  ORDER_STATUS_CANCEL_BEFORE_PAY = 2 ;//
-	/**订单状态3.下单未支付系统取消（已下单，30分钟内未支付）*/
-	public static final Integer  ORDER_STATUS_CANCEL_NOT_PAY = 3 ;//
-	/**订单状态4.已支付（已下单，支付完成）*/
-	public static final Integer  ORDER_STATUS_PAYED = 4 ;
-	/**订单状态5.超时未接（已支付，大V30分钟内未接单）*/
-	public static final Integer  ORDER_STATUS_CANCEL_PAYED_DV_RECEIVE_OVER_TIME = 5 ;//
-	/**订单状态6.大V接单前用户自主取消;*/
-	public static final Integer  ORDER_STATUS_CANCEL_PAYED_USER_SELE_CANCEL = 6 ;
-	/**订单状态7.大V拒绝订单（支付完成，大V拒绝，客户退款）;*/
-	public static final Integer  ORDER_STATUS_PAYED_DV_REFUSE = 7 ;
-	/**订单状态8.大V接受订单;*/
-	public static final Integer  ORDER_STATUS_PAYED_DV_ACCEPT_ORDER = 8 ;
-	/**订单状态9.大V接单后用户取消订单（用户退款）;*/
-	public static final Integer  ORDER_STATUS_CANCLE_DV_ACCEPT_USER_SELF_CANCLE = 9 ;
-	/**订单状态10.大V确认开始订单;*/
-	public static final Integer  ORDER_STATUS_PAYED_DV_CONFIRM_START = 10 ;
-	/**订单状态11.用户同意（响应大V立即服务请求）;*/
-	public static final Integer  ORDER_STATUS_CUST_AGREE_DV_START_SERVICE = 11 ;
-	/**订单状态12.订单进行之前取消（客户退款）;*/
-	public static final Integer  ORDER_STATUS_CANCEL_BEFORE_ING = 12 ;
-	/**订单状态13.用户拒绝（响应大V立即服务请求）;*/
-	public static final Integer  ORDER_STATUS_CUST_REFUSE_DV_START_SERVICE = 13 ;
-	/**订单状态14.进行中（用户同意或者到约定的订单开始时间）;*/
-	public static final Integer  ORDER_STATUS_GOING_ING = 14 ;
-	/**订单状态15.用户申请退款;*/
-	public static final Integer  ORDER_STATUS_USER_APPLAY_REFUND = 15 ;
-	/**订单状态16.订单作废（大V同意退款，客户退款）;*/
-	public static final Integer  ORDER_STATUS_CANCEL_DV_AGREE_REFUND = 16 ;
-	/**订单状态17.订单完成（大V拒绝退款）;*/
-	public static final Integer  ORDER_STATUS_END_DV_REFUSE = 17 ;
+	/**订单状态2.待接单;   */
+	public static final Integer  ORDER_STATUS_WAITING_RECEIVE = 2 ;
+	/**订单状态4.取消（用户下单后自主取消）*/
+	public static final Integer  ORDER_STATUS_CANCEL_BEFORE_RECEIVE = 4 ;//
+	/**订单状态6.取消（待接单-大V超时未接）*/
+	public static final Integer  ORDER_STATUS_CANCEL_SYSTEM_NOT_RECEIVE = 6 ;//
+	/**订单状态8.已拒绝（大V拒绝接单）*/
+	public static final Integer  ORDER_STATUS_DAV_REFUSED_RECEIVE = 8 ;
+	/**订单状态10.待开始（大V接单）;*/
+	public static final Integer  ORDER_STATUS_WAITING_START = 10 ;//
+	/**订单状态12.取消（大V接单，大V同一时间其它订单取消）;*/
+	public static final Integer  ORDER_STATUS_CANCEL_DAV_START_ONE_ORDER = 12 ;
+	/**订单状态14.取消（大V接单后用户自主取消）;*/
+	public static final Integer  ORDER_STATUS_CANCEL_BEFORE_DAV_START = 14 ;
+	/**订单状态16.取消（待开始5分钟大V未发起开始服务）*/
+	public static final Integer  ORDER_STATUS_CANCEL_NOT_START = 16 ;
+	/**订单状态18.待开始(大V发起开始服务)*/
+	public static final Integer  ORDER_STATUS_WAITING_START_DA_APPAY_START_SERVICE = 18 ;
+	/**订单状态20.取消（大V发起开始服务用户自主取消）;*/
+	public static final Integer  ORDER_STATUS_CANCLE_USER_SELF_BEFORE_SERVICE = 20 ;
+	/**订单状态22.取消（大V发起开始服务用户5分钟未接）;*/
+	public static final Integer  ORDER_STATUS_CANCEL_USER_NOT_ACCEPCT = 22 ;
+	/**订单状态24.进行中（大V发起开始服务用户5分钟内同意，叫醒特享）;*/
+	public static final Integer  ORDER_STATUS_GOING_WAITING_START = 24 ;
+	/**订单状态26.进行中（大V发起开始服务用户5分钟内同意）;*/
+	public static final Integer  ORDER_STATUS_GOING_USER_ACCEPCT = 26 ;
+	/**订单状态28.进行中（大V发起完成服务）*/
+	public static final Integer  ORDER_STATUS_GOING_DAV_APPAY_FINISH = 28 ;
+	/**订单状态30.已完成（用户同意对方）*/
+	public static final Integer  ORDER_STATUS_FINISHED_USER_ACCEPCT = 30 ;
+	/**订单状态32.已完成（大V发起已完成服务，12小时客户不响应自动完成）*/
+	public static final Integer  ORDER_STATUS_FINISH_DV_FINISH = 32 ;
+	/**订单状态34.进行中（用户发起完成服务）*/
+	public static final Integer  ORDER_STATUS_GOING_USRE_APPAY_FINISH = 34 ;
+	/**订单状态36.已完成（大V在服务时间外完成）;*/
+	public static final Integer  ORDER_STATUS_FINISH_DAV_FINISH_AFTER_SERVICE_TIME = 36 ;
+	/**订单状态38.已完成（订单开始12小时系统自动完成）*/
+	public static final Integer  ORDER_STATUS_FINISH_BOTH_NO_OPERATE = 38 ;
+	/**订单状态40.已完成（用户评价完成）*/
+	public static final Integer  ORDER_STATUS_FINISHED_AND_PINGJIA = 40 ;
+	
+	
+	
 	/**订单状态18.订单完成（正常完成）;*/
 	public static final Integer  ORDER_STATUS_END = 18 ;
+	
+	
+	
+	
+	
+	
+//	大V声音审核状态1：待审核（审核中） 2：审核拒绝   3.审核通过   4.修改之后待审核   5.修改之后审核拒绝    6.修改之后审核通过
+	
+	//////////////大V声音状态/////////////////
+	/**大V声音状态1：未录制*/
+	public static final  Integer  VOICE_STATUS_UNEXIST = 1;
+	/**大V声音状态2：待审核（审核中）*/
+	public static final  Integer  VOICE_STATUS_UN_APPROVE = 2;
+	/**大V声音状态3：审核拒绝*/
+	public static final  Integer  VOICE_STATUS_APPROVE_REFUSED = 3;
+	/**大V声音状态4：审核通过*/
+	public static final  Integer  VOICE_STATUS_APPROVE_PASS = 4;
 	
 	
 }

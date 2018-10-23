@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="EvaluationLabel">
+    <resultMap id="BaseResultMap" type="EvaluationLabel">
+        <id column="label_id" property="labelId" jdbcType="INTEGER"/>
+        <result column="skill_item_id" property="skillItemId" jdbcType="VARCHAR"/>
+        <result column="customer_sex" property="customerSex" jdbcType="TINYINT"/>
+        <result column="label_name" property="labelName" jdbcType="VARCHAR"/>
+        <result column="border_color" property="borderColor" jdbcType="VARCHAR"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP"/>
+        <result column="create_man" property="createMan" jdbcType="VARCHAR"/>
+        <result column="modify_man" property="modifyMan" jdbcType="VARCHAR"/>
+
+        <!-- 扩展查询字段 -->
+        <result column="skill_item_name" property="skillItemName" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    label_id, skill_item_id, customer_sex, label_name, border_color, create_time, modify_time, 
+    create_man, modify_man
+  </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="map">
+        select
+        <include refid="Base_Column_List"/>
+        from evaluation_label
+        where label_id = #{arg0}
+    </select>
+    <insert id="insert" parameterType="EvaluationLabel">
+    insert into evaluation_label (skill_item_id, customer_sex,
+      label_name, border_color, create_time, 
+      modify_time, create_man, modify_man
+      )
+    values (#{skillItemId,jdbcType=VARCHAR}, #{customerSex,jdbcType=TINYINT},
+      #{labelName,jdbcType=VARCHAR}, #{borderColor,jdbcType=VARCHAR}, NOW(),
+      NOW(), #{createMan,jdbcType=VARCHAR}, #{modifyMan,jdbcType=VARCHAR}
+      )
+  </insert>
+    <update id="update" parameterType="EvaluationLabel">
+        update evaluation_label
+        <set>
+            <if test="skillItemId != null">
+                skill_item_id = #{skillItemId,jdbcType=VARCHAR},
+            </if>
+            <if test="customerSex != null">
+                customer_sex = #{customerSex,jdbcType=TINYINT},
+            </if>
+            <if test="labelName != null">
+                label_name = #{labelName,jdbcType=VARCHAR},
+            </if>
+            <if test="borderColor != null">
+                border_color = #{borderColor,jdbcType=VARCHAR},
+            </if>
+            modify_time = NOW(),
+            <if test="modifyMan != null">
+                modify_man = #{modifyMan,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where label_id = #{labelId,jdbcType=INTEGER}
+    </update>
+
+    <!-- 查询数量 -->
+    <select id="queryCount" parameterType="map" resultType="int">
+        select count(label_id) from evaluation_label where 1=1
+        <if test="skillItemId != null">and skill_item_id = #{skillItemId}</if>
+        <if test="customerSex !=null">and customer_sex = #{customerSex}</if>
+        <if test="labelName != null and labelName != ''">and label_name like concat('%',#{labelName},'%')</if>
+    </select>
+
+    <!-- 分页查询数据 -->
+    <select id="query" parameterType="map" resultMap="BaseResultMap">
+        select
+        t.label_id, t.skill_item_id, t.customer_sex, t.label_name,
+        t.border_color, t.create_time, t.modify_time, t.create_man, t.modify_man,
+        s.skill_item_name
+        FROM evaluation_label t
+        LEFT JOIN skill_item s ON s.id = t.skill_item_id
+        WHERE 1 = 1
+        <if test="skillItemId != null">and skill_item_id = #{skillItemId}</if>
+        <if test="customerSex !=null">and customer_sex = #{customerSex}</if>
+        <if test="labelName != null and labelName != ''">and label_name like concat('%',#{labelName},'%')</if>
+        order by create_time desc
+        limit ${iDisplayStart},${iDisplayLength}
+    </select>
+
+    <delete id="delete" parameterType="map">
+		DELETE FROM evaluation_label WHERE label_id = #{arg0}
+	</delete>
+
+    <!-- 查询校验数据 -->
+    <select id="countCheckData" parameterType="map" resultType="int">
+        select count(label_id)
+        from evaluation_label
+        where 1=1
+        <if test="labelId != null">and label_id != #{labelId}</if>
+        <if test="skillItemId != null">and skill_item_id = #{skillItemId}</if>
+        <if test="labelName != null and labelName != ''">and label_name = #{labelName}</if>
+    </select>
+</mapper>

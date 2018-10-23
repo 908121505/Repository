@@ -8,6 +8,7 @@
     <result column="min_price" property="minPrice" jdbcType="DECIMAL" />
     <result column="max_price" property="maxPrice" jdbcType="DECIMAL" />
     <result column="image_url" property="imageUrl" jdbcType="VARCHAR" />
+    <result column="title_url" property="titleUrl" jdbcType="VARCHAR" />
     <result column="price_step" property="priceStep" jdbcType="SMALLINT" />
     <result column="sort" property="sort" jdbcType="SMALLINT" />
     <result column="skill_status" property="skillStatus" jdbcType="TINYINT" />
@@ -20,7 +21,7 @@
 
 
   <sql id="Base_Column_List" >
-    id, name, skill_describe, min_price, max_price, image_url, price_step,sort, skill_status, 
+    id, name, skill_describe, min_price, max_price, image_url,title_url,  price_step,sort, skill_status, 
     create_time, modify_time, create_man, modify_man, remark
   </sql>
 
@@ -35,14 +36,18 @@
     where id = #{id,jdbcType=INTEGER}
   </delete>
 
+  <delete id="delete" parameterType="map">
+    delete from skill where id = #{arg0}
+  </delete>
+
   <insert id="insert" parameterType="com.calf.module.order.entity.Skill" >
     insert into skill (id, name, skill_describe, 
-      min_price, max_price, image_url, 
+      min_price, max_price, image_url, title_url, 
       price_step, sort,skill_status, create_time, 
       modify_time, create_man, modify_man, 
       remark)
     values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{skillDescribe,jdbcType=VARCHAR}, 
-      #{minPrice,jdbcType=DECIMAL}, #{maxPrice,jdbcType=DECIMAL}, #{imageUrl,jdbcType=VARCHAR}, 
+      #{minPrice,jdbcType=DECIMAL}, #{maxPrice,jdbcType=DECIMAL}, #{imageUrl,jdbcType=VARCHAR},  #{titleUrl,jdbcType=VARCHAR},
       #{priceStep,jdbcType=SMALLINT},#{sort,jdbcType=SMALLINT}, #{skillStatus,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP}, 
       #{modifyTime,jdbcType=TIMESTAMP}, #{createMan,jdbcType=VARCHAR}, #{modifyMan,jdbcType=VARCHAR}, 
       #{remark,jdbcType=VARCHAR})
@@ -67,6 +72,9 @@
       </if>
       <if test="imageUrl != null" >
         image_url,
+      </if>
+      <if test="titleUrl != null" >
+        title_url,
       </if>
       <if test="priceStep != null" >
         price_step,
@@ -111,6 +119,9 @@
       </if>
       <if test="imageUrl != null" >
         #{imageUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="titleUrl != null" >
+        #{titleUrl,jdbcType=VARCHAR},
       </if>
       <if test="priceStep != null" >
         #{priceStep,jdbcType=SMALLINT},
@@ -157,6 +168,9 @@
       <if test="imageUrl != null" >
         image_url = #{imageUrl,jdbcType=VARCHAR},
       </if>
+      <if test="titleUrl != null" >
+        title_url = #{titleUrl,jdbcType=VARCHAR},
+      </if>
       <if test="priceStep != null" >
         price_step = #{priceStep,jdbcType=SMALLINT},
       </if>
@@ -191,6 +205,7 @@
       min_price = #{minPrice,jdbcType=DECIMAL},
       max_price = #{maxPrice,jdbcType=DECIMAL},
       image_url = #{imageUrl,jdbcType=VARCHAR},
+      title_url = #{titleUrl,jdbcType=VARCHAR},
       price_step = #{priceStep,jdbcType=SMALLINT},
       sort = #{sort,jdbcType=SMALLINT},
       skill_status = #{skillStatus,jdbcType=TINYINT},
@@ -228,7 +243,6 @@
      <if test="name != null" >
         and  name like  concat( '%',#{name},'%')
      </if>
-    
   </select>
   
   

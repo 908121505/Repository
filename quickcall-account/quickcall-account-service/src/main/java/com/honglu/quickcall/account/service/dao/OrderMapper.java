@@ -2,6 +2,7 @@ package com.honglu.quickcall.account.service.dao;
 
 import java.util.List;
 
+import com.honglu.quickcall.account.facade.entity.EvaluationLabel;
 import org.apache.ibatis.annotations.Param;
 
 import com.honglu.quickcall.account.facade.entity.Order;
@@ -41,4 +42,38 @@ public interface OrderMapper {
 	OrderDetailVO queryCustOrderDetail(@Param("orderId")Long orderId);
 	/**查询进行中订单数量*/
 	Integer queryIngOrderCount(@Param("buyerId")Long buyerId, @Param("sellerId")Long sellerId, @Param("orderStatus")Integer orderStatus, @Param("orderStatusTwo")Integer orderStatusTwo);
+
+	/**
+	 * 查询弹幕显示需要的订单消息
+	 * @param orderId
+	 * @return
+	 */
+	OrderDetailVO queryBarrageOrderInfo(@Param("orderId") Long orderId);
+
+	/**
+	 * 查询评价页面需要的数据
+	 * @param orderId
+	 * @return
+	 */
+	OrderDetailVO queryEvaluationData(@Param("orderId") Long orderId);
+
+	/**
+	 * 保存订单表评价信息
+	 * @param evaluationInfo
+	 * @return
+	 */
+	int saveEvaluationInfo(Order evaluationInfo);
+
+	/**
+	 * 保存评价标签
+	 * @param list
+	 */
+	int saveEvaluationLabels(List<EvaluationLabel> list);
+
+	/**
+	 * 删除旧的评价标签
+	 * @param orderId
+	 * @return
+	 */
+	int deleteEvaluationLabels(@Param("orderId") Long orderId);
 }

@@ -20,6 +20,10 @@ public class AliYunFilePaths {
      */
     public static final String APP_BANNER = ROOT_PATH + "banner";
     /**
+     * APP展示技能的图片存放路径
+     */
+    public static final String APP_SKILL = ROOT_PATH + "skill";
+    /**
      * 用户身份认证身份证图片存放路径
      **/
     public static final String IDENTITY_AUTH_ID_CARD_IMAGE = ROOT_PATH + "user/idcard";
@@ -31,4 +35,12 @@ public class AliYunFilePaths {
      * 用户上传头像存储的路径
      **/
     public static final String USER_UPLOAD_HEAD_IMG = ROOT_PATH + "user/headimg";
+    /**
+     * 随机用户上传头像存储的路径
+     **/
+    public static final String FADE_USER_UPLOAD_HEAD_IMG = ROOT_PATH + "fadecustomer/headimg";
+    /**
+     * 大V技能认证声音文件存放路径
+     */
+    public static final String CUSTOMER_SKILL_CERTIFY_AUDIO = ROOT_PATH + "user/skillVoice";
 }

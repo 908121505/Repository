@@ -12,6 +12,16 @@
 				action="banner/save${empty entity?'Insert':'Update' }.htm"
 				role="form">
 				<div class="form-group">
+					<label class="col-sm-2 control-label">banner类型<font color="red">&nbsp;*</font></label>
+					<div class="col-sm-10">
+						<select class="form-control" id="bannerType" name="bannerType">
+							<option value="1" ${entity.bannerType=='1'?'selected':''}>首页顶部banner</option>
+							<option value="2" ${entity.bannerType=='2'?'selected':''}>首页中部banner</option>
+							<option value="3" ${entity.bannerType=='3'?'selected':''}>分类页banner</option>
+						</select>
+					</div>
+				</div>
+				<div class="form-group">
 					<label class="col-sm-2 control-label">标题<font color="red">&nbsp;*</font></label>
 					<div class="col-sm-10">
 						<input type="hidden" value="${entity.bannerId }" name="bannerId" /> 
@@ -20,10 +30,21 @@
 					</div>
 				</div>
 				<div class="form-group">
+					<label class="col-sm-2 control-label">跳转方式<font color="red">&nbsp;*</font></label>
+					<div class="col-sm-10">
+						<select class="form-control" id="clickType" name="clickType">
+							<option value="0" ${entity.clickType=='0'?'selected':''}>不跳转</option>
+							<option value="1" ${entity.clickType=='1'?'selected':''}>HTML页面</option>
+							<option value="2" ${entity.clickType=='2'?'selected':''}>个人主页</option>
+							<option value="3" ${entity.clickType=='3'?'selected':''}>分类页</option>
+						</select>
+					</div>
+				</div>
+				<div class="form-group">
 					<label class="col-sm-2 control-label">链接<font color="red">&nbsp;*</font></label>
 					<div class="col-sm-10">
 						<input type="text" class="form-control" id="banner_url" name="url" value="${entity.url }"><br>
-						<font color="red">(注：如果是跳转到APP产品详情页URL传入产品ID，产品ID从产品管理-产品详情页面获取，格式如下：productId=abd815646d8a4544b7c454d5e77a063b )</font>
+						<font color="red">(注：根据跳转方式输入相应的类容：HTML页面->url链接；个人主页->个人ID；分类页->类别ID)</font>
 					</div>
 				</div>
 				<div class="form-group">
@@ -40,17 +61,10 @@
 					</div>
 				</div>
 				<div class="form-group">
-					<label class="col-sm-2 control-label">banner类型<font color="red">&nbsp;*</font></label>
-					<div class="col-sm-10">
-						<select class="form-control" id="bannerType" name="bannerType">
-							<option value="1" ${entity.bannerType=='1'?'selected':''}>首页banner</option>
-						</select>
-					</div>
-				</div>
-				<div class="form-group">
 					<label class="col-sm-2 control-label">序号<font color="red">&nbsp;*</font></label>
 					<div class="col-sm-10">
 						<input type="number" step="1" class="form-control" id="banner_sort" name="sort" value="${entity.sort }">
+						<font color="red">(注：通过序号权重排序，数字大的优先展示 )</font>
 					</div>
 				</div>
 				<div class="form-group">
@@ -136,84 +150,92 @@
 <script type="text/javascript"
 	src="resources/js/My97DatePicker/WdatePicker.js" charset="utf-8"></script>
 <script type="text/javascript">
-function check_fun(){
-	$("#tip").html("");
-	var b = true;
-	var endTime = $("#banner_endTime").val();
-	var startTime = $("#banner_startTime").val();
-	var sort = $("#banner_sort").val();
-	var state = $('input[name="bannerStatus"]:checked').val();
-	var remark = $('input[name="remark"]').val();
-	var url = $("#banner_url").val();
-	var title = $("#banner_title").val();
+	function check_fun(){
+		$("#tip").html("");
 
-    var versionRule = $("#appVersionRule").val();
-    var version = $("#appVersion").val();
-    if (versionRule != 0) {
-        if(version == null || version.trim() == ''){
-            $("#tip").html("请输入版本号，格式：4.0.0");
-            return false;
-        }
-    }
-
-	if('${entity}' == ''){
-		var filepath = $("#bannerFile_input").val();
-		if( filepath == null || filepath == ''){
-			$("#tip").html("请上传图片");
-			b = false;
+		var title = $("#banner_title").val();
+		if(title == null || title.trim() == ''){
+			$("#tip").html("请输入标题");
+			return false;
 		}
-		
-	}
-	
-	if(endTime == null || endTime.trim() == ''){
-		$("#tip").html("请输入结束时间");
-		b = false;
-	}
-	if(startTime == null || startTime.trim() == ''){
-		$("#tip").html("请输入开始时间");
-		b = false;
-	}
-	if(sort == null || sort.trim() == ''){
-		$("#tip").html("请输入序号");
-		b = false;
-	}
-	if(state == undefined){
-		$("#tip").html("请选择状态");
-		b = false;
-	}
-	if(url == null || url.trim() == ''){
-		$("#tip").html("请输入链接");
-		b = false;
-	}
-	if(title == null || title.trim() == ''){
-		$("#tip").html("请输入标题");
-		b = false;
-	}
+		if(title&&title.length>150){
+			$("#tip").html("标题不能超过150个字");
+			return false;
+		}
 
-	//格式校验
-	if(title&&title.length>150){
-		$("#tip").html("标题不能超过150个字");
-		b = false;
+		var url = $("#banner_url").val();
+		if(url == null || url.trim() == ''){
+			if($("#clickType").val() == 1){
+				$("#tip").html("请输入HTML链接");
+				return false;
+			}
+			if($("#clickType").val() == 2){
+				$("#tip").html("请输入个人主页的主页ID");
+				return false;
+			}
+			if($("#clickType").val() == 3){
+				$("#tip").html("请输入分类页的类别ID");
+				return false;
+			}
+		}
+
+		var sort = $("#banner_sort").val();
+		if(sort == null || sort.trim() == ''){
+			$("#tip").html("请输入序号");
+			return false;
+		}
+		if(sort&&sort.length>9){
+			$("#tip").html("序号不能超过9个字");
+			return false;
+		}
+
+		var startTime = $("#banner_startTime").val();
+		var endTime = $("#banner_endTime").val();
+		if(startTime == null || startTime.trim() == ''){
+			$("#tip").html("请输入开始时间");
+			return false;
+		}
+		if(endTime == null || endTime.trim() == ''){
+			$("#tip").html("请输入结束时间");
+			return false;
+		}
+		if(endTime <= startTime){
+			$("#tip").html("开始时间必须大于结束时间");
+			return false;
+		}
+
+		var versionRule = $("#appVersionRule").val();
+		var version = $("#appVersion").val();
+		if (versionRule != 0) {
+			if(version == null || version.trim() == ''){
+				$("#tip").html("请输入版本号，格式：4.0.0");
+				return false;
+			}
+		}
+
+		if('${entity}' == ''){
+			var filepath = $("#bannerFile_input").val();
+			if( filepath == null || filepath == ''){
+				$("#tip").html("请上传图片");
+				return false;
+			}
+
+		}
+
+		var remark = $('input[name="remark"]').val();
+		if(remark&&remark.length>250){
+			$("#tip").html("备注不能超过250个字");
+			return false;
+		}
+
+		var temp = /^[0-9]*$/;
+		if(!temp.test(sort)){
+			$("#tip").html("序号必须全部是数字");
+			return false;
+		}
+
+		return true;
 	}
-
-    if(sort&&sort.length>9){
-    	$("#tip").html("序号不能超过9个字");
-    	b = false;
-    }
-    
-    if(remark&&remark.length>250){
-   	    $("#tip").html("备注不能超过250个字");
-    	b = false;
-    } 
-
-    var temp = /^[0-9]*$/;
-    if(!temp.test(sort)){
-    	$("#tip").html("序号必须全部是数字");
-    	b = false;
-    }
-
-	return b;
-}
 	$(function() {
 		$('#uploadBanner').click(function() {
 			var file = document.bannerForm.appversionFile.value;

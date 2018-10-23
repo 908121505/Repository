@@ -270,7 +270,7 @@
 		SELECT
 		  c.nick_name AS nickName,
 		  c.sex  AS  sex ,
-		  (YEAR(NOW()) -  YEAR(c.birthday))  AS age ,
+		  ((YEAR(NOW()) -  YEAR(c.birthday)) + 1)  AS age ,
 		  p.price as price ,
 		  p.service_time  AS  serviceTime,
 		  c.customer_id  AS  customerId,
@@ -293,7 +293,7 @@
   
   
   <!-- 大V个人技能查询 -->
-  <select id="selectDaVPersonalProduct" resultType="com.honglu.quickcall.account.facade.vo.OrderDaVProductVO"  >
+  <select id="selectDaVPersonalProduct" resultType="com.honglu.quickcall.account.facade.vo.OrderDaVSkillVO"  >
 	SELECT
 		p.seller_id AS sellerId,
 		c.nick_name AS nickName,

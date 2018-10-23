@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.honglu.quickcall.task.dao.RechargeMapper" >
+  <resultMap id="BaseResultMap" type="com.honglu.quickcall.task.entity.Recharge" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="customer_id" property="customerId" jdbcType="BIGINT" />
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="finish_date" property="finishDate" jdbcType="TIMESTAMP" />
+    <result column="token_package" property="tokenPackage" jdbcType="INTEGER" />
+    <result column="amount" property="amount" jdbcType="DECIMAL" />
+    <result column="type" property="type"  />
+    <result column="alipayordersn" property="alipayordersn" jdbcType="VARCHAR" />
+    <result column="ordersn" property="ordersn" jdbcType="VARCHAR" />
+    <result column="state" property="state"  />
+    <result column="recharge_type" property="rechargeType" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, customer_id, create_date, finish_date, token_package, amount, type, alipayordersn, 
+    ordersn, state, recharge_type
+  </sql>
+  <!-- 查询30分钟内 未处理订单 -->
+  <select id="queryAbnormityOfRecharge" resultMap="BaseResultMap">
+  select
+  <include refid="Base_Column_List"/>
+  from recharge 
+  where create_date>=CURRENT_TIMESTAMP - INTERVAL 30 MINUTE and state=1
+  </select>
+
+
+
+</mapper>

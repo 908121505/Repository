@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="FadeCustomer" >
+  <resultMap id="BaseResultMap" type="com.calf.module.customer.entity.FadeCustomer" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="nick_name" property="nickName" jdbcType="VARCHAR" />
+    <result column="head_portrait_url" property="headPortraitUrl" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="TINYINT" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+    <result column="create_man" property="createMan" jdbcType="VARCHAR" />
+    <result column="modify_man" property="modifyMan" jdbcType="VARCHAR" />
+  </resultMap>
+
+  <sql id="Base_Column_List" >
+    id, nick_name, head_portrait_url, status, remark, create_time, modify_time, create_man, modify_man
+  </sql>
+
+  <select id="selectByPrimaryKey" parameterType="map" resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List"/>
+    FROM fade_customer WHERE id = #{arg0}
+  </select>
+
+  <delete id="delete" parameterType="map">
+    delete from fade_customer where id = #{arg0}
+  </delete>
+
+  <insert id="insert" parameterType="com.calf.module.customer.entity.FadeCustomer" >
+    insert into fade_customer (nick_name, head_portrait_url, status, remark, create_man, modify_man)
+    values (#{nickName,jdbcType=VARCHAR}, #{headPortraitUrl,jdbcType=VARCHAR}, #{status,jdbcType=TINYINT}, #{remark,jdbcType=VARCHAR},
+           #{createMan,jdbcType=VARCHAR}, #{modifyMan,jdbcType=VARCHAR})
+  </insert>
+
+  <update id="update" parameterType="com.calf.module.customer.entity.FadeCustomer" >
+    update fade_customer
+    <set >
+      <if test="nickName != null" >
+        nick_name = #{nickName,jdbcType=VARCHAR},
+      </if>
+      <if test="headPortraitUrl != null" >
+        head_portrait_url = #{headPortraitUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      modify_time = NOW(),
+      <if test="modifyMan != null" >
+        modify_man = #{modifyMan,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <select id="queryCount" parameterType="map" resultType="int">
+    select count(id) from fade_customer where 1=1
+    <if test="nickName !=null">and nick_name like concat('%',#{nickName},'%')</if>
+    <if test="status !=null">and status = #{status}</if>
+  </select>
+
+  <select id="query" parameterType="map" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from
+    fade_customer where 1=1
+    <if test="nickName !=null">and nick_name like concat('%',#{nickName},'%')</if>
+    <if test="status !=null">and status = #{status}</if>
+    order by create_time desc
+    limit ${iDisplayStart},${iDisplayLength}
+  </select>
+
+</mapper>

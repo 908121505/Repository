@@ -1,72 +1,40 @@
 package com.honglu.quickcall.user.service.service.impl;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import javax.persistence.criteria.Order;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import com.alibaba.dubbo.common.json.JSONObject;
-import com.alibaba.fastjson.JSON;
+import cn.jiguang.commom.utils.StringUtils;
 import com.honglu.quickcall.account.facade.code.AccountBizReturnCode;
 import com.honglu.quickcall.common.api.code.BizCode;
-import com.honglu.quickcall.common.api.code.MyServiceCode;
 import com.honglu.quickcall.common.api.exception.BizException;
 import com.honglu.quickcall.common.api.exception.RemoteException;
 import com.honglu.quickcall.common.api.exchange.CommonResponse;
+import com.honglu.quickcall.common.api.exchange.ResultUtils;
 import com.honglu.quickcall.common.api.util.JedisUtil;
-import com.honglu.quickcall.common.api.util.ResponseUtils;
 import com.honglu.quickcall.common.core.util.Detect;
 import com.honglu.quickcall.common.core.util.StringUtil;
+import com.honglu.quickcall.common.core.util.UUIDUtils;
+import com.honglu.quickcall.common.third.rongyun.models.CodeSuccessReslut;
+import com.honglu.quickcall.common.third.rongyun.util.RongYunUtil;
 import com.honglu.quickcall.user.facade.code.UserBizReturnCode;
-import com.honglu.quickcall.user.facade.entity.Customer;
-import com.honglu.quickcall.user.facade.entity.CustomerInterest;
-import com.honglu.quickcall.user.facade.entity.CustomerOccupation;
-import com.honglu.quickcall.user.facade.entity.Interest;
-import com.honglu.quickcall.user.facade.entity.Occupation;
-import com.honglu.quickcall.user.facade.entity.Orders;
-import com.honglu.quickcall.user.facade.entity.Product;
-import com.honglu.quickcall.user.facade.entity.SensitivityWord;
-import com.honglu.quickcall.user.facade.entity.Skill;
-import com.honglu.quickcall.user.facade.entity.in.HomePageLogout;
-import com.honglu.quickcall.user.facade.entity.in.PersonHomePage;
-import com.honglu.quickcall.user.facade.entity.in.VProductTag;
-import com.honglu.quickcall.user.facade.exchange.request.PersonInfoRequest;
-import com.honglu.quickcall.user.facade.exchange.request.SaveBirthRequest;
-import com.honglu.quickcall.user.facade.exchange.request.SaveGenderRequest;
-import com.honglu.quickcall.user.facade.exchange.request.SaveInterestRequest;
-import com.honglu.quickcall.user.facade.exchange.request.SaveNickNameRequest;
-import com.honglu.quickcall.user.facade.exchange.request.SaveOccupationRequest;
-import com.honglu.quickcall.user.facade.exchange.request.SaveSignNameRequest;
-import com.honglu.quickcall.user.facade.exchange.request.ShowHomePageLogout;
-import com.honglu.quickcall.user.service.dao.CustomerMapper;
-import com.honglu.quickcall.user.service.dao.CustomerOccupationMapper;
-import com.honglu.quickcall.user.service.dao.FansMapper;
-import com.honglu.quickcall.user.service.dao.InterestMapper;
-import com.honglu.quickcall.user.service.dao.OccupationMapper;
-import com.honglu.quickcall.user.service.dao.OrdersMapper;
-import com.honglu.quickcall.user.service.dao.ProductMapper;
-import com.honglu.quickcall.user.service.dao.SensitivityWordMapper;
-import com.honglu.quickcall.user.service.dao.SkillMapper;
-import com.honglu.quickcall.user.service.dao.CustomerInterestMapper;
+import com.honglu.quickcall.user.facade.constants.UserBizConstants;
+import com.honglu.quickcall.user.facade.entity.*;
+import com.honglu.quickcall.user.facade.exchange.request.*;
+import com.honglu.quickcall.user.facade.vo.*;
+import com.honglu.quickcall.user.service.dao.*;
 import com.honglu.quickcall.user.service.service.CustomerRedisManagement;
 import com.honglu.quickcall.user.service.service.PersonInfoService;
+import com.honglu.quickcall.user.service.util.CountAge;
 import com.honglu.quickcall.user.service.util.JsonParseUtil;
 import com.honglu.quickcall.user.service.util.RedisKeyConstants;
-import com.honglu.quickcall.user.service.util.CountAge;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import cn.jiguang.commom.utils.StringUtils;
+import java.math.BigDecimal;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 @Service
 @Transactional
 public class PersonInfoServiceImpl implements PersonInfoService {
@@ -85,123 +53,53 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 	@Autowired
 	private CustomerOccupationMapper customerOccupationMapper;
 	@Autowired
-	private ProductMapper productMapper;
-	@Autowired
 	private FansMapper fansMapper;
 	@Autowired
-	private SkillMapper skillMapper;
+	private SkillItemMapper skillItemMapper;
 	@Autowired
-	private OrdersMapper ordersMapper;
+	private CustomerSkillMapper customerSkillMapper;
+	@Autowired
+	private CustomerSkillCertifyMapper customerSkillCertifyMapper;
+	@Autowired
+	private CustomerAppearanceMapper customerAppearanceMapper;
+
 	/**
 	 * 中文、英文、数字、下划线校验 4-24位
 	 */
 	private final static Pattern CH_EN_PATTERN = Pattern.compile("^[\\u4e00-\\u9fa5a-z\\d_]{4,24}$");
-	private final static Pattern ID_PATTERN = Pattern.compile("^\\d{6}(18|19|20)?\\d{2}(0[1-9]|1[012])(0[1-9]|[12]\\d|3[01])\\d{3}(\\d|[xX])$");
 	private static final Logger logger = LoggerFactory.getLogger(PersonInfoServiceImpl.class);
 
-	//测试正则
-//	public static void main(String[] args) {
-//		String string = "大猫__";
-//		Matcher m = CH_EN_PATTERN.matcher(string);
-//		System.out.println(m.matches());
-//
-//	}
+    /** 用户默认的形象照 **/
+    private static String DEFAULT_CUSTOMER_APPEARANCE_URL = ResourceBundle.getBundle("thirdconfig").getString("DEFAULT_CUSTOMER_APPEARANCE_URL");
+
 	/**
-	 * @author liuyinkai 查看个人信息
+	 * 首页搜索用户
+	 * @param params
+	 * @return
 	 */
 	@Override
-	public CommonResponse queryPersonInfo(PersonInfoRequest params) {
-		if (null==params.getCustomerId()||"".equals(params.getCustomerId())) {
-			throw new RemoteException(UserBizReturnCode.UserNotExist, "用户不存在 request.getJson()=" + params.getCustomerId());
-		}
+	public CommonResponse searchPerson(SearchPersonRequest params){
 		CommonResponse commonResponse = new CommonResponse();
-		PersonHomePage personHomePage = null;
-//		if (null == (params.getCustomerId()) || null == (params.getOtherId())) {
-//			throw new RemoteException(UserBizReturnCode.paramError, "参数错误 request.getJson()=" + params.getCustomerId());
-//		}
-		try {
-			// 判断是不是查看自己的资料
-//			if (!params.getCustomerId().equals(params.getOtherId())) {
-//				personHomePage = queryPersonal(params.getOtherId());
-//			} else {
-				personHomePage = queryPersonal(params.getCustomerId());
-//			}
-
-			commonResponse.setData(personHomePage);
-			commonResponse.setCode(UserBizReturnCode.Success);
-			commonResponse.setMessage(UserBizReturnCode.Success.desc());
-		} catch (Exception e) {
-			throw new RemoteException(UserBizReturnCode.UserNotExist, "用户不存在");
+		String keyword = params.getKeyword();
+		if(StringUtil.isBlank(keyword)){
+			throw new BizException(UserBizReturnCode.paramError, "搜索关键字不能为空");
 		}
-
+		Pattern pattern = Pattern.compile("[0-9]{10}");
+		Long currentCustomer = params.getCustomerId();
+		List<SearchPersonListVO> customerList = null;
+		//匹配搜索关键字是模糊搜索还是精准搜索
+		if(pattern.matcher(keyword).matches()){
+			customerList = customerMapper.selectPreciseSearch(keyword,currentCustomer);
+		}
+		else{
+			customerList = customerMapper.selectFuzzySearch(keyword,currentCustomer,params.getPageIndex(),params.getPageSize());
+		}
+		
+		logger.info("用户编号为："+currentCustomer+"搜索关键字:"+keyword+" 成功");
+		commonResponse.setData(customerList);
+		commonResponse.setCode(UserBizReturnCode.Success);
+		commonResponse.setMessage(UserBizReturnCode.Success.desc());
 		return commonResponse;
-	}
-
-	/**
-	 * @Title 查询详细展示信息
-	 * @modify liuyinkai
-	 * @param accountId
-	 * @return outPacket
-	 */
-	@SuppressWarnings("unchecked")
-	public PersonHomePage queryPersonal(Long customerId) {
-		Customer customer = customerRedisManagement.getCustomer(customerId);
-		// 获取身份证
-		String identityID = customer.getCredentialsNum();
-		PersonHomePage personHomePage = new PersonHomePage();
-		if (customer != null) {
-			personHomePage.setCustomerId(customerId);// id
-			personHomePage.setNickName(customer.getNickName());// 昵称
-			personHomePage.setSignName(customer.getSignName());//签名
-			personHomePage.setStarSign(customer.getStarSign());//星座
-			personHomePage.setTokenCode(customer.getTokenCode());//token
-			personHomePage.setvStatus(customer.getvStatus());//大V审核状态
-			personHomePage.setIdentityStatus(customer.getIdentityStatus());//身份证审核状态
-			// 查询粉丝数量
-			Long fansNum = fansMapper.queryFansNumByCustomerId(customerId);
-			personHomePage.setFansNum(fansNum);
-			//查询关注数量
-			int attentionNum = fansMapper.queryAttentionNumByCustomerId(customerId);
-			personHomePage.setAttentionNum(attentionNum);
-			//获取年纪
-			 Date birthday = personHomePage.getBirthday();
-			 //用工具类去转换
-			 int age = CountAge.getAgeByBirth(birthday);
-			 personHomePage.setAge(age);
-			// 判断身份证是否为空，如果又身份证则按找身份证上面的性别
-			if (StringUtils.isNotEmpty(identityID)) {
-				Matcher m = ID_PATTERN.matcher(identityID);
-				if (!m.matches()) {
-					throw new RemoteException(UserBizReturnCode.paramError, "身份证参数错误");
-				}
-				// 判断身份证男女，截取身份证倒数第二位
-				String genderStr = identityID.substring(identityID.length() - 2, identityID.length() - 1);
-				int genderInt = Integer.parseInt(genderStr);
-				if (genderInt % 2 == 0) {
-					personHomePage.setSex(0);// 女
-				} else {
-					personHomePage.setSex(1);// 男
-				}
-			} else {
-				personHomePage.setSex(customer.getSex());// 性别
-			}
-			personHomePage.setHeadPortraitUrl(customer.getHeadPortraitUrl());// 头像
-			personHomePage.setBirthday(customer.getBirthday());// 生日
-			// 查询兴趣爱好 by customerId
-			try {
-				
-				List<Interest> interestList = interestMapper.selectInterestByCustomerId(customerId);
-				personHomePage.setInterest(interestList);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			// 查询职业 by accountId
-			String occupation = occupationMapper.selectByCustomerId(customerId);
-			personHomePage.setOccupation(occupation);
-			return personHomePage;
-		} else {
-			return null;
-		}
 	}
 
 	/**
@@ -243,6 +141,18 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 		int result = customerMapper.updateByPrimaryKeySelective(customer);
 		logger.info("=====saveNickName,更新数量" + result);
 		if (result > 0) {
+
+			// 刷新融云用户信息
+			CodeSuccessReslut reslut = RongYunUtil.refreshUser(String.valueOf(customer.getCustomerId()),
+					customer.getNickName(), customer.getHeadPortraitUrl());
+			// 刷新失败
+			if (reslut.getCode() != 200) {
+				logger.error("刷新融云用户信息失败，用户id为：" + String.valueOf(customer.getCustomerId()) + "失败原因为："
+						+ reslut.getErrorMessage());
+			} else {
+				logger.info("刷新融云用户信息成功！");
+			}
+
 			JedisUtil.set(RedisKeyConstants.USER_CUSTOMER_INFO + params.getCustomerId(),
 					JsonParseUtil.castToJson(customer));
 			commonResponse.setData(customer);
@@ -258,7 +168,8 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 	 * 昵称规则校验
 	 * 
 	 * @modify liuyinkai
-	 * @param nickName 用户昵称
+	 * @param nickName
+	 *            用户昵称
 	 * @return 0 - 通过，1 - 敏感词，2 - 中英文
 	 */
 	private Integer checkNickName(String nickName) {
@@ -370,12 +281,12 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 	public CommonResponse saveBirthday(SaveBirthRequest params) {
 		CommonResponse commonResponse = new CommonResponse();
 		Customer customer = customerRedisManagement.getCustomer(params.getCustomerId());
-		customer.setBirthday(params.getBirthday());//生日
-		customer.setStarSign(params.getStarSign());//星座
+		customer.setBirthday(params.getBirthday());// 生日
+		customer.setStarSign(params.getStarSign());// 星座
 		try {
 			// 更新生日
 			int result = customerMapper.updateByPrimaryKeySelective(customer);
-			
+
 			if (result > 0) {
 				JedisUtil.set(RedisKeyConstants.USER_CUSTOMER_INFO + params.getCustomerId(),
 						JsonParseUtil.castToJson(customer));
@@ -410,20 +321,20 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 		if (null != customer) {
 			// 更新customer_interest表
 			try {
-				//如果customer_interest中间表有该用户，先删除该用户在此表的数据
+				// 如果customer_interest中间表有该用户，先删除该用户在此表的数据
 				customerInterestMapper.deleteByCustomerId(params.getCustomerId());
 				for (String str : interest) {
 					customerInterest.setInterestId(Integer.parseInt(str));
-					//customerInterest.setCreateTime(new Date());
-					//判断是否有重复数据
-//					int num = customerInterestMapper.selectRepetitiveData(customerInterest);
-//					if (num>0) {
-//						//更新
-//						customerInterestMapper.updateByCustomerIdSelective(customerInterest);
-//					} else {
-						//插入
-						int result = customerInterestMapper.insertSelective(customerInterest);
-//					}
+					// customerInterest.setCreateTime(new Date());
+					// 判断是否有重复数据
+					// int num = customerInterestMapper.selectRepetitiveData(customerInterest);
+					// if (num>0) {
+					// //更新
+					// customerInterestMapper.updateByCustomerIdSelective(customerInterest);
+					// } else {
+					// 插入
+					customerInterestMapper.insertSelective(customerInterest);
+					// }
 				}
 				commonResponse.setData(customerInterest);
 				commonResponse.setCode(UserBizReturnCode.Success);
@@ -458,22 +369,23 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 			// 更新customer_interest表
 			try {
 				// 存入职业ID
-				//customerOccupation.setOccupationId(occupation);
+				// customerOccupation.setOccupationId(occupation);
 				// 创建时间
-				//customerOccupation.setCreateTime(new Date());
-				//查看重复数量
+				// customerOccupation.setCreateTime(new Date());
+				// 查看重复数量
 				int num = customerOccupationMapper.findRepetitveData(params.getCustomerId());
-				if (num>0) {
-					//更新
+				if (num > 0) {
+					// 更新
 					// 存入职业ID
 					customerOccupation.setOccupationId(occupation);
-					customerOccupation.setModifyTime(new Date());//更新修改时间
-					int nn=customerOccupationMapper.updateByCustomerIdSelective(customerOccupation);
+					customerOccupation.setModifyTime(new Date());
+					// 更新修改时间
+					/* int nn = */customerOccupationMapper.updateByCustomerIdSelective(customerOccupation);
 				} else {
 					// 存入职业ID
 					customerOccupation.setOccupationId(occupation);
-					//插入
-					int result = customerOccupationMapper.insertSelective(customerOccupation);
+					// 插入
+					/* int result = */customerOccupationMapper.insertSelective(customerOccupation);
 				}
 				commonResponse.setData(customerOccupation);
 				commonResponse.setCode(UserBizReturnCode.Success);
@@ -489,99 +401,392 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 
 	}
 
-	/**
-	 * 大V主页，普通用户主页（客态）
-	 * 
-	 * @author liuyinkai
-	 * @param params
-	 */
 	@Override
-	public CommonResponse showHomePageLogout(ShowHomePageLogout params) {
+	public CommonResponse queryInterestList(QueryInterestListRequest request) {
 		CommonResponse commonResponse = new CommonResponse();
-		if (null != params) {
-			HomePageLogout homePageLogout = new HomePageLogout();
-			try {
-				
-				// 获取主页所有资料
-				 homePageLogout = customerMapper.showHomePageLogout(params.getCustomerId());
-				 //获取年纪
-				 Date birthday = homePageLogout.getBirthday();
-				 //用工具类去转换
-				 int age = CountAge.getAgeByBirth(birthday);
-				 homePageLogout.setAge(age);
-				// 获取兴趣名字
-				List<Interest> interestName = interestMapper.selectInterestByCustomerId(params.getCustomerId());
-				homePageLogout.setInterestName(interestName);
-				// 获取职业名字
-				String occupationName = occupationMapper.selectByCustomerId(params.getCustomerId());
-				homePageLogout.setOccupationName(occupationName);
-				// 判断是否是大V用户，只有拥有上架商品的用户和通过大V认证的用户才会显示大V认证
-				int num = productMapper.queryVProductNum(params.getCustomerId());
-				if (num > 0 && homePageLogout.getvStatus() == 2) {
-					// 可以显示大V图标
-					homePageLogout.setvStatus(1);
+		try {
+			List<InterestVO> interestList = interestMapper.selectInterestList();
+			commonResponse.setData(interestList);
+			commonResponse.setCode(UserBizReturnCode.Success);
+			commonResponse.setMessage(UserBizReturnCode.Success.desc());
+		} catch (Exception e) {
+			logger.error("查询异常，异常信息：", e);
+			// throw new RemoteException(UserBizReturnCode.UserNotExist, "用户不存在");
+		}
+
+		return commonResponse;
+	}
+
+	@Override
+	public CommonResponse queryOccupationList(QueryOccupationListRequest request) {
+		CommonResponse commonResponse = new CommonResponse();
+		try {
+			List<OccupationVO> interestList = occupationMapper.selectOccupationList();
+			commonResponse.setData(interestList);
+			commonResponse.setCode(UserBizReturnCode.Success);
+			commonResponse.setMessage(UserBizReturnCode.Success.desc());
+		} catch (Exception e) {
+			logger.error("查询异常，异常信息：", e);
+			// throw new RemoteException(UserBizReturnCode.UserNotExist, "用户不存在");
+		}
+
+		return commonResponse;
+	}
+
+	@Override
+	public CommonResponse queryAttentionFansList(QueryAttentionFansListRequest request) {
+
+		CommonResponse commonResponse = new CommonResponse();
+		try {
+			List<AttentionFansVO> resultList = new ArrayList<AttentionFansVO>();
+
+			Long customerId = request.getCustomerId();
+			Integer type = request.getType();
+			if (UserBizConstants.QUERY_ATTENTION_LIST_TYPE == type) {
+				// 查询关注列表
+				resultList = fansMapper.queryAttentionListByCustomerId(customerId,
+						UserBizConstants.ATTENTION_STATUS_ATTENED);
+			} else if (UserBizConstants.QUERY_FANS_LIST_TYPE == type) {
+				// 查询粉丝列表
+				resultList = fansMapper.queryFansIdListByCustomerId(customerId,
+						UserBizConstants.ATTENTION_STATUS_ATTENED);
+			}
+			commonResponse.setData(resultList);
+			commonResponse.setCode(UserBizReturnCode.Success);
+			commonResponse.setMessage(UserBizReturnCode.Success.desc());
+		} catch (Exception e) {
+			logger.error("查询异常，异常信息：", e);
+			// throw new RemoteException(UserBizReturnCode.UserNotExist, "用户不存在");
+		}
+
+		return commonResponse;
+	}
+
+	@Override
+	public CommonResponse addOrCancelFans(AddOrCancelFansRequest request) {
+		if (request == null || request.getFansId() == null || request.getAttendedId() == null) {
+			throw new BizException(UserBizReturnCode.paramError, "参数异常");
+		}
+
+		CommonResponse commonResponse = new CommonResponse();
+
+		try {
+
+			Long fansId = request.getFansId();
+			Long attendedId = request.getAttendedId();
+			Integer type = request.getType();
+
+			Fans fans = fansMapper.queryFans(fansId, attendedId);
+
+			if (UserBizConstants.ATTENTION_TYPE_ADD == type) {
+				// 添加关注
+				if (fans == null) {
+					// 添加关注
+					Fans fan = new Fans();
+					fan.setId(UUIDUtils.getId());
+					fan.setAttentionState(UserBizConstants.ATTENTION_STATUS_ATTENED);
+					fan.setCreateTime(new Date());
+					fan.setFansId(fansId);
+					fan.setAnchorId(attendedId);
+					fansMapper.insert(fan);
 				} else {
-					// 不显示大V图标
-					homePageLogout.setvStatus(0);
+					// 更改状态为关注
+					Integer attentionStatus = fans.getAttentionState();
+					if (UserBizConstants.ATTENTION_STATUS_UN_ATTENED == attentionStatus) {
+						Fans record = new Fans();
+						record.setId(fans.getId());
+						record.setAttentionState(UserBizConstants.ATTENTION_STATUS_ATTENED);
+						record.setModifyTime(new Date());
+						fansMapper.updateByPrimaryKey(record);
+					}
 				}
-				// 主播擅长项目
-				List<VProductTag> vProductTags = this.queryTag(params.getCustomerId());
-				homePageLogout.setvProductTags(vProductTags);
-				// 查询粉丝数量
-				Long fansNum = fansMapper.queryFansNumByCustomerId(params.getCustomerId());
-				homePageLogout.setFansNum(fansNum);
-				//查询关注数量
-				int attentionNum = fansMapper.queryAttentionNumByCustomerId(params.getCustomerId());
-				homePageLogout.setAttentionNum(attentionNum);
-				
-				commonResponse.setData(homePageLogout);
-				commonResponse.setCode(UserBizReturnCode.Success);
-				commonResponse.setMessage(UserBizReturnCode.Success.desc());
+			} else if (UserBizConstants.ATTENTION_TYPE_CANCEL == type) {
+				// 取消关注
+				if (fans != null) {
+					Integer attentionStatus = fans.getAttentionState();
+					if (UserBizConstants.ATTENTION_STATUS_ATTENED == attentionStatus) {
+						// 更改状态
+						Fans record = new Fans();
+						record.setId(fans.getId());
+						record.setAttentionState(UserBizConstants.ATTENTION_STATUS_UN_ATTENED);
+						record.setModifyTime(new Date());
+						fansMapper.updateByPrimaryKey(record);
+					}
+				}
+
+			}
+
+			commonResponse.setData("00000");
+			commonResponse.setCode(UserBizReturnCode.Success);
+			commonResponse.setMessage(UserBizReturnCode.Success.desc());
+		} catch (Exception e) {
+			logger.error("查询异常，异常信息：", e);
+			// throw new RemoteException(UserBizReturnCode.UserNotExist, "用户不存在");
+		}
+
+		return commonResponse;
+	}
+
+	@Override
+	public CommonResponse checkAttention(CheckAttentionRequest request) {
+		CommonResponse commonResponse = new CommonResponse();
+		return commonResponse;
+	}
+
+	@Override
+	public CommonResponse readAttention(ReadAttentionRequest params) {
+
+		if (params.getCustomerId() == null) {
+			throw new BizException(BizCode.ParamError, "用戶Id 不能为空");
+		}
+		fansMapper.updateReadAttention(params.getCustomerId());
+		return ResultUtils.resultSuccess();
+	}
+
+	@Override
+	public CommonResponse queryMySkill(queryMyskillRequest params) {
+		if (params.getCustomerId() == null) {
+			throw new BizException(BizCode.ParamError, "用戶Id 不能为空");
+		}
+		CommonResponse commonResponse = new CommonResponse();
+		List<SkillItem> skillList = skillItemMapper.selectAllSkill();
+		List<CustomerSkillCertify> skillReviewList = customerSkillCertifyMapper.selectAllSkillByCustomer(params.getCustomerId());
+		//已经解锁的技能列表
+		List<MySkillVO> haveSkill = new ArrayList<MySkillVO>();
+		//未解锁的技能列表
+		List<MySkillVO> noHaveSkill = new ArrayList<MySkillVO>();
+		boolean flag ;
+		Map<String,Object> map = new HashMap<String,Object>();
+		//区分解锁和不解锁的技能
+		for (SkillItem skill : skillList) {
+			flag = true;
+			MySkillVO mySkillVO = new MySkillVO();
+			mySkillVO.setName(skill.getSkillItemName());
+			mySkillVO.setImageUrl(skill.getUnlockIcon());
+			mySkillVO.setSkillId(skill.getId());
+			mySkillVO.setSkillStatus(skill.getSkillStatus());
+			for (CustomerSkillCertify skillReview : skillReviewList) {
+				//判断认证的技能
+				if(skill.getId().equals(skillReview.getSkillItemId())){
+					mySkillVO.setAuditStatus(skillReview.getAuditStatus());
+					//是否已经审核过
+					if(skillReview.getIsAudited()==1){
+						//审核状态不是待审核状态
+						if(skillReview.getAuditStatus() != 1){
+							mySkillVO.setSkillVoiceUrl(skillReview.getSkillVoiceUrl());
+							mySkillVO.setSkillVoiceTime(skillReview.getSkillVoiceTime());
+						}
+						haveSkill.add(mySkillVO);
+						flag = false;
+						skillReviewList.remove(skillReview);
+						break;
+					}
+				}
+			}
+			if(flag){
+				mySkillVO.setImageUrl(skill.getLockIcon());
+				noHaveSkill.add(mySkillVO);
+			}
+		}
+
+//		//已经解锁的技能列表
+//		List<MySkillVO> haveSkill = new ArrayList<MySkillVO>();
+//		//未解锁的技能列表
+//		List<MySkillVO> noHaveSkill = new ArrayList<MySkillVO>();
+//		MySkillVO m1 = new MySkillVO("甜蜜互动","http://test-guanjia.oss-cn-shanghai.aliyuncs.com/voice/banner/1539583182452.png",1,1809221430063474300L,1);
+//		MySkillVO m2 = new MySkillVO("午夜畅聊","http://test-guanjia.oss-cn-shanghai.aliyuncs.com/voice/banner/1539583354838.png",2,1809221430063474300L,"http://test-guanjia.oss-cn-shanghai.aliyuncs.com/voice/user/audio/db91943b9bb04d6b97127dce1a37a9fe.mp3",new BigDecimal(8.0),1);
+//		MySkillVO m3 = new MySkillVO("游戏互动","http://test-guanjia.oss-cn-shanghai.aliyuncs.com/voice/banner/1539583368153.png",1,1809221430063474300L,1);
+//		MySkillVO m4 = new MySkillVO("哄睡","http://test-guanjia.oss-cn-shanghai.aliyuncs.com/voice/banner/1539583182452.png",0,1809221430063474300L,0);
+//		MySkillVO m5 = new MySkillVO("声优聊天","http://test-guanjia.oss-cn-shanghai.aliyuncs.com/voice/banner/1539583182452.png",0,1809221430063474300L,1);
+//		MySkillVO m6 = new MySkillVO("哄睡","http://test-guanjia.oss-cn-shanghai.aliyuncs.com/voice/banner/1539583182452.png",0,1809221430063474300L,1);
+//		haveSkill.add(m1);
+//		haveSkill.add(m2);
+//		noHaveSkill.add(m3);
+//		noHaveSkill.add(m4);
+//		noHaveSkill.add(m5);
+//		noHaveSkill.add(m6);
+//		Map<String,Object> map = new HashMap<String,Object>();
+		logger.info("用户编号为："+params.getCustomerId()+"查询我的技能成功");
+		map.put("unlockList", haveSkill);
+		map.put("lockList", noHaveSkill);
+		commonResponse.setData(map);
+		commonResponse.setCode(UserBizReturnCode.Success);
+		commonResponse.setMessage(UserBizReturnCode.Success.desc());
+		return commonResponse;
+	}
+
+	@Override
+	public CommonResponse saveCustomerSkillCertify(SaveSkillAuditRequest params) {
+		CommonResponse commonResponse = new CommonResponse();
+		CustomerSkillCertify certifyNow = customerSkillCertifyMapper.selectSkillCertifyId(params.getCustomerId(),params.getSkillItemId());
+
+		CustomerSkillCertify csc = new CustomerSkillCertify();
+		csc.setCustomerId(params.getCustomerId());
+		csc.setSkillItemId(params.getSkillItemId());
+		csc.setSkillVoiceUrlTmp(params.getSkillVoiceUrl());
+		csc.setSkillVoiceTimeTmp(params.getSkillVoiceTime());
+		csc.setAuditStatus(UserBizConstants.SKILL_CERTIFY_STATUS_AUDIT);
+		//更改的数量
+		int n;
+		if(certifyNow != null ){
+			//如果是审核中不能进入本方法
+			if(certifyNow.getAuditStatus()==UserBizConstants.SKILL_CERTIFY_STATUS_AUDIT){
+				commonResponse.setCode(UserBizReturnCode.skillCertifyError);
+				commonResponse.setMessage(UserBizReturnCode.skillCertifyError.desc());
 				return commonResponse;
-			} catch (Exception e) {
-				e.printStackTrace();
 			}
+			//更新操作
+			csc.setCertifyId(certifyNow.getCertifyId());
+			n = customerSkillCertifyMapper.updateEntity(csc);
+		}else{
+			//插入操作
+			csc.setCertifyId(UUIDUtils.getId());
+			n = customerSkillCertifyMapper.saveEntity(csc);
 		}
-		throw new BizException(AccountBizReturnCode.JdbcError, "未查询到此用户");
+		if(n > 0){
+			commonResponse.setCode(UserBizReturnCode.Success);
+			commonResponse.setMessage(UserBizReturnCode.Success.desc());
+		}else{
+			throw new BizException(AccountBizReturnCode.JdbcError, "操作数据库异常");
+		}
+		return commonResponse;
 	}
 
-	/**
-	 * 查询主播产品标签
-	 * 
-	 * @author liuyinkai
-	 * @param customerId
-	 * @return
-	 */
-	public List<VProductTag> queryTag(Long customerId) {
-		List<VProductTag> list = new ArrayList<VProductTag>();
-		Orders orders = new Orders();
-		// 获取标签名称id，价钱，服务时间
-		list = productMapper.selectVProductTag(customerId);
-		for (VProductTag tag : list) {
-			try {
-				// 获取标签名称
-				Product product = productMapper.selectByPrimaryKey(customerId);
-				tag.setTagName(product.getName());
-				// 获取该产品接单次数(订单完成状态)
-				// 封装参数
-				orders.setProductId(product.getProductId());
-				orders.setSellerId(customerId);
-				//查询完成数量
-				Orders num = ordersMapper.queryCompleteNumByCustomerIdProductId(orders);
-				if (null!=num) {
-					int completeNum = orders.getOrderNum();
-					
-					tag.setCompletedOrderNum(completeNum);
-				}else {
-					tag.setCompletedOrderNum(0);
-				}
-				
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+	@Override
+	public CommonResponse queryCustomerCenter(CustomerCenterRequest request) {
+		Customer customer = customerMapper.selectByPrimaryKey(request.getCustomerId());
+		if (customer == null) {
+			return ResultUtils.resultDataNotExist("用户数据不存在");
 		}
-		return list;
+		CustomerCenterVO customerCenterVO = new CustomerCenterVO();
+		customerCenterVO.setCustomerId(request.getCustomerId());
+		customerCenterVO.setCustomerAppId(customer.getAppId());
+		customerCenterVO.setNickName(customer.getNickName());
+		customerCenterVO.setHeadPortraitUrl(customer.getHeadPortraitUrl());
+		customerCenterVO.setSex(customer.getSex());
+		if (customer.getBirthday() != null) {
+			customerCenterVO.setAge(CountAge.getAgeByBirth(customer.getBirthday()));
+		}
 
+		// 客户等级 ADUAN -- 待完成
+		customerCenterVO.setCustomerLevel(250);
+
+		customerCenterVO.setSignName(customer.getSignName());
+		customerCenterVO.setIdentityStatus(customer.getIdentityStatus());
+		customerCenterVO.setvStatus(customer.getvStatus());
+
+		// 查询关注数
+		customerCenterVO.setAttentionNum(fansMapper.queryAttentionNumByCustomerId(request.getCustomerId()));
+
+		// 查询粉丝数
+		customerCenterVO.setFansNum(fansMapper.queryFansNumByCustomerId(request.getCustomerId()).intValue());
+
+		// 查询充值、提现金额
+		Map<String, BigDecimal> customerMoney = customerMapper.queryCustomerAccountMoney(request.getCustomerId());
+		if(customerMoney != null) {
+			customerCenterVO.setRechargeAmounts(customerMoney.get("rechargeAmounts"));
+			customerCenterVO.setWithdrawAmounts(customerMoney.get("withdrawAmounts"));
+		}
+		return ResultUtils.resultSuccess(customerCenterVO);
 	}
 
+	@Override
+	public CommonResponse queryCustomerHome(CustomerHomeRequest request) {
+		Customer viewCustomer = customerMapper.selectByPrimaryKey(request.getViewCustomerId());
+        if (viewCustomer == null) {
+            return ResultUtils.resultDataNotExist("用户数据不存在");
+        }
+
+        CustomerHomeVO customerHomeVO = new CustomerHomeVO();
+        customerHomeVO.setLoginCustomerId(request.getLoginCustomerId());
+        customerHomeVO.setViewCustomerId(request.getViewCustomerId());
+        customerHomeVO.setCustomerAppId(viewCustomer.getAppId());
+        customerHomeVO.setNickName(viewCustomer.getNickName());
+		customerHomeVO.setHeadPortraitUrl(viewCustomer.getHeadPortraitUrl());
+        customerHomeVO.setSex(viewCustomer.getSex());
+        if (viewCustomer.getBirthday() != null) {
+            customerHomeVO.setAge(CountAge.getAgeByBirth(viewCustomer.getBirthday()));
+        }
+
+        // 客户等级 ADUAN -- 待完成
+        customerHomeVO.setCustomerLevel(250);
+
+        customerHomeVO.setSignName(viewCustomer.getSignName());
+        customerHomeVO.setStarSign(viewCustomer.getStarSign());
+        customerHomeVO.setIdentityStatus(viewCustomer.getIdentityStatus());
+        customerHomeVO.setvStatus(viewCustomer.getvStatus());
+
+        // 查询登录用户是否关注被查看的用户
+        if (request.getLoginCustomerId() != null && !Objects.equals(request.getLoginCustomerId(), request.getViewCustomerId())) {
+            int idFollow = fansMapper.queryIsFollow(request.getViewCustomerId(), request.getLoginCustomerId());
+            customerHomeVO.setAttentionStatus(Objects.equals(idFollow, 1) ? 1 : 0);
+        }
+
+        // 查询粉丝数
+        customerHomeVO.setFansNum(fansMapper.queryFansNumByCustomerId(request.getViewCustomerId()).intValue());
+
+        // 查询用户形象照列表
+		List<String> appearanceList = customerAppearanceMapper.queryCustomerAuditedAppearance(request.getViewCustomerId(), 0);
+        customerHomeVO.setAppearanceUrlList(appearanceList.isEmpty() ? Arrays.asList(DEFAULT_CUSTOMER_APPEARANCE_URL): appearanceList);
+
+        // 查询用户兴趣
+        customerHomeVO.setInterestList(customerInterestMapper.queryCustomerInterestList(request.getViewCustomerId()));
+
+        // 查询声鉴卡
+		List<String> soundGuideCard = customerAppearanceMapper.queryCustomerAuditedAppearance(request.getViewCustomerId(), 2);
+        customerHomeVO.setSoundGuideCard(soundGuideCard.isEmpty() ? null : soundGuideCard.get(0));
+
+        // 查询用户技能 -- 条件是大V
+        List<CustomerHomeVO.CustomerSkill> skillList = new ArrayList<>();
+        if (Objects.equals(viewCustomer.getvStatus(), 2)) {
+            List<CustomerSkill> customerSkills = customerSkillMapper.selectCustomerAuditedSkill(request.getViewCustomerId());
+            for (CustomerSkill bean : customerSkills) {
+                CustomerHomeVO.CustomerSkill customerSkill = customerHomeVO.new CustomerSkill();
+                customerSkill.setSkillId(bean.getSkillItemId());
+                customerSkill.setSkillName(bean.getSkillName());
+				customerSkill.setSkillBackColor(bean.getSkillBackColor());
+				customerSkill.setSkillFontColor(bean.getSkillFontColor());
+                customerSkill.setSkillVoiceUrl(bean.getSkillVoiceUrl());
+                customerSkill.setSkillVoiceTime(bean.getSkillVoiceTime());
+
+                // 价格显示折扣后的价格
+                customerSkill.setSkillPrice(bean.getDiscountPrice());
+                customerSkill.setServiceUnit(bean.getServiceUnit());
+                // 查询技能评价标签
+                customerSkill.setCustomerLabel(customerSkillMapper.selectCustomerSkillHotLabel(request.getViewCustomerId(), bean.getSkillItemId()));
+
+                // ADUAN -- 声量 -- 后期在做
+                customerSkill.setSkillVolume(250);
+
+                skillList.add(customerSkill);
+            }
+        }
+        customerHomeVO.setSkillList(skillList);
+
+		return ResultUtils.resultSuccess(customerHomeVO);
+	}
+
+	@Override
+	public CommonResponse queryCustomerLevel(CustomerLevelRequest request) {
+		Customer customer = customerMapper.selectByPrimaryKey(request.getCustomerId());
+		if (customer == null) {
+			return ResultUtils.resultDataNotExist("用户数据不存在");
+		}
+		CustomerLevelVO customerLevelVO = new CustomerLevelVO();
+		customerLevelVO.setCustomerId(request.getCustomerId());
+		customerLevelVO.setCustomerAppId(customer.getAppId());
+		customerLevelVO.setNickName(customer.getNickName());
+		customerLevelVO.setHeadPortraitUrl(customer.getHeadPortraitUrl());
+
+		// ADUAN -- 待完成 -- 客户等级、等级特权、如何升级
+		customerLevelVO.setCustomerLevel(80);
+		customerLevelVO.setNextLevel(81);
+		customerLevelVO.setNeedExperienceNum(3000);
+
+		// 查询等级特权
+
+		// 查询如何升级
+
+		return ResultUtils.resultSuccess(customerLevelVO);
+	}
 }

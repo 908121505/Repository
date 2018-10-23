@@ -20,6 +20,8 @@ public interface OrderRequestType {
     public static final  String  QUERY_ORDER_FOR_FIRST_PAGE = "19003";
     /**首页查询项目分类*/
     public static final  String  QUERY_SKILL_NAME_FOR_FIRST_PAGE = "19004";
+    /**首页分类下的大V列表*/
+    public static final  String  QUERY_DV_LIST_BY_TYPE = "19005";
     
     
     
@@ -64,6 +66,11 @@ public interface OrderRequestType {
     public static final  String  QUERY_ING_ORDER_COUNT = "19051";
     /**查询退款原因*/
     public static final  String  QUERY_REFUND_REASON = "19052";
-    
-    
+
+
+    /**订单评价页面获取数据**/
+    String  ORDER_EVALUATION = "19060";
+    /**订单评价提交获取数据**/
+    String  ORDER_EVALUATION_SUBMIT = "19061";
+
 }

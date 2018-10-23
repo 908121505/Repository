@@ -6,6 +6,7 @@
     <result column="banner_type" property="bannerType" jdbcType="TINYINT" />
     <result column="title" property="title" jdbcType="VARCHAR" />
     <result column="image_url" property="imageUrl" jdbcType="VARCHAR" />
+    <result column="click_type" property="clickType" jdbcType="TINYINT" />
     <result column="url" property="url" jdbcType="VARCHAR" />
     <result column="sort" property="sort" jdbcType="SMALLINT" />
     <result column="banner_status" property="bannerStatus" jdbcType="TINYINT" />
@@ -29,10 +30,13 @@
 
   <!-- 查询Banner给前段展示 -->
   <select id="queryBannerInfo" resultType="Banner" resultMap="BaseResultMap">
-    SELECT title, image_url, url
+    SELECT title, image_url, click_type, url
     FROM banner
     WHERE 1 = 1 and banner_status = 1
     and  start_time <![CDATA[ <= ]]>NOW() and end_time  <![CDATA[ >= ]]>  NOW()
+    <if test="bannerType != null">
+      and banner_type = #{bannerType}
+    </if>
     <if test="deviceType != null">
       and device_type = #{deviceType}
     </if>
@@ -56,6 +60,12 @@
         and app_version_rule = #{appVersionRule} and app_version <![CDATA[ <= ]]> #{appVersion}
       </if>
     </if>
-    ORDER BY sort ASC,modify_time DESC
+    ORDER BY sort DESC,modify_time DESC
+    <if test="bannerType == 2">
+      limit 0,2
+    </if>
+    <if test="bannerType != 2">
+      limit 0,5
+    </if>
   </select>
 </mapper>

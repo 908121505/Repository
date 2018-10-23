@@ -7,6 +7,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.calf.module.order.entity.Order;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -48,9 +49,9 @@ public class OrderService {
 
 	public void getOrderDetail(Model model, String id) {
 		Map<String, Object> paramMap = new HashMap<String, Object>();
-		paramMap.put("id", id);
-		Skill  skill = baseManager.get("Skill.selectByPrimaryKey",  paramMap);
-		model.addAttribute("entity", skill);
+		paramMap.put("orderId", id);
+		Order order = baseManager.get("Order.selectByPrimaryKey",  paramMap);
+		model.addAttribute("entity", order);
 	}
 
 	public int saveAdd(OrderVO entity) {

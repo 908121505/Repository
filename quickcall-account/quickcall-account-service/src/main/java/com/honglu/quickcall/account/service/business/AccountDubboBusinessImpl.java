@@ -1,47 +1,20 @@
 package com.honglu.quickcall.account.service.business;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.honglu.quickcall.account.facade.business.AccountDubboBusiness;
 import com.honglu.quickcall.account.facade.code.AccountFunctionType;
 import com.honglu.quickcall.account.facade.code.OrderRequestType;
-import com.honglu.quickcall.account.facade.exchange.request.AlipayNotifyRequest;
-import com.honglu.quickcall.account.facade.exchange.request.ApplayRefundRequest;
-import com.honglu.quickcall.account.facade.exchange.request.BindAliaccountRequest;
-import com.honglu.quickcall.account.facade.exchange.request.CancelOrderRequest;
-import com.honglu.quickcall.account.facade.exchange.request.ConfirmOrderRequest;
-import com.honglu.quickcall.account.facade.exchange.request.CreateUserAccountRequest;
-import com.honglu.quickcall.account.facade.exchange.request.DetailOrderRequest;
-import com.honglu.quickcall.account.facade.exchange.request.DvConfirmRefundRequest;
-import com.honglu.quickcall.account.facade.exchange.request.DvReceiveOrderRequest;
-import com.honglu.quickcall.account.facade.exchange.request.DvStartServiceRequest;
-import com.honglu.quickcall.account.facade.exchange.request.FirstPageDaVinfoRequest;
-import com.honglu.quickcall.account.facade.exchange.request.FirstPageSkillinfoRequest;
-import com.honglu.quickcall.account.facade.exchange.request.OrderDaVProductRequest;
-import com.honglu.quickcall.account.facade.exchange.request.OrderReceiveOrderListRequest;
-import com.honglu.quickcall.account.facade.exchange.request.OrderSaveRequest;
-import com.honglu.quickcall.account.facade.exchange.request.OrderSendOrderListRequest;
-import com.honglu.quickcall.account.facade.exchange.request.PayOrderRequest;
-import com.honglu.quickcall.account.facade.exchange.request.QueryAccountRequest;
-import com.honglu.quickcall.account.facade.exchange.request.QueryIngOrderCountRequest;
-import com.honglu.quickcall.account.facade.exchange.request.QueryRefundReasonRequest;
-import com.honglu.quickcall.account.facade.exchange.request.RechargeRequest;
-import com.honglu.quickcall.account.facade.exchange.request.SkillInfoRequest;
-import com.honglu.quickcall.account.facade.exchange.request.SkillUpdateRequest;
-import com.honglu.quickcall.account.facade.exchange.request.WhthdrawRequest;
-import com.honglu.quickcall.account.service.service.AliPayService;
-import com.honglu.quickcall.account.service.service.IOrderService;
-import com.honglu.quickcall.account.service.service.ISkillService;
-import com.honglu.quickcall.account.service.service.UserAccountService;
+import com.honglu.quickcall.account.facade.exchange.request.*;
+import com.honglu.quickcall.account.service.bussService.*;
 import com.honglu.quickcall.common.api.code.BizCode;
 import com.honglu.quickcall.common.api.exception.BaseException;
 import com.honglu.quickcall.common.api.exception.BizException;
 import com.honglu.quickcall.common.api.exchange.AbstractRequest;
 import com.honglu.quickcall.common.api.exchange.CommonResponse;
 import com.honglu.quickcall.user.facade.code.UserBizReturnCode;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
  * Created by len.song on 2017-12-18.
@@ -55,9 +28,13 @@ public class AccountDubboBusinessImpl implements AccountDubboBusiness {
 	@Autowired
 	private AliPayService aliPayService;
 	@Autowired
-	private ISkillService skillService;
+	private ISkillBussService skillService;
 	@Autowired
 	private IOrderService orderService;
+	@Autowired
+	private BarrageMessageService barrageMessageService;
+	@Autowired
+	private ApplePayService applePayService;
 
 	@Override
 	public CommonResponse excute(AbstractRequest request) {
@@ -85,12 +62,16 @@ public class AccountDubboBusinessImpl implements AccountDubboBusiness {
 				break;
 			/** 首页技能种类展示 */
 			case OrderRequestType.QUERY_SKILL_NAME_FOR_FIRST_PAGE:
-				response = skillService.getFirstPageSkillinfo((FirstPageSkillinfoRequest) request);
+				response = skillService.getFirstPageSkillItemInfo((FirstPageSkillinfoRequest) request);
+				break;
+				/** 首页技能种类展示 */
+			case OrderRequestType.QUERY_DV_LIST_BY_TYPE:
+				response = skillService.getDaVListBySkillItemId((DaVListBySkillItemIdRequest) request);
 				break;
 			/////////////////////////////////////////////////////////////////
 			/** 获取主播开启产品 */
 			case OrderRequestType.ORDER_DAV_PRODUCT_LIST:
-				response = orderService.queryDaVProduct((OrderDaVProductRequest) request);
+				response = orderService.queryDaVSkill((OrderDaVSkillRequest) request);
 				break;
 			/** 用户下单 */
 			case OrderRequestType.ORDER_SAVE:
@@ -148,8 +129,28 @@ public class AccountDubboBusinessImpl implements AccountDubboBusiness {
 			case OrderRequestType.QUERY_REFUND_REASON:
 				response = orderService.queryRefundReason((QueryRefundReasonRequest) request);
 				break;
+			/** 订单评价页面 **/
+			case OrderRequestType.ORDER_EVALUATION:
+				response = orderService.orderEvaluation((OrderEvaluationRequest) request);
+				break;
+			/** 提交订单评价 **/
+			case OrderRequestType.ORDER_EVALUATION_SUBMIT:
+				response = orderService.submitOrderEvaluation((OrderEvaluationSubmitRequest) request);
+				break;
 
-		   /////////////////////////////////订单相关结束///////////////////////////////////
+		    /////////////////////////////////订单相关结束///////////////////////////////////
+
+			/////////////////////////////////充值相关结束///////////////////////////////////
+			case AccountFunctionType.APPLY_PAY_RECHARGE:
+				//苹果内购充值
+				response = applePayService.createOrder((ApplePayRequest) request);
+				break;
+			case AccountFunctionType.APPLY_PAY_NOTIFY:
+				//苹果内购回调验证
+				response = applePayService.applePurchase((ApplePurchaseRequest) request);
+				break;
+			/////////////////////////////////充值相关结束///////////////////////////////////
+
 			case AccountFunctionType.CreateUserAccount:
 				// 创建账户
 				response = userAccountService.createAccount((CreateUserAccountRequest) request);
@@ -171,6 +172,10 @@ public class AccountDubboBusinessImpl implements AccountDubboBusiness {
 				break;
 			case AccountFunctionType.QueryAccount:
 				response = userAccountService.queryAccount((QueryAccountRequest) request);
+				break;
+			/** 获取弹幕消息 **/
+			case AccountFunctionType.GET_BARRAGE_MESSAGE:
+				response = barrageMessageService.rpopMessage((BarrageMessageRequest) request);
 				break;
 			default:
 

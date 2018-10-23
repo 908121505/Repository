@@ -6,7 +6,10 @@ import com.honglu.quickcall.common.api.exchange.WebResponseModel;
 import com.honglu.quickcall.common.core.util.UUIDUtils;
 import com.honglu.quickcall.common.third.OSS.OSSUtil;
 import com.honglu.quickcall.user.facade.code.UserBizReturnCode;
+import com.honglu.quickcall.user.facade.constants.UserBizConstants;
 import com.honglu.quickcall.user.facade.exchange.request.SaveCertificationRequest;
+import com.honglu.quickcall.user.facade.exchange.request.SaveDvVoiceRequest;
+import com.honglu.quickcall.user.facade.exchange.request.SaveSkillAuditRequest;
 import com.honglu.quickcall.user.facade.exchange.request.UserIdCardInfoRequest;
 import com.honglu.quickcall.user.web.service.UserCenterService;
 import org.apache.commons.lang3.StringUtils;
@@ -19,6 +22,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
+
+import java.math.BigDecimal;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -158,13 +163,69 @@ public class CertificationController {
         }
         WebResponseModel response = uploadFile(request, AliYunFilePaths.BIG_V_INTRODUCE_AUDIO);
         if("000000".equals(response.getCode())){
-            SaveCertificationRequest params = new SaveCertificationRequest();
-            params.setCustomerId(Long.valueOf(customerId));
-            params.setVoiceUrl(response.getData());
-            params.setCertifyType(2);// 大V认证
-            response = userCenterService.execute(params);
+        	String   voiceTimeStr = request.getParameter("voiceTime");
+        	String   requestType =  request.getParameter("requestType");
+        	if(UserBizConstants.UPLOAD_AUDIT_REQUEST.equals(requestType)){
+        		//大V自己的声音非大V认证声音
+        		SaveDvVoiceRequest params = new SaveDvVoiceRequest();
+        		if(StringUtils.isNotBlank(voiceTimeStr)){
+        			params.setVoiceTime(new BigDecimal(voiceTimeStr).setScale(1, BigDecimal.ROUND_HALF_UP));
+        		}
+        		params.setCustomerId(Long.valueOf(customerId));
+        		params.setVoiceUrl(response.getData());
+        		if(StringUtils.isNotBlank(voiceTimeStr)){
+        			params.setVoiceTime(new BigDecimal(voiceTimeStr).setScale(1, BigDecimal.ROUND_HALF_UP));
+        		}
+        		response = userCenterService.execute(params);
+        		response.setData(response.getData());
+        	}else{
+        		//大V认证声音上传
+        		SaveCertificationRequest params = new SaveCertificationRequest();
+        		if(StringUtils.isNotBlank(voiceTimeStr)){
+        			params.setVoiceTime(new BigDecimal(voiceTimeStr).setScale(1, BigDecimal.ROUND_HALF_UP));
+        		}
+        		params.setCustomerId(Long.valueOf(customerId));
+        		params.setVoiceUrl(response.getData());
+        		params.setCertifyType(2);// 大V认证
+        		response = userCenterService.execute(params);
+        	}
         }
         logger.info("userWeb.certification introduceAudioUpload response data : " + request);
+        return response;
+    }
+    
+    /**
+     * 大V技能声音审核
+     *
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "/skillAuditUpload", produces = "application/json;charset=UTF-8", method = RequestMethod.POST)
+    @ResponseBody
+    public WebResponseModel skillAuditUpload(HttpServletRequest request) {
+        logger.info("userWeb.certification skillAuditUpload request data : " + request);
+        String customerId = request.getParameter("customerId");
+        String  skillItemId = request.getParameter("skillItemId");
+        String  skillVoiceTime = request.getParameter("skillVoiceTime");
+        if(StringUtils.isBlank(customerId)){
+            WebResponseModel response = new WebResponseModel();
+            response.setCode(UserBizReturnCode.paramError.code());
+            response.setMsg("客户ID为空");
+            return response;
+        }
+        //上传技能声音文件
+        WebResponseModel response = uploadFile(request, AliYunFilePaths.CUSTOMER_SKILL_CERTIFY_AUDIO);
+        if("000000".equals(response.getCode())){
+        	SaveSkillAuditRequest params = new SaveSkillAuditRequest();
+        	params.setCustomerId(Long.valueOf(customerId));
+        	params.setSkillItemId(Long.valueOf(skillItemId));
+        	params.setSkillVoiceTime(new BigDecimal(skillVoiceTime).setScale(1, BigDecimal.ROUND_HALF_UP));
+        	params.setSkillVoiceUrl(response.getData());
+        	//调用保存技能认证服务
+        	response = userCenterService.execute(params);
+        }
+        logger.info("userWeb.certification skillAuditUpload response data : " + response);
+        
         return response;
     }
 

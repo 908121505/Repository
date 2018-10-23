@@ -6,6 +6,8 @@
     <result column="anchor_id" property="anchorId" jdbcType="BIGINT" />
     <result column="fans_id" property="fansId" jdbcType="BIGINT" />
     <result column="attention_state" property="attentionState" jdbcType="TINYINT" />
+     <result column="read_state" property="readState"  />
+    
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
     <result column="create_man" property="createMan" jdbcType="VARCHAR" />
@@ -13,9 +15,12 @@
     <result column="remark" property="remark" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, anchor_id, fans_id, attention_state, create_time, modify_time, create_man, modify_man, 
+    id, anchor_id, fans_id,read_state, attention_state, create_time, modify_time, create_man, modify_man, 
     remark
   </sql>
+  <select id="queryIsFollow" resultType="int" parameterType="map">
+  	select COUNT(*) FROM fans where anchor_id=#{anchorId} AND fans_id=#{fansId} AND attention_state=1;
+  </select>
   <select id="queryFansNumByCustomerId" resultType="java.lang.Long" parameterType="java.lang.Long" >
     SELECT COUNT(*) FROM fans WHERE anchor_id=#{customerId} AND attention_state=1; 
   </select>
@@ -103,7 +108,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.honglu.quickcall.user.facade.entity.Fans" >
+  <update id="updateByPrimaryKey" parameterType="com.honglu.quickcall.user.facade.entity.Fans" >
     update fans
     <set >
       <if test="anchorId != null" >
@@ -133,7 +138,7 @@
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.honglu.quickcall.user.facade.entity.Fans" >
+<!--   <update id="updateByPrimaryKey" parameterType="com.honglu.quickcall.user.facade.entity.Fans" >
     update fans
     set anchor_id = #{anchorId,jdbcType=BIGINT},
       fans_id = #{fansId,jdbcType=BIGINT},
@@ -144,5 +149,128 @@
       modify_man = #{modifyMan,jdbcType=VARCHAR},
       remark = #{remark,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
+  </update> -->
+  
+  <!-- 查询关注列表 -->
+  <select id="queryAttentionListByCustomerId" resultType="com.honglu.quickcall.user.facade.vo.AttentionFansVO" >
+		SELECT
+			fs.anchor_id AS customerId,
+			ct.head_portrait_url AS headPortraitUrl,
+		    ct.nick_name  AS  nickName,
+		    <![CDATA[ TIMESTAMPDIFF(YEAR, ct.birthday, CURDATE()) AS age  ]]>,
+		    ct.sex    AS sex,
+		    fs.attention_state  AS  attentionStatus,
+		    ct.type AS type,
+		    (IFNULL(fs.attention_state,0))&amp;(IFNULL(fs1.attention_state,0)) AS eachAttentionStatus 
+		FROM
+			fans fs
+		LEFT JOIN customer ct ON fs.anchor_id = ct.customer_id 
+		LEFT JOIN fans fs1 ON fs.anchor_id = fs1.fans_id and fs.fans_id = fs1.anchor_id 
+		WHERE
+			fs.fans_id = #{customerId}  and   fs.attention_state = #{attentionStatus} 
+		ORDER BY eachAttentionStatus desc,fs.modify_time desc
+  </select>
+  
+  
+  
+  
+  
+  <!-- 查询粉丝列表 -->
+  <select id="queryFansIdListByCustomerId" resultType="com.honglu.quickcall.user.facade.vo.AttentionFansVO"  >
+		SELECT
+			fs.fans_id AS customerId,
+			ct.head_portrait_url AS headPortraitUrl,
+		    ct.nick_name  AS  nickName,
+		    <![CDATA[ TIMESTAMPDIFF(YEAR, ct.birthday, CURDATE()) AS age  ]]>,
+		    ct.sex    AS sex,
+		    fs.attention_state  AS  attentionStatus,
+		    ct.type AS type,
+		    (IFNULL(fs.attention_state,0))&amp;(IFNULL(fs1.attention_state,0)) AS eachAttentionStatus 
+		FROM
+			fans fs
+		LEFT JOIN customer ct ON fs.fans_id = ct.customer_id 
+		LEFT JOIN fans fs1 ON fs.anchor_id = fs1.fans_id and fs.fans_id = fs1.anchor_id 
+		WHERE
+			fs.anchor_id = #{customerId}  and   fs.attention_state = #{attentionStatus} 
+		ORDER BY eachAttentionStatus desc,fs.modify_time desc
+  </select>
+  
+  
+  <!-- 查询关注的人信息列表 -->
+  <select id="queryFansListByAnchorIdList" resultMap="BaseResultMap"  >
+		SELECT  <include refid="Base_Column_List"></include>    FROM  fans WHERE  fans_id  = #{customerId}   and  
+		
+		anchor_id in  
+		<foreach collection="list"  item="id"  open="("  close=")"  separator=",">
+		  #{id}
+		</foreach>
+  </select>
+  
+  <!-- 查询粉丝范围信息列表 -->
+  <select id="queryFansListByFansIdList" resultMap="BaseResultMap"  >
+		SELECT  <include refid="Base_Column_List"></include>    FROM  fans WHERE  anchor_id  = #{customerId}   and  
+		
+		fans_id in  
+		<foreach collection="list"  item="id"  open="("  close=")"  separator=",">
+		  #{id}
+		</foreach>
+  </select>
+  <!-- 查询粉丝信息列表 -->
+  <select id="queryCustomerListByCustomerIdList" resultType="com.honglu.quickcall.user.facade.vo.AttentionFansVO"  >
+		SELECT
+			customer_id  AS customerId,
+			head_portrait_url AS headPortraitUrl,
+			nick_name AS nickName,
+			(YEAR (NOW()) - YEAR (birthday)) AS age,
+			sex AS sex,
+			type AS type  
+		FROM  customer
+		where
+		customer_id in
+		<foreach collection="list"  item="id"  open="("  close=")"  separator=",">
+		  #{id}
+		</foreach>
+  </select>
+  
+  
+  
+  <!-- 查询粉丝列表 -->
+  <select id="queryFansListByCustomerId" resultType="com.honglu.quickcall.user.facade.vo.AttentionFansVO"  >
+	SELECT
+		tmp.fansId AS customerId,
+		cust.head_portrait_url AS headPortraitUrl,
+		cust.nick_name AS nickName,
+		(YEAR (NOW()) - YEAR (cust.birthday)) AS age,
+		cust.sex AS sex,
+		tmp.attentionStatus AS attentionStatus
+	FROM
+		(
+			SELECT
+	      (CASE  WHEN fb.id IS NULL THEN  0  ELSE  fb.attention_state  END) AS attentionStatus,
+				fa.fans_id AS fansId
+			FROM
+				fans fa
+			LEFT JOIN fans fb ON fa.fans_id = fb.anchor_id
+			WHERE
+				fa.anchor_id = #{customerId}  and  fa.attention_state  = #{attentionStatus}   AND   fb.fans_id = #{customerId}
+		) tmp
+	LEFT JOIN customer cust ON tmp.fansId = cust.customer_id 
+  </select>
+  <!-- 查询粉丝列表 -->
+  <select id="queryFans"  resultMap="BaseResultMap"   >
+    SELECT  
+    <include refid="Base_Column_List"></include>
+    FROM  fans   WHERE  fans_id = #{fansId}   AND   anchor_id = #{attendedId}
+  </select>
+  
+  
+  
+  <update id="updateReadAttention" parameterType="Map">
+  update fans set read_state=1
+  where anchor_id=#{customerId}
   </update>
+  
+  
+  
+  
 </mapper>

@@ -1,32 +1,24 @@
 package com.honglu.quickcall.account.web.controller;
 
 
+import com.alibaba.fastjson.JSONObject;
+import com.honglu.quickcall.account.facade.exchange.request.*;
+import com.honglu.quickcall.user.facade.code.UserBizReturnCode;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.honglu.quickcall.account.facade.exchange.request.ApplayRefundRequest;
-import com.honglu.quickcall.account.facade.exchange.request.CancelOrderRequest;
-import com.honglu.quickcall.account.facade.exchange.request.ConfirmOrderRequest;
-import com.honglu.quickcall.account.facade.exchange.request.DetailOrderRequest;
-import com.honglu.quickcall.account.facade.exchange.request.DvConfirmRefundRequest;
-import com.honglu.quickcall.account.facade.exchange.request.DvReceiveOrderRequest;
-import com.honglu.quickcall.account.facade.exchange.request.DvStartServiceRequest;
-import com.honglu.quickcall.account.facade.exchange.request.OrderDaVProductRequest;
-import com.honglu.quickcall.account.facade.exchange.request.OrderReceiveOrderListRequest;
-import com.honglu.quickcall.account.facade.exchange.request.OrderSaveRequest;
-import com.honglu.quickcall.account.facade.exchange.request.OrderSendOrderListRequest;
-import com.honglu.quickcall.account.facade.exchange.request.PayOrderRequest;
-import com.honglu.quickcall.account.facade.exchange.request.QueryIngOrderCountRequest;
-import com.honglu.quickcall.account.facade.exchange.request.QueryRefundReasonRequest;
 import com.honglu.quickcall.account.web.service.IOrderInfoService;
 import com.honglu.quickcall.common.api.exchange.WebResponseModel;
 
 @Controller
 @RequestMapping("/order")
 public class OrderController {
+    private final static Logger LOGGER = LoggerFactory.getLogger(OrderController.class);
 
     @Autowired
     private IOrderInfoService orderInfoService;
@@ -38,7 +30,7 @@ public class OrderController {
      */
     @RequestMapping(value = "/dvProduct", method = RequestMethod.POST)
     @ResponseBody
-    public WebResponseModel queryDaVProduct(/*  @RequestBody  */OrderDaVProductRequest params) {
+    public WebResponseModel queryDaVProduct(/*  @RequestBody  */OrderDaVSkillRequest params) {
     	WebResponseModel response = orderInfoService.execute(params);
         return response;
     }
@@ -194,7 +186,49 @@ public class OrderController {
     	WebResponseModel response = orderInfoService.execute(params);
     	return response;
     }
-    
-    
-    
+
+    /**
+     * 订单评价页面
+     * @param params
+     * @return
+     */
+    @RequestMapping(value = "/orderEvaluation", method = RequestMethod.POST)
+    @ResponseBody
+    public WebResponseModel orderEvaluation(OrderEvaluationRequest params) {
+        LOGGER.info("orderWeb order orderEvaluation request data : " + JSONObject.toJSONString(params));
+        WebResponseModel response = new WebResponseModel();
+        if (params.getOrderId() == null) {
+            response.setCode(UserBizReturnCode.paramError.code());
+            response.setMsg(UserBizReturnCode.paramError.desc());
+            return response;
+        }
+        response = orderInfoService.execute(params);
+        LOGGER.info("orderWeb user orderEvaluation response data : " + JSONObject.toJSONString(response));
+        return response;
+    }
+
+    /**
+     * 提交订单评价
+     * @param params
+     * @return
+     */
+    @RequestMapping(value = "/orderEvaluationSubmit", method = RequestMethod.POST)
+    @ResponseBody
+    public WebResponseModel orderEvaluationSubmit(OrderEvaluationSubmitRequest params) {
+        LOGGER.info("orderWeb order orderEvaluationSubmit request data : " + JSONObject.toJSONString(params));
+        WebResponseModel response = new WebResponseModel();
+        response.setCode(UserBizReturnCode.paramError.code());
+        if (params.getOrderId() == null || params.getCustomerId() == null) {
+            response.setMsg(UserBizReturnCode.paramError.desc());
+            return response;
+        }
+        if(params.getLabelIds() != null && params.getLabelIds().length > 3){
+            response.setMsg("最多选择3个标签");
+            return response;
+        }
+        response = orderInfoService.execute(params);
+        LOGGER.info("orderWeb user orderEvaluationSubmit response data : " + JSONObject.toJSONString(response));
+        return response;
+    }
+
 }

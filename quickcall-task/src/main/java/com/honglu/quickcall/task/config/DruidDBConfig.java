@@ -11,7 +11,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 
 import com.alibaba.druid.pool.DruidDataSource;
-import com.honglu.quickcall.task.entity.DruidSettings;
 
 @Configuration
 @EnableConfigurationProperties(DruidSettings.class)

@@ -12,7 +12,7 @@
 		</div>
 		<div class="main-content">
 			<div class="col-md-2">
-				<ul id="treeDemo" class="ztree"></ul>
+				<ul id="menu_tree_ul" class="ztree"></ul>
 			</div>
 			<div class="col-md-10">
 				<div class="row">
@@ -135,7 +135,7 @@
 			
 			var treeObj;
 			$(document).ready(function() {
-				treeObj = $.fn.zTree.init($("#treeDemo"), setting);
+				treeObj = $.fn.zTree.init($("#menu_tree_ul"), setting);
 			});
 		</script>
 </shiro:hasPermission>
