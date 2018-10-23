@@ -232,8 +232,9 @@ public class OrderServiceImpl implements IOrderService {
 //		orderMapper.insert(record);
 		CommonResponse commonResponse = commonService.getCommonResponse();
 		Integer  result =  Math.random() > 0.5 ? 1 : 2;
-		HashMap<String, Integer>  resultMap = new HashMap<>();
-		resultMap.put("retCode", result);
+		HashMap<String, String>  resultMap = new HashMap<>();
+		resultMap.put("retCode", result+"");
+		resultMap.put("downLoadStr", "13:59");
 		commonResponse.setData(resultMap);
 		LOGGER.info("======>>>>>用户编号为：" + request.getCustomerId() + "下单成功");
 		return commonResponse;
