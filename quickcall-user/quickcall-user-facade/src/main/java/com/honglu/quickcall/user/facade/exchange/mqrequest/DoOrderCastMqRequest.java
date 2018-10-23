@@ -1,6 +1,7 @@
 package com.honglu.quickcall.user.facade.exchange.mqrequest;
 
 import com.honglu.quickcall.common.api.code.MqMessageServiceCode;
+import com.honglu.quickcall.common.api.exchange.AbstractRequest;
 import com.honglu.quickcall.user.facade.exchange.UserCenterRequest;
 
 import java.io.Serializable;
@@ -11,7 +12,7 @@ import java.io.Serializable;
  * @author duanjun
  * @date 2018-10-23 13:09
  */
-public class DoOrderCastMqRequest extends UserCenterRequest implements Serializable {
+public class DoOrderCastMqRequest extends AbstractRequest implements Serializable {
     private static final long serialVersionUID = 8298710509385584756L;
 
     /**
