@@ -1,6 +1,7 @@
 package com.honglu.quickcall.user.service.mq.pull;
 
 import com.alibaba.fastjson.JSON;
+import com.honglu.quickcall.common.api.code.MqMessageServiceCode;
 import com.honglu.quickcall.user.service.dao.CustomerMapper;
 import com.rabbitmq.client.AMQP;
 import com.rabbitmq.client.Channel;
@@ -34,8 +35,16 @@ public class UserCenterMqExperienceListener implements ChannelAwareMessageListen
             if (map == null) {
                 return;
             }
-            int mqtype = Integer.parseInt(map.get("mqtype") + "");
-            switch (mqtype) {
+            int mqType = Integer.parseInt(map.get("MQ_TYPE") + "");
+            switch (mqType) {
+                /** 客户获取经验值 -- 下单花费 **/
+                case MqMessageServiceCode.CUSTOMER_EXPERIENCE_COST:
+                    LOGGER.info("获取到客户经验值MQ消息---------");
+                    break;
+
+                default:
+                    LOGGER.warn("获取到未知服务编码的MQ消息-------------");
+                    break;
             }
 
             channel.basicAck(message.getMessageProperties().getDeliveryTag(), false);

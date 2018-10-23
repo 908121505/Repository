@@ -19,17 +19,10 @@
 
     <rabbit:admin connection-factory="RCconnectionFactory"/>
 
-
     <!-- queue 队列声明-->
     <rabbit:queue id="queue_userCenter_for_experience" durable="true" auto-delete="false" exclusive="false" name="queue_userCenter_for_experience"/>
 
     <!-- exchange queue binging key 绑定 -->
-    <rabbit:direct-exchange name="accountCenter-mq-exchange" durable="true" auto-delete="false" id="accountCenter-mq-exchange">
-        <rabbit:bindings>
-            <rabbit:binding queue="queue_userCenter_for_experience" key="queue_userCenter_for_experience_key"/>
-        </rabbit:bindings>
-    </rabbit:direct-exchange>
-
     <rabbit:direct-exchange name="userCenter-mq-exchange" durable="true" auto-delete="false" id="userCenter-mq-exchange">
         <rabbit:bindings>
             <rabbit:binding queue="queue_userCenter_for_experience" key="queue_userCenter_for_experience_key"/>

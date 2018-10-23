@@ -7,6 +7,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import javax.annotation.Resource;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * MQ测试
@@ -23,8 +25,13 @@ public class TestMq {
 
     @Test
     public void testSend() {
-        for (int i = 0; i < 10; i++) {
-            amqpTemplate.convertAndSend("userCenter-mq-exchange", "queue_userCenter_for_experience_key", "测试消息___" + i);
+        for (int i = 1; i <= 10; i++) {
+            Map<String, Object> map = new HashMap<>();
+            map.put("message", "测试消息--- = " + i);
+            map.put("customerId", 1809282058558244370L);
+            map.put("addExperience", 100 + i);
+            map.put("MQ_TYPE", 1);
+            amqpTemplate.convertAndSend("userCenter-mq-exchange", "queue_userCenter_for_experience_key", map);
         }
     }
 }
