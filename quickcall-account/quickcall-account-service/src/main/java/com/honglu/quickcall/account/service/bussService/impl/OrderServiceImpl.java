@@ -219,7 +219,7 @@ public class OrderServiceImpl implements IOrderService {
 //		record.setServicePrice(customerSkill.getSkillPrice());
 //		record.setDiscountRate(customerSkill.getDiscountRate());
 //		
-//		Long  orderId =  UUIDUtils.getId();
+		Long  orderId =  UUIDUtils.getId();
 //		Long  serviceId =  request.getServiceId();
 //		record.setCustomerId(customerId);
 //		record.setOrderId(orderId);
@@ -234,6 +234,7 @@ public class OrderServiceImpl implements IOrderService {
 		HashMap<String, String>  resultMap = new HashMap<>();
 		resultMap.put("retCode", customerId+"");
 		resultMap.put("downLoadStr", "13:59");
+		resultMap.put("orderId", orderId+"");
 		commonResponse.setData(resultMap);
 		LOGGER.info("======>>>>>用户编号为：" + request.getCustomerId() + "下单成功");
 		return commonResponse;
