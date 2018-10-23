@@ -21,6 +21,8 @@
    <rabbit:queue id="queue_userCenter_homepage_common" durable="true" auto-delete="false" exclusive="false" name="queue_userCenter_homepage_common"/>
    <rabbit:queue id="queue_userCenter_forAccount" durable="true" auto-delete="false" exclusive="false" name="queue_userCenter_forAccount"/>
    <rabbit:queue id="queue_userCenter_forActivity" durable="true" auto-delete="false" exclusive="false" name="queue_userCenter_forActivity"/>
+   <!-- 用户中心队列：用户获取经验值 -->
+   <rabbit:queue id="queue_userCenter_for_experience" durable="true" auto-delete="false" exclusive="false" name="queue_userCenter_for_experience"/>
 
    <!-- mq通道 -->
    <rabbit:direct-exchange name="userCenter-mq-exchange" durable="true" auto-delete="false" id="userCenter-mq-exchange">
@@ -28,6 +30,7 @@
          <rabbit:binding queue="queue_userCenter_homepage_common" key="queue_userCenter_homepage_common_key"/>
          <rabbit:binding queue="queue_userCenter_forAccount" key="queue_userCenter_forAccount_key"/>
          <rabbit:binding queue="queue_userCenter_forActivity" key="queue_userCenter_forActivity_key"/>
+         <rabbit:binding queue="queue_userCenter_for_experience" key="queue_userCenter_for_experience_key"/>
       </rabbit:bindings>
    </rabbit:direct-exchange>
 
