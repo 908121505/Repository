@@ -13,6 +13,9 @@ import java.util.Map;
 
 /**
  * 用户中心MQ -- 经验值消息监听者
+ *
+ * @author duanjun
+ * @date 2018-10-23 11:38:00
  */
 public class UserCenterMqExperienceListener implements ChannelAwareMessageListener {
     private final static Logger LOGGER = Logger.getLogger(UserCenterMqExperienceListener.class);
