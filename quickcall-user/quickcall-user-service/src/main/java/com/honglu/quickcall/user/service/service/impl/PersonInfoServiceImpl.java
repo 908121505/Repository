@@ -16,7 +16,6 @@ import com.honglu.quickcall.common.third.rongyun.util.RongYunUtil;
 import com.honglu.quickcall.user.facade.code.UserBizReturnCode;
 import com.honglu.quickcall.user.facade.constants.UserBizConstants;
 import com.honglu.quickcall.user.facade.entity.*;
-import com.honglu.quickcall.user.facade.entity.in.PersonHomePage;
 import com.honglu.quickcall.user.facade.exchange.request.*;
 import com.honglu.quickcall.user.facade.vo.*;
 import com.honglu.quickcall.user.service.dao.*;
@@ -72,67 +71,6 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 
     /** 用户默认的形象照 **/
     private static String DEFAULT_CUSTOMER_APPEARANCE_URL = ResourceBundle.getBundle("thirdconfig").getString("DEFAULT_CUSTOMER_APPEARANCE_URL");
-
-	/**
-	 * @Title 查询详细展示信息
-	 * @modify liuyinkai
-	 * @param customerId
-	 * @return outPacket
-	 */
-	public PersonHomePage queryPersonal(Long customerId) {
-		Customer customer = customerRedisManagement.getCustomer(customerId);
-		// 获取身份证
-		String identityID = customer.getCredentialsNum();
-		PersonHomePage personHomePage = null;
-		if (customer != null) {
-			personHomePage = new PersonHomePage();
-			personHomePage.setCustomerId(customerId);// id
-			personHomePage.setNickName(customer.getNickName());// 昵称
-			personHomePage.setSignName(customer.getSignName());// 签名
-			personHomePage.setStarSign(customer.getStarSign());// 星座
-			personHomePage.setTokenCode(customer.getTokenCode());// token
-			personHomePage.setvStatus(customer.getvStatus());// 大V审核状态
-			personHomePage.setIdentityStatus(customer.getIdentityStatus());// 身份证审核状态
-			// 查询粉丝数量R
-			Long fansNum = fansMapper.queryFansNumByCustomerId(customerId);
-			personHomePage.setFansNum(fansNum);
-			// 查询关注数量
-			int attentionNum = fansMapper.queryAttentionNumByCustomerId(customerId);
-			personHomePage.setAttentionNum(attentionNum);
-			// 获取年纪
-			Date birthday = customer.getBirthday();
-			// 用工具类去转换
-			int age = CountAge.getAgeByBirth(birthday);
-			personHomePage.setAge(age);
-			// 判断身份证是否为空，如果又身份证则按找身份证上面的性别
-			if (StringUtils.isNotEmpty(identityID)) {
-				// 判断身份证男女，截取身份证倒数第二位
-				String genderStr = identityID.substring(identityID.length() - 2, identityID.length() - 1);
-				int genderInt = Integer.parseInt(genderStr);
-				if (genderInt % 2 == 0) {
-					personHomePage.setSex(0);// 女
-				} else {
-					personHomePage.setSex(1);// 男
-				}
-			} else {
-				personHomePage.setSex(customer.getSex());// 性别
-			}
-			personHomePage.setHeadPortraitUrl(customer.getHeadPortraitUrl());// 头像
-			personHomePage.setBirthday(customer.getBirthday());// 生日
-			// 查询兴趣爱好 by customerId
-			try {
-
-				List<Interest> interestList = interestMapper.selectInterestByCustomerId(customerId);
-				personHomePage.setInterest(interestList);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			// 查询职业 by accountId
-			List<Occupation> occupation = occupationMapper.selectByCustomerId(customerId);
-			personHomePage.setOccupation(occupation);
-		}
-		return personHomePage;
-	}
 
 	/**
 	 * 首页搜索用户
