@@ -23,6 +23,9 @@ public interface FansMapper {
 	// 根据customerId查询粉丝数量
 	Long queryFansNumByCustomerId(Long customerId);
 
+	// 根据customerId查询未读粉丝数量
+	int queryNoReadFansNumByCustomerId(Long customerId);
+
 	// 根据customerId查询关注数量
 	int queryAttentionNumByCustomerId(Long customerId);
 
@@ -78,7 +81,7 @@ public interface FansMapper {
 	 * @return
 	 */
 	List<Fans> queryFansListByFansIdList(@Param("list") List<Long> fansId, @Param("customerId") Long customerId);
-	
+
 	/**
 	 * 查询粉丝列表
 	 * 
