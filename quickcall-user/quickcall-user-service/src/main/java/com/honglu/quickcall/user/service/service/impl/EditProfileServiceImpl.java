@@ -325,7 +325,7 @@ public class EditProfileServiceImpl implements EditProfileService {
         CustomerAppearance customerAppearance = customerAppearanceMapper.selectByCustomerIdAndType(params.getCustomerId(), AppearanceTypeEnum.VOICE_IDENTIFICATION_CARD.getCode());
         if (null != customerAppearance) {
             customerAppearance.setAuditAppearance(params.getVoiceIdentificationCard());
-
+// TODO: 2018/10/23 照片更新的时候记得指定审核状态，还有其他几个地方 created by chenpeng
             result = customerAppearanceMapper.updateAppearance(customerAppearance);
             logger.info("修改声鉴卡 updateVoiceIdentificationCard,更新数量" + result);
 

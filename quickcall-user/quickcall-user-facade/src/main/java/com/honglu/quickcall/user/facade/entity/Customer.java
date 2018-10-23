@@ -85,7 +85,15 @@ public class Customer {
 	private String vVoiceUrlTmp;
 	/** 大V声音审核状态1：待审核（审核中） 2：审核拒绝 3.审核通过 4.修改之后待审核 5.修改之后审核拒绝 6.修改之后审核通过 */
 	private Integer voiceStatus;
+	private String gtClientId;// 个推用户端Id
 
+	public String getGtClientId() {
+		return gtClientId;
+	}
+
+	public void setGtClientId(String gtClientId) {
+		this.gtClientId = gtClientId;
+	}
 
 	public BigDecimal getvVoiceTimeTmp() {
 		return vVoiceTimeTmp;

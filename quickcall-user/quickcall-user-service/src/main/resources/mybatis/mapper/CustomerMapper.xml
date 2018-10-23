@@ -28,6 +28,8 @@
     <result column="voice_time" property="voiceTime" jdbcType="DECIMAL" />
     <result column="v_status" property="vStatus"   />
     
+    <result column="gt_client_id" property="gtClientId"   />
+    
     <!-- 大V自己声音相关 -->
     <result column="v_voice_url" property="voiceUrl" jdbcType="VARCHAR" />
     <result column="v_voice_time" property="voiceTime" jdbcType="DECIMAL" />
@@ -55,7 +57,7 @@
     star_sign, birthday, voice_url, voice_time, v_voice_url, v_voice_url_tmp, v_voice_time_tmp, 
     v_voice_status, v_voice_time, v_status, identity_status, token_code, other_relation, 
     create_time, modify_time, create_man, modify_man, remark, app_channel_name, device_id, 
-    login_time
+    login_time,gt_client_id
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
@@ -256,6 +258,9 @@
       <if test="loginTime != null" >
         login_time,
       </if>
+      <if test="gtClientId != null" >
+        gt_client_id,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="customerId != null" >
@@ -381,6 +386,9 @@
       <if test="loginTime != null" >
         #{loginTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="gtClientId != null" >
+        #{gtClientId},
+      </if>
     </trim>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="com.honglu.quickcall.user.facade.entity.Customer" >
@@ -502,6 +510,9 @@
       </if>
       <if test="loginTime != null" >
         login_time = #{loginTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gtClientId != null and gtClientId!=''" >
+        gt_client_id = #{gtClientId},
       </if>
 
     </set>
