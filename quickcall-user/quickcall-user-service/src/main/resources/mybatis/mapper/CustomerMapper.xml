@@ -11,7 +11,6 @@
     <result column="type" property="type"   />
     <result column="credentials_type" property="credentialsType"   />
     <result column="credentials_num" property="credentialsNum" jdbcType="VARCHAR" />
-    <result column="interest_id" property="interestId" jdbcType="INTEGER" />
     <result column="wechat_open_id" property="wechatOpenId" jdbcType="VARCHAR" />
     <result column="qq_open_id" property="qqOpenId" jdbcType="VARCHAR" />
     <result column="microblog_open_id" property="microblogOpenId" jdbcType="VARCHAR" />
@@ -51,7 +50,7 @@
   </resultMap>
  <sql id="Base_Column_List" >
         customer_id,app_id, phone, real_name, sex, nick_name, type, credentials_type, credentials_num, 
-    interest_id, wechat_open_id, qq_open_id, microblog_open_id, occupation_id, front_portrait_url, 
+    wechat_open_id, qq_open_id, microblog_open_id, occupation_id, front_portrait_url,
     back_portrait_url, head_portrait_url, source, cust_status, cust_password, sign_name, 
     star_sign, birthday, voice_url, voice_time, v_voice_url, v_voice_url_tmp, v_voice_time_tmp, 
     v_voice_status, v_voice_time, v_status, identity_status, token_code, other_relation, 
@@ -160,9 +159,6 @@
       </if>
       <if test="credentialsNum != null" >
         credentials_num,
-      </if>
-      <if test="interestId != null" >
-        interest_id,
       </if>
       <if test="wechatOpenId != null" >
         wechat_open_id,
@@ -289,9 +285,6 @@
       <if test="credentialsNum != null" >
         #{credentialsNum,jdbcType=VARCHAR},
       </if>
-      <if test="interestId != null" >
-        #{interestId,jdbcType=INTEGER},
-      </if>
       <if test="wechatOpenId != null" >
         #{wechatOpenId,jdbcType=VARCHAR},
       </if>
@@ -413,9 +406,6 @@
       </if>
       <if test="credentialsNum != null" >
         credentials_num = #{credentialsNum,jdbcType=VARCHAR},
-      </if>
-      <if test="interestId != null" >
-        interest_id = #{interestId,jdbcType=INTEGER},
       </if>
       <if test="wechatOpenId != null" >
         wechat_open_id = #{wechatOpenId,jdbcType=VARCHAR},

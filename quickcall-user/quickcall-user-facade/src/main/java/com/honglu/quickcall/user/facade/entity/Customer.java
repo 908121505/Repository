@@ -22,8 +22,6 @@ public class Customer {
 
 	private String credentialsNum;
 
-	private Integer interestId;
-
 	private String wechatOpenId;
 
 	private String qqOpenId;
@@ -207,14 +205,6 @@ public class Customer {
 
 	public void setCredentialsNum(String credentialsNum) {
 		this.credentialsNum = credentialsNum == null ? null : credentialsNum.trim();
-	}
-
-	public Integer getInterestId() {
-		return interestId;
-	}
-
-	public void setInterestId(Integer interestId) {
-		this.interestId = interestId;
 	}
 
 	public String getWechatOpenId() {
