@@ -2,8 +2,8 @@ package com.honglu.quickcall.user.service.mq.pull;
 
 import com.alibaba.fastjson.JSON;
 import com.honglu.quickcall.common.api.code.MqMessageServiceCode;
-import com.honglu.quickcall.user.facade.exchange.ExperienceSendMq;
-import com.honglu.quickcall.user.service.dao.CustomerMapper;
+import com.honglu.quickcall.user.facade.exchange.mqrequest.DoOrderCastMqRequest;
+import com.honglu.quickcall.user.service.service.CustomerGetExperienceService;
 import com.rabbitmq.client.AMQP;
 import com.rabbitmq.client.Channel;
 import org.apache.log4j.Logger;
@@ -23,7 +23,7 @@ public class UserCenterMqExperienceListener implements ChannelAwareMessageListen
     private final static Logger LOGGER = Logger.getLogger(UserCenterMqExperienceListener.class);
 
     @Autowired
-    private CustomerMapper customerMapper;
+    private CustomerGetExperienceService customerGetExperienceService;
 
     @Override
     public void onMessage(Message message, Channel channel) throws Exception {
@@ -32,18 +32,18 @@ public class UserCenterMqExperienceListener implements ChannelAwareMessageListen
             json = new String(message.getBody(), "UTF-8");
             LOGGER.info("【UserCenterMqExperienceListener】 RabbitMQ消息 :" + json);
             LOGGER.info("consumer--:" + message.getMessageProperties() + ":" + new String(message.getBody()));
-            ExperienceSendMq mqObj = JSON.parseObject(json, ExperienceSendMq.class);
-//            Map<String, Object> map = JSON.parseObject(json);
-//            if (mqObj == null) {
-//                return;
-//            }
-//            int bizCode = Integer.parseInt(map.get("MQ_BIZ_CODE") + "");
-            switch (mqObj.getBizCode()) {
+            Map<String, Object> map = JSON.parseObject(json);
+            if (map == null) {
+                LOGGER.warn("MQ消息转换Map为空-------------");
+                return;
+            }
+            String bizCode = map.get("bizCode") + "";
+            switch (bizCode) {
                 /** 客户获取经验值 -- 下单花费 **/
                 case MqMessageServiceCode.CUSTOMER_EXPERIENCE_ORDER_COST:
                     LOGGER.info("获取到客户经验值MQ消息---------");
+                    customerGetExperienceService.doOrderCast(JSON.parseObject(json, DoOrderCastMqRequest.class));
                     break;
-
                 default:
                     LOGGER.warn("获取到未知服务编码的MQ消息-------------");
                     break;
