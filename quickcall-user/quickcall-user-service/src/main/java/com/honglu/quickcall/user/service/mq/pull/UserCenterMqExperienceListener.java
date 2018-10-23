@@ -2,6 +2,7 @@ package com.honglu.quickcall.user.service.mq.pull;
 
 import com.alibaba.fastjson.JSON;
 import com.honglu.quickcall.common.api.code.MqMessageServiceCode;
+import com.honglu.quickcall.user.facade.exchange.ExperienceSendMq;
 import com.honglu.quickcall.user.service.dao.CustomerMapper;
 import com.rabbitmq.client.AMQP;
 import com.rabbitmq.client.Channel;
@@ -31,14 +32,15 @@ public class UserCenterMqExperienceListener implements ChannelAwareMessageListen
             json = new String(message.getBody(), "UTF-8");
             LOGGER.info("【UserCenterMqExperienceListener】 RabbitMQ消息 :" + json);
             LOGGER.info("consumer--:" + message.getMessageProperties() + ":" + new String(message.getBody()));
-            Map<String, Object> map = JSON.parseObject(json);
-            if (map == null) {
-                return;
-            }
-            int mqType = Integer.parseInt(map.get("MQ_TYPE") + "");
-            switch (mqType) {
+            ExperienceSendMq mqObj = JSON.parseObject(json, ExperienceSendMq.class);
+//            Map<String, Object> map = JSON.parseObject(json);
+//            if (mqObj == null) {
+//                return;
+//            }
+//            int bizCode = Integer.parseInt(map.get("MQ_BIZ_CODE") + "");
+            switch (mqObj.getBizCode()) {
                 /** 客户获取经验值 -- 下单花费 **/
-                case MqMessageServiceCode.CUSTOMER_EXPERIENCE_COST:
+                case MqMessageServiceCode.CUSTOMER_EXPERIENCE_ORDER_COST:
                     LOGGER.info("获取到客户经验值MQ消息---------");
                     break;
 
@@ -50,9 +52,9 @@ public class UserCenterMqExperienceListener implements ChannelAwareMessageListen
             channel.basicAck(message.getMessageProperties().getDeliveryTag(), false);
         } catch (Exception e) {
             LOGGER.error("mq消息消费异常,UserCenterMqExperienceListener 消息的请求参数为：" + json);
-            LOGGER.error("错误信息为：" + e.getMessage(), e);
+            LOGGER.error("ack返回true，并重新回到队列，错误信息为：" + e.getMessage(), e);
             //ack返回false，并重新回到队列
-            channel.basicNack(message.getMessageProperties().getDeliveryTag(), false, false);
+            channel.basicNack(message.getMessageProperties().getDeliveryTag(), false, true);
             AMQP.BasicProperties properties = new AMQP.BasicProperties();
             channel.basicPublish("queue_userCenter_for_experience", "queue_userCenter_for_experience_key", properties, json.getBytes());
         }

@@ -1,5 +1,7 @@
 package com.honglu.quickcall.user.test;
 
+import com.honglu.quickcall.common.api.code.MqMessageServiceCode;
+import com.honglu.quickcall.user.facade.exchange.ExperienceSendMq;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.amqp.core.AmqpTemplate;
@@ -25,13 +27,11 @@ public class TestMq {
 
     @Test
     public void testSend() {
-        for (int i = 1; i <= 10; i++) {
-            Map<String, Object> map = new HashMap<>();
-            map.put("message", "测试消息--- = " + i);
-            map.put("customerId", 1809282058558244370L);
-            map.put("addExperience", 100 + i);
-            map.put("MQ_TYPE", 1);
-            amqpTemplate.convertAndSend("userCenter-mq-exchange", "queue_userCenter_for_experience_key", map);
-        }
+//        for (int i = 1; i <= 10; i++) {
+            ExperienceSendMq experienceSendMq = new ExperienceSendMq(MqMessageServiceCode.CUSTOMER_EXPERIENCE_ORDER_COST);
+            experienceSendMq.setCustomerId(1809282058558244370L);
+            experienceSendMq.setExperience(100);
+            amqpTemplate.convertAndSend("userCenter-mq-exchange", "queue_userCenter_for_experience_key", experienceSendMq);
+//        }
     }
 }
