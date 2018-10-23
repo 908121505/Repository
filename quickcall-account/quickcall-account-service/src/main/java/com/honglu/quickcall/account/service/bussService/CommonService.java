@@ -39,12 +39,11 @@ public interface CommonService {
 	public  void  pushMessage(PushAppMsgTypeEnum msgType,Long  sellerId,Long  customerId);
 	
 	/**
-	 * 
 	 * 根据订单ID更新订单状态
 	 * @param orderId
 	 * @param orderStatus
 	 */
-	public void updateOrder(Long orderId, Integer orderStatus,String  refundReason);
+	public void updateOrder(Long orderId, Integer orderStatus);
 	/**
 	 * 支付修改订单状态
 	 * @param orderId

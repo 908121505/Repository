@@ -150,5 +150,16 @@ public interface UserFunctionType {
 	 */
 	String saveBlacklist = "0011162";
 
+	/**
+	 * 查询所有非其他原因的举报
+	 */
+	String getAllDelate = "0011170";
+
+	/**
+	 * 插入举报
+	 */
+	String insertDelate = "0011171";
+
+
 
 }
