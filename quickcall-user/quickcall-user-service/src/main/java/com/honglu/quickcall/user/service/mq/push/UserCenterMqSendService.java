@@ -13,7 +13,7 @@ import javax.annotation.Resource;
 /**
  * Created by len.song on 2018-01-29.
  */
-@Service("userCenterMqSendService")
+//@Service("userCenterMqSendService")
 public class UserCenterMqSendService {
     private final static Logger LOGGER = LoggerFactory.getLogger(UserCenterMqSendService.class);
 
