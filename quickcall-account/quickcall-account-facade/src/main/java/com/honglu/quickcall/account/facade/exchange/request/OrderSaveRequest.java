@@ -16,55 +16,18 @@ import com.honglu.quickcall.common.api.exchange.AbstractRequest;
  */
 public class OrderSaveRequest extends AbstractRequest {
     
-	private static final long serialVersionUID = 2391674663886831167L;
 	/**客户编号*/
 	private Long  customerId;
 	/**大V编号*/
-	private Long  sellerId;
+	private Long  serviceId;
 	/**产品ID*/
-	private Long  productId;
-	/**技能Id*/
-	private Long  skillId;
-	/**单价*/
-	private BigDecimal  price;
-	/**项目名称*/
-	private String  productName ;
+	private Long  customerSkillId;
 	/**订单数量*/
 	private Integer  orderNum;
-	/**服务开始时间*/
-	private String  startTimeStr;
-	
-	
-	
-	public String getStartTimeStr() {
-		return startTimeStr;
-	}
-
-
-	public void setStartTimeStr(String startTimeStr) {
-		this.startTimeStr = startTimeStr;
-	}
-
-
-	public Long getSellerId() {
-		return sellerId;
-	}
-
-
-	public void setSellerId(Long sellerId) {
-		this.sellerId = sellerId;
-	}
-
-
-	public Long getSkillId() {
-		return skillId;
-	}
-
-
-	public void setSkillId(Long skillId) {
-		this.skillId = skillId;
-	}
-
+	/**下单备注*/
+	private String  remark;
+	/**预约时间*/
+	private String  appointTimeStr;
 
 	public Long getCustomerId() {
 		return customerId;
@@ -76,33 +39,23 @@ public class OrderSaveRequest extends AbstractRequest {
 	}
 
 
-	public Long getProductId() {
-		return productId;
+	public Long getServiceId() {
+		return serviceId;
 	}
 
 
-	public void setProductId(Long productId) {
-		this.productId = productId;
+	public void setServiceId(Long serviceId) {
+		this.serviceId = serviceId;
 	}
 
 
-	public BigDecimal getPrice() {
-		return price;
+	public Long getCustomerSkillId() {
+		return customerSkillId;
 	}
 
 
-	public void setPrice(BigDecimal price) {
-		this.price = price;
-	}
-
-
-	public String getProductName() {
-		return productName;
-	}
-
-
-	public void setProductName(String productName) {
-		this.productName = productName;
+	public void setCustomerSkillId(Long customerSkillId) {
+		this.customerSkillId = customerSkillId;
 	}
 
 
@@ -116,20 +69,33 @@ public class OrderSaveRequest extends AbstractRequest {
 	}
 
 
+	public String getRemark() {
+		return remark;
+	}
+
+
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
+
+	public String getAppointTimeStr() {
+		return appointTimeStr;
+	}
+	
+	
+	public void setAppointTimeStr(String appointTimeStr) {
+		this.appointTimeStr = appointTimeStr;
+	}
+
 	@Override
 	public String getBizCode() {
 		return OrderRequestType.ORDER_SAVE;
 	}
 
-
-	@Override
-	public String toString() {
-		return "OrderSaveRequest [customerId=" + customerId + ", sellerId=" + sellerId + ", productId=" + productId
-				+ ", skillId=" + skillId + ", price=" + price + ", productName=" + productName + ", orderNum="
-				+ orderNum + ", startTimeStr=" + startTimeStr + "]";
-	}
-
 	
+	
+
+
 
 
 }

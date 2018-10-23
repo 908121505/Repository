@@ -61,11 +61,11 @@ public class BarrageMessageServiceImpl implements BarrageMessageService {
 
             // 封装弹幕消息
             BarrageMessageVO barrageMessageVO = new BarrageMessageVO();
-            barrageMessageVO.setNickName("*" + orderDetailVO.getAnotherNickName().substring(1));
-            barrageMessageVO.setHeadPortraitUrl(orderDetailVO.getAnotherHeadPortraitUrl());
-            barrageMessageVO.setSkillId(orderDetailVO.getSkillId());
-            barrageMessageVO.setProductName(orderDetailVO.getProductName());
-            barrageMessageVO.setOrderAmounts(orderDetailVO.getOrderAmounts());
+            barrageMessageVO.setNickName("*" + orderDetailVO.getNickName().substring(1));
+            barrageMessageVO.setHeadPortraitUrl(orderDetailVO.getHeadPortraitUrl());
+            barrageMessageVO.setSkillId(orderDetailVO.getSkillItemId());
+            barrageMessageVO.setProductName(orderDetailVO.getSkillName());
+            barrageMessageVO.setOrderAmounts(orderDetailVO.getOrderAmount());
             barrageMessageVO.setOrderTime(orderDetailVO.getOrderTime());
 
             Jedis jedis = null;

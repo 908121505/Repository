@@ -44,7 +44,7 @@ public interface OrderRequestType {
     /**客户再来一单*/
     public static final  String  CUST_COPY_ORDER = "19032";
     /**客户申请退款/完成*/
-    public static final  String  CUST_APPLAY_REFUND = "19033";
+    public static final  String  CUST_CONFIRM_FINISH_REFUND = "19033";
     /**客户同意/拒绝订单*/
     public static final  String  CUST_CONFIRM_ORDER = "19034";
     /**订单详情*/
@@ -66,6 +66,11 @@ public interface OrderRequestType {
     public static final  String  QUERY_ING_ORDER_COUNT = "19051";
     /**查询退款原因*/
     public static final  String  QUERY_REFUND_REASON = "19052";
-    
-    
+
+
+    /**订单评价页面获取数据**/
+    String  ORDER_EVALUATION = "19060";
+    /**订单评价提交获取数据**/
+    String  ORDER_EVALUATION_SUBMIT = "19061";
+
 }

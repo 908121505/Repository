@@ -28,7 +28,8 @@
 					<div class="col-sm-8">
 						<input type="text" id="skillItemName" class="form-control"  name="skillItemName" value="${entity.skillItemName}"  maxlength="50">
 						<input type="hidden" id="id" class="form-control"  name="id" value="${entity.id}" >
-						<input type="hidden" id="skillBackGroungImg" class="form-control"  name="imageUrl" value="${entity.imageUrl}" >
+						<input type="hidden" id="skillBackGroungImg" class="form-control"  name="lockIcon" value="${entity.lockIcon}" >
+						<input type="hidden" id="skillTitleImg" class="form-control"  name="unlockIcon" value="${entity.unlockIcon}" >
 					</div>
 				</div>
 				<div class="form-group"  >
@@ -49,6 +50,20 @@
 						<label class="checkbox-inline">
 							<input type="radio" name="skillStatus" value="0" ${entity.skillStatus=='0'?'checked':'' }>
 							可用
+						</label>
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label class="col-sm-2 control-label">技能类型<font color="red">&nbsp;*</font></label>
+					<div class="col-sm-10">
+						<label class="checkbox-inline">
+							<input type="radio" name="skillType" value="1" ${empty entity or entity.skillType=='1'?'checked':'' }>
+							不可重复接单类型
+						</label>
+						<label class="checkbox-inline">
+							<input type="radio" name="skillType" value="2" ${entity.skillType=='2'?'checked':'' }>
+							可重复接单类型
 						</label>
 					</div>
 				</div>
@@ -73,13 +88,27 @@
 						<input type="text" id="sort" class="form-control" name="sort" value="${entity.sort}" >
 					</div>
 				</div>
+
+				<div class="form-group" >
+					<label class="col-sm-4 control-label">背景颜色<!-- <font color="red">&nbsp;*</font> --></label>
+					<div class="col-sm-8">
+						<input type="text" id="backColor" class="form-control" name="backColor" value="${entity.backColor}" >
+					</div>
+				</div>
+
+				<div class="form-group" >
+					<label class="col-sm-4 control-label">字体颜色<!-- <font color="red">&nbsp;*</font> --></label>
+					<div class="col-sm-8">
+						<input type="text" id="fontColor" class="form-control" name="fontColor" value="${entity.fontColor}" >
+					</div>
+				</div>
 				
 				<div class="form-group">
-					<label class="col-sm-4 control-label">背景图片上传<c:if test="${entity eq null }"><font color="red">&nbsp;*</font></c:if>
+					<label class="col-sm-4 control-label">未解锁图片<c:if test="${entity eq null }"><font color="red">&nbsp;*</font></c:if>
 					</label>
 					<div class="col-sm-8">
 						<div class="input-group">
-							<input type="file" class="form-control" id="imageFile"  name="imageFile"> 
+							<input type="file" class="form-control" id="imageFile"  name="imageFile">
 							<span class="input-group-btn">
 								<button class="btn btn-success" type="button" id="uploadImage">上传图片</button>
 							</span>
@@ -90,15 +119,15 @@
 					<label for="skillFile_img" class="col-sm-4 control-label">图片</label>
 					<div class="col-sm-8">
 						<div class="col-sm-6">
-							<img src="${entity.imageUrl }" alt="暂无图片，点击上传！" class="img-rounded" style="max-width: 100%; max-height: 300px;" id="skillFile_img">
+							<img src="${entity.lockIcon }" alt="暂无图片，点击上传！" class="img-rounded" style="max-width: 100%; max-height: 300px;" id="skillFile_img">
 						</div>
 					</div>
 				</div>
 				
 				
 				
-			<%--	<div class="form-group">
-					<label class="col-sm-4 control-label">标题背景图片上传<c:if test="${entity eq null }"><font color="red">&nbsp;*</font></c:if>
+				<div class="form-group">
+					<label class="col-sm-4 control-label">解锁图片上传<c:if test="${entity eq null }"><font color="red">&nbsp;*</font></c:if>
 					</label>
 					<div class="col-sm-8">
 						<div class="input-group">
@@ -113,10 +142,10 @@
 					<label for="skillFile_img1" class="col-sm-4 control-label">图片</label>
 					<div class="col-sm-8">
 						<div class="col-sm-6">
-							<img src="${entity.titleUrl }" alt="暂无图片，点击上传！" class="img-rounded" style="max-width: 100%; max-height: 300px;" id="skillFile_img1">
+							<img src="${entity.unlockIcon }" alt="暂无图片，点击上传！" class="img-rounded" style="max-width: 100%; max-height: 300px;" id="skillFile_img1">
 						</div>
 					</div>
-				</div>--%>
+				</div>
 				
 				
 			</form>

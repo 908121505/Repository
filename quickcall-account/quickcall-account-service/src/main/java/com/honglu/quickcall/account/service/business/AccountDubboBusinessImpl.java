@@ -100,8 +100,8 @@ public class AccountDubboBusinessImpl implements AccountDubboBusiness {
 				response = orderService.payOrder((PayOrderRequest) request);
 				break;
 			/** 发起的订单页--申请退款/完成 */
-			case OrderRequestType.CUST_APPLAY_REFUND:
-				response = orderService.applayRefund((ApplayRefundRequest) request);
+			case OrderRequestType.CUST_CONFIRM_FINISH_REFUND:
+				response = orderService.custConfirmFinish((CustConfirmFinishRequest) request);
 				break;
 			/** 发起的订单页--同意/拒绝 */
 			case OrderRequestType.CUST_CONFIRM_ORDER:
@@ -118,7 +118,7 @@ public class AccountDubboBusinessImpl implements AccountDubboBusiness {
 				break;
 			/** 收到的订单页--大V同意退款/拒绝 */
 			case OrderRequestType.DV_CONFRIM_ORDER:
-				response = orderService.dvConfirmRefund((DvConfirmRefundRequest) request);
+				response = orderService.dvConfirmRefund((FinishOrderRequest) request);
 				break;
 			///////////////////////////
 				/** 查询进行中订单数量 */
@@ -128,6 +128,14 @@ public class AccountDubboBusinessImpl implements AccountDubboBusiness {
 				/**查询退款理由 */
 			case OrderRequestType.QUERY_REFUND_REASON:
 				response = orderService.queryRefundReason((QueryRefundReasonRequest) request);
+				break;
+			/** 订单评价页面 **/
+			case OrderRequestType.ORDER_EVALUATION:
+				response = orderService.orderEvaluation((OrderEvaluationRequest) request);
+				break;
+			/** 提交订单评价 **/
+			case OrderRequestType.ORDER_EVALUATION_SUBMIT:
+				response = orderService.submitOrderEvaluation((OrderEvaluationSubmitRequest) request);
 				break;
 
 		    /////////////////////////////////订单相关结束///////////////////////////////////

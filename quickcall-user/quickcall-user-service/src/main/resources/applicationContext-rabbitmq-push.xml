@@ -9,22 +9,22 @@
                 http://www.springframework.org/schema/rabbit/spring-rabbit-1.4.xsd">
                    
    <!-- 连接服务配置   需要确认publisher-confirms="true" -->
-   <rabbit:connection-factory id="RconnectionFactory" host="${mq.host}" username="${mq.username}"
-                              password="${mq.password}" port="${mq.port}" />
+   <rabbit:connection-factory id="RconnectionFactory"
+                              host="${mq.host}"
+                              username="${mq.username}"
+                              password="${mq.password}"
+                              port="${mq.port}" />
 
    <rabbit:admin connection-factory="RconnectionFactory"/>
 
-   <!-- mq队列 -->
-   <rabbit:queue id="queue_userCenter_homepage_common" durable="true" auto-delete="false" exclusive="false" name="queue_userCenter_homepage_common"/>
-   <rabbit:queue id="queue_userCenter_forAccount" durable="true" auto-delete="false" exclusive="false" name="queue_userCenter_forAccount"/>
-   <rabbit:queue id="queue_userCenter_forActivity" durable="true" auto-delete="false" exclusive="false" name="queue_userCenter_forActivity"/>
+   <!-- ======================================= mq队列 ===================================-->
+   <!-- 用户中心队列：用户获取经验值 -->
+   <rabbit:queue id="queue_userCenter_for_experience" durable="true" auto-delete="false" exclusive="false" name="queue_userCenter_for_experience"/>
 
    <!-- mq通道 -->
    <rabbit:direct-exchange name="userCenter-mq-exchange" durable="true" auto-delete="false" id="userCenter-mq-exchange">
       <rabbit:bindings>
-         <rabbit:binding queue="queue_userCenter_homepage_common" key="queue_userCenter_homepage_common_key"/>
-         <rabbit:binding queue="queue_userCenter_forAccount" key="queue_userCenter_forAccount_key"/>
-         <rabbit:binding queue="queue_userCenter_forActivity" key="queue_userCenter_forActivity_key"/>
+         <rabbit:binding queue="queue_userCenter_for_experience" key="queue_userCenter_for_experience_key"/>
       </rabbit:bindings>
    </rabbit:direct-exchange>
 
@@ -40,8 +40,7 @@
    <!-- 死信队列转发到的普通队列 -->
    <rabbit:queue name="dead" />
    <rabbit:queue name="paydead" />
-   <rabbit:direct-exchange name="dead-letter-exchange"
-                           durable="true" auto-delete="false" id="dead-letter-exchange">
+   <rabbit:direct-exchange name="dead-letter-exchange" durable="true" auto-delete="false" id="dead-letter-exchange">
       <rabbit:bindings>
          <rabbit:binding queue="dead"/>
          <rabbit:binding queue="paydead"/>

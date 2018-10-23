@@ -64,7 +64,7 @@
 
 
   <insert id="insert" parameterType="com.honglu.quickcall.account.facade.entity.Order" >
-    insert into order (order_id, order_no, customer_skill_id, 
+    insert into orders (order_id, order_no, customer_skill_id, 
       customer_id, service_id, trade_id, 
       payment_type, order_num, service_unit, 
       service_price, order_amounts, discount_rate, 
@@ -90,7 +90,7 @@
   
   
   <insert id="insertSelective" parameterType="com.honglu.quickcall.account.facade.entity.Order" >
-  insert into order
+  insert into orders
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="orderId != null" >
         order_id,
@@ -293,7 +293,7 @@
 
 
   <update id="updateByPrimaryKeySelective" parameterType="com.honglu.quickcall.account.facade.entity.Order" >
-    update order
+    update orders
     <set >
       <if test="orderNo != null" >
         order_no = #{orderNo,jdbcType=BIGINT},
@@ -395,7 +395,7 @@
   
   
   <update id="updateByPrimaryKey" parameterType="com.honglu.quickcall.account.facade.entity.Order" >
-   update order
+   update orders
     set order_no = #{orderNo,jdbcType=BIGINT},
       customer_skill_id = #{customerSkillId,jdbcType=BIGINT},
       customer_id = #{customerId,jdbcType=BIGINT},
@@ -436,108 +436,103 @@
    <!-- 查询发出的订单 -->
   <select id="querySendOrderList" resultType="com.honglu.quickcall.account.facade.vo.OrderSendOrderListVO"  >
 	SELECT
-	  od.order_id AS  orderId,
-	  od.seller_id  AS sellerId,
-	  od.order_time AS orderTime,
-	  od.payment_time AS paymentTime,
-	  cu.nick_name  AS  nickName,
-	  cu.head_portrait_url  AS  headPortraitUrl,
-	  p.`name` AS  productName,
-	  p.price  AS  price,
-	  p.product_id  AS  productId,
-	  od.order_num  AS  orderNum,
-	  od.order_amounts  AS  orderAmounts,
-	  od.order_status  AS  orderStatus,
-	  DATE_FORMAT(od.start_time,'%Y-%m-%d %H:%i:%s') AS startTimeStr
+		  od.order_id  AS orderId,
+		  ct.nick_name  AS nickName,
+		  od.service_id AS serviceId ,
+		  ct.head_portrait_url  AS  headPortraitUrl,
+		  od.service_price  AS  servicePrice ,
+		  od.service_unit  AS  serviceUnit,
+		  od.order_num AS  orderNum,
+		  od.order_amounts AS  orderAmount,
+		  od.order_status  AS orderStatus,
+		  cs.skill_name  AS  skillItemName,
+		  st.unlock_icon  AS  icon
 	FROM
-		orders od
-	LEFT JOIN customer cu ON od.seller_id = cu.customer_id
-	LEFT JOIN product  p  ON  od.product_id  =  p.product_id
-	WHERE
-		od.buyer_id = #{customerId}
-		order  by  od.order_time  desc
+		orders od LEFT JOIN   customer_skill  cs  ON  od.customer_skill_id  = cs.customer_skill_id
+	        LEFT JOIN   skill_item   st ON  cs.skill_item_id  =  st.id
+	    LEFT JOIN  customer  ct  ON  od.service_id  =  ct.customer_id 
+	WHERE  od.customer_id  = #{customerId}
   </select>
   
   
   <!-- 查询收到的订单 -->
   <select id="queryReceiveOrderList" resultType="com.honglu.quickcall.account.facade.vo.OrderReceiveOrderListVO"  >
 	SELECT
-	  od.order_id AS  orderId,
-	  od.buyer_id  AS  buyerId,
-	  od.payment_time AS paymentTime,
-	  cu.nick_name  AS  nickName,
-	  cu.head_portrait_url  AS  headPortraitUrl,
-	  p.`name` AS  productName,
-	  p.price  AS  price,
-	  p.product_id  AS  productId,
-	  od.order_num  AS  orderNum,
-	  od.order_amounts  AS  orderAmounts,
-	  od.order_status  AS  orderStatus,
-	  DATE_FORMAT(od.start_time,'%Y-%m-%d %H:%i:%s') AS startTimeStr
-	   
+		  od.order_id  AS orderId,
+		  ct.nick_name  AS nickName,
+		  od.customer_id AS customerId ,
+		  ct.head_portrait_url  AS  headPortraitUrl,
+		  od.service_price  AS  servicePrice ,
+		  od.service_unit  AS  serviceUnit,
+		  od.order_num AS  orderNum,
+		  od.order_amounts AS  orderAmount,
+		  od.order_status  AS orderStatus,
+		  cs.skill_name  AS  skillItemName,
+		  st.unlock_icon  AS  icon
 	FROM
-		orders od
-	LEFT JOIN customer cu ON od.buyer_id = cu.customer_id
-	LEFT JOIN product  p  ON  od.product_id  =  p.product_id
-	WHERE
-		od.seller_id =  #{customerId}
-		<!-- 大V端不能看到未支付的订单 -->
-		AND  od.order_status <![CDATA[ >  ]]> 3
-		order  by  od.order_time  desc
+		orders od LEFT JOIN   customer_skill  cs  ON  od.customer_skill_id  = cs.customer_skill_id
+	        LEFT JOIN   skill_item   st ON  cs.skill_item_id  =  st.id
+	    LEFT JOIN  customer  ct  ON  od.customer_id  =  ct.customer_id 
+	WHERE  od.service_id  = #{customerId}
   </select>
   
   
   <!-- 查询大V订单详情 -->
   <select id="queryDvOrderDetail" resultType="com.honglu.quickcall.account.facade.vo.OrderDetailVO"  >
-	SELECT
-	  od.order_id AS  orderId,
-	  od.refund_reason  AS refundReason,
-	  od.payment_time AS paymentTime,
-	  cu.sex  AS  sex ,
-	  cu.customer_id  AS  customerId,
-	  ((YEAR(NOW()) -  YEAR(cu.birthday)) +1)  AS age ,
-	  cu.v_status  AS dvStatus,
-	  cu.nick_name  AS  anotherNickName,
-	  cu.head_portrait_url  AS  anotherHeadPortraitUrl,
-	  p.`name` AS  productName,
-	  p.price  AS  price,
-	  p.product_id  AS  productId,
-	  od.order_num  AS  orderNum,
-	  od.order_amounts  AS  orderAmounts,
-	  od.order_status  AS  orderStatus,
-	  od.order_time AS orderTime,
-	  DATE_FORMAT(od.start_time,'%Y-%m-%d %H:%i:%s') AS startTimeStr
-	FROM
-		orders od
-	LEFT JOIN customer cu ON od.buyer_id = cu.customer_id
-	LEFT JOIN product  p  ON  od.product_id  =  p.product_id
+		SELECT
+			ct.customer_id AS customerId,
+			ct.head_portrait_url AS headPortraitUrl,
+			ct.app_id AS appId,
+			ct.nick_name AS nickName,
+			ct.sex AS sex,
+			ct.birthday AS birthday,
+			ct.identity_status AS identityStatus,
+			cs.skill_name AS skillName,
+			od.service_price AS servicePrice,
+			od.service_unit AS serviceUnit,
+			od.order_num AS orderNum,
+			od.order_amounts AS orderAmount,
+			od.order_status AS orderStatus,
+			od.remark AS remark,
+			od.order_id AS orderId,
+			od.order_time AS orderTime,
+			od.start_service_time AS startTime,
+			od.end_time AS endTime ,
+  			cs.skill_item_id   AS  skillItemId
+		FROM
+			orders od
+		LEFT JOIN customer ct ON ct.customer_id = od.customer_id
+		LEFT JOIN customer_skill cs ON od.customer_skill_id = cs.customer_skill_id
+
 	WHERE
 		od.order_id =  #{orderId}
   </select>
   <!-- 查询消费端订单详情 -->
   <select id="queryCustOrderDetail" resultType="com.honglu.quickcall.account.facade.vo.OrderDetailVO"  >
+<!-- 订单发起方  看到的是主播的个人信息 -->
 	SELECT
-	  od.order_id AS  orderId,
-	  od.refund_reason  AS refundReason,
-	  od.payment_time AS paymentTime,
-	  cu.sex  AS  sex ,
-	  cu.customer_id  AS  customerId,
-	  ((YEAR(NOW()) -  YEAR(cu.birthday)) + 1 ) AS age ,
-	  cu.v_status  AS dvStatus,
-	  cu.nick_name  AS  anotherNickName,
-	  cu.head_portrait_url  AS  anotherHeadPortraitUrl,
-	  p.`name` AS  productName,
-	  p.price  AS  price,
-	  p.product_id  AS  productId,
-	  od.order_num  AS  orderNum,
-	  od.order_amounts  AS  orderAmounts,
-	  od.order_status  AS  orderStatus,
-	  od.order_time AS orderTime,
-	  DATE_FORMAT(od.start_time,'%Y-%m-%d %H:%i:%s') AS startTimeStr
+		ct.customer_id AS customerId,
+		ct.head_portrait_url AS headPortraitUrl,
+		ct.app_id AS appId,
+		ct.nick_name AS nickName,
+		ct.sex AS sex,
+		ct.birthday AS birthday,
+		ct.identity_status AS identityStatus,
+		cs.skill_name AS skillName,
+		od.service_price AS servicePrice,
+		od.service_unit AS serviceUnit,
+		od.order_num AS orderNum,
+		od.order_amounts AS orderAmount,
+		od.order_status AS orderStatus,
+		od.remark AS remark,
+		od.order_id AS orderId,
+		od.order_time AS orderTime,
+		od.start_service_time AS startTime,
+		od.end_time AS endTime 
 	FROM
 		orders od
-	LEFT JOIN customer cu ON od.seller_id = cu.customer_id
-	LEFT JOIN product  p  ON  od.product_id  =  p.product_id
+	LEFT JOIN customer ct ON ct.customer_id = od.service_id
+	LEFT JOIN customer_skill cs ON od.customer_skill_id = cs.customer_skill_id
 	WHERE
 		od.order_id =  #{orderId}
   </select>
@@ -554,22 +549,62 @@
 		buyer_id = #{buyerId}  and  seller_id =  #{sellerId}  
   </select>
 
-    <!-- 查询弹幕显示需要的订单消息 -->
+
+  <!-- 查询弹幕显示需要的订单消息 -->
   <select id="queryBarrageOrderInfo" resultType="com.honglu.quickcall.account.facade.vo.OrderDetailVO"  >
     SELECT
-      cu.nick_name  AS  anotherNickName,
-      cu.head_portrait_url  AS  anotherHeadPortraitUrl,
-      p.`name` AS  productName,
-      p.skill_id AS skillId,
-      p.price  AS  price,
-      od.order_num  AS  orderNum,
-      od.order_amounts  AS  orderAmounts,
-      od.order_time AS orderTime
+        cu.nick_name AS nickName,
+        cu.head_portrait_url AS headPortraitUrl,
+        cs.skill_name AS skillName,
+        cs.skill_item_id AS skillItemId,
+        cs.skill_price AS price,
+        od.order_num AS orderNum,
+        od.order_amounts AS orderAmounts,
+        od.order_time AS orderTime
     FROM
         orders od
-    LEFT JOIN customer cu ON od.seller_id = cu.customer_id
-    LEFT JOIN product  p  ON  od.product_id  =  p.product_id
+    LEFT JOIN customer cu ON cu.customer_id = od.customer_id
+    LEFT JOIN customer_skill cs ON cs.customer_skill_id = od.customer_skill_id
     WHERE
         od.order_id =  #{orderId}
   </select>
+
+
+  <!-- 查询订单评价页面需要的数据 -->
+  <select id="queryEvaluationData" resultType="com.honglu.quickcall.account.facade.vo.OrderDetailVO"  >
+    SELECT
+        cu.nick_name AS nickName,
+        cu.head_portrait_url AS headPortraitUrl,
+        cu.sex AS sex,
+        cs.skill_name AS skillName,
+        cs.skill_item_id AS skillItemId,
+        od.service_id as serviceId,
+        od.customer_is_evaluate as customerIsEvaluate
+    FROM
+        orders od
+    LEFT JOIN customer cu ON cu.customer_id = od.service_id
+    LEFT JOIN customer_skill cs ON cs.customer_skill_id = od.customer_skill_id
+    WHERE
+        od.order_id =  #{orderId}
+  </select>
+
+  <!-- 保存评价信息 -->
+  <update id="saveEvaluationInfo" parameterType="com.honglu.quickcall.account.facade.entity.Order">
+    update orders set modify_time = NOW(), customer_is_evaluate = 1,
+    evaluate_start = #{evaluateStart}, customer_evaluate = #{customerEvaluate}
+    where order_id = #{orderId}
+  </update>
+
+  <!-- 保存评价标签 -->
+  <insert id="saveEvaluationLabels" parameterType="list">
+    insert into order_evaluation_label(evaluation_id,customer_id,skill_item_id,order_id,label_id) values
+    <foreach collection="list" index="index" item="item" separator=",">
+      (#{item.evaluationId},#{item.customerId},#{item.skillItemId},#{item.orderId},#{item.labelId})
+    </foreach>
+  </insert>
+
+  <!-- 删除旧的评价标签 -->
+  <delete id="deleteEvaluationLabels">
+    delete from order_evaluation_label where order_id = #{orderId}
+  </delete>
 </mapper>

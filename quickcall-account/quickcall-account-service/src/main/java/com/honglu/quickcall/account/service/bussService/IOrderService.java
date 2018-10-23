@@ -1,19 +1,6 @@
 package com.honglu.quickcall.account.service.bussService;
 
-import com.honglu.quickcall.account.facade.exchange.request.ApplayRefundRequest;
-import com.honglu.quickcall.account.facade.exchange.request.CancelOrderRequest;
-import com.honglu.quickcall.account.facade.exchange.request.ConfirmOrderRequest;
-import com.honglu.quickcall.account.facade.exchange.request.DetailOrderRequest;
-import com.honglu.quickcall.account.facade.exchange.request.DvConfirmRefundRequest;
-import com.honglu.quickcall.account.facade.exchange.request.DvReceiveOrderRequest;
-import com.honglu.quickcall.account.facade.exchange.request.DvStartServiceRequest;
-import com.honglu.quickcall.account.facade.exchange.request.OrderDaVSkillRequest;
-import com.honglu.quickcall.account.facade.exchange.request.OrderReceiveOrderListRequest;
-import com.honglu.quickcall.account.facade.exchange.request.OrderSaveRequest;
-import com.honglu.quickcall.account.facade.exchange.request.OrderSendOrderListRequest;
-import com.honglu.quickcall.account.facade.exchange.request.PayOrderRequest;
-import com.honglu.quickcall.account.facade.exchange.request.QueryIngOrderCountRequest;
-import com.honglu.quickcall.account.facade.exchange.request.QueryRefundReasonRequest;
+import com.honglu.quickcall.account.facade.exchange.request.*;
 import com.honglu.quickcall.common.api.exchange.CommonResponse;
 
 /**
@@ -68,11 +55,11 @@ public interface IOrderService {
 	
 	
 	
-	/**
-	 * 发起的订单页--去支付
-	 * @param request
-	 */
-	public CommonResponse  payOrder(PayOrderRequest  request);
+//	/**
+//	 * 发起的订单页--去支付
+//	 * @param request
+//	 */
+//	public CommonResponse  payOrder(PayOrderRequest  request);
 	
 	
 //	/**
@@ -83,14 +70,14 @@ public interface IOrderService {
 	
 	
 	/**
-	 * 发起的订单页--申请退款/完成
+	 * 用户同意大V服务完成
 	 * @param request
 	 */
-	public CommonResponse  applayRefund(ApplayRefundRequest  request);
+	public CommonResponse  custConfirmFinish(CustConfirmFinishRequest  request);
 	
 	
 	/**
-	 * 发起的订单页--同意/拒绝
+	 * 用户同意大V立即服务
 	 * @param request
 	 */
 	public CommonResponse  confirmOrder(ConfirmOrderRequest  request);
@@ -114,10 +101,10 @@ public interface IOrderService {
 	
 	
 	/**
-	 * 收到的订单页--大V同意退款/拒绝
+	 *用户/大V完成服务
 	 * @param request
 	 */
-	public CommonResponse  dvConfirmRefund(DvConfirmRefundRequest  request);
+	public CommonResponse  finishOrder(FinishOrderRequest  request);
 	
 	//##################################大V收到的订单页相关结束##################################
 	
@@ -134,23 +121,19 @@ public interface IOrderService {
 	 * @param request
 	 */
 	public CommonResponse  queryRefundReason(QueryRefundReasonRequest  request);
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
+	/**
+	 * 订单评价页面
+	 * @param request
+	 * @return
+	 */
+	CommonResponse orderEvaluation(OrderEvaluationRequest request);
+
+	/**
+	 * 提交订单评价
+	 * @param request
+	 * @return
+	 */
+	CommonResponse submitOrderEvaluation(OrderEvaluationSubmitRequest request);
+
 }

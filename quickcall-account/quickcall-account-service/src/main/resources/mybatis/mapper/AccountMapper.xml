@@ -223,6 +223,9 @@
     <if test="type==2">
     remainder_amounts=remainder_amounts+#{amount}
     </if>
+    <if test="type==3">
+    frozen_amounts=frozen_amounts+#{amount}
+    </if>
     where customer_id = #{userId}
    
    </update>
@@ -235,6 +238,10 @@
     </if>
     <if test="type==2">
     remainder_amounts=remainder_amounts-#{amount}
+    </if>
+    <if test="type==3">
+    frozen_amounts=frozen_amounts-#{amount}  ,
+    remainder_amounts=remainder_amounts+#{amount}
     </if>
     where customer_id = #{userId}
    </update>
