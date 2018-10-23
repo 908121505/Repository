@@ -16,6 +16,11 @@ import com.calf.cn.entity.DataTables;
 import com.calf.module.order.impl.SkillPriceLevelService;
 import com.calf.module.order.vo.SkillPriceLevelVO;
 
+/**
+ * 阶梯价格管理
+ * @author zhaozheyi
+ *
+ */
 @Controller
 @RequestMapping("/skillPriceLevel")
 public class SkillPriceLevelController implements BaseController<SkillPriceLevelVO>{
