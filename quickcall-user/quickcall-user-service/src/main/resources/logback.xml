@@ -17,6 +17,14 @@
 
     <logger name="dao" level="DEBUG"/>
 
+    <!--rabbitmq的日志输出级别-->
+    <logger name="org.springframework.amqp.rabbit.listener.BlockingQueueConsumer" >
+        <level value="WARN" />
+    </logger>
+    <logger name="org.springframework.core.task.SimpleAsyncTaskExecutor"  >
+        <level value="WARN" />
+    </logger>
+
     <!-- 日志输出级别 -->
     <root level="DEBUG">
         <appender-ref ref="console" />

@@ -22,7 +22,9 @@ public class TestMq {
     private AmqpTemplate amqpTemplate;
 
     @Test
-    public void testSend(){
-        amqpTemplate.convertAndSend("userCenter-mq-exchange", "queue_userCenter_for_experience_key", "测试消息");
+    public void testSend() {
+        for (int i = 0; i < 10; i++) {
+            amqpTemplate.convertAndSend("userCenter-mq-exchange", "queue_userCenter_for_experience_key", "测试消息___" + i);
+        }
     }
 }
