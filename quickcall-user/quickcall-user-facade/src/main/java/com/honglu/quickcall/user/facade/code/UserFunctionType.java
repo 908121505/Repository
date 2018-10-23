@@ -23,6 +23,8 @@ public interface UserFunctionType {
 
 	// 阅读关注(底部tab 点击关注)
 	String readAttention = "001008";
+	// 关注未读数量
+	String NoReadAttentionCount = "001009";
 	// 系统相关 001300 - 001350
 	String MarketOnOff = "001300";
 	String AppConfig = "001301";
@@ -159,7 +161,5 @@ public interface UserFunctionType {
 	 * 插入举报
 	 */
 	String insertDelate = "0011171";
-
-
 
 }

@@ -107,9 +107,23 @@ public class Order {
 
     
     private String remark;
+    /**技能类型*/
+    private Integer  skillType;
+    
+    
 
     
-    public Long getOrderId() {
+    public Integer getSkillType() {
+		return skillType;
+	}
+
+
+	public void setSkillType(Integer skillType) {
+		this.skillType = skillType;
+	}
+
+
+	public Long getOrderId() {
         return orderId;
     }
 

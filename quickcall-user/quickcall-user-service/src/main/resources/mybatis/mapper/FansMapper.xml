@@ -24,6 +24,12 @@
   <select id="queryFansNumByCustomerId" resultType="java.lang.Long" parameterType="java.lang.Long" >
     SELECT COUNT(*) FROM fans WHERE anchor_id=#{customerId} AND attention_state=1; 
   </select>
+  
+   <select id="queryNoReadFansNumByCustomerId" resultType="java.lang.Integer" parameterType="java.lang.Long" >
+    SELECT COUNT(*) FROM fans WHERE anchor_id=#{customerId} AND attention_state=1 and read_state=0
+  </select>
+  
+  
   <select id="queryAttentionNumByCustomerId" resultType="int" parameterType="java.lang.Long" >
     SELECT COUNT(*) FROM fans WHERE fans_id=#{customerId} AND attention_state=1; 
   </select>
