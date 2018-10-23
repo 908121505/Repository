@@ -330,4 +330,14 @@
     WHERE b.`customer_id` = #{customerId}
 
   </select>
+
+  <select id="selectCountByCusIdAndBlackCusId" resultType="java.lang.Integer" >
+
+    SELECT
+   count(1)
+    FROM
+    blacklist b
+    WHERE b.`customer_id` = #{customerId} and b.`black_customer_id` = #{blackCustomerId}
+
+  </select>
 </mapper>

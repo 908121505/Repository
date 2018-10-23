@@ -59,4 +59,6 @@ public interface BlacklistMapper {
     int updateByPrimaryKey(Blacklist record);
 
     List<BlacklistVo> selectListByCustomerId(@Param("customerId") Long customerId);
+
+    int selectCountByCusIdAndBlackCusId(@Param("customerId") Long customerId, @Param("blackCustomerId") Long blackCustomerId);
 }

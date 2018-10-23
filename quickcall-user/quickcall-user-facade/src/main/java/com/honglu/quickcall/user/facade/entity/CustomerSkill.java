@@ -71,7 +71,8 @@ public class CustomerSkill {
     private String remark;
 
     /**********扩展查询字段********/
-    private String skillImageUrl;
+    private String skillBackColor;
+    private String skillFontColor;
     private String skillVoiceUrl;
     private BigDecimal skillVoiceTime;
 
@@ -320,12 +321,20 @@ public class CustomerSkill {
         this.skillStatus = skillStatus;
     }
 
-    public String getSkillImageUrl() {
-        return skillImageUrl;
+    public String getSkillBackColor() {
+        return skillBackColor;
     }
 
-    public void setSkillImageUrl(String skillImageUrl) {
-        this.skillImageUrl = skillImageUrl;
+    public void setSkillBackColor(String skillBackColor) {
+        this.skillBackColor = skillBackColor;
+    }
+
+    public String getSkillFontColor() {
+        return skillFontColor;
+    }
+
+    public void setSkillFontColor(String skillFontColor) {
+        this.skillFontColor = skillFontColor;
     }
 
     public String getSkillVoiceUrl() {
@@ -343,4 +352,5 @@ public class CustomerSkill {
     public void setSkillVoiceTime(BigDecimal skillVoiceTime) {
         this.skillVoiceTime = skillVoiceTime;
     }
+
 }

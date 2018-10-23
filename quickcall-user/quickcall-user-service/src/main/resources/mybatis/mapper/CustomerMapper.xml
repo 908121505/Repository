@@ -11,7 +11,6 @@
     <result column="type" property="type"   />
     <result column="credentials_type" property="credentialsType"   />
     <result column="credentials_num" property="credentialsNum" jdbcType="VARCHAR" />
-    <result column="interest_id" property="interestId" jdbcType="INTEGER" />
     <result column="wechat_open_id" property="wechatOpenId" jdbcType="VARCHAR" />
     <result column="qq_open_id" property="qqOpenId" jdbcType="VARCHAR" />
     <result column="microblog_open_id" property="microblogOpenId" jdbcType="VARCHAR" />
@@ -51,7 +50,7 @@
   </resultMap>
  <sql id="Base_Column_List" >
         customer_id,app_id, phone, real_name, sex, nick_name, type, credentials_type, credentials_num, 
-    interest_id, wechat_open_id, qq_open_id, microblog_open_id, occupation_id, front_portrait_url, 
+    wechat_open_id, qq_open_id, microblog_open_id, occupation_id, front_portrait_url,
     back_portrait_url, head_portrait_url, source, cust_status, cust_password, sign_name, 
     star_sign, birthday, voice_url, voice_time, v_voice_url, v_voice_url_tmp, v_voice_time_tmp, 
     v_voice_status, v_voice_time, v_status, identity_status, token_code, other_relation, 
@@ -131,40 +130,6 @@
          </if>
      </where>
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
-    delete from customer
-    where customer_id = #{customerId,jdbcType=BIGINT}
-  </delete>
-  <insert id="insert" parameterType="com.honglu.quickcall.user.facade.entity.Customer" >
-        insert into customer (customer_id, phone, real_name, 
-      sex, nick_name, type, 
-      credentials_type, credentials_num, interest_id, 
-      wechat_open_id, qq_open_id, microblog_open_id, 
-      occupation_id, front_portrait_url, back_portrait_url, 
-      head_portrait_url, source, cust_status, 
-      cust_password, sign_name, star_sign, 
-      birthday, voice_url, voice_time, 
-      v_voice_url, v_voice_url_tmp, v_voice_time_tmp, 
-      v_voice_status, v_voice_time, v_status, 
-      identity_status, token_code, other_relation, 
-      create_time, modify_time, create_man, 
-      modify_man, remark, app_channel_name, 
-      device_id, login_time)
-    values (#{customerId,jdbcType=BIGINT}, #{phone,jdbcType=BIGINT}, #{realName,jdbcType=VARCHAR}, 
-      #{sex,jdbcType=TINYINT}, #{nickName,jdbcType=VARCHAR}, #{type,jdbcType=TINYINT}, 
-      #{credentialsType,jdbcType=TINYINT}, #{credentialsNum,jdbcType=VARCHAR}, #{interestId,jdbcType=INTEGER}, 
-      #{wechatOpenId,jdbcType=VARCHAR}, #{qqOpenId,jdbcType=VARCHAR}, #{microblogOpenId,jdbcType=VARCHAR}, 
-      #{occupationId,jdbcType=INTEGER}, #{frontPortraitUrl,jdbcType=VARCHAR}, #{backPortraitUrl,jdbcType=VARCHAR}, 
-      #{headPortraitUrl,jdbcType=VARCHAR}, #{source,jdbcType=TINYINT}, #{custStatus,jdbcType=TINYINT}, 
-      #{custPassword,jdbcType=VARCHAR}, #{signName,jdbcType=VARCHAR}, #{starSign,jdbcType=CHAR}, 
-      #{birthday,jdbcType=TIMESTAMP}, #{voiceUrl,jdbcType=VARCHAR}, #{voiceTime,jdbcType=DECIMAL}, 
-      #{vVoiceUrl,jdbcType=VARCHAR}, #{vVoiceUrlTmp,jdbcType=VARCHAR}, #{vVoiceTimeTmp,jdbcType=DECIMAL}, 
-      #{voiceStatus,jdbcType=TINYINT}, #{vVoiceTime,jdbcType=DECIMAL}, #{vStatus,jdbcType=TINYINT}, 
-      #{identityStatus,jdbcType=TINYINT}, #{tokenCode,jdbcType=VARCHAR}, #{otherRelation,jdbcType=VARCHAR}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{modifyTime,jdbcType=TIMESTAMP}, #{createMan,jdbcType=VARCHAR}, 
-      #{modifyMan,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{appChannelName,jdbcType=VARCHAR}, 
-      #{deviceId,jdbcType=VARCHAR}, #{loginTime,jdbcType=TIMESTAMP})
-  </insert>
   <insert id="insertSelective" parameterType="com.honglu.quickcall.user.facade.entity.Customer" >
      insert into customer
     <trim prefix="(" suffix=")" suffixOverrides="," >
@@ -194,9 +159,6 @@
       </if>
       <if test="credentialsNum != null" >
         credentials_num,
-      </if>
-      <if test="interestId != null" >
-        interest_id,
       </if>
       <if test="wechatOpenId != null" >
         wechat_open_id,
@@ -323,9 +285,6 @@
       <if test="credentialsNum != null" >
         #{credentialsNum,jdbcType=VARCHAR},
       </if>
-      <if test="interestId != null" >
-        #{interestId,jdbcType=INTEGER},
-      </if>
       <if test="wechatOpenId != null" >
         #{wechatOpenId,jdbcType=VARCHAR},
       </if>
@@ -448,9 +407,6 @@
       <if test="credentialsNum != null" >
         credentials_num = #{credentialsNum,jdbcType=VARCHAR},
       </if>
-      <if test="interestId != null" >
-        interest_id = #{interestId,jdbcType=INTEGER},
-      </if>
       <if test="wechatOpenId != null" >
         wechat_open_id = #{wechatOpenId,jdbcType=VARCHAR},
       </if>
@@ -551,50 +507,6 @@
     </set>
     where customer_id = #{customerId,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.honglu.quickcall.user.facade.entity.Customer" >
-     update customer
-    set phone = #{phone,jdbcType=BIGINT},
-      real_name = #{realName,jdbcType=VARCHAR},
-      sex = #{sex,jdbcType=TINYINT},
-      nick_name = #{nickName,jdbcType=VARCHAR},
-      type = #{type,jdbcType=TINYINT},
-      credentials_type = #{credentialsType,jdbcType=TINYINT},
-      credentials_num = #{credentialsNum,jdbcType=VARCHAR},
-      interest_id = #{interestId,jdbcType=INTEGER},
-      wechat_open_id = #{wechatOpenId,jdbcType=VARCHAR},
-      qq_open_id = #{qqOpenId,jdbcType=VARCHAR},
-      microblog_open_id = #{microblogOpenId,jdbcType=VARCHAR},
-      occupation_id = #{occupationId,jdbcType=INTEGER},
-      front_portrait_url = #{frontPortraitUrl,jdbcType=VARCHAR},
-      back_portrait_url = #{backPortraitUrl,jdbcType=VARCHAR},
-      head_portrait_url = #{headPortraitUrl,jdbcType=VARCHAR},
-      source = #{source,jdbcType=TINYINT},
-      cust_status = #{custStatus,jdbcType=TINYINT},
-      cust_password = #{custPassword,jdbcType=VARCHAR},
-      sign_name = #{signName,jdbcType=VARCHAR},
-      star_sign = #{starSign,jdbcType=CHAR},
-      birthday = #{birthday,jdbcType=TIMESTAMP},
-      voice_url = #{voiceUrl,jdbcType=VARCHAR},
-      voice_time = #{voiceTime,jdbcType=DECIMAL},
-      v_voice_url = #{vVoiceUrl,jdbcType=VARCHAR},
-      v_voice_url_tmp = #{vVoiceUrlTmp,jdbcType=VARCHAR},
-      v_voice_time_tmp = #{vVoiceTimeTmp,jdbcType=DECIMAL},
-      v_voice_status = #{voiceStatus,jdbcType=TINYINT},
-      v_voice_time = #{vVoiceTime,jdbcType=DECIMAL},
-      v_status = #{vStatus,jdbcType=TINYINT},
-      identity_status = #{identityStatus,jdbcType=TINYINT},
-      token_code = #{tokenCode,jdbcType=VARCHAR},
-      other_relation = #{otherRelation,jdbcType=VARCHAR},
-      create_time = #{createTime,jdbcType=TIMESTAMP},
-      modify_time = #{modifyTime,jdbcType=TIMESTAMP},
-      create_man = #{createMan,jdbcType=VARCHAR},
-      modify_man = #{modifyMan,jdbcType=VARCHAR},
-      remark = #{remark,jdbcType=VARCHAR},
-      app_channel_name = #{appChannelName,jdbcType=VARCHAR},
-      device_id = #{deviceId,jdbcType=VARCHAR},
-      login_time = #{loginTime,jdbcType=TIMESTAMP}
-    where customer_id = #{customerId,jdbcType=BIGINT}
-  </update>
 
   <!--登录  -->
   <select id="login" resultMap="BaseResultMap" parameterType="com.honglu.quickcall.user.facade.entity.Customer">
@@ -635,16 +547,6 @@
     select
       customer_id, real_name, credentials_type, credentials_num,
       front_portrait_url, back_portrait_url,identity_status
-    from customer
-    where customer_id = #{customerId,jdbcType=BIGINT}
-  </select>
-  <select id="showHomePageLogout" resultType="com.honglu.quickcall.user.facade.entity.in.HomePageLogout" parameterType="java.lang.Long" >
-    select 
-    customer_id as customerId,sex, nick_name as nickname, type,credentials_num as credentialsNum,
-    interest_id as interestId,occupation_id as occupationId, front_portrait_url as frontPortraitUrl, 
-    cust_status as custStatus,sign_name as signName,head_portrait_url as headPortraitUrl,
-    star_sign as starSign, birthday, voice_url as voiceUrl, voice_time as voiceTime, v_voice_url as vVoiceUrl, v_voice_time as vVoiceTime,v_voice_status  AS  voiceStatus,v_status as vStatus, identity_status as identityStatus, token_code as tokenCode, other_relation as otherRelation 
-    
     from customer
     where customer_id = #{customerId,jdbcType=BIGINT}
   </select>

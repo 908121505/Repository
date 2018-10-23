@@ -39,7 +39,7 @@ public class BlacklistServiceimpl implements BlacklistService {
     public CommonResponse removeBlacklist(RemoveBlacklistReq params) {
         CommonResponse commonResponse = new CommonResponse();
 
-        if(params.getId() == null){
+        if (params.getId() == null) {
             throw new BizException(UserBizReturnCode.paramError, "id不能为空");
         }
 
@@ -58,7 +58,7 @@ public class BlacklistServiceimpl implements BlacklistService {
     @Override
     public CommonResponse queryBlacklist(QueryBlacklistReq params) {
         CommonResponse commonResponse = new CommonResponse();
-        if(params.getCustomerId() == null){
+        if (params.getCustomerId() == null) {
             throw new BizException(UserBizReturnCode.paramError, "customerId不能为空");
         }
 
@@ -73,11 +73,16 @@ public class BlacklistServiceimpl implements BlacklistService {
     @Override
     public CommonResponse saveBlacklist(SaveBlacklistReq params) {
         CommonResponse commonResponse = new CommonResponse();
-        if(params.getCustomerId() == null){
+        if (params.getCustomerId() == null) {
             throw new BizException(UserBizReturnCode.paramError, "customerId不能为空");
         }
-        if(params.getBlackCustomerId() == null){
+        if (params.getBlackCustomerId() == null) {
             throw new BizException(UserBizReturnCode.paramError, "blackCustomerId不能为空");
+        }
+        //先查询数据库中是否已存在
+        int count = blacklistMapper.selectCountByCusIdAndBlackCusId(params.getCustomerId(), params.getBlackCustomerId());
+        if(count > 0){
+            throw new BizException(UserBizReturnCode.paramError, "黑名单已存在");
         }
 
         Blacklist Blacklist = new Blacklist();

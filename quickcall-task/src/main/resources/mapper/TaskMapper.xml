@@ -12,7 +12,7 @@
     <select id="queryWillBeStartMessage" resultMap="OrderResultMap">
 		SELECT
 		customer_id, service_id
-		FROM order WHERE 1 =1
+		FROM orders WHERE 1 =1
 		and order_status in (2,3)
 		and start_time <![CDATA[  >= ]]> date_format(date_add(now(), interval 4 minute), '%Y-%m-%d %H:%i:00')
 		and start_time <![CDATA[  <= ]]> date_format(date_add(now(), interval 6 minute), '%Y-%m-%d %H:%i:00')

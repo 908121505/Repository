@@ -15,14 +15,20 @@ import java.util.Date;
 public class OrderSkillItemVO implements  Serializable{
 
 
+	/**技能ICON*/
+	private String  skillIcon;
 	/**用户技能ID*/
 	private Long  userSkillItemId;
 	/**技能名称*/
 	private String  skillItemName;
 	/**技能单价*/
 	private BigDecimal  price ;
+	/**折扣价格*/
+	private BigDecimal  discontPrice;
 	/**服务单位（小时/半小时/次）*/
 	private String  serviceUnit;
+	/**技能类型1：按次收费 有预约时间，2：按时间段收费 没有预约时间*/
+	private Integer  skillType;
 	public Long getUserSkillItemId() {
 		return userSkillItemId;
 	}
@@ -48,6 +54,29 @@ public class OrderSkillItemVO implements  Serializable{
 	public void setSkillItemName(String skillItemName) {
 		this.skillItemName = skillItemName;
 	}
+	public String getSkillIcon() {
+		return skillIcon;
+	}
+	public void setSkillIcon(String skillIcon) {
+		this.skillIcon = skillIcon;
+	}
+	public BigDecimal getDiscontPrice() {
+		return discontPrice;
+	}
+	public void setDiscontPrice(BigDecimal discontPrice) {
+		this.discontPrice = discontPrice;
+	}
+	public Integer getSkillType() {
+		return skillType;
+	}
+	public void setSkillType(Integer skillType) {
+		this.skillType = skillType;
+	}
+	
+	
+	
+	
+	
 	
 	
 	

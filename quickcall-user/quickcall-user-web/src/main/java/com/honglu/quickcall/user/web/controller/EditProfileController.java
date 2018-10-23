@@ -75,6 +75,18 @@ public class EditProfileController {
         return response;
     }
     /**
+     * 查询兴趣列表
+     *
+     * @return
+     */
+    @RequestMapping(value = "/queryInterestList")
+    public WebResponseModel queryInterestList() {
+        QueryInterestListReq params = new QueryInterestListReq();
+        logger.info("查询兴趣列表");
+        WebResponseModel response = userCenterService.execute(params);
+        return response;
+    }
+    /**
      * 修改兴趣
      *
      * @param params
@@ -134,6 +146,7 @@ public class EditProfileController {
         WebResponseModel response = userCenterService.execute(params);
         return response;
     }
+
 
 
 }
