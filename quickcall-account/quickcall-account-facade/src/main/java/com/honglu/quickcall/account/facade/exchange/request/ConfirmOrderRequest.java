@@ -14,11 +14,9 @@ import com.honglu.quickcall.common.api.exchange.AbstractRequest;
 public class ConfirmOrderRequest extends AbstractRequest {
     
 	
-	private static final long serialVersionUID = 2665791907859429874L;
+	private static final long serialVersionUID = 4768919318889438929L;
 	/**客户编号*/
 	private Long  orderId;
-	/**请求类型1：同意  2：拒绝*/
-	private Integer  type;
 
 
 
@@ -34,15 +32,6 @@ public class ConfirmOrderRequest extends AbstractRequest {
 
 
 
-	public Integer getType() {
-		return type;
-	}
-
-
-
-	public void setType(Integer type) {
-		this.type = type;
-	}
 
 
 
@@ -55,8 +44,11 @@ public class ConfirmOrderRequest extends AbstractRequest {
 
 	@Override
 	public String toString() {
-		return "ConfirmOrderRequest [orderId=" + orderId + ", type=" + type + "]";
+		return "ConfirmOrderRequest [orderId=" + orderId + "]";
 	}
+
+
+
 
 	
 

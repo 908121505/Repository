@@ -37,10 +37,10 @@ public interface OrderSkillConstants {
 	public static final Integer  REQUEST_DV_CONFIRM_TYPE_NO = 2 ;
 	
 	
-	/**大V请求退款类型：同意*/
-	public static final Integer  REQUEST_DV_REFUND_TYPE_YES = 1 ;
-	/**大V请求退款类型：拒绝*/
-	public static final Integer  REQUEST_DV_REFUND_TYPE_NO = 2 ;
+	/**用户请求完成服务类型：1 同意*/
+	public static final Integer  REQUEST_DV_FINISH_TYPE = 1 ;
+	/**大V请求完成服务类型：2 拒绝*/
+	public static final Integer  REQUEST_CUST_FINISH_TYPE = 2 ;
 	
 	
 	/**订单详情请求类型1：客户端*/
