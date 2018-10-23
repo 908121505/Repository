@@ -49,6 +49,12 @@ public interface OrderSkillConstants {
 	public static final Integer  REQUEST_TYPE_DV = 2 ;
 	
 	
+	/**技能类型类型1：不可重复接单*/
+	public static final Integer  SKILL_TYPE_YES = 1 ;
+	/**技能类型类型2：可重复接单*/
+	public static final Integer  SKILL_TYPE_NO = 2 ;
+	
+	
 	
 	/**订单状态2.待接单;   */
 	public static final Integer  ORDER_STATUS_WAITING_RECEIVE = 2 ;

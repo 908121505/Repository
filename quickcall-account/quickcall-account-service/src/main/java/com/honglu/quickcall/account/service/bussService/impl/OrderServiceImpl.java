@@ -187,7 +187,7 @@ public class OrderServiceImpl implements IOrderService {
 		}
 		LOGGER.info("======>>>>>saveOrder()入参："+request.toString());
 		
-//		Long  customerId =  request.getCustomerId();
+		Long  customerId =  request.getCustomerId();
 //		Long  customerSkillId =  request.getCustomerSkillId();
 //		//根据技能ID 获取等级获取价格信息
 //		CustomerSkill   customerSkill = customerSkillMapper.selectByPrimaryKey(customerSkillId);
@@ -231,9 +231,8 @@ public class OrderServiceImpl implements IOrderService {
 //		record.setOrderTime(new Date());
 //		orderMapper.insert(record);
 		CommonResponse commonResponse = commonService.getCommonResponse();
-		Integer  result =  Math.random() > 0.5 ? 1 : 2;
 		HashMap<String, String>  resultMap = new HashMap<>();
-		resultMap.put("retCode", result+"");
+		resultMap.put("retCode", customerId+"");
 		resultMap.put("downLoadStr", "13:59");
 		commonResponse.setData(resultMap);
 		LOGGER.info("======>>>>>用户编号为：" + request.getCustomerId() + "下单成功");
