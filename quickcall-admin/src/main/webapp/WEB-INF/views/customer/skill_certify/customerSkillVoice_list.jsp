@@ -1,12 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="shiro" uri="http://shiro.apache.org/tags" %>
-<shiro:hasPermission name="checkBigVVoiceAuth:select">
+<shiro:hasPermission name="customerSkillCertify:select">
 <div class="content1">
     <div class="header">
-        <h1 class="page-title">大V声音审核</h1>
+        <h1 class="page-title">大V技能审核</h1>
         <ul class="breadcrumb">
             <li>用户管理</li>
-            <li class="active">大V声音审核</li>
+            <li class="active">大V技能审核</li>
         </ul>
     </div>
 
@@ -31,8 +31,8 @@
             <div class="col-md-2">
                 <div class="form-group">
                     <div class="input-group">
-                        <div class="input-group-addon">身份证号码</div>
-                        <input class="form-control" type="text" id="credentialsNum">
+                        <div class="input-group-addon">技能名称</div>
+                        <input class="form-control" type="text" id="skillItemName">
                     </div>
                 </div>
             </div>
@@ -40,10 +40,10 @@
                 <div class="form-group">
                     <div class="input-group">
                         <%-- 0=未认证,1=待审核,2=已通过,3=拒绝 --%>
-                        <div class="input-group-addon">声音认证状态</div>
-                        <select class="form-control" id="vVoiceStatus" name="vVoiceStatus">
-                            <option value="2">待审核</option>
-                            <option value="4">已通过</option>
+                        <div class="input-group-addon">技能认证状态</div>
+                        <select class="form-control" id="auditStatus" name="auditStatus">
+                            <option value="1">待审核</option>
+                            <option value="2">已通过</option>
                             <option value="3">拒绝</option>
                             <%--<option value="0">未认证</option>--%>
                         </select>
@@ -63,7 +63,7 @@
         //表格的初始化
         $(document).ready(function () {
             var table = $('#example').initTable({
-                sAjaxSource: "checkAuth/initTable.htm",
+                sAjaxSource: "skillCertify/initTable.htm",
                 aoColumns: [
                     {
                         "data": "nickName",
@@ -76,26 +76,12 @@
                         'sClass': "text-center"
                     },
                     {
-                        "data": "credentialsNum",
-                        "sTitle": "身份证号",
+                        "data": "skillItemName",
+                        "sTitle": "技能名称",
                         'sClass': "text-center"
                     },
                     {
-                        "data": "sex",
-                        "sTitle": "性别",
-                        'sClass': "text-center",
-                        "mRender": function (data, type, full) {
-                            if (data == 0) {
-                                return "女";
-                            } else if (data == 1) {
-                                return "男";
-                            } else {
-                                return "<font color='red'>" + data + "</font>";
-                            }
-                        }
-                    },
-                    {
-                        "data": "vVoiceUrlTmp",
+                        "data": "skillVoiceUrlTmp",
                         "sTitle": "声音",
                         'sClass': "text-center",
                         "mRender": function (data, type, full) {
@@ -107,15 +93,15 @@
                         }
                     },
                     {
-                        "data": "vVoiceStatus",
+                        "data": "auditStatus",
                         "sTitle": "状态",
                         'sClass': "text-center",
                         "mRender": function (data, type, full) {
-                            if (data == 1) {
+                            if (data == 0) {
                                 return "<font color='red'>未认证</font>";
-                            } else if (data == 2) {
+                            } else if (data == 1) {
                                 return "<font color='blue'>待审核</font>";
-                            } else if (data == 4) {
+                            } else if (data == 2) {
                                 return "<font color='blue'>已通过</font>";
                             } else if (data == 3) {
                                 return "<font color='blue'>拒绝</font>";
@@ -124,22 +110,22 @@
                             }
                         }
                     }
-                    , {"data": "customerId", "sTitle": "操作", 'sClass': "text-center"}
+                    , {"data": "certifyId", "sTitle": "操作", 'sClass': "text-center"}
                 ],
                 fnServerParams: function (aoData) {  //查询条件
                     aoData.push({"name": "nickName", "value": $("#nickName").val()});
                     aoData.push({"name": "realName", "value": $("#realName").val()});
-                    aoData.push({"name": "credentialsNum", "value": $("#credentialsNum").val()});
-                    aoData.push({"name": "vVoiceStatus", "value": $("#vVoiceStatus").val()});
+                    aoData.push({"name": "skillItemName", "value": $("#skillItemName").val()});
+                    aoData.push({"name": "auditStatus", "value": $("#auditStatus").val()});
                 },
                 aoColumnDefs: [
                     {
-                        "aTargets": 6, "mRender": function (data, type, row) {
+                        "aTargets": 5, "mRender": function (data, type, row) {
                             var approved = "", refuse = "";
-                            <shiro:hasPermission name="checkBigVVoiceAuth:update">
-                            if (row.vVoiceStatus == 2) {
-                                approved = "<a href='#' onclick='approvedFn(\"" + row.customerId + "\",\"" + row.vVoiceUrlTmp + "\")' data-toggle='modal' class='padding-right-small label label-success'><i class='glyphicon glyphicon-edit'></i> 通过</a>";
-                                refuse = "<a href='#' onclick='refuseFn(\"" + row.customerId + "\",\"" + row.vVoiceUrlTmp + "\")' data-toggle='modal' class='padding-right-small label label-success'><i class='glyphicon glyphicon-edit'></i> 拒绝</a>";
+                            <shiro:hasPermission name="customerSkillCertify:update">
+                            if (row.auditStatus == 1) {
+                                approved = "<a href='#' onclick='approvedFn(\"" + row.certifyId + "\",\"" + row.skillItemName + "\")' data-toggle='modal' class='padding-right-small label label-success'><i class='glyphicon glyphicon-edit'></i> 通过</a>";
+                                refuse = "<a href='#' onclick='refuseFn(\"" + row.certifyId + "\",\"" + row.skillItemName + "\")' data-toggle='modal' class='padding-right-small label label-success'><i class='glyphicon glyphicon-edit'></i> 拒绝</a>";
                             }
                             </shiro:hasPermission>
                             return approved + "&nbsp;" + refuse;
@@ -155,7 +141,7 @@
         });
 
         function pauseVoiceFn(src) {
-            $("#vVoiceUrlTmp").val(src);
+            $("#skillVoiceUrlTmp").val(src);
             //弹出一个页面层
             layer.open({
                 type: 1,
@@ -167,28 +153,28 @@
             audioCutFn(src);
         }
 
-        function approvedFn(customerId,vVoiceUrlTmp) {
+        function approvedFn(certifyId,skillItemName) {
             if (window.confirm("确认通过审核？")) {
-                doCheck(customerId, 4,vVoiceUrlTmp);
+                doCheck(certifyId,skillItemName,2);
             }
         }
 
-        function refuseFn(customerId,vVoiceUrlTmp) {
+        function refuseFn(certifyId,skillItemName) {
             if (window.confirm("确认拒绝审核？")) {
-                doCheck(customerId, 3,vVoiceUrlTmp);
+                doCheck(certifyId,skillItemName,3);
             }
         }
 
-        function doCheck(customerId, vVoiceStatus,vVoiceUrlTmp) {
+        function doCheck(certifyId,skillItemName,status) {
             $.ajax({
-                url: "checkAuth/saveUpdate.htm",
+                url: "skillCertify/saveUpdate.htm",
                 async: false,
                 dataType: "JSON",
                 type: 'post',
                 data: {
-                    customerId: customerId,
-                    vVoiceStatus: vVoiceStatus,
-                    vVoiceUrlTmp:vVoiceUrlTmp
+                	certifyId: certifyId,
+                    skillItemName:skillItemName,
+                    auditStatus: status
                 },
                 success: function (data) {
                     if (data > 0) {

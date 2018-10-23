@@ -29,6 +29,8 @@ public class AccountBizReturnCode extends BizCode {
     public static final BizCode ORDER_PAY_BALANCE_NOT_ENOUGH = new AccountBizReturnCode("ORDER_PAY_BALANCE_NOT_ENOUGH","702", MyServiceCode.ACCOUNT,"订单状态不符合");
     /**账户不存在*/
     public static final BizCode ORDER_PAY_ACCOUNT_NOT_EXIST = new AccountBizReturnCode("ORDER_PAY_ACCOUNT_NOT_EXIST","703", MyServiceCode.ACCOUNT,"订单状态不符合");
+    /**余额不足*/
+    public static final BizCode DV_BUSYING = new AccountBizReturnCode("DV_BUSYING","704", MyServiceCode.ACCOUNT,"大V忙");
     
     
     //订单中心使用异常号段：700-799-------结束
