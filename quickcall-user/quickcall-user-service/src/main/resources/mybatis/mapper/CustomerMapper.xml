@@ -47,6 +47,8 @@
     <result column="modify_man" property="modifyMan" jdbcType="VARCHAR" />
     <result column="remark" property="remark" jdbcType="VARCHAR" />
     <result column="app_channel_name" property="appChannelName" jdbcType="VARCHAR" />
+    <result column="cumulate_experience" property="cumulateExperience" jdbcType="INTEGER" />
+    <result column="customer_level" property="customerLevel" jdbcType="INTEGER" />
     <result column="device_id" property="deviceId" jdbcType="VARCHAR" />
     <result column="login_time" property="loginTime" jdbcType="TIMESTAMP" />
   </resultMap>
@@ -56,8 +58,8 @@
     back_portrait_url, head_portrait_url, source, cust_status, cust_password, sign_name, 
     star_sign, birthday, voice_url, voice_time, v_voice_url, v_voice_url_tmp, v_voice_time_tmp, 
     v_voice_status, v_voice_time, v_status, identity_status, token_code, other_relation, 
-    create_time, modify_time, create_man, modify_man, remark, app_channel_name, device_id, 
-    login_time,gt_client_id
+    create_time, modify_time, create_man, modify_man, remark, app_channel_name,cumulate_experience,
+    customer_level, device_id, login_time,gt_client_id
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
@@ -603,7 +605,7 @@
       SET modify_time = NOW(), cumulate_experience = cumulate_experience + #{experience},
         customer_level = (
             SELECT customer_level FROM `grade`
-            WHERE cumulate_experience <![CDATA[ <= ]]> t.cumulate_experience + #{experience}
+            WHERE cumulate_experience <![CDATA[ <= ]]> t.cumulate_experience
             ORDER BY cumulate_experience DESC LIMIT 0, 1
         )
       WHERE

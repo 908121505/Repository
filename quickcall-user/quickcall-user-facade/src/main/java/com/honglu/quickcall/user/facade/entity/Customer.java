@@ -70,6 +70,10 @@ public class Customer {
 
 	private String appChannelName;
 
+	private Integer cumulateExperience;
+
+	private Integer customerLevel;
+
 	private String deviceId;
 
 	private Date loginTime;
@@ -421,5 +425,21 @@ public class Customer {
 
 	public void setLoginTime(Date loginTime) {
 		this.loginTime = loginTime;
+	}
+
+	public Integer getCumulateExperience() {
+		return cumulateExperience;
+	}
+
+	public void setCumulateExperience(Integer cumulateExperience) {
+		this.cumulateExperience = cumulateExperience;
+	}
+
+	public Integer getCustomerLevel() {
+		return customerLevel;
+	}
+
+	public void setCustomerLevel(Integer customerLevel) {
+		this.customerLevel = customerLevel;
 	}
 }

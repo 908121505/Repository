@@ -33,9 +33,9 @@ public class CustomerLevelVO implements Serializable {
      */
     private Integer customerLevel;
     /**
-     * 下一级级别
+     * 客户经验值
      */
-    private Integer nextLevel;
+    private Integer customerExperience;
     /**
      * 目前距离下一级所需经验
      */
@@ -81,12 +81,12 @@ public class CustomerLevelVO implements Serializable {
         this.customerLevel = customerLevel;
     }
 
-    public Integer getNextLevel() {
-        return nextLevel;
+    public Integer getCustomerExperience() {
+        return customerExperience;
     }
 
-    public void setNextLevel(Integer nextLevel) {
-        this.nextLevel = nextLevel;
+    public void setCustomerExperience(Integer customerExperience) {
+        this.customerExperience = customerExperience;
     }
 
     public Integer getNeedExperienceNum() {
@@ -105,7 +105,7 @@ public class CustomerLevelVO implements Serializable {
                 ", nickName='" + nickName + '\'' +
                 ", headPortraitUrl='" + headPortraitUrl + '\'' +
                 ", customerLevel=" + customerLevel +
-                ", nextLevel=" + nextLevel +
+                ", customerExperience=" + customerExperience +
                 ", needExperienceNum=" + needExperienceNum +
                 '}';
     }

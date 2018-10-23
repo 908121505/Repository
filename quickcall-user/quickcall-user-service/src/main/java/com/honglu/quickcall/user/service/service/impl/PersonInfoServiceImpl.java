@@ -729,10 +729,7 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 		if (customer.getBirthday() != null) {
 			customerCenterVO.setAge(CountAge.getAgeByBirth(customer.getBirthday()));
 		}
-
-		// 客户等级 ADUAN -- 待完成
-		customerCenterVO.setCustomerLevel(250);
-
+		customerCenterVO.setCustomerLevel(customer.getCustomerLevel());
 		customerCenterVO.setSignName(customer.getSignName());
 		customerCenterVO.setIdentityStatus(customer.getIdentityStatus());
 		customerCenterVO.setvStatus(customer.getvStatus());
@@ -769,10 +766,7 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 		if (viewCustomer.getBirthday() != null) {
 			customerHomeVO.setAge(CountAge.getAgeByBirth(viewCustomer.getBirthday()));
 		}
-
-		// 客户等级 ADUAN -- 待完成
-		customerHomeVO.setCustomerLevel(250);
-
+		customerHomeVO.setCustomerLevel(viewCustomer.getCustomerLevel());
 		customerHomeVO.setSignName(viewCustomer.getSignName());
 		customerHomeVO.setStarSign(viewCustomer.getStarSign());
 		customerHomeVO.setIdentityStatus(viewCustomer.getIdentityStatus());
@@ -823,7 +817,7 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 				customerSkill.setCustomerLabel(customerSkillMapper
 						.selectCustomerSkillHotLabel(request.getViewCustomerId(), bean.getSkillItemId()));
 
-				// ADUAN -- 声量 -- 后期在做
+				// 声量 ADUAN -- 一期前段不显示
 				customerSkill.setSkillVolume(250);
 
 				skillList.add(customerSkill);
@@ -845,15 +839,14 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 		customerLevelVO.setCustomerAppId(customer.getAppId());
 		customerLevelVO.setNickName(customer.getNickName());
 		customerLevelVO.setHeadPortraitUrl(customer.getHeadPortraitUrl());
+		customerLevelVO.setCustomerLevel(customer.getCustomerLevel());
+		customerLevelVO.setCustomerExperience(customer.getCumulateExperience());
+		// 查询记录下一级所需经验值
+//		customerLevelVO.setNeedExperienceNum(customerMapper.getNeedExperienceNum(customer.getCustomerLevel(), customer.getCumulateExperience()));
 
-		// ADUAN -- 待完成 -- 客户等级、等级特权、如何升级
-		customerLevelVO.setCustomerLevel(80);
-		customerLevelVO.setNextLevel(81);
-		customerLevelVO.setNeedExperienceNum(3000);
+		// 查询等级特权 ADUAN -- 一期不做
 
-		// 查询等级特权
-
-		// 查询如何升级
+		// 查询如何升级 ADUAN -- 一期不做
 
 		return ResultUtils.resultSuccess(customerLevelVO);
 	}
