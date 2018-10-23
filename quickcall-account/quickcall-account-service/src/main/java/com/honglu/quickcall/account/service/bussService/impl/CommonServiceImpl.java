@@ -81,6 +81,7 @@ public class CommonServiceImpl implements CommonService {
 		Date  currTime = cal.getTime();
 		Long  countDownSeconds = null ;
 		Date  endTime = null ;
+		tempVO.setOrderStatus(oldOrderStatus);
 		//待接单计算倒计时
 		if(oldOrderStatus == OrderSkillConstants.ORDER_STATUS_WAITING_RECEIVE){
 			Calendar  cal1 =  Calendar.getInstance();
