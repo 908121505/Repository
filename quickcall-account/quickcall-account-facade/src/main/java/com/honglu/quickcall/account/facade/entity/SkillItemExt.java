@@ -34,6 +34,9 @@ public class SkillItemExt {
     private Integer skillExtStatus;
     
     private BigDecimal skillExtDiscont;
+    
+    private Integer skillExtThreshold;
+    
 
     
     private Date createTime;
@@ -175,4 +178,14 @@ public class SkillItemExt {
     public void setSkillExtType(Integer skillExtType) {
         this.skillExtType = skillExtType;
     }
+
+
+	public Integer getSkillExtThreshold() {
+		return skillExtThreshold;
+	}
+
+
+	public void setSkillExtThreshold(Integer skillExtThreshold) {
+		this.skillExtThreshold = skillExtThreshold;
+	}
 }
