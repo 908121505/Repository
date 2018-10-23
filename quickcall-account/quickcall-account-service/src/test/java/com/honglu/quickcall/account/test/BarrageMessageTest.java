@@ -1,6 +1,7 @@
 package com.honglu.quickcall.account.test;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -22,11 +23,14 @@ public class BarrageMessageTest {
 		HashMap<String, Object> paramMap = new HashMap<>();
 		paramMap.put("orderId", "66c6e6cb5f064ff2bef5d651faec9be1");
 
-		String json = JSON.toJSONString(paramMap, true);
 		String params = "orderId=403be86602cb4ad0b5043623a03ea5c9";
 		String res = HttpClientUtils
 				.doPostForm("http://testfinance.51huihuahua.com/financevoice/voice/aliPayOrderQuery", params);
-
-		System.out.println(res);
+		if (res != null) {
+			Map maps = JSON.parseObject(res);
+			if (maps.get("code").equals("200")) {
+				res = JSON.parseObject(maps.get("data").toString()).get("tradeStatus").toString();
+			}
+		}
 	}
 }

@@ -14,7 +14,7 @@ public interface SkillItemExtMapper {
 
     int insertSelective(SkillItemExt record);
 
-    SkillItemExt selectByPrimaryKey(Integer id);
+    SkillItemExt selectByPrimaryKey(Long id);
     int updateByPrimaryKeySelective(SkillItemExt record);
 
     int updateByPrimaryKey(SkillItemExt record);

@@ -10,6 +10,7 @@
     <result column="back_color" property="backColor" jdbcType="VARCHAR"/>
     <result column="sort" property="sort" jdbcType="SMALLINT" />
     <result column="skill_status" property="skillStatus" jdbcType="TINYINT" />
+    <result column="skill_type" property="skillType" jdbcType="TINYINT"/>
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
     <result column="create_man" property="createMan" jdbcType="VARCHAR" />
@@ -20,7 +21,7 @@
 
 
   <sql id="Base_Column_List" >
-    id, skill_item_name, skill_describe, lock_icon,unlock_icon,back_color,font_color,sort, skill_status, create_time,
+    id, skill_item_name, skill_describe, lock_icon,unlock_icon,back_color,font_color,sort, skill_status,skill_type,create_time,
     modify_time, create_man, modify_man, remark
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
@@ -40,13 +41,13 @@
 
   <insert id="insert" parameterType="com.calf.module.order.entity.SkillItem" >
     insert into skill_item (id, skill_item_name, skill_describe, 
-      lock_icon,unlock_icon,back_color, sort,font_color,
-      skill_status, create_time, modify_time, 
+      lock_icon,unlock_icon,back_color, font_color,sort,
+      skill_status, skill_type,create_time, modify_time,
       create_man, modify_man, remark
       )
     values (#{id,jdbcType=BIGINT}, #{skillItemName,jdbcType=VARCHAR}, #{skillDescribe,jdbcType=VARCHAR}, 
       #{lockIcon,jdbcType=VARCHAR},#{unlockIcon,jdbcType=VARCHAR},#{backColor,jdbcType=VARCHAR},#{fontColor jdbcType=VARCHAR},#{sort,jdbcType=SMALLINT},
-      #{skillStatus,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP}, #{modifyTime,jdbcType=TIMESTAMP}, 
+      #{skillStatus,jdbcType=TINYINT},#{skillType,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP}, #{modifyTime,jdbcType=TIMESTAMP},
       #{createMan,jdbcType=VARCHAR}, #{modifyMan,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}
       )
   </insert>
@@ -83,6 +84,11 @@
       <if test="skillStatus != null" >
         skill_status,
       </if>
+
+      <if test="skillType != null" >
+        skill_type,
+      </if>
+
       <if test="createTime != null" >
         create_time,
       </if>
@@ -127,6 +133,10 @@
       <if test="skillStatus != null" >
         #{skillStatus,jdbcType=TINYINT},
       </if>
+      <if test="skillType != null" >
+        #{skillType,jdbcType=TINYINT},
+      </if>
+
       <if test="createTime != null" >
         #{createTime,jdbcType=TIMESTAMP},
       </if>
@@ -174,6 +184,10 @@
       <if test="skillStatus != null" >
         skill_status = #{skillStatus,jdbcType=TINYINT},
       </if>
+      <if test="skillType != null" >
+        skill_type = #{skillType,jdbcType=TINYINT},
+      </if>
+
       <if test="createTime != null" >
         create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
@@ -204,6 +218,7 @@
       font_color = #{fontColor,jdbcType=VARCHAR},
       sort = #{sort,jdbcType=SMALLINT},
       skill_status = #{skillStatus,jdbcType=TINYINT},
+      skill_type = #{skillType,jdbcType=TINYINT},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       modify_time = #{modifyTime,jdbcType=TIMESTAMP},
       create_man = #{createMan,jdbcType=VARCHAR},

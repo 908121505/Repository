@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
+import com.honglu.quickcall.account.facade.entity.Order;
 import org.apache.ibatis.annotations.Param;
 
 import com.honglu.quickcall.user.facade.entity.Customer;
@@ -60,4 +61,19 @@ public interface CustomerMapper {
 	 * @return rechargeAmounts 充值金额；withdrawAmounts 提现金额
 	 */
     Map<String, BigDecimal> queryCustomerAccountMoney(@Param("customerId") Long customerId);
+
+	/**
+	 * 查询客户的一个订单（仅查询部分字段）
+	 * @param orderId
+	 * @return
+	 */
+	Order selectCustomerOrder(@Param("orderId") Long orderId);
+
+	/**
+	 * 更新客户的经验值和等级
+	 * @param customerId
+	 * @param experience
+	 * @return
+	 */
+	int updateCustomerExperienceAndLevel(@Param("customerId") Long customerId, @Param("experience") Integer experience);
 }

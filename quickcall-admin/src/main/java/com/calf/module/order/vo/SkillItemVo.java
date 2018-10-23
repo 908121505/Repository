@@ -23,6 +23,16 @@ public class SkillItemVo {
 
     private String fontColor;
 
+    private Integer skillType;
+
+    public Integer getSkillType() {
+        return skillType;
+    }
+
+    public void setSkillType(Integer skillType) {
+        this.skillType = skillType;
+    }
+
     public String getFontColor() {
         return fontColor;
     }

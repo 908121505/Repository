@@ -3,7 +3,7 @@ package com.honglu.quickcall.account.facade.entity;
 import java.util.Date;
 
 public class SkillItem {
-	private Long id;
+	private String id;
 
 	private String skillItemName;
 
@@ -25,11 +25,61 @@ public class SkillItem {
 
 	private String remark;
 
-	public Long getId() {
+	private String lockIcon;
+
+	private String unlockIcon;
+
+	private String backColor;
+
+	private String fontColor;
+
+	private Integer skillType;
+
+	public Integer getSkillType() {
+		return skillType;
+	}
+
+	public void setSkillType(Integer skillType) {
+		this.skillType = skillType;
+	}
+
+	public String getFontColor() {
+		return fontColor;
+	}
+
+	public void setFontColor(String fontColor) {
+		this.fontColor = fontColor;
+	}
+
+	public String getLockIcon() {
+		return lockIcon;
+	}
+
+	public void setLockIcon(String lockIcon) {
+		this.lockIcon = lockIcon;
+	}
+
+	public String getUnlockIcon() {
+		return unlockIcon;
+	}
+
+	public void setUnlockIcon(String unlockIcon) {
+		this.unlockIcon = unlockIcon;
+	}
+
+	public String getBackColor() {
+		return backColor;
+	}
+
+	public void setBackColor(String backColor) {
+		this.backColor = backColor;
+	}
+
+	public String getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 

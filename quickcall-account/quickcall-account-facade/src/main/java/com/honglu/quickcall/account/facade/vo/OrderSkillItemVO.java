@@ -2,7 +2,6 @@ package com.honglu.quickcall.account.facade.vo;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.Date;
 
 /**   
  * Copyright © 2018 www.xiaoniu.com All rights reserved.
@@ -15,6 +14,7 @@ import java.util.Date;
 public class OrderSkillItemVO implements  Serializable{
 
 
+	private static final long serialVersionUID = -5599818621776972036L;
 	/**技能ICON*/
 	private String  skillIcon;
 	/**用户技能ID*/

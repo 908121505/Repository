@@ -8,5 +8,5 @@ package com.honglu.quickcall.common.api.code;
  */
 public interface MqMessageServiceCode {
     /** 客户获取经验值 -- 下单消费 **/
-    int CUSTOMER_EXPERIENCE_ORDER_COST = 1;
+    String CUSTOMER_EXPERIENCE_ORDER_COST = "100001";
 }

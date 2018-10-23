@@ -96,9 +96,9 @@ public class AccountDubboBusinessImpl implements AccountDubboBusiness {
 				response = orderService.detailOrder((DetailOrderRequest) request);
 				break;
 			/** 发起的订单页--去支付 */
-			case OrderRequestType.CUST_PAY_ORDER:
-				response = orderService.payOrder((PayOrderRequest) request);
-				break;
+//			case OrderRequestType.CUST_PAY_ORDER:
+//				response = orderService.payOrder((PayOrderRequest) request);
+//				break;
 			/** 发起的订单页--申请退款/完成 */
 			case OrderRequestType.CUST_CONFIRM_FINISH_REFUND:
 				response = orderService.custConfirmFinish((CustConfirmFinishRequest) request);
@@ -118,7 +118,7 @@ public class AccountDubboBusinessImpl implements AccountDubboBusiness {
 				break;
 			/** 收到的订单页--大V同意退款/拒绝 */
 			case OrderRequestType.DV_CONFRIM_ORDER:
-				response = orderService.dvConfirmRefund((FinishOrderRequest) request);
+				response = orderService.finishOrder((FinishOrderRequest) request);
 				break;
 			///////////////////////////
 				/** 查询进行中订单数量 */

@@ -155,6 +155,7 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 		login.setCustomerId(customer.getCustomerId());
 
 		login.setModifyTime(new Date());
+		login.setGtClientId(params.getGtClientId());
 		customerMapper.updateByPrimaryKeySelective(login);
 
 		return ResultUtils.resultSuccess(customer);
@@ -248,6 +249,7 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 		customer.setCustomerId(UUIDUtils.getId());
 		customer.setAppId(randomAppId());
 		customer.setCreateTime(new Date());
+		customer.setGtClientId(request.getGtClientId());
 		customer.setMicroblogOpenId(request.getMicroblogOpenId());
 		customer.setQqOpenId(request.getQqOpenId());
 		customer.setWechatOpenId(request.getWechatOpenId());
