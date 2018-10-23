@@ -236,6 +236,19 @@ public class DateUtils {
         }
     }
     
+    /**
+     * 获取两个时间之间的秒数
+     * @param startTime
+     * @param endTime
+     * @return
+     */
+    public static Long getDiffSeconds(Date  startTime,Date  endTime)  {
+    	if(startTime == null ||  endTime == null){
+    		return 0L;
+    	}
+    	return (endTime.getTime() -  startTime.getTime())/1000;
+    }
+    
     
 
 }

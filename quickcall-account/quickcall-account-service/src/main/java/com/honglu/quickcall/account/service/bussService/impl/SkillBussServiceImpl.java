@@ -65,7 +65,7 @@ public class SkillBussServiceImpl implements ISkillBussService {
 
 	@Override
 	public CommonResponse updateSkillInfoPersonal(SkillUpdateRequest request) {
-		if (request == null /*|| request.getCustomerId() == null*/) {
+		if (request == null ) {
 			throw new BizException(AccountBizReturnCode.paramError, "更改技能参数异常");
 		}
 		productSkillService.updateSkillInfoPersonal(request);
@@ -79,7 +79,7 @@ public class SkillBussServiceImpl implements ISkillBussService {
 
 	@Override
 	public CommonResponse getFirstPageDaVinfo(FirstPageDaVinfoRequest request) {
-		if (request == null /*|| request.getCustomerId() == null*/) {
+		if (request == null) {
 			throw new BizException(AccountBizReturnCode.paramError, "查询首页大V列表参数异常");
 		}
 		//首先查询所有的技能信息
