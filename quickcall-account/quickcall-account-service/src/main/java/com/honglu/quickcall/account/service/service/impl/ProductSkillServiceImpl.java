@@ -212,7 +212,7 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 
 
 //	@Override
-	public CustomerSkillInfoVO querySkillInfoPersonal(Long customerId) {
+	public CustomerSkillInfoVO querySkillInfoPersonalExt(Long customerId) {
 
 		CustomerSkillInfoVO resultVO = new CustomerSkillInfoVO();
 		// 获取用户技能列表信息
@@ -249,8 +249,8 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 		return resultVO;
 	}
 
-//	@Override
-	public CustomerSkillInfoVO querySkillInfoPersonalExt(Long customerId) {
+	@Override
+	public CustomerSkillInfoVO querySkillInfoPersonal(Long customerId) {
 
 		CustomerSkillInfoVO resultVO = new CustomerSkillInfoVO();
 
@@ -380,15 +380,24 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 			CustomerSkill custSkill = new CustomerSkill();
 			custSkill.setCustomerId(customerId);
 			custSkill.setCustomerSkillId(csrv.getCustomerSkillId());
-			Long  skillItemExtId = csrv.getSkillItemExtId();
-			custSkill.setSkillItemExtId(skillItemExtId);
 			Long  skillItemId = csrv.getSkillItemId();
 			//根据技能ID获取技能信息
 			SkillItem  skillItem = skillItemMapper.selectByPrimaryKey(skillItemId);
 			if(skillItem != null){
 				custSkill.setSkillName(skillItem.getSkillItemName());
 			}
-			custSkill.setDiscountRate(csrv.getDiscountRate());
+			
+			//获取价格
+			Long  skillItemExtId = csrv.getSkillItemExtId();
+			SkillItemExt  skillItemExt =  skillItemExtMapper.selectByPrimaryKey(skillItemExtId);
+			BigDecimal  skillExtPrice = skillItemExt.getSkillExtPrice() ;
+			custSkill.setSkillPrice(skillExtPrice);
+			//计算折扣价格
+			BigDecimal  discountRate = csrv.getDiscountRate();
+			custSkill.setDiscountPrice(skillExtPrice.multiply(discountRate.divide(new BigDecimal(10))));
+			
+			custSkill.setSkillItemExtId(skillItemExtId);
+			custSkill.setDiscountRate(discountRate);
 			custSkill.setSkillItemId(skillItemId);
 			custSkill.setSwitchStatus(csrv.getSwitchStatus());
 			custSkill.setMonday(monday);
@@ -403,6 +412,7 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 			custSkill.setEndTimeStr(endTimeStr);
 			updateList.add(custSkill);
 		}
+		//在技能审核的时候已经初始化用户技能信息
 		customerSkillMapper.batchUpdate(updateList);
 
 	}

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.honglu.quickcall.task.dao.TaskOrderMapper" >
+
+  
+  
+  
+  
+
+
+
+  
+
+
+
+
+<!-- 待接单订单超时 -->
+  <update id="waittingReceiveOrderOverTime" parameterType="map" >
+    
+		UPDATE 
+			orders
+		SET 
+			system_cancel_time = #{currTime}
+		 	order_status = #{updateStatus},
+		 	skill_type = #{skillType}
+		WHERE
+			order_status = #{queryStatus}
+		AND order_time > #{endTime}
+  </update>
+ 
+  
+ 
+  
+  
+  
+  
+  
+  
+</mapper>

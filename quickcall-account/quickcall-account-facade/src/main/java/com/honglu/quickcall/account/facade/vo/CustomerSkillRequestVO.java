@@ -14,10 +14,15 @@ import java.math.BigDecimal;
  */
 public class CustomerSkillRequestVO {
 
+	/**客户技能ID*/
 	private Long customerSkillId;
+	/**技能项扩展信息ID*/
 	private Long skillItemExtId;
+	/**技能项信息ID*/
 	private Long skillItemId;
+	/**开启状态*/
 	private Integer switchStatus;
+	/**选中折扣率10：无折扣   7.5  8 等*/
 	private BigDecimal  discountRate;
 	
 	
