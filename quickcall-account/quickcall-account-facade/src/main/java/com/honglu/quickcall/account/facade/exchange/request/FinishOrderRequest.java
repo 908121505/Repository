@@ -6,22 +6,19 @@ import com.honglu.quickcall.common.api.exchange.AbstractRequest;
 /**   
  * Copyright © 2018 www.xiaoniu.com All rights reserved.
  * 
- * 功能描述：客户申请退款/完成
+ * 功能描述：用户/大V完成服务
  * @Package: com.honglu.quickcall.account.facade.exchange.request 
  * @author: chenliuguang   
  * @date: 2018年9月23日 下午8:22:05 
  */
-public class ApplayRefundRequest extends AbstractRequest {
+public class FinishOrderRequest extends AbstractRequest {
     
-	private static final long serialVersionUID = -8484581694258195919L;
+	private static final long serialVersionUID = -2275579186626656793L;
 	/**客户编号*/
 	private Long  orderId;
-	/**请求类型1：退款 2：完成*/
+	/**请求类型1：大V发起   2：用户发起  */
 	private Integer  type;
-	/**退款理由*/
-	private String  refundReason;
 
-	
 
 
 	public Long getOrderId() {
@@ -29,9 +26,11 @@ public class ApplayRefundRequest extends AbstractRequest {
 	}
 
 
+
 	public void setOrderId(Long orderId) {
 		this.orderId = orderId;
 	}
+
 
 
 	public Integer getType() {
@@ -39,25 +38,23 @@ public class ApplayRefundRequest extends AbstractRequest {
 	}
 
 
+
 	public void setType(Integer type) {
 		this.type = type;
 	}
-	
 
-
-	public String getRefundReason() {
-		return refundReason;
-	}
-
-
-	public void setRefundReason(String refundReason) {
-		this.refundReason = refundReason;
-	}
 
 
 	@Override
 	public String getBizCode() {
-		return OrderRequestType.CUST_APPLAY_REFUND;
+		return OrderRequestType.DV_CONFRIM_ORDER;
+	}
+
+
+
+	@Override
+	public String toString() {
+		return "DvConfirmRefundRequest [orderId=" + orderId + ", type=" + type + "]";
 	}
 
 

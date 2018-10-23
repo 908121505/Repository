@@ -112,9 +112,9 @@ public class OrderController {
      * @param params
      * @return
      */
-    @RequestMapping(value = "/applayRefund", method = RequestMethod.POST)
+    @RequestMapping(value = "/custConfirmFinish", method = RequestMethod.POST)
     @ResponseBody
-    public WebResponseModel applayRefund( /* @RequestBody */ ApplayRefundRequest params) {
+    public WebResponseModel custConfirmFinish( /* @RequestBody */ CustConfirmFinishRequest params) {
     	WebResponseModel response = orderInfoService.execute(params);
     	return response;
     }
@@ -153,13 +153,13 @@ public class OrderController {
     	return response;
     }
     /**
-     * 收到的订单页--大V同意退款/拒绝
+     * 用户/大V完成服务
      * @param params
      * @return
      */
-    @RequestMapping(value = "/dvConfirmRefund", method = RequestMethod.POST)
+    @RequestMapping(value = "/finishOrder", method = RequestMethod.POST)
     @ResponseBody
-    public WebResponseModel dvConfirmRefund( /* @RequestBody */ DvConfirmRefundRequest params) {
+    public WebResponseModel finishOrder( /* @RequestBody */ FinishOrderRequest params) {
     	WebResponseModel response = orderInfoService.execute(params);
     	return response;
     }

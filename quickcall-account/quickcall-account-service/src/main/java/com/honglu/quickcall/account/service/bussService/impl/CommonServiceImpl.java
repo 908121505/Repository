@@ -66,14 +66,11 @@ public class CommonServiceImpl implements CommonService {
 	}
 
 	@Override
-	public void updateOrder(Long orderId, Integer orderStatus,String  refundReason) {
+	public void updateOrder(Long orderId, Integer orderStatus) {
 		Order record = new Order();
 		record.setOrderStatus(orderStatus);
 		record.setOrderId(orderId);
 		record.setModifyTime(new Date());
-		if(StringUtils.isNotBlank(refundReason)){
-//			record.setRefundReason(refundReason);
-		}
 		//修改订单状态为：已支付
 		orderMapper.updateByPrimaryKeySelective(record);
 	}
