@@ -58,7 +58,6 @@ public class CustomerGetExperienceServiceImpl implements CustomerGetExperienceSe
     }
 
     private boolean ifDoneOrder(Integer orderStatus) {
-        // ADUAN -- 订单状态改变后，记得更新
         return Objects.equals(orderStatus, OrderSkillConstants.ORDER_STATUS_FINISHED_USER_ACCEPCT) // 30.已完成（用户同意对方）
                 || Objects.equals(orderStatus, OrderSkillConstants.ORDER_STATUS_FINISH_DV_FINISH) // 32.已完成（大V发起已完成服务，12小时客户不响应自动完成）
                 || Objects.equals(orderStatus, OrderSkillConstants.ORDER_STATUS_GOING_USRE_APPAY_FINISH) // 34.已完成（用户发起完成服务）
