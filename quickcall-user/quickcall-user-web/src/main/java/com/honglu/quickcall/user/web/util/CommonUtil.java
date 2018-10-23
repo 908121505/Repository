@@ -2,6 +2,7 @@ package com.honglu.quickcall.user.web.util;
 
 import com.aliyun.oss.OSSClient;
 import com.honglu.quickcall.common.api.exchange.WebResponseModel;
+import com.honglu.quickcall.common.core.util.StringUtil;
 import com.honglu.quickcall.common.core.util.UUIDUtils;
 import com.honglu.quickcall.common.third.OSS.OSSUtil;
 import com.honglu.quickcall.user.facade.code.UserBizReturnCode;
@@ -99,6 +100,11 @@ public class CommonUtil {
             if (file == null || file.isEmpty()) {
                 response.setCode(UserBizReturnCode.paramError.code());
                 response.setMsg("文件为空");
+                return response;
+            }
+            if (StringUtil.isBlank(diskName)) {
+                response.setCode(UserBizReturnCode.paramError.code());
+                response.setMsg("存放磁盘路径为空");
                 return response;
             }
             // 提取文件后缀名

@@ -149,6 +149,18 @@ public interface UserFunctionType {
 	 * 添加黑名单
 	 */
 	String saveBlacklist = "0011162";
+	/**
+	 * 修改性别
+	 */
+	String updateGender = "0011163";
+	/**
+	 * 修改年龄
+	 */
+	String updateBirthday = "0011164";
+	/**
+	 * 编辑资料页面数据展示
+	 */
+	String queryUserEditInfo = "0011165";
 
 	/**
 	 * 查询所有非其他原因的举报

@@ -1,6 +1,10 @@
 package com.honglu.quickcall.user.web.controller;
 
+import com.honglu.quickcall.common.api.code.AliYunFilePaths;
 import com.honglu.quickcall.common.api.exchange.WebResponseModel;
+import com.honglu.quickcall.common.core.util.StringUtil;
+import com.honglu.quickcall.user.facade.code.UserBizReturnCode;
+import com.honglu.quickcall.user.web.type.AppearanceTypeEnum;
 import com.honglu.quickcall.user.web.util.CommonUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,10 +31,33 @@ public class FileController {
     public WebResponseModel upload(HttpServletRequest request) {
         MultipartHttpServletRequest multiRequest = (MultipartHttpServletRequest) request;
         MultipartFile file = multiRequest.getFile("file");
-        String diskUrl = request.getParameter("diskUrl");
-        logger.info("上传文件 diskUrl = " + diskUrl + ", fileNames = " + file.getOriginalFilename());
+        String fileType = request.getParameter("fileType");
+        logger.info("上传文件 fileType = " + fileType + ", fileNames = " + file.getOriginalFilename());
 
-        WebResponseModel response = CommonUtil.uploadFile(request, diskUrl);
+        if (StringUtil.isBlank(fileType)) {
+            WebResponseModel response = new WebResponseModel();
+            response.setCode(UserBizReturnCode.paramError.code());
+            response.setMsg("存放磁盘路径为空");
+            return response;
+        }
+        if (file == null || file.isEmpty()) {
+            WebResponseModel response = new WebResponseModel();
+            response.setCode(UserBizReturnCode.paramError.code());
+            response.setMsg("文件为空");
+            return response;
+        }
+
+        Integer fileTypeInt = Integer.parseInt(fileType);
+        //文件上传到服务器上的路径
+        String directory = "";
+        if((AppearanceTypeEnum.APPEARANCE.getCode()).equals(fileTypeInt)){
+            directory = AliYunFilePaths.USER_APPEARANCE_DIR;
+        }else if((AppearanceTypeEnum.HEAD_PORTRAIT.getCode()).equals(fileTypeInt)){
+            directory = AliYunFilePaths.USER_UPLOAD_HEAD_IMG;
+        }else if((AppearanceTypeEnum.VOICE_IDENTIFICATION_CARD.getCode()).equals(fileTypeInt)){
+            directory = AliYunFilePaths.USER_VOICE_IDENTIFICATION_CARD_DIR;
+        }
+        WebResponseModel response = CommonUtil.uploadFile(request, directory);
         return response;
     }
 }

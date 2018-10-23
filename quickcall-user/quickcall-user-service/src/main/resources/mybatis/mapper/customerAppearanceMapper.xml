@@ -135,6 +135,9 @@ id,	customer_id,	audit_appearance,	appearance,	type,	audit_status,	sort,	status,
 			<if test="appearance != null">
 				appearance = #{appearance},
 			</if>
+			<if test="auditStatus != null">
+				audit_status = #{auditStatus},
+			</if>
 
 				modify_time = now()
 

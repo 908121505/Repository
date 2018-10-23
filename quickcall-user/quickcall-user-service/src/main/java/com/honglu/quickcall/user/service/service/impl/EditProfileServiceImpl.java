@@ -236,7 +236,7 @@ public class EditProfileServiceImpl implements EditProfileService {
         CustomerAppearance customerAppearance = customerAppearanceMapper.selectByCustomerIdAndType(params.getCustomerId(), AppearanceTypeEnum.HEAD_PORTRAIT.getCode());
         if (null != customerAppearance) {
             customerAppearance.setAuditAppearance(params.getHeadPortraitUrl());
-
+            customerAppearance.setAuditStatus(0);
             result = customerAppearanceMapper.updateAppearance(customerAppearance);
             logger.info("修改头像 updateHeadPortrait,更新数量" + result);
 
@@ -272,7 +272,8 @@ public class EditProfileServiceImpl implements EditProfileService {
         }
 
         CustomerAppearance customerAppearance = new CustomerAppearance();
-        customerAppearance.setId(UUIDUtils.getId());
+        Long id = UUIDUtils.getId();
+        customerAppearance.setId(id);
         customerAppearance.setCustomerId(params.getCustomerId());
         customerAppearance.setAuditAppearance(params.getAppearance());
         customerAppearance.setType(AppearanceTypeEnum.APPEARANCE.getCode());
@@ -281,6 +282,7 @@ public class EditProfileServiceImpl implements EditProfileService {
         if (result > 0) {
             commonResponse.setCode(UserBizReturnCode.Success);
             commonResponse.setMessage(UserBizReturnCode.Success.desc());
+            commonResponse.setData(id);
             return commonResponse;
         } else {
             logger.error("修改形象照 异常");
@@ -325,7 +327,7 @@ public class EditProfileServiceImpl implements EditProfileService {
         CustomerAppearance customerAppearance = customerAppearanceMapper.selectByCustomerIdAndType(params.getCustomerId(), AppearanceTypeEnum.VOICE_IDENTIFICATION_CARD.getCode());
         if (null != customerAppearance) {
             customerAppearance.setAuditAppearance(params.getVoiceIdentificationCard());
-// TODO: 2018/10/23 照片更新的时候记得指定审核状态，还有其他几个地方 created by chenpeng
+            customerAppearance.setAuditStatus(0);
             result = customerAppearanceMapper.updateAppearance(customerAppearance);
             logger.info("修改声鉴卡 updateVoiceIdentificationCard,更新数量" + result);
 
