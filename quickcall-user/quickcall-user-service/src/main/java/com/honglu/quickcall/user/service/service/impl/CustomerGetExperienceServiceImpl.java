@@ -45,19 +45,19 @@ public class CustomerGetExperienceServiceImpl implements CustomerGetExperienceSe
 
         // 查询下单人
         Customer customer = customerMapper.selectByPrimaryKey(order.getCustomerId());
-        if(customer == null){
+        if (customer == null) {
             LOGGER.warn("客户下单消费获取经验值 -- 未查询到客户信息，客户ID：" + order.getCustomerId());
             return;
         }
         // 计算客户需要获取的经验值
         Integer experience = order.getOrderAmounts().multiply(new BigDecimal(100)).intValue();
 
+        LOGGER.info("客户下单获取经验值--客户ID：" + customer.getCustomerId() + " ， 增加经验值：" + experience);
         // 更新用户经验值和等级
         customerMapper.updateCustomerExperienceAndLevel(customer.getCustomerId(), experience);
     }
 
     private boolean ifDoneOrder(Integer orderStatus) {
-        // ADUAN -- 订单状态改变后，记得更新
         return Objects.equals(orderStatus, OrderSkillConstants.ORDER_STATUS_FINISHED_USER_ACCEPCT) // 30.已完成（用户同意对方）
                 || Objects.equals(orderStatus, OrderSkillConstants.ORDER_STATUS_FINISH_DV_FINISH) // 32.已完成（大V发起已完成服务，12小时客户不响应自动完成）
                 || Objects.equals(orderStatus, OrderSkillConstants.ORDER_STATUS_GOING_USRE_APPAY_FINISH) // 34.已完成（用户发起完成服务）

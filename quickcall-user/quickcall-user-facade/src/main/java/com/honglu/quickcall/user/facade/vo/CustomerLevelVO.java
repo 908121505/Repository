@@ -33,13 +33,21 @@ public class CustomerLevelVO implements Serializable {
      */
     private Integer customerLevel;
     /**
-     * 下一级级别
+     * 客户经验值
      */
-    private Integer nextLevel;
+    private Integer customerExperience;
     /**
      * 目前距离下一级所需经验
      */
     private Integer needExperienceNum;
+    /**
+     * 当前等级累计经验值
+     */
+    private Integer currentLevelExperience;
+    /**
+     * 下一等级累计经验值
+     */
+    private Integer nextLevelExperience;
 
     public Long getCustomerId() {
         return customerId;
@@ -81,12 +89,12 @@ public class CustomerLevelVO implements Serializable {
         this.customerLevel = customerLevel;
     }
 
-    public Integer getNextLevel() {
-        return nextLevel;
+    public Integer getCustomerExperience() {
+        return customerExperience;
     }
 
-    public void setNextLevel(Integer nextLevel) {
-        this.nextLevel = nextLevel;
+    public void setCustomerExperience(Integer customerExperience) {
+        this.customerExperience = customerExperience;
     }
 
     public Integer getNeedExperienceNum() {
@@ -97,6 +105,22 @@ public class CustomerLevelVO implements Serializable {
         this.needExperienceNum = needExperienceNum;
     }
 
+    public Integer getCurrentLevelExperience() {
+        return currentLevelExperience;
+    }
+
+    public void setCurrentLevelExperience(Integer currentLevelExperience) {
+        this.currentLevelExperience = currentLevelExperience;
+    }
+
+    public Integer getNextLevelExperience() {
+        return nextLevelExperience;
+    }
+
+    public void setNextLevelExperience(Integer nextLevelExperience) {
+        this.nextLevelExperience = nextLevelExperience;
+    }
+
     @Override
     public String toString() {
         return "CustomerLevelVO{" +
@@ -105,8 +129,10 @@ public class CustomerLevelVO implements Serializable {
                 ", nickName='" + nickName + '\'' +
                 ", headPortraitUrl='" + headPortraitUrl + '\'' +
                 ", customerLevel=" + customerLevel +
-                ", nextLevel=" + nextLevel +
+                ", customerExperience=" + customerExperience +
                 ", needExperienceNum=" + needExperienceNum +
+                ", currentLevelExperience=" + currentLevelExperience +
+                ", nextLevelExperience=" + nextLevelExperience +
                 '}';
     }
 }

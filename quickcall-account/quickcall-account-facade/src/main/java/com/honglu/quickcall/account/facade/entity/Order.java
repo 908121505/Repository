@@ -110,10 +110,32 @@ public class Order {
     /**技能类型*/
     private Integer  skillType;
     
+    private String selectReason;
+    private String remarkReason;
     
 
     
-    public Integer getSkillType() {
+    public String getSelectReason() {
+		return selectReason;
+	}
+
+
+	public void setSelectReason(String selectReason) {
+		this.selectReason = selectReason;
+	}
+
+
+	public String getRemarkReason() {
+		return remarkReason;
+	}
+
+
+	public void setRemarkReason(String remarkReason) {
+		this.remarkReason = remarkReason;
+	}
+
+
+	public Integer getSkillType() {
 		return skillType;
 	}
 

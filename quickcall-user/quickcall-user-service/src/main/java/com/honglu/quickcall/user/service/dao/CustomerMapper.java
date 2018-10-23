@@ -78,6 +78,13 @@ public interface CustomerMapper {
 	 */
 	int updateCustomerExperienceAndLevel(@Param("customerId") Long customerId, @Param("experience") Integer experience);
 
+	/**
+	 * 查询等级累计经验值
+	 * @param customerLevel
+	 * @return
+	 */
+	Integer getGradeExperienceByLevelNo(@Param("customerLevel") Integer customerLevel);
+
 
 	/**
 	 * 编辑资料页面 查询用户数据

@@ -1,9 +1,7 @@
 //package com.honglu.quickcall.task.job;
 //
-//import java.util.ArrayList;
 //import java.util.Calendar;
 //import java.util.Date;
-//import java.util.List;
 //
 //import org.slf4j.Logger;
 //import org.slf4j.LoggerFactory;
@@ -13,7 +11,6 @@
 //
 //import com.honglu.quickcall.account.facade.constants.OrderSkillConstants;
 //import com.honglu.quickcall.task.dao.TaskOrderMapper;
-//import com.honglu.quickcall.task.entity.TaskOrder;
 //
 ///**
 // * 
@@ -35,6 +32,8 @@
 //
 //    /**默认超时分钟数*/
 //    private final static  Integer   RECEIVE_OVER_TIME_MINUTES = 15;
+//    /**立即服务超时分钟数*/
+//    private final static  Integer   START_OVER_TIME_MINUTES = 5;
 //
 //    
 //    //接单设置
@@ -51,15 +50,30 @@
 //    		cal.add(Calendar.MINUTE, RECEIVE_OVER_TIME_MINUTES);
 //    		Date  endTime =  cal.getTime();
 //    		
+//    		Integer skillType = OrderSkillConstants.SKILL_TYPE_NO; 
 //    		//获取接单设置超时
-//    		List<Integer>  statusList =  new ArrayList<Integer>();
-//    		Integer  orderStatus = OrderSkillConstants.ORDER_STATUS_WAITING_RECEIVE;
+//    		Integer  queryStatus = OrderSkillConstants.ORDER_STATUS_WAITING_RECEIVE;
+//    		Integer  updateStatus = OrderSkillConstants.ORDER_STATUS_CANCEL_SYSTEM_NOT_RECEIVE;
+//			taskOrderMapper.waittingReceiveOrderOverTime(currTime, endTime, queryStatus, updateStatus, skillType);
 //    		
-//    		List<TaskOrder>  result = taskOrderMapper.getOverTimeOrderList(currTime, statusList);
-//    		
-//    		
-//    		
-//    		
+//			//大V未发起立即服务超时
+//    		cal = Calendar.getInstance();
+//    		cal.setTime(currTime);
+//    		cal.add(Calendar.MINUTE, START_OVER_TIME_MINUTES);
+//    		endTime =  cal.getTime();
+//    		queryStatus = OrderSkillConstants.ORDER_STATUS_WAITING_START;
+//    		updateStatus = OrderSkillConstants.ORDER_STATUS_CANCEL_NOT_START;
+//			taskOrderMapper.startOrderOverTime(currTime, endTime, queryStatus, updateStatus, skillType);
+//			
+//			
+//			//用户未接立即服务超时
+//			cal = Calendar.getInstance();
+//			cal.setTime(currTime);
+//			cal.add(Calendar.MINUTE, START_OVER_TIME_MINUTES);
+//			endTime =  cal.getTime();
+//			queryStatus = OrderSkillConstants.ORDER_STATUS_WAITING_START;
+//			updateStatus = OrderSkillConstants.ORDER_STATUS_CANCEL_NOT_START;
+//			taskOrderMapper.startOrderOverTime(currTime, endTime, queryStatus, updateStatus, skillType);
 //    		
 //    		
 //    		

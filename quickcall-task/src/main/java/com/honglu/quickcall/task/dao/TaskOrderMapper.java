@@ -1,9 +1,6 @@
 package com.honglu.quickcall.task.dao;
 
 import java.util.Date;
-import java.util.List;
-
-import com.honglu.quickcall.task.entity.TaskOrder;
 
 public interface TaskOrderMapper {
    
@@ -13,6 +10,14 @@ public interface TaskOrderMapper {
 	 * @param statusList
 	 * @return
 	 */
-	void  waittingReceiveOrderOverTime(Date  currTime,Date  endTime);
+	void  waittingReceiveOrderOverTime(Date  currTime,Date  endTime,Integer queryStatus ,Integer  updateStatus,Integer  skillT);
+	
+	/**
+	 * 获取特定状态符合条件的记录
+	 * @param currTime
+	 * @param statusList
+	 * @return
+	 */
+	void  startOrderOverTime(Date  currTime,Date  endTime,Integer queryStatus ,Integer  updateStatus,Integer  skillT);
 
 }

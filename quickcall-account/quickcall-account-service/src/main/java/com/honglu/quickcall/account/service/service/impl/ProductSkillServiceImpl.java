@@ -211,8 +211,8 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 	
 
 
-//	@Override
-	public CustomerSkillInfoVO querySkillInfoPersonalExt(Long customerId) {
+	@Override
+	public CustomerSkillInfoVO querySkillInfoPersonal(Long customerId) {
 
 		CustomerSkillInfoVO resultVO = new CustomerSkillInfoVO();
 		// 获取用户技能列表信息
@@ -238,6 +238,7 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 			skillVO.setOldServiceUnit(custSkill.getServiceUnit());
 			skillVO.setSkillItemName(custSkill.getSkillName());
 			skillVO.setSwitchStatus(custSkill.getSwitchStatus());
+			skillVO.setOldSkillPrice(custSkill.getDiscountPrice());
 			// 根据技能ID获取可选技能信息
 			Long skillItemId = custSkill.getSkillItemId();
 			getSkillExtList(skillItemId,skillVO);
@@ -249,8 +250,8 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 		return resultVO;
 	}
 
-	@Override
-	public CustomerSkillInfoVO querySkillInfoPersonal(Long customerId) {
+//	@Override
+	public CustomerSkillInfoVO querySkillInfoPersonalExt(Long customerId) {
 
 		CustomerSkillInfoVO resultVO = new CustomerSkillInfoVO();
 
@@ -395,8 +396,9 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 			//计算折扣价格
 			BigDecimal  discountRate = csrv.getDiscountRate();
 			custSkill.setDiscountPrice(skillExtPrice.multiply(discountRate.divide(new BigDecimal(10))));
-			
+			custSkill.setSkillRange(skillItemExt.getSkillExtRange());
 			custSkill.setSkillItemExtId(skillItemExtId);
+			custSkill.setServiceUnit(skillItemExt.getSkillExtUnit());
 			custSkill.setDiscountRate(discountRate);
 			custSkill.setSkillItemId(skillItemId);
 			custSkill.setSwitchStatus(csrv.getSwitchStatus());

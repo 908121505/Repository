@@ -30,6 +30,9 @@
     from skill_item
     where id = #{id,jdbcType=BIGINT}
   </select>
+  <select id="selectAllSkillItem" resultType="map">
+  	select id as skillItemId,skill_item_name as skillItemName from skill_item 
+  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
     delete from skill_item
     where id = #{id,jdbcType=BIGINT}
