@@ -611,4 +611,10 @@
       WHERE
       customer_id = #{customerId}
   </update>
+
+  <!-- 查询客户距离下一级所需经验值 -->
+  <select id="getNeedExperienceNum" resultType="int">
+    SELECT cumulate_experience - #{cumulateExperience}
+    FROM grade where customer_level = #{customerLevel} + 1
+  </select>
 </mapper>
