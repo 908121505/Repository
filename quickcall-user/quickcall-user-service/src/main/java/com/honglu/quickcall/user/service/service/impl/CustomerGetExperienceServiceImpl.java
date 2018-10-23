@@ -45,13 +45,14 @@ public class CustomerGetExperienceServiceImpl implements CustomerGetExperienceSe
 
         // 查询下单人
         Customer customer = customerMapper.selectByPrimaryKey(order.getCustomerId());
-        if(customer == null){
+        if (customer == null) {
             LOGGER.warn("客户下单消费获取经验值 -- 未查询到客户信息，客户ID：" + order.getCustomerId());
             return;
         }
         // 计算客户需要获取的经验值
         Integer experience = order.getOrderAmounts().multiply(new BigDecimal(100)).intValue();
 
+        LOGGER.info("客户下单获取经验值--客户ID：" + customer.getCustomerId() + " ， 增加经验值：" + experience);
         // 更新用户经验值和等级
         customerMapper.updateCustomerExperienceAndLevel(customer.getCustomerId(), experience);
     }
