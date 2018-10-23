@@ -3,7 +3,6 @@ package com.honglu.quickcall.user.service.mq.push;
 
 import com.honglu.quickcall.common.api.code.MqMessageServiceCode;
 import com.honglu.quickcall.user.facade.exchange.UserCenterRequest;
-import com.honglu.quickcall.user.facade.exchange.mqrequest.DoOrderCastMqRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.core.AmqpTemplate;
