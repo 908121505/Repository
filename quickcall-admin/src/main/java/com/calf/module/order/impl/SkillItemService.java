@@ -89,5 +89,9 @@ public class SkillItemService {
         }
         return map;
     }
-
+    
+    public List<Map<String,Object>> getAllSkillItem(){
+    	 List<Map<String, Object>> skillList = baseManager.query("SkillItem.selectAllSkillItem", null);
+    	 return skillList;
+    }
 }
