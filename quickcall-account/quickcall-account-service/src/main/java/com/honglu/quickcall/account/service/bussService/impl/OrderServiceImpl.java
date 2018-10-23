@@ -161,55 +161,18 @@ public class OrderServiceImpl implements IOrderService {
 				OrderSkillItemVO  vo =  new OrderSkillItemVO();
 				vo.setPrice(skill.getSkillPrice());
 				vo.setDiscontPrice(skill.getDiscountPrice());
-				vo.setUserSkillItemId(1000L);
+				vo.setUserSkillItemId(skill.getCustomerSkillId());
+				Long skillItemId = skill.getSkillItemId();
+				SkillItem  skillItem = skillItemMapper.selectByPrimaryKey(skillItemId);
+				vo.setSkillType(skillItem.getSkillType());
+				vo.setSkillIcon(skillItem.getUnlockIcon());
+				vo.setServiceUnit(skill.getServiceUnit());
+				vo.setSkillItemName(skillItem.getSkillItemName());
+				custSkillList.add(vo);
 			}
-			
-			
-			
 		}
 		
-		
-		
-		
-		
-		
-		
-		for (int i = 0; i < 3; i++) {
-			OrderSkillItemVO  vo =  new OrderSkillItemVO();
-			vo.setPrice(new BigDecimal(10 *(i +1)));
-			vo.setDiscontPrice(new BigDecimal(10 *(i +1)));
-			vo.setUserSkillItemId(1000L);
-			String  serviceUnit  = null ;
-			String  skillIcon = null ;
-			Integer  skillType = 1 ; 
-			String  skillItemName  = "哄睡" ;
-			if(i == 0){
-				skillType = 1 ; 
-				skillIcon  = "http://test-guanjia.oss-cn-shanghai.aliyuncs.com/voice/skill/1540189000614.png" ;
-				skillItemName  = "哄睡" ;
-				serviceUnit = "半小时";
-			}else if (i == 1){
-				skillType = 2 ;
-				skillIcon  = "http://test-guanjia.oss-cn-shanghai.aliyuncs.com/voice/skill/1540189035478.png" ;
-				skillItemName  = "情感咨询" ;
-				serviceUnit = "小时";
-			}else{
-				skillType = 1 ;
-				skillIcon  = "http://test-guanjia.oss-cn-shanghai.aliyuncs.com/voice/skill/1540189035478.png" ;
-				skillItemName  = "叫醒" ;
-				serviceUnit = "次";
-				
-			}
-			vo.setSkillType(skillType);
-			vo.setSkillIcon(skillIcon);
-			vo.setServiceUnit(serviceUnit);
-			vo.setSkillItemName(skillItemName);
-			custSkillList.add(vo);
-		}
 		resultVO.setCustSkillList(custSkillList );
-		
-		
-		
 		CommonResponse commonResponse = commonService.getCommonResponse();
 		commonResponse.setData(resultVO);
 		LOGGER.info("======>>>>>用户编号为：" + request.getCustomerId() + "查询成功");

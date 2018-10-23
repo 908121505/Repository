@@ -1,17 +1,13 @@
 package com.honglu.quickcall.account.service.bussService.impl;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.honglu.quickcall.account.facade.constants.OrderSkillConstants;
 import com.honglu.quickcall.account.facade.entity.Order;
-import com.honglu.quickcall.account.facade.entity.Skill;
 import com.honglu.quickcall.account.facade.vo.OrderTempResponseVO;
 import com.honglu.quickcall.account.service.bussService.CommonService;
 import com.honglu.quickcall.account.service.dao.OrderMapper;
@@ -37,25 +33,7 @@ public class CommonServiceImpl implements CommonService {
 		 return commonResponse;
 	}
 
-	@Override
-	public List<BigDecimal> getPriceList(Skill skill) {
-		List<BigDecimal>   retList =  new  ArrayList<BigDecimal>();
-		BigDecimal  maxPrice = skill.getMaxPrice();
-		BigDecimal  minPrice = skill.getMinPrice();
-		BigDecimal  priceStep = skill.getPriceStep();
-		
-		retList.add(minPrice);
-		BigDecimal   tempPrice =  minPrice;
-		for (;;) {
-			tempPrice =  tempPrice.add(priceStep);
-			if(tempPrice.compareTo(maxPrice) <= 0){
-				retList.add(tempPrice);
-			}else{
-				break;
-			}
-		}
-		return retList ;
-	}
+
 
 	@Override
 	public void pushMessage(PushAppMsgTypeEnum msgType,Long  sellerId,Long  customerId) {
