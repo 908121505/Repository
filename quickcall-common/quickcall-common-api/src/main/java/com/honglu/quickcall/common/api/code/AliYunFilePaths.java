@@ -43,4 +43,12 @@ public class AliYunFilePaths {
      * 大V技能认证声音文件存放路径
      */
     public static final String CUSTOMER_SKILL_CERTIFY_AUDIO = ROOT_PATH + "user/skillVoice";
+    /**
+     * 用户形象照文件存放路径
+     */
+    public static final String USER_APPEARANCE_DIR = ROOT_PATH + "user/appearance";
+    /**
+     * 用户声鉴卡文件存放路径
+     */
+    public static final String USER_VOICE_IDENTIFICATION_CARD_DIR = ROOT_PATH + "user/voiceIdentificationCard";
 }

@@ -147,6 +147,42 @@ public class EditProfileController {
         return response;
     }
 
+    /**
+     * 修改性别
+     *
+     * @param params
+     * @return
+     */
+    @PostMapping(value = "/updateGender")
+    public WebResponseModel updateGender(@RequestBody UpdateGenderReq params) {
+        logger.info("修改性别 请求参数：" + params.toString());
+        WebResponseModel response = userCenterService.execute(params);
+        return response;
+    }
+    /**
+     * 修改年龄
+     *
+     * @param params
+     * @return
+     */
+    @PostMapping(value = "/updateBirthday")
+    public WebResponseModel updateBirthday(@RequestBody UpdateBirthdayReq params) {
+        logger.info("修改年龄 请求参数：" + params.toString());
+        WebResponseModel response = userCenterService.execute(params);
+        return response;
+    }
+    /**
+     * 编辑资料页面，查询用户信息
+     *
+     * @param params
+     * @return
+     */
+    @PostMapping(value = "/queryUserEditInfo")
+    public WebResponseModel queryUserEditInfo(@RequestBody QueryUserEditInfoReq params) {
+        logger.info("编辑资料页面，查询用户信息 请求参数：" + params.toString());
+        WebResponseModel response = userCenterService.execute(params);
+        return response;
+    }
 
 
 }
