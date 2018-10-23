@@ -14,6 +14,7 @@ import java.util.Date;
  */
 public class OrderDetailVO implements  Serializable{
 
+	private static final long serialVersionUID = 2682387557580493341L;
 	/**订单ID*/
 	private Long  orderId;
 	/**服务方编号*/
@@ -65,12 +66,15 @@ public class OrderDetailVO implements  Serializable{
 	private Long  countDownSeconds; 
 
 	private Long  customerIsEvaluate ;
-
-
+	/**大V接单时间*/
+	private Date  receiveOrderTime ;
 	
-	
-	
-	
+	public Date getReceiveOrderTime() {
+		return receiveOrderTime;
+	}
+	public void setReceiveOrderTime(Date receiveOrderTime) {
+		this.receiveOrderTime = receiveOrderTime;
+	}
 	public Long getCountDownSeconds() {
 		return countDownSeconds;
 	}

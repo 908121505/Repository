@@ -1,12 +1,8 @@
 package com.honglu.quickcall.account.service.bussService;
 
-import java.math.BigDecimal;
 import java.util.Date;
-import java.util.List;
 
 import com.honglu.quickcall.account.facade.entity.Order;
-import com.honglu.quickcall.account.facade.entity.Skill;
-import com.honglu.quickcall.account.facade.vo.OrderDetailVO;
 import com.honglu.quickcall.account.facade.vo.OrderTempResponseVO;
 import com.honglu.quickcall.common.api.exchange.CommonResponse;
 import com.honglu.quickcall.user.facade.enums.PushAppMsgTypeEnum;
@@ -23,12 +19,6 @@ import com.honglu.quickcall.user.facade.enums.PushAppMsgTypeEnum;
 public interface CommonService {
 	
 	public CommonResponse  getCommonResponse();
-	/**
-	 * 根据技能信息获取技能价格列表
-	 * @param skill
-	 * @return
-	 */
-	public List<BigDecimal>   getPriceList(Skill  skill);
 	
 	
 	
