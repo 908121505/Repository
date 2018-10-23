@@ -64,7 +64,7 @@
 
 
   <insert id="insert" parameterType="com.honglu.quickcall.account.facade.entity.Order" >
-    insert into order (order_id, order_no, customer_skill_id, 
+    insert into orders (order_id, order_no, customer_skill_id, 
       customer_id, service_id, trade_id, 
       payment_type, order_num, service_unit, 
       service_price, order_amounts, discount_rate, 
@@ -90,7 +90,7 @@
   
   
   <insert id="insertSelective" parameterType="com.honglu.quickcall.account.facade.entity.Order" >
-  insert into order
+  insert into orders
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="orderId != null" >
         order_id,
@@ -293,7 +293,7 @@
 
 
   <update id="updateByPrimaryKeySelective" parameterType="com.honglu.quickcall.account.facade.entity.Order" >
-    update order
+    update orders
     <set >
       <if test="orderNo != null" >
         order_no = #{orderNo,jdbcType=BIGINT},
@@ -395,7 +395,7 @@
   
   
   <update id="updateByPrimaryKey" parameterType="com.honglu.quickcall.account.facade.entity.Order" >
-   update order
+   update orders
     set order_no = #{orderNo,jdbcType=BIGINT},
       customer_skill_id = #{customerSkillId,jdbcType=BIGINT},
       customer_id = #{customerId,jdbcType=BIGINT},
@@ -448,7 +448,7 @@
 		  cs.skill_name  AS  skillItemName,
 		  st.unlock_icon  AS  icon
 	FROM
-		`order` od LEFT JOIN   customer_skill  cs  ON  od.customer_skill_id  = cs.customer_skill_id
+		orders od LEFT JOIN   customer_skill  cs  ON  od.customer_skill_id  = cs.customer_skill_id
 	        LEFT JOIN   skill_item   st ON  cs.skill_item_id  =  st.id
 	    LEFT JOIN  customer  ct  ON  od.service_id  =  ct.customer_id 
 	WHERE  od.customer_id  = #{customerId}
@@ -470,7 +470,7 @@
 		  cs.skill_name  AS  skillItemName,
 		  st.unlock_icon  AS  icon
 	FROM
-		`order` od LEFT JOIN   customer_skill  cs  ON  od.customer_skill_id  = cs.customer_skill_id
+		orders od LEFT JOIN   customer_skill  cs  ON  od.customer_skill_id  = cs.customer_skill_id
 	        LEFT JOIN   skill_item   st ON  cs.skill_item_id  =  st.id
 	    LEFT JOIN  customer  ct  ON  od.customer_id  =  ct.customer_id 
 	WHERE  od.service_id  = #{customerId}
@@ -500,7 +500,7 @@
 			od.end_time AS endTime ,
   			cs.skill_item_id   AS  skillItemId
 		FROM
-			`order` od
+			orders od
 		LEFT JOIN customer ct ON ct.customer_id = od.customer_id
 		LEFT JOIN customer_skill cs ON od.customer_skill_id = cs.customer_skill_id
 
@@ -530,7 +530,7 @@
 		od.start_service_time AS startTime,
 		od.end_time AS endTime 
 	FROM
-		`order` od
+		orders od
 	LEFT JOIN customer ct ON ct.customer_id = od.service_id
 	LEFT JOIN customer_skill cs ON od.customer_skill_id = cs.customer_skill_id
 	WHERE
@@ -562,7 +562,7 @@
         od.order_amounts AS orderAmounts,
         od.order_time AS orderTime
     FROM
-        `order` od
+        orders od
     LEFT JOIN customer cu ON cu.customer_id = od.customer_id
     LEFT JOIN customer_skill cs ON cs.customer_skill_id = od.customer_skill_id
     WHERE
@@ -581,7 +581,7 @@
         od.service_id as serviceId,
         od.customer_is_evaluate as customerIsEvaluate
     FROM
-        `order` od
+        orders od
     LEFT JOIN customer cu ON cu.customer_id = od.service_id
     LEFT JOIN customer_skill cs ON cs.customer_skill_id = od.customer_skill_id
     WHERE
@@ -590,7 +590,7 @@
 
   <!-- 保存评价信息 -->
   <update id="saveEvaluationInfo" parameterType="com.honglu.quickcall.account.facade.entity.Order">
-    update `order` set modify_time = NOW(), customer_is_evaluate = 1,
+    update orders set modify_time = NOW(), customer_is_evaluate = 1,
     evaluate_start = #{evaluateStart}, customer_evaluate = #{customerEvaluate}
     where order_id = #{orderId}
   </update>
