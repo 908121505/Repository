@@ -1,9 +1,8 @@
 package com.honglu.quickcall.account.service.bussService.impl;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
+import java.util.ResourceBundle;
 
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -31,6 +30,8 @@ public class AccountServiceImpl implements AccountService {
 	private AccountMapper accountMapper;
 	@Autowired
 	private TradeDetailMapper tradeDetailMapper;
+
+	private final static String froZenTime = ResourceBundle.getBundle("thirdconfig").getString("froZenTime");;
 
 	@Override
 	public Account queryAccount(Long customerId) {
@@ -66,7 +67,7 @@ public class AccountServiceImpl implements AccountService {
 			}
 			JedisUtil.set(steamFrozenKey, amount + "");
 			// 缓存24小时
-			JedisUtil.set(frozenTimeKey, "1", 86400);
+			JedisUtil.set(frozenTimeKey, "1", Integer.parseInt(froZenTime));
 
 		}
 
@@ -86,59 +87,6 @@ public class AccountServiceImpl implements AccountService {
 		tradeDetail.setOutPrice(amount);
 		tradeDetailMapper.insertSelective(tradeDetail);
 
-		if (transferType == TransferTypeEnum.FROZEN) {
-			String userFrozenkey = RedisKeyConstants.ACCOUNT_USERFROZEN_USER + customerId;
-
-			String userFrozenValue = JedisUtil.get(userFrozenkey);
-			if (StringUtils.isNotBlank(userFrozenValue)) {
-				List<String> strList = new ArrayList<String>();
-				String[] arys = userFrozenValue.split(",");
-				for (int i = 0; i < arys.length; i++) {
-					String steamFrozenKey = RedisKeyConstants.ACCOUNT_USERFROZEN_USER + arys[i];
-					String frozenTimeKey = RedisKeyConstants.ACCOUNT_USERFROZEN_Time + arys[i];
-					String stramValue = JedisUtil.get(steamFrozenKey);
-					String frozenTimeValue = JedisUtil.get(frozenTimeKey);
-					if (StringUtils.isNotBlank(stramValue)) {
-						if (StringUtils.isEmpty(frozenTimeValue)) {
-							// 操作流水
-
-							// 记录操过24小时的冻结流水Id
-							strList.add(stramValue);
-						}
-					}
-				}
-				// 数组移除操过24小时的冻结流水Id
-				for (int i = 0; i < strList.size(); i++) {
-					arys = remove(arys, strList.get(i));
-				}
-				userFrozenValue = StringUtils.join(arys, ",");
-				if (userFrozenValue.length() > 0) {
-					JedisUtil.set(userFrozenkey, userFrozenValue);
-				}
-			} else {
-				logger.error("订单异常,不存在冻结金额流水");
-
-			}
-
-		}
-
-	}
-
-	private static String[] remove(String[] arr, String str) {
-		String[] tmp = new String[arr.length - 1];
-		int idx = 0;
-		boolean hasRemove = false;
-		for (int i = 0; i < arr.length; i++) {
-
-			if (!hasRemove && arr[i] == str) {
-				hasRemove = true;
-				continue;
-			}
-
-			tmp[idx++] = arr[i];
-		}
-
-		return tmp;
 	}
 
 }
