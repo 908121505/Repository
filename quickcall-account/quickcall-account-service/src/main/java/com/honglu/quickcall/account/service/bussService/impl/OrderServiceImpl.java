@@ -3,6 +3,7 @@ package com.honglu.quickcall.account.service.bussService.impl;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -135,9 +136,6 @@ public class OrderServiceImpl implements IOrderService {
 			custSkillList.add(vo);
 		}
 		skill.setCustSkillList(custSkillList );
-		
-		
-		
 		CommonResponse commonResponse = commonService.getCommonResponse();
 		commonResponse.setData(skill);
 		LOGGER.info("======>>>>>用户编号为：" + request.getCustomerId() + "查询成功");
@@ -189,52 +187,54 @@ public class OrderServiceImpl implements IOrderService {
 		}
 		LOGGER.info("======>>>>>saveOrder()入参："+request.toString());
 		
-		Long  customerId =  request.getCustomerId();
-		Long  customerSkillId =  request.getCustomerSkillId();
-		//根据技能ID 获取等级获取价格信息
-		CustomerSkill   customerSkill = customerSkillMapper.selectByPrimaryKey(customerSkillId);
-		
-		
-		
-		Integer  orderNum =  request.getOrderNum();
-		BigDecimal  price =  customerSkill.getDiscountPrice();
-		BigDecimal orderAmounts = new BigDecimal(orderNum).multiply(price);
-		//判断余额是否充足
-		Account account=accountService.queryAccount(customerId);
-		//消费用户的充值金额
-		BigDecimal  rechargeAmounts =  account.getRechargeAmounts();
-		if(rechargeAmounts != null){
-			if(orderAmounts.compareTo(rechargeAmounts) >  0){
-				//返回余额不足状态  
-				throw new BizException(AccountBizReturnCode.ORDER_PAY_BALANCE_NOT_ENOUGH, "余额不足，无法支付");
-			}
-		}
-		
-		//创建订单
-		Order record = new Order();
-		
-		Long  skillItemId = customerSkill.getSkillItemId();
-		SkillItem  skillItem = skillItemMapper.selectByPrimaryKey(skillItemId);
-		if(skillItem != null){
-			record.setSkillType(skillItem.getSkillType());
-		}
-		record.setServiceUnit(customerSkill.getServiceUnit());
-		record.setServicePrice(customerSkill.getSkillPrice());
-		record.setDiscountRate(customerSkill.getDiscountRate());
-		
-		Long  orderId =  UUIDUtils.getId();
-		Long  serviceId =  request.getServiceId();
-		record.setCustomerId(customerId);
-		record.setOrderId(orderId);
-		record.setServiceId(serviceId);
-		record.setCreateTime(new Date());
-		record.setOrderAmounts(orderAmounts);
-		record.setOrderNum(orderNum);
-		record.setOrderStatus(OrderSkillConstants.ORDER_STATUS_WAITING_RECEIVE);
-		record.setOrderTime(new Date());
-		orderMapper.insert(record);
+//		Long  customerId =  request.getCustomerId();
+//		Long  customerSkillId =  request.getCustomerSkillId();
+//		//根据技能ID 获取等级获取价格信息
+//		CustomerSkill   customerSkill = customerSkillMapper.selectByPrimaryKey(customerSkillId);
+//		Integer  orderNum =  request.getOrderNum();
+//		BigDecimal  price =  customerSkill.getDiscountPrice();
+//		BigDecimal orderAmounts = new BigDecimal(orderNum).multiply(price);
+//		//判断余额是否充足
+//		Account account=accountService.queryAccount(customerId);
+//		if(account != null){
+//			//消费用户的充值金额
+//			BigDecimal  rechargeAmounts =  account.getRechargeAmounts();
+//			if(rechargeAmounts != null){
+//				if(orderAmounts.compareTo(rechargeAmounts) >  0){
+//					//返回余额不足状态  
+//					throw new BizException(AccountBizReturnCode.ORDER_PAY_BALANCE_NOT_ENOUGH, "余额不足，无法支付");
+//				}
+//			}
+//		}
+//		
+//		//创建订单
+//		Order record = new Order();
+//		
+//		Long  skillItemId = customerSkill.getSkillItemId();
+//		SkillItem  skillItem = skillItemMapper.selectByPrimaryKey(skillItemId);
+//		if(skillItem != null){
+//			record.setSkillType(skillItem.getSkillType());
+//		}
+//		record.setServiceUnit(customerSkill.getServiceUnit());
+//		record.setServicePrice(customerSkill.getSkillPrice());
+//		record.setDiscountRate(customerSkill.getDiscountRate());
+//		
+//		Long  orderId =  UUIDUtils.getId();
+//		Long  serviceId =  request.getServiceId();
+//		record.setCustomerId(customerId);
+//		record.setOrderId(orderId);
+//		record.setServiceId(serviceId);
+//		record.setCreateTime(new Date());
+//		record.setOrderAmounts(orderAmounts);
+//		record.setOrderNum(orderNum);
+//		record.setOrderStatus(OrderSkillConstants.ORDER_STATUS_WAITING_RECEIVE);
+//		record.setOrderTime(new Date());
+//		orderMapper.insert(record);
 		CommonResponse commonResponse = commonService.getCommonResponse();
-		commonResponse.setData(orderId);
+		Integer  result =  Math.random() > 0.5 ? 1 : 2;
+		HashMap<String, Integer>  resultMap = new HashMap<>();
+		resultMap.put("retCode", result);
+		commonResponse.setData(resultMap);
 		LOGGER.info("======>>>>>用户编号为：" + request.getCustomerId() + "下单成功");
 		return commonResponse;
 	}

@@ -14,6 +14,8 @@ import java.util.Date;
  */
 public class OrderSendOrderListVO implements  Serializable{
 
+	
+	private static final long serialVersionUID = -2246395099082397013L;
 	/**主播ID*/
 	private Long  orderId;
 	/**主播昵称*/
