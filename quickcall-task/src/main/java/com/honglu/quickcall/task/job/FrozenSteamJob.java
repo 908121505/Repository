@@ -22,6 +22,12 @@ import com.honglu.quickcall.task.dao.AccountMapper;
 import com.honglu.quickcall.task.dao.TradeDetailMapper;
 import com.honglu.quickcall.task.entity.Account;
 
+/**
+ * 冻结金额24小时回账 job
+ * 
+ * @author liyingtang
+ *
+ */
 @Component
 public class FrozenSteamJob {
 	public static final Logger logger = LoggerFactory.getLogger(FrozenSteamJob.class);
