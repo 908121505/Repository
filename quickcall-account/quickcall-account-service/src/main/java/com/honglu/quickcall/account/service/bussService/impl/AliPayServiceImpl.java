@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.alibaba.fastjson.JSON;
 import com.honglu.quickcall.account.facade.entity.Account;
@@ -171,6 +172,7 @@ public class AliPayServiceImpl implements AliPayService {
 	}
 
 	@Override
+	@Transactional
 	public CommonResponse alipayNotify(AlipayNotifyRequest params) {
 		// TODO Auto-generated method stub
 		logger.info("支付回调参数===========" + JSON.toJSONString(params));
@@ -181,9 +183,7 @@ public class AliPayServiceImpl implements AliPayService {
 		recharge.setOrdersn(params.getOrderNo());
 		if (params.getPayState() == 1) {
 			recharge.setState(2);// 状态。1-申请支付，2-支付成功 3支付失败
-			// 入账
-			// accountMapper.inAccount(params.getAccountId(), params.getAmount(),
-			// TransferTypeEnum.RECHARGE.getType());
+
 			accountService.inAccount(params.getAccountId(), params.getAmount(), TransferTypeEnum.RECHARGE,
 					AccountBusinessTypeEnum.Recharge);
 		} else if (params.getPayState() == 0) {
