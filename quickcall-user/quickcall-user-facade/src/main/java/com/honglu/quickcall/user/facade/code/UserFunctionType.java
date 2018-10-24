@@ -184,4 +184,9 @@ public interface UserFunctionType {
 	 */
 	String insertFeedBack = "0011180";
 
+	/**
+	 * 查询我的站内信消息
+	 */
+	String INTERNAL_MESSAGE = "001201";
+
 }
