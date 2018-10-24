@@ -37,6 +37,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Description: 个人中心 -> 编辑资料
@@ -465,7 +466,7 @@ public class EditProfileServiceImpl implements EditProfileService {
             UserEditInfoVO userEditInfoVO = customerMapper.queryUserEditInfo(params.getCustomerId());
 
             if (userEditInfoVO == null) {
-                throw new RemoteException(UserBizReturnCode.paramError, "参数错误，用户数据不存在");
+                throw new BizException(UserBizReturnCode.paramError,  "参数错误，用户数据不存在");
             }
 
             if (userEditInfoVO.getBirthday() != null) {
@@ -480,7 +481,7 @@ public class EditProfileServiceImpl implements EditProfileService {
             List<AppearanceVO> appearanceList = customerAppearanceMapper.selectAppearanceVOByCustomerIdAndType(params.getCustomerId(),0);
             List<AppearanceVO> viceCard = customerAppearanceMapper.selectAppearanceVOByCustomerIdAndType(params.getCustomerId(),2);
             if(headPortrait.size() == 0){
-                userEditInfoVO.setHeadPortrait(new AppearanceVO());
+                userEditInfoVO.setHeadPortrait(new AppearanceVO(null,null,"","",null,null));
             }else {
                 userEditInfoVO.setHeadPortrait(headPortrait.get(0));
             }
@@ -488,7 +489,7 @@ public class EditProfileServiceImpl implements EditProfileService {
             userEditInfoVO.setAppearanceList(appearanceList);
 
             if(viceCard.size() == 0){
-                userEditInfoVO.setViceCard(new AppearanceVO());
+                userEditInfoVO.setViceCard(new AppearanceVO(null,null,"","",null,null));
             }else {
                 userEditInfoVO.setViceCard(viceCard.get(0));
             }

@@ -1,6 +1,7 @@
 package com.honglu.quickcall.user.service.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import com.honglu.quickcall.user.facade.entity.Interest;
 import com.honglu.quickcall.user.facade.vo.InterestVO;
@@ -14,4 +15,5 @@ public interface InterestMapper {
 	List<InterestVO> selectInterestList ();
 
 	List<InterestVO> selectInterestListByCustomerId (@Param("customerId") Long customerId);
+
 }
