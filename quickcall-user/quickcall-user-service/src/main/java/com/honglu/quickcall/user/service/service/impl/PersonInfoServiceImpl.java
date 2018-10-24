@@ -125,7 +125,7 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 
 	/** 用户默认的形象照 **/
 	private static String DEFAULT_CUSTOMER_APPEARANCE_URL = ResourceBundle.getBundle("thirdconfig").getString("DEFAULT_CUSTOMER_APPEARANCE_URL");
-	private static String CUSTOMER_HOME_SHARE_H5_URL = ResourceBundle.getBundle("thirdconfig").getString("CUSTOMER_HOME_SHARE_H5_URL");
+//	private static String CUSTOMER_HOME_SHARE_H5_URL = ResourceBundle.getBundle("thirdconfig").getString("CUSTOMER_HOME_SHARE_H5_URL");
 
 	/**
 	 * 首页搜索用户
@@ -797,7 +797,7 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 		customerHomeVO.setSoundGuideCard(soundGuideCard.isEmpty() ? null : soundGuideCard.get(0));
 
 		// 分享链接
-		customerHomeVO.setShareUrl(CUSTOMER_HOME_SHARE_H5_URL);
+		customerHomeVO.setShareUrl("http://www.baidu.com");
 
 		// 查询用户技能 -- 条件是大V
 		List<CustomerHomeVO.CustomerSkill> skillList = new ArrayList<>();
