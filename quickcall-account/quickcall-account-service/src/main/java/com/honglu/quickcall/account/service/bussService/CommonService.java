@@ -36,6 +36,21 @@ public interface CommonService {
 	 * @param orderStatus
 	 */
 	public void updateOrder(Long orderId, Integer orderStatus);
+	
+	/**
+	 * 根据订单ID更新订单状态
+	 * @param orderId
+	 * @param orderStatus
+	 * @param startServiceTime
+	 */
+	public void dvStartServiceUpdateOrder(Long orderId, Integer orderStatus,Date  startServiceTime);
+	/**
+	 * 根据订单ID更新订单状态
+	 * @param orderId
+	 * @param orderStatus
+	 * @param startTime
+	 */
+	public void confirmOrderUpdateOrder(Long orderId, Integer orderStatus,Date  startTime,Date  endTime);
 	/**
 	 * 大V接单修改订单信息
 	 * @param orderId
