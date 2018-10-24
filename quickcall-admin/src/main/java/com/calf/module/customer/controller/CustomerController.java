@@ -7,6 +7,7 @@ import com.calf.cn.utils.SearchUtil;
 import com.calf.module.customer.entity.Customer;
 import com.calf.module.customer.entity.CustomerVo;
 import com.calf.module.customer.entity.FadeCustomer;
+import com.calf.module.customer.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,7 +24,10 @@ import java.util.Map;
 public class CustomerController implements BaseController<CustomerVo> {
 
     @Autowired
-    BaseManager baseManager;
+    private BaseManager baseManager;
+
+    @Autowired
+    private CustomerService customerService;
 
     @Override
     public String home() {
@@ -63,6 +67,7 @@ public class CustomerController implements BaseController<CustomerVo> {
 
     @Override
     public int saveUpdate(CustomerVo entity) {
+        customerService.updateCustomer(entity);
         return 0;
     }
 

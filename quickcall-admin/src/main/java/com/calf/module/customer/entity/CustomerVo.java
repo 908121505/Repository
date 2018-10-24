@@ -24,6 +24,26 @@ public class CustomerVo {
 
     private String formatString;
 
+    private String operate; //0 解禁 1 分禁
+
+    private String closureDate; //封禁时间
+
+    public String getClosureDate() {
+        return closureDate;
+    }
+
+    public void setClosureDate(String closureDate) {
+        this.closureDate = closureDate;
+    }
+
+    public String getOperate() {
+        return operate;
+    }
+
+    public void setOperate(String operate) {
+        this.operate = operate;
+    }
+
     public String getCustomerId() {
         return customerId;
     }
@@ -87,6 +107,9 @@ public class CustomerVo {
     }
 
     public Date getBlockStartTime() {
+        if(custStatus == -1){
+            return null;
+        }
         return blockStartTime;
     }
 
@@ -95,6 +118,9 @@ public class CustomerVo {
     }
 
     public Date getBlockEndTime() {
+        if(custStatus == -1){
+            return null;
+        }
         return blockEndTime;
     }
 

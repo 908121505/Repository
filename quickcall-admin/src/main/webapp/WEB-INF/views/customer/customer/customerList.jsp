@@ -211,7 +211,7 @@
                             } else if(data == 10){
                                 return "<font color='red'>已封禁-设备登录权限</font>";
                             }else{
-                                return "<font color='red'>异常</font>";
+                                return "<font color='red'>永久封禁</font>";
                             }
 
                         }
