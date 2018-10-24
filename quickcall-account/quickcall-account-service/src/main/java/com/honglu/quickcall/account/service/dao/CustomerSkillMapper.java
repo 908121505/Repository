@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Param;
 import com.honglu.quickcall.account.facade.entity.CustomerSkill;
 import com.honglu.quickcall.account.facade.vo.FirstPageSkillIteminfoVO;
 import com.honglu.quickcall.account.facade.vo.OrderDaVSkillVO;
+import com.honglu.quickcall.account.facade.vo.OrderIMVO;
 
 public interface CustomerSkillMapper {
     int deleteByPrimaryKey(Long userSkillId);
@@ -32,4 +33,8 @@ public interface CustomerSkillMapper {
 	List<FirstPageSkillIteminfoVO> selectPartSkill();
 
 	List<OrderDaVSkillVO> selectDaVSkill(Long customerId);
+
+	
+	
+	OrderIMVO selectCustSkillItem(Long customerSkillId);
 }

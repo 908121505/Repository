@@ -135,5 +135,12 @@ public interface IOrderService {
 	 * @return
 	 */
 	CommonResponse submitOrderEvaluation(OrderEvaluationSubmitRequest request);
+	
+	/***
+	 * IM订单详情
+	 * @param request
+	 * @return
+	 */
+	public CommonResponse detailOrderForIM(DetailOrderForIMRequest request);
 
 }

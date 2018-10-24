@@ -14,6 +14,16 @@ public interface OrderSkillConstants {
 	
 	
 	public  static final  String  IM_MSG_CONTENT_RECEIVE_ORDER = "有人下单啦";
+	public  static final  String  IM_MSG_CONTENT_CANCEL_ORDER = "订单取消啦";
+	public  static final  String  IM_MSG_CONTENT_USER_CONFIRM_FINISH= "订单完成啦";
+	public  static final  String  IM_MSG_CONTENT_USER_CONFIRM_START_SERVICE = "用户同意开始服务啦";
+	public  static final  String  IM_MSG_CONTENT_DAV_REFUSE = "大V接单啦";
+	public  static final  String  IM_MSG_CONTENT_DAV_CONFIRM = "大V拒绝接单啦";
+	public  static final  String  IM_MSG_CONTENT_DAV_START_SERVICE = "大V开始服务啦";
+	
+	public  static final  String  IM_MSG_CONTENT_CUST_FINISH = "用户完成服务啦";
+	public  static final  String  IM_MSG_CONTENT_DAV_FINISH = "大V完成服务啦";
+
 	
 	
 	/**下单返回结果：1 成功*/
