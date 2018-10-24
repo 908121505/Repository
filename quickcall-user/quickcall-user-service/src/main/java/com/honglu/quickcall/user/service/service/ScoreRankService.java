@@ -12,14 +12,14 @@ import com.honglu.quickcall.user.facade.exchange.mqrequest.EvaluationOrderMqRequ
 public interface ScoreRankService {
 
     /**
-     * 客户下单消费 -- 主播更新评分排名表
+     * 客户下单消费 -- 更新主播评分排名表
      *
      * @param request
      */
     void doOrderCast(DoOrderCastMqRequest request);
 
     /**
-     * 客户评价订单 -- 主播更新评分排名表
+     * 客户评价订单 -- 更新主播评分排名表
      * @param request
      */
     void evaluationOrder(EvaluationOrderMqRequest request);
