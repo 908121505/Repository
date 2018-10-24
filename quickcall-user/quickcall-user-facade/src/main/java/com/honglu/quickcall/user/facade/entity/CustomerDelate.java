@@ -11,6 +11,8 @@ public class CustomerDelate {
 
     private Integer delateId; //举报内容Id
 
+    private String delateContent;
+
     private Date createTime;
 
     private Date modifyTime;
@@ -91,5 +93,13 @@ public class CustomerDelate {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public String getDelateContent() {
+        return delateContent;
+    }
+
+    public void setDelateContent(String delateContent) {
+        this.delateContent = delateContent;
     }
 }

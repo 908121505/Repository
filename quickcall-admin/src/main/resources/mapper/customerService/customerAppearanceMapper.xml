@@ -175,10 +175,12 @@
         customer_appearance a
         LEFT JOIN customer c
         ON a.customer_id = c.customer_id
-        WHERE a.type = 0
+        WHERE 1=1
+        <if test="type !=null ">and a.type = #{type}</if>
         <if test="nickName !=null and nickName!='' ">and c.nick_name like concat('%',#{nickName},'%')</if>
         <if test="customerId !=null and customerId!='' ">and a.customer_id = #{customerId}</if>
         <if test="auditStatus !=null and auditStatus!='' ">and a.audit_status = #{auditStatus}</if>
+        ORDER BY a.create_time DESC
         LIMIT ${iDisplayStart}, ${iDisplayLength}
     </select>
     <select id="selectAppearanceCount" resultType="java.lang.Integer" parameterType="map">
@@ -187,7 +189,8 @@
         from customer_appearance a
         LEFT JOIN customer c
         ON a.customer_id = c.customer_id
-        where a.type = 0
+        where 1=1
+        <if test="type !=null ">and a.type = #{type}</if>
         <if test="nickName !=null and nickName!='' ">and c.nick_name like concat('%',#{nickName},'%')</if>
         <if test="customerId !=null and customerId!='' ">and a.customer_id = #{customerId}</if>
         <if test="auditStatus !=null and auditStatus!='' ">and a.audit_status = #{auditStatus}</if>
@@ -205,33 +208,4 @@
 		WHERE id = #{id}
 	</update>
 
-    <select id="selectVoiceIdentificationCardPageList"
-            resultType="com.calf.module.customerservice.entity.CustomerAppearance" parameterType="map">
-		SELECT
-		a.id,
-		a.customer_id customerId,
-		a.audit_appearance auditAppearance,
-		a.appearance appearance,
-		a.type TYPE,
-		a.audit_status auditStatus,
-		a.sort sort,
-		a.status STATUS,
-		a.create_time createTime,
-		a.modify_time modifyTime,
-		a.create_man createMan,
-		a.modify_man modifyMan,
-		a.remark,
-		c.nick_name nickName
-		FROM
-		customer_appearance a
-		LEFT JOIN customer c
-		ON a.customer_id = c.customer_id
-		WHERE a.type = 2
-		LIMIT ${iDisplayStart}, ${iDisplayLength}
-	</select>
-    <select id="selectVoiceIdentificationCardCount" resultType="java.lang.Integer">
-		select
-		count(1)
-		from customer_appearance where type = 2
-	</select>
 </mapper>
