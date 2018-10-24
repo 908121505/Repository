@@ -1,12 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="shiro" uri="http://shiro.apache.org/tags" %>
-<shiro:hasPermission name="skillPriceLevel:select">
+<shiro:hasPermission name="feedBack:select">
 <div class="content1">
     <div class="header">
-        <h1 class="page-title">价格阶梯管理</h1>
+        <h1 class="page-title">产品问题反馈</h1>
         <ul class="breadcrumb">
-            <li>订单管理</li>
-            <li class="active">价格阶梯管理</li>
+            <li>客服后台</li>
+            <li class="active">产品问题反馈</li>
         </ul>
     </div>
 
@@ -15,36 +15,16 @@
 				<div class="col-md-2">
 					<div class="form-group">
 						<div class="input-group">
-							<div class="input-group-addon">技能名称</div>
-							<input class="form-control" type="text" id="skillItemNameQuery">
+							<div class="input-group-addon">用户昵称</div>
+							<input class="form-control" type="text" id="nickName">
 						</div>
 					</div>
 				</div>
 				<div class="col-md-2">
 					<div class="form-group">
 						<div class="input-group">
-							<div class="input-group-addon">等级</div>
-							<select class="form-control" id="priceLevelQuery">
-								<option value="">--请选择--</option>
-								<option value="1">一等级</option>
-								<option value="2">二等级</option>
-								<option value="3">三等级</option>
-							</select>
-						</div>
-					</div>
-				</div>
-				<div class="col-md-2">
-					<div class="form-group">
-						<div class="input-group">
-							<div class="input-group-addon">状态</div>
-							<select class="form-control" id="levelStatusQuery">
-								<option value="">--请选择--</option>
-								<option value="0">关闭</option>
-								<option value="1">显示次数</option>
-								<option value="2">显示一小时</option>
-								<option value="4">显示半小时</option>
-								<option value="6">同时显示半/一小时</option>
-							</select>
+							<div class="input-group-addon">联系方式</div>
+							<input class="form-control" type="text" id="contactWay">
 						</div>
 					</div>
 				</div>
@@ -55,15 +35,19 @@
 						<i class="glyphicon glyphicon-search"></i> 查询
 					</button>
 				</div>
-				<shiro:hasPermission name="skillPriceLevel:add">
-				<div class="col-md-2">
-					<button type="button" class="btn btn-info btn-small btn-block"
-						onclick="addAndUpdateRow(0)">
-						<i class="glyphicon glyphicon-plus"></i> 增加
-					</button>
-				</div>
-				<shiro:hasPermission>
 			</div>
+			<div class="row">
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <div class="input-group">
+                            <div class="input-group-addon">提交时间</div>
+                            <input class="form-control" type="date" id="startTime">
+                            <div class="input-group-addon">到</div>
+                            <input class="form-control" type="date" id="endTime">
+                        </div>
+                    </div>
+                </div>
+            </div>
 			<table id="example" class="table"></table>
 		</div>
 		<script>
@@ -120,90 +104,88 @@
 			//表格的初始化
 			$(document).ready(function() {
 				var table = $('#example').initTable({
-					sAjaxSource:"skillPriceLevel/initTable.htm",
+					sAjaxSource:"feedBack/initTable.htm",
 					aoColumns: [
 			            { 
-			              "data": "skillItemName",
-			              "sTitle":"技能名称",
+			              "data": "nickName",
+			              "sTitle":"用户名称",
 			              'sClass':"text-center"
 			            },
 			            { 
-			               "data": "priceLevel",
-			               "sTitle":"价格等级",
+			               "data": "feedBackContent",
+			               "sTitle":"反馈内容",
 			               'sClass':"text-center",
-			           	"mRender": function(data, type, full) {
-	                    		if(data == 1){
-	                               return "<font color='green'>一等级</font>";
-	                           } else if(data == 2) {
-	                               return "<font color='green'>二等级</font>";
-	                           }else if(data == 3) {
-	                               return "<font color='green'>三等级</font>";
-	                           }else{
-	                        	   return data;
-	                           }
-                      	 	}
+			               "mRender": function(data, type, full) {
+                          		if(data.length>10){
+                          			return data.substring(0, 10)+"..."
+                          		}else{
+                          			return data;
+                          		}
+                          	}
 			            },
 						{
-							"data": "halfPrice",
-							"sTitle": "半小时价格",
+							"data": "createTime",
+							"sTitle": "提交时间",
                             'sClass':"text-center"
 						},
 						{
-							"data": "onePrice",
-							"sTitle": "一小时价格",
+							"data": "contactWay",
+							"sTitle": "联系方式",
                             'sClass':"text-center"
 						},
 						{
-							"data": "timePrice",
-							"sTitle": "一次价格",
+							"data": "handleResult",
+							"sTitle": "处理结果",
+                            'sClass':"text-center",
+                           	"mRender": function(data, type, full) {
+                           		if(data.length>10){
+                           			return data.substring(0, 10)+"..."
+                           		}else{
+                           			return data;
+                           		}
+                           	}
+						},
+						{
+							"data": "handleUser",
+							"sTitle": "处理人",
                             'sClass':"text-center"
 						},
 						{
-							"data": "levelThreshold",
-							"sTitle": "评分阀值",
-                            'sClass':"text-center"
-						},
-						{
-							"data": "levelStatus",
+							"data": "handleStatus",
 							"sTitle": "状态",
                             'sClass':"text-center",
                            	"mRender": function(data, type, full) {
                             		if(data == 0){
-                                       return "<font color='red'>关闭</font>";
+                                       return "<font color='red'>未处理</font>";
                                    } else if(data == 1) {
-                                       return "<font color='green'>显示次数</font>";
-                                   }else if(data == 2) {
-                                       return "<font color='green'>显示一小时</font>";
-                                   }else if(data == 4) {
-                                       return "<font color='green'>显示半小时</font>";
-                                   }else if(data == 6) {
-                                       return "<font color='green'>同时显示半/一小时</font>";
+                                       return "<font color='green'>已处理</font>";
                                    }else{
                                 	   return data;
                                    }
                                }
 						},
 						{
-							"data" : "skillItemId",
+							"data" : "id",
 							"sTitle" : "操作",
 							'sClass' : "text-center"
 						}
 			         ],
 			         fnServerParams: function (aoData) {  //查询条件
-	                       aoData.push({ "name": "skillItemName", "value": $("#skillItemNameQuery").val().replace(new RegExp(" ","g"),"") } );
-		                   aoData.push({"name": "priceLevel", "value": $("#priceLevelQuery").val()});
-		                   aoData.push({"name": "levelStatus", "value": $("#levelStatusQuery").val()});
+	                       aoData.push({ "name": "nickName", "value": $("#nickName").val().replace(new RegExp(" ","g"),"") } );
+		                   aoData.push({"name": "contactWay", "value": $("#contactWay").val()});
+		                   aoData.push({"name": "startTime", "value": $("#startTime").val()});
+		                   aoData.push({"name": "endTime", "value": $("#endTime").val()});
 	                    },
 	                    aoColumnDefs : [ {
 							"aTargets" : 7,
 							"mRender" : function(data,type, row) {
 								var detail = "",del = "";
-								<shiro:hasPermission name="skillPriceLevel:update">
-									detail = "<a href='#' onclick='addAndUpdateRow(\""+ row.skillItemId+"\",\""+row.priceLevel+"\")' data-toggle='modal' class='padding-right-small label label-success'><i class='glyphicon glyphicon-edit'></i>修改</a>";
+								<shiro:hasPermission name="feedBack:update">
+								detail = "<a href='#' onclick='addAndUpdateRow(\""+ row.id +"\")' data-toggle='modal' class='padding-right-small label label-success'><i class='glyphicon glyphicon-edit'></i>修改</a>";
 								</shiro:hasPermission>
-								<shiro:hasPermission name="skillPriceLevel:delete">
-                                	del = "<a href='#' onclick='deleteRow(\""+ row.skillItemId+"\",\""+row.priceLevel+"\")' data-toggle='modal' class='padding-right-small label label-success'><i class='glyphicon glyphicon-edit'></i>删除</a>";
-                               	</shiro:hasPermission>
+								<shiro:hasPermission name="feedBack:delete">
+                                del = "<a href='#' onclick='deleteRow(\""+ row.id +"\")' data-toggle='modal' class='padding-right-small label label-success'><i class='glyphicon glyphicon-edit'></i>删除</a>";
+                                </shiro:hasPermission>
 								return  detail+"&nbsp;"+del;
 							}
 						} ]
@@ -216,12 +198,12 @@
 			
 			});
 			//增加或者修改受影响的行数
-			function addAndUpdateRow(skillItemId,priceLevel){
-				$('#insertAndUpdate').addAndUpdateRow("skillPriceLevel/addAndUpdateOther.htm?skillItemId="+skillItemId+"&priceLevel="+priceLevel);
+			function addAndUpdateRow(id){
+				$('#insertAndUpdate').addAndUpdateRow("feedBack/addAndUpdateHome.htm?id="+id);
 			}
 
-        function deleteRow(skillItemId,priceLevel){
-            $('#myModal').deleteRow("skillPriceLevel/deleteRow.htm?skillItemId="+skillItemId+"&priceLevel="+priceLevel);
+        function deleteRow(id){
+            $('#myModal').deleteRow("feedBack/del.htm?id="+id);
         }
 	</script>
 		<!---dialog选项-->

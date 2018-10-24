@@ -30,6 +30,7 @@ import com.honglu.quickcall.common.core.util.UUIDUtils;
 public class CustomerSkillCertifyController implements BaseController<CustomerSkillCertifyVO> {
     @Autowired
     private BaseManager baseManager;
+    
 
     private static final String JSP_PATH = "customer/skill_certify/%s";
     

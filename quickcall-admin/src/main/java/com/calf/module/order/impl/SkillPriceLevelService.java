@@ -13,6 +13,7 @@ import org.springframework.ui.Model;
 import com.calf.cn.entity.DataTables;
 import com.calf.cn.service.BaseManager;
 import com.calf.cn.utils.SearchUtil;
+import com.calf.module.common.impl.CommonUtilService;
 import com.calf.module.order.vo.SkillPriceLevelVO;
 import com.honglu.quickcall.account.facade.entity.SkillItemExt;
 import com.honglu.quickcall.common.core.util.UUIDUtils;
@@ -24,6 +25,8 @@ public class SkillPriceLevelService {
 
     @Autowired
     private SkillItemService skillItemService;
+    @Autowired
+	private CommonUtilService  commonUtilService ;
 
 
     /**
@@ -77,6 +80,7 @@ public class SkillPriceLevelService {
 	 * @return
 	 */
 	public int insertPriceLevel(SkillPriceLevelVO entity){
+		String man = commonUtilService.getCurrUser();
 		//半小时记录
 		SkillItemExt sie1 = new SkillItemExt();
 		sie1.setSkillItemId(Long.valueOf(entity.getSkillItemId()));
@@ -87,6 +91,7 @@ public class SkillPriceLevelService {
 		sie1.setSkillExtPrice(entity.getHalfPrice());
 		sie1.setSkillExtThreshold(entity.getLevelThreshold());
 		sie1.setSkillExtStatus(entity.getLevelStatus()>>2);
+		sie1.setCreateMan(man);
 		int n = baseManager.insert("SkillItemExt.insertSelective", sie1);
 		//一小时记录
 		SkillItemExt sie2 = new SkillItemExt();
@@ -98,6 +103,7 @@ public class SkillPriceLevelService {
 		sie2.setSkillExtPrice(entity.getOnePrice());
 		sie2.setSkillExtThreshold(entity.getLevelThreshold());
 		sie2.setSkillExtStatus((entity.getLevelStatus()>>1)&1);
+		sie2.setCreateMan(man);
 		int n1 = baseManager.insert("SkillItemExt.insertSelective", sie2);
 		//一次记录
 		SkillItemExt sie3 = new SkillItemExt();
@@ -109,6 +115,7 @@ public class SkillPriceLevelService {
 		sie3.setSkillExtPrice(entity.getTimePrice());
 		sie3.setSkillExtThreshold(entity.getLevelThreshold());
 		sie3.setSkillExtStatus(entity.getLevelStatus()&1);
+		sie1.setCreateMan(man);
 		int n2 = baseManager.insert("SkillItemExt.insertSelective", sie3);
 		return n+n1+n2;
 	}
