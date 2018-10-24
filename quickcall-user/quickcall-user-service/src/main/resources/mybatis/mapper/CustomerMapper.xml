@@ -633,7 +633,8 @@
     sign_name AS signName,
     star_sign AS starSign,
     birthday,
-    identity_status as identityStatus
+    identity_status as identityStatus,
+    head_portrait_url as defaultHeadPortrait
   FROM
   customer
   where customer_id = #{customerId}

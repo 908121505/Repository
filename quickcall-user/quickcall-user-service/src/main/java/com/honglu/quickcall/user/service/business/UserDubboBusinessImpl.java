@@ -112,6 +112,9 @@ public class UserDubboBusinessImpl implements UserDubboBusiness {
                 case UserFunctionType.CHECK_ATTENTION:// 判断是否关注对方
                     response = personInfoService.checkAttention((CheckAttentionRequest) request);
                     break;
+                case UserFunctionType.CHECK_EACH_ATTENTION:// 判断是否互相关注对方
+    				response = personInfoService.checkEachAttention((CheckEachAttentionRequest) request);
+    				break;
                 ///////////////////////////////////////////////////////////////////////////
                 case UserFunctionType.SaveOccupation:// 保存职业
                     response = personInfoService.saveOccupation((SaveOccupationRequest) request);

@@ -26,6 +26,18 @@ public class AppearanceVO {
     private Integer auditStatus;
 
 
+    public AppearanceVO() {
+    }
+
+    public AppearanceVO(Long id, Long customerId, String auditAppearance, String appearance, Integer type, Integer auditStatus) {
+        this.id = id;
+        this.customerId = customerId;
+        this.auditAppearance = auditAppearance;
+        this.appearance = appearance;
+        this.type = type;
+        this.auditStatus = auditStatus;
+    }
+
     public void setId(Long id){
         this.id = id;
     }

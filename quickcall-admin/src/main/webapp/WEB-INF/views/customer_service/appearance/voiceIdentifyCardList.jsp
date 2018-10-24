@@ -190,10 +190,10 @@
 
             });
 
-           /* $('#example tbody').on('click','tr:nth-child(2) td:nth-child(2)', function (e) {
-                var name = $(this).text();
-                alert("给第2行第2列的JQuery datatables添加点击事件"+name);
-            } );*/
+            /* $('#example tbody').on('click','tr:nth-child(2) td:nth-child(2)', function (e) {
+                 var name = $(this).text();
+                 alert("给第2行第2列的JQuery datatables添加点击事件"+name);
+             } );*/
 
 
             //审核通过

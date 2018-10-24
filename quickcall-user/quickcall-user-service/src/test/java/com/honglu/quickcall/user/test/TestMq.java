@@ -1,5 +1,6 @@
 package com.honglu.quickcall.user.test;
 
+import com.honglu.quickcall.user.facade.business.UserCenterSendMqMessageService;
 import com.honglu.quickcall.user.facade.exchange.mqrequest.DoOrderCastMqRequest;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -21,6 +22,8 @@ public class TestMq {
 
     @Resource
     private AmqpTemplate amqpTemplate;
+    @Resource
+    private UserCenterSendMqMessageService userCenterSendMqMessageService;
 
     @Test
     public void testSend() {
@@ -29,5 +32,10 @@ public class TestMq {
             experienceSendMq.setOrderId(1809282102486183353L);
             amqpTemplate.convertAndSend("userCenter-mq-exchange", "queue_userCenter_for_experience_key", experienceSendMq);
 //        }
+    }
+
+    @Test
+    public void testSendMqService(){
+        userCenterSendMqMessageService.sendEvaluationOrderScoreRank(1809282102486183353L);
     }
 }

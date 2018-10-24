@@ -663,7 +663,7 @@
   <!-- 查询客户信息 -->
   <select id="selectGongIngOrderListByCustomerSkillId" resultType="java.lang.Integer" >
 		SELECT
-			count(orderId)
+			count(order_id)
 		FROM
 			orders
 		WHERE
@@ -675,7 +675,18 @@
 		</foreach>
   </select>
   
-  
+  	<select id="queryOrderByCustomerIdAndServiceId" resultMap="BaseResultMap" parameterType="map" >
+		
+		    select 
+    <include refid="Base_Column_List" />
+    from orders
+    where customer_id = #{customerId,jdbcType=BIGINT} and  service_id = #{serviceId}  and  order_status in
+    <foreach collection="list" item="orderStatus" open="("  close=")"  separator=",">
+      #{orderStatus}  
+    </foreach>
+    order  by  order_time  desc
+    limit 1
+  	</select>
   
   
   

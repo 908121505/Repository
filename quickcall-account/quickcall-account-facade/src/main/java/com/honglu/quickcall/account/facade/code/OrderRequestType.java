@@ -49,6 +49,8 @@ public interface OrderRequestType {
     public static final  String  CUST_CONFIRM_ORDER = "19034";
     /**订单详情*/
     public static final  String  DETAIL_ORDER = "19035";
+    /**订单详情*/
+    public static final  String  DETAIL_ORDER_FOR_IM = "19037";
     /**订单取消*/
     public static final  String  CANCEL_ORDER = "19036";
     
