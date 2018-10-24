@@ -2,6 +2,7 @@ package com.honglu.quickcall.account.facade.vo;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Date;
 
 /**   
  * Copyright © 2018 www.xiaoniu.com All rights reserved.
@@ -13,6 +14,8 @@ import java.math.BigDecimal;
  */
 public class OrderSendOrderListVO implements  Serializable{
 
+	
+	private static final long serialVersionUID = -2246395099082397013L;
 	/**主播ID*/
 	private Long  orderId;
 	/**主播昵称*/
@@ -45,6 +48,24 @@ public class OrderSendOrderListVO implements  Serializable{
 	/**倒计时秒数*/
 	private Long  countDownSeconds; 
 	
+	/**下单时间*/
+	private Date  orderTime ;
+	/**接单时间*/
+	private Date  receiveOrderTime ;
+	
+	
+	public Date getOrderTime() {
+		return orderTime;
+	}
+	public void setOrderTime(Date orderTime) {
+		this.orderTime = orderTime;
+	}
+	public Date getReceiveOrderTime() {
+		return receiveOrderTime;
+	}
+	public void setReceiveOrderTime(Date receiveOrderTime) {
+		this.receiveOrderTime = receiveOrderTime;
+	}
 	public Long getOrderId() {
 		return orderId;
 	}

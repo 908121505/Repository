@@ -1,6 +1,23 @@
 package com.honglu.quickcall.user.service.service.impl;
 
-import cn.jiguang.commom.utils.StringUtils;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.ResourceBundle;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.honglu.quickcall.account.facade.code.AccountBizReturnCode;
 import com.honglu.quickcall.common.api.code.BizCode;
 import com.honglu.quickcall.common.api.exception.BizException;
@@ -15,25 +32,59 @@ import com.honglu.quickcall.common.third.rongyun.models.CodeSuccessReslut;
 import com.honglu.quickcall.common.third.rongyun.util.RongYunUtil;
 import com.honglu.quickcall.user.facade.code.UserBizReturnCode;
 import com.honglu.quickcall.user.facade.constants.UserBizConstants;
-import com.honglu.quickcall.user.facade.entity.*;
-import com.honglu.quickcall.user.facade.exchange.request.*;
-import com.honglu.quickcall.user.facade.vo.*;
-import com.honglu.quickcall.user.service.dao.*;
+import com.honglu.quickcall.user.facade.entity.Customer;
+import com.honglu.quickcall.user.facade.entity.CustomerInterest;
+import com.honglu.quickcall.user.facade.entity.CustomerOccupation;
+import com.honglu.quickcall.user.facade.entity.CustomerSkill;
+import com.honglu.quickcall.user.facade.entity.CustomerSkillCertify;
+import com.honglu.quickcall.user.facade.entity.Fans;
+import com.honglu.quickcall.user.facade.entity.SensitivityWord;
+import com.honglu.quickcall.user.facade.entity.SkillItem;
+import com.honglu.quickcall.user.facade.exchange.request.AddOrCancelFansRequest;
+import com.honglu.quickcall.user.facade.exchange.request.CheckAttentionRequest;
+import com.honglu.quickcall.user.facade.exchange.request.CustomerCenterRequest;
+import com.honglu.quickcall.user.facade.exchange.request.CustomerHomeRequest;
+import com.honglu.quickcall.user.facade.exchange.request.CustomerLevelRequest;
+import com.honglu.quickcall.user.facade.exchange.request.NoReadAttentionCountRequest;
+import com.honglu.quickcall.user.facade.exchange.request.QueryAttentionFansListRequest;
+import com.honglu.quickcall.user.facade.exchange.request.QueryInterestListRequest;
+import com.honglu.quickcall.user.facade.exchange.request.QueryOccupationListRequest;
+import com.honglu.quickcall.user.facade.exchange.request.ReadAttentionRequest;
+import com.honglu.quickcall.user.facade.exchange.request.SaveBirthRequest;
+import com.honglu.quickcall.user.facade.exchange.request.SaveGenderRequest;
+import com.honglu.quickcall.user.facade.exchange.request.SaveInterestRequest;
+import com.honglu.quickcall.user.facade.exchange.request.SaveNickNameRequest;
+import com.honglu.quickcall.user.facade.exchange.request.SaveOccupationRequest;
+import com.honglu.quickcall.user.facade.exchange.request.SaveSignNameRequest;
+import com.honglu.quickcall.user.facade.exchange.request.SaveSkillAuditRequest;
+import com.honglu.quickcall.user.facade.exchange.request.SearchPersonRequest;
+import com.honglu.quickcall.user.facade.exchange.request.queryMyskillRequest;
+import com.honglu.quickcall.user.facade.vo.AttentionFansVO;
+import com.honglu.quickcall.user.facade.vo.CustomerCenterVO;
+import com.honglu.quickcall.user.facade.vo.CustomerHomeVO;
+import com.honglu.quickcall.user.facade.vo.CustomerLevelVO;
+import com.honglu.quickcall.user.facade.vo.InterestVO;
+import com.honglu.quickcall.user.facade.vo.MySkillVO;
+import com.honglu.quickcall.user.facade.vo.OccupationVO;
+import com.honglu.quickcall.user.facade.vo.SearchPersonListVO;
+import com.honglu.quickcall.user.service.dao.CustomerAppearanceMapper;
+import com.honglu.quickcall.user.service.dao.CustomerInterestMapper;
+import com.honglu.quickcall.user.service.dao.CustomerMapper;
+import com.honglu.quickcall.user.service.dao.CustomerOccupationMapper;
+import com.honglu.quickcall.user.service.dao.CustomerSkillCertifyMapper;
+import com.honglu.quickcall.user.service.dao.CustomerSkillMapper;
+import com.honglu.quickcall.user.service.dao.FansMapper;
+import com.honglu.quickcall.user.service.dao.InterestMapper;
+import com.honglu.quickcall.user.service.dao.OccupationMapper;
+import com.honglu.quickcall.user.service.dao.SensitivityWordMapper;
+import com.honglu.quickcall.user.service.dao.SkillItemMapper;
 import com.honglu.quickcall.user.service.service.CustomerRedisManagement;
 import com.honglu.quickcall.user.service.service.PersonInfoService;
 import com.honglu.quickcall.user.service.util.CountAge;
 import com.honglu.quickcall.user.service.util.JsonParseUtil;
 import com.honglu.quickcall.user.service.util.RedisKeyConstants;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
-import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import cn.jiguang.commom.utils.StringUtils;
 
 @Service
 @Transactional
@@ -69,33 +120,35 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 	private final static Pattern CH_EN_PATTERN = Pattern.compile("^[\\u4e00-\\u9fa5a-z\\d_]{4,24}$");
 	private static final Logger logger = LoggerFactory.getLogger(PersonInfoServiceImpl.class);
 
-    /** 用户默认的形象照 **/
-    private static String DEFAULT_CUSTOMER_APPEARANCE_URL = ResourceBundle.getBundle("thirdconfig").getString("DEFAULT_CUSTOMER_APPEARANCE_URL");
+	/** 用户默认的形象照 **/
+	private static String DEFAULT_CUSTOMER_APPEARANCE_URL = ResourceBundle.getBundle("thirdconfig")
+			.getString("DEFAULT_CUSTOMER_APPEARANCE_URL");
 
 	/**
 	 * 首页搜索用户
+	 * 
 	 * @param params
 	 * @return
 	 */
 	@Override
-	public CommonResponse searchPerson(SearchPersonRequest params){
+	public CommonResponse searchPerson(SearchPersonRequest params) {
 		CommonResponse commonResponse = new CommonResponse();
 		String keyword = params.getKeyword();
-		if(StringUtil.isBlank(keyword)){
+		if (StringUtil.isBlank(keyword)) {
 			throw new BizException(UserBizReturnCode.paramError, "搜索关键字不能为空");
 		}
 		Pattern pattern = Pattern.compile("[0-9]{10}");
 		Long currentCustomer = params.getCustomerId();
 		List<SearchPersonListVO> customerList = null;
-		//匹配搜索关键字是模糊搜索还是精准搜索
-		if(pattern.matcher(keyword).matches()){
-			customerList = customerMapper.selectPreciseSearch(keyword,currentCustomer);
+		// 匹配搜索关键字是模糊搜索还是精准搜索
+		if (pattern.matcher(keyword).matches()) {
+			customerList = customerMapper.selectPreciseSearch(keyword, currentCustomer);
+		} else {
+			customerList = customerMapper.selectFuzzySearch(keyword, currentCustomer, params.getPageIndex(),
+					params.getPageSize());
 		}
-		else{
-			customerList = customerMapper.selectFuzzySearch(keyword,currentCustomer,params.getPageIndex(),params.getPageSize());
-		}
-		
-		logger.info("用户编号为："+currentCustomer+"搜索关键字:"+keyword+" 成功");
+
+		logger.info("用户编号为：" + currentCustomer + "搜索关键字:" + keyword + " 成功");
 		commonResponse.setData(customerList);
 		commonResponse.setCode(UserBizReturnCode.Success);
 		commonResponse.setMessage(UserBizReturnCode.Success.desc());
@@ -550,14 +603,15 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 		}
 		CommonResponse commonResponse = new CommonResponse();
 		List<SkillItem> skillList = skillItemMapper.selectAllSkill();
-		List<CustomerSkillCertify> skillReviewList = customerSkillCertifyMapper.selectAllSkillByCustomer(params.getCustomerId());
-		//已经解锁的技能列表
+		List<CustomerSkillCertify> skillReviewList = customerSkillCertifyMapper
+				.selectAllSkillByCustomer(params.getCustomerId());
+		// 已经解锁的技能列表
 		List<MySkillVO> haveSkill = new ArrayList<MySkillVO>();
-		//未解锁的技能列表
+		// 未解锁的技能列表
 		List<MySkillVO> noHaveSkill = new ArrayList<MySkillVO>();
-		boolean flag ;
-		Map<String,Object> map = new HashMap<String,Object>();
-		//区分解锁和不解锁的技能
+		boolean flag;
+		Map<String, Object> map = new HashMap<String, Object>();
+		// 区分解锁和不解锁的技能
 		for (SkillItem skill : skillList) {
 			flag = true;
 			MySkillVO mySkillVO = new MySkillVO();
@@ -566,13 +620,13 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 			mySkillVO.setSkillId(skill.getId());
 			mySkillVO.setSkillStatus(skill.getSkillStatus());
 			for (CustomerSkillCertify skillReview : skillReviewList) {
-				//判断认证的技能
-				if(skill.getId().equals(skillReview.getSkillItemId())){
+				// 判断认证的技能
+				if (skill.getId().equals(skillReview.getSkillItemId())) {
 					mySkillVO.setAuditStatus(skillReview.getAuditStatus());
-					//是否已经审核过
-					if(skillReview.getIsAudited()==1){
-						//审核状态不是待审核状态
-						if(skillReview.getAuditStatus() != 1){
+					// 是否已经审核过
+					if (skillReview.getIsAudited() == 1) {
+						// 审核状态不是待审核状态
+						if (skillReview.getAuditStatus() != 1) {
 							mySkillVO.setSkillVoiceUrl(skillReview.getSkillVoiceUrl());
 							mySkillVO.setSkillVoiceTime(skillReview.getSkillVoiceTime());
 						}
@@ -583,30 +637,37 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 					}
 				}
 			}
-			if(flag){
+			if (flag) {
 				mySkillVO.setImageUrl(skill.getLockIcon());
 				noHaveSkill.add(mySkillVO);
 			}
 		}
 
-//		//已经解锁的技能列表
-//		List<MySkillVO> haveSkill = new ArrayList<MySkillVO>();
-//		//未解锁的技能列表
-//		List<MySkillVO> noHaveSkill = new ArrayList<MySkillVO>();
-//		MySkillVO m1 = new MySkillVO("甜蜜互动","http://test-guanjia.oss-cn-shanghai.aliyuncs.com/voice/banner/1539583182452.png",1,1809221430063474300L,1);
-//		MySkillVO m2 = new MySkillVO("午夜畅聊","http://test-guanjia.oss-cn-shanghai.aliyuncs.com/voice/banner/1539583354838.png",2,1809221430063474300L,"http://test-guanjia.oss-cn-shanghai.aliyuncs.com/voice/user/audio/db91943b9bb04d6b97127dce1a37a9fe.mp3",new BigDecimal(8.0),1);
-//		MySkillVO m3 = new MySkillVO("游戏互动","http://test-guanjia.oss-cn-shanghai.aliyuncs.com/voice/banner/1539583368153.png",1,1809221430063474300L,1);
-//		MySkillVO m4 = new MySkillVO("哄睡","http://test-guanjia.oss-cn-shanghai.aliyuncs.com/voice/banner/1539583182452.png",0,1809221430063474300L,0);
-//		MySkillVO m5 = new MySkillVO("声优聊天","http://test-guanjia.oss-cn-shanghai.aliyuncs.com/voice/banner/1539583182452.png",0,1809221430063474300L,1);
-//		MySkillVO m6 = new MySkillVO("哄睡","http://test-guanjia.oss-cn-shanghai.aliyuncs.com/voice/banner/1539583182452.png",0,1809221430063474300L,1);
-//		haveSkill.add(m1);
-//		haveSkill.add(m2);
-//		noHaveSkill.add(m3);
-//		noHaveSkill.add(m4);
-//		noHaveSkill.add(m5);
-//		noHaveSkill.add(m6);
-//		Map<String,Object> map = new HashMap<String,Object>();
-		logger.info("用户编号为："+params.getCustomerId()+"查询我的技能成功");
+		// //已经解锁的技能列表
+		// List<MySkillVO> haveSkill = new ArrayList<MySkillVO>();
+		// //未解锁的技能列表
+		// List<MySkillVO> noHaveSkill = new ArrayList<MySkillVO>();
+		// MySkillVO m1 = new
+		// MySkillVO("甜蜜互动","http://test-guanjia.oss-cn-shanghai.aliyuncs.com/voice/banner/1539583182452.png",1,1809221430063474300L,1);
+		// MySkillVO m2 = new
+		// MySkillVO("午夜畅聊","http://test-guanjia.oss-cn-shanghai.aliyuncs.com/voice/banner/1539583354838.png",2,1809221430063474300L,"http://test-guanjia.oss-cn-shanghai.aliyuncs.com/voice/user/audio/db91943b9bb04d6b97127dce1a37a9fe.mp3",new
+		// BigDecimal(8.0),1);
+		// MySkillVO m3 = new
+		// MySkillVO("游戏互动","http://test-guanjia.oss-cn-shanghai.aliyuncs.com/voice/banner/1539583368153.png",1,1809221430063474300L,1);
+		// MySkillVO m4 = new
+		// MySkillVO("哄睡","http://test-guanjia.oss-cn-shanghai.aliyuncs.com/voice/banner/1539583182452.png",0,1809221430063474300L,0);
+		// MySkillVO m5 = new
+		// MySkillVO("声优聊天","http://test-guanjia.oss-cn-shanghai.aliyuncs.com/voice/banner/1539583182452.png",0,1809221430063474300L,1);
+		// MySkillVO m6 = new
+		// MySkillVO("哄睡","http://test-guanjia.oss-cn-shanghai.aliyuncs.com/voice/banner/1539583182452.png",0,1809221430063474300L,1);
+		// haveSkill.add(m1);
+		// haveSkill.add(m2);
+		// noHaveSkill.add(m3);
+		// noHaveSkill.add(m4);
+		// noHaveSkill.add(m5);
+		// noHaveSkill.add(m6);
+		// Map<String,Object> map = new HashMap<String,Object>();
+		logger.info("用户编号为：" + params.getCustomerId() + "查询我的技能成功");
 		map.put("unlockList", haveSkill);
 		map.put("lockList", noHaveSkill);
 		commonResponse.setData(map);
@@ -618,7 +679,8 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 	@Override
 	public CommonResponse saveCustomerSkillCertify(SaveSkillAuditRequest params) {
 		CommonResponse commonResponse = new CommonResponse();
-		CustomerSkillCertify certifyNow = customerSkillCertifyMapper.selectSkillCertifyId(params.getCustomerId(),params.getSkillItemId());
+		CustomerSkillCertify certifyNow = customerSkillCertifyMapper.selectSkillCertifyId(params.getCustomerId(),
+				params.getSkillItemId());
 
 		CustomerSkillCertify csc = new CustomerSkillCertify();
 		csc.setCustomerId(params.getCustomerId());
@@ -626,27 +688,27 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 		csc.setSkillVoiceUrlTmp(params.getSkillVoiceUrl());
 		csc.setSkillVoiceTimeTmp(params.getSkillVoiceTime());
 		csc.setAuditStatus(UserBizConstants.SKILL_CERTIFY_STATUS_AUDIT);
-		//更改的数量
+		// 更改的数量
 		int n;
-		if(certifyNow != null ){
-			//如果是审核中不能进入本方法
-			if(certifyNow.getAuditStatus()==UserBizConstants.SKILL_CERTIFY_STATUS_AUDIT){
+		if (certifyNow != null) {
+			// 如果是审核中不能进入本方法
+			if (certifyNow.getAuditStatus() == UserBizConstants.SKILL_CERTIFY_STATUS_AUDIT) {
 				commonResponse.setCode(UserBizReturnCode.skillCertifyError);
 				commonResponse.setMessage(UserBizReturnCode.skillCertifyError.desc());
 				return commonResponse;
 			}
-			//更新操作
+			// 更新操作
 			csc.setCertifyId(certifyNow.getCertifyId());
 			n = customerSkillCertifyMapper.updateEntity(csc);
-		}else{
-			//插入操作
+		} else {
+			// 插入操作
 			csc.setCertifyId(UUIDUtils.getId());
 			n = customerSkillCertifyMapper.saveEntity(csc);
 		}
-		if(n > 0){
+		if (n > 0) {
 			commonResponse.setCode(UserBizReturnCode.Success);
 			commonResponse.setMessage(UserBizReturnCode.Success.desc());
-		}else{
+		} else {
 			throw new BizException(AccountBizReturnCode.JdbcError, "操作数据库异常");
 		}
 		return commonResponse;
@@ -667,10 +729,7 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 		if (customer.getBirthday() != null) {
 			customerCenterVO.setAge(CountAge.getAgeByBirth(customer.getBirthday()));
 		}
-
-		// 客户等级 ADUAN -- 待完成
-		customerCenterVO.setCustomerLevel(250);
-
+		customerCenterVO.setCustomerLevel(customer.getCustomerLevel());
 		customerCenterVO.setSignName(customer.getSignName());
 		customerCenterVO.setIdentityStatus(customer.getIdentityStatus());
 		customerCenterVO.setvStatus(customer.getvStatus());
@@ -683,7 +742,7 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 
 		// 查询充值、提现金额
 		Map<String, BigDecimal> customerMoney = customerMapper.queryCustomerAccountMoney(request.getCustomerId());
-		if(customerMoney != null) {
+		if (customerMoney != null) {
 			customerCenterVO.setRechargeAmounts(customerMoney.get("rechargeAmounts"));
 			customerCenterVO.setWithdrawAmounts(customerMoney.get("withdrawAmounts"));
 		}
@@ -693,75 +752,78 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 	@Override
 	public CommonResponse queryCustomerHome(CustomerHomeRequest request) {
 		Customer viewCustomer = customerMapper.selectByPrimaryKey(request.getViewCustomerId());
-        if (viewCustomer == null) {
-            return ResultUtils.resultDataNotExist("用户数据不存在");
-        }
+		if (viewCustomer == null) {
+			return ResultUtils.resultDataNotExist("用户数据不存在");
+		}
 
-        CustomerHomeVO customerHomeVO = new CustomerHomeVO();
-        customerHomeVO.setLoginCustomerId(request.getLoginCustomerId());
-        customerHomeVO.setViewCustomerId(request.getViewCustomerId());
-        customerHomeVO.setCustomerAppId(viewCustomer.getAppId());
-        customerHomeVO.setNickName(viewCustomer.getNickName());
+		CustomerHomeVO customerHomeVO = new CustomerHomeVO();
+		customerHomeVO.setLoginCustomerId(request.getLoginCustomerId());
+		customerHomeVO.setViewCustomerId(request.getViewCustomerId());
+		customerHomeVO.setCustomerAppId(viewCustomer.getAppId());
+		customerHomeVO.setNickName(viewCustomer.getNickName());
 		customerHomeVO.setHeadPortraitUrl(viewCustomer.getHeadPortraitUrl());
-        customerHomeVO.setSex(viewCustomer.getSex());
-        if (viewCustomer.getBirthday() != null) {
-            customerHomeVO.setAge(CountAge.getAgeByBirth(viewCustomer.getBirthday()));
-        }
+		customerHomeVO.setSex(viewCustomer.getSex());
+		if (viewCustomer.getBirthday() != null) {
+			customerHomeVO.setAge(CountAge.getAgeByBirth(viewCustomer.getBirthday()));
+		}
+		customerHomeVO.setCustomerLevel(viewCustomer.getCustomerLevel());
+		customerHomeVO.setSignName(viewCustomer.getSignName());
+		customerHomeVO.setStarSign(viewCustomer.getStarSign());
+		customerHomeVO.setIdentityStatus(viewCustomer.getIdentityStatus());
+		customerHomeVO.setvStatus(viewCustomer.getvStatus());
 
-        // 客户等级 ADUAN -- 待完成
-        customerHomeVO.setCustomerLevel(250);
+		// 查询登录用户是否关注被查看的用户
+		if (request.getLoginCustomerId() != null
+				&& !Objects.equals(request.getLoginCustomerId(), request.getViewCustomerId())) {
+			int idFollow = fansMapper.queryIsFollow(request.getViewCustomerId(), request.getLoginCustomerId());
+			customerHomeVO.setAttentionStatus(Objects.equals(idFollow, 1) ? 1 : 0);
+		}
 
-        customerHomeVO.setSignName(viewCustomer.getSignName());
-        customerHomeVO.setStarSign(viewCustomer.getStarSign());
-        customerHomeVO.setIdentityStatus(viewCustomer.getIdentityStatus());
-        customerHomeVO.setvStatus(viewCustomer.getvStatus());
+		// 查询粉丝数
+		customerHomeVO.setFansNum(fansMapper.queryFansNumByCustomerId(request.getViewCustomerId()).intValue());
 
-        // 查询登录用户是否关注被查看的用户
-        if (request.getLoginCustomerId() != null && !Objects.equals(request.getLoginCustomerId(), request.getViewCustomerId())) {
-            int idFollow = fansMapper.queryIsFollow(request.getViewCustomerId(), request.getLoginCustomerId());
-            customerHomeVO.setAttentionStatus(Objects.equals(idFollow, 1) ? 1 : 0);
-        }
+		// 查询用户形象照列表
+		List<String> appearanceList = customerAppearanceMapper
+				.queryCustomerAuditedAppearance(request.getViewCustomerId(), 0);
+		customerHomeVO.setAppearanceUrlList(
+				appearanceList.isEmpty() ? Arrays.asList(DEFAULT_CUSTOMER_APPEARANCE_URL) : appearanceList);
 
-        // 查询粉丝数
-        customerHomeVO.setFansNum(fansMapper.queryFansNumByCustomerId(request.getViewCustomerId()).intValue());
+		// 查询用户兴趣
+		customerHomeVO.setInterestList(customerInterestMapper.queryCustomerInterestList(request.getViewCustomerId()));
 
-        // 查询用户形象照列表
-		List<String> appearanceList = customerAppearanceMapper.queryCustomerAuditedAppearance(request.getViewCustomerId(), 0);
-        customerHomeVO.setAppearanceUrlList(appearanceList.isEmpty() ? Arrays.asList(DEFAULT_CUSTOMER_APPEARANCE_URL): appearanceList);
+		// 查询声鉴卡
+		List<String> soundGuideCard = customerAppearanceMapper
+				.queryCustomerAuditedAppearance(request.getViewCustomerId(), 2);
+		customerHomeVO.setSoundGuideCard(soundGuideCard.isEmpty() ? null : soundGuideCard.get(0));
 
-        // 查询用户兴趣
-        customerHomeVO.setInterestList(customerInterestMapper.queryCustomerInterestList(request.getViewCustomerId()));
-
-        // 查询声鉴卡
-		List<String> soundGuideCard = customerAppearanceMapper.queryCustomerAuditedAppearance(request.getViewCustomerId(), 2);
-        customerHomeVO.setSoundGuideCard(soundGuideCard.isEmpty() ? null : soundGuideCard.get(0));
-
-        // 查询用户技能 -- 条件是大V
-        List<CustomerHomeVO.CustomerSkill> skillList = new ArrayList<>();
-        if (Objects.equals(viewCustomer.getvStatus(), 2)) {
-            List<CustomerSkill> customerSkills = customerSkillMapper.selectCustomerAuditedSkill(request.getViewCustomerId());
-            for (CustomerSkill bean : customerSkills) {
-                CustomerHomeVO.CustomerSkill customerSkill = customerHomeVO.new CustomerSkill();
-                customerSkill.setSkillId(bean.getSkillItemId());
-                customerSkill.setSkillName(bean.getSkillName());
+		// 查询用户技能 -- 条件是大V
+		List<CustomerHomeVO.CustomerSkill> skillList = new ArrayList<>();
+		if (Objects.equals(viewCustomer.getvStatus(), 2)) {
+			List<CustomerSkill> customerSkills = customerSkillMapper
+					.selectCustomerAuditedSkill(request.getViewCustomerId());
+			for (CustomerSkill bean : customerSkills) {
+				CustomerHomeVO.CustomerSkill customerSkill = customerHomeVO.new CustomerSkill();
+				customerSkill.setSkillId(bean.getSkillItemId());
+				customerSkill.setSkillName(bean.getSkillName());
 				customerSkill.setSkillBackColor(bean.getSkillBackColor());
 				customerSkill.setSkillFontColor(bean.getSkillFontColor());
-                customerSkill.setSkillVoiceUrl(bean.getSkillVoiceUrl());
-                customerSkill.setSkillVoiceTime(bean.getSkillVoiceTime());
+				customerSkill.setSkillVoiceUrl(bean.getSkillVoiceUrl());
+				customerSkill.setSkillVoiceTime(bean.getSkillVoiceTime());
 
-                // 价格显示折扣后的价格
-                customerSkill.setSkillPrice(bean.getDiscountPrice());
-                customerSkill.setServiceUnit(bean.getServiceUnit());
-                // 查询技能评价标签
-                customerSkill.setCustomerLabel(customerSkillMapper.selectCustomerSkillHotLabel(request.getViewCustomerId(), bean.getSkillItemId()));
+				// 价格显示折扣后的价格
+				customerSkill.setSkillPrice(bean.getDiscountPrice());
+				customerSkill.setServiceUnit(bean.getServiceUnit());
+				// 查询技能评价标签
+				customerSkill.setCustomerLabel(customerSkillMapper
+						.selectCustomerSkillHotLabel(request.getViewCustomerId(), bean.getSkillItemId()));
 
-                // ADUAN -- 声量 -- 后期在做
-                customerSkill.setSkillVolume(250);
+				// 声量 ADUAN -- 一期前段不显示
+				customerSkill.setSkillVolume(250);
 
-                skillList.add(customerSkill);
-            }
-        }
-        customerHomeVO.setSkillList(skillList);
+				skillList.add(customerSkill);
+			}
+		}
+		customerHomeVO.setSkillList(skillList);
 
 		return ResultUtils.resultSuccess(customerHomeVO);
 	}
@@ -777,16 +839,32 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 		customerLevelVO.setCustomerAppId(customer.getAppId());
 		customerLevelVO.setNickName(customer.getNickName());
 		customerLevelVO.setHeadPortraitUrl(customer.getHeadPortraitUrl());
+		customerLevelVO.setCustomerLevel(customer.getCustomerLevel());
+		customerLevelVO.setCustomerExperience(customer.getCumulateExperience());
 
-		// ADUAN -- 待完成 -- 客户等级、等级特权、如何升级
-		customerLevelVO.setCustomerLevel(80);
-		customerLevelVO.setNextLevel(81);
-		customerLevelVO.setNeedExperienceNum(3000);
+		// 查询当前等级经验值
+		Integer currentLevelExperience = customerMapper.getGradeExperienceByLevelNo(customer.getCustomerLevel());
+		customerLevelVO.setCustomerExperience(currentLevelExperience);
+		// 查询下一等级经验值
+		Integer nextLevelExperience = customerMapper.getGradeExperienceByLevelNo(customer.getCustomerLevel());
+		customerLevelVO.setNextLevelExperience(nextLevelExperience);
 
-		// 查询等级特权
+		// 距离下一级所需经验值
+		customerLevelVO.setNeedExperienceNum(nextLevelExperience - customer.getCumulateExperience());
 
-		// 查询如何升级
+		// 查询等级特权 ADUAN -- 一期不做
+
+		// 查询如何升级 ADUAN -- 一期不做
 
 		return ResultUtils.resultSuccess(customerLevelVO);
+	}
+
+	@Override
+	public CommonResponse noReadAttentionCount(NoReadAttentionCountRequest params) {
+		if (params.getCustomerId() == null) {
+			throw new BizException(BizCode.ParamError, "用戶Id 不能为空");
+		}
+		int row = fansMapper.queryNoReadFansNumByCustomerId(params.getCustomerId());
+		return ResultUtils.resultSuccess(row);
 	}
 }

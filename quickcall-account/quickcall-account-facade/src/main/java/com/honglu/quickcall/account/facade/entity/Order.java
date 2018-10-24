@@ -107,9 +107,45 @@ public class Order {
 
     
     private String remark;
+    /**技能类型*/
+    private Integer  skillType;
+    
+    private String selectReason;
+    private String remarkReason;
+    
 
     
-    public Long getOrderId() {
+    public String getSelectReason() {
+		return selectReason;
+	}
+
+
+	public void setSelectReason(String selectReason) {
+		this.selectReason = selectReason;
+	}
+
+
+	public String getRemarkReason() {
+		return remarkReason;
+	}
+
+
+	public void setRemarkReason(String remarkReason) {
+		this.remarkReason = remarkReason;
+	}
+
+
+	public Integer getSkillType() {
+		return skillType;
+	}
+
+
+	public void setSkillType(Integer skillType) {
+		this.skillType = skillType;
+	}
+
+
+	public Long getOrderId() {
         return orderId;
     }
 

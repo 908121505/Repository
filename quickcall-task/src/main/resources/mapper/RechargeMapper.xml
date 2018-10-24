@@ -25,7 +25,39 @@
   from recharge 
   where create_date>=CURRENT_TIMESTAMP - INTERVAL 30 MINUTE and state=1
   </select>
-
+<update id="updateByOrderNo" parameterType="com.honglu.quickcall.task.entity.Recharge" >
+    update recharge
+    <set >
+      <if test="customerId != null" >
+        customer_id = #{customerId,jdbcType=BIGINT},
+      </if>
+      <if test="createDate != null" >
+        create_date = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="finishDate != null" >
+        finish_date = #{finishDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="tokenPackage != null" >
+        token_package = #{tokenPackage,jdbcType=INTEGER},
+      </if>
+      <if test="amount != null" >
+        amount = #{amount,jdbcType=DOUBLE},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=TINYINT},
+      </if>
+      <if test="alipayordersn != null" >
+        alipayordersn = #{alipayordersn,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null" >
+        state = #{state,jdbcType=TINYINT},
+      </if>
+      <if test="rechargeType != null" >
+        recharge_type = #{rechargeType,jdbcType=INTEGER},
+      </if>
+    </set>
+    where   ordersn = #{ordersn,jdbcType=VARCHAR}
+  </update>
 
 
 </mapper>

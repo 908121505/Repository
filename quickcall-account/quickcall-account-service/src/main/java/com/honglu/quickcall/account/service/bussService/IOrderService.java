@@ -55,11 +55,11 @@ public interface IOrderService {
 	
 	
 	
-	/**
-	 * 发起的订单页--去支付
-	 * @param request
-	 */
-	public CommonResponse  payOrder(PayOrderRequest  request);
+//	/**
+//	 * 发起的订单页--去支付
+//	 * @param request
+//	 */
+//	public CommonResponse  payOrder(PayOrderRequest  request);
 	
 	
 //	/**
@@ -70,14 +70,14 @@ public interface IOrderService {
 	
 	
 	/**
-	 * 发起的订单页--申请退款/完成
+	 * 用户同意大V服务完成
 	 * @param request
 	 */
-	public CommonResponse  applayRefund(ApplayRefundRequest  request);
+	public CommonResponse  custConfirmFinish(CustConfirmFinishRequest  request);
 	
 	
 	/**
-	 * 发起的订单页--同意/拒绝
+	 * 用户同意大V立即服务
 	 * @param request
 	 */
 	public CommonResponse  confirmOrder(ConfirmOrderRequest  request);
@@ -101,10 +101,10 @@ public interface IOrderService {
 	
 	
 	/**
-	 * 收到的订单页--大V同意退款/拒绝
+	 *用户/大V完成服务
 	 * @param request
 	 */
-	public CommonResponse  dvConfirmRefund(DvConfirmRefundRequest  request);
+	public CommonResponse  finishOrder(FinishOrderRequest  request);
 	
 	//##################################大V收到的订单页相关结束##################################
 	

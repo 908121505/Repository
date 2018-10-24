@@ -53,6 +53,20 @@
 						</label>
 					</div>
 				</div>
+
+				<div class="form-group">
+					<label class="col-sm-2 control-label">技能类型<font color="red">&nbsp;*</font></label>
+					<div class="col-sm-10">
+						<label class="checkbox-inline">
+							<input type="radio" name="skillType" value="1" ${empty entity or entity.skillType=='1'?'checked':'' }>
+							不可重复接单类型
+						</label>
+						<label class="checkbox-inline">
+							<input type="radio" name="skillType" value="2" ${entity.skillType=='2'?'checked':'' }>
+							可重复接单类型
+						</label>
+					</div>
+				</div>
 				
 				
 				

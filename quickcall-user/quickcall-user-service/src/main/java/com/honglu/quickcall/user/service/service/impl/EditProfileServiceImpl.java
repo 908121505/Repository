@@ -5,6 +5,7 @@ import com.honglu.quickcall.account.facade.code.AccountBizReturnCode;
 import com.honglu.quickcall.common.api.exception.BizException;
 import com.honglu.quickcall.common.api.exception.RemoteException;
 import com.honglu.quickcall.common.api.exchange.CommonResponse;
+import com.honglu.quickcall.common.api.exchange.ResultUtils;
 import com.honglu.quickcall.common.api.util.JedisUtil;
 import com.honglu.quickcall.common.core.util.Detect;
 import com.honglu.quickcall.common.core.util.StringUtil;
@@ -17,13 +18,16 @@ import com.honglu.quickcall.user.facade.entity.CustomerAppearance;
 import com.honglu.quickcall.user.facade.entity.CustomerInterest;
 import com.honglu.quickcall.user.facade.entity.SensitivityWord;
 import com.honglu.quickcall.user.facade.exchange.request.editprofile.*;
+import com.honglu.quickcall.user.facade.vo.AppearanceVO;
 import com.honglu.quickcall.user.facade.vo.BlacklistVo;
 import com.honglu.quickcall.user.facade.vo.InterestVO;
+import com.honglu.quickcall.user.facade.vo.UserEditInfoVO;
 import com.honglu.quickcall.user.service.dao.*;
 import com.honglu.quickcall.user.service.service.CustomerRedisManagement;
 import com.honglu.quickcall.user.service.service.EditProfileService;
 import com.honglu.quickcall.user.service.type.AppearanceTypeEnum;
 import com.honglu.quickcall.user.service.util.CommonUtil;
+import com.honglu.quickcall.user.service.util.CountAge;
 import com.honglu.quickcall.user.service.util.JsonParseUtil;
 import com.honglu.quickcall.user.service.util.RedisKeyConstants;
 import org.slf4j.Logger;
@@ -63,10 +67,10 @@ public class EditProfileServiceImpl implements EditProfileService {
     public CommonResponse updateNickName(UpdateNickNameReq params) {
         CommonResponse commonResponse = new CommonResponse();
 
-        if(params.getCustomerId() == null){
+        if (params.getCustomerId() == null) {
             throw new BizException(UserBizReturnCode.paramError, "customerId不能为空");
         }
-        if(StringUtil.isBlank(params.getNickName())){
+        if (StringUtil.isBlank(params.getNickName())) {
             throw new BizException(UserBizReturnCode.paramError, "nickName不能为空");
         }
 
@@ -122,10 +126,10 @@ public class EditProfileServiceImpl implements EditProfileService {
     public CommonResponse updateSignName(UpdateSignNameReq params) {
         CommonResponse commonResponse = new CommonResponse();
 
-        if(params.getCustomerId() == null){
+        if (params.getCustomerId() == null) {
             throw new BizException(UserBizReturnCode.paramError, "customerId不能为空");
         }
-        if(StringUtil.isBlank(params.getSignName())){
+        if (StringUtil.isBlank(params.getSignName())) {
             throw new BizException(UserBizReturnCode.paramError, "signName不能为空");
         }
 
@@ -163,10 +167,10 @@ public class EditProfileServiceImpl implements EditProfileService {
     public CommonResponse updateStarSign(UpdateStarSignReq params) {
         CommonResponse commonResponse = new CommonResponse();
 
-        if(params.getCustomerId() == null){
+        if (params.getCustomerId() == null) {
             throw new BizException(UserBizReturnCode.paramError, "customerId不能为空");
         }
-        if(StringUtil.isBlank(params.getStarSign())){
+        if (StringUtil.isBlank(params.getStarSign())) {
             throw new BizException(UserBizReturnCode.paramError, "starSign不能为空");
         }
 
@@ -191,10 +195,10 @@ public class EditProfileServiceImpl implements EditProfileService {
     public CommonResponse updateInterest(UpdateInterestReq params) {
         CommonResponse commonResponse = new CommonResponse();
 
-        if(params.getCustomerId() == null){
+        if (params.getCustomerId() == null) {
             throw new BizException(UserBizReturnCode.paramError, "customerId不能为空");
         }
-        if(StringUtil.isBlank(params.getInterestId())){
+        if (StringUtil.isBlank(params.getInterestId())) {
             throw new BizException(UserBizReturnCode.paramError, "interestId不能为空");
         }
 
@@ -224,10 +228,10 @@ public class EditProfileServiceImpl implements EditProfileService {
     public CommonResponse updateHeadPortrait(UpdateHeadPortraitReq params) {
         CommonResponse commonResponse = new CommonResponse();
 
-        if(params.getCustomerId() == null){
+        if (params.getCustomerId() == null) {
             throw new BizException(UserBizReturnCode.paramError, "customerId不能为空");
         }
-        if(StringUtil.isBlank(params.getHeadPortraitUrl())){
+        if (StringUtil.isBlank(params.getHeadPortraitUrl())) {
             throw new BizException(UserBizReturnCode.paramError, "headPortraitUrl不能为空");
         }
 
@@ -236,7 +240,7 @@ public class EditProfileServiceImpl implements EditProfileService {
         CustomerAppearance customerAppearance = customerAppearanceMapper.selectByCustomerIdAndType(params.getCustomerId(), AppearanceTypeEnum.HEAD_PORTRAIT.getCode());
         if (null != customerAppearance) {
             customerAppearance.setAuditAppearance(params.getHeadPortraitUrl());
-
+            customerAppearance.setAuditStatus(0);
             result = customerAppearanceMapper.updateAppearance(customerAppearance);
             logger.info("修改头像 updateHeadPortrait,更新数量" + result);
 
@@ -264,15 +268,16 @@ public class EditProfileServiceImpl implements EditProfileService {
     public CommonResponse updateAppearance(UpdateAppearanceReq params) {
         CommonResponse commonResponse = new CommonResponse();
 
-        if(params.getCustomerId() == null){
+        if (params.getCustomerId() == null) {
             throw new BizException(UserBizReturnCode.paramError, "customerId不能为空");
         }
-        if(StringUtil.isBlank(params.getAppearance())){
+        if (StringUtil.isBlank(params.getAppearance())) {
             throw new BizException(UserBizReturnCode.paramError, "appearance不能为空");
         }
 
         CustomerAppearance customerAppearance = new CustomerAppearance();
-        customerAppearance.setId(UUIDUtils.getId());
+        Long id = UUIDUtils.getId();
+        customerAppearance.setId(id);
         customerAppearance.setCustomerId(params.getCustomerId());
         customerAppearance.setAuditAppearance(params.getAppearance());
         customerAppearance.setType(AppearanceTypeEnum.APPEARANCE.getCode());
@@ -281,6 +286,7 @@ public class EditProfileServiceImpl implements EditProfileService {
         if (result > 0) {
             commonResponse.setCode(UserBizReturnCode.Success);
             commonResponse.setMessage(UserBizReturnCode.Success.desc());
+            commonResponse.setData(id);
             return commonResponse;
         } else {
             logger.error("修改形象照 异常");
@@ -293,7 +299,7 @@ public class EditProfileServiceImpl implements EditProfileService {
     public CommonResponse removeAppearance(RemoveAppearanceReq params) {
         CommonResponse commonResponse = new CommonResponse();
 
-        if(params.getId() == null){
+        if (params.getId() == null) {
             throw new BizException(UserBizReturnCode.paramError, "id不能为空");
         }
 
@@ -313,10 +319,10 @@ public class EditProfileServiceImpl implements EditProfileService {
     public CommonResponse updateVoiceIdentificationCard(UpdateVoiceIdentificationCardReq params) {
         CommonResponse commonResponse = new CommonResponse();
 
-        if(params.getCustomerId() == null){
+        if (params.getCustomerId() == null) {
             throw new BizException(UserBizReturnCode.paramError, "customerId不能为空");
         }
-        if(StringUtil.isBlank(params.getVoiceIdentificationCard())){
+        if (StringUtil.isBlank(params.getVoiceIdentificationCard())) {
             throw new BizException(UserBizReturnCode.paramError, "voiceIdentificationCard不能为空");
         }
 
@@ -325,7 +331,7 @@ public class EditProfileServiceImpl implements EditProfileService {
         CustomerAppearance customerAppearance = customerAppearanceMapper.selectByCustomerIdAndType(params.getCustomerId(), AppearanceTypeEnum.VOICE_IDENTIFICATION_CARD.getCode());
         if (null != customerAppearance) {
             customerAppearance.setAuditAppearance(params.getVoiceIdentificationCard());
-
+            customerAppearance.setAuditStatus(0);
             result = customerAppearanceMapper.updateAppearance(customerAppearance);
             logger.info("修改声鉴卡 updateVoiceIdentificationCard,更新数量" + result);
 
@@ -353,7 +359,7 @@ public class EditProfileServiceImpl implements EditProfileService {
     public CommonResponse removeVoiceIdentificationCard(RemoveVoiceIdentificationCardReq params) {
         CommonResponse commonResponse = new CommonResponse();
 
-        if(params.getId() == null){
+        if (params.getId() == null) {
             throw new BizException(UserBizReturnCode.paramError, "id不能为空");
         }
 
@@ -381,6 +387,112 @@ public class EditProfileServiceImpl implements EditProfileService {
             commonResponse.setMessage(UserBizReturnCode.Success.desc());
         } catch (Exception e) {
             logger.error("查询兴趣列表异常，异常信息：", e);
+        }
+        return commonResponse;
+    }
+
+
+    @Override
+    public CommonResponse updateGender(UpdateGenderReq params) {
+        CommonResponse commonResponse = new CommonResponse();
+        if (params.getCustomerId() == null) {
+            throw new BizException(UserBizReturnCode.paramError, "customerId不能为空");
+        }
+
+        // 取账号信息并存redis
+        Customer customer = customerRedisManagement.getCustomer(params.getCustomerId());
+
+        Integer newGender = params.getGender();
+        // 如果newGender 为空或者不等于 0、1 则返回错误
+        if (null != newGender && newGender != 0 && newGender != 1) {
+            throw new RemoteException(UserBizReturnCode.paramError, "性别参数错误，修改失败");
+        }
+        customer.setSex(newGender);
+        // 更新性别
+        int result = customerMapper.updateByPrimaryKeySelective(customer);
+        logger.info("修改性别 updateGender,更新数量" + result);
+        if (result > 0) {
+            JedisUtil.set(RedisKeyConstants.USER_CUSTOMER_INFO + params.getCustomerId(), JsonParseUtil.castToJson(customer));
+
+            commonResponse.setCode(UserBizReturnCode.Success);
+            commonResponse.setMessage(UserBizReturnCode.Success.desc());
+            return commonResponse;
+        } else {
+            logger.error("修改性别 异常");
+            throw new BizException(UserBizReturnCode.jdbcError, "操作数据库异常");
+        }
+    }
+
+    @Override
+    public CommonResponse updateBirthday(UpdateBirthdayReq params) {
+        CommonResponse commonResponse = new CommonResponse();
+        if (params.getCustomerId() == null) {
+            throw new BizException(UserBizReturnCode.paramError, "customerId不能为空");
+        }
+        if (params.getBirthday() == null) {
+            throw new BizException(UserBizReturnCode.paramError, "birthday不能为空");
+        }
+
+        Customer customer = customerRedisManagement.getCustomer(params.getCustomerId());
+        customer.setBirthday(params.getBirthday());
+        // 更新生日
+        int result = customerMapper.updateByPrimaryKeySelective(customer);
+        logger.info("修改年龄 updateBirthday,更新数量" + result);
+        if (result > 0) {
+            JedisUtil.set(RedisKeyConstants.USER_CUSTOMER_INFO + params.getCustomerId(), JsonParseUtil.castToJson(customer));
+
+            commonResponse.setCode(UserBizReturnCode.Success);
+            commonResponse.setMessage(UserBizReturnCode.Success.desc());
+            return commonResponse;
+        } else {
+            logger.error("修改年龄 异常");
+            throw new BizException(UserBizReturnCode.jdbcError, "操作数据库异常");
+        }
+    }
+
+    @Override
+    public CommonResponse queryUserEditInfo(QueryUserEditInfoReq params) {
+        CommonResponse commonResponse = new CommonResponse();
+        if (params.getCustomerId() == null) {
+            throw new BizException(UserBizReturnCode.paramError, "customerId不能为空");
+        }
+        try {
+            UserEditInfoVO userEditInfoVO = customerMapper.queryUserEditInfo(params.getCustomerId());
+
+            if (userEditInfoVO == null) {
+                throw new RemoteException(UserBizReturnCode.paramError, "参数错误，用户数据不存在");
+            }
+
+            if (userEditInfoVO.getBirthday() != null) {
+                userEditInfoVO.setAge(CountAge.getAgeByBirth(userEditInfoVO.getBirthday()));
+            }
+
+            List<InterestVO> interestList = interestMapper.selectInterestListByCustomerId(params.getCustomerId());
+
+            userEditInfoVO.setInterestList(interestList);
+
+            List<AppearanceVO> headPortrait = customerAppearanceMapper.selectAppearanceVOByCustomerIdAndType(params.getCustomerId(),1);
+            List<AppearanceVO> appearanceList = customerAppearanceMapper.selectAppearanceVOByCustomerIdAndType(params.getCustomerId(),0);
+            List<AppearanceVO> viceCard = customerAppearanceMapper.selectAppearanceVOByCustomerIdAndType(params.getCustomerId(),2);
+            if(headPortrait.size() == 0){
+                userEditInfoVO.setHeadPortrait(new AppearanceVO());
+            }else {
+                userEditInfoVO.setHeadPortrait(headPortrait.get(0));
+            }
+
+            userEditInfoVO.setAppearanceList(appearanceList);
+
+            if(viceCard.size() == 0){
+                userEditInfoVO.setViceCard(new AppearanceVO());
+            }else {
+                userEditInfoVO.setViceCard(viceCard.get(0));
+            }
+
+            commonResponse.setData(userEditInfoVO);
+            commonResponse.setCode(UserBizReturnCode.Success);
+            commonResponse.setMessage(UserBizReturnCode.Success.desc());
+        } catch (Exception e) {
+            logger.error("查询编辑资料页面用户信息异常，异常信息：", e);
         }
         return commonResponse;
     }

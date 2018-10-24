@@ -132,7 +132,7 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 		customer = customerMapper.login(param);
 		if (customer == null) {
 			logger.info("用户不存在");
-			throw new BizException(BizCode.ParamError, "用戶不存在");
+			throw new BizException(BizCode.ParamError, "用户不存在");
 		} else {
 			if (StringUtils.isNotBlank(params.getPassWord())) {
 				if (!MD5.md5(params.getPassWord()).equals(customer.getCustPassword())) {
@@ -155,6 +155,7 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 		login.setCustomerId(customer.getCustomerId());
 
 		login.setModifyTime(new Date());
+		login.setGtClientId(params.getGtClientId());
 		customerMapper.updateByPrimaryKeySelective(login);
 
 		return ResultUtils.resultSuccess(customer);
@@ -242,12 +243,13 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 		customer = customerMapper.login(param);
 		if (customer != null) {
 			logger.info("用户已存在");
-			throw new BizException(BizCode.ParamError, "用戶已存在");
+			throw new BizException(BizCode.ParamError, "用户已存在");
 		}
 		customer = new Customer();
 		customer.setCustomerId(UUIDUtils.getId());
 		customer.setAppId(randomAppId());
 		customer.setCreateTime(new Date());
+		customer.setGtClientId(request.getGtClientId());
 		customer.setMicroblogOpenId(request.getMicroblogOpenId());
 		customer.setQqOpenId(request.getQqOpenId());
 		customer.setWechatOpenId(request.getWechatOpenId());
@@ -321,11 +323,11 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 		customer = customerMapper.login(param);
 		if (customer == null) {
 			if (!"2".equals(params.getCodeType())) {
-				throw new BizException(UserBizReturnCode.exceedError, "用户未注冊");
+				throw new BizException(UserBizReturnCode.exceedError, "用户未注册");
 			}
 		} else {
 			if ("2".equals(params.getCodeType())) {
-				throw new BizException(UserBizReturnCode.exceedError, "用户已注冊");
+				throw new BizException(UserBizReturnCode.exceedError, "用户已注册");
 			}
 		}
 		// 四位随机数

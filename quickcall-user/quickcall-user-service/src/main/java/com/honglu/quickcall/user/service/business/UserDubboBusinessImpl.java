@@ -1,8 +1,6 @@
 package com.honglu.quickcall.user.service.business;
 
-import com.honglu.quickcall.user.facade.exchange.request.*;
 import com.honglu.quickcall.user.facade.exchange.request.editprofile.*;
-import com.honglu.quickcall.user.service.service.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +15,43 @@ import com.honglu.quickcall.common.api.exchange.CommonResponse;
 import com.honglu.quickcall.user.facade.business.UserDubboBusiness;
 import com.honglu.quickcall.user.facade.code.UserBizReturnCode;
 import com.honglu.quickcall.user.facade.code.UserFunctionType;
+import com.honglu.quickcall.user.facade.exchange.request.AddOrCancelFansRequest;
+import com.honglu.quickcall.user.facade.exchange.request.BindVXorQQRequest;
+import com.honglu.quickcall.user.facade.exchange.request.CheckAttentionRequest;
+import com.honglu.quickcall.user.facade.exchange.request.CustomerCenterRequest;
+import com.honglu.quickcall.user.facade.exchange.request.CustomerHomeRequest;
+import com.honglu.quickcall.user.facade.exchange.request.CustomerLevelRequest;
+import com.honglu.quickcall.user.facade.exchange.request.DelateInsertRequest;
+import com.honglu.quickcall.user.facade.exchange.request.GetSmsCodeRequest;
+import com.honglu.quickcall.user.facade.exchange.request.IsPhoneExistsRequest;
+import com.honglu.quickcall.user.facade.exchange.request.NoReadAttentionCountRequest;
+import com.honglu.quickcall.user.facade.exchange.request.QueryAttentionFansListRequest;
+import com.honglu.quickcall.user.facade.exchange.request.QueryInterestListRequest;
+import com.honglu.quickcall.user.facade.exchange.request.QueryOccupationListRequest;
+import com.honglu.quickcall.user.facade.exchange.request.ReadAttentionRequest;
+import com.honglu.quickcall.user.facade.exchange.request.SaveBirthRequest;
+import com.honglu.quickcall.user.facade.exchange.request.SaveCertificationRequest;
+import com.honglu.quickcall.user.facade.exchange.request.SaveDvVoiceRequest;
+import com.honglu.quickcall.user.facade.exchange.request.SaveGenderRequest;
+import com.honglu.quickcall.user.facade.exchange.request.SaveInterestRequest;
+import com.honglu.quickcall.user.facade.exchange.request.SaveNickNameRequest;
+import com.honglu.quickcall.user.facade.exchange.request.SaveOccupationRequest;
+import com.honglu.quickcall.user.facade.exchange.request.SaveSignNameRequest;
+import com.honglu.quickcall.user.facade.exchange.request.SaveSkillAuditRequest;
+import com.honglu.quickcall.user.facade.exchange.request.SearchPersonRequest;
+import com.honglu.quickcall.user.facade.exchange.request.SetHeardUrlRequest;
+import com.honglu.quickcall.user.facade.exchange.request.SetPwdRequest;
+import com.honglu.quickcall.user.facade.exchange.request.UserIdCardInfoRequest;
+import com.honglu.quickcall.user.facade.exchange.request.UserLoginRequest;
+import com.honglu.quickcall.user.facade.exchange.request.UserRegisterRequest;
+import com.honglu.quickcall.user.facade.exchange.request.UserUnreadMessageNumRequest;
+import com.honglu.quickcall.user.facade.exchange.request.queryMyskillRequest;
+import com.honglu.quickcall.user.service.service.BlacklistService;
+import com.honglu.quickcall.user.service.service.CommonPersonService;
+import com.honglu.quickcall.user.service.service.DelateService;
+import com.honglu.quickcall.user.service.service.EditProfileService;
+import com.honglu.quickcall.user.service.service.PersonInfoService;
+import com.honglu.quickcall.user.service.service.UserMessageService;
 
 @Component
 @Service("User.UserDubboBusiness")
@@ -34,6 +69,8 @@ public class UserDubboBusinessImpl implements UserDubboBusiness {
 	private EditProfileService editProfileService;
 	@Autowired
 	private BlacklistService blacklistService;
+	@Autowired
+	private DelateService delateService;
 
 	@Override
 	public CommonResponse excute(AbstractRequest request) {
@@ -173,6 +210,25 @@ public class UserDubboBusinessImpl implements UserDubboBusiness {
 				break;
 			case UserFunctionType.saveBlacklist:
 				response = blacklistService.saveBlacklist((SaveBlacklistReq) request);
+				break;
+			case UserFunctionType.updateGender:
+				response = editProfileService.updateGender((UpdateGenderReq) request);
+				break;
+			case UserFunctionType.updateBirthday:
+				response = editProfileService.updateBirthday((UpdateBirthdayReq) request);
+				break;
+			case UserFunctionType.queryUserEditInfo:
+				response = editProfileService.queryUserEditInfo((QueryUserEditInfoReq) request);
+				break;
+			case UserFunctionType.getAllDelate:
+				response = delateService.getAllDelatesExcludeOther();
+				break;
+			case UserFunctionType.insertDelate:
+				response = delateService.insertDelate((DelateInsertRequest) request);
+				break;
+
+			case UserFunctionType.NoReadAttentionCount:
+				response = personInfoService.noReadAttentionCount((NoReadAttentionCountRequest) request);
 				break;
 			default:
 				throw new BizException(UserBizReturnCode.BizFunctionTypeNotMatch,

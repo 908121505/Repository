@@ -22,6 +22,7 @@
     <result column="start_time" property="startTime" jdbcType="TIMESTAMP" />
     <result column="end_time" property="endTime" jdbcType="TIMESTAMP" />
     <result column="order_time" property="orderTime" jdbcType="TIMESTAMP" />
+    <result column="skill_type" property="skillType" jdbcType="TINYINT" />
     <result column="order_status" property="orderStatus" jdbcType="TINYINT" />
     <result column="payment_time" property="paymentTime" jdbcType="TIMESTAMP" />
     <result column="customer_is_evaluate" property="customerIsEvaluate" jdbcType="TINYINT" />
@@ -34,6 +35,8 @@
     <result column="create_man" property="createMan" jdbcType="VARCHAR" />
     <result column="modify_man" property="modifyMan" jdbcType="VARCHAR" />
     <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="select_reason" property="selectReason" jdbcType="VARCHAR" />
+    <result column="remark_reason" property="remarkReason" jdbcType="VARCHAR" />
   </resultMap>
   
   
@@ -43,9 +46,9 @@
     order_id, order_no, customer_skill_id, customer_id, service_id, trade_id, payment_type, 
     order_num, service_unit, service_price, order_amounts, discount_rate, cust_cancel_time, 
     system_cancel_time, receive_order_time, start_service_time, appay_end_time, start_time, 
-    end_time, order_time, order_status, payment_time, customer_is_evaluate, customer_message, 
+    end_time, order_time,skill_type, order_status, payment_time, customer_is_evaluate, customer_message, 
     evaluate_start, customer_evaluate, order_describe, create_time, modify_time, create_man, 
-    modify_man, remark
+    modify_man, remark,select_reason,remark_reason
   </sql>
 
 
@@ -70,22 +73,22 @@
       service_price, order_amounts, discount_rate, 
       cust_cancel_time, system_cancel_time, receive_order_time, 
       start_service_time, appay_end_time, start_time, 
-      end_time, order_time, order_status, 
+      end_time, order_time,skill_type, order_status, 
       payment_time, customer_is_evaluate, customer_message, 
       evaluate_start, customer_evaluate, order_describe, 
       create_time, modify_time, create_man, 
-      modify_man, remark)
+      modify_man, remark,select_reason,remark_reason)
     values (#{orderId,jdbcType=BIGINT}, #{orderNo,jdbcType=BIGINT}, #{customerSkillId,jdbcType=BIGINT}, 
       #{customerId,jdbcType=BIGINT}, #{serviceId,jdbcType=BIGINT}, #{tradeId,jdbcType=BIGINT}, 
       #{paymentType,jdbcType=TINYINT}, #{orderNum,jdbcType=INTEGER}, #{serviceUnit,jdbcType=VARCHAR}, 
       #{servicePrice,jdbcType=DECIMAL}, #{orderAmounts,jdbcType=DECIMAL}, #{discountRate,jdbcType=DECIMAL}, 
       #{custCancelTime,jdbcType=TIMESTAMP}, #{systemCancelTime,jdbcType=TIMESTAMP}, #{receiveOrderTime,jdbcType=TIMESTAMP}, 
       #{startServiceTime,jdbcType=TIMESTAMP}, #{appayEndTime,jdbcType=TIMESTAMP}, #{startTime,jdbcType=TIMESTAMP}, 
-      #{endTime,jdbcType=TIMESTAMP}, #{orderTime,jdbcType=TIMESTAMP}, #{orderStatus,jdbcType=TINYINT}, 
+      #{endTime,jdbcType=TIMESTAMP}, #{orderTime,jdbcType=TIMESTAMP}, #{skillType,jdbcType=TINYINT}, #{orderStatus,jdbcType=TINYINT}, 
       #{paymentTime,jdbcType=TIMESTAMP}, #{customerIsEvaluate,jdbcType=TINYINT}, #{customerMessage,jdbcType=VARCHAR}, 
       #{evaluateStart,jdbcType=INTEGER}, #{customerEvaluate,jdbcType=VARCHAR}, #{orderDescribe,jdbcType=VARCHAR}, 
       #{createTime,jdbcType=TIMESTAMP}, #{modifyTime,jdbcType=TIMESTAMP}, #{createMan,jdbcType=VARCHAR}, 
-      #{modifyMan,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR})
+      #{modifyMan,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}), #{selectReason,jdbcType=VARCHAR}), #{remarkReason,jdbcType=VARCHAR})
   </insert>
   
   
@@ -151,6 +154,9 @@
       </if>
       <if test="orderTime != null" >
         order_time,
+      </if>
+      <if test="skillType != null" >
+        skill_type,
       </if>
       <if test="orderStatus != null" >
         order_status,
@@ -249,6 +255,9 @@
       </if>
       <if test="orderTime != null" >
         #{orderTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="skillType != null" >
+        #{skillType,jdbcType=TINYINT},
       </if>
       <if test="orderStatus != null" >
         #{orderStatus,jdbcType=TINYINT},
@@ -352,6 +361,9 @@
       <if test="orderTime != null" >
         order_time = #{orderTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="skillType != null" >
+        skill_type = #{skillType,jdbcType=TINYINT},
+      </if>
       <if test="orderStatus != null" >
         order_status = #{orderStatus,jdbcType=TINYINT},
       </if>
@@ -415,6 +427,7 @@
       start_time = #{startTime,jdbcType=TIMESTAMP},
       end_time = #{endTime,jdbcType=TIMESTAMP},
       order_time = #{orderTime,jdbcType=TIMESTAMP},
+      skill_type = #{skillType,jdbcType=TINYINT},
       order_status = #{orderStatus,jdbcType=TINYINT},
       payment_time = #{paymentTime,jdbcType=TIMESTAMP},
       customer_is_evaluate = #{customerIsEvaluate,jdbcType=TINYINT},
@@ -446,7 +459,9 @@
 		  od.order_amounts AS  orderAmount,
 		  od.order_status  AS orderStatus,
 		  cs.skill_name  AS  skillItemName,
-		  st.unlock_icon  AS  icon
+		  st.unlock_icon  AS  icon,
+	      od.order_time  AS  orderTime,
+	      od.receive_order_time  AS receiveOrderTime
 	FROM
 		orders od LEFT JOIN   customer_skill  cs  ON  od.customer_skill_id  = cs.customer_skill_id
 	        LEFT JOIN   skill_item   st ON  cs.skill_item_id  =  st.id
@@ -468,7 +483,9 @@
 		  od.order_amounts AS  orderAmount,
 		  od.order_status  AS orderStatus,
 		  cs.skill_name  AS  skillItemName,
-		  st.unlock_icon  AS  icon
+		  st.unlock_icon  AS  icon,
+	      od.order_time  AS  orderTime,
+	      od.receive_order_time  AS receiveOrderTime
 	FROM
 		orders od LEFT JOIN   customer_skill  cs  ON  od.customer_skill_id  = cs.customer_skill_id
 	        LEFT JOIN   skill_item   st ON  cs.skill_item_id  =  st.id
@@ -498,7 +515,8 @@
 			od.order_time AS orderTime,
 			od.start_service_time AS startTime,
 			od.end_time AS endTime ,
-  			cs.skill_item_id   AS  skillItemId
+  			cs.skill_item_id   AS  skillItemId,
+  			od.receive_order_time  AS receiveOrderTime
 		FROM
 			orders od
 		LEFT JOIN customer ct ON ct.customer_id = od.customer_id
@@ -588,6 +606,7 @@
         od.order_id =  #{orderId}
   </select>
 
+
   <!-- 保存评价信息 -->
   <update id="saveEvaluationInfo" parameterType="com.honglu.quickcall.account.facade.entity.Order">
     update orders set modify_time = NOW(), customer_is_evaluate = 1,
@@ -607,4 +626,24 @@
   <delete id="deleteEvaluationLabels">
     delete from order_evaluation_label where order_id = #{orderId}
   </delete>
+
+
+
+  <!-- 查询客户信息 -->
+  <select id="getCustomerByCustomerId" resultType="com.honglu.quickcall.account.facade.vo.OrderDaVSkillVO"  >
+		SELECT
+			customer_id AS  serviceId,
+		  nick_name  AS  nikeName,
+		head_portrait_url  AS  headPortraitUrl
+		FROM
+			customer
+		WHERE
+			customer_id ==  #{customerId}
+  </select>
+  
+  
+  
+  
+  
+  
 </mapper>

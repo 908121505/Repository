@@ -2,10 +2,11 @@ package com.honglu.quickcall.account.service.dao;
 
 import java.util.List;
 
-import com.honglu.quickcall.account.facade.entity.EvaluationLabel;
 import org.apache.ibatis.annotations.Param;
 
+import com.honglu.quickcall.account.facade.entity.EvaluationLabel;
 import com.honglu.quickcall.account.facade.entity.Order;
+import com.honglu.quickcall.account.facade.vo.OrderDaVSkillVO;
 import com.honglu.quickcall.account.facade.vo.OrderDetailVO;
 import com.honglu.quickcall.account.facade.vo.OrderReceiveOrderListVO;
 import com.honglu.quickcall.account.facade.vo.OrderSendOrderListVO;
@@ -76,4 +77,13 @@ public interface OrderMapper {
 	 * @return
 	 */
 	int deleteEvaluationLabels(@Param("orderId") Long orderId);
+	
+	
+	
+	/**
+	 * 根据客户编号获取客户信息
+	 * @param customerId
+	 * @return
+	 */
+	OrderDaVSkillVO  getCustomerByCustomerId(@Param("customerId") Long customerId);
 }

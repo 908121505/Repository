@@ -28,6 +28,8 @@
     <result column="voice_time" property="voiceTime" jdbcType="DECIMAL" />
     <result column="v_status" property="vStatus"   />
     
+    <result column="gt_client_id" property="gtClientId"   />
+    
     <!-- 大V自己声音相关 -->
     <result column="v_voice_url" property="voiceUrl" jdbcType="VARCHAR" />
     <result column="v_voice_time" property="voiceTime" jdbcType="DECIMAL" />
@@ -45,6 +47,8 @@
     <result column="modify_man" property="modifyMan" jdbcType="VARCHAR" />
     <result column="remark" property="remark" jdbcType="VARCHAR" />
     <result column="app_channel_name" property="appChannelName" jdbcType="VARCHAR" />
+    <result column="cumulate_experience" property="cumulateExperience" jdbcType="INTEGER" />
+    <result column="customer_level" property="customerLevel" jdbcType="INTEGER" />
     <result column="device_id" property="deviceId" jdbcType="VARCHAR" />
     <result column="login_time" property="loginTime" jdbcType="TIMESTAMP" />
   </resultMap>
@@ -54,8 +58,8 @@
     back_portrait_url, head_portrait_url, source, cust_status, cust_password, sign_name, 
     star_sign, birthday, voice_url, voice_time, v_voice_url, v_voice_url_tmp, v_voice_time_tmp, 
     v_voice_status, v_voice_time, v_status, identity_status, token_code, other_relation, 
-    create_time, modify_time, create_man, modify_man, remark, app_channel_name, device_id, 
-    login_time
+    create_time, modify_time, create_man, modify_man, remark, app_channel_name,cumulate_experience,
+    customer_level, device_id, login_time,gt_client_id
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
@@ -256,6 +260,9 @@
       <if test="loginTime != null" >
         login_time,
       </if>
+      <if test="gtClientId != null" >
+        gt_client_id,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="customerId != null" >
@@ -381,6 +388,9 @@
       <if test="loginTime != null" >
         #{loginTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="gtClientId != null" >
+        #{gtClientId},
+      </if>
     </trim>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="com.honglu.quickcall.user.facade.entity.Customer" >
@@ -503,6 +513,9 @@
       <if test="loginTime != null" >
         login_time = #{loginTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="gtClientId != null and gtClientId!=''" >
+        gt_client_id = #{gtClientId},
+      </if>
 
     </set>
     where customer_id = #{customerId,jdbcType=BIGINT}
@@ -575,5 +588,46 @@
       remainder_amounts + frozen_amounts as withdrawAmounts
     FROM `account`
     WHERE customer_id = #{customerId}
+  </select>
+
+  <!-- 查询客户的一个订单 -->
+  <select id="selectCustomerOrder" resultType="com.honglu.quickcall.account.facade.entity.Order">
+    select
+      customer_id as customerId,
+      order_status as orderStatus,
+      order_amounts as orderAmounts
+    from orders where order_id = #{orderId}
+  </select>
+
+  <!-- 更新客户的经验值和等级 -->
+  <update id="updateCustomerExperienceAndLevel">
+      UPDATE customer t
+      SET modify_time = NOW(), cumulate_experience = cumulate_experience + #{experience},
+        customer_level = (
+            SELECT customer_level FROM `grade`
+            WHERE cumulate_experience <![CDATA[ <= ]]> t.cumulate_experience
+            ORDER BY cumulate_experience DESC LIMIT 0, 1
+        )
+      WHERE
+      customer_id = #{customerId}
+  </update>
+
+  <!-- 查询等级累计经验值 -->
+  <select id="getGradeExperienceByLevelNo" resultType="int">
+    SELECT cumulate_experience FROM grade where customer_level = #{customerLevel}
+  </select>
+
+  <select id="queryUserEditInfo" resultType="com.honglu.quickcall.user.facade.vo.UserEditInfoVO">
+   SELECT
+    customer_id AS customerId,
+    sex AS gender,
+    nick_name AS nickName,
+    sign_name AS signName,
+    star_sign AS starSign,
+    birthday,
+    identity_status as identityStatus
+  FROM
+  customer
+  where customer_id = #{customerId}
   </select>
 </mapper>

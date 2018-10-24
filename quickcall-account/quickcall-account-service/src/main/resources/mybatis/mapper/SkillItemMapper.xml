@@ -2,30 +2,35 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.honglu.quickcall.account.service.dao.SkillItemMapper">
     <resultMap id="BaseResultMap" type="com.honglu.quickcall.account.facade.entity.SkillItem">
-        <id column="id" property="id" jdbcType="BIGINT"/>
-        <result column="skill_item_name" property="skillItemName" jdbcType="VARCHAR"/>
-        <result column="skill_describe" property="skillDescribe" jdbcType="VARCHAR"/>
-        <result column="image_url" property="imageUrl" jdbcType="VARCHAR"/>
-        <result column="sort" property="sort" jdbcType="SMALLINT"/>
-        <result column="skill_status" property="skillStatus" jdbcType="TINYINT"/>
-        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
-        <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP"/>
-        <result column="create_man" property="createMan" jdbcType="VARCHAR"/>
-        <result column="modify_man" property="modifyMan" jdbcType="VARCHAR"/>
-        <result column="remark" property="remark" jdbcType="VARCHAR"/>
-    </resultMap>
+    <id column="id" property="id" jdbcType="BIGINT" javaType="string" />
+    <result column="skill_item_name" property="skillItemName" jdbcType="VARCHAR" />
+    <result column="skill_describe" property="skillDescribe" jdbcType="VARCHAR" />
+    <result column="lock_icon" property="lockIcon" jdbcType="VARCHAR"/>
+    <result column="unlock_icon" property="unlockIcon" jdbcType="VARCHAR"/>
+    <result column="back_color" property="backColor" jdbcType="VARCHAR"/>
+    <result column="sort" property="sort" jdbcType="SMALLINT" />
+    <result column="skill_status" property="skillStatus" jdbcType="TINYINT" />
+    <result column="skill_type" property="skillType" jdbcType="TINYINT"/>
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+    <result column="create_man" property="createMan" jdbcType="VARCHAR" />
+    <result column="modify_man" property="modifyMan" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="font_color" property="fontColor" jdbcType="VARCHAR"/>
+  </resultMap>
 
-    <sql id="Base_Column_List">
-    id, skill_item_name, skill_describe, image_url, sort,  skill_status, create_time, 
+
+  <sql id="Base_Column_List" >
+    id, skill_item_name, skill_describe, lock_icon,unlock_icon,back_color,font_color,sort, skill_status,skill_type,create_time,
     modify_time, create_man, modify_man, remark
   </sql>
-    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
-        select
-        <include refid="Base_Column_List"/>
-        from skill_item
-        where id = #{id,jdbcType=BIGINT}
-    </select>
-
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from skill_item
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  
     <!-- 查询技能评价标签 -->
     <select id="queryEvaluationLabel" resultType="com.honglu.quickcall.account.facade.entity.EvaluationLabel">
         SELECT

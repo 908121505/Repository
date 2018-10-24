@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="shiro" uri="http://shiro.apache.org/tags" %>
-<shiro:hasPermission name="checkBigVAuth:select">
+<shiro:hasPermission name="checkBigVVoiceAuth:select">
 <div class="content1">
     <div class="header">
         <h1 class="page-title">大V声音审核</h1>

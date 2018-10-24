@@ -3,14 +3,8 @@ package com.honglu.quickcall.account.service.bussService.impl;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
-
-import com.honglu.quickcall.account.facade.entity.EvaluationLabel;
-import com.honglu.quickcall.account.facade.exchange.request.*;
-import com.honglu.quickcall.account.facade.vo.*;
-import com.honglu.quickcall.account.service.dao.SkillItemMapper;
-import com.honglu.quickcall.common.api.exchange.ResultUtils;
-import com.honglu.quickcall.common.api.util.DateUtils;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,17 +16,44 @@ import com.honglu.quickcall.account.facade.code.AccountBizReturnCode;
 import com.honglu.quickcall.account.facade.constants.OrderSkillConstants;
 import com.honglu.quickcall.account.facade.entity.Account;
 import com.honglu.quickcall.account.facade.entity.CustomerSkill;
+import com.honglu.quickcall.account.facade.entity.EvaluationLabel;
 import com.honglu.quickcall.account.facade.entity.Order;
+import com.honglu.quickcall.account.facade.entity.SkillItem;
 import com.honglu.quickcall.account.facade.enums.AccountBusinessTypeEnum;
 import com.honglu.quickcall.account.facade.enums.TransferTypeEnum;
+import com.honglu.quickcall.account.facade.exchange.request.CancelOrderRequest;
+import com.honglu.quickcall.account.facade.exchange.request.ConfirmOrderRequest;
+import com.honglu.quickcall.account.facade.exchange.request.CustConfirmFinishRequest;
+import com.honglu.quickcall.account.facade.exchange.request.DetailOrderRequest;
+import com.honglu.quickcall.account.facade.exchange.request.DvReceiveOrderRequest;
+import com.honglu.quickcall.account.facade.exchange.request.DvStartServiceRequest;
+import com.honglu.quickcall.account.facade.exchange.request.FinishOrderRequest;
+import com.honglu.quickcall.account.facade.exchange.request.OrderDaVSkillRequest;
+import com.honglu.quickcall.account.facade.exchange.request.OrderEvaluationRequest;
+import com.honglu.quickcall.account.facade.exchange.request.OrderEvaluationSubmitRequest;
+import com.honglu.quickcall.account.facade.exchange.request.OrderReceiveOrderListRequest;
+import com.honglu.quickcall.account.facade.exchange.request.OrderSaveRequest;
+import com.honglu.quickcall.account.facade.exchange.request.OrderSendOrderListRequest;
+import com.honglu.quickcall.account.facade.exchange.request.QueryIngOrderCountRequest;
+import com.honglu.quickcall.account.facade.exchange.request.QueryRefundReasonRequest;
+import com.honglu.quickcall.account.facade.vo.OrderDaVSkillVO;
+import com.honglu.quickcall.account.facade.vo.OrderDetailVO;
+import com.honglu.quickcall.account.facade.vo.OrderEvaluationVo;
+import com.honglu.quickcall.account.facade.vo.OrderReceiveOrderListVO;
+import com.honglu.quickcall.account.facade.vo.OrderSendOrderListVO;
+import com.honglu.quickcall.account.facade.vo.OrderSkillItemVO;
+import com.honglu.quickcall.account.facade.vo.OrderTempResponseVO;
 import com.honglu.quickcall.account.service.bussService.AccountService;
 import com.honglu.quickcall.account.service.bussService.BarrageMessageService;
 import com.honglu.quickcall.account.service.bussService.CommonService;
 import com.honglu.quickcall.account.service.bussService.IOrderService;
 import com.honglu.quickcall.account.service.dao.CustomerSkillMapper;
 import com.honglu.quickcall.account.service.dao.OrderMapper;
+import com.honglu.quickcall.account.service.dao.SkillItemMapper;
 import com.honglu.quickcall.common.api.exception.BizException;
 import com.honglu.quickcall.common.api.exchange.CommonResponse;
+import com.honglu.quickcall.common.api.exchange.ResultUtils;
+import com.honglu.quickcall.common.api.util.DateUtils;
 import com.honglu.quickcall.common.core.util.UUIDUtils;
 
 /**
@@ -53,8 +74,6 @@ public class OrderServiceImpl implements IOrderService {
 	private CommonService  commonService;
 	@Autowired
 	private OrderMapper  orderMapper;
-//	@Autowired
-//	private AccountMapper  accountMapper;
 	@Autowired
 	private AccountService  accountService;
 	@Autowired
@@ -63,6 +82,9 @@ public class OrderServiceImpl implements IOrderService {
 	private BarrageMessageService barrageMessageService;
 	@Autowired
 	private SkillItemMapper skillItemMapper;
+	
+	
+	
 
 	
 	
@@ -75,10 +97,6 @@ public class OrderServiceImpl implements IOrderService {
 			throw new BizException(AccountBizReturnCode.paramError, "查询技能信息参数异常");
 		}
 		LOGGER.info("======>>>>>queryDaVSkill()入参："+request.toString());
-//		List<OrderDaVSkillVO>  resultList =  new ArrayList<OrderDaVSkillVO>();
-//		Long  customerId =  request.getCustomerId();
-//		List<OrderDaVSkillVO>  resultList =  customerSkillMapper.selectDaVSkill(customerId);
-		
 		OrderDaVSkillVO  skill =  new OrderDaVSkillVO();
 		skill.setHeadPortraitUrl("http://test-guanjia.oss-cn-shanghai.aliyuncs.com/voice/user/headimg/c2bb9b11facd4ef98126d3a0ab495cd4.jpg");
 		skill.setNickName("测试");
@@ -118,11 +136,43 @@ public class OrderServiceImpl implements IOrderService {
 			custSkillList.add(vo);
 		}
 		skill.setCustSkillList(custSkillList );
-		
-		
-		
 		CommonResponse commonResponse = commonService.getCommonResponse();
 		commonResponse.setData(skill);
+		LOGGER.info("======>>>>>用户编号为：" + request.getCustomerId() + "查询成功");
+		return commonResponse;
+	}
+	public CommonResponse queryDaVSkillExt(OrderDaVSkillRequest request) {
+		if (request == null || request.getCustomerId() == null) {
+			throw new BizException(AccountBizReturnCode.paramError, "查询技能信息参数异常");
+		}
+		LOGGER.info("======>>>>>queryDaVSkill()入参："+request.toString());
+		
+		
+		Long  customerId =  request.getCustomerId();
+		OrderDaVSkillVO  resultVO = orderMapper.getCustomerByCustomerId(customerId);
+		
+		List<OrderSkillItemVO> custSkillList = new  ArrayList<>();
+		
+		List<CustomerSkill> skillList  = customerSkillMapper.querySkillInfoPersonal(customerId);
+		if(!CollectionUtils.isEmpty(skillList)){
+			for (CustomerSkill skill : skillList) {
+				OrderSkillItemVO  vo =  new OrderSkillItemVO();
+				vo.setPrice(skill.getSkillPrice());
+				vo.setDiscontPrice(skill.getDiscountPrice());
+				vo.setUserSkillItemId(skill.getCustomerSkillId());
+				Long skillItemId = skill.getSkillItemId();
+				SkillItem  skillItem = skillItemMapper.selectByPrimaryKey(skillItemId);
+				vo.setSkillType(skillItem.getSkillType());
+				vo.setSkillIcon(skillItem.getUnlockIcon());
+				vo.setServiceUnit(skill.getServiceUnit());
+				vo.setSkillItemName(skillItem.getSkillItemName());
+				custSkillList.add(vo);
+			}
+		}
+		
+		resultVO.setCustSkillList(custSkillList );
+		CommonResponse commonResponse = commonService.getCommonResponse();
+		commonResponse.setData(resultVO);
 		LOGGER.info("======>>>>>用户编号为：" + request.getCustomerId() + "查询成功");
 		return commonResponse;
 	}
@@ -137,34 +187,55 @@ public class OrderServiceImpl implements IOrderService {
 		}
 		LOGGER.info("======>>>>>saveOrder()入参："+request.toString());
 		
-		Long  customerSkillId =  request.getCustomerSkillId();
-		//根据技能ID 获取等级获取价格信息
-		
-		CustomerSkill   customerSkill = customerSkillMapper.selectByPrimaryKey(customerSkillId);
-		
-		//创建订单
 		Long  customerId =  request.getCustomerId();
-		Order record = new Order();
-		record.setServiceUnit(customerSkill.getServiceUnit());
-		record.setServicePrice(customerSkill.getSkillPrice());
-		record.setDiscountRate(customerSkill.getDiscountRate());
-		
+//		Long  customerSkillId =  request.getCustomerSkillId();
+//		//根据技能ID 获取等级获取价格信息
+//		CustomerSkill   customerSkill = customerSkillMapper.selectByPrimaryKey(customerSkillId);
+//		Integer  orderNum =  request.getOrderNum();
+//		BigDecimal  price =  customerSkill.getDiscountPrice();
+//		BigDecimal orderAmounts = new BigDecimal(orderNum).multiply(price);
+//		//判断余额是否充足
+//		Account account=accountService.queryAccount(customerId);
+//		if(account != null){
+//			//消费用户的充值金额
+//			BigDecimal  rechargeAmounts =  account.getRechargeAmounts();
+//			if(rechargeAmounts != null){
+//				if(orderAmounts.compareTo(rechargeAmounts) >  0){
+//					//返回余额不足状态  
+//					throw new BizException(AccountBizReturnCode.ORDER_PAY_BALANCE_NOT_ENOUGH, "余额不足，无法支付");
+//				}
+//			}
+//		}
+//		
+//		//创建订单
+//		Order record = new Order();
+//		
+//		Long  skillItemId = customerSkill.getSkillItemId();
+//		SkillItem  skillItem = skillItemMapper.selectByPrimaryKey(skillItemId);
+//		if(skillItem != null){
+//			record.setSkillType(skillItem.getSkillType());
+//		}
+//		record.setServiceUnit(customerSkill.getServiceUnit());
+//		record.setServicePrice(customerSkill.getSkillPrice());
+//		record.setDiscountRate(customerSkill.getDiscountRate());
+//		
 		Long  orderId =  UUIDUtils.getId();
-		Long  serviceId =  request.getServiceId();
-		record.setCustomerId(customerId);
-		record.setOrderId(orderId);
-		record.setServiceId(serviceId);
-		record.setCreateTime(new Date());
-		Integer  orderNum =  request.getOrderNum();
-		BigDecimal  price =  null;
-		BigDecimal orderAmounts = new BigDecimal(orderNum).multiply(price);
-		record.setOrderAmounts(orderAmounts);
-		record.setOrderNum(orderNum);
-		record.setOrderStatus(OrderSkillConstants.ORDER_STATUS_WAITING_RECEIVE);
-		record.setOrderTime(new Date());
-		orderMapper.insert(record);
+//		Long  serviceId =  request.getServiceId();
+//		record.setCustomerId(customerId);
+//		record.setOrderId(orderId);
+//		record.setServiceId(serviceId);
+//		record.setCreateTime(new Date());
+//		record.setOrderAmounts(orderAmounts);
+//		record.setOrderNum(orderNum);
+//		record.setOrderStatus(OrderSkillConstants.ORDER_STATUS_WAITING_RECEIVE);
+//		record.setOrderTime(new Date());
+//		orderMapper.insert(record);
 		CommonResponse commonResponse = commonService.getCommonResponse();
-		commonResponse.setData(orderId);
+		HashMap<String, String>  resultMap = new HashMap<>();
+		resultMap.put("retCode", customerId+"");
+		resultMap.put("downLoadStr", "13:59");
+		resultMap.put("orderId", orderId+"");
+		commonResponse.setData(resultMap);
 		LOGGER.info("======>>>>>用户编号为：" + request.getCustomerId() + "下单成功");
 		return commonResponse;
 	}
@@ -180,18 +251,18 @@ public class OrderServiceImpl implements IOrderService {
 		if (request == null || request.getCustomerId() == null) {
 			throw new BizException(AccountBizReturnCode.paramError, "查询接收订单参数异常");
 		}
-		
 		LOGGER.info("======>>>>>queryReceiveOrderList()入参："+request.toString());
 		Long  customerId =  request.getCustomerId();
 		List<OrderReceiveOrderListVO>  resultList =  orderMapper.queryReceiveOrderList(customerId);
 		
 		if(!CollectionUtils.isEmpty(resultList)){
 			for (OrderReceiveOrderListVO info : resultList) {
-				info.setCountDownSeconds(1200L);
+				OrderTempResponseVO  responseVO = commonService.getCountDownSeconds(info.getOrderStatus(), info.getOrderTime(), info.getReceiveOrderTime());
+				info.setCountDownSeconds(responseVO.getCountDownSeconds());
+				info.setOrderStatus(responseVO.getOrderStatus());
 			}
 		}
 			
-		
 		CommonResponse commonResponse = commonService.getCommonResponse();
 		commonResponse.setData(resultList);
 		LOGGER.info("======>>>>>查询收到的订单，用户编号为：" + request.getCustomerId() + "查询成功");
@@ -199,9 +270,6 @@ public class OrderServiceImpl implements IOrderService {
 	}
 
 
-
-	
-	private static final  Integer   DIFF_MINUTES  = 30;
 
 	/**
 	 * 发起的订单是全状态
@@ -216,35 +284,11 @@ public class OrderServiceImpl implements IOrderService {
 		Long  customerId =  request.getCustomerId();
 		List<OrderSendOrderListVO>  resultList =  orderMapper.querySendOrderList(customerId);
 		if(!CollectionUtils.isEmpty(resultList)){
-			
-//			Date  currDateTime =  new Date();
 			for (OrderSendOrderListVO info : resultList) {
-				info.setCountDownSeconds(1200L);
-//				Integer   orderStatus  = info.getOrderStatus();
-//				if(OrderSkillConstants.ORDER_STATUS_NOT_PAY ==  orderStatus){
-//					Date  orderTime =  info.getOrderTime();
-//					//截止下单时间
-//					Date  endPayDate = DateUtils.getAddDate(orderTime,DIFF_MINUTES);
-//					//结束时间在当前时间之后，订单未取消
-//					if(endPayDate.after(currDateTime)){
-//						info.setCurrTime(currDateTime.getTime());
-//						info.setEndTime(endPayDate.getTime());
-//					}else{
-//						info.setOrderStatus(OrderSkillConstants.ORDER_STATUS_CANCEL_NOT_PAY);
-//					}
-//					
-//				}else  if(OrderSkillConstants.ORDER_STATUS_PAYED ==  orderStatus){
-//				//判断订单支付后，大V是否接单超时
-//					Date  paymentTime =  info.getPaymentTime();
-//					//截止下单时间
-//					Date  endReceiveDate = DateUtils.getAddDate(paymentTime,DIFF_MINUTES);
-//					//接受截止时间在当前时间之前，订单取消
-//					if(endReceiveDate.before(currDateTime)){
-//						info.setOrderStatus(OrderSkillConstants.ORDER_STATUS_CANCEL_PAYED_DV_RECEIVE_OVER_TIME);
-//					}
-//					
-				}
-//			}
+				OrderTempResponseVO  responseVO = commonService.getCountDownSeconds(info.getOrderStatus(), info.getOrderTime(), info.getReceiveOrderTime());
+				info.setCountDownSeconds(responseVO.getCountDownSeconds());
+				info.setOrderStatus(responseVO.getOrderStatus());
+			}
 		}
 		
 		CommonResponse commonResponse = commonService.getCommonResponse();
@@ -268,36 +312,29 @@ public class OrderServiceImpl implements IOrderService {
 		Integer   orderStatus =  null ;
 		if(order != null ){
 			Integer   oldOrderStatus =  order.getOrderStatus();
-			//订单金额
-			BigDecimal   payAmount =  null;
-//			//根据不同状态进行取消
-//			//下单未支付
-//			if(OrderSkillConstants.ORDER_STATUS_NOT_PAY  == oldOrderStatus){
-//				//支付之前取消
-//				orderStatus = OrderSkillConstants.ORDER_STATUS_CANCEL_BEFORE_PAY;
-//			}else if(OrderSkillConstants.ORDER_STATUS_PAYED  == oldOrderStatus){
-//				//订单状态5.大V接单前用户自主取消
-//				orderStatus = OrderSkillConstants.ORDER_STATUS_CANCEL_PAYED_USER_SELE_CANCEL;
-//				payAmount =  order.getOrderAmounts();
-//			//大V接受订单
-//			}else if(OrderSkillConstants.ORDER_STATUS_PAYED_DV_ACCEPT_ORDER  == oldOrderStatus){
-//				//订单状态8.大V接受订单之后开始之前用户自主取消
-//				orderStatus = OrderSkillConstants.ORDER_STATUS_CANCLE_DV_ACCEPT_USER_SELF_CANCLE;
-//				payAmount =  order.getOrderAmounts();
-//			}else if(OrderSkillConstants.ORDER_STATUS_PAYED_DV_CONFIRM_START  == oldOrderStatus){
-//				//订单状态12.大V接受订单之后开始之前用户自主取消
-//				orderStatus = OrderSkillConstants.ORDER_STATUS_CANCEL_BEFORE_ING;
-//				payAmount =  order.getOrderAmounts();
-//			}
+			//根据不同状态进行取消
+			//待接单取消
+			if(OrderSkillConstants.ORDER_STATUS_WAITING_RECEIVE  == oldOrderStatus){
+				//支付之前取消
+				orderStatus = OrderSkillConstants.ORDER_STATUS_CANCEL_BEFORE_RECEIVE;
+			//待开始  大V接单
+			}else if(OrderSkillConstants.ORDER_STATUS_WAITING_START  == oldOrderStatus){
+				//订单状态5.大V接单前用户自主取消
+				orderStatus = OrderSkillConstants.ORDER_STATUS_CANCEL_BEFORE_DAV_START;
+			//大V发起开始服务
+			}else if(OrderSkillConstants.ORDER_STATUS_WAITING_START_DA_APPAY_START_SERVICE  == oldOrderStatus){
+				//订单状态8.大V接受订单之后开始之前用户自主取消
+				orderStatus = OrderSkillConstants.ORDER_STATUS_CANCLE_USER_SELF_BEFORE_SERVICE;
+			}
+			BigDecimal   payAmount =  order.getOrderAmounts();
 			if(orderStatus == null){
 				throw new BizException(AccountBizReturnCode.paramError, "取消订单参数异常");
 			}else{
-				commonService.updateOrder(orderId, orderStatus,null);
+				commonService.updateOrder(orderId, orderStatus);
 				//金额不为空，说明需要退款给用户
 				if(payAmount != null){
-//					Long  buyerId =  order.getBuyerId();
-//					accountMapper.inAccount(buyerId, payAmount,TransferTypeEnum.RECHARGE.getType());
-//					accountService.inAccount(buyerId, payAmount,TransferTypeEnum.RECHARGE,AccountBusinessTypeEnum.OrderRefund);
+					Long  customerId =  order.getCustomerId();
+					accountService.inAccount(customerId, payAmount,TransferTypeEnum.RECHARGE,AccountBusinessTypeEnum.OrderRefund);
 				}
 			}
 		}
@@ -320,54 +357,22 @@ public class OrderServiceImpl implements IOrderService {
 			throw new BizException(AccountBizReturnCode.paramError, "查询订单详情参数异常");
 		}
 		
-		
 		Long  orderId =  request.getOrderId();
 		OrderDetailVO  orderDetail =  null ;
-		Date  currDateTime = new Date();
+		//订单详情时需要有倒计时业务
 		if(type == OrderSkillConstants.REQUEST_TYPE_CUST ){
 			orderDetail =  orderMapper.queryCustOrderDetail(orderId);
-			//需要判断是否过了支付时间
-			Integer   orderStatus  = orderDetail.getOrderStatus();
-//			if(OrderSkillConstants.ORDER_STATUS_NOT_PAY ==  orderStatus){
-//				Date  orderTime =  orderDetail.getOrderTime();
-//				//截止下单时间
-//				Date  endPayDate = DateUtils.getAddDate(orderTime,DIFF_MINUTES);
-//				//结束时间在当前时间之后，订单未取消
-//				if(endPayDate.before(currDateTime)){
-//					orderDetail.setOrderStatus(OrderSkillConstants.ORDER_STATUS_CANCEL_NOT_PAY);
-//				}
-//			}else  if(OrderSkillConstants.ORDER_STATUS_PAYED ==  orderStatus){
-//			//判断订单支付后，大V是否接单超时
-//				Date  paymentTime =  orderDetail.getPaymentTime();
-//				//截止下单时间
-//				Date  endReceiveDate = DateUtils.getAddDate(paymentTime,DIFF_MINUTES);
-//				//接受截止时间在当前时间之前，订单取消
-//				if(endReceiveDate.before(currDateTime)){
-//					orderDetail.setOrderStatus(OrderSkillConstants.ORDER_STATUS_CANCEL_PAYED_DV_RECEIVE_OVER_TIME);
-//				}
-//			}
-			
 		}else{
 			orderDetail =  orderMapper.queryDvOrderDetail(orderId);
-			//需要判断是否过了支付时间
-			Integer   orderStatus  = orderDetail.getOrderStatus();
-//			if(OrderSkillConstants.ORDER_STATUS_PAYED ==  orderStatus){
-//			//判断订单支付后，大V是否接单超时
-//				Date  paymentTime =  orderDetail.getPaymentTime();
-//				//截止下单时间
-//				Date  endReceiveDate = DateUtils.getAddDate(paymentTime,DIFF_MINUTES);
-//				//接受截止时间在当前时间之前，订单取消
-//				if(endReceiveDate.before(currDateTime)){
-//					orderDetail.setOrderStatus(OrderSkillConstants.ORDER_STATUS_CANCEL_PAYED_DV_RECEIVE_OVER_TIME);
-//				}
-//			}
 		}
 		
 		if(orderDetail != null){
 			Date  birthday  =  orderDetail.getBirthday();
 			int   age = DateUtils.getAgeByBirth(birthday);
 			orderDetail.setAge(age);
-			orderDetail.setCountDownSeconds(1200L);
+			OrderTempResponseVO  responseVO = commonService.getCountDownSeconds(orderDetail.getOrderStatus(), orderDetail.getOrderTime(), orderDetail.getReceiveOrderTime());
+			orderDetail.setCountDownSeconds(responseVO.getCountDownSeconds());
+			orderDetail.setOrderStatus(responseVO.getOrderStatus());
 		}
 		
 		CommonResponse commonResponse = commonService.getCommonResponse();
@@ -378,25 +383,25 @@ public class OrderServiceImpl implements IOrderService {
 	
 	
 	
-	@Override
-	public CommonResponse payOrder(PayOrderRequest request) {
-		if (request == null || request.getOrderId() == null) {
-			throw new BizException(AccountBizReturnCode.paramError, "查询发起订单参数异常");
-		}
-		
-		LOGGER.info("======>>>>>payOrder()入参："+request.toString());
-		Long  orderId =  request.getOrderId();
-		//查询订单详情
-		Order  order = orderMapper.selectByPrimaryKey(orderId);
-		if(order != null){
-			BigDecimal  payAmount =  order.getOrderAmounts();
-			Long  userId =  order.getOrderId();
-			Long  sellerId =  order.getOrderId();
-			//判断余额是否充足
-			Account account=accountService.queryAccount(userId);
-			//消费用户的充值金额
-			BigDecimal  rechargeAmounts =  account.getRechargeAmounts();
-			if(rechargeAmounts != null){
+//	@Override
+//	public CommonResponse payOrder(PayOrderRequest request) {
+//		if (request == null || request.getOrderId() == null) {
+//			throw new BizException(AccountBizReturnCode.paramError, "查询发起订单参数异常");
+//		}
+//		
+//		LOGGER.info("======>>>>>payOrder()入参："+request.toString());
+//		Long  orderId =  request.getOrderId();
+//		//查询订单详情
+//		Order  order = orderMapper.selectByPrimaryKey(orderId);
+//		if(order != null){
+//			BigDecimal  payAmount =  order.getOrderAmounts();
+//			Long  userId =  order.getOrderId();
+//			Long  sellerId =  order.getOrderId();
+//			//判断余额是否充足
+//			Account account=accountService.queryAccount(userId);
+//			//消费用户的充值金额
+//			BigDecimal  rechargeAmounts =  account.getRechargeAmounts();
+//			if(rechargeAmounts != null){
 //				if(payAmount.compareTo(rechargeAmounts) <=  0){
 //					commonService.updateOrderForPay(orderId, OrderSkillConstants.ORDER_STATUS_PAYED,new Date());
 //					//修改账户余额
@@ -410,18 +415,18 @@ public class OrderServiceImpl implements IOrderService {
 //					//返回余额不足状态  
 //					throw new BizException(AccountBizReturnCode.ORDER_PAY_BALANCE_NOT_ENOUGH, "余额不足，无法支付");
 //				}
-			}else{
-				//余额不足提醒
-				throw new BizException(AccountBizReturnCode.ORDER_PAY_ACCOUNT_NOT_EXIST, "账户不存在，无法支付");
-			}
-		}else{
-			//订单不存在
-			throw new BizException(AccountBizReturnCode.ORDER_NOT_EXIST, "订单不存在，无法对订单操作");
-		}
-		CommonResponse commonResponse = commonService.getCommonResponse();
-		LOGGER.info("======>>>>>订单支付，订单编号：" + orderId + "，支付完成");
-		return commonResponse;
-	}
+//			}else{
+//				//余额不足提醒
+//				throw new BizException(AccountBizReturnCode.ORDER_PAY_ACCOUNT_NOT_EXIST, "账户不存在，无法支付");
+//			}
+//		}else{
+//			//订单不存在
+//			throw new BizException(AccountBizReturnCode.ORDER_NOT_EXIST, "订单不存在，无法对订单操作");
+//		}
+//		CommonResponse commonResponse = commonService.getCommonResponse();
+//		LOGGER.info("======>>>>>订单支付，订单编号：" + orderId + "，支付完成");
+//		return commonResponse;
+//	}
 
 
 
@@ -452,45 +457,27 @@ public class OrderServiceImpl implements IOrderService {
 
 
 	@Override
-	public CommonResponse applayRefund(ApplayRefundRequest request) {
-		if (request == null || request.getOrderId() == null || request.getType() == null) {
-			throw new BizException(AccountBizReturnCode.paramError, "申请退款/完成订单参数异常");
+	public CommonResponse custConfirmFinish(CustConfirmFinishRequest request) {
+		if (request == null || request.getOrderId() == null ) {
+			throw new BizException(AccountBizReturnCode.paramError, "用户同意大V服务完成参数异常");
 		}
 		
 		LOGGER.info("======>>>>>applayRefund()入参："+request.toString());
 		Long  orderId =  request.getOrderId();
-		Integer  type =  request.getType();
 		
-		if(type != OrderSkillConstants.REQUEST_REFUND_TYPE_REFUND  && type != OrderSkillConstants.REQUEST_REFUND_TYPE_FINISH){
-			throw new BizException(AccountBizReturnCode.paramError, "申请退款/完成订单参数异常");
-		}
 		
 		Integer  newOrderStatus = null ;
 		//查询订单详情
 		Order  order = orderMapper.selectByPrimaryKey(orderId); 
 		if(order != null ){
 			Integer  orderStatus =  order.getOrderStatus();
-//			if(OrderSkillConstants.ORDER_STATUS_GOING_ING != orderStatus && OrderSkillConstants.ORDER_STATUS_END_DV_REFUSE  != orderStatus && OrderSkillConstants.ORDER_STATUS_CUST_AGREE_DV_START_SERVICE  != orderStatus   ){
-//				//只有进行中才能进行退款
-//				throw new BizException(AccountBizReturnCode.ORDER_STATUS_ERROR, "订单状态异常");
-//			}
-			Long  sellerId =  order.getOrderId();//主播ID
-			Long  userId =  order.getOrderId();
-//			if(OrderSkillConstants.REQUEST_REFUND_TYPE_REFUND == type ){
-//				//退款理由
-//				String  refundReason = request.getRefundReason();
-//				newOrderStatus = OrderSkillConstants.ORDER_STATUS_USER_APPLAY_REFUND;
-//				//修改订单状态为：申请退款
-//				commonService.updateOrder(orderId, newOrderStatus,refundReason);
-//				commonService.pushMessage(PushAppMsgTypeEnum.REFUND_TIP, sellerId, userId);
-//			}else if(OrderSkillConstants.REQUEST_REFUND_TYPE_FINISH == type ){
-//				newOrderStatus = OrderSkillConstants.ORDER_STATUS_END;
-//				//修改订单状态为：18.订单完成（正常完成）
-//				commonService.updateOrder(orderId, newOrderStatus,null);
-//				//大V入账 
-//				BigDecimal  orderAmount =  order.getOrderAmounts();
-//				accountService.inAccount(sellerId, orderAmount, TransferTypeEnum.REMAINDER,AccountBusinessTypeEnum.CompleteOrder);
-//			}
+			if(OrderSkillConstants.ORDER_STATUS_GOING_DAV_APPAY_FINISH != orderStatus){
+				//只有进行中才能进行退款
+				throw new BizException(AccountBizReturnCode.ORDER_STATUS_ERROR, "订单状态异常");
+			}
+			newOrderStatus = OrderSkillConstants.ORDER_STATUS_FINISHED_USER_ACCEPCT;
+			//修改订单状态为：申请退款
+			commonService.updateOrder(orderId, newOrderStatus);
 		}else{
 			//订单不存在
 			throw new BizException(AccountBizReturnCode.ORDER_NOT_EXIST, "订单不存在，无法对订单操作");
@@ -498,7 +485,7 @@ public class OrderServiceImpl implements IOrderService {
 		
 		CommonResponse commonResponse = commonService.getCommonResponse();
 		commonResponse.setData(newOrderStatus);
-		LOGGER.info("======>>>>>订单支付，订单编号：" + orderId + "，申请退款/完成订单完成");
+		LOGGER.info("======>>>>>订单支付，订单编号：" + orderId + "，用户同意大V服务完成订单完成");
 		return commonResponse;
 	}
 
@@ -507,36 +494,24 @@ public class OrderServiceImpl implements IOrderService {
 
 	@Override
 	public CommonResponse confirmOrder(ConfirmOrderRequest request) {
-		if (request == null || request.getOrderId() == null || request.getType() == null) {
+		if (request == null || request.getOrderId() == null ) {
 			throw new BizException(AccountBizReturnCode.paramError, "同意/拒绝订单参数异常");
 		}
 		LOGGER.info("======>>>>>confirmOrder()入参："+request.toString());
 		Long  orderId =  request.getOrderId();
-		Integer  type =  request.getType();
-		if(type != OrderSkillConstants.REQUEST_CONFIRM_TYPE_YES  &&  type != OrderSkillConstants.REQUEST_CONFIRM_TYPE_NO){
-			throw new BizException(AccountBizReturnCode.paramError, "同意/拒绝订单参数异常");
-		}
 		
 		//查询订单详情
 		Order  order = orderMapper.selectByPrimaryKey(orderId);
 		Integer   newOrderStatus = null ;
 		if(order != null ){
 			Integer orderStatus =  order.getOrderStatus();
-//			if(OrderSkillConstants.ORDER_STATUS_PAYED_DV_CONFIRM_START != orderStatus){
-//				throw new BizException(AccountBizReturnCode.ORDER_STATUS_ERROR, "订单状态异常");
-//			}
-//			
-//			//用户同意，修改状态，用户不同意，状态不变
-//			if(OrderSkillConstants.REQUEST_CONFIRM_TYPE_YES == type ){
-//				newOrderStatus = OrderSkillConstants.ORDER_STATUS_CUST_AGREE_DV_START_SERVICE;
-//			}else{
-//				newOrderStatus = OrderSkillConstants.ORDER_STATUS_CUST_REFUSE_DV_START_SERVICE;
-//				//退钱给用户
-//				Long  customerId =  order.getCustomerId();
-//				BigDecimal   payAmount =  order.getOrderAmounts();
-//				accountService.inAccount(customerId, payAmount, TransferTypeEnum.RECHARGE,AccountBusinessTypeEnum.OrderRefund);
-//			}
-			commonService.updateOrder(orderId, newOrderStatus,null);
+			if(OrderSkillConstants.ORDER_STATUS_WAITING_START_DA_APPAY_START_SERVICE != orderStatus){
+				throw new BizException(AccountBizReturnCode.ORDER_STATUS_ERROR, "订单状态异常");
+			}
+			
+			//用户同意，修改状态
+			newOrderStatus = OrderSkillConstants.ORDER_STATUS_GOING_USER_ACCEPCT;
+			commonService.updateOrder(orderId, newOrderStatus);
 		}else{
 			//订单不存在
 			throw new BizException(AccountBizReturnCode.ORDER_NOT_EXIST, "订单不存在，无法对订单操作");
@@ -570,22 +545,24 @@ public class OrderServiceImpl implements IOrderService {
 		Integer   newOrderStatus =  null ;
 		if(order != null ){
 			Integer  orderStatus = order.getOrderStatus();
-//			//大V只能接受订单状态为：已支付的订单
-//			if(OrderSkillConstants.ORDER_STATUS_PAYED  != orderStatus){
-//				throw new BizException(AccountBizReturnCode.ORDER_STATUS_ERROR, "订单状态异常");
-//			}
-//			
-//			//大V同意，状态为大V接受
-//			if(OrderSkillConstants.REQUEST_DV_CONFIRM_TYPE_YES == type ){
-//				newOrderStatus = OrderSkillConstants.ORDER_STATUS_PAYED_DV_ACCEPT_ORDER;
-//			//大V不同意，状态为大V拒绝，退款给购买者
-//			}else {
-//				newOrderStatus = OrderSkillConstants.ORDER_STATUS_PAYED_DV_REFUSE;
-//				BigDecimal  payAmount = order.getOrderAmounts();
-//				Long   buyerId =  order.getCustomerId();
-//				accountService.inAccount(buyerId, payAmount, TransferTypeEnum.RECHARGE,AccountBusinessTypeEnum.OrderRefund);
-//			}
-			commonService.updateOrder(orderId, newOrderStatus,null);
+			//大V只能接受订单状态为：待接单
+			if(OrderSkillConstants.ORDER_STATUS_WAITING_RECEIVE  != orderStatus){
+				throw new BizException(AccountBizReturnCode.ORDER_STATUS_ERROR, "订单状态异常");
+			}
+			
+			//大V同意，状态为大V接受
+			if(OrderSkillConstants.REQUEST_DV_CONFIRM_TYPE_YES == type ){
+				newOrderStatus = OrderSkillConstants.ORDER_STATUS_WAITING_START;
+				//设置大V接单时间
+				commonService.dvReciveOrderUpdateOrder(orderId, newOrderStatus,new Date());
+			//大V不同意，状态为大V拒绝，退款给购买者
+			}else {
+				newOrderStatus = OrderSkillConstants.ORDER_STATUS_DAV_REFUSED_RECEIVE;
+				BigDecimal  payAmount = order.getOrderAmounts();
+				Long   customerId =  order.getCustomerId();
+				accountService.inAccount(customerId, payAmount, TransferTypeEnum.RECHARGE,AccountBusinessTypeEnum.OrderRefund);
+				commonService.updateOrder(orderId, newOrderStatus);
+			}
 		}else{
 			//订单不存在
 			throw new BizException(AccountBizReturnCode.ORDER_NOT_EXIST, "订单不存在，无法对订单操作");
@@ -609,18 +586,18 @@ public class OrderServiceImpl implements IOrderService {
 		//查询订单详情
 		Order  order = orderMapper.selectByPrimaryKey(orderId);
 		Integer   orderStatus =  null ;
-//		if(order != null ){
-//			Integer  oldOrderStatus =  order.getOrderStatus();
-//			//订单状态为8.大V接受订单    大V接受订单之后可以开启立即服务
-//			if(OrderSkillConstants.ORDER_STATUS_PAYED_DV_ACCEPT_ORDER  != oldOrderStatus){
-//				throw new BizException(AccountBizReturnCode.ORDER_STATUS_ERROR, "订单状态异常");
-//			}
-//			orderStatus =  OrderSkillConstants.ORDER_STATUS_PAYED_DV_CONFIRM_START ;
-//			commonService.updateOrder(orderId, orderStatus,null);
-//		}else{
-//			//订单不存在
-//			throw new BizException(AccountBizReturnCode.ORDER_NOT_EXIST, "订单不存在，无法对订单操作");
-//		}
+		if(order != null ){
+			Integer  oldOrderStatus =  order.getOrderStatus();
+			//订单状态为10.大V接受订单    大V接受订单之后可以开启立即服务
+			if(OrderSkillConstants.ORDER_STATUS_WAITING_START  != oldOrderStatus ){
+				throw new BizException(AccountBizReturnCode.ORDER_STATUS_ERROR, "订单状态异常");
+			}
+			orderStatus =  OrderSkillConstants.ORDER_STATUS_WAITING_START_DA_APPAY_START_SERVICE ;
+			commonService.updateOrder(orderId, orderStatus);
+		}else{
+			//订单不存在
+			throw new BizException(AccountBizReturnCode.ORDER_NOT_EXIST, "订单不存在，无法对订单操作");
+		}
 		CommonResponse commonResponse = commonService.getCommonResponse();
 		commonResponse.setData(orderStatus);
 		LOGGER.info("======>>>>>订单支付，订单编号：" + orderId + "，大V立即开始完成");
@@ -631,17 +608,17 @@ public class OrderServiceImpl implements IOrderService {
 
 
 	@Override
-	public CommonResponse dvConfirmRefund(DvConfirmRefundRequest request) {
+	public CommonResponse finishOrder(FinishOrderRequest request) {
 		if (request == null || request.getOrderId() == null || request.getType() == null) {
-			throw new BizException(AccountBizReturnCode.paramError, "大V同意/拒绝退款参数异常");
+			throw new BizException(AccountBizReturnCode.paramError, "用户/大V完成服务参数异常");
 		}
 		
 		LOGGER.info("======>>>>>dvConfirmRefund()入参："+request.toString());
 		Long  orderId =  request.getOrderId();
 		Integer  type =  request.getType();
 		
-		if(type != OrderSkillConstants.REQUEST_DV_REFUND_TYPE_YES   && type != OrderSkillConstants.REQUEST_DV_REFUND_TYPE_NO){
-			throw new BizException(AccountBizReturnCode.paramError, "大V同意/拒绝退款参数异常");
+		if(type != OrderSkillConstants.REQUEST_DV_FINISH_TYPE   && type != OrderSkillConstants.REQUEST_CUST_FINISH_TYPE){
+			throw new BizException(AccountBizReturnCode.paramError, "用户/大V完成服务参数异常");
 		}
 		
 		//查询订单详情
@@ -650,33 +627,26 @@ public class OrderServiceImpl implements IOrderService {
 		if(order != null ){
 			
 			Integer  oldOrderStatus =  order.getOrderStatus();
-			//订单状态为15.用户申请退款      只有用户发起退款申请，大V才能进行响应
-//			if(OrderSkillConstants.ORDER_STATUS_USER_APPLAY_REFUND  != oldOrderStatus){
-//				throw new BizException(AccountBizReturnCode.ORDER_STATUS_ERROR, "订单状态异常");
-//			}
-//			
-//			//大V同意，状态为大V同意退款，给用户退款
-//			if(OrderSkillConstants.REQUEST_DV_REFUND_TYPE_YES == type ){
-//				newOrderStatus = OrderSkillConstants.ORDER_STATUS_CANCEL_DV_AGREE_REFUND;
-//			//大V不同意，状态为大V拒绝
-//			}else {
-//				newOrderStatus = OrderSkillConstants.ORDER_STATUS_END_DV_REFUSE;
-//			}
-			commonService.updateOrder(orderId, newOrderStatus,null);
-			//大V同意退款
-			if(OrderSkillConstants.REQUEST_DV_REFUND_TYPE_YES == type ){
-				Long  customerId =  order.getCustomerId();
-				BigDecimal  payAmount = order.getOrderAmounts();
-				//大V同意退款，对消费客户入账
-				accountService.inAccount(customerId, payAmount,TransferTypeEnum.RECHARGE,AccountBusinessTypeEnum.OrderRefund);
+			
+			//只有在订单状态为26.进行中（大V发起开始服务用户5分钟内同意）;双方才可以进行服务完成操作
+			if(OrderSkillConstants.ORDER_STATUS_GOING_USER_ACCEPCT  != oldOrderStatus){
+				throw new BizException(AccountBizReturnCode.ORDER_STATUS_ERROR, "订单状态异常");
 			}
+			//大V发起完成服务
+			if(OrderSkillConstants.REQUEST_DV_FINISH_TYPE == type){
+				newOrderStatus = OrderSkillConstants.ORDER_STATUS_GOING_DAV_APPAY_FINISH ;
+			}else{
+			//用户发起完成服务	
+				newOrderStatus = OrderSkillConstants.ORDER_STATUS_GOING_USRE_APPAY_FINISH ;
+			}
+			commonService.updateOrder(orderId, newOrderStatus);
 		}else{
 			//订单不存在
 			throw new BizException(AccountBizReturnCode.ORDER_NOT_EXIST, "订单不存在，无法对订单操作");
 		}
 		CommonResponse commonResponse = commonService.getCommonResponse();
 		commonResponse.setData(newOrderStatus);
-		LOGGER.info("======>>>>>订单支付，订单编号：" + orderId + "，大V同意/拒绝退款订单完成");
+		LOGGER.info("======>>>>>订单支付，订单编号：" + orderId + "，用户/大V完成服务订单完成");
 		return commonResponse;
 	}
 

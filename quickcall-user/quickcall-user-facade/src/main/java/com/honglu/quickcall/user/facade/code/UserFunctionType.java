@@ -23,6 +23,8 @@ public interface UserFunctionType {
 
 	// 阅读关注(底部tab 点击关注)
 	String readAttention = "001008";
+	// 关注未读数量
+	String NoReadAttentionCount = "001009";
 	// 系统相关 001300 - 001350
 	String MarketOnOff = "001300";
 	String AppConfig = "001301";
@@ -149,6 +151,27 @@ public interface UserFunctionType {
 	 * 添加黑名单
 	 */
 	String saveBlacklist = "0011162";
+	/**
+	 * 修改性别
+	 */
+	String updateGender = "0011163";
+	/**
+	 * 修改年龄
+	 */
+	String updateBirthday = "0011164";
+	/**
+	 * 编辑资料页面数据展示
+	 */
+	String queryUserEditInfo = "0011165";
 
+	/**
+	 * 查询所有非其他原因的举报
+	 */
+	String getAllDelate = "0011170";
+
+	/**
+	 * 插入举报
+	 */
+	String insertDelate = "0011171";
 
 }
