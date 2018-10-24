@@ -824,7 +824,11 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 				customerSkill.setSkillVolume(250);
 
 				// 判断是否可下单 ADUAN -- 待做
-				customerSkill.setCanOrder(accountOrderService.checkReceiveOrderByCustomerSkillId(request.getViewCustomerId(), bean.getCustomerSkillId()));
+				if(Objects.equals(request.getLoginCustomerId(), request.getViewCustomerId())){
+					customerSkill.setCanOrder(0); // 自己看自己的个人主页时 -- 直接返回 0=不可接单
+				}else{
+					customerSkill.setCanOrder(accountOrderService.checkReceiveOrderByCustomerSkillId(bean.getCustomerSkillId()));
+				}
 
 				skillList.add(customerSkill);
 			}
