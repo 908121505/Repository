@@ -11,4 +11,10 @@ public interface MqMessageServiceCode {
     String CUSTOMER_EXPERIENCE_ORDER_COST = "100001";
     /** 客户评价订单 -- 发送消息到MQ **/
     String CUSTOMER_EVALUATION_ORDER = "100002";
+
+    /**
+     * 后台业务
+     */
+    /** 客户站内信发送 **/
+    String ADMIN_CUSTOMER_MESSAGE = "200001";
 }
