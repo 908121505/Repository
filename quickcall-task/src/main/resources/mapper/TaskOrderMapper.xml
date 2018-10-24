@@ -42,8 +42,23 @@
   </update>
   
   
-<!-- 12小时未响应超时 -->
-  <update id="updateOrderStatusAfter12Hour" parameterType="map" >
+<!-- 大V发起完成服务，客户12小时未响应超时 -->
+  <update id="updateOrderStatusAfter12HourCust" parameterType="map" >
+    
+		UPDATE 
+			orders
+		SET 
+			system_cancel_time = #{currTime}
+		 	order_status = #{updateStatus},
+		 	skill_type = #{skillType}
+		WHERE
+			order_status = #{queryStatus}
+		AND start_time < #{endTime}
+  </update>
+  
+  
+<!-- 双方都没有主动结束：12小时未响应超时 -->
+  <update id="updateOrderStatusAfter12HourBoth" parameterType="map" >
     
 		UPDATE 
 			orders

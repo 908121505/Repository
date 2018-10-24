@@ -663,7 +663,7 @@
   <!-- 查询客户信息 -->
   <select id="selectGongIngOrderListByCustomerSkillId" resultType="java.lang.Integer" >
 		SELECT
-			count(orderId)
+			count(order_id)
 		FROM
 			orders
 		WHERE
