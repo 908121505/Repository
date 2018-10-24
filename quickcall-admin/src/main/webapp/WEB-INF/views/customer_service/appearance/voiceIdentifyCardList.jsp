@@ -5,7 +5,7 @@
         <h1 class="page-title">客服后台</h1>
         <ul class="breadcrumb">
             <li>客服后台</li>
-            <li class="active">形象照审核</li>
+            <li class="active">声鉴卡审核</li>
         </ul>
     </div>
     <div class="main-content">
@@ -57,7 +57,7 @@
             //表格的初始化
             $(document).ready(function () {
                 var table = $('#example').initTable({
-                    sAjaxSource: "appearance/initTable.htm",
+                    sAjaxSource: "voiceIdentifyCard/initTable.htm",
                     fnServerParams: function (aoData) {  //查询条件
                         aoData.push({"name": "customerId", "value": $("#customerId").val().trim()});
                         aoData.push({"name": "nickName", "value": $("#nickName").val().trim()});
@@ -204,12 +204,12 @@
 
             //审核通过
             function approveRow(id) {
-                $('#approveRow').deleteRow("appearance/approve?id=" + id);
+                $('#approveRow').deleteRow("voiceIdentifyCard/approve?id=" + id);
             }
 
             //拒绝
             function rejectRow(id) {
-                $('#rejectRow').deleteRow("appearance/reject?id=" + id);
+                $('#rejectRow').deleteRow("voiceIdentifyCard/reject?id=" + id);
             }
 
 
