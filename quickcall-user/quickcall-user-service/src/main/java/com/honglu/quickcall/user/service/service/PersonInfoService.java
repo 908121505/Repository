@@ -3,6 +3,7 @@ package com.honglu.quickcall.user.service.service;
 import com.honglu.quickcall.common.api.exchange.CommonResponse;
 import com.honglu.quickcall.user.facade.exchange.request.AddOrCancelFansRequest;
 import com.honglu.quickcall.user.facade.exchange.request.CheckAttentionRequest;
+import com.honglu.quickcall.user.facade.exchange.request.CheckEachAttentionRequest;
 import com.honglu.quickcall.user.facade.exchange.request.CustomerCenterRequest;
 import com.honglu.quickcall.user.facade.exchange.request.CustomerHomeRequest;
 import com.honglu.quickcall.user.facade.exchange.request.CustomerLevelRequest;
@@ -136,4 +137,11 @@ public interface PersonInfoService {
 	 * @return
 	 */
 	CommonResponse queryCustomerLevel(CustomerLevelRequest request);
+
+	/**
+	 * 查询是否互相关注
+	 * @param request
+	 * @return
+	 */
+	CommonResponse checkEachAttention(CheckEachAttentionRequest request);
 }

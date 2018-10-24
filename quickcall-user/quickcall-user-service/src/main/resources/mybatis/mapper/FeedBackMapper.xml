@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.honglu.quickcall.user.service.dao.FeedBackMapper">
+    <!--private Integer id; //主键Id
+
+    private Long customerId; //反馈人Id
+
+    private String feedBackContent; //反馈内容
+
+    private String createTime; //创建时间
+
+    private String contactWay; //联系方式
+
+    private String createMan;-->
+
+    <insert id="insertFeedBack" parameterType="com.honglu.quickcall.user.facade.entity.FeedBack">
+      insert  into feed_back(customer_id,feed_back_content,create_time,contact_way,create_man) values(
+        #{customerId,jdbcType=BIGINT},#{feedBackContent,jdbcType=VARCHAR},#{createTime,jdbcType=TIMESTAMP},#{contactWay,jdbcType=VARCHAR},#{createMan,jdbcType=VARCHAR}
+      );
+  </insert>
+
+</mapper>

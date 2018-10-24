@@ -107,4 +107,14 @@ public interface OrderMapper {
 	 * @return
 	 */
 	Integer selectGongIngOrderListByCustomerSkillId(@Param("customerSkillId")Long customerSkillId,@Param("skillType")Integer  skillType,@Param("list")List<Integer>  statusList);
+
+
+	/**
+	 * 查询双方是否有订单关系
+	 * @param customerId
+	 * @param serviceId
+	 * @param statusList
+	 * @return
+	 */
+	Order queryOrderByCustomerIdAndServiceId(@Param("customerId")Long customerId, @Param("serviceId")Long serviceId, @Param("list")List<Integer> statusList);
 }

@@ -1,6 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="shiro" uri="http://shiro.apache.org/tags" %>
-<link type="text/css" rel="stylesheet" href="resources/plugins/viewer/viewer.min.css" media="screen"/>
 <div class="content1">
     <div class="header">
         <h1 class="page-title">客服后台</h1>
@@ -72,7 +71,7 @@
                             "data": "id",
                             "sTitle": "ID",
                             'sClass': "text-center",
-//                            "bVisible": false //此列不显示
+                            "bVisible": false //此列不显示
                         },
                         {
                             "data": "customerId",
@@ -89,8 +88,7 @@
                             "sTitle": "当前使用照片",
                             'sClass': "text-center",
                             "mRender": function (data, type, full) {
-                                return "<ul id='viewer-1-"+full.id+"\' style='list-style-type: none;padding: 0px;margin: 0px;'>" +
-                                    "<li><img src=\"" + data + "\" style='width: 50px;' onclick='showImg(this)'></li></ul>";
+                                return "<img src='" + data + "' height='50px;'/>";
                             },
                         },
                         {
@@ -98,8 +96,7 @@
                             "sTitle": "待审核照片",
                             'sClass': "text-center",
                             "mRender": function (data, type, full) {
-                                return "<ul id='viewer-2-"+full.id+"\' style='list-style-type: none;padding: 0px;margin: 0px;'>" +
-                                    "<li><img src=\"" + data + "\" style='width: 50px;' onclick='showImg(this)'></li></ul>";
+                                return "<img src='" + data + "' height='50px;'/>";
                             },
                         },
                         {
@@ -190,11 +187,20 @@
 
             });
 
-           /* $('#example tbody').on('click','tr:nth-child(2) td:nth-child(2)', function (e) {
-                var name = $(this).text();
-                alert("给第2行第2列的JQuery datatables添加点击事件"+name);
-            } );*/
-
+            $('#example tbody td img').live('click', function () {
+                alert("aaaaa");
+                var nTr = $(this).parents('tr')[0];
+                if (oTable.fnIsOpen(nTr)) {
+                    /* This row is already open - close it */
+                    this.src = "../examples_support/details_open.png";
+                    oTable.fnClose(nTr);
+                }
+                else {
+                    /* Open this row */
+                    this.src = "../examples_support/details_close.png";
+                    oTable.fnOpen(nTr, fnFormatDetails(oTable, nTr), 'details');
+                }
+            });
 
             //审核通过
             function approveRow(id) {
@@ -205,6 +211,7 @@
             function rejectRow(id) {
                 $('#rejectRow').deleteRow("voiceIdentifyCard/reject?id=" + id);
             }
+
 
             function Format(now, mask) {
                 var d = now;
@@ -272,15 +279,7 @@
                             return $0.substr(1, $0.length - 2);
                     }
                 });
-            }
-
-            function showImg(obj) {
-                var id = $(obj).parent().parent().attr("id");
-                var viewer = new Viewer(document.getElementById(id), {
-                    url: 'data-original'
-                });
-                viewer.show();
-            }
+            };
         </script>
         <!---dialog选项-->
         <div>
@@ -292,4 +291,3 @@
 
     </div>
 </div>
-<script type="text/javascript" src="resources/plugins/viewer/viewer.min.js"></script>
