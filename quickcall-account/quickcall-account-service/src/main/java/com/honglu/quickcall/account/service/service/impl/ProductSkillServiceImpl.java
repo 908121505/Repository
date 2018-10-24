@@ -92,7 +92,7 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 			}
 			listVO.setSkillItemId(1000L);
 			List<DaVinfoVO> daVinfoList = new ArrayList<DaVinfoVO>();
-			for (int j = 0; j < 5; j++) {
+			for (int j = 0; j < 4; j++) {
 				daVinfoList.add(getDaVinfoVO(unitName, bussTagUrl, categoryTagUrl, coverUrl));
 			}
 			listVO.setDaVinfoList(daVinfoList);
