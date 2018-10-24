@@ -67,10 +67,17 @@
 						</label>
 					</div>
 				</div>
-				
-				
-				
-				<%--<div class="form-group" >
+
+				<div class="form-group"  >
+					<label class="col-sm-4 control-label">备注<font color="red">&nbsp;*</font></label>
+					<div class="col-sm-8">
+						<input type="text" id="remark" class="form-control"
+							   name="remark" value="${entity.remark}">
+					</div>
+				</div>
+
+
+			<%--<div class="form-group" >
 					<label class="col-sm-4 control-label">最高价格<!-- <font color="red">&nbsp;*</font> --></label>
 					<div class="col-sm-8">
 						<input type="text" id="maxPrice" class="form-control" name="maxPrice" value="${entity.maxPrice}">

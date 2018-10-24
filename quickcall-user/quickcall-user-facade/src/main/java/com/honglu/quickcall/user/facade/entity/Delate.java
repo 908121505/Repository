@@ -9,8 +9,6 @@ public class Delate {
 
     private String delateDescribe; // 举报描述
 
-    private String otherReason; // 其他原因
-
     private Date createTime;
 
     private Date modifyTime;
@@ -43,14 +41,6 @@ public class Delate {
 
     public void setDelateDescribe(String delateDescribe) {
         this.delateDescribe = delateDescribe;
-    }
-
-    public String getOtherReason() {
-        return otherReason;
-    }
-
-    public void setOtherReason(String otherReason) {
-        this.otherReason = otherReason;
     }
 
     public Date getCreateTime() {

@@ -4,10 +4,10 @@
 <shiro:hasPermission name="fadeCustomer:select">
     <div class="content1">
         <div class="header">
-            <h1 class="page-title">随机用户管理</h1>
+            <h1 class="page-title">用户管理</h1>
             <ul class="breadcrumb">
                 <li>用户管理</li>
-                <li class="active">随机用户管理</li>
+                <li class="active">用户管理</li>
             </ul>
         </div>
         <div class="main-content">

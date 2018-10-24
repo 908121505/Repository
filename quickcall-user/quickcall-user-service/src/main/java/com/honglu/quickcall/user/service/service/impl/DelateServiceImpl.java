@@ -68,17 +68,12 @@ public class DelateServiceImpl implements DelateService {
         }
 
         if (Strings.isNotNullAndNotEmpty(otherReason)) {
-            Delate delate = new Delate();
-            delate.setCreateTime(new Date());
-            delate.setCreateMan(delateCustId + "");
-            delate.setOtherReason(otherReason);
-            delateMapper.insertOtherReason(delate);
             CustomerDelate customerDelate = new CustomerDelate();
             customerDelate.setCustomerId(customerId);
             customerDelate.setDelateCustId(delateCustId);
             customerDelate.setCreateTime(new Date());
             customerDelate.setCreateMan(delateCustId + "");
-            customerDelate.setDelateId(delate.getId());
+            customerDelate.setDelateContent(otherReason);
             customerDelateMapper.insert(customerDelate);
         }
 

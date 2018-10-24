@@ -6,7 +6,6 @@
         <result column="id" property="id" jdbcType="INTEGER"/>
         <result column="name" property="name" jdbcType="VARCHAR"/>
         <result column="delate_describe" property="delateDescribe" jdbcType="VARCHAR"/>
-        <result column="other_reason" property="otherReason" jdbcType="VARCHAR"/>
         <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
         <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
         <result column="create_man" property="createMan" jdbcType="VARCHAR" />
@@ -14,11 +13,11 @@
         <result column="remark" property="remark" jdbcType="VARCHAR" />
     </resultMap>
     <sql id="Base_Column_List" >
-          id, name, delate_describe,other_reason, create_time, modify_time, create_man, modify_man, remark
+          id, name, delate_describe,create_time, modify_time, create_man, modify_man, remark
    </sql>
     <select id="getAllDelateExcludeOther" resultType="com.honglu.quickcall.user.facade.vo.DelateVO">
         select id,name
-        from delate where other_reason = ''
+        from delate
     </select>
 
     <insert id="insertOtherReason" useGeneratedKeys="true" keyProperty="id" parameterType="com.honglu.quickcall.user.facade.entity.Delate">
