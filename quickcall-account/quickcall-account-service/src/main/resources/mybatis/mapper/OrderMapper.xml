@@ -85,11 +85,11 @@
       #{servicePrice,jdbcType=DECIMAL}, #{orderAmounts,jdbcType=DECIMAL}, #{discountRate,jdbcType=DECIMAL}, 
       #{custCancelTime,jdbcType=TIMESTAMP}, #{systemCancelTime,jdbcType=TIMESTAMP}, #{receiveOrderTime,jdbcType=TIMESTAMP}, 
       #{startServiceTime,jdbcType=TIMESTAMP}, #{appayEndTime,jdbcType=TIMESTAMP}, #{startTime,jdbcType=TIMESTAMP}, 
-      #{endTime,jdbcType=TIMESTAMP},#{ecpectEndTime,jdbcType=TIMESTAMP}, #{orderTime,jdbcType=TIMESTAMP}, #{skillType,jdbcType=TINYINT}, #{orderStatus,jdbcType=TINYINT}, 
+      #{endTime,jdbcType=TIMESTAMP},#{expectEndTime,jdbcType=TIMESTAMP}, #{orderTime,jdbcType=TIMESTAMP}, #{skillType,jdbcType=TINYINT}, #{orderStatus,jdbcType=TINYINT}, 
       #{paymentTime,jdbcType=TIMESTAMP}, #{customerIsEvaluate,jdbcType=TINYINT}, #{customerMessage,jdbcType=VARCHAR}, 
       #{evaluateStart,jdbcType=INTEGER}, #{customerEvaluate,jdbcType=VARCHAR}, #{orderDescribe,jdbcType=VARCHAR}, 
       #{createTime,jdbcType=TIMESTAMP}, #{modifyTime,jdbcType=TIMESTAMP}, #{createMan,jdbcType=VARCHAR}, 
-      #{modifyMan,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}), #{selectReason,jdbcType=VARCHAR}), #{remarkReason,jdbcType=VARCHAR})
+      #{modifyMan,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{selectReason,jdbcType=VARCHAR}, #{remarkReason,jdbcType=VARCHAR})
   </insert>
   
   
@@ -643,7 +643,7 @@
 		FROM
 			customer
 		WHERE
-			customer_id ==  #{customerId}
+			customer_id =  #{customerId}
   </select>
   <!-- 查询客户信息 -->
   <select id="selectGongIngOrderListByCustomerId" resultMap="BaseResultMap" >

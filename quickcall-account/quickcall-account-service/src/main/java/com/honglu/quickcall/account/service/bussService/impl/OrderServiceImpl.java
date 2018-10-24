@@ -100,8 +100,8 @@ public class OrderServiceImpl implements IOrderService {
 	
 	
 	
-	@Override
-	public CommonResponse queryDaVSkill(OrderDaVSkillRequest request) {
+//	@Override
+	public CommonResponse queryDaVSkillExt(OrderDaVSkillRequest request) {
 		if (request == null || request.getCustomerId() == null) {
 			throw new BizException(AccountBizReturnCode.paramError, "查询技能信息参数异常");
 		}
@@ -150,7 +150,9 @@ public class OrderServiceImpl implements IOrderService {
 		LOGGER.info("======>>>>>用户编号为：" + request.getCustomerId() + "查询成功");
 		return commonResponse;
 	}
-	public CommonResponse queryDaVSkillExt(OrderDaVSkillRequest request) {
+	
+	@Override
+	public CommonResponse queryDaVSkill(OrderDaVSkillRequest request) {
 		if (request == null || request.getCustomerId() == null) {
 			throw new BizException(AccountBizReturnCode.paramError, "查询技能信息参数异常");
 		}
@@ -258,6 +260,8 @@ public class OrderServiceImpl implements IOrderService {
 						resultMap.put("retCode",  OrderSkillConstants.RET_CODE_BALANCE_NOT_ENOUTH);
 						//返回余额不足状态  
 						return   commonResponse ;
+					}else{
+						accountService.inAccount(customerId, orderAmounts,TransferTypeEnum.RECHARGE,AccountBusinessTypeEnum.PlaceOrder);
 					}
 				}
 			}
@@ -275,6 +279,8 @@ public class OrderServiceImpl implements IOrderService {
 			record.setDiscountRate(customerSkill.getDiscountRate());
 			
 			Long  orderId =  UUIDUtils.getId();
+			record.setOrderNo(orderId);
+			record.setCustomerSkillId(customerSkillId);
 			record.setCustomerId(customerId);
 			record.setOrderId(orderId);
 			record.setServiceId(serviceId);
@@ -296,7 +302,9 @@ public class OrderServiceImpl implements IOrderService {
 			RongYunUtil.sendOrderMessage(serviceId, OrderSkillConstants.IM_MSG_CONTENT_RECEIVE_ORDER);
 			LOGGER.info("======>>>>>用户编号为：" + request.getCustomerId() + "下单成功");
 		} catch (Exception e) {
+			e.printStackTrace();
 			resultMap.put("retCode",  OrderSkillConstants.RET_CODE_SYSTEM_ERROR);
+			
 		}
 		
 		commonResponse.setData(resultMap);
