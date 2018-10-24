@@ -25,6 +25,8 @@ public interface UserFunctionType {
 	String readAttention = "001008";
 	// 关注未读数量
 	String NoReadAttentionCount = "001009";
+	// 退出登录
+	String loginOut = "001010";
 	// 系统相关 001300 - 001350
 	String MarketOnOff = "001300";
 	String AppConfig = "001301";

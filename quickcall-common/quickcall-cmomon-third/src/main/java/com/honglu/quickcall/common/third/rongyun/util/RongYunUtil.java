@@ -204,7 +204,7 @@ public class RongYunUtil {
 	}
 
 	public static void main(String[] args) {
-		sendUser();
+		// sendUser();
 		/*
 		 * Long fromUserId = 1810161814552346784L; String nickName = "Aaaa"; String
 		 * photo =
@@ -220,7 +220,7 @@ public class RongYunUtil {
 		 * null, null, null, null, null, null); System.out.println(code);
 		 */
 
-		// sendSystemMessage(1810161659557030302L, "我喜欢亚波");
+		sendSystemMessage(1810161659557030302L, "我喜欢亚波");
 		/*
 		 * refreshUser("1810201521499459795", "系统消息",
 		 * "shanghai.aliyuncs.com/voice/user/headimg/25d8dfa082314cb693f78faaf51581d8.jpg"

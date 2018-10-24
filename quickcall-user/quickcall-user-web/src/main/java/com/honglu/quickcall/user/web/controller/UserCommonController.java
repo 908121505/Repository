@@ -28,6 +28,7 @@ import com.honglu.quickcall.user.facade.exchange.request.CustomerHomeRequest;
 import com.honglu.quickcall.user.facade.exchange.request.CustomerLevelRequest;
 import com.honglu.quickcall.user.facade.exchange.request.GetSmsCodeRequest;
 import com.honglu.quickcall.user.facade.exchange.request.IsPhoneExistsRequest;
+import com.honglu.quickcall.user.facade.exchange.request.LoginOutRequest;
 import com.honglu.quickcall.user.facade.exchange.request.SetHeardUrlRequest;
 import com.honglu.quickcall.user.facade.exchange.request.SetPwdRequest;
 import com.honglu.quickcall.user.facade.exchange.request.UserLoginRequest;
@@ -202,18 +203,24 @@ public class UserCommonController {
 		return response;
 	}
 
-	/* *//**
-			 * 退出登录
-			 * 
-			 * @param params
-			 * @return
-			 *//*
-				 * @RequestMapping(value = "/loginout", method = RequestMethod.POST)
-				 * 
-				 * @ResponseBody public WebResponseModel loginout(LoginOutRequest params) {
-				 * WebResponseModel response = userCenterService.execute(params); return
-				 * response; }
-				 */
+	/**
+	 * 退出登录
+	 * 
+	 * @param params
+	 * @return
+	 */
+	@RequestMapping(value = "/loginout", method = RequestMethod.POST)
+	@ResponseBody
+	public WebResponseModel loginout(LoginOutRequest params) {
+		WebResponseModel response = new WebResponseModel();
+		if (params.getCustomerId() == null) {
+			response.setCode(UserBizReturnCode.paramError.code());
+			response.setMsg(UserBizReturnCode.paramError.desc());
+			return response;
+		}
+		response = userCenterService.execute(params);
+		return response;
+	}
 
 	/**
 	 * @Title 上传用户头像
