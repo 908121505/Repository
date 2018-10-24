@@ -179,4 +179,9 @@ public interface UserFunctionType {
 	 */
 	String insertDelate = "0011171";
 
+	/**
+	 * 插入反馈
+	 */
+	String insertFeedBack = "0011180";
+
 }
