@@ -1,6 +1,5 @@
 package com.honglu.quickcall.user.service.business;
 
-import com.honglu.quickcall.user.facade.exchange.request.editprofile.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +23,7 @@ import com.honglu.quickcall.user.facade.exchange.request.CustomerLevelRequest;
 import com.honglu.quickcall.user.facade.exchange.request.DelateInsertRequest;
 import com.honglu.quickcall.user.facade.exchange.request.GetSmsCodeRequest;
 import com.honglu.quickcall.user.facade.exchange.request.IsPhoneExistsRequest;
+import com.honglu.quickcall.user.facade.exchange.request.LoginOutRequest;
 import com.honglu.quickcall.user.facade.exchange.request.NoReadAttentionCountRequest;
 import com.honglu.quickcall.user.facade.exchange.request.QueryAttentionFansListRequest;
 import com.honglu.quickcall.user.facade.exchange.request.QueryInterestListRequest;
@@ -46,6 +46,22 @@ import com.honglu.quickcall.user.facade.exchange.request.UserLoginRequest;
 import com.honglu.quickcall.user.facade.exchange.request.UserRegisterRequest;
 import com.honglu.quickcall.user.facade.exchange.request.UserUnreadMessageNumRequest;
 import com.honglu.quickcall.user.facade.exchange.request.queryMyskillRequest;
+import com.honglu.quickcall.user.facade.exchange.request.editprofile.QueryBlacklistReq;
+import com.honglu.quickcall.user.facade.exchange.request.editprofile.QueryInterestListReq;
+import com.honglu.quickcall.user.facade.exchange.request.editprofile.QueryUserEditInfoReq;
+import com.honglu.quickcall.user.facade.exchange.request.editprofile.RemoveAppearanceReq;
+import com.honglu.quickcall.user.facade.exchange.request.editprofile.RemoveBlacklistReq;
+import com.honglu.quickcall.user.facade.exchange.request.editprofile.RemoveVoiceIdentificationCardReq;
+import com.honglu.quickcall.user.facade.exchange.request.editprofile.SaveBlacklistReq;
+import com.honglu.quickcall.user.facade.exchange.request.editprofile.UpdateAppearanceReq;
+import com.honglu.quickcall.user.facade.exchange.request.editprofile.UpdateBirthdayReq;
+import com.honglu.quickcall.user.facade.exchange.request.editprofile.UpdateGenderReq;
+import com.honglu.quickcall.user.facade.exchange.request.editprofile.UpdateHeadPortraitReq;
+import com.honglu.quickcall.user.facade.exchange.request.editprofile.UpdateInterestReq;
+import com.honglu.quickcall.user.facade.exchange.request.editprofile.UpdateNickNameReq;
+import com.honglu.quickcall.user.facade.exchange.request.editprofile.UpdateSignNameReq;
+import com.honglu.quickcall.user.facade.exchange.request.editprofile.UpdateStarSignReq;
+import com.honglu.quickcall.user.facade.exchange.request.editprofile.UpdateVoiceIdentificationCardReq;
 import com.honglu.quickcall.user.service.service.BlacklistService;
 import com.honglu.quickcall.user.service.service.CommonPersonService;
 import com.honglu.quickcall.user.service.service.DelateService;
@@ -88,6 +104,9 @@ public class UserDubboBusinessImpl implements UserDubboBusiness {
 				break;
 			case UserFunctionType.login:
 				response = commonPersonService.login((UserLoginRequest) request);
+				break;
+			case UserFunctionType.loginOut:
+				response = commonPersonService.loginOut((LoginOutRequest) request);
 				break;
 			case UserFunctionType.setpwd:
 				response = commonPersonService.setpwd((SetPwdRequest) request);

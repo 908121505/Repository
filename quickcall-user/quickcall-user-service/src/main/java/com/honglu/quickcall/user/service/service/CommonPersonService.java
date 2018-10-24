@@ -4,6 +4,7 @@ import com.honglu.quickcall.common.api.exchange.CommonResponse;
 import com.honglu.quickcall.user.facade.exchange.request.BindVXorQQRequest;
 import com.honglu.quickcall.user.facade.exchange.request.GetSmsCodeRequest;
 import com.honglu.quickcall.user.facade.exchange.request.IsPhoneExistsRequest;
+import com.honglu.quickcall.user.facade.exchange.request.LoginOutRequest;
 import com.honglu.quickcall.user.facade.exchange.request.SaveCertificationRequest;
 import com.honglu.quickcall.user.facade.exchange.request.SaveDvVoiceRequest;
 import com.honglu.quickcall.user.facade.exchange.request.SetHeardUrlRequest;
@@ -95,4 +96,12 @@ public interface CommonPersonService {
 	 * @return
 	 */
 	CommonResponse bindVXorQQ(BindVXorQQRequest request);
+
+	/**
+	 * 退出登录
+	 * 
+	 * @param request
+	 * @return
+	 */
+	CommonResponse loginOut(LoginOutRequest request);
 }
