@@ -51,7 +51,6 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 		String coverUrl = "http://test-guanjia.oss-cn-shanghai.aliyuncs.com/voice/skill/1539668863932.png";
 		String bussTagUrl = "http://test-guanjia.oss-cn-shanghai.aliyuncs.com/voice/skill/1539668863932.png";
 		String categoryTagUrl = "http://test-guanjia.oss-cn-shanghai.aliyuncs.com/voice/skill/1539668869623.png";
-
 		for (int i = 0; i < 6; i++) {
 			daVinfoList.add(getDaVinfoVO("半小时", bussTagUrl, categoryTagUrl, coverUrl));
 		}
@@ -93,7 +92,7 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 			}
 			listVO.setSkillItemId(1000L);
 			List<DaVinfoVO> daVinfoList = new ArrayList<DaVinfoVO>();
-			for (int j = 0; j < 5; j++) {
+			for (int j = 0; j < 4; j++) {
 				daVinfoList.add(getDaVinfoVO(unitName, bussTagUrl, categoryTagUrl, coverUrl));
 			}
 			listVO.setDaVinfoList(daVinfoList);
@@ -117,6 +116,9 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 		infoVO.setUnitName(unitName);
 		infoVO.setCoverUrl(coverUrl);
 		infoVO.setCurrencyName(Math.random() > 0.5 ? "币" : "元");
+		infoVO.setSkillItemName("哄睡");
+		infoVO.setVoiceTime(new BigDecimal(10));
+		infoVO.setVoiceUrl("http://test-guanjia.oss-cn-shanghai.aliyuncs.com/voice/user/audio/51d8d1dbace54c41a56208864c1c9284.mp3");
 		return infoVO;
 	}
 

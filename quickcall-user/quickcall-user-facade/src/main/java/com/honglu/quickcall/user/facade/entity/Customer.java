@@ -38,6 +38,8 @@ public class Customer {
 
 	private Integer source;
 
+	private Integer custState;
+
 	private Integer custStatus;
 
 	private String custPassword;
@@ -111,6 +113,14 @@ public class Customer {
 
 	public String getGtClientId() {
 		return gtClientId;
+	}
+
+	public Integer getCustState() {
+		return custState;
+	}
+
+	public void setCustState(Integer custState) {
+		this.custState = custState;
 	}
 
 	public void setGtClientId(String gtClientId) {

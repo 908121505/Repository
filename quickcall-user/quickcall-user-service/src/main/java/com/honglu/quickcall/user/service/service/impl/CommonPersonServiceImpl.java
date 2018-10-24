@@ -34,9 +34,11 @@ import com.honglu.quickcall.common.third.rongyun.util.RongYunUtil;
 import com.honglu.quickcall.user.facade.code.UserBizReturnCode;
 import com.honglu.quickcall.user.facade.constants.UserBizConstants;
 import com.honglu.quickcall.user.facade.entity.Customer;
+import com.honglu.quickcall.user.facade.enums.CustomerCusStateEnum;
 import com.honglu.quickcall.user.facade.exchange.request.BindVXorQQRequest;
 import com.honglu.quickcall.user.facade.exchange.request.GetSmsCodeRequest;
 import com.honglu.quickcall.user.facade.exchange.request.IsPhoneExistsRequest;
+import com.honglu.quickcall.user.facade.exchange.request.LoginOutRequest;
 import com.honglu.quickcall.user.facade.exchange.request.SaveCertificationRequest;
 import com.honglu.quickcall.user.facade.exchange.request.SaveDvVoiceRequest;
 import com.honglu.quickcall.user.facade.exchange.request.SetHeardUrlRequest;
@@ -173,10 +175,12 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 			throw new BizException(BizCode.ParamError, "您的账号因违规操作已被封停，如果有疑问请联系客服：400-1150-707");
 		}
 
+		// 更新登录信息
 		login.setCustomerId(customer.getCustomerId());
 
 		login.setModifyTime(new Date());
 		login.setGtClientId(params.getGtClientId());
+		login.setCustState(CustomerCusStateEnum.ON_LINE.getType());
 		customerMapper.updateByPrimaryKeySelective(login);
 
 		return ResultUtils.resultSuccess(customer);
@@ -563,6 +567,20 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 			throw new BizException(BizCode.ParamError, "绑定账号已存在，不能绑定");
 		}
 		int row = customerMapper.updateByPrimaryKeySelective(param);
+		return ResultUtils.resultSuccess();
+	}
+
+	@Override
+	public CommonResponse loginOut(LoginOutRequest request) {
+		Long customerId = request.getCustomerId();
+		Customer customer = customerMapper.selectByPrimaryKey(customerId);
+		if (customer == null) {
+			return ResultUtils.resultDataNotExist("用户数据不存在");
+		}
+		Customer cus = new Customer();
+		cus.setCustomerId(customerId);
+		cus.setCustState(CustomerCusStateEnum.OFF_LINE.getType());
+		int row = customerMapper.updateByPrimaryKeySelective(cus);
 		return ResultUtils.resultSuccess();
 	}
 

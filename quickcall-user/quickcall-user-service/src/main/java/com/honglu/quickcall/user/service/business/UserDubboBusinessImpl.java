@@ -23,7 +23,7 @@ import com.honglu.quickcall.user.facade.code.UserFunctionType;
 @Service("User.UserDubboBusiness")
 public class UserDubboBusinessImpl implements UserDubboBusiness {
 
-    private static final Logger logger = LoggerFactory.getLogger(UserDubboBusinessImpl.class);
+	private static final Logger logger = LoggerFactory.getLogger(UserDubboBusinessImpl.class);
 
     @Autowired
     private CommonPersonService commonPersonService;
