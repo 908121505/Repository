@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="ResourcePool" >
+  <resultMap id="BaseResultMap" type="com.calf.module.resource.entity.ResourcePool" >
+    <id column="id" property="id" jdbcType="BIGINT" javaType="string" />
+    <result column="resource_name" property="resourceName" jdbcType="VARCHAR" />
+    <result column="sound_total" property="soundTotal" jdbcType="INTEGER" />
+    <result column="sound_total_UIDStr" property="soundTotalUIDStr" jdbcType="VARCHAR" />
+<!--    <result column="sound_online" property="soundOnline" jdbcType="INTEGER"/>
+    <result column="sound_order" property="soundOrder" jdbcType="INTEGER"/>
+    <result column="sound_remaining" property="soundRemaining" jdbcType="INTEGER"/>-->
+
+    <result column="status" property="status" jdbcType="TINYINT" />
+    <result column="active_status" property="activeStatus" jdbcType="TINYINT" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+    <result column="create_man" property="createMan" jdbcType="VARCHAR" />
+    <result column="modify_man" property="modifyMan" jdbcType="VARCHAR" />
+<!--    <association property="" >
+
+    </association>-->
+  </resultMap>
+
+
+  <sql id="Base_Column_List" >
+    id, resource_name, sound_total,sound_total_uidstr, status,active_status
+    create_time,modify_time, create_man, modify_man
+  </sql>
+
+  <select id="selectPageList" resultMap="BaseResultMap" parameterType="map" >
+    select
+    <include refid="Base_Column_List" />
+    from resource_pool
+    where  status = 1
+
+    <if test="resource_name != null" >
+      and  resource_name like  concat( '%',#{resource_name},'%')
+    </if>
+    LIMIT ${iDisplayStart},${iDisplayLength}
+  </select>
+
+  <select id="selectCount" resultType="java.lang.Integer" parameterType="map" >
+    select
+    count(1)
+    from resource_pool
+    where  status = 1
+    <if test="resource_name != null" >
+      and  resource_name like  concat( '%',#{resource_name},'%')
+    </if>
+  </select>
+
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select
+    <include refid="Base_Column_List" />
+    from resource_pool
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+
+  <update id="updateByPrimaryKey" parameterType="com.calf.module.resource.entity.ResourcePool" >
+    update resource_pool
+    set resource_name = #{resourceName,jdbcType=VARCHAR},
+      sound_total = #{soundTotal,jdbcType=INTEGER},
+      sound_total_UIDStr = #{soundTotalUIDStr,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      create_man = #{createMan,jdbcType=VARCHAR},
+      modify_man = #{modifyMan,jdbcType=VARCHAR},
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+  <update id="updateStatusDel" parameterType="com.calf.module.resource.entity.ResourcePool" >
+    update resource_pool
+    set status = #{status,jdbcType=TINYINT},
+      modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      modify_man = #{modifyMan,jdbcType=VARCHAR},
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+  <!-- 查询所有数据 -->
+  <select id="selectAllValidData" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from resource_pool
+    where status=1
+    order by create_time desc
+  </select>
+</mapper>
