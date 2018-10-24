@@ -226,10 +226,15 @@ public class RongYunUtil {
 		 * null, null, null, null, null, null); System.out.println(code);
 		 */
 
-		// sendSystemMessage(1810161659557030302L, "我喜欢亚波");
-		sendFansMessage(1810241141388482637L, "轻音_3575",
-				"http://test-guanjia.oss-cn-shanghai.aliyuncs.com/user/app/1538205551716.png", 1810161659557030302L,
-				"我关注了你哦", 1);
+		sendSystemMessage(1810161659557030302L, "我喜欢亚波");
+		sendOrderMessage(1810161659557030302L, "你有一条新的订单哦");
+		sendActivityMessage(1810161659557030302L, "红包");
+
+		/*
+		 * sendFansMessage(1810241141388482637L, "轻音_3575",
+		 * "http://test-guanjia.oss-cn-shanghai.aliyuncs.com/user/app/1538205551716.png",
+		 * 1810161659557030302L, "我关注了你哦", 1);
+		 */
 		/*
 		 * refreshUser("1810201521499459795", "系统消息",
 		 * "shanghai.aliyuncs.com/voice/user/headimg/25d8dfa082314cb693f78faaf51581d8.jpg"
