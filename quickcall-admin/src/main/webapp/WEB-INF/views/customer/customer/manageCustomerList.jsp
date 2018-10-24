@@ -30,6 +30,51 @@
 						<input type="hidden" id="id" class="form-control"  name="customerId" value="${entity.customerId}" >
 					</div>
 				</div>
+
+				<div class="form-group"  >
+					<label class="col-sm-4 control-label">用户UID<font color="red">&nbsp;*</font></label>
+					<div class="col-sm-8">
+						<input type="text" id="appId" class="form-control"
+							   name="appId" value="${entity.appId}" readonly="readonly">
+					</div>
+				</div>
+
+				<div class="form-group"  >
+					<label class="col-sm-4 control-label">用户类型<font color="red">&nbsp;*</font></label>
+					<div class="col-sm-8">
+						<input type="text" id="type" class="form-control"
+							   name="type" value="${entity.type == 0?'普通用户':'声优用户'}" readonly="readonly">
+					</div>
+				</div>
+				<%-- 4=已封禁-无法接单,6=已封禁-无法接指定技能,8=已封禁-账户登录权限,10=已封禁-设备登录权限--%>
+				<div class="form-group"  >
+					<label class="col-sm-4 control-label">用户类型<font color="red">&nbsp;*</font></label>
+					<div class="col-sm-8">
+						<input type="text" id="custStatus" class="form-control"
+							   name="custStatus" value="${entity.custStatus == 1?'正常': entity.custStatus == 4 ?
+							    '已封禁-无法接单':entity.custStatus==6?'已封禁-无法接指定技能':
+							    entity.custStatus == 8 ?'已封禁-账户登录权限': entity.custStatus == 10?'已封禁-设备登录权限':'未知状态'}"
+							   readonly="readonly">
+
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label class="col-sm-2 control-label">操作类型<font color="red">&nbsp;*</font></label>
+					<div class="col-sm-10">
+						<select class="form-control" id="operaterType" name="operaterType">
+							<c:if test="${entity.custStatus == 1}">
+
+							</c:if>
+							<option value="0">解禁</option>
+							<option value="1">封禁</option>
+						</select>
+					</div>
+				</div>
+
+
+
+
 		<%--		<div class="form-group"  >
 					<label class="col-sm-4 control-label">描述<font color="red">&nbsp;*</font></label>
 					<div class="col-sm-8">
@@ -218,11 +263,11 @@
 			$("#tip").text("请输入最低价格");
 			return  false;
 		}*/
-		var skillBackGroungImg =  $("#skillBackGroungImg").val();
+		/*var skillBackGroungImg =  $("#skillBackGroungImg").val();
 		if(skillBackGroungImg == null  || skillBackGroungImg.trim() == ''){
 			$("#tip").text("请上传项目背景图片");
 			return  false;
-		}
+		}*/
 		/*var skillTitleImg =  $("#skillTitleImg").val();
 		if(skillTitleImg == null  || skillTitleImg.trim() == ''){
 			$("#tip").text("请上传项目标题图片");

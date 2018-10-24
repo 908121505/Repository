@@ -225,7 +225,7 @@
     </select>
     <select id="selectVoByPrimaryKey" resultMap="BaseVOResultMap" parameterType="java.lang.Long">
         select
-          customer_id,app_id,nick_name,front_portrait_url,block_end_time,block_start_time,cust_status
+          customer_id,app_id,nick_name,front_portrait_url,type,block_end_time,block_start_time,cust_status
         from customer
         where customer_id = #{customerId,jdbcType=BIGINT}
     </select>
