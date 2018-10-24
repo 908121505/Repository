@@ -12,6 +12,7 @@ import java.util.ResourceBundle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.honglu.quickcall.account.facade.business.IAccountOrderService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -113,6 +114,8 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 	private CustomerSkillCertifyMapper customerSkillCertifyMapper;
 	@Autowired
 	private CustomerAppearanceMapper customerAppearanceMapper;
+	@Autowired
+	private IAccountOrderService accountOrderService;
 
 	/**
 	 * 中文、英文、数字、下划线校验 4-24位
@@ -799,10 +802,10 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 		// 查询用户技能 -- 条件是大V
 		List<CustomerHomeVO.CustomerSkill> skillList = new ArrayList<>();
 		if (Objects.equals(viewCustomer.getvStatus(), 2)) {
-			List<CustomerSkill> customerSkills = customerSkillMapper
-					.selectCustomerAuditedSkill(request.getViewCustomerId());
+			List<CustomerSkill> customerSkills = customerSkillMapper.selectCustomerAuditedSkill(request.getViewCustomerId());
 			for (CustomerSkill bean : customerSkills) {
 				CustomerHomeVO.CustomerSkill customerSkill = customerHomeVO.new CustomerSkill();
+				customerSkill.setCustomerSkillId(bean.getCustomerSkillId());
 				customerSkill.setSkillId(bean.getSkillItemId());
 				customerSkill.setSkillName(bean.getSkillName());
 				customerSkill.setSkillBackColor(bean.getSkillBackColor());
@@ -819,6 +822,9 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 
 				// 声量 ADUAN -- 一期前段不显示
 				customerSkill.setSkillVolume(250);
+
+				// 判断是否可下单 ADUAN -- 待做
+				customerSkill.setCanOrder(accountOrderService.checkReceiveOrderByCustomerSkillId(request.getViewCustomerId(), bean.getCustomerSkillId()));
 
 				skillList.add(customerSkill);
 			}

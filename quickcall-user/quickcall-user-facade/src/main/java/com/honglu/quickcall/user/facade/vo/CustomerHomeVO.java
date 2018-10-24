@@ -94,6 +94,10 @@ public class CustomerHomeVO implements Serializable {
         private static final long serialVersionUID = 2871296634994569921L;
 
         /**
+         * 客户技能ID
+         */
+        private Long customerSkillId;
+        /**
          * 技能ID
          */
         private Long skillId;
@@ -137,6 +141,14 @@ public class CustomerHomeVO implements Serializable {
          * 用户标签 -- 最多的3个标签
          */
         private List<String> customerLabel;
+
+        public Long getCustomerSkillId() {
+            return customerSkillId;
+        }
+
+        public void setCustomerSkillId(Long customerSkillId) {
+            this.customerSkillId = customerSkillId;
+        }
 
         public Long getSkillId() {
             return skillId;
