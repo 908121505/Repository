@@ -29,7 +29,7 @@
     <result column="v_status" property="vStatus"   />
     
     <result column="gt_client_id" property="gtClientId"   />
-    
+     
     <!-- 大V自己声音相关 -->
     <result column="v_voice_url" property="voiceUrl" jdbcType="VARCHAR" />
     <result column="v_voice_time" property="voiceTime" jdbcType="DECIMAL" />
@@ -51,6 +51,8 @@
     <result column="customer_level" property="customerLevel" jdbcType="INTEGER" />
     <result column="device_id" property="deviceId" jdbcType="VARCHAR" />
     <result column="login_time" property="loginTime" jdbcType="TIMESTAMP" />
+    <result column="block_start_time" property="blockStartTime" jdbcType="TIMESTAMP" />
+    <result column="block_end_time" property="blockEndTime" jdbcType="TIMESTAMP" />
   </resultMap>
  <sql id="Base_Column_List" >
         customer_id,app_id, phone, real_name, sex, nick_name, type, credentials_type, credentials_num, 
@@ -59,7 +61,7 @@
     star_sign, birthday, voice_url, voice_time, v_voice_url, v_voice_url_tmp, v_voice_time_tmp, 
     v_voice_status, v_voice_time, v_status, identity_status, token_code, other_relation, 
     create_time, modify_time, create_man, modify_man, remark, app_channel_name,cumulate_experience,
-    customer_level, device_id, login_time,gt_client_id
+    customer_level, device_id, login_time,gt_client_id,block_start_time,block_end_time
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
