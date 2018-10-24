@@ -11,6 +11,33 @@ package com.honglu.quickcall.account.facade.constants;
  */
 public interface OrderSkillConstants {
 	
+	
+	
+	/**下单返回结果：1 成功*/
+	public static final String  RET_CODE_SUCCESS = "1";
+	/**下单返回结果：2 余额不足*/
+	public static final String  RET_CODE_BALANCE_NOT_ENOUTH = "2";
+	/**下单返回结果：3 大V正忙*/
+	public static final String  RET_CODE_DV_BUSY = "3";
+	/**下单返回结果：4 系统错误*/
+	public static final String  RET_CODE_SYSTEM_ERROR = "4";
+	
+	/**默认空字符串*/
+	public static final String  DEFAULT_NULL_STR = "";
+	
+	/**半小时秒数：1800秒*/
+	public  static final  Integer  HALF_HOUR_SECONDS = 1800;
+	/**一小时秒数：3600秒*/
+	public  static final  Integer  ONE_HOUR_SECONDS = 3600;
+	/**服务单位：一小时*/
+	public  static final  String  SERVICE_UNIT_HOUR = "一小时";
+	/**服务单位：半小时*/
+	public  static final  String  SERVICE_UNIT_HALF_HOUR = "半小时";
+	/**服务单位：次*/
+	public  static final  String  SERVICE_UNIT_TIMES = "次";
+	
+	
+	
 	/**默认每页显示条数*/
 	public static  final  Integer  DEFAULT_PAGE_SIZE = 6;
     
@@ -88,7 +115,7 @@ public interface OrderSkillConstants {
 	public static final Integer  ORDER_STATUS_FINISHED_USER_ACCEPCT = 30 ;
 	/**订单状态32.已完成（大V发起已完成服务，12小时客户不响应自动完成）*/
 	public static final Integer  ORDER_STATUS_FINISH_DV_FINISH = 32 ;
-	/**订单状态34.进行中（用户发起完成服务）*/
+	/**订单状态34.已完成（用户发起完成服务）*/
 	public static final Integer  ORDER_STATUS_GOING_USRE_APPAY_FINISH = 34 ;
 	/**订单状态36.已完成（大V在服务时间外完成）;*/
 	public static final Integer  ORDER_STATUS_FINISH_DAV_FINISH_AFTER_SERVICE_TIME = 36 ;

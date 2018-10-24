@@ -11,5 +11,8 @@
     
     <dubbo:reference group="accountCenter" id="accountDubboBusiness" interface="com.honglu.quickcall.account.facade.business.AccountDubboBusiness" check="false" version="0.0.1"/>
 
+    <!-- account中 - 订单服务 -->
+    <dubbo:reference group="accountCenter" id="accountOrderService" interface="com.honglu.quickcall.account.facade.business.IAccountOrderService" check="false" version="0.0.1"/>
+
     <dubbo:reference group="activityCenter" id="activityDubboBusiness" interface="com.honglu.quickcall.activity.facade.business.ActivityDubboBusiness" check="false" version="0.0.1"/>
 </beans>

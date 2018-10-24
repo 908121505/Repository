@@ -89,6 +89,8 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 
 		} else if (StringUtils.isNotBlank(params.getWechatOpenId())) {
 			param.setWechatOpenId(params.getWechatOpenId());
+		} else if (StringUtils.isNotBlank(params.getNickName())) {
+			param.setNickName(params.getNickName());
 		}
 		customer = customerMapper.login(param);
 		if (customer != null) {
@@ -152,6 +154,25 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 			}
 			login.setTokenCode(rongyunToken);
 		}
+		boolean isBlock = false;
+		// 用户是否被封禁
+		if (customer.getCustStatus() != null) {
+			if (customer.getCustStatus() == -1 || customer.getCustStatus() == 8) {
+				isBlock = true;
+				if (customer.getCustStatus() == 8) {
+					// 到了封禁时间 解封
+					if (customer.getBlockEndTime() != null && customer.getBlockEndTime().before(new Date())) {
+						login.setCustStatus(1);
+						isBlock = false;
+					}
+				}
+			}
+		}
+		// 账户被封
+		if (isBlock) {
+			throw new BizException(BizCode.ParamError, "您的账号因违规操作已被封停，如果有疑问请联系客服：400-1150-707");
+		}
+
 		login.setCustomerId(customer.getCustomerId());
 
 		login.setModifyTime(new Date());

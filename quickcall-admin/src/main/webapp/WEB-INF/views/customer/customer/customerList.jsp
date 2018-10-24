@@ -2,10 +2,10 @@
 <%@ taglib prefix="shiro" uri="http://shiro.apache.org/tags" %>
 <div class="content1">
     <div class="header">
-        <h1 class="page-title">订单管理</h1>
+        <h1 class="page-title">用户管理</h1>
         <ul class="breadcrumb">
-            <li>订单管理</li>
-            <li class="active">技能配置</li>
+            <li>用户管理</li>
+            <li class="active">用户管理后台</li>
         </ul>
     </div>
     <div class="main-content">
@@ -13,24 +13,11 @@
             <div class="col-md-2">
                 <div class="form-group">
                     <div class="input-group">
-                        <div class="input-group-addon">技能名称</div>
+                        <div class="input-group-addon">用户或UUID</div>
                         <input class="form-control" type="text" id="nameQuery">
                     </div>
                 </div>
             </div>
-            <div class="col-md-2">
-                <div class="form-group">
-                    <div class="input-group">
-                        <div class="input-group-addon">状态</div>
-                        <select class="form-control" id="skillStatusQuery">
-                            <option value="">--请选择--</option>
-                            <option value="0">可用</option>
-                            <option value="1">不可用</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-
             <div class="col-md-2">
                 <button type="button" class="btn btn-primary btn-small btn-block"
                         id="query">
@@ -38,11 +25,43 @@
                 </button>
             </div>
             <div class="col-md-2">
-                <button type="button" class="btn btn-info btn-small btn-block"
-                        onclick="addAndUpdateRow(0)">
-                    <i class="glyphicon glyphicon-plus"></i> 增加
-                </button>
+                <div class="form-group">
+                    <div class="input-group">
+                        <select class="form-control" id="customTypeQuery">
+                            <option value="">--请选择--</option>
+                            <option value="0">普通用户</option>
+                            <option value="1">声优用户</option>
+                        </select>
+                    </div>
+                </div>
             </div>
+            <div class="col-md-2">
+                <div class="form-group">
+                    <div class="input-group">
+                        <select class="form-control" id="customerStatusQuery" onchange="customerStatusOnChange()">
+                            <option value="">--请选择--</option>
+                            <option value="1">正常</option>
+                            <option value="2">封禁</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+           <%-- 4=已封禁-无法接单,6=已封禁-无法接指定技能,8=已封禁-账户登录权限,10=已封禁-设备登录权限--%>
+            <div class="col-md-2">
+                <div class="form-group">
+                    <div class="input-group">
+                        <select class="form-control" id="closureStatusQuery" disabled="disabled">
+                            <option value="">--请选择--</option>
+                            <option value="4">已封禁-无法接单</option>
+                            <option value="6">已封禁-无法接指定技能</option>
+                            <option value="8">已封禁-账户登录权限</option>
+                            <option value="10">已封禁-设备登录权限</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+
         </div>
         <!-- 			<div class="row">
                         <div class="col-md-2">
@@ -131,21 +150,21 @@
         //表格的初始化
         $(document).ready(function () {
             var table = $('#example').initTable({
-                sAjaxSource: "skill/initTable.htm",
+                sAjaxSource: "customer/initTable.htm",
                 aoColumns: [
                     {
-                        "data": "id",
-                        "sTitle": "技能ID",
+                        "data": "nickName",
+                        "sTitle": "用户昵称",
                         'sClass': "text-center"
                     },
                     {
-                        "data": "skillItemName",
-                        "sTitle": "技能名称",
+                        "data": "appId",
+                        "sTitle": "用户UID",
                         'sClass': "text-center"
                     },
                     {
-                        "data": "lockIcon",
-                        "sTitle": "未解锁图片",
+                        "data": "frontPortraitUrl",
+                        "sTitle": "实名认证",
                         'sClass': "text-center",
                         "mRender": function (data, type, full) {
                             if (data == '' || data == null) {
@@ -157,8 +176,14 @@
                         }
                     },
                     {
+                        "data": "formatString",
+                        "sTitle": "声优认证",
+                        'sClass': "text-center"
+                    },
+
+                 /*   {
                         "data": "unlockIcon",
-                        "sTitle": "解锁图片",
+                        "sTitle": "声优认证",
                         'sClass': "text-center",
                         "mRender": function (data, type, full) {
                             if (data == '' || data == null) {
@@ -168,43 +193,31 @@
                             }
 
                         }
-                    },
+                    },*/
+                    <%-- 4=已封禁-无法接单,6=已封禁-无法接指定技能,8=已封禁-账户登录权限,10=已封禁-设备登录权限--%>
                     {
-                        "data": "backColor",
-                        "sTitle": "背景颜色",
+                        "data": "custStatus",
+                        "sTitle": "当前状态",
                         'sClass': "text-center",
                         "mRender": function (data, type, full) {
-                            if (data == '' || data == null) {
-                                return "--";
-                            } else {
-                                return "<div style=\"background-color:" + data + ";\">\n" +
-                                    "                    <br>背影颜色\n" +
-                                    "                </div>\n"
-                            }
-
-                        }
-                    },
-                    {
-                        "data": "fontColor",
-                        "sTitle": "字体颜色",
-                        'sClass': "text-center",
-                        "mRender": function (data, type, full) {
-                            if (data == '' || data == null) {
-                                return "--";
-                            } else {
-                                return "<div style=\"background-color:" + data + ";\">\n" +
-                                    "                    <br>背影颜色\n" +
-                                    "                </div>\n"
+                            if(data == 1){
+                                return "<font color='red'>正常</font>";
+                            } else if(data == 4){
+                                return "<font color='red'>已封禁-无法接单</font>";
+                            } else if(data == 6){
+                                return "<font color='red'>已封禁-无法接指定技能</font>";
+                            } else if(data == 8){
+                                return "<font color='red'>已封禁-账户登录权限</font>";
+                            } else if(data == 10){
+                                return "<font color='red'>已封禁-设备登录权限</font>";
+                            }else{
+                                return "<font color='red'>异常</font>";
                             }
 
                         }
                     },
 
-                    {
-                        "data": "skillDescribe",
-                        "sTitle": "描述",
-                        'sClass': "text-center"
-                    },
+
                     /*   {
                           "data": "titleUrl",
                           "sTitle":"标题背景图片",
@@ -233,67 +246,10 @@
                             "sTitle":"价格步长",
                             'sClass':"text-center",
                         },*/
-                    {
-                        "data": "skillStatus",
-                        "sTitle": "状态",
-                        'sClass': "text-center",
-                        "mRender": function (data, type, full) {
-                            /* if(data==''||data==null){
-                                return	"--";
-                            }else */
-                            if (data == 0) {
-                                skillStatus = 0;
-                                return "<font color='red'>可用</font>";
-                            } else if (data == 1) {
-                                skillStatus = 1;
-                                return "<font color='red'>不可用</font>";
-                            }
-                        }
-                    },
-                    {
-                        "data": "skillType",
-                        "sTitle": "技能类型",
-                        'sClass': "text-center",
-                        "mRender": function (data, type, full) {
-                            /* if(data==''||data==null){
-                                return	"--";
-                            }else */
-                            if (data == 1) {
-                                return "<font color='red'>不可重复接单类型</font>";
-                            } else if (data == 2) {
-                                return "<font color='red'>可重复接单类型</font>";
-                            }
-                        }
-                    },
 
                     {
-                        "data": "sort",
-                        "sTitle": "排序",
-                        'sClass': "text-center",
-                    },
-
-
-                    {
-                        "data": "remark",
-                        "sTitle": "备注",
-                        'sClass': "text-center"
-                    },
-
-                    {
-                        "data": "createMan",
-                        "sTitle": "创建人",
-                        'sClass': "text-center",
-                        "mRender": function (data, type, full) {
-                            if (data == '' || data == null) {
-                                return "--";
-                            } else {
-                                return data;
-                            }
-                        }
-                    },
-                    {
-                        "data": "createTime",
-                        "sTitle": "创建时间",
+                        "data": "blockStartTime",
+                        "sTitle": "封禁起初时间",
                         'sClass': "text-center",
                         "mRender": function (
                             data, type,
@@ -309,13 +265,8 @@
                         }
                     },
                     {
-                        "data": "modifyMan",
-                        "sTitle": "修改人",
-                        'sClass': "text-center"
-                    },
-                    {
-                        "data": "modifyTime",
-                        "sTitle": "修改时间",
+                        "data": "blockEndTime",
+                        "sTitle": "封禁结束时间",
                         'sClass': "text-center",
                         "mRender": function (
                             data, type,
@@ -331,28 +282,29 @@
                         }
                     },
                     {
-                        "data": "id",
+                        "data": "customerId",
                         "sTitle": "操作",
                         'sClass': "text-center"
                     }
                 ],
                 fnServerParams: function (aoData) {  //查询条件
-                    aoData.push({"name": "name", "value": $("#nameQuery").val().replace(new RegExp(" ", "g"), "")});
-                    aoData.push({"name": "skillStatus", "value": $("#skillStatusQuery").val()});
+                    aoData.push({"name": "nickName", "value": $("#nameQuery").val().replace(new RegExp(" ", "g"), "")});
+                    aoData.push({"name": "type", "value": $("#customTypeQuery").val()});
+
+                    var status = $('#customerStatusQuery').val();
+                    if(status == 1){
+                        aoData.push({"name": "custStatus", "value": 1});
+                    }else if(status == 2){
+                        aoData.push({"name": "custStatus", "value": $("#closureStatusQuery").val()});
+                    }
                 },
                 aoColumnDefs: [{
-                    "aTargets": 15,
+                    "aTargets": 7,
                     "mRender": function (data, type, row) {
 
-                        var detail = "", del = "", status;
-                        detail = "<a href='#' onclick='addAndUpdateRow(\"" + row.id + "\")' data-toggle='modal' class='padding-right-small label label-success'><i class='glyphicon glyphicon-edit'></i>详情</a>";
-                        del = "<a href='#' onclick='deleteRow(\"" + row.id + "\")' data-toggle='modal' class='padding-right-small label label-success'><i class='glyphicon glyphicon-edit'></i>删除</a>";
-                        if (skillStatus == 0) {
-                            status = "<a href='#' onclick='updateDownStatus(\"" + row.id + "\")' data-toggle='modal' class='padding-right-small label label-success'><i class='glyphicon glyphicon-edit'></i>下线</a>";
-                        } else if (skillStatus == 1) {
-                            status = "<a href='#' onclick='updateUpStatus(\"" + row.id + "\")' data-toggle='modal' class='padding-right-small label label-success'><i class='glyphicon glyphicon-edit'></i>上线</a>";
-                        }
-                        return status+"&nbsp;"+detail + "&nbsp;" + del;
+                        var detail = "";
+                        detail = "<a href='#' onclick='addAndUpdateRow(\"" + data + "\")' data-toggle='modal' class='padding-right-small label label-success'><i class='glyphicon glyphicon-edit'></i>管理</a>";
+                        return detail;
                     }
                 }]
 
@@ -366,19 +318,18 @@
 
         //增加或者修改受影响的行数
         function addAndUpdateRow(id) {
-            $('#insertAndUpdate').addAndUpdateRow("skill/addAndUpdateHome.htm?id=" + id);
+            $('#insertAndUpdate').addAndUpdateRow("customer/addAndUpdateHome.htm?id=" + id);
         }
 
-        function deleteRow(id) {
-            $('#myModal').deleteRow('skill/delete.htm?id=' + id);
-        }
 
-        function updateUpStatus(id){
-            $('#updateStatusModal').deleteRow('skill/saveUpdate.htm?id=' + id+"&skillStatus=0");
-        }
+        function customerStatusOnChange(){
+           var status = $('#customerStatusQuery').val();
+            if(status == 2){
+                $('#closureStatusQuery').removeAttr("disabled");
+            }else{
+                $('#closureStatusQuery').attr("disabled","disabled");
+            }
 
-        function updateDownStatus(id) {
-            $('#updateStatusModal').deleteRow('skill/saveUpdate.htm?id=' +id+"&skillStatus=1");
         }
 
     </script>

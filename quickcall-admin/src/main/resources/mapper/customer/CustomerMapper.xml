@@ -38,6 +38,27 @@
         <result column="v_voice_url_tmp" property="vVoiceUrlTmp" jdbcType="VARCHAR"/>
         <result column="v_voice_status" property="vVoiceStatus"/>
     </resultMap>
+    
+    <resultMap id="BaseVOResultMap" type="com.calf.module.customer.entity.CustomerVo">
+        <result column="customer_id" property="customerId" jdbcType="BIGINT"/>
+        <result column="app_id" property="appId" jdbcType="VARCHAR"/>
+        <result column="nick_name" property="nickName" jdbcType="VARCHAR"/>
+        <result column="front_portrait_url" property="frontPortraitUrl" jdbcType="VARCHAR"/>
+        <result column="block_end_time" property="blockEndTime" jdbcType="TIMESTAMP"/>
+        <result column="block_start_time" property="blockStartTime" jdbcType="TIMESTAMP"/>
+        <result column="type" property="type"/>
+        <result column="cust_status" property="custStatus" />
+        <collection property="customerSkills" column="customer_id" select="Customer.selectCustomerSkills">
+
+        </collection>
+    </resultMap>
+    
+    <select id="selectCustomerSkills" parameterType="java.lang.Long" resultType="java.lang.String">
+          select skill_name from customer_skill where customer_id = #{param1}
+    </select>
+    
+    
+    
     <sql id="Base_Column_List">
         customer_id, phone, real_name, sex, nick_name, type, credentials_type, credentials_num,
         wechat_open_id, qq_open_id, microblog_open_id, occupation_id, front_portrait_url,
@@ -46,6 +67,9 @@
         create_time, modify_time, create_man, modify_man, remark, app_channel_name, device_id,
         login_time,v_voice_url_tmp,v_voice_status
     </sql>
+    
+
+    
 
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
         select
@@ -181,4 +205,28 @@
     </select>
 
 
+    <select id="selectCustomVo" parameterType="map" resultMap="BaseVOResultMap">
+      select customer_id,app_id,nick_name,front_portrait_url,block_end_time,block_start_time,cust_status
+      from customer
+      where 1=1
+        <if test="nickName !=null and nickName != ''">and nick_name like concat('%',#{nickName},'%')</if>
+        <if test="appId !=null and appId != ''">and app_id like concat('%',#{appId},'%')</if>
+        <if test="type !=null and type != ''">and type = #{type}</if>
+        <if test="custStatus !=null and type != ''">and cust_status=#{custStatus}</if>
+        order by create_time desc
+        limit ${iDisplayStart},${iDisplayLength}
+    </select>
+    <select id="queryCountVo" resultType="int" parameterType="map" >
+        select count(*) from customer where 1=1
+        <if test="nickName !=null and nickName != ''">and nick_name like concat('%',#{nickName},'%')</if>
+        <if test="appId !=null and appId != ''">and app_id like concat('%',#{appId},'%')</if>
+        <if test="type !=null and type != ''">and type = #{type}</if>
+        <if test="custStatus !=null and type != ''">and cust_status=#{custStatus}</if>
+    </select>
+    <select id="selectVoByPrimaryKey" resultMap="BaseVOResultMap" parameterType="java.lang.Long">
+        select
+          customer_id,app_id,nick_name,front_portrait_url,type,block_end_time,block_start_time,cust_status
+        from customer
+        where customer_id = #{customerId,jdbcType=BIGINT}
+    </select>
 </mapper>

@@ -11,20 +11,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * Description: 形象照审核
+ * Description: 声鉴卡审核
  *
  * @author chenpeng
- * @date 2018/10/22 15:16
+ * @date 2018/10/24 10:28
  */
 @Controller
-@RequestMapping(value = "/appearance")
-public class AppearanceController implements BaseController<CustomerAppearance> {
+@RequestMapping(value = "/voiceIdentifyCard")
+public class VoiceIdentifyCardController implements BaseController<CustomerAppearance> {
     private static final Logger logger = LoggerFactory.getLogger(AppearanceController.class);
 
     @Autowired
@@ -32,12 +31,12 @@ public class AppearanceController implements BaseController<CustomerAppearance> 
 
     @Override
     public String home() {
-        return "customer_service/appearance/appearanceList";
+        return "customer_service/appearance/voiceIdentifyCardList";
     }
 
     @Override
     public DataTables<CustomerAppearance> initTable(HttpServletRequest request) {
-        request.setAttribute("type",0);
+        request.setAttribute("type",2);
         return appearanceService.getAppearancePageList(request);
     }
 
@@ -90,5 +89,4 @@ public class AppearanceController implements BaseController<CustomerAppearance> 
     public int reject(String id){
         return appearanceService.reject(id);
     }
-
 }

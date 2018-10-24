@@ -180,9 +180,5 @@
         <div>
             <jsp:include page="/WEB-INF/views/common/delete_dialog.jsp" />
             <jsp:include page="/WEB-INF/views/common/addupdate_dialog.jsp" />
-
-            <div class="modal fade" id="insertAndUpdate" tabindex="-1"
-                 role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-            </div>
         </div>
     </div>

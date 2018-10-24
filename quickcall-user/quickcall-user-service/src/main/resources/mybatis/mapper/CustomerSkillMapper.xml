@@ -370,6 +370,7 @@
   <!-- 查询客户审核通过的技能 -->
   <select id="selectCustomerAuditedSkill" resultMap="BaseResultMap">
    SELECT
+        t.customer_skill_id,
         t.skill_item_id,
         t.skill_name,
         t.discount_price,

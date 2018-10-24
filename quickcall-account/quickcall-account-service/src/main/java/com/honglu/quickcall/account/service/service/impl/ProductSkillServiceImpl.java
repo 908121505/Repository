@@ -167,19 +167,14 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 	 */
 	public void getSkillExtList(Long skillItemId,CustomerSkillVO skillVO) {
 		List<CustomerSkillExtVO> resultList = new ArrayList<CustomerSkillExtVO>();
-		List<SkillItemExt> skillItemExtList = skillItemExtMapper.querySkillItemExtList(skillItemId, 1);
+		List<SkillItemExt> skillItemExtList = skillItemExtMapper.querySkillItemExtList(skillItemId, 1,1);
 		if (CollectionUtils.isEmpty(skillItemExtList)) {
 			return;
 		}
 		HashMap<Integer, List<SkillUnitPriceVO>> itemExtMap = new HashMap<Integer, List<SkillUnitPriceVO>>();
-		List<BigDecimal> discontRateList = new ArrayList<BigDecimal>();
+		
 		for (SkillItemExt itemExt : skillItemExtList) {
-			Integer  type = itemExt.getSkillExtType();
 			//需要使用常量进行限制
-			if(type == 2){
-				discontRateList.add(itemExt.getSkillExtDiscont());
-				continue ;
-			}
 			List<SkillUnitPriceVO> list = null;
 			Integer skillExtRange = itemExt.getSkillExtRange();
 			if (itemExtMap.containsKey(skillExtRange)) {
@@ -203,9 +198,35 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 			resultList.add(extVO);
 		}
 		
-		
-		skillVO.setDiscontRateList(discontRateList);
 		skillVO.setSkillExtList(resultList);
+		String  oldServiceUnit = skillVO.getOldServiceUnit();
+		if(StringUtils.isBlank(oldServiceUnit) ){
+			List<SkillUnitPriceVO>  list =  itemExtMap.get(1);
+			skillVO.setOldServiceUnit(list.get(0).getUnitName());
+			skillVO.setOldSkillPrice(list.get(0).getUnitPrice());
+		}
+		List<BigDecimal> discontRateList = new ArrayList<BigDecimal>();
+		List<SkillItemExt> skillItemExtDiscountList = skillItemExtMapper.querySkillItemExtDiscountList(skillItemId, 1,2);
+		if(!CollectionUtils.isEmpty(skillItemExtDiscountList)){
+			for (SkillItemExt skillItemExt : skillItemExtDiscountList) {
+				discontRateList.add(skillItemExt.getSkillExtDiscont());
+			}
+			skillVO.setDiscontRateList(discontRateList);
+			BigDecimal  oldDiscountRate = skillVO.getOldDiscountRate();
+			if(oldDiscountRate == null){
+				skillVO.setOldDiscountRate(skillItemExtDiscountList.get(0).getSkillExtDiscont());
+			}else{
+				if(oldDiscountRate.compareTo(BigDecimal.ZERO) == 0){
+					skillVO.setOldDiscountRate(skillItemExtDiscountList.get(0).getSkillExtDiscont());
+				}
+			}
+			
+		}
+		
+		
+		
+		
+		
 	}
 	
 	

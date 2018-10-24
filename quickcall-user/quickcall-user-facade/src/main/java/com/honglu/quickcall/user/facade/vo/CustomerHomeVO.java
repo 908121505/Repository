@@ -86,6 +86,10 @@ public class CustomerHomeVO implements Serializable {
      * 用户技能列表
      **/
     private List<CustomerSkill> skillList;
+    /**
+     * 分享url
+     */
+    private String shareUrl;
 
     /**
      * 用户技能对象
@@ -94,9 +98,17 @@ public class CustomerHomeVO implements Serializable {
         private static final long serialVersionUID = 2871296634994569921L;
 
         /**
+         * 客户技能ID
+         */
+        private Long customerSkillId;
+        /**
          * 技能ID
          */
         private Long skillId;
+        /**
+         * 是否可下单：1是；2否
+         */
+        private Integer canOrder;
         /**
          * 技能名称
          */
@@ -134,12 +146,28 @@ public class CustomerHomeVO implements Serializable {
          */
         private List<String> customerLabel;
 
+        public Long getCustomerSkillId() {
+            return customerSkillId;
+        }
+
+        public void setCustomerSkillId(Long customerSkillId) {
+            this.customerSkillId = customerSkillId;
+        }
+
         public Long getSkillId() {
             return skillId;
         }
 
         public void setSkillId(Long skillId) {
             this.skillId = skillId;
+        }
+
+        public Integer getCanOrder() {
+            return canOrder;
+        }
+
+        public void setCanOrder(Integer canOrder) {
+            this.canOrder = canOrder;
         }
 
         public String getSkillName() {
@@ -376,6 +404,14 @@ public class CustomerHomeVO implements Serializable {
         this.skillList = skillList;
     }
 
+    public String getShareUrl() {
+        return shareUrl;
+    }
+
+    public void setShareUrl(String shareUrl) {
+        this.shareUrl = shareUrl;
+    }
+
     @Override
     public String toString() {
         return "CustomerHomeVO{" +
@@ -383,6 +419,7 @@ public class CustomerHomeVO implements Serializable {
                 ", viewCustomerId=" + viewCustomerId +
                 ", customerAppId='" + customerAppId + '\'' +
                 ", nickName='" + nickName + '\'' +
+                ", headPortraitUrl='" + headPortraitUrl + '\'' +
                 ", sex=" + sex +
                 ", age=" + age +
                 ", customerLevel=" + customerLevel +
@@ -396,6 +433,7 @@ public class CustomerHomeVO implements Serializable {
                 ", appearanceUrlList=" + appearanceUrlList +
                 ", interestList=" + interestList +
                 ", skillList=" + skillList +
+                ", shareUrl='" + shareUrl + '\'' +
                 '}';
     }
 }

@@ -21,7 +21,7 @@ import java.util.Map;
 import java.util.ResourceBundle;
 
 /**
- * 随机用户管理模块
+ * 模块
  *
  * @author duanjun
  * @date 2018-10-17 17:13
