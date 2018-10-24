@@ -229,4 +229,23 @@
         from customer
         where customer_id = #{customerId,jdbcType=BIGINT}
     </select>
+
+    <update id="unlockCustomers" parameterType="map">
+        update customer set cust_status = 1 where customer_id = #{id}
+    </update>
+    
+    <update id="lockCustomers" parameterType="map">
+        update customer set cust_status = #{custStatus},block_end_time = #{blockEndTime},block_start_time = #{blockStartTime}
+          where customer_id = #{id}
+
+    </update>
+
+    <update id="lockForever" parameterType="map">
+        update customer set cust_status = -1 where customer_id = #{id}
+    </update>
+    
+    <update id="lockSkill" parameterType="map">
+        update customer_skill set skill_status = 2 where customer_id =#{id} and skill_name = #{skillName}
+    </update>
+
 </mapper>
