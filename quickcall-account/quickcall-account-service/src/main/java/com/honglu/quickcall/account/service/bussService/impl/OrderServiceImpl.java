@@ -59,6 +59,7 @@ import com.honglu.quickcall.common.api.exchange.CommonResponse;
 import com.honglu.quickcall.common.api.exchange.ResultUtils;
 import com.honglu.quickcall.common.api.util.DateUtils;
 import com.honglu.quickcall.common.core.util.UUIDUtils;
+import com.honglu.quickcall.common.third.AliyunSms.utils.SendSmsUtil;
 import com.honglu.quickcall.common.third.rongyun.util.RongYunUtil;
 import com.honglu.quickcall.user.facade.business.UserCenterSendMqMessageService;
 
@@ -99,8 +100,8 @@ public class OrderServiceImpl implements IOrderService {
 	
 	
 	
-	@Override
-	public CommonResponse queryDaVSkill(OrderDaVSkillRequest request) {
+//	@Override
+	public CommonResponse queryDaVSkillExt(OrderDaVSkillRequest request) {
 		if (request == null || request.getCustomerId() == null) {
 			throw new BizException(AccountBizReturnCode.paramError, "查询技能信息参数异常");
 		}
@@ -149,7 +150,9 @@ public class OrderServiceImpl implements IOrderService {
 		LOGGER.info("======>>>>>用户编号为：" + request.getCustomerId() + "查询成功");
 		return commonResponse;
 	}
-	public CommonResponse queryDaVSkillExt(OrderDaVSkillRequest request) {
+	
+	@Override
+	public CommonResponse queryDaVSkill(OrderDaVSkillRequest request) {
 		if (request == null || request.getCustomerId() == null) {
 			throw new BizException(AccountBizReturnCode.paramError, "查询技能信息参数异常");
 		}
@@ -257,6 +260,8 @@ public class OrderServiceImpl implements IOrderService {
 						resultMap.put("retCode",  OrderSkillConstants.RET_CODE_BALANCE_NOT_ENOUTH);
 						//返回余额不足状态  
 						return   commonResponse ;
+					}else{
+						accountService.inAccount(customerId, orderAmounts,TransferTypeEnum.RECHARGE,AccountBusinessTypeEnum.PlaceOrder);
 					}
 				}
 			}
@@ -274,6 +279,8 @@ public class OrderServiceImpl implements IOrderService {
 			record.setDiscountRate(customerSkill.getDiscountRate());
 			
 			Long  orderId =  UUIDUtils.getId();
+			record.setOrderNo(orderId);
+			record.setCustomerSkillId(customerSkillId);
 			record.setCustomerId(customerId);
 			record.setOrderId(orderId);
 			record.setServiceId(serviceId);
@@ -288,11 +295,16 @@ public class OrderServiceImpl implements IOrderService {
 			// ADUAN 下单支付成功后 -- 发送弹幕消息
 			barrageMessageService.lpushMessage(orderId);
 			
+			
+			SendSmsUtil.sendSms(UUIDUtils.getUUID(), "18321334072", 2, customerSkill.getSkillName());
+			
 			//下单成功后推送IM消息
 			RongYunUtil.sendOrderMessage(serviceId, OrderSkillConstants.IM_MSG_CONTENT_RECEIVE_ORDER);
 			LOGGER.info("======>>>>>用户编号为：" + request.getCustomerId() + "下单成功");
 		} catch (Exception e) {
+			e.printStackTrace();
 			resultMap.put("retCode",  OrderSkillConstants.RET_CODE_SYSTEM_ERROR);
+			
 		}
 		
 		commonResponse.setData(resultMap);
@@ -605,8 +617,8 @@ public class OrderServiceImpl implements IOrderService {
 			newOrderStatus = OrderSkillConstants.ORDER_STATUS_FINISHED_USER_ACCEPCT;
 			//修改订单状态为：已完成
 			commonService.updateOrder(orderId, newOrderStatus);
-			// ADUAN 订单服务完成推送MQ消息 -- 给下单客户加经验值
-			userCenterSendMqMessageService.sendOrderCostExperience(orderId);
+			// ADUAN 订单服务完成推送MQ消息
+			userCenterSendMqMessageService.sendOrderCostMqMessage(orderId);
 			
 		}else{
 			//订单不存在
@@ -948,6 +960,9 @@ public class OrderServiceImpl implements IOrderService {
 			}
 			orderMapper.saveEvaluationLabels(list);
 		}
+
+		// ADUAN -- 用户评价，计算主播评分排名，发送MQ消息
+		userCenterSendMqMessageService.sendEvaluationOrderMqMessage(request.getOrderId());
 
         return ResultUtils.resultSuccess();
     }

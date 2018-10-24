@@ -9,23 +9,16 @@ package com.honglu.quickcall.user.facade.business;
 public interface UserCenterSendMqMessageService {
 
     /**
-     * 发送MQ消息 -- 客户【下单花费】 -- 获取经验值
+     * 发送MQ消息 -- 客户【下单花费】
      *
      * @param orderId
      */
-    void sendOrderCostExperience(Long orderId);
+    void sendOrderCostMqMessage(Long orderId);
 
     /**
-     * 发送MQ消息 -- 客户【下单花费】 -- 更新主播排名
+     * 发送MQ消息 -- 客户【评价订单】
      *
      * @param orderId
      */
-    void sendOrderCostScoreRank(Long orderId);
-
-    /**
-     * 发送MQ消息 -- 客户【评价订单】 -- 更新主播排名
-     *
-     * @param orderId
-     */
-    void sendEvaluationOrderScoreRank(Long orderId);
+    void sendEvaluationOrderMqMessage(Long orderId);
 }

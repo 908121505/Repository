@@ -43,15 +43,15 @@
 					<label class="col-sm-4 control-label">用户类型<font color="red">&nbsp;*</font></label>
 					<div class="col-sm-8">
 						<input type="text" id="type" class="form-control"
-							   name="type" value="${entity.type == 0?'普通用户':'声优用户'}" readonly="readonly">
+							   name="type" value="${entity.type == 0?'普通用户':'声优用户'}" readonly="readonly" disabled="disabled">
 					</div>
 				</div>
 				<%-- 4=已封禁-无法接单,6=已封禁-无法接指定技能,8=已封禁-账户登录权限,10=已封禁-设备登录权限--%>
 				<div class="form-group"  >
 					<label class="col-sm-4 control-label">用户类型<font color="red">&nbsp;*</font></label>
 					<div class="col-sm-8">
-						<input type="text" id="custStatus" class="form-control"
-							   name="custStatus" value="${entity.custStatus == 1?'正常': entity.custStatus == 4 ?
+						<input type="text" id="custStatusDispaly" class="form-control"
+							   name="custStatusDispaly" value="${entity.custStatus == 1?'正常': entity.custStatus == 4 ?
 							    '已封禁-无法接单':entity.custStatus==6?'已封禁-无法接指定技能':
 							    entity.custStatus == 8 ?'已封禁-账户登录权限': entity.custStatus == 10?'已封禁-设备登录权限':'未知状态'}"
 							   readonly="readonly">
@@ -60,17 +60,58 @@
 				</div>
 
 				<div class="form-group">
-					<label class="col-sm-2 control-label">操作类型<font color="red">&nbsp;*</font></label>
+					<label class="col-sm-2 control-label">操作<font color="red">&nbsp;*</font></label>
 					<div class="col-sm-10">
-						<select class="form-control" id="operaterType" name="operaterType">
+						<select class="form-control" id="operate" name="operate" onchange="onOperateChange()">
 							<c:if test="${entity.custStatus == 1}">
-
+								<option value="1">封禁</option>
 							</c:if>
-							<option value="0">解禁</option>
-							<option value="1">封禁</option>
+							<c:if test="${entity.custStatus != 1}">
+								<option value="0">解禁</option>
+								<option value="1">封禁</option>
+							</c:if>
 						</select>
 					</div>
 				</div>
+				<%-- 4=已封禁-无法接单,6=已封禁-无法接指定技能,8=已封禁-账户登录权限,10=已封禁-设备登录权限--%>
+				<div class="form-group" id="allStatus">
+					<label class="col-sm-2 control-label">操作类型<font color="red">&nbsp;*</font></label>
+					<div class="col-sm-10">
+						<select class="form-control" id="custStatus" name="custStatus" onchange="onCustStatusChange()">
+							<option value="4">已封禁-无法接单</option>
+							<option value="6">已封禁-无法接指定技能</option>
+							<option value="8">已封禁-账户登录权限</option>
+							<option value="10">已封禁-设备登录权限</option>
+						</select>
+					</div>
+
+					<div class="col-sm-10" >
+						<select class="form-control" id="customerSkills" name="customerSkills" multiple="multiple">
+								<c:forEach items="${entity.customerSkills}" var="skill" >
+										<option>${skill}</option>
+								</c:forEach>
+						</select>
+					</div>
+
+				</div>
+
+
+				<div class="form-group" id="allTime">
+					<label class="col-sm-2 control-label">时间<font color="red">&nbsp;*</font></label>
+					<div class="col-sm-10">
+						<select class="form-control" id="closureDate" name="closureDate">
+							<option value="1">1</option>
+							<option value="3">3</option>
+							<option value="7">7</option>
+							<option value="30">30</option>
+							<option value="-1">永久</option>
+						</select>
+					</div>
+				</div>
+
+
+
+
 
 
 
@@ -209,7 +250,36 @@
 </div>
 
 <script type="text/javascript">
-	Date.prototype.Format = function (fmt) { //author: meizz   
+
+    $(function() {// 初始化内容
+        var status = $('#operate').val();
+        if(status == 0){
+            $('#custStatus').attr("disabled",true);
+            $('#allStatus').css({ "display": "none" });
+            $('#closureDate').attr("disabled",true);
+            $('#allTime').css({ "display": "none" });
+        }else{
+            $('#allTime').css({ "display": "inline" });
+            $('#custStatus').attr("disabled",false);
+            $('#allStatus').css({ "display": "inline" });
+            $('#closureDate').attr("disabled",false);
+
+        }
+
+        var status1 = $('#custStatus').val();
+        if(status1 == 6){
+            $('#customerSkills').css({ "display": "inline" });
+            $('#customerSkills').attr("disabled",false);
+        } else{
+            $('#customerSkills').css({ "display": "none" });
+            $('#customerSkills').attr("disabled",true);
+        }
+
+
+    });
+
+
+    Date.prototype.Format = function (fmt) { //author: meizz
 	    var o = {  
 	        "M+": this.getMonth() + 1, //月份   
 	        "d+": this.getDate(), //日   
@@ -223,10 +293,36 @@
 	    for (var k in o)  
 	    if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));  
 	    return fmt;  
-	}  
+	};
 	
+	function onOperateChange() {
+        var status = $('#operate').val();
+        if(status == 0){
+            $('#custStatus').attr("disabled",true);
+            $('#allStatus').css({ "display": "none" });
+            $('#closureDate').attr("disabled",true);
+            $('#allTime').css({ "display": "none" });
+		}else{
+            $('#allTime').css({ "display": "inline" });
+            $('#custStatus').attr("disabled",false);
+            $('#allStatus').css({ "display": "inline" });
+            $('#closureDate').attr("disabled",false);
+
+		}
+
+    }
 	
-	
+    function onCustStatusChange() {
+	    var status = $('#custStatus').val();
+	    if(status == 6){
+            $('#customerSkills').css({ "display": "inline" });
+            $('#customerSkills').attr("disabled",false);
+		} else{
+            $('#customerSkills').css({ "display": "none" });
+            $('#customerSkills').attr("disabled",true);
+		}
+		
+    }
 	
 
 	
