@@ -98,6 +98,10 @@ public class CustomerHomeVO implements Serializable {
          */
         private Long skillId;
         /**
+         * 是否可下单：1是；2否
+         */
+        private Integer canOrder;
+        /**
          * 技能名称
          */
         private String skillName;
@@ -140,6 +144,14 @@ public class CustomerHomeVO implements Serializable {
 
         public void setSkillId(Long skillId) {
             this.skillId = skillId;
+        }
+
+        public Integer getCanOrder() {
+            return canOrder;
+        }
+
+        public void setCanOrder(Integer canOrder) {
+            this.canOrder = canOrder;
         }
 
         public String getSkillName() {

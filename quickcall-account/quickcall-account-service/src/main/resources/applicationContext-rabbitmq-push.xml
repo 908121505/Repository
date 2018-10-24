@@ -21,12 +21,12 @@
 
     <!-- ======================================= mq队列 ===================================-->
     <!-- 用户中心队列：用户获取经验值 -->
-    <rabbit:queue id="queue_userCenter_for_experience" durable="true" auto-delete="false" exclusive="false" name="queue_userCenter_for_experience"/>
+    <rabbit:queue id="queue_accountCenter_for_order" durable="true" auto-delete="false" exclusive="false" name="queue_accountCenter_for_order"/>
 
     <!-- exchange queue binging key 绑定 -->
-    <rabbit:direct-exchange name="userCenter-mq-exchange" durable="true" auto-delete="false" id="userCenter-mq-exchange">
+    <rabbit:direct-exchange name="accountCenter-mq-exchange" durable="true" auto-delete="false" id="accountCenter-mq-exchange">
         <rabbit:bindings>
-            <rabbit:binding queue="queue_userCenter_for_experience" key="queue_userCenter_for_experience_key"/>
+            <rabbit:binding queue="queue_accountCenter_for_order" key="queue_accountCenter_for_order_key"/>
         </rabbit:bindings>
     </rabbit:direct-exchange>
 
@@ -51,5 +51,5 @@
 
     <!-- 将jackson替换为fastjson的一个实现 spring amqp默认的是jackson 的一个插件,目的将生产者生产的数据转换为json存入消息队列，由于fastjson的速度快于jackson,-->
     <bean id="jsonMessageConverter" class="com.honglu.quickcall.common.api.util.FastJsonMessageConverter"/>
-    <rabbit:template exchange="userCenter-mq-exchange" id="amqpTemplate" connection-factory="RconnectionFactory" message-converter="jsonMessageConverter"/>
+    <rabbit:template exchange="accountCenter-mq-exchange" id="amqpTemplate" connection-factory="RconnectionFactory" message-converter="jsonMessageConverter"/>
 </beans>

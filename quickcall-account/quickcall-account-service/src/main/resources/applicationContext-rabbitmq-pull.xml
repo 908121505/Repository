@@ -19,10 +19,10 @@
 
     <rabbit:admin connection-factory="RCconnectionFactory"/>
 
-    <rabbit:queue id="queue_userCenter_forAccount" durable="true" auto-delete="false" exclusive="false" name="queue_userCenter_forAccount"/>
-    <rabbit:direct-exchange name="userCenter-mq-exchange" durable="true" auto-delete="false" id="userCenter-mq-exchange">
+    <rabbit:queue id="queue_accountCenter_for_order" durable="true" auto-delete="false" exclusive="false" name="queue_accountCenter_for_order"/>
+    <rabbit:direct-exchange name="accountCenter-mq-exchange" durable="true" auto-delete="false" id="userCenter-mq-exchange">
         <rabbit:bindings>
-            <rabbit:binding queue="queue_userCenter_forAccount" key="queue_userCenter_forAccount_key"/>
+            <rabbit:binding queue="queue_accountCenter_for_order" key="queue_accountCenter_for_order_key"/>
         </rabbit:bindings>
     </rabbit:direct-exchange>
 
@@ -33,5 +33,5 @@
          <rabbit:listener queues="queue_userCenter_forAccount" ref="userCenterForAccountMqLitener"/>
      </rabbit:listener-container> -->
 
-    <bean id="userCenterForAccountMqLitener" class="com.honglu.quickcall.account.service.mq.pull.UserCenterForAccountMqLitener"/>
+    <bean id="accountCenterForOrderMqLitener" class="com.honglu.quickcall.account.service.mq.pull.AccountCenterForOrderMqLitener"/>
 </beans>
