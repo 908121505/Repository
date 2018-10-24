@@ -544,6 +544,9 @@
     <if test="microblogOpenId!=null and microblogOpenId!=''">
     and microblog_open_id=#{microblogOpenId}
     </if>
+    <if test="nickName!=null and nickName!=''">
+    and nick_name=#{nickName}
+    </if>
     </select>
     <!-- 设置密码 -->
     <update id="customerSetPwd" parameterType="Map"  >

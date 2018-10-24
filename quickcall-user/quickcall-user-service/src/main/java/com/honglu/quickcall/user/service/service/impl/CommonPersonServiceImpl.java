@@ -89,6 +89,8 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 
 		} else if (StringUtils.isNotBlank(params.getWechatOpenId())) {
 			param.setWechatOpenId(params.getWechatOpenId());
+		} else if (StringUtils.isNotBlank(params.getNickName())) {
+			param.setNickName(params.getNickName());
 		}
 		customer = customerMapper.login(param);
 		if (customer != null) {

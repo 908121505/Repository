@@ -7,15 +7,24 @@ import com.honglu.quickcall.user.facade.exchange.UserCenterRequest;
  * Created by len.song on 2017-12-07.
  */
 public class IsPhoneExistsRequest extends UserCenterRequest {
-    private String tel; //电话
-    private String wechatOpenId;//微信 唯一标识
+	private String tel; // 电话
+	private String wechatOpenId;// 微信 唯一标识
 
-    private String qqOpenId;//QQ唯一标识
+	private String qqOpenId;// QQ唯一标识
 
-    private String microblogOpenId;//微博唯一标识
-    
-   
-    public String getWechatOpenId() {
+	private String microblogOpenId;// 微博唯一标识
+
+	private String nickName;// 昵称
+
+	public String getNickName() {
+		return nickName;
+	}
+
+	public void setNickName(String nickName) {
+		this.nickName = nickName;
+	}
+
+	public String getWechatOpenId() {
 		return wechatOpenId;
 	}
 
@@ -39,7 +48,6 @@ public class IsPhoneExistsRequest extends UserCenterRequest {
 		this.microblogOpenId = microblogOpenId;
 	}
 
-
 	public String getTel() {
 		return tel;
 	}
@@ -49,7 +57,7 @@ public class IsPhoneExistsRequest extends UserCenterRequest {
 	}
 
 	@Override
-    public String getBizCode() {
-        return UserFunctionType.CheckPhone;
-    }
+	public String getBizCode() {
+		return UserFunctionType.CheckPhone;
+	}
 }
