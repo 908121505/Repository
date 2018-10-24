@@ -36,6 +36,6 @@ public class TestMq {
 
     @Test
     public void testSendMqService(){
-        userCenterSendMqMessageService.sendEvaluationOrderScoreRank(1809282102486183353L);
+        userCenterSendMqMessageService.sendEvaluationOrderMqMessage(1809282102486183353L);
     }
 }

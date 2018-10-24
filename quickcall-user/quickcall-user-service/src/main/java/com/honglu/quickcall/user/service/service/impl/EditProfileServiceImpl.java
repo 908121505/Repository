@@ -1,11 +1,9 @@
 package com.honglu.quickcall.user.service.service.impl;
 
 import cn.jiguang.commom.utils.StringUtils;
-import com.honglu.quickcall.account.facade.code.AccountBizReturnCode;
 import com.honglu.quickcall.common.api.exception.BizException;
 import com.honglu.quickcall.common.api.exception.RemoteException;
 import com.honglu.quickcall.common.api.exchange.CommonResponse;
-import com.honglu.quickcall.common.api.exchange.ResultUtils;
 import com.honglu.quickcall.common.api.util.JedisUtil;
 import com.honglu.quickcall.common.core.util.Detect;
 import com.honglu.quickcall.common.core.util.StringUtil;
@@ -19,13 +17,12 @@ import com.honglu.quickcall.user.facade.entity.CustomerInterest;
 import com.honglu.quickcall.user.facade.entity.SensitivityWord;
 import com.honglu.quickcall.user.facade.exchange.request.editprofile.*;
 import com.honglu.quickcall.user.facade.vo.AppearanceVO;
-import com.honglu.quickcall.user.facade.vo.BlacklistVo;
 import com.honglu.quickcall.user.facade.vo.InterestVO;
 import com.honglu.quickcall.user.facade.vo.UserEditInfoVO;
 import com.honglu.quickcall.user.service.dao.*;
 import com.honglu.quickcall.user.service.service.CustomerRedisManagement;
 import com.honglu.quickcall.user.service.service.EditProfileService;
-import com.honglu.quickcall.user.service.type.AppearanceTypeEnum;
+import com.honglu.quickcall.user.service.constants.AppearanceTypeEnum;
 import com.honglu.quickcall.user.service.util.CommonUtil;
 import com.honglu.quickcall.user.service.util.CountAge;
 import com.honglu.quickcall.user.service.util.JsonParseUtil;
@@ -37,7 +34,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * Description: 个人中心 -> 编辑资料

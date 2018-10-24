@@ -25,7 +25,7 @@ public class DubboServiceTest {
     @Test
     public void testUserCenterMqSend(){
         for(int i=1;i<=100;i++){
-            userCenterSendMqMessageService.sendOrderCostExperience(1899282017997784647L + i);
+            userCenterSendMqMessageService.sendOrderCostMqMessage(1899282017997784647L + i);
         }
     }
 

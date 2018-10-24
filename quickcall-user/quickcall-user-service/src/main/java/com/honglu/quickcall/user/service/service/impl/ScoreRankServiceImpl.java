@@ -17,12 +17,13 @@ public class ScoreRankServiceImpl implements ScoreRankService {
     private final static Logger LOGGER = Logger.getLogger(ScoreRankServiceImpl.class);
 
     @Override
-    public void doOrderCast(DoOrderCastMqRequest parseObject) {
-
+    public void doOrderCast(DoOrderCastMqRequest request) {
+        LOGGER.info("客户下单消费 -- 更新主播评分排名表：" + request.getOrderId());
     }
 
     @Override
-    public void evaluationOrder(EvaluationOrderMqRequest parseObject) {
-
+    public void evaluationOrder(EvaluationOrderMqRequest request) {
+        LOGGER.info("客户评价订单 -- 更新主播评分排名表：" + request.getOrderId());
+        
     }
 }

@@ -23,6 +23,6 @@ public class TestMq {
 
     @Test
     public void testSendExperience() {
-        userCenterSendMqMessageService.sendOrderCostExperience(1899282017997784647L);
+        userCenterSendMqMessageService.sendOrderCostMqMessage(1899282017997784647L);
     }
 }

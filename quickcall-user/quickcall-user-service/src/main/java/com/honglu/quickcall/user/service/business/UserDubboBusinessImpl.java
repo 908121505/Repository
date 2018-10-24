@@ -1,15 +1,5 @@
 package com.honglu.quickcall.user.service.business;
 
-import com.honglu.quickcall.user.facade.entity.FeedBack;
-import com.honglu.quickcall.user.facade.exchange.request.*;
-import com.honglu.quickcall.user.facade.exchange.request.editprofile.*;
-import com.honglu.quickcall.user.service.service.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
-
 import com.honglu.quickcall.common.api.code.BizCode;
 import com.honglu.quickcall.common.api.exception.BaseException;
 import com.honglu.quickcall.common.api.exception.BizException;
@@ -18,6 +8,14 @@ import com.honglu.quickcall.common.api.exchange.CommonResponse;
 import com.honglu.quickcall.user.facade.business.UserDubboBusiness;
 import com.honglu.quickcall.user.facade.code.UserBizReturnCode;
 import com.honglu.quickcall.user.facade.code.UserFunctionType;
+import com.honglu.quickcall.user.facade.exchange.request.*;
+import com.honglu.quickcall.user.facade.exchange.request.editprofile.*;
+import com.honglu.quickcall.user.service.service.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 @Component
 @Service("User.UserDubboBusiness")
@@ -39,6 +37,8 @@ public class UserDubboBusinessImpl implements UserDubboBusiness {
     private DelateService delateService;
     @Autowired
     private FeedBackService feedBackService;
+    @Autowired
+    private InternalMessageService internalMessageService;
 
     @Override
     public CommonResponse excute(AbstractRequest request) {
@@ -202,8 +202,11 @@ public class UserDubboBusinessImpl implements UserDubboBusiness {
                     response = personInfoService.noReadAttentionCount((NoReadAttentionCountRequest) request);
                     break;
                 case UserFunctionType.insertFeedBack:
-					 response = feedBackService.insertFeedBack((FeedBackInsertRequest) request);
-					 break;
+                    response = feedBackService.insertFeedBack((FeedBackInsertRequest) request);
+                    break;
+                case UserFunctionType.INTERNAL_MESSAGE:
+                    response = internalMessageService.queryMessages((InternalMessageRequest) request);
+                    break;
                 default:
                     throw new BizException(UserBizReturnCode.BizFunctionTypeNotMatch,
                             UserBizReturnCode.BizFunctionTypeNotMatch.desc());

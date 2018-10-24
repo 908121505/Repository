@@ -26,7 +26,8 @@ public class UserCenterSendMqMessageServiceImpl implements UserCenterSendMqMessa
     private AmqpTemplate amqpTemplate;
 
     @Override
-    public void sendOrderCostExperience(Long orderId) {
+    public void sendOrderCostMqMessage(Long orderId) {
+        // 发送MQ消息 -- 下单客户获取经验值
         try {
             DoOrderCastMqRequest request = new DoOrderCastMqRequest();
             request.setOrderId(orderId);
@@ -35,10 +36,8 @@ public class UserCenterSendMqMessageServiceImpl implements UserCenterSendMqMessa
         }catch (Exception e){
             LOGGER.error("发送MQ消息 -- 客户【下单话费】获取经验值异常，orderId : " + orderId + " ， 异常信息：", e);
         }
-    }
 
-    @Override
-    public void sendOrderCostScoreRank(Long orderId) {
+        // 发送MQ消息 -- 计算主播评分排名
         try {
             DoOrderCastMqRequest request = new DoOrderCastMqRequest();
             request.setOrderId(orderId);
@@ -50,7 +49,8 @@ public class UserCenterSendMqMessageServiceImpl implements UserCenterSendMqMessa
     }
 
     @Override
-    public void sendEvaluationOrderScoreRank(Long orderId) {
+    public void sendEvaluationOrderMqMessage(Long orderId) {
+        // 发送MQ消息 -- 更新主播排名
         try {
             EvaluationOrderMqRequest request = new EvaluationOrderMqRequest();
             request.setOrderId(orderId);
