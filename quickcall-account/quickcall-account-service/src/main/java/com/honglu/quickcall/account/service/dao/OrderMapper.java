@@ -86,4 +86,25 @@ public interface OrderMapper {
 	 * @return
 	 */
 	OrderDaVSkillVO  getCustomerByCustomerId(@Param("customerId") Long customerId);
+
+
+	/**
+	 * 根据客户编号查询用户可能在进行中的订单列表
+	 * 具体规则如下：
+	 *   skillType :未不可重复接单状态
+	 *   orderStatus:已接单 进行中  已完成  
+	 * @param customerId
+	 * @return
+	 */
+	List<Order> selectGongIngOrderListByCustomerId(@Param("customerId")Long customerId,@Param("skillType")Integer  skillType,@Param("list")List<Integer>  statusList);
+	
+	/**
+	 * 根据客户编号查询用户可能在进行中的订单列表
+	 * 具体规则如下：
+	 *   skillType :未不可重复接单状态
+	 *   orderStatus:已接单 进行中  已完成  
+	 * @param customerId
+	 * @return
+	 */
+	Integer selectGongIngOrderListByCustomerSkillId(@Param("customerSkillId")Long customerSkillId,@Param("skillType")Integer  skillType,@Param("list")List<Integer>  statusList);
 }

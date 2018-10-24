@@ -12,6 +12,7 @@ import java.util.ResourceBundle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.honglu.quickcall.account.facade.business.IAccountOrderService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -113,6 +114,8 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 	private CustomerSkillCertifyMapper customerSkillCertifyMapper;
 	@Autowired
 	private CustomerAppearanceMapper customerAppearanceMapper;
+	@Autowired
+	private IAccountOrderService accountOrderService;
 
 	/**
 	 * 中文、英文、数字、下划线校验 4-24位
@@ -121,12 +124,12 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 	private static final Logger logger = LoggerFactory.getLogger(PersonInfoServiceImpl.class);
 
 	/** 用户默认的形象照 **/
-	private static String DEFAULT_CUSTOMER_APPEARANCE_URL = ResourceBundle.getBundle("thirdconfig")
-			.getString("DEFAULT_CUSTOMER_APPEARANCE_URL");
+	private static String DEFAULT_CUSTOMER_APPEARANCE_URL = ResourceBundle.getBundle("thirdconfig").getString("DEFAULT_CUSTOMER_APPEARANCE_URL");
+	private static String CUSTOMER_HOME_SHARE_H5_URL = ResourceBundle.getBundle("thirdconfig").getString("CUSTOMER_HOME_SHARE_H5_URL");
 
 	/**
 	 * 首页搜索用户
-	 * 
+	 *
 	 * @param params
 	 * @return
 	 */
@@ -157,7 +160,7 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 
 	/**
 	 * 保存昵称和头像
-	 * 
+	 *
 	 * @author liuyinkai
 	 * @param params
 	 */
@@ -219,7 +222,7 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 
 	/**
 	 * 昵称规则校验
-	 * 
+	 *
 	 * @modify liuyinkai
 	 * @param nickName
 	 *            用户昵称
@@ -252,7 +255,7 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 
 	/**
 	 * 保存性别
-	 * 
+	 *
 	 * @author liuyinkai
 	 */
 	@Override
@@ -281,7 +284,7 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 
 	/**
 	 * 保存签名
-	 * 
+	 *
 	 * @author liuyinkai
 	 */
 	@Override
@@ -327,7 +330,7 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 
 	/**
 	 * 保存生日
-	 * 
+	 *
 	 * @author liuyinkai
 	 */
 	@Override
@@ -357,7 +360,7 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 
 	/**
 	 * 保存兴趣
-	 * 
+	 *
 	 * @author liuyinkai
 	 */
 	@Override
@@ -404,7 +407,7 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 
 	/**
 	 * 保存职业
-	 * 
+	 *
 	 * @author liuyinkai
 	 */
 	@Override
@@ -783,26 +786,26 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 		customerHomeVO.setFansNum(fansMapper.queryFansNumByCustomerId(request.getViewCustomerId()).intValue());
 
 		// 查询用户形象照列表
-		List<String> appearanceList = customerAppearanceMapper
-				.queryCustomerAuditedAppearance(request.getViewCustomerId(), 0);
-		customerHomeVO.setAppearanceUrlList(
-				appearanceList.isEmpty() ? Arrays.asList(DEFAULT_CUSTOMER_APPEARANCE_URL) : appearanceList);
+		List<String> appearanceList = customerAppearanceMapper.queryCustomerAuditedAppearance(request.getViewCustomerId(), 0);
+		customerHomeVO.setAppearanceUrlList(appearanceList.isEmpty() ? Arrays.asList(DEFAULT_CUSTOMER_APPEARANCE_URL) : appearanceList);
 
 		// 查询用户兴趣
 		customerHomeVO.setInterestList(customerInterestMapper.queryCustomerInterestList(request.getViewCustomerId()));
 
 		// 查询声鉴卡
-		List<String> soundGuideCard = customerAppearanceMapper
-				.queryCustomerAuditedAppearance(request.getViewCustomerId(), 2);
+		List<String> soundGuideCard = customerAppearanceMapper.queryCustomerAuditedAppearance(request.getViewCustomerId(), 2);
 		customerHomeVO.setSoundGuideCard(soundGuideCard.isEmpty() ? null : soundGuideCard.get(0));
+
+		// 分享链接
+		customerHomeVO.setShareUrl(CUSTOMER_HOME_SHARE_H5_URL);
 
 		// 查询用户技能 -- 条件是大V
 		List<CustomerHomeVO.CustomerSkill> skillList = new ArrayList<>();
 		if (Objects.equals(viewCustomer.getvStatus(), 2)) {
-			List<CustomerSkill> customerSkills = customerSkillMapper
-					.selectCustomerAuditedSkill(request.getViewCustomerId());
+			List<CustomerSkill> customerSkills = customerSkillMapper.selectCustomerAuditedSkill(request.getViewCustomerId());
 			for (CustomerSkill bean : customerSkills) {
 				CustomerHomeVO.CustomerSkill customerSkill = customerHomeVO.new CustomerSkill();
+				customerSkill.setCustomerSkillId(bean.getCustomerSkillId());
 				customerSkill.setSkillId(bean.getSkillItemId());
 				customerSkill.setSkillName(bean.getSkillName());
 				customerSkill.setSkillBackColor(bean.getSkillBackColor());
@@ -814,11 +817,17 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 				customerSkill.setSkillPrice(bean.getDiscountPrice());
 				customerSkill.setServiceUnit(bean.getServiceUnit());
 				// 查询技能评价标签
-				customerSkill.setCustomerLabel(customerSkillMapper
-						.selectCustomerSkillHotLabel(request.getViewCustomerId(), bean.getSkillItemId()));
+				customerSkill.setCustomerLabel(customerSkillMapper.selectCustomerSkillHotLabel(request.getViewCustomerId(), bean.getSkillItemId()));
 
 				// 声量 ADUAN -- 一期前段不显示
 				customerSkill.setSkillVolume(250);
+
+				// 判断是否可下单 ADUAN -- 待做
+				if(Objects.equals(request.getLoginCustomerId(), request.getViewCustomerId())){
+					customerSkill.setCanOrder(0); // 自己看自己的个人主页时 -- 直接返回 0=不可接单
+				}else{
+					customerSkill.setCanOrder(accountOrderService.checkReceiveOrderByCustomerSkillId(bean.getCustomerSkillId()));
+				}
 
 				skillList.add(customerSkill);
 			}

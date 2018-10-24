@@ -68,6 +68,8 @@ public class Order {
 
     
     private Date endTime;
+    
+    private Date expectEndTime;
 
     
     private Date orderTime;
@@ -462,4 +464,16 @@ public class Order {
     public void setRemark(String remark) {
         this.remark = remark == null ? null : remark.trim();
     }
+
+
+	public Date getExpectEndTime() {
+		return expectEndTime;
+	}
+
+
+	public void setExpectEndTime(Date expectEndTime) {
+		this.expectEndTime = expectEndTime;
+	}
+    
+    
 }

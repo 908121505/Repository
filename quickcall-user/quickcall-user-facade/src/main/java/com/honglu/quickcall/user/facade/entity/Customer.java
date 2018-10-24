@@ -90,6 +90,24 @@ public class Customer {
 	/** 大V声音审核状态1：待审核（审核中） 2：审核拒绝 3.审核通过 4.修改之后待审核 5.修改之后审核拒绝 6.修改之后审核通过 */
 	private Integer voiceStatus;
 	private String gtClientId;// 个推用户端Id
+	private Date blockStartTime;
+	private Date blockEndTime;
+
+	public Date getBlockStartTime() {
+		return blockStartTime;
+	}
+
+	public void setBlockStartTime(Date blockStartTime) {
+		this.blockStartTime = blockStartTime;
+	}
+
+	public Date getBlockEndTime() {
+		return blockEndTime;
+	}
+
+	public void setBlockEndTime(Date blockEndTime) {
+		this.blockEndTime = blockEndTime;
+	}
 
 	public String getGtClientId() {
 		return gtClientId;
