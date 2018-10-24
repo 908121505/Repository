@@ -609,8 +609,8 @@ public class OrderServiceImpl implements IOrderService {
 			newOrderStatus = OrderSkillConstants.ORDER_STATUS_FINISHED_USER_ACCEPCT;
 			//修改订单状态为：已完成
 			commonService.updateOrder(orderId, newOrderStatus);
-			// ADUAN 订单服务完成推送MQ消息 -- 给下单客户加经验值
-			userCenterSendMqMessageService.sendOrderCostExperience(orderId);
+			// ADUAN 订单服务完成推送MQ消息
+			userCenterSendMqMessageService.sendOrderCostMqMessage(orderId);
 			
 		}else{
 			//订单不存在
