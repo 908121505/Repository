@@ -49,7 +49,8 @@ public class UserCenterSendMqMessageServiceImpl implements UserCenterSendMqMessa
     }
 
     @Override
-    public void sendEvaluationOrderScoreRank(Long orderId) {
+    public void sendEvaluationOrderMqMessage(Long orderId) {
+        // 发送MQ消息 -- 更新主播排名
         try {
             EvaluationOrderMqRequest request = new EvaluationOrderMqRequest();
             request.setOrderId(orderId);

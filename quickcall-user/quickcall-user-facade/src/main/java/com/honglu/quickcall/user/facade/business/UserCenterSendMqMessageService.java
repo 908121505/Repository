@@ -16,9 +16,9 @@ public interface UserCenterSendMqMessageService {
     void sendOrderCostMqMessage(Long orderId);
 
     /**
-     * 发送MQ消息 -- 客户【评价订单】 -- 更新主播排名
+     * 发送MQ消息 -- 客户【评价订单】
      *
      * @param orderId
      */
-    void sendEvaluationOrderScoreRank(Long orderId);
+    void sendEvaluationOrderMqMessage(Long orderId);
 }
