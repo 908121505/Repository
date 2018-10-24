@@ -32,9 +32,13 @@ public class SendMqMessageService {
      * @param orderId
      */
     public void sendExperience(Long orderId) {
-        DoOrderCastMqRequest request = new DoOrderCastMqRequest();
-        request.setOrderId(orderId);
-        LOGGER.info("发送MQ消息 --  客户【下单话费】获取经验值: {}", JSON.toJSONString(request));
-        amqpTemplate.convertAndSend("userCenter-mq-exchange", "queue_userCenter_for_experience_key", request);
+        try {
+            DoOrderCastMqRequest request = new DoOrderCastMqRequest();
+            request.setOrderId(orderId);
+            LOGGER.info("发送MQ消息 --  客户【下单话费】获取经验值: {}", JSON.toJSONString(request));
+            amqpTemplate.convertAndSend("userCenter-mq-exchange", "queue_userCenter_for_experience_key", request);
+        }catch (Exception e){
+            LOGGER.error("发送MQ消息 -- 客户【下单话费】获取经验值异常，orderId : " + orderId + " ， 异常信息：", e);
+        }
     }
 }
