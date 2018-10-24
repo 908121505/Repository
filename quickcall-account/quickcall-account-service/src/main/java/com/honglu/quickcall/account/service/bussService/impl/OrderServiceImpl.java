@@ -2,6 +2,7 @@ package com.honglu.quickcall.account.service.bussService.impl;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -476,14 +477,14 @@ public class OrderServiceImpl implements IOrderService {
 		
 		OrderDetailForIMVO   orderVO =  new OrderDetailForIMVO();
 		if(order != null ){
-			orderVO.setRetCode(3);
+			orderVO.setRetCode(OrderSkillConstants.IM_RETCODE_ORDER_EXIST);
 			OrderIMVO orderIMVO = new OrderIMVO();
 			Long  customerSkillId =  order.getCustomerSkillId();
 			orderIMVO = customerSkillMapper.selectCustSkillItem(customerSkillId);
 			orderIMVO.setOrderStatus(order.getOrderStatus());
 			orderIMVO.setServiceId(serviceId);
 			orderIMVO.setCustomerId(customerId);
-			orderVO.setOrderIMVO(orderIMVO );
+			orderVO.setOrderIMVO(orderIMVO);
 		}else{
 			//判断大V是否正忙
 			statusList = new ArrayList<Integer>();
@@ -493,10 +494,10 @@ public class OrderServiceImpl implements IOrderService {
 			statusList.add(OrderSkillConstants.ORDER_STATUS_GOING_DAV_APPAY_FINISH);//进行中（大V发起完成服务）
 			List<Order>   gongIngOrderList = orderMapper.selectGongIngOrderListByCustomerId(serviceId, OrderSkillConstants.SKILL_TYPE_YES, statusList );
 			if(CollectionUtils.isEmpty(gongIngOrderList)){
-				orderVO.setRetCode(1);
+				orderVO.setRetCode(OrderSkillConstants.IM_RETCODE_CAN_ORDER);
 			}else{
 				//用户存在进行中或者即将进行中订单，说明大V正忙
-				orderVO.setRetCode(2);
+				orderVO.setRetCode(OrderSkillConstants.IM_RETCODE_DV_BUSY);
 			}
 			
 		}
@@ -645,7 +646,27 @@ public class OrderServiceImpl implements IOrderService {
 			
 			//用户同意，修改状态
 			newOrderStatus = OrderSkillConstants.ORDER_STATUS_GOING_USER_ACCEPCT;
-			commonService.updateOrder(orderId, newOrderStatus);
+			
+			
+			Date  currTime =  new Date();
+			
+			String  serviceUnit = order.getServiceUnit();
+		    int  addMinute =  0 ;
+		    Integer  orderNum = order.getOrderNum();
+			if(OrderSkillConstants.SERVICE_UNIT_HALF_HOUR.equals(serviceUnit)){
+				addMinute = orderNum * 30 ;
+			}else if(OrderSkillConstants.SERVICE_UNIT_HALF_HOUR.equals(serviceUnit)){
+				addMinute = orderNum * 60 ;
+			}
+			
+			Calendar cal =  Calendar.getInstance();
+			cal.setTime(currTime);
+			Date  endTime =  null;
+			if(addMinute > 0){
+				cal.add(Calendar.MINUTE, addMinute);
+			}
+			endTime = cal.getTime();
+			commonService.confirmOrderUpdateOrder(orderId, newOrderStatus,new Date(),endTime);
 		}else{
 			//订单不存在
 			throw new BizException(AccountBizReturnCode.ORDER_NOT_EXIST, "订单不存在，无法对订单操作");
@@ -745,7 +766,7 @@ public class OrderServiceImpl implements IOrderService {
 				throw new BizException(AccountBizReturnCode.ORDER_STATUS_ERROR, "订单状态异常");
 			}
 			orderStatus =  OrderSkillConstants.ORDER_STATUS_WAITING_START_DA_APPAY_START_SERVICE ;
-			commonService.updateOrder(orderId, orderStatus);
+			commonService.dvStartServiceUpdateOrder(orderId, orderStatus,new Date());
 			
 			
 			//大V开始服务请求，向用户发送消息
@@ -783,16 +804,22 @@ public class OrderServiceImpl implements IOrderService {
 		Order  order = orderMapper.selectByPrimaryKey(orderId);
 		Integer   newOrderStatus =  null ;
 		if(order != null ){
-			//TODO  大V完成服务需要判断是否是在服务时间内
 			Integer  oldOrderStatus =  order.getOrderStatus();
-			
 			//只有在订单状态为26.进行中（大V发起开始服务用户5分钟内同意）;双方才可以进行服务完成操作
 			if(OrderSkillConstants.ORDER_STATUS_GOING_USER_ACCEPCT  != oldOrderStatus){
 				throw new BizException(AccountBizReturnCode.ORDER_STATUS_ERROR, "订单状态异常");
 			}
 			//大V发起完成服务
 			if(OrderSkillConstants.REQUEST_DV_FINISH_TYPE == type){
-				newOrderStatus = OrderSkillConstants.ORDER_STATUS_GOING_DAV_APPAY_FINISH ;
+				//判断时间是否在服务时间内
+				Date  expectEndTime =  order.getExpectEndTime();
+				if(expectEndTime.before(new Date())){
+					//已经在服务时间之外了，可以立即结束
+					newOrderStatus = OrderSkillConstants.ORDER_STATUS_FINISH_DAV_FINISH_AFTER_SERVICE_TIME ;
+				}else{
+					//大V在服务时间内发起完成服务
+					newOrderStatus = OrderSkillConstants.ORDER_STATUS_GOING_DAV_APPAY_FINISH ;
+				}
 			}else{
 			//用户发起完成服务	
 				newOrderStatus = OrderSkillConstants.ORDER_STATUS_GOING_USRE_APPAY_FINISH ;
@@ -807,9 +834,6 @@ public class OrderServiceImpl implements IOrderService {
 				Long  serviceId = order.getServiceId();
 				RongYunUtil.sendOrderMessage(serviceId, OrderSkillConstants.IM_MSG_CONTENT_CUST_FINISH);
 			}
-			
-			
-			
 			
 			commonService.updateOrder(orderId, newOrderStatus);
 		}else{
