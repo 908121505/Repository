@@ -133,9 +133,11 @@ public class RongYunUtil {
 	 * 
 	 */
 	public static void sendSystemMessage(Long toCustomerId, String content) {
+
 		Long fromUserId = Long.parseLong(SYSTEM_COSTOMER_ID);
-		sendMessage("系统消息", fromUserId, toCustomerId, content, 1,
-				"http://wdgj.oss-cn-shanghai.aliyuncs.com/voice/user/headimg/25d8dfa082314cb693f78faaf51581d8.jpg");
+		String imageUrl = "http://wdgj.oss-cn-shanghai.aliyuncs.com/voice/user/headimg/25d8dfa082314cb693f78faaf51581d8.jpg";
+		refreshUser(fromUserId + "", "系统消息", imageUrl);
+		sendMessage("系统消息", fromUserId, toCustomerId, content, 1, imageUrl, 10);
 	}
 
 	/**
@@ -149,7 +151,9 @@ public class RongYunUtil {
 	 */
 	public static void sendActivityMessage(Long toCustomerId, String content) {
 		Long fromUserId = Long.parseLong(ACTIVITY_COSTOMER_ID);
-		sendMessage("活动消息", fromUserId, toCustomerId, content, 1, null);
+		String imageUrl = "http://wdgj.oss-cn-shanghai.aliyuncs.com/voice/user/headimg/d13b199ed66f4ba1aedc6ac4b32e00cd.jpg";
+		refreshUser(fromUserId + "", "活动消息", imageUrl);
+		sendMessage("活动消息", fromUserId, toCustomerId, content, 1, imageUrl, 10);
 	}
 
 	/**
@@ -163,7 +167,9 @@ public class RongYunUtil {
 	 */
 	public static void sendOrderMessage(Long toCustomerId, String content) {
 		Long fromUserId = Long.parseLong(ORDER_COSTOMER_ID);
-		sendMessage("订单消息", fromUserId, toCustomerId, content, 1, null);
+		String imageUrl = "http://wdgj.oss-cn-shanghai.aliyuncs.com/voice/user/headimg/dd85f3b6b42e441eb48f2839752474cc.jpg";
+		refreshUser(fromUserId + "", "订单消息", imageUrl);
+		sendMessage("订单消息", fromUserId, toCustomerId, content, 1, imageUrl, 10);
 	}
 
 	/**
@@ -184,15 +190,15 @@ public class RongYunUtil {
 	 */
 	public static void sendFansMessage(Long fromUserId, String nickName, String headPortraitUrl, Long toCustomerId,
 			String content, Integer sex) {
-		sendMessage(nickName, fromUserId, toCustomerId, content, sex, headPortraitUrl);
+		sendMessage(nickName, fromUserId, toCustomerId, content, sex, headPortraitUrl, 20);
 	}
 
 	private static void sendMessage(String nickName, Long fromUserId, Long toCustomerId, String content, Integer sex,
-			String headPortraitUrl) {
+			String headPortraitUrl, Integer type) {
 
 		Long otherId = toCustomerId;
 		SendUser sendUser = new SendUser(nickName, headPortraitUrl, sex, otherId);
-		RongYunPushBean rongYunPushBean = new RongYunPushBean(1, content, 1, 0, 10, fromUserId, otherId, 1, sendUser,
+		RongYunPushBean rongYunPushBean = new RongYunPushBean(1, content, 1, 0, type, fromUserId, otherId, 1, sendUser,
 				System.currentTimeMillis());
 		String jsonString = JSON.toJSONString(rongYunPushBean);
 		TxtMessage txtMessage = new TxtMessage(jsonString, "");
@@ -204,7 +210,7 @@ public class RongYunUtil {
 	}
 
 	public static void main(String[] args) {
-
+		// sendUser();
 		/*
 		 * Long fromUserId = 1810161814552346784L; String nickName = "Aaaa"; String
 		 * photo =
@@ -220,7 +226,10 @@ public class RongYunUtil {
 		 * null, null, null, null, null, null); System.out.println(code);
 		 */
 
-		sendSystemMessage(1810161659557030302L, "我喜欢亚波");
+		// sendSystemMessage(1810161659557030302L, "我喜欢亚波");
+		sendFansMessage(1810241141388482637L, "轻音_3575",
+				"http://test-guanjia.oss-cn-shanghai.aliyuncs.com/user/app/1538205551716.png", 1810161659557030302L,
+				"我关注了你哦", 1);
 		/*
 		 * refreshUser("1810201521499459795", "系统消息",
 		 * "shanghai.aliyuncs.com/voice/user/headimg/25d8dfa082314cb693f78faaf51581d8.jpg"

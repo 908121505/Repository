@@ -13,6 +13,9 @@ public interface OrderSkillConstants {
 	
 	
 	
+	public  static final  String  IM_MSG_CONTENT_RECEIVE_ORDER = "有人下单啦";
+	
+	
 	/**下单返回结果：1 成功*/
 	public static final String  RET_CODE_SUCCESS = "1";
 	/**下单返回结果：2 余额不足*/

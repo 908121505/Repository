@@ -20,6 +20,7 @@
     <result column="head_portrait_url" property="headPortraitUrl" jdbcType="VARCHAR" />
     <result column="source" property="source"   />
     <result column="cust_status" property="custStatus"   />
+     <result column="cust_state" property="custState"   />
     <result column="cust_password" property="custPassword" jdbcType="VARCHAR" />
     <result column="sign_name" property="signName" jdbcType="VARCHAR" />
     <result column="star_sign" property="starSign" jdbcType="CHAR" />
@@ -61,7 +62,7 @@
     star_sign, birthday, voice_url, voice_time, v_voice_url, v_voice_url_tmp, v_voice_time_tmp, 
     v_voice_status, v_voice_time, v_status, identity_status, token_code, other_relation, 
     create_time, modify_time, create_man, modify_man, remark, app_channel_name,cumulate_experience,
-    customer_level, device_id, login_time,gt_client_id,block_start_time,block_end_time
+    customer_level, device_id, login_time,gt_client_id,block_start_time,block_end_time,cust_state
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
@@ -518,7 +519,9 @@
       <if test="gtClientId != null and gtClientId!=''" >
         gt_client_id = #{gtClientId},
       </if>
-
+      <if test="custState != null and custState!=''" >
+        cust_state = #{custState},
+      </if>
     </set>
     where customer_id = #{customerId,jdbcType=BIGINT}
   </update>
@@ -543,6 +546,9 @@
     </if>
     <if test="microblogOpenId!=null and microblogOpenId!=''">
     and microblog_open_id=#{microblogOpenId}
+    </if>
+    <if test="nickName!=null and nickName!=''">
+    and nick_name=#{nickName}
     </if>
     </select>
     <!-- 设置密码 -->
