@@ -1,5 +1,6 @@
 package com.honglu.quickcall.task.job;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -63,8 +64,10 @@ public class AbnormityOfRechargeJob {
 					recharge.setFinishDate(new Date());
 					recharge.setOrdersn(rechargeList.get(i).getOrdersn());
 					recharge.setState(2);// 状态。1-申请支付，2-支付成功 3支付失败
+					// RMB转换轻音货币 比例1:100
+					BigDecimal amount = rechargeList.get(i).getAmount().multiply(new BigDecimal("100"));
 					// 入账
-					accountMapper.inAccount(rechargeList.get(i).getCustomerId(), rechargeList.get(i).getAmount(),
+					accountMapper.inAccount(rechargeList.get(i).getCustomerId(), amount,
 							TransferTypeEnum.RECHARGE.getType());
 					// 记录流水
 					TradeDetail tradeDetail = new TradeDetail();
@@ -72,7 +75,7 @@ public class AbnormityOfRechargeJob {
 					tradeDetail.setCustomerId(rechargeList.get(i).getCustomerId());
 					tradeDetail.setCreateTime(new Date());
 					tradeDetail.setType(AccountBusinessTypeEnum.Recharge.getType());
-					tradeDetail.setInPrice(rechargeList.get(i).getAmount());
+					tradeDetail.setInPrice(amount);
 					tradeDetailMapper.insertSelective(tradeDetail);
 					rechargeMapper.updateByOrderNo(recharge);
 					logger.info("修复成功一条异常充值消息----订单Id为" + rechargeList.get(i).getOrdersn());

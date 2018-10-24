@@ -25,7 +25,7 @@
 		 	skill_type = #{skillType}
 		WHERE
 			order_status = #{queryStatus}
-		AND order_time > #{endTime}
+		AND order_time < #{endTime}
   </update>
 <!-- 待接单订单超时 -->
   <update id="startOrderOverTime" parameterType="map" >
@@ -38,7 +38,22 @@
 		 	skill_type = #{skillType}
 		WHERE
 			order_status = #{queryStatus}
-		AND receive_order_time > #{endTime}
+		AND receive_order_time < #{endTime}
+  </update>
+  
+  
+<!-- 12小时未响应超时 -->
+  <update id="updateOrderStatusAfter12Hour" parameterType="map" >
+    
+		UPDATE 
+			orders
+		SET 
+			system_cancel_time = #{currTime}
+		 	order_status = #{updateStatus},
+		 	skill_type = #{skillType}
+		WHERE
+			order_status = #{queryStatus}
+		AND start_time < #{endTime}
   </update>
  
   

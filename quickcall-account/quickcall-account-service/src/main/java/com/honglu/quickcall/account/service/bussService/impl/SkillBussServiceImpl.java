@@ -3,6 +3,7 @@ package com.honglu.quickcall.account.service.bussService.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.honglu.quickcall.common.api.exchange.ResultUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -83,17 +84,18 @@ public class SkillBussServiceImpl implements ISkillBussService {
 			throw new BizException(AccountBizReturnCode.paramError, "查询首页大V列表参数异常");
 		}
 		//首先查询所有的技能信息
-		List<DaVinfoListVO>   resultList =  new  ArrayList<DaVinfoListVO>();
+		List<DaVinfoListVO>   resultList = new ArrayList<>();
+
 		//资源位信息
 		DaVinfoListVO  resourceDaVinfoListVO =  productSkillService.getResourceDaVinfoList();
 		resultList.add(resourceDaVinfoListVO);
+
 		//飞标签位列表
 		List<DaVinfoListVO>   tagList  =  productSkillService.getTagDaVinfoList();
 		resultList.addAll(tagList);
-		CommonResponse commonResponse = commonService.getCommonResponse();
-		commonResponse.setData(resultList);
+
 		LOGGER.info("用户编号为：" + request.getCustomerId() + "查询成功");
-		return commonResponse;
+		return ResultUtils.resultSuccess(resultList);
 	}
 
 

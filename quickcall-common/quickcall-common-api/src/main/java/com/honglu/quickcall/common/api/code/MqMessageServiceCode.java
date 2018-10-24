@@ -7,6 +7,8 @@ package com.honglu.quickcall.common.api.code;
  * @date 2018-10-23 11:48
  */
 public interface MqMessageServiceCode {
-    /** 客户获取经验值 -- 下单消费 **/
+    /** 下单消费完成 -- 发送消息到MQ **/
     String CUSTOMER_EXPERIENCE_ORDER_COST = "100001";
+    /** 客户评价订单 -- 发送消息到MQ **/
+    String CUSTOMER_EVALUATION_ORDER = "100002";
 }

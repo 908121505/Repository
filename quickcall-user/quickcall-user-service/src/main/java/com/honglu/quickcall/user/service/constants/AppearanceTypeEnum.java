@@ -1,4 +1,4 @@
-package com.honglu.quickcall.user.service.type;
+package com.honglu.quickcall.user.service.constants;
 
 /**
  * 对应customer_appearance表中type字段

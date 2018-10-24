@@ -92,7 +92,7 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 			}
 			listVO.setSkillItemId(1000L);
 			List<DaVinfoVO> daVinfoList = new ArrayList<DaVinfoVO>();
-			for (int j = 0; j < 5; j++) {
+			for (int j = 0; j < 4; j++) {
 				daVinfoList.add(getDaVinfoVO(unitName, bussTagUrl, categoryTagUrl, coverUrl));
 			}
 			listVO.setDaVinfoList(daVinfoList);
@@ -206,6 +206,7 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 			List<SkillUnitPriceVO>  list =  itemExtMap.get(1);
 			skillVO.setOldServiceUnit(list.get(0).getUnitName());
 			skillVO.setOldSkillPrice(list.get(0).getUnitPrice());
+			skillVO.setOldSkillItemExtId(list.get(0).getSkillItemExtId());
 		}
 		List<BigDecimal> discontRateList = new ArrayList<BigDecimal>();
 		List<SkillItemExt> skillItemExtDiscountList = skillItemExtMapper.querySkillItemExtDiscountList(skillItemId, 1,2);

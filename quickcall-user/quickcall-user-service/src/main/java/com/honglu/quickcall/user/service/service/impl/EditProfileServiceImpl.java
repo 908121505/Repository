@@ -1,11 +1,9 @@
 package com.honglu.quickcall.user.service.service.impl;
 
 import cn.jiguang.commom.utils.StringUtils;
-import com.honglu.quickcall.account.facade.code.AccountBizReturnCode;
 import com.honglu.quickcall.common.api.exception.BizException;
 import com.honglu.quickcall.common.api.exception.RemoteException;
 import com.honglu.quickcall.common.api.exchange.CommonResponse;
-import com.honglu.quickcall.common.api.exchange.ResultUtils;
 import com.honglu.quickcall.common.api.util.JedisUtil;
 import com.honglu.quickcall.common.core.util.Detect;
 import com.honglu.quickcall.common.core.util.StringUtil;
@@ -19,13 +17,12 @@ import com.honglu.quickcall.user.facade.entity.CustomerInterest;
 import com.honglu.quickcall.user.facade.entity.SensitivityWord;
 import com.honglu.quickcall.user.facade.exchange.request.editprofile.*;
 import com.honglu.quickcall.user.facade.vo.AppearanceVO;
-import com.honglu.quickcall.user.facade.vo.BlacklistVo;
 import com.honglu.quickcall.user.facade.vo.InterestVO;
 import com.honglu.quickcall.user.facade.vo.UserEditInfoVO;
 import com.honglu.quickcall.user.service.dao.*;
 import com.honglu.quickcall.user.service.service.CustomerRedisManagement;
 import com.honglu.quickcall.user.service.service.EditProfileService;
-import com.honglu.quickcall.user.service.type.AppearanceTypeEnum;
+import com.honglu.quickcall.user.service.constants.AppearanceTypeEnum;
 import com.honglu.quickcall.user.service.util.CommonUtil;
 import com.honglu.quickcall.user.service.util.CountAge;
 import com.honglu.quickcall.user.service.util.JsonParseUtil;
@@ -465,7 +462,7 @@ public class EditProfileServiceImpl implements EditProfileService {
             UserEditInfoVO userEditInfoVO = customerMapper.queryUserEditInfo(params.getCustomerId());
 
             if (userEditInfoVO == null) {
-                throw new RemoteException(UserBizReturnCode.paramError, "参数错误，用户数据不存在");
+                throw new BizException(UserBizReturnCode.paramError,  "参数错误，用户数据不存在");
             }
 
             if (userEditInfoVO.getBirthday() != null) {
@@ -480,7 +477,7 @@ public class EditProfileServiceImpl implements EditProfileService {
             List<AppearanceVO> appearanceList = customerAppearanceMapper.selectAppearanceVOByCustomerIdAndType(params.getCustomerId(),0);
             List<AppearanceVO> viceCard = customerAppearanceMapper.selectAppearanceVOByCustomerIdAndType(params.getCustomerId(),2);
             if(headPortrait.size() == 0){
-                userEditInfoVO.setHeadPortrait(new AppearanceVO());
+                userEditInfoVO.setHeadPortrait(new AppearanceVO(null,null,"","",null,null));
             }else {
                 userEditInfoVO.setHeadPortrait(headPortrait.get(0));
             }
@@ -488,7 +485,7 @@ public class EditProfileServiceImpl implements EditProfileService {
             userEditInfoVO.setAppearanceList(appearanceList);
 
             if(viceCard.size() == 0){
-                userEditInfoVO.setViceCard(new AppearanceVO());
+                userEditInfoVO.setViceCard(new AppearanceVO(null,null,"","",null,null));
             }else {
                 userEditInfoVO.setViceCard(viceCard.get(0));
             }

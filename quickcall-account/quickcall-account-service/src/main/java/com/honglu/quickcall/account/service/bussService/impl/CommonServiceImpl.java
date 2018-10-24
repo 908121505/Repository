@@ -134,4 +134,35 @@ public class CommonServiceImpl implements CommonService {
 		
 	}
 
+
+
+	@Override
+	public void confirmOrderUpdateOrder(Long orderId, Integer orderStatus, Date startTime,Date  endTime) {
+		Order record = new Order();
+		record.setOrderStatus(orderStatus);
+		record.setOrderId(orderId);
+		record.setModifyTime(new Date());
+		record.setStartTime(startTime);
+		if(endTime != null){
+			record.setExpectEndTime(endTime);
+		}
+		//修改订单状态为：已支付
+		orderMapper.updateByPrimaryKeySelective(record);
+		
+	}
+
+
+
+	@Override
+	public void dvStartServiceUpdateOrder(Long orderId, Integer orderStatus, Date startServiceTime) {
+		Order record = new Order();
+		record.setOrderStatus(orderStatus);
+		record.setOrderId(orderId);
+		record.setModifyTime(new Date());
+		record.setStartTime(startServiceTime);
+		//修改订单状态为：已支付
+		orderMapper.updateByPrimaryKeySelective(record);
+		
+	}
+
 }

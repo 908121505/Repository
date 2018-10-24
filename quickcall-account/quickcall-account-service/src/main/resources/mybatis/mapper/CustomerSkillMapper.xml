@@ -382,6 +382,7 @@
     from customer_skill
     where customer_id = #{customerId,jdbcType=BIGINT}
   </select>
+
   
   
   	<update id="batchUpdate" >
@@ -411,4 +412,20 @@
     	customer_skill_id = #{skill.customerSkillId,jdbcType=BIGINT} ;
 		</foreach>
 	</update>
+	
+	  <select id="selectCustSkillItem" resultType="com.honglu.quickcall.account.facade.vo.OrderIMVO" parameterType="java.lang.Long" >
+			SELECT
+			  cs.service_unit  AS  serviceUnit,
+			  cs.discount_price  AS  servicePrice,
+			  cs.skill_name  AS  skillItemName,
+			  st.unlock_icon  AS  icon
+			FROM
+				customer_skill cs
+			LEFT JOIN skill_item st ON cs.skill_item_id = st.id
+			WHERE
+				cs.customer_skill_id = #{customerSkillId}
+  </select>
+  
+  
+
 </mapper>

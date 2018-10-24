@@ -12,8 +12,29 @@ package com.honglu.quickcall.account.facade.constants;
 public interface OrderSkillConstants {
 	
 	
+	/**1：订单不存在，可以下单 */
+	public  static final  Integer  IM_RETCODE_CAN_ORDER = 1;
+	/** 2：订单不存在 大V在忙*/
+	public  static final  Integer  IM_RETCODE_DV_BUSY = 2;
+	/** 3：订单存在*/
+	public  static final  Integer  IM_RETCODE_ORDER_EXIST = 3;
 	
+	
+	
+	
+	
+	////////////////////////IM消息内容//////////////////////////
 	public  static final  String  IM_MSG_CONTENT_RECEIVE_ORDER = "有人下单啦";
+	public  static final  String  IM_MSG_CONTENT_CANCEL_ORDER = "订单取消啦";
+	public  static final  String  IM_MSG_CONTENT_USER_CONFIRM_FINISH= "订单完成啦";
+	public  static final  String  IM_MSG_CONTENT_USER_CONFIRM_START_SERVICE = "用户同意开始服务啦";
+	public  static final  String  IM_MSG_CONTENT_DAV_REFUSE = "大V接单啦";
+	public  static final  String  IM_MSG_CONTENT_DAV_CONFIRM = "大V拒绝接单啦";
+	public  static final  String  IM_MSG_CONTENT_DAV_START_SERVICE = "大V开始服务啦";
+	public  static final  String  IM_MSG_CONTENT_CUST_FINISH = "用户完成服务啦";
+	public  static final  String  IM_MSG_CONTENT_DAV_FINISH = "大V完成服务啦";
+
+	////////////////////////IM消息内容//////////////////////////
 	
 	
 	/**下单返回结果：1 成功*/
@@ -67,9 +88,9 @@ public interface OrderSkillConstants {
 	public static final Integer  REQUEST_DV_CONFIRM_TYPE_NO = 2 ;
 	
 	
-	/**用户请求完成服务类型：1 同意*/
+	/**用户请求完成服务类型：1 */
 	public static final Integer  REQUEST_DV_FINISH_TYPE = 1 ;
-	/**大V请求完成服务类型：2 拒绝*/
+	/**大V请求完成服务类型：2 */
 	public static final Integer  REQUEST_CUST_FINISH_TYPE = 2 ;
 	
 	

@@ -30,26 +30,25 @@
 //    @Autowired
 //    private TaskOrderMapper    taskOrderMapper;
 //
+//    /**默认超时小时数*/
+//    private final static  Integer   END_OVER_TIME_HOUR = -12;
 //    /**默认超时分钟数*/
-//    private final static  Integer   RECEIVE_OVER_TIME_MINUTES = 15;
+//    private final static  Integer   RECEIVE_OVER_TIME_MINUTES = -15;
 //    /**立即服务超时分钟数*/
-//    private final static  Integer   START_OVER_TIME_MINUTES = 5;
+//    private final static  Integer   START_OVER_TIME_MINUTES = -5;
 //
 //    
 //    //接单设置
 //    
-//    @Scheduled(cron = "0 1 * * * ?")
+//    @Scheduled(cron = "0 * * * * ?")
 //    public void updateOrderStatus() {
 //    	LOGGER.info("=============修改订单状态自动任务开始=================");
 //    	try {
 //    		Date  currTime = new Date();
-//    		
 //    		Calendar  cal = Calendar.getInstance();
-//    		
 //    		cal.setTime(currTime);
 //    		cal.add(Calendar.MINUTE, RECEIVE_OVER_TIME_MINUTES);
 //    		Date  endTime =  cal.getTime();
-//    		
 //    		Integer skillType = OrderSkillConstants.SKILL_TYPE_NO; 
 //    		//获取接单设置超时
 //    		Integer  queryStatus = OrderSkillConstants.ORDER_STATUS_WAITING_RECEIVE;
@@ -74,11 +73,28 @@
 //			queryStatus = OrderSkillConstants.ORDER_STATUS_WAITING_START;
 //			updateStatus = OrderSkillConstants.ORDER_STATUS_CANCEL_NOT_START;
 //			taskOrderMapper.startOrderOverTime(currTime, endTime, queryStatus, updateStatus, skillType);
-//    		
-//    		
-//    		
-//    		
-//    		
+//    	} catch (Exception e) {
+//    		LOGGER.error("job执行发生异常，异常信息：", e);
+//    	}
+//    	LOGGER.info("=============修改订单状态自动任务结束=================");
+//    }
+//    
+//    
+//    @Scheduled(cron = "30 0/30 * * * ?")
+//    public void updateOrderStatusAfter12Hour() {
+//    	LOGGER.info("=============修改订单状态自动任务开始=================");
+//    	try {
+//    		Date  currTime = new Date();
+//    		Calendar  cal = Calendar.getInstance();
+//    		cal.setTime(currTime);
+//    		cal.add(Calendar.HOUR_OF_DAY, END_OVER_TIME_HOUR);
+//    		Date  endTime =  cal.getTime();
+//    		Integer skillType = OrderSkillConstants.SKILL_TYPE_NO; 
+//    		//获取接单设置超时
+//    		Integer  queryStatus = OrderSkillConstants.ORDER_STATUS_GOING_DAV_APPAY_FINISH;
+//    		Integer  updateStatus = OrderSkillConstants.ORDER_STATUS_FINISH_DV_FINISH;
+//    		taskOrderMapper.updateOrderStatusAfter12Hour(currTime, endTime, queryStatus, updateStatus, skillType);
+//
 //    		
 //    		
 //    	} catch (Exception e) {

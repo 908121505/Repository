@@ -86,13 +86,26 @@ public class OrderController {
     	return response;
     }
     /**
-     * 发起的订单页--去支付
+     * 订单详情
      * @param params
      * @return
      */
     @RequestMapping(value = "/detailOrder", method = RequestMethod.POST)
     @ResponseBody
     public WebResponseModel detailOrder( /* @RequestBody */ DetailOrderRequest params) {
+    	WebResponseModel response = orderInfoService.execute(params);
+    	return response;
+    }
+    
+    
+    /**
+     * IM订单详情
+     * @param params
+     * @return
+     */
+    @RequestMapping(value = "/detailOrderForIM", method = RequestMethod.POST)
+    @ResponseBody
+    public WebResponseModel detailOrderForIM(DetailOrderForIMRequest params) {
     	WebResponseModel response = orderInfoService.execute(params);
     	return response;
     }

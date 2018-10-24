@@ -26,6 +26,7 @@ import com.honglu.quickcall.common.api.exception.RemoteException;
 import com.honglu.quickcall.common.api.exchange.CommonResponse;
 import com.honglu.quickcall.common.api.exchange.ResultUtils;
 import com.honglu.quickcall.common.api.util.JedisUtil;
+import com.honglu.quickcall.common.api.util.ResponseUtils;
 import com.honglu.quickcall.common.core.util.Detect;
 import com.honglu.quickcall.common.core.util.StringUtil;
 import com.honglu.quickcall.common.core.util.UUIDUtils;
@@ -43,6 +44,7 @@ import com.honglu.quickcall.user.facade.entity.SensitivityWord;
 import com.honglu.quickcall.user.facade.entity.SkillItem;
 import com.honglu.quickcall.user.facade.exchange.request.AddOrCancelFansRequest;
 import com.honglu.quickcall.user.facade.exchange.request.CheckAttentionRequest;
+import com.honglu.quickcall.user.facade.exchange.request.CheckEachAttentionRequest;
 import com.honglu.quickcall.user.facade.exchange.request.CustomerCenterRequest;
 import com.honglu.quickcall.user.facade.exchange.request.CustomerHomeRequest;
 import com.honglu.quickcall.user.facade.exchange.request.CustomerLevelRequest;
@@ -587,6 +589,17 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 	public CommonResponse checkAttention(CheckAttentionRequest request) {
 		CommonResponse commonResponse = new CommonResponse();
 		return commonResponse;
+	}
+	
+	@Override
+	public CommonResponse checkEachAttention(CheckEachAttentionRequest request) {
+		int n = fansMapper.queryIsFollow(request.getFansId(),request.getAttendedId());
+		int n1 = fansMapper.queryIsFollow(request.getAttendedId(),request.getFansId());
+		int status = n&n1;
+		status = status==0?0:1;
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("eachAttentionStatus", status);
+		return ResultUtils.resultSuccess(map);
 	}
 
 	@Override
