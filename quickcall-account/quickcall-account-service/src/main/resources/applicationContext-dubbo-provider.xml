@@ -11,8 +11,7 @@
     <!-- registry address, used for service to register itself-->
     <dubbo:protocol name="dubbo" port="21350" serialization="kryo"/>
 
-    <!-- 注册服务端 -->
-    <!--账户相关 -->
+    <!-- 服务提供者 - 账户相关 -->
     <dubbo:service group="accountCenter" interface="com.honglu.quickcall.account.facade.business.AccountDubboBusiness" ref="Account.AccountDubboBusiness" timeout="30000" retries="0" version="0.0.1"/>
    
 </beans>
