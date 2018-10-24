@@ -133,9 +133,11 @@ public class RongYunUtil {
 	 * 
 	 */
 	public static void sendSystemMessage(Long toCustomerId, String content) {
+
 		Long fromUserId = Long.parseLong(SYSTEM_COSTOMER_ID);
-		sendMessage("系统消息", fromUserId, toCustomerId, content, 1,
-				"http://wdgj.oss-cn-shanghai.aliyuncs.com/voice/user/headimg/25d8dfa082314cb693f78faaf51581d8.jpg");
+		String imageUrl = "http://wdgj.oss-cn-shanghai.aliyuncs.com/voice/user/headimg/25d8dfa082314cb693f78faaf51581d8.jpg";
+		refreshUser(fromUserId + "", "系统消息", imageUrl);
+		sendMessage("系统消息", fromUserId, toCustomerId, content, 1, imageUrl);
 	}
 
 	/**
@@ -149,7 +151,9 @@ public class RongYunUtil {
 	 */
 	public static void sendActivityMessage(Long toCustomerId, String content) {
 		Long fromUserId = Long.parseLong(ACTIVITY_COSTOMER_ID);
-		sendMessage("活动消息", fromUserId, toCustomerId, content, 1, null);
+		String imageUrl = "http://wdgj.oss-cn-shanghai.aliyuncs.com/voice/user/headimg/d13b199ed66f4ba1aedc6ac4b32e00cd.jpg";
+		refreshUser(fromUserId + "", "活动消息", imageUrl);
+		sendMessage("活动消息", fromUserId, toCustomerId, content, 1, imageUrl);
 	}
 
 	/**
@@ -163,7 +167,9 @@ public class RongYunUtil {
 	 */
 	public static void sendOrderMessage(Long toCustomerId, String content) {
 		Long fromUserId = Long.parseLong(ORDER_COSTOMER_ID);
-		sendMessage("订单消息", fromUserId, toCustomerId, content, 1, null);
+		String imageUrl = "http://wdgj.oss-cn-shanghai.aliyuncs.com/voice/user/headimg/dd85f3b6b42e441eb48f2839752474cc.jpg";
+		refreshUser(fromUserId + "", "订单消息", imageUrl);
+		sendMessage("订单消息", fromUserId, toCustomerId, content, 1, imageUrl);
 	}
 
 	/**
