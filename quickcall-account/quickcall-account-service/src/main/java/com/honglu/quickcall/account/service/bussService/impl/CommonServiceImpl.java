@@ -16,6 +16,7 @@ import com.honglu.quickcall.common.api.exchange.CommonResponse;
 import com.honglu.quickcall.common.api.util.DateUtils;
 import com.honglu.quickcall.user.facade.business.UserPushAppMsgBusiness;
 import com.honglu.quickcall.user.facade.enums.PushAppMsgTypeEnum;
+import com.honglu.quickcall.user.facade.exchange.request.PushAppMsgRequest;
 
 
 @Service("commonService")
@@ -37,12 +38,12 @@ public class CommonServiceImpl implements CommonService {
 
 	@Override
 	public void pushMessage(PushAppMsgTypeEnum msgType,Long  sellerId,Long  customerId) {
-//		PushAppMsgRequest  msgRequest =  new PushAppMsgRequest();
-//		msgRequest.setMsgType(PushAppMsgTypeEnum.NEW_ORDER);
-//		msgRequest.setReceiverId(sellerId);
-//		msgRequest.setSenderId(customerId);
-//		//发送消息
-//		userPushAppMsgBusiness.excute(msgRequest);
+		PushAppMsgRequest  msgRequest =  new PushAppMsgRequest();
+		msgRequest.setMsgType(PushAppMsgTypeEnum.NEW_ORDER);
+		msgRequest.setReceiverId(sellerId);
+		msgRequest.setSenderId(customerId);
+		//发送消息
+		userPushAppMsgBusiness.excute(msgRequest);
 		
 	}
 

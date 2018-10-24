@@ -205,6 +205,17 @@
     select 
     <include refid="Base_Column_List" />
     from skill_item_ext
-    where skill_item_id = #{skillItemId,jdbcType=INTEGER}  and   skill_ext_status = #{skillExtStatus,jdbcType=INTEGER}
+    where skill_item_id = #{skillItemId,jdbcType=INTEGER}  and   skill_ext_status = #{skillExtStatus,jdbcType=INTEGER}  and  skill_ext_type = #{skillExtType,jdbcType=TINYINT}
+    
+    order by  skill_ext_range  asc ,skill_ext_price  asc
+  </select>
+  
+  
+    <select id="querySkillItemExtDiscountList" resultMap="BaseResultMap" parameterType="map" >
+    select 
+    <include refid="Base_Column_List" />
+    from skill_item_ext
+    where skill_item_id = #{skillItemId,jdbcType=INTEGER}  and   skill_ext_status = #{skillExtStatus,jdbcType=INTEGER}  and  skill_ext_type = #{skillExtType,jdbcType=TINYINT}
+    order by  skill_ext_discont desc
   </select>
 </mapper>

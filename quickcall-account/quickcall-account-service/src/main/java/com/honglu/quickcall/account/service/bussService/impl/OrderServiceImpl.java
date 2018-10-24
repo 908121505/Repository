@@ -55,6 +55,7 @@ import com.honglu.quickcall.common.api.exchange.CommonResponse;
 import com.honglu.quickcall.common.api.exchange.ResultUtils;
 import com.honglu.quickcall.common.api.util.DateUtils;
 import com.honglu.quickcall.common.core.util.UUIDUtils;
+import com.honglu.quickcall.user.facade.business.UserCenterSendMqMessageService;
 
 /**
  * 
@@ -82,6 +83,8 @@ public class OrderServiceImpl implements IOrderService {
 	private BarrageMessageService barrageMessageService;
 	@Autowired
 	private SkillItemMapper skillItemMapper;
+	@Autowired
+	private UserCenterSendMqMessageService userCenterSendMqMessageService;
 	
 	
 	
@@ -178,6 +181,48 @@ public class OrderServiceImpl implements IOrderService {
 	}
 	
 	
+	public static void main(String[] args) {
+		long  remainStr = 3500 ;
+		long hour =  remainStr / 3600 ;
+		long minutes =  (remainStr - hour * 3600 ) / 60 ;
+		long seconds =  remainStr % 60;
+		String  hourStr = null ;
+		if(hour == 0){
+			hourStr  = "";
+		}else if(hour > 0){
+			hourStr = hour +":";
+		}
+		String  minuteStr = null ;
+		if(minutes == 0){
+			minuteStr  = "00";
+		}else if(minutes > 0){
+			if(minutes > 9){
+				minuteStr = "" +minutes ;
+			}else{
+				minuteStr = "0" +minutes ;
+			}
+		}
+		
+		
+		String  secondsStr = null ;
+		if(seconds == 0){
+			secondsStr  = "00";
+		}else if(seconds > 0){
+			if(seconds > 9){
+				secondsStr = "" +seconds ;
+			}else{
+				secondsStr = "0" +seconds ;
+			}
+		}
+		
+		
+		
+		
+		
+		String  downLoadStr =hourStr +minuteStr + ":"+secondsStr;  
+		System.out.println("============"+downLoadStr);
+	}
+	
 	
 	
 	@Override
@@ -187,56 +232,107 @@ public class OrderServiceImpl implements IOrderService {
 		}
 		LOGGER.info("======>>>>>saveOrder()入参："+request.toString());
 		
-		Long  customerId =  request.getCustomerId();
-//		Long  customerSkillId =  request.getCustomerSkillId();
-//		//根据技能ID 获取等级获取价格信息
-//		CustomerSkill   customerSkill = customerSkillMapper.selectByPrimaryKey(customerSkillId);
-//		Integer  orderNum =  request.getOrderNum();
-//		BigDecimal  price =  customerSkill.getDiscountPrice();
-//		BigDecimal orderAmounts = new BigDecimal(orderNum).multiply(price);
-//		//判断余额是否充足
-//		Account account=accountService.queryAccount(customerId);
-//		if(account != null){
-//			//消费用户的充值金额
-//			BigDecimal  rechargeAmounts =  account.getRechargeAmounts();
-//			if(rechargeAmounts != null){
-//				if(orderAmounts.compareTo(rechargeAmounts) >  0){
-//					//返回余额不足状态  
-//					throw new BizException(AccountBizReturnCode.ORDER_PAY_BALANCE_NOT_ENOUGH, "余额不足，无法支付");
-//				}
-//			}
-//		}
-//		
-//		//创建订单
-//		Order record = new Order();
-//		
-//		Long  skillItemId = customerSkill.getSkillItemId();
-//		SkillItem  skillItem = skillItemMapper.selectByPrimaryKey(skillItemId);
-//		if(skillItem != null){
-//			record.setSkillType(skillItem.getSkillType());
-//		}
-//		record.setServiceUnit(customerSkill.getServiceUnit());
-//		record.setServicePrice(customerSkill.getSkillPrice());
-//		record.setDiscountRate(customerSkill.getDiscountRate());
-//		
-		Long  orderId =  UUIDUtils.getId();
-//		Long  serviceId =  request.getServiceId();
-//		record.setCustomerId(customerId);
-//		record.setOrderId(orderId);
-//		record.setServiceId(serviceId);
-//		record.setCreateTime(new Date());
-//		record.setOrderAmounts(orderAmounts);
-//		record.setOrderNum(orderNum);
-//		record.setOrderStatus(OrderSkillConstants.ORDER_STATUS_WAITING_RECEIVE);
-//		record.setOrderTime(new Date());
-//		orderMapper.insert(record);
+		
 		CommonResponse commonResponse = commonService.getCommonResponse();
 		HashMap<String, String>  resultMap = new HashMap<>();
-		resultMap.put("retCode", customerId+"");
-		resultMap.put("downLoadStr", "13:59");
-		resultMap.put("orderId", orderId+"");
+		resultMap.put("retCode",  OrderSkillConstants.DEFAULT_NULL_STR);
+		resultMap.put("downLoadStr", OrderSkillConstants.DEFAULT_NULL_STR);
+		resultMap.put("orderId",OrderSkillConstants.DEFAULT_NULL_STR);
+		
+		try {
+			Date  currTime = new Date();
+			//1.首先判断大V是否可以接单
+			Long  customerId =  request.getCustomerId();
+			Long  serviceId =  request.getServiceId();
+
+			
+			List<Integer> statusList = new ArrayList<Integer>();
+			statusList.add(OrderSkillConstants.ORDER_STATUS_WAITING_START);//待开始
+			statusList.add(OrderSkillConstants.ORDER_STATUS_WAITING_START_DA_APPAY_START_SERVICE);//大V发起开始服务
+			statusList.add(OrderSkillConstants.ORDER_STATUS_GOING_USER_ACCEPCT);//进行中
+			statusList.add(OrderSkillConstants.ORDER_STATUS_GOING_DAV_APPAY_FINISH);//进行中（大V发起完成服务）
+			statusList.add(OrderSkillConstants.ORDER_STATUS_WAITING_START);//待开始
+			
+			List<Order>   gongIngOrderList = orderMapper.selectGongIngOrderListByCustomerId(serviceId, OrderSkillConstants.SKILL_TYPE_YES, statusList );
+			if(!CollectionUtils.isEmpty(gongIngOrderList)){
+				//记录不为空说明大V正在接单，不能下单
+				Order  order = gongIngOrderList.get(0);
+				//订单预计结束时间
+				Date  expectEndTime = order.getExpectEndTime();
+				
+				if(expectEndTime != null){
+					//当前时间和截止时间的间隔秒数
+					Long  remainStr = DateUtils.getDiffSeconds(currTime, expectEndTime);
+					if(remainStr != null &&  remainStr > 0){
+						String  downLoadStr = DateUtils.getDiffSeconds(remainStr);
+						
+						resultMap.put("retCode", OrderSkillConstants.RET_CODE_DV_BUSY);
+						resultMap.put("downLoadStr", downLoadStr);
+						commonResponse.setData(resultMap);
+						//返回大V正忙，以及结束时间
+						return   commonResponse ;
+					}
+					
+					
+				}
+				
+			}
+			
+			
+			
+			Long  customerSkillId =  request.getCustomerSkillId();
+			//根据技能ID 获取等级获取价格信息
+			CustomerSkill   customerSkill = customerSkillMapper.selectByPrimaryKey(customerSkillId);
+			Integer  orderNum =  request.getOrderNum();
+			BigDecimal  price =  customerSkill.getDiscountPrice();
+			BigDecimal orderAmounts = new BigDecimal(orderNum).multiply(price);
+			//判断余额是否充足
+			Account account=accountService.queryAccount(customerId);
+			if(account != null){
+				//消费用户的充值金额
+				BigDecimal  rechargeAmounts =  account.getRechargeAmounts();
+				if(rechargeAmounts != null){
+					if(orderAmounts.compareTo(rechargeAmounts) >  0){
+						//大V忙
+						resultMap.put("retCode",  OrderSkillConstants.RET_CODE_BALANCE_NOT_ENOUTH);
+						//返回余额不足状态  
+						return   commonResponse ;
+					}
+				}
+			}
+			
+			//创建订单
+			Order record = new Order();
+			
+			Long  skillItemId = customerSkill.getSkillItemId();
+			SkillItem  skillItem = skillItemMapper.selectByPrimaryKey(skillItemId);
+			if(skillItem != null){
+				record.setSkillType(skillItem.getSkillType());
+			}
+			record.setServiceUnit(customerSkill.getServiceUnit());
+			record.setServicePrice(customerSkill.getSkillPrice());
+			record.setDiscountRate(customerSkill.getDiscountRate());
+			
+			Long  orderId =  UUIDUtils.getId();
+			record.setCustomerId(customerId);
+			record.setOrderId(orderId);
+			record.setServiceId(serviceId);
+			record.setCreateTime(new Date());
+			record.setOrderAmounts(orderAmounts);
+			record.setOrderNum(orderNum);
+			record.setOrderStatus(OrderSkillConstants.ORDER_STATUS_WAITING_RECEIVE);
+			record.setOrderTime(currTime);
+			orderMapper.insert(record);
+			resultMap.put("retCode",  OrderSkillConstants.RET_CODE_SUCCESS);
+			resultMap.put("orderId", orderId+"");
+			// ADUAN 下单支付成功后 -- 发送弹幕消息
+			barrageMessageService.lpushMessage(orderId);
+			LOGGER.info("======>>>>>用户编号为：" + request.getCustomerId() + "下单成功");
+		} catch (Exception e) {
+			resultMap.put("retCode",  OrderSkillConstants.RET_CODE_SYSTEM_ERROR);
+		}
+		
 		commonResponse.setData(resultMap);
-		LOGGER.info("======>>>>>用户编号为：" + request.getCustomerId() + "下单成功");
 		return commonResponse;
 	}
 
@@ -476,8 +572,11 @@ public class OrderServiceImpl implements IOrderService {
 				throw new BizException(AccountBizReturnCode.ORDER_STATUS_ERROR, "订单状态异常");
 			}
 			newOrderStatus = OrderSkillConstants.ORDER_STATUS_FINISHED_USER_ACCEPCT;
-			//修改订单状态为：申请退款
+			//修改订单状态为：已完成
 			commonService.updateOrder(orderId, newOrderStatus);
+			// ADUAN 订单服务完成推送MQ消息 -- 给下单客户加经验值
+			userCenterSendMqMessageService.sendOrderCostExperience(orderId);
+			
 		}else{
 			//订单不存在
 			throw new BizException(AccountBizReturnCode.ORDER_NOT_EXIST, "订单不存在，无法对订单操作");
@@ -539,7 +638,8 @@ public class OrderServiceImpl implements IOrderService {
 		if(type != OrderSkillConstants.REQUEST_DV_CONFIRM_TYPE_YES   && type != OrderSkillConstants.REQUEST_DV_CONFIRM_TYPE_NO){
 			throw new BizException(AccountBizReturnCode.paramError, "大V同意/拒绝订单参数异常");
 		}
-		
+		//TODO  大V接单需要判断是否可重复接单问题 
+		//TODO  大V接单成功，需要将其他待接单置位已取消
 		//查询订单详情
 		Order  order = orderMapper.selectByPrimaryKey(orderId);
 		Integer   newOrderStatus =  null ;
@@ -625,7 +725,7 @@ public class OrderServiceImpl implements IOrderService {
 		Order  order = orderMapper.selectByPrimaryKey(orderId);
 		Integer   newOrderStatus =  null ;
 		if(order != null ){
-			
+			//TODO  大V完成服务需要判断是否是在服务时间内
 			Integer  oldOrderStatus =  order.getOrderStatus();
 			
 			//只有在订单状态为26.进行中（大V发起开始服务用户5分钟内同意）;双方才可以进行服务完成操作
