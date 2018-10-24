@@ -19,13 +19,16 @@
 
     <rabbit:admin connection-factory="RCconnectionFactory"/>
 
-    <!-- queue 队列声明-->
+    <!-- queue 队列声明 - 用户获取经验值 -->
     <rabbit:queue id="queue_userCenter_for_experience" durable="true" auto-delete="false" exclusive="false" name="queue_userCenter_for_experience"/>
+    <!-- queue 队列声明 - 主播评分排名表 -->
+    <rabbit:queue id="queue_userCenter_for_scoreRank" durable="true" auto-delete="false" exclusive="false" name="queue_userCenter_for_scoreRank"/>
 
     <!-- exchange queue binging key 绑定 -->
     <rabbit:direct-exchange name="userCenter-mq-exchange" durable="true" auto-delete="false" id="userCenter-mq-exchange">
         <rabbit:bindings>
             <rabbit:binding queue="queue_userCenter_for_experience" key="queue_userCenter_for_experience_key"/>
+            <rabbit:binding queue="queue_userCenter_for_scoreRank" key="queue_userCenter_for_scoreRank_key"/>
         </rabbit:bindings>
     </rabbit:direct-exchange>
 
@@ -34,8 +37,12 @@
     <!-- queue litener  观察 监听模式 当有消息到达时会通知监听在对应的队列上的监听对象-->
     <rabbit:listener-container connection-factory="RCconnectionFactory" acknowledge="manual" task-executor="taskExecutor">
         <rabbit:listener queues="queue_userCenter_for_experience" ref="userCenterMqExperienceListener"/>
+        <rabbit:listener queues="queue_userCenter_for_scoreRank" ref="userCenterMqScoreRankListener"/>
     </rabbit:listener-container>
 
-     <bean id="userCenterMqExperienceListener"  class="com.honglu.quickcall.user.service.mq.pull.UserCenterMqExperienceListener" />
+    <!-- MQ消息监听者 - 用户获取经验值 -->
+    <bean id="userCenterMqExperienceListener"  class="com.honglu.quickcall.user.service.mq.pull.UserCenterMqExperienceListener" />
+    <!-- MQ消息监听者 - 主播评分排名 -->
+    <bean id="userCenterMqScoreRankListener"  class="com.honglu.quickcall.user.service.mq.pull.UserCenterMqScoreRankListener" />
 
 </beans>
