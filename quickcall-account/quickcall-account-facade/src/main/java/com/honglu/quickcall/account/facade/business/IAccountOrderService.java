@@ -12,10 +12,10 @@ package com.honglu.quickcall.account.facade.business;
 public interface IAccountOrderService {
 
     /**
-     * 根据用户技能ID判断用户是否可以接单
-     * @param customerId
-     * @param custSkillId
+     * 判断用户是否可以接单
+     * @param customerSkillId
      * @return
+     * 0:不可接单   1：可接单
      */
-    Integer checkReceiveOrderByCustomerSkillId(Long customerId,Long  custSkillId);
+    Integer checkReceiveOrderByCustomerSkillId(Long customerSkillId);
 }
