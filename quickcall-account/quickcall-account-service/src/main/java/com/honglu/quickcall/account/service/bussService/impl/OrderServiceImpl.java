@@ -59,6 +59,7 @@ import com.honglu.quickcall.common.api.exchange.CommonResponse;
 import com.honglu.quickcall.common.api.exchange.ResultUtils;
 import com.honglu.quickcall.common.api.util.DateUtils;
 import com.honglu.quickcall.common.core.util.UUIDUtils;
+import com.honglu.quickcall.common.third.AliyunSms.utils.SendSmsUtil;
 import com.honglu.quickcall.common.third.rongyun.util.RongYunUtil;
 import com.honglu.quickcall.user.facade.business.UserCenterSendMqMessageService;
 
@@ -287,6 +288,9 @@ public class OrderServiceImpl implements IOrderService {
 			resultMap.put("orderId", orderId+"");
 			// ADUAN 下单支付成功后 -- 发送弹幕消息
 			barrageMessageService.lpushMessage(orderId);
+			
+			
+			SendSmsUtil.sendSms(UUIDUtils.getUUID(), "18321334072", 2, customerSkill.getSkillName());
 			
 			//下单成功后推送IM消息
 			RongYunUtil.sendOrderMessage(serviceId, OrderSkillConstants.IM_MSG_CONTENT_RECEIVE_ORDER);
