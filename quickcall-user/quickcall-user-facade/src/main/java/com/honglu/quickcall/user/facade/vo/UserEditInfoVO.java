@@ -28,12 +28,22 @@ public class UserEditInfoVO {
 
     private List<InterestVO> interestList;
 
+    private String defaultHeadPortrait;
+
     /** 头像*/
     private AppearanceVO headPortrait;
     /** 形象照*/
     private List<AppearanceVO> appearanceList;
     /** 声鉴卡*/
     private AppearanceVO viceCard;
+
+    public String getDefaultHeadPortrait() {
+        return defaultHeadPortrait;
+    }
+
+    public void setDefaultHeadPortrait(String defaultHeadPortrait) {
+        this.defaultHeadPortrait = defaultHeadPortrait;
+    }
 
     public Integer getAge() {
         return age;
