@@ -949,6 +949,9 @@ public class OrderServiceImpl implements IOrderService {
 			orderMapper.saveEvaluationLabels(list);
 		}
 
+		// ADUAN -- 用户评价，计算主播评分排名，发送MQ消息
+		userCenterSendMqMessageService.sendEvaluationOrderScoreRank(request.getOrderId());
+
         return ResultUtils.resultSuccess();
     }
 
