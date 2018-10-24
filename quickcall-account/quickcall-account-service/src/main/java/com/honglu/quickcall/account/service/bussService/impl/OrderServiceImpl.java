@@ -55,6 +55,7 @@ import com.honglu.quickcall.common.api.exchange.CommonResponse;
 import com.honglu.quickcall.common.api.exchange.ResultUtils;
 import com.honglu.quickcall.common.api.util.DateUtils;
 import com.honglu.quickcall.common.core.util.UUIDUtils;
+import com.honglu.quickcall.common.third.rongyun.util.RongYunUtil;
 import com.honglu.quickcall.user.facade.business.UserCenterSendMqMessageService;
 
 /**
@@ -181,50 +182,6 @@ public class OrderServiceImpl implements IOrderService {
 	}
 	
 	
-	public static void main(String[] args) {
-		long  remainStr = 3500 ;
-		long hour =  remainStr / 3600 ;
-		long minutes =  (remainStr - hour * 3600 ) / 60 ;
-		long seconds =  remainStr % 60;
-		String  hourStr = null ;
-		if(hour == 0){
-			hourStr  = "";
-		}else if(hour > 0){
-			hourStr = hour +":";
-		}
-		String  minuteStr = null ;
-		if(minutes == 0){
-			minuteStr  = "00";
-		}else if(minutes > 0){
-			if(minutes > 9){
-				minuteStr = "" +minutes ;
-			}else{
-				minuteStr = "0" +minutes ;
-			}
-		}
-		
-		
-		String  secondsStr = null ;
-		if(seconds == 0){
-			secondsStr  = "00";
-		}else if(seconds > 0){
-			if(seconds > 9){
-				secondsStr = "" +seconds ;
-			}else{
-				secondsStr = "0" +seconds ;
-			}
-		}
-		
-		
-		
-		
-		
-		String  downLoadStr =hourStr +minuteStr + ":"+secondsStr;  
-		System.out.println("============"+downLoadStr);
-	}
-	
-	
-	
 	@Override
 	public CommonResponse saveOrder(OrderSaveRequest request) {
 		if (request == null || request.getCustomerId() == null || request.getCustomerSkillId() == null) {
@@ -327,6 +284,9 @@ public class OrderServiceImpl implements IOrderService {
 			resultMap.put("orderId", orderId+"");
 			// ADUAN 下单支付成功后 -- 发送弹幕消息
 			barrageMessageService.lpushMessage(orderId);
+			
+			//下单成功后推送IM消息
+			RongYunUtil.sendOrderMessage(serviceId, OrderSkillConstants.IM_MSG_CONTENT_RECEIVE_ORDER);
 			LOGGER.info("======>>>>>用户编号为：" + request.getCustomerId() + "下单成功");
 		} catch (Exception e) {
 			resultMap.put("retCode",  OrderSkillConstants.RET_CODE_SYSTEM_ERROR);
@@ -720,6 +680,7 @@ public class OrderServiceImpl implements IOrderService {
 		if(type != OrderSkillConstants.REQUEST_DV_FINISH_TYPE   && type != OrderSkillConstants.REQUEST_CUST_FINISH_TYPE){
 			throw new BizException(AccountBizReturnCode.paramError, "用户/大V完成服务参数异常");
 		}
+		
 		
 		//查询订单详情
 		Order  order = orderMapper.selectByPrimaryKey(orderId);
