@@ -84,6 +84,9 @@ public interface UserFunctionType {
 
 	// 保存大V技能审核信息
 	public static final String SAVE_DV_SKILL_AUDIT = "0011136";
+	
+	/** 判断是否关注对方 */
+	public static final String CHECK_EACH_ATTENTION = "0011137";
 
 	/**
 	 * 修改昵称

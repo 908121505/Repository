@@ -17,6 +17,7 @@ import com.honglu.quickcall.user.facade.code.UserFunctionType;
 import com.honglu.quickcall.user.facade.exchange.request.AddOrCancelFansRequest;
 import com.honglu.quickcall.user.facade.exchange.request.BindVXorQQRequest;
 import com.honglu.quickcall.user.facade.exchange.request.CheckAttentionRequest;
+import com.honglu.quickcall.user.facade.exchange.request.CheckEachAttentionRequest;
 import com.honglu.quickcall.user.facade.exchange.request.CustomerCenterRequest;
 import com.honglu.quickcall.user.facade.exchange.request.CustomerHomeRequest;
 import com.honglu.quickcall.user.facade.exchange.request.CustomerLevelRequest;
@@ -162,6 +163,9 @@ public class UserDubboBusinessImpl implements UserDubboBusiness {
 				break;
 			case UserFunctionType.CHECK_ATTENTION:// 判断是否关注对方
 				response = personInfoService.checkAttention((CheckAttentionRequest) request);
+				break;
+			case UserFunctionType.CHECK_EACH_ATTENTION:// 判断是否关注对方
+				response = personInfoService.checkEachAttention((CheckEachAttentionRequest) request);
 				break;
 			///////////////////////////////////////////////////////////////////////////
 			case UserFunctionType.SaveOccupation:// 保存职业
