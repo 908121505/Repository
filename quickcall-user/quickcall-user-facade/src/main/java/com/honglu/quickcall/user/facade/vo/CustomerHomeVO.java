@@ -86,6 +86,10 @@ public class CustomerHomeVO implements Serializable {
      * 用户技能列表
      **/
     private List<CustomerSkill> skillList;
+    /**
+     * 分享url
+     */
+    private String shareUrl;
 
     /**
      * 用户技能对象
@@ -400,6 +404,14 @@ public class CustomerHomeVO implements Serializable {
         this.skillList = skillList;
     }
 
+    public String getShareUrl() {
+        return shareUrl;
+    }
+
+    public void setShareUrl(String shareUrl) {
+        this.shareUrl = shareUrl;
+    }
+
     @Override
     public String toString() {
         return "CustomerHomeVO{" +
@@ -407,6 +419,7 @@ public class CustomerHomeVO implements Serializable {
                 ", viewCustomerId=" + viewCustomerId +
                 ", customerAppId='" + customerAppId + '\'' +
                 ", nickName='" + nickName + '\'' +
+                ", headPortraitUrl='" + headPortraitUrl + '\'' +
                 ", sex=" + sex +
                 ", age=" + age +
                 ", customerLevel=" + customerLevel +
@@ -420,6 +433,7 @@ public class CustomerHomeVO implements Serializable {
                 ", appearanceUrlList=" + appearanceUrlList +
                 ", interestList=" + interestList +
                 ", skillList=" + skillList +
+                ", shareUrl='" + shareUrl + '\'' +
                 '}';
     }
 }
