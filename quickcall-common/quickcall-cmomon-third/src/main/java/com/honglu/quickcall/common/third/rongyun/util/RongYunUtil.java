@@ -134,7 +134,8 @@ public class RongYunUtil {
 	 */
 	public static void sendSystemMessage(Long toCustomerId, String content) {
 		Long fromUserId = Long.parseLong(SYSTEM_COSTOMER_ID);
-		sendMessage("系统消息", fromUserId, toCustomerId, content, 1, null);
+		sendMessage("系统消息", fromUserId, toCustomerId, content, 1,
+				"http://wdgj.oss-cn-shanghai.aliyuncs.com/voice/user/headimg/25d8dfa082314cb693f78faaf51581d8.jpg");
 	}
 
 	/**
@@ -220,5 +221,10 @@ public class RongYunUtil {
 		 */
 
 		sendSystemMessage(1810161659557030302L, "我喜欢亚波");
+		/*
+		 * refreshUser("1810201521499459795", "系统消息",
+		 * "shanghai.aliyuncs.com/voice/user/headimg/25d8dfa082314cb693f78faaf51581d8.jpg"
+		 * );
+		 */
 	}
 }
