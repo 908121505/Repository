@@ -28,6 +28,7 @@
                 <div class="form-group">
                     <div class="input-group">
                         <select class="form-control" id="customTypeQuery">
+                            <option value="">--请选择--</option>
                             <option value="0">普通用户</option>
                             <option value="1">声优用户</option>
                         </select>
@@ -38,8 +39,9 @@
                 <div class="form-group">
                     <div class="input-group">
                         <select class="form-control" id="customerStatusQuery" onchange="customerStatusOnChange()">
-                            <option value="0">正常</option>
-                            <option value="1">封禁</option>
+                            <option value="">--请选择--</option>
+                            <option value="1">正常</option>
+                            <option value="2">封禁</option>
                         </select>
                     </div>
                 </div>
@@ -49,6 +51,7 @@
                 <div class="form-group">
                     <div class="input-group">
                         <select class="form-control" id="closureStatusQuery" disabled="disabled">
+                            <option value="">--请选择--</option>
                             <option value="4">已封禁-无法接单</option>
                             <option value="6">已封禁-无法接指定技能</option>
                             <option value="8">已封禁-账户登录权限</option>
@@ -199,7 +202,7 @@
                         "mRender": function (data, type, full) {
                             if(data == 1){
                                 return "<font color='red'>正常</font>";
-                            } else if(date == 4){
+                            } else if(data == 4){
                                 return "<font color='red'>已封禁-无法接单</font>";
                             } else if(data == 6){
                                 return "<font color='red'>已封禁-无法接指定技能</font>";
@@ -289,9 +292,9 @@
                     aoData.push({"name": "type", "value": $("#customTypeQuery").val()});
 
                     var status = $('#customerStatusQuery').val();
-                    if(status == 0){
+                    if(status == 1){
                         aoData.push({"name": "custStatus", "value": 1});
-                    }else{
+                    }else if(status == 2){
                         aoData.push({"name": "custStatus", "value": $("#closureStatusQuery").val()});
                     }
                 },
@@ -321,7 +324,7 @@
 
         function customerStatusOnChange(){
            var status = $('#customerStatusQuery').val();
-            if(status == 1){
+            if(status == 2){
                 $('#closureStatusQuery').removeAttr("disabled");
             }else{
                 $('#closureStatusQuery').attr("disabled","disabled");

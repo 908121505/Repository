@@ -25,6 +25,6 @@ public class TestDubboService {
 
     @Test
     public void testSend() {
-        accountOrderService.checkReceiveOrderByCustomerSkillId(11111L, 2222L);
+        accountOrderService.checkReceiveOrderByCustomerSkillId(2222L);
     }
 }
