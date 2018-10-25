@@ -38,9 +38,9 @@
     insert into message_customer (id, phone, receiver_id, 
       message_id, message_status, create_time, 
       modify_time, create_man, modify_man, 
-      remark)
+      remark) values
     <foreach collection="list" item="item" index="index" separator="," >
-    values (#{item.id}, #{item.phone}, #{item.receiverId}, #{item.messageId}, #{item.messageStatus}, #{item.createTime},
+     (#{item.id}, #{item.phone}, #{item.receiverId}, #{item.messageId}, #{item.messageStatus}, #{item.createTime},
       #{item.modifyTime}, #{item.createMan}, #{item.modifyMan}, #{item.remark})
     </foreach>
   </insert>

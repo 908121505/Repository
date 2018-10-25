@@ -154,7 +154,7 @@ public class InternalController implements BaseController<Message> {
     /**
      * 背景图片上传
      *
-     * @param id
+     * @param imgFolder
      * @param file
      * @param request
      * @return
