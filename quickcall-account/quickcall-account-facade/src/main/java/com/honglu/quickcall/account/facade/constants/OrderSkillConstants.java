@@ -43,6 +43,8 @@ public interface OrderSkillConstants {
 	public static final String  RET_CODE_BALANCE_NOT_ENOUTH = "2";
 	/**下单返回结果：3 大V正忙*/
 	public static final String  RET_CODE_DV_BUSY = "3";
+	/**下单返回结果：3 大V正忙*/
+	public static final String  RET_CODE_DV_NOT_ACCEPTE_ORDER = "5";
 	/**下单返回结果：4 系统错误*/
 	public static final String  RET_CODE_SYSTEM_ERROR = "4";
 	

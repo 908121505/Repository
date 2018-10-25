@@ -260,7 +260,7 @@ public class OrderServiceImpl implements IOrderService {
 			
 			if(customerSkill == null ){
 				//TODO  大V技能不存在，无法下单
-				resultMap.put("retCode",  OrderSkillConstants.RET_CODE_DV_BUSY);
+				resultMap.put("retCode",  OrderSkillConstants.RET_CODE_DV_NOT_ACCEPTE_ORDER);
 				commonResponse.setData(resultMap);
 				//返回大V正忙，以及结束时间
 				return   commonResponse ;
