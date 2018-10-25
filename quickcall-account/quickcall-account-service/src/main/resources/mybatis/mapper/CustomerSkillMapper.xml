@@ -50,7 +50,7 @@
     select 
     <include refid="Base_Column_List" />
     from customer_skill
-    where customer_skill_id = #{customerSkillId,jdbcType=BIGINT}
+    where customer_skill_id = #{customerSkillId,jdbcType=BIGINT}  AND switch_status = 1 AND receive_status =1 
        <if test="weekIndex == 1" >
         AND  monday = #{skillSwitch,jdbcType=TINYINT}
       </if>
@@ -75,6 +75,7 @@
       <if test="endTimeStr != null" >
         AND  end_time_str <![CDATA[  > ]]> #{endTimeStr,jdbcType=VARCHAR}
       </if>
+      
     
     
     
