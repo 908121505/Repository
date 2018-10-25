@@ -56,6 +56,11 @@ public class ScoreRankServiceImpl implements ScoreRankService {
             return;
         }
 
+        if (order.getValueScore() != null) {
+            LOGGER.warn("客户下单消费 -- 更新主播评分排名表 -- 该订单已计算过评分：" + order.getOrderStatus());
+            return;
+        }
+
         // 计算该订单对应的技能的评分
         BigDecimal score = calculateOrderSkillScore(order);
 
@@ -87,32 +92,33 @@ public class ScoreRankServiceImpl implements ScoreRankService {
      */
     private BigDecimal calculateOrderSkillScore(Order order) {
         // 判断是否计算过订单的价值
-        if (order.getValueScore() == null) {
-            // 查询该用户该技能的订单笔数
-            Integer orderTotal = bigvSkillScoreMapper.selectBigvSkillOrderTotal(order.getServiceId(), order.getSkillItemId());
-            orderTotal = orderTotal == null ? 0 : orderTotal;
+        // 查询该用户该技能的订单笔数
+        Integer orderTotal = bigvSkillScoreMapper.selectBigvSkillOrderTotal(order.getServiceId(), order.getSkillItemId());
+        orderTotal = orderTotal == null ? 0 : orderTotal;
 
-            // 计算技能总比价得分
-            BigDecimal orderTotalScore = new BigDecimal((Objects.equals(orderTotal, 1) ? 0 : (2 / Math.log10(orderTotal)) + 6)
-                    * 10 * ScoreRankConstants.PLATFORM_ORDER_NUM_TOTAL_WEIGHT);
+        // 计算技能总比价得分
+        BigDecimal orderTotalScore = new BigDecimal((Objects.equals(orderTotal, 1) ? 0 : (2 / Math.log10(orderTotal)) + 6)
+                * 10 * ScoreRankConstants.PLATFORM_ORDER_NUM_TOTAL_WEIGHT);
 
-            // 计算技能笔单价得分
-            BigDecimal servicePriceScore = order.getServicePrice().multiply(new BigDecimal(ScoreRankConstants.PLATFORM_SINGLE_ORDER_PRICE_WEIGHT));
+        // 计算技能笔单价得分
+        BigDecimal servicePriceScore = order.getServicePrice().multiply(new BigDecimal(ScoreRankConstants.PLATFORM_SINGLE_ORDER_PRICE_WEIGHT));
 
-            // 计算评价得分
-            BigDecimal evaluateNum = new BigDecimal(ScoreRankConstants.DEFAULT_EVALUATION_LEVEL
-                    * ScoreRankConstants.EVALUATION_LEVEL_WEIGHT_MAP.get(ScoreRankConstants.DEFAULT_EVALUATION_LEVEL) * ScoreRankConstants.PLATFORM_ORDER_EVALUATION_WEIGHT);
+        // 计算默认评价得分 -- 默认评价3分
+        BigDecimal evaluateNum = new BigDecimal(ScoreRankConstants.DEFAULT_EVALUATION_LEVEL
+                * ScoreRankConstants.EVALUATION_LEVEL_WEIGHT_MAP.get(ScoreRankConstants.DEFAULT_EVALUATION_LEVEL) * ScoreRankConstants.PLATFORM_ORDER_EVALUATION_WEIGHT);
 
-            // 计算总得分
-            BigDecimal valueScore = orderTotalScore.add(servicePriceScore).multiply(evaluateNum);
+        // 计算总得分
+        BigDecimal valueScore = orderTotalScore.add(servicePriceScore).multiply(evaluateNum);
 
-            // 更新订单价值得分
+        // 更新订单价值得分
+        bigvSkillScoreMapper.updateValueScoreToOrder(order.getOrderId(), valueScore);
+        order.setValueScore(valueScore);
+
+        // 存入技能排名表
+        if (bigvSkillScoreMapper.updateBigvSkillScore(order.getServiceId(), order.getSkillItemId(), order.getValueScore()) == 0) {
+            // 更新失败则插入
 
         }
-
-
-        // ADUAN -- 计算规则待完成
-
 
         return new BigDecimal(100);
     }
