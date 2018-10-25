@@ -277,7 +277,7 @@ public class OrderServiceImpl implements IOrderService {
 			record.setServiceUnit(customerSkill.getServiceUnit());
 			record.setServicePrice(customerSkill.getSkillPrice());
 			record.setDiscountRate(customerSkill.getDiscountRate());
-			
+			record.setSkillItemId(skillItemId);
 			Long  orderId =  UUIDUtils.getId();
 			record.setOrderNo(orderId);
 			record.setCustomerSkillId(customerSkillId);
@@ -731,7 +731,16 @@ public class OrderServiceImpl implements IOrderService {
 				//设置大V接单时间
 				commonService.dvReciveOrderUpdateOrder(orderId, newOrderStatus,new Date());
 				//大V接受订单通知消息
+				//大V同意需要将接收到的其他订单取消
 				
+				List<Order>  orderList = commonService.selectOrderReceiveOrder(order.getServiceId(), orderId, OrderSkillConstants.ORDER_STATUS_WAITING_RECEIVE, OrderSkillConstants.SKILL_TYPE_YES);
+				if(!CollectionUtils.isEmpty(orderList)){
+					List<Long>  orderIdList =  new ArrayList<Long>();
+					for (Order od : orderList) {
+						orderIdList.add(od.getOrderId());
+					}
+					commonService.updateOrderReceiveOrder(orderIdList, OrderSkillConstants.ORDER_STATUS_CANCEL_DAV_START_ONE_ORDER);
+				}
 				
 				//大V接受订单通知用户
 				RongYunUtil.sendOrderMessage(customerId, OrderSkillConstants.IM_MSG_CONTENT_DAV_REFUSE);
