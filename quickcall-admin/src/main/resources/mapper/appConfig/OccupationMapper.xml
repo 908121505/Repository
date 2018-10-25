@@ -162,7 +162,7 @@
   </select>
   <select id="selectCount" resultType="java.lang.Integer" >
     select
-    count(id)
+    count(1)
     from occupation
   </select>
   
