@@ -52,6 +52,9 @@ public class Order {
 
     
     private Date custCancelTime;
+    
+    
+    private Date appointTime;
 
     
     private Date systemCancelTime;
@@ -173,7 +176,17 @@ public class Order {
     }
 
     
-    public Long getOrderNo() {
+    public Date getAppointTime() {
+		return appointTime;
+	}
+
+
+	public void setAppointTime(Date appointTime) {
+		this.appointTime = appointTime;
+	}
+
+
+	public Long getOrderNo() {
         return orderNo;
     }
 

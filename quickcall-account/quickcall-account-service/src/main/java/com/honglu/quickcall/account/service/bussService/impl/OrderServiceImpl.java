@@ -106,55 +106,55 @@ public class OrderServiceImpl implements IOrderService {
 	
 	
 //	@Override
-	public CommonResponse queryDaVSkillExt(OrderDaVSkillRequest request) {
-		if (request == null || request.getCustomerId() == null) {
-			throw new BizException(AccountBizReturnCode.paramError, "查询技能信息参数异常");
-		}
-		LOGGER.info("======>>>>>queryDaVSkill()入参："+request.toString());
-		OrderDaVSkillVO  skill =  new OrderDaVSkillVO();
-		skill.setHeadPortraitUrl("http://test-guanjia.oss-cn-shanghai.aliyuncs.com/voice/user/headimg/c2bb9b11facd4ef98126d3a0ab495cd4.jpg");
-		skill.setNickName("测试");
-		skill.setServiceId(1000L);
-		List<OrderSkillItemVO> custSkillList = new  ArrayList<>();
-	
-		for (int i = 0; i < 3; i++) {
-			OrderSkillItemVO  vo =  new OrderSkillItemVO();
-			vo.setPrice(new BigDecimal(10 *(i +1)));
-			vo.setDiscontPrice(new BigDecimal(10 *(i +1)));
-			vo.setUserSkillItemId(1000L);
-			String  serviceUnit  = null ;
-			String  skillIcon = null ;
-			Integer  skillType = 1 ; 
-			String  skillItemName  = "哄睡" ;
-			if(i == 0){
-				skillType = 1 ; 
-				skillIcon  = "http://test-guanjia.oss-cn-shanghai.aliyuncs.com/voice/skill/1540189000614.png" ;
-				skillItemName  = "哄睡" ;
-				serviceUnit = "半小时";
-			}else if (i == 1){
-				skillType = 2 ;
-				skillIcon  = "http://test-guanjia.oss-cn-shanghai.aliyuncs.com/voice/skill/1540189035478.png" ;
-				skillItemName  = "情感咨询" ;
-				serviceUnit = "小时";
-			}else{
-				skillType = 1 ;
-				skillIcon  = "http://test-guanjia.oss-cn-shanghai.aliyuncs.com/voice/skill/1540189035478.png" ;
-				skillItemName  = "叫醒" ;
-				serviceUnit = "次";
-				
-			}
-			vo.setSkillType(skillType);
-			vo.setSkillIcon(skillIcon);
-			vo.setServiceUnit(serviceUnit);
-			vo.setSkillItemName(skillItemName);
-			custSkillList.add(vo);
-		}
-		skill.setCustSkillList(custSkillList );
-		CommonResponse commonResponse = commonService.getCommonResponse();
-		commonResponse.setData(skill);
-		LOGGER.info("======>>>>>用户编号为：" + request.getCustomerId() + "查询成功");
-		return commonResponse;
-	}
+//	public CommonResponse queryDaVSkillExt(OrderDaVSkillRequest request) {
+//		if (request == null || request.getCustomerId() == null) {
+//			throw new BizException(AccountBizReturnCode.paramError, "查询技能信息参数异常");
+//		}
+//		LOGGER.info("======>>>>>queryDaVSkill()入参："+request.toString());
+//		OrderDaVSkillVO  skill =  new OrderDaVSkillVO();
+//		skill.setHeadPortraitUrl("http://test-guanjia.oss-cn-shanghai.aliyuncs.com/voice/user/headimg/c2bb9b11facd4ef98126d3a0ab495cd4.jpg");
+//		skill.setNickName("测试");
+//		skill.setServiceId(1000L);
+//		List<OrderSkillItemVO> custSkillList = new  ArrayList<>();
+//	
+//		for (int i = 0; i < 3; i++) {
+//			OrderSkillItemVO  vo =  new OrderSkillItemVO();
+//			vo.setPrice(new BigDecimal(10 *(i +1)));
+//			vo.setDiscontPrice(new BigDecimal(10 *(i +1)));
+//			vo.setUserSkillItemId(1000L);
+//			String  serviceUnit  = null ;
+//			String  skillIcon = null ;
+//			Integer  skillType = 1 ; 
+//			String  skillItemName  = "哄睡" ;
+//			if(i == 0){
+//				skillType = 1 ; 
+//				skillIcon  = "http://test-guanjia.oss-cn-shanghai.aliyuncs.com/voice/skill/1540189000614.png" ;
+//				skillItemName  = "哄睡" ;
+//				serviceUnit = "半小时";
+//			}else if (i == 1){
+//				skillType = 2 ;
+//				skillIcon  = "http://test-guanjia.oss-cn-shanghai.aliyuncs.com/voice/skill/1540189035478.png" ;
+//				skillItemName  = "情感咨询" ;
+//				serviceUnit = "小时";
+//			}else{
+//				skillType = 1 ;
+//				skillIcon  = "http://test-guanjia.oss-cn-shanghai.aliyuncs.com/voice/skill/1540189035478.png" ;
+//				skillItemName  = "叫醒" ;
+//				serviceUnit = "次";
+//				
+//			}
+//			vo.setSkillType(skillType);
+//			vo.setSkillIcon(skillIcon);
+//			vo.setServiceUnit(serviceUnit);
+//			vo.setSkillItemName(skillItemName);
+//			custSkillList.add(vo);
+//		}
+//		skill.setCustSkillList(custSkillList );
+//		CommonResponse commonResponse = commonService.getCommonResponse();
+//		commonResponse.setData(skill);
+//		LOGGER.info("======>>>>>用户编号为：" + request.getCustomerId() + "查询成功");
+//		return commonResponse;
+//	}
 	
 	@Override
 	public CommonResponse queryDaVSkill(OrderDaVSkillRequest request) {
@@ -292,9 +292,22 @@ public class OrderServiceImpl implements IOrderService {
 			
 			Long  skillItemId = customerSkill.getSkillItemId();
 			SkillItem  skillItem = skillItemMapper.selectByPrimaryKey(skillItemId);
-			if(skillItem != null){
-				record.setSkillType(skillItem.getSkillType());
+			Integer  skillType = skillItem.getSkillType();
+			record.setSkillType(skillType);
+//			if(skillItem != null){
+//			}
+			if(OrderSkillConstants.SKILL_TYPE_NO == skillType){
+				Date  appointTime = DateUtils.formatDate(request.getAppointTimeStr());
+				Calendar  cal =  Calendar.getInstance();
+				cal.setTime(appointTime);
+				cal.add(Calendar.MINUTE, 5);
+				Date  expectEndTime =  cal.getTime();
+				record.setAppointTime(appointTime);
+				record.setExpectEndTime(expectEndTime);
 			}
+			
+			
+			
 			record.setServiceUnit(customerSkill.getServiceUnit());
 			record.setServicePrice(customerSkill.getSkillPrice());
 			record.setDiscountRate(customerSkill.getDiscountRate());
@@ -444,7 +457,7 @@ public class OrderServiceImpl implements IOrderService {
 				throw new BizException(AccountBizReturnCode.ORDER_STATUS_ERROR, "订单状态异常");
 			}
 			BigDecimal   payAmount =  order.getOrderAmounts();
-			commonService.cancelUpdateOrder(orderId, orderStatus,new Date());
+			commonService.cancelUpdateOrder(orderId, orderStatus,new Date(),request.getSelectReason(),request.getRemarkReason());
 			//金额不为空，说明需要退款给用户
 			if(payAmount != null){
 				Long  customerId =  order.getCustomerId();
@@ -698,8 +711,15 @@ public class OrderServiceImpl implements IOrderService {
 				throw new BizException(AccountBizReturnCode.ORDER_STATUS_ERROR, "订单状态异常");
 			}
 			
-			//用户同意，修改状态
-			newOrderStatus = OrderSkillConstants.ORDER_STATUS_GOING_USER_ACCEPCT;
+			Integer  skillType =  order.getSkillType();
+			if(OrderSkillConstants.SKILL_TYPE_YES == skillType){
+				
+				//用户同意，修改状态
+				newOrderStatus = OrderSkillConstants.ORDER_STATUS_GOING_USER_ACCEPCT;
+			}else{
+				//用户同意，修改状态:叫醒类型服务专享
+				newOrderStatus = OrderSkillConstants.ORDER_STATUS_GOING_WAITING_START;
+			}
 			
 			
 			Date  currTime =  new Date();
