@@ -390,9 +390,9 @@
     LEFT JOIN customer_skill_certify t2 ON t2.certify_id = t.certify_id
     LEFT JOIN skill_item t3 ON t3.id = t.skill_item_id
     LEFT JOIN customer t4 ON t4.customer_id = t.customer_id
-    WHERE t.customer_id = #{customerId}
+    WHERE 1=1
       <if test="skillItemId != null" >
-        skill_item_id = #{skillItemId},
+        AND t.skill_item_id = #{skillItemId}
       </if>
     AND t.skill_status = 1
     ORDER BY t.create_time ASC
