@@ -14,11 +14,11 @@
 		</div>
 		<div class="modal-body" style="max-height: 700px; overflow-y: auto;"  id = "editBody">
 			<form class="form-horizontal" method="post" id="skillPriceLevelForm" name="skillPriceLevelForm" role="form"
-				action="feedBack/saveUpdate.htm?id=${entity.id}">
+				action="customerDelate/saveUpdate.htm?id=${entity.id}">
 				<div class="form-group">
-					<label class="col-sm-3 control-label">反馈内容<font color="red">&nbsp;*</font></label>
+					<label class="col-sm-3 control-label">举报内容<font color="red">&nbsp;*</font></label>
 					<div class="col-sm-6">
-						<textarea id="feedBackContent" name="feedBackContent" rows="6" cols="20"class="form-control" disabled='disabled'>${entity.feedBackContent}</textarea>
+						<textarea id="delateContent" name="delateContent" rows="6" cols="20"class="form-control" disabled='disabled'>${entity.delateContent}</textarea>
 					</div>
 				</div>
 				<div class="form-group">

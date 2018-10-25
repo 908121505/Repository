@@ -17,12 +17,12 @@ import com.calf.cn.entity.DataTables;
 import com.calf.cn.service.BaseManager;
 import com.calf.cn.utils.SearchUtil;
 import com.calf.module.common.impl.CommonUtilService;
-import com.calf.module.customerservice.entity.FeedBack;
-import com.calf.module.customerservice.vo.FeedBackVO;
+import com.calf.module.customerservice.entity.CustomerDelate;
+import com.calf.module.customerservice.vo.CustomerDelateVO;
 
 @Controller
-@RequestMapping("/feedBack")
-public class FeedBackController implements BaseController<FeedBackVO> {
+@RequestMapping("/customerDelate")
+public class CustomerDelateController implements BaseController<CustomerDelateVO> {
 	@Autowired
     private BaseManager baseManager;
 	
@@ -31,18 +31,18 @@ public class FeedBackController implements BaseController<FeedBackVO> {
 	
     
 
-    private static final String JSP_PATH = "customer_service/feedBack/%s";
+    private static final String JSP_PATH = "customer_service/customerDelate/%s";
 
 
 	@Override
 	public String home() {
-		return String.format(JSP_PATH, "feedBackList");
+		return String.format(JSP_PATH, "customerDelateList");
 	}
 
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public DataTables<FeedBackVO> initTable(HttpServletRequest request) {
+	public DataTables<CustomerDelateVO> initTable(HttpServletRequest request) {
 		Map<String, Object> parameters = SearchUtil.convertorEntitysToMap(request.getParameterMap());
         String sTime = (String) parameters.get("startTime");
         if (StringUtils.isNotBlank(sTime)) {
@@ -55,31 +55,31 @@ public class FeedBackController implements BaseController<FeedBackVO> {
             parameters.put("endTime", eTime);
         }
         String sEcho = (String) parameters.get("sEcho");
-        List<FeedBackVO> banners = baseManager.query("FeedBack.queryFeedBackList", parameters);
-        int total = baseManager.get("FeedBack.queryCount", parameters);
+        List<CustomerDelateVO> banners = baseManager.query("CustomerDelate.queryCustomerDelateList", parameters);
+        int total = baseManager.get("CustomerDelate.queryCount", parameters);
         return new DataTables<>(sEcho, banners, banners.size(), total);
 	}
 	
 	
 	@Override
-	public int saveUpdate(FeedBackVO entity) {
+	public int saveUpdate(CustomerDelateVO entity) {
 		entity.setModifyMan(commonUtilService.getCurrUser());
 		entity.setHandleUser(commonUtilService.getCurrUser());
-		return baseManager.update("FeedBack.updateEntity",entity);
+		return baseManager.update("CustomerDelate.updateEntity",entity);
 	}
 
 	@Override
 	public String addAndUpdateHome(Model model, String id) {
 		Map<String,Object> map = new HashMap<>();
 		map.put("id", id);
-		FeedBackVO fbvo = baseManager.get("FeedBack.queryFeedBackById", map);
-		model.addAttribute("entity", fbvo);
-		return String.format(JSP_PATH, "feedBackEdit");
+		CustomerDelateVO cdvo = baseManager.get("CustomerDelate.queryCustomerDelateById", map);
+		model.addAttribute("entity", cdvo);
+		return String.format(JSP_PATH, "customerDelateEdit");
 	}
 
 
 	@Override
-	public int saveAdd(FeedBackVO entity) {
+	public int saveAdd(CustomerDelateVO entity) {
 		
 		return 0;
 	}
@@ -96,6 +96,6 @@ public class FeedBackController implements BaseController<FeedBackVO> {
 	public int delete(String id) {
 		Map<String,Object> map = new HashMap<>();
 		map.put("id", id);
-		return baseManager.delete("FeedBack.deleteEntity", map);
+		return baseManager.delete("CustomerDelate.deleteEntity", map);
 	}
 }
