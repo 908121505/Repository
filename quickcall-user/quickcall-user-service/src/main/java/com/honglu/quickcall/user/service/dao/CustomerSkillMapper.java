@@ -19,6 +19,17 @@ public interface CustomerSkillMapper {
 
     int updateByPrimaryKey(CustomerSkill record);
 
+
+    /**
+     * 查询审核通过的技能
+     *
+     * @param skillItemId
+     * @param pageIndex
+     * @param pageSize
+     * @return
+     */
+    List<CustomerSkill> selectAuditedSkillByPage(@Param("skillItemId") Long skillItemId, @Param("pageIndex") Integer pageIndex, @Param("pageSize") Integer pageSize);
+
     /**
      * 查询用户审核通过的技能
      * @param customerId

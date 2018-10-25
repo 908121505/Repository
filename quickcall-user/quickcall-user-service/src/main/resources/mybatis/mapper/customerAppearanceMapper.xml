@@ -108,7 +108,7 @@ id,	customer_id,	audit_appearance,	appearance,	type,	audit_status,	sort,	status,
 		AND status = 1
 		AND appearance IS NOT NULL
 		AND appearance != ''
-		ORDER BY create_time DESC
+		ORDER BY create_time ASC
 	</select>
 	<!-- 查询（根据用户id和类型查询） -->
 	<select id="selectByCustomerIdAndType" resultMap="customerAppearanceMap">

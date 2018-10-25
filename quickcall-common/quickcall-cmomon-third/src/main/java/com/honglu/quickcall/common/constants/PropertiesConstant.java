@@ -17,4 +17,7 @@ public class PropertiesConstant {
     public final static String QINIUPATHS = ResourceBundle.getBundle("thirdconfig").getString("domain");
     public final static String QINIUIMG = ResourceBundle.getBundle("thirdconfig").getString("QiniuImg");
     public final static String QINIUSEXY = ResourceBundle.getBundle("thirdconfig").getString("QiniuSexy");
+
+    /** 默认大V形象照 **/
+    public final static String DEFAULT_CUSTOMER_APPEARANCE_URL = ResourceBundle.getBundle("thirdconfig").getString("DEFAULT_CUSTOMER_APPEARANCE_URL");
 }

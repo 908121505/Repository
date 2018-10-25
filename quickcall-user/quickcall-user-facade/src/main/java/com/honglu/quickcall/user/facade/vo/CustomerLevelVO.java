@@ -11,7 +11,7 @@ import java.math.BigDecimal;
  */
 public class CustomerLevelVO implements Serializable {
 
-    private static final long serialVersionUID = 6809866060508287636L;
+    private static final long serialVersionUID = -5688398953637286224L;
     /**
      * 客户ID
      */
@@ -28,6 +28,10 @@ public class CustomerLevelVO implements Serializable {
      * 用户头像
      */
     private String headPortraitUrl;
+    /**
+     * 大V审核状态
+     */
+    private Integer vStatus;
     /**
      * 用户等级
      */
@@ -121,6 +125,14 @@ public class CustomerLevelVO implements Serializable {
         this.nextLevelExperience = nextLevelExperience;
     }
 
+    public Integer getvStatus() {
+        return vStatus;
+    }
+
+    public void setvStatus(Integer vStatus) {
+        this.vStatus = vStatus;
+    }
+
     @Override
     public String toString() {
         return "CustomerLevelVO{" +
@@ -128,6 +140,7 @@ public class CustomerLevelVO implements Serializable {
                 ", customerAppId='" + customerAppId + '\'' +
                 ", nickName='" + nickName + '\'' +
                 ", headPortraitUrl='" + headPortraitUrl + '\'' +
+                ", vStatus=" + vStatus +
                 ", customerLevel=" + customerLevel +
                 ", customerExperience=" + customerExperience +
                 ", needExperienceNum=" + needExperienceNum +
