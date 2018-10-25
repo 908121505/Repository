@@ -46,6 +46,39 @@
     from customer_skill
     where customer_skill_id = #{customerSkillId,jdbcType=BIGINT}
   </select>
+  <select id="selectByPrimaryKeyExt" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from customer_skill
+    where customer_skill_id = #{customerSkillId,jdbcType=BIGINT}
+       <if test="weekIndex == 1" >
+        monday = #{monday,jdbcType=TINYINT},
+      </if>
+      <if test="weekIndex == 2" >
+        tuesday = #{tuesday,jdbcType=TINYINT},
+      </if>
+      <if test="wednesday == 3" >
+        wednesday = #{wednesday,jdbcType=TINYINT},
+      </if>
+      <if test="weekIndex == 4" >
+        thursday = #{thursday,jdbcType=TINYINT},
+      </if>
+      <if test="weekIndex == 5" >
+        friday = #{friday,jdbcType=TINYINT},
+      </if>
+      <if test="weekIndex == 6" >
+        saturday = #{saturday,jdbcType=TINYINT},
+      </if>
+      <if test="weekIndex == 7" >
+        sunday = #{sunday,jdbcType=TINYINT},
+      </if>
+      <if test="endTimeStr != null" >
+        end_time_str <![CDATA[  > ]]> #{endTimeStr,jdbcType=VARCHAR},
+      </if>
+    
+    
+    
+  </select>
 
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
     delete from customer_skill

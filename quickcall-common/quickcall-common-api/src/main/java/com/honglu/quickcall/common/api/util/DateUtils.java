@@ -74,6 +74,17 @@ public class DateUtils {
      * @param date
      * @return
      */
+    public static String formatDateHHSS(Date date) {
+    	dateFormat = new SimpleDateFormat("HH:mm");
+    	return dateFormat.format(date);
+    }
+    
+    /**
+     * 格式化Date日期
+     *
+     * @param date
+     * @return
+     */
     public static String formatDateReachDate(Date date) {
         dateFormat = new SimpleDateFormat(format);
         return dateFormat.format(date);
