@@ -647,4 +647,11 @@
   customer
   where customer_id = #{customerId}
   </select>
+  <select id="queryCustomerByCustomerId" resultType="com.honglu.quickcall.user.facade.entity.Customer">
+   SELECT
+    *
+  FROM
+  customer
+  where customer_id = #{customerId}
+  </select>
 </mapper>

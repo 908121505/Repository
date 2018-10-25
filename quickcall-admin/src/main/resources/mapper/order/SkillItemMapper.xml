@@ -308,4 +308,10 @@
     where skill_status=1
     order by create_time desc
   </select>
+  <!-- 查询所有消息技能数据 -->
+  <select id="selectAll" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from skill_item
+  </select>
 </mapper>

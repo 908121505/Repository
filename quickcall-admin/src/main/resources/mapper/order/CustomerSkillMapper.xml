@@ -365,4 +365,20 @@
       remark = #{remark,jdbcType=VARCHAR}
     where customer_skill_id = #{customerSkillId,jdbcType=BIGINT}
   </update>
+
+  <update id="updateReceiveStatus" parameterType="map" >
+    update customer_skill
+    <set >
+      <if test="receiveStatus != null" >
+        receive_status = #{receiveStatus,jdbcType=TINYINT},
+      </if>
+    </set>
+    where customer_id = #{customerId,jdbcType=BIGINT}
+  </update>
+
+  <select id="queryCustomerSkill" resultMap="BaseResultMap" parameterType="map" >
+  	select * from customer_skill
+  	where customer_id = #{customerId}
+  </select>
+
 </mapper>
