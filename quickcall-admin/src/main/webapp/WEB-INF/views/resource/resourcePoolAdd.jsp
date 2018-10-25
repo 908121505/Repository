@@ -32,17 +32,15 @@
 				<div class="form-group"  >
 					<label class="col-sm-4 control-label">录入<font color="red">&nbsp;*</font></label>
 					<div class="col-sm-8">
-						<input type="hidden" id="soundTotal" class="form-control" name="soundTotal" value="${entity.soundTotal}" />
+						<%--<input type="hidden" id="soundTotal" class="form-control" name="soundTotal" value="${entity.soundTotal}" />--%>
 						<textarea id="soundTotalUIDStr" rows="10" cols="48" name="soundTotalUIDStr" placeholder="录入主播的UID，换行录入多个">${entity.soundTotalUIDStr}</textarea>
 					</div>
 				</div>
 				
 			</form>
 		</div>
-		<div class="modal-footer" style="text-align:center;">
+		<div class="modal-footer">
 			<span id="tip" style="color: red; font-size: 16px; margin-left: 20px;float:left;"></span>
-		</div>
-		<div class="modal-footer" style="text-align:center;">
 			<button class="btn btn-default" data-dismiss="modal" aria-hidden="true" >取消</button>
 			<button class="btn btn-primary" data-dismiss="modal" >确认</button>
 		</div>
@@ -50,13 +48,7 @@
 </div>
 
 <script type="text/javascript">
-    $(function() {
-       /* var soundTotal =  $("#soundTotal").val();
-        if(soundTotal == null  || soundTotal.trim() == ''){
-            $("#soundTotalUIDStr").html(soundTotal);
-        }*/
 
-	});
 	function check_fun() {
 		var name =  $("#resourceName").val();
 		if(name == null  || name.trim() == ''){
@@ -76,7 +68,7 @@
         var keycode = (event.keyCode ? event.keyCode : event.which);
         var areaRows = $("#soundTotalUIDStr").val().split("\n").length; //获取行数
         if(keycode != '' && areaRows<=1001){//小于一千行
-            $('#soundTotal').val(areaRows);//替换默认数量0
+            //$('#soundTotal').val(areaRows);//替换默认数量0
         } else{
             alert("最多可输入1000个");
             return false;
@@ -84,12 +76,12 @@
     });
 
     //鼠标离开事件
-    $('#soundTotalUIDStr').blur(function(){
+    /*$('#soundTotalUIDStr').blur(function(){
         var areaRows = $("#soundTotalUIDStr").val().split("\n").length;
         $('#soundTotal').val(areaRows);
         if($("#soundTotalUIDStr").val() == 0){//如果为空时
             $('#soundTotal').val(0);//恢复初始值
         }
-    });
+    });*/
 
 </script>

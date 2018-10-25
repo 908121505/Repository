@@ -1,17 +1,20 @@
 package com.calf.module.resource.entity;
 
 import java.util.Date;
+
 /**
- * 资源池表
+ * 资源池-Customer中间表
  */
-public class ResourcePool {
-    private String id;//ID
+public class ResourcePoolCustomer {
+    private Integer id;//ID
 
-    private String resourceName;//资源池名称
+    private String resourcePoolId;//资源池ID'
 
-    private Integer soundTotal;//声优总量
+    private String customerId;//客户号
 
-    private Integer status;//删除状态(0=删除，1=可用)
+    private String appId;//客户端 对外 显示的Id
+
+    private Integer status;//状态(0=不可用，1=可用)
 
     private String remark;//备注
 
@@ -23,29 +26,36 @@ public class ResourcePool {
 
     private String modifyMan;
 
-    
-    public String getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
-    public String getResourceName() {
-        return resourceName;
+    public String getResourcePoolId() {
+        return resourcePoolId;
     }
 
-    public void setResourceName(String resourceName) {
-        this.resourceName = resourceName;
+    public void setResourcePoolId(String resourcePoolId) {
+        this.resourcePoolId = resourcePoolId;
     }
 
-    public Integer getSoundTotal() {
-        return soundTotal;
+    public String getCustomerId() {
+        return customerId;
     }
 
-    public void setSoundTotal(Integer soundTotal) {
-        this.soundTotal = soundTotal;
+    public void setCustomerId(String customerId) {
+        this.customerId = customerId;
+    }
+
+    public String getAppId() {
+        return appId;
+    }
+
+    public void setAppId(String appId) {
+        this.appId = appId;
     }
 
     public Integer getStatus() {
