@@ -13,17 +13,21 @@ import java.util.Map;
 public class ScoreRankConstants {
 
     /**
-     * 订单数量累计总数权重
+     * 平台笔数权重
      **/
-    public static final Double ORDER_NUM_TOTAL_WEIGHT = Double.valueOf(1);
+    public static final Double PLATFORM_ORDER_NUM_TOTAL_WEIGHT = Double.valueOf(1);
     /**
-     * 单笔订单价格权重
+     * 平台笔单价权重
      **/
-    public static final Double SINGLE_ORDER_PRICE_WEIGHT = Double.valueOf(1);
+    public static final Double PLATFORM_SINGLE_ORDER_PRICE_WEIGHT = Double.valueOf(0.2);
     /**
-     * 订单评价权重
+     * 平台价值权重
      **/
-    public static final Double ORDER_EVALUATION_WEIGHT = Double.valueOf(1);
+    public static final Double PLATFORM_ORDER_EVALUATION_WEIGHT = Double.valueOf(0.8);
+    /**
+     * 默认订单评分
+     */
+    private static final Integer DEFAULT_EVALUATION_LEVEL = 3;
     /**
      * 评分等级权重常量定义
      */
@@ -31,15 +35,15 @@ public class ScoreRankConstants {
     /**
      * 单笔订单件数权重常量定义
      */
-    public static Map<Integer, Double> SINGLE_ORDER_NUM_WEIGHT_MAP = new LinkedHashMap<>();
+    private static Map<Integer, Double> SINGLE_ORDER_NUM_WEIGHT_MAP = new LinkedHashMap<>();
 
     static {
         /********************************* 评分等级权重配置 *********************************/
-        EVALUATION_LEVEL_WEIGHT_MAP.put(1, 10);
-        EVALUATION_LEVEL_WEIGHT_MAP.put(2, 40);
-        EVALUATION_LEVEL_WEIGHT_MAP.put(3, 70);
-        EVALUATION_LEVEL_WEIGHT_MAP.put(4, 100);
-        EVALUATION_LEVEL_WEIGHT_MAP.put(5, 130);
+        EVALUATION_LEVEL_WEIGHT_MAP.put(1, 5);
+        EVALUATION_LEVEL_WEIGHT_MAP.put(2, 20);
+        EVALUATION_LEVEL_WEIGHT_MAP.put(3, 50);
+        EVALUATION_LEVEL_WEIGHT_MAP.put(4, 85);
+        EVALUATION_LEVEL_WEIGHT_MAP.put(5, 100);
 
         /********************************* 单笔订单件数权重配置 *********************************/
         SINGLE_ORDER_NUM_WEIGHT_MAP.put(1, Double.valueOf(1));

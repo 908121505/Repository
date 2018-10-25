@@ -3,8 +3,11 @@ package com.honglu.quickcall.user.service.service.impl;
 import com.honglu.quickcall.account.facade.constants.OrderSkillConstants;
 import com.honglu.quickcall.account.facade.entity.Order;
 import com.honglu.quickcall.common.api.util.JedisUtil;
+import com.honglu.quickcall.user.facade.entity.BigvSkillScore;
 import com.honglu.quickcall.user.facade.exchange.mqrequest.DoOrderCastMqRequest;
 import com.honglu.quickcall.user.facade.exchange.mqrequest.EvaluationOrderMqRequest;
+import com.honglu.quickcall.user.service.constants.ScoreRankConstants;
+import com.honglu.quickcall.user.service.dao.BigvSkillScoreMapper;
 import com.honglu.quickcall.user.service.dao.CustomerMapper;
 import com.honglu.quickcall.user.service.service.ScoreRankService;
 import org.apache.log4j.Logger;
@@ -30,8 +33,11 @@ public class ScoreRankServiceImpl implements ScoreRankService {
      */
     private static final String SCORE_RANK_DISTRIBUTED_KEY = "distributed_lock:SCORE_RANK_CUSTOMER_ID_";
 
+
     @Autowired
     private CustomerMapper customerMapper;
+    @Autowired
+    private BigvSkillScoreMapper bigvSkillScoreMapper;
 
     @Override
     public void doOrderCast(DoOrderCastMqRequest request) {
@@ -50,11 +56,8 @@ public class ScoreRankServiceImpl implements ScoreRankService {
             return;
         }
 
-        // 查询该用户该技能的订单笔数 -- ADUAN -- 待查询
-        int orderTotal = 1;
-
         // 计算该订单对应的技能的评分
-        BigDecimal score = calculateOrderSkillScore(orderTotal, order.getServicePrice());
+        BigDecimal score = calculateOrderSkillScore(order);
 
         // 更新评分到大V技能评分表和总评分排名表
         updateToBigvScore(order.getServiceId(), order.getSkillItemId(), score);
@@ -77,11 +80,37 @@ public class ScoreRankServiceImpl implements ScoreRankService {
     /**
      * 计算该笔订单的评价值
      *
-     * @param orderTotal
-     * @param servicePrice
+     * @param order
      * @return
+     * @计算公式：完成一笔价值评价=[（log(100,该技能累计订单数)+6)*10*平台笔数权重+笔单价*平台笔单价权重]*(评价*评价权重*平台价值权重)
+     * @总排名：个人总价值=所有单个技能累计价值之和
      */
-    private BigDecimal calculateOrderSkillScore(int orderTotal, BigDecimal servicePrice) {
+    private BigDecimal calculateOrderSkillScore(Order order) {
+        // 判断是否计算过订单的价值
+        if (order.getValueScore() == null) {
+            // 查询该用户该技能的订单笔数
+            Integer orderTotal = bigvSkillScoreMapper.selectBigvSkillOrderTotal(order.getServiceId(), order.getSkillItemId());
+            orderTotal = orderTotal == null ? 0 : orderTotal;
+
+            // 计算技能总比价得分
+            BigDecimal orderTotalScore = new BigDecimal((Objects.equals(orderTotal, 1) ? 0 : (2 / Math.log10(orderTotal)) + 6)
+                    * 10 * ScoreRankConstants.PLATFORM_ORDER_NUM_TOTAL_WEIGHT);
+
+            // 计算技能笔单价得分
+            BigDecimal servicePriceScore = order.getServicePrice().multiply(new BigDecimal(ScoreRankConstants.PLATFORM_SINGLE_ORDER_PRICE_WEIGHT));
+
+            // 计算评价得分
+            BigDecimal evaluateNum = new BigDecimal(order.getEvaluateStart()
+                    * ScoreRankConstants.EVALUATION_LEVEL_WEIGHT_MAP.get(order.getEvaluateStart()) * ScoreRankConstants.PLATFORM_ORDER_EVALUATION_WEIGHT);
+
+            // 计算总得分
+            BigDecimal valueScore = orderTotalScore.add(servicePriceScore).multiply(evaluateNum);
+
+            // 更新订单价值得分
+
+        }
+
+
         // ADUAN -- 计算规则待完成
 
 
