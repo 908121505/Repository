@@ -459,6 +459,19 @@
 				cs.customer_skill_id = #{customerSkillId}
   </select>
   
+    <!-- 获取全部技能分类 -->
+  <select id="selectPartSkill" resultType="com.honglu.quickcall.account.facade.vo.FirstPageSkillIteminfoVO" >
+
+		SELECT
+			id  as  skillItemId,
+			skill_item_name as  skillItemName,
+			unlock_icon   as  imageUrl
+		FROM
+			skill_item   
+		ORDER BY
+			sort DESC ,create_time  DESC
+  </select>
+  
   
 
 </mapper>
