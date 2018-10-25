@@ -23,9 +23,9 @@ public class BarrageMessageTest {
 		HashMap<String, Object> paramMap = new HashMap<>();
 		paramMap.put("orderId", "66c6e6cb5f064ff2bef5d651faec9be1");
 
-		String params = "orderId=403be86602cb4ad0b5043623a03ea5c9";
-		String res = HttpClientUtils
-				.doPostForm("http://testfinance.51huihuahua.com/financevoice/voice/aliPayOrderQuery", params);
+		String params = "orderId=c6a5360b4fcd45e39d09d1ca9433a1d3&type=2";
+		String res = HttpClientUtils.doPostForm("http://testfinance.51huihuahua.com/financevoice/voice/payOrderQuery",
+				params);
 		if (res != null) {
 			Map maps = JSON.parseObject(res);
 			if (maps.get("code").equals("200")) {

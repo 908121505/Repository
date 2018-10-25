@@ -23,7 +23,7 @@
   select
   <include refid="Base_Column_List"/>
   from recharge 
-  where create_date>=CURRENT_TIMESTAMP - INTERVAL 30 MINUTE and state=1
+  where create_date>=CURRENT_TIMESTAMP - INTERVAL 30 MINUTE and state=1 and recharge_type<3
   </select>
 <update id="updateByOrderNo" parameterType="com.honglu.quickcall.task.entity.Recharge" >
     update recharge
