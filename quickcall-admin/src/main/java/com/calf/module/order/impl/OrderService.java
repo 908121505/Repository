@@ -1,25 +1,26 @@
 package com.calf.module.order.impl;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-
-import com.calf.module.order.entity.Order;
+import com.calf.cn.entity.DataTables;
+import com.calf.cn.service.BaseManager;
+import com.calf.cn.utils.DateUtil;
+import com.calf.cn.utils.RadomUtil;
+import com.calf.cn.utils.SearchUtil;
+import com.calf.module.common.impl.CommonUtilService;
+import com.calf.module.customer.entity.Customer;
+import com.calf.module.enums.OrderStatusEnums;
+import com.calf.module.order.entity.*;
+import com.calf.module.order.vo.OrderStatusVO;
+import com.calf.module.order.vo.OrderVO;
+import com.honglu.quickcall.common.core.util.UUIDUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
-import com.calf.cn.entity.DataTables;
-import com.calf.cn.service.BaseManager;
-import com.calf.cn.utils.SearchUtil;
-import com.calf.module.common.impl.CommonUtilService;
-import com.calf.module.order.entity.Skill;
-import com.calf.module.order.vo.OrderVO;
-import com.honglu.quickcall.common.core.util.UUIDUtils;
+import javax.servlet.http.HttpServletRequest;
+import java.math.BigDecimal;
+import java.util.*;
 
 @Service("orderService")
 public class OrderService {
@@ -27,7 +28,8 @@ public class OrderService {
 	@Autowired
 	private BaseManager  baseManager;
 	@Autowired
-	private CommonUtilService  commonUtilService ;
+	private CommonUtilService  commonUtilService;
+
 
 	@SuppressWarnings("unchecked")
 	public DataTables<OrderVO> getOrderPageList(HttpServletRequest request) {
@@ -47,10 +49,83 @@ public class OrderService {
 		return new DataTables<OrderVO>(sEcho, skillList, skillList.size(), total);
 	}
 
+	/**
+	 * 分页查询订单
+	 * @param request
+	 * @return
+	 */
+	public DataTables<OrderVO> queryOrderPageList(HttpServletRequest request) {
+		HashMap<String,Object> parameters = (HashMap<String, Object>) SearchUtil.convertorEntitysToMap(request.getParameterMap());
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+		paramMap.put("orderId",parameters.get("orderId"));
+		paramMap.put("placeOrderId",parameters.get("placeOrderId"));
+		paramMap.put("receivedOrderId",parameters.get("receivedOrderId"));
+		paramMap.put("startTime",parameters.get("startTime"));
+		paramMap.put("endTime",parameters.get("endTime"));
+		paramMap.put("placeOrderUserNickName",parameters.get("placeOrderUserNickName"));
+		paramMap.put("receiveOrderUserNickName",parameters.get("receiveOrderUserNickName"));
+
+		String orderStatus = (String)parameters.get("orderStatus");
+		String serviceType = (String)parameters.get("serviceType");
+		String discountType = (String)parameters.get("discountTypeVal");
+		if (serviceType !=null && (!serviceType.equals("-1"))){
+			paramMap.put("serviceType",parameters.get("serviceType"));
+		}
+		if (orderStatus !=null && (!orderStatus.equals("-1"))){
+			paramMap.put("orderStatus",parameters.get("orderStatus"));
+		}
+		if (discountType !=null && (!discountType.equals("-1"))){
+			String[] discountTypes = discountType.split("-");
+			paramMap.put("discountTypeMin",discountTypes[0]);
+			paramMap.put("discountTypeMax",discountTypes[1]);
+		}
+		paramMap.put("iDisplayStart", parameters.get("iDisplayStart"));
+		paramMap.put("iDisplayLength", parameters.get("iDisplayLength"));
+		List<OrderVO> skillList = baseManager.query("Order.queryPageList", paramMap);
+		for(OrderVO vo:skillList){
+			if (StringUtils.isNotBlank(vo.getDiscountType())) {
+				double dis = Double.parseDouble(vo.getDiscountType());
+				dis = dis * 10;
+				vo.setDiscountType(dis + "%");
+			}
+		}
+		String sEcho = (String) parameters.get("sEcho");
+		int total = baseManager.get("Order.selectCount", paramMap);
+		return new DataTables<OrderVO>(sEcho, skillList, skillList.size(), total);
+	}
+
+	public List<OrderStatusVO> getOrderStatusList(){
+		//获取订单状态
+		List<OrderStatusVO> statusVOS = new ArrayList<>();
+		for (OrderStatusEnums orderStatusEnums : OrderStatusEnums.values()) {
+			OrderStatusVO vo = new OrderStatusVO();
+			vo.setValue(orderStatusEnums.getValue());
+			vo.setDesc(orderStatusEnums.getDesc());
+			vo.setSubset(orderStatusEnums.getSubset());
+			statusVOS.add(vo);
+		}
+		return statusVOS;
+	}
+
+	public List<SkillItem> getSkillItemsList(){
+		//获取服务类型
+		List<SkillItem> skillItems = baseManager.query("SkillItem.selectAll",null);
+		return skillItems;
+	}
+
 	public void getOrderDetail(Model model, String id) {
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		paramMap.put("orderId", id);
 		Order order = baseManager.get("Order.selectByPrimaryKey",  paramMap);
+		model.addAttribute("entity", order);
+	}
+
+	public void queryOrderDetail(Model model, String id) {
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+		paramMap.put("orderId", id);
+		OrderVO order = baseManager.get("Order.queryOrderDetail",  paramMap);
+        OrderStatusEnums stauts = OrderStatusEnums.getOrderStautsEnums(order.getOrderStatus());
+        order.setOrderStatusVal(stauts==null?order.getOrderStatus():stauts.getDesc());
 		model.addAttribute("entity", order);
 	}
 
@@ -66,6 +141,60 @@ public class OrderService {
 		baseManager.insert(skill);
 		return 0;
 	}
+
+    /**
+     * 添加订单
+     * @param entity
+     * @return
+     */
+    public int addOrder(OrderVO entity) {
+        Map<String, Object> paramMap = new HashMap<String, Object>();
+        paramMap.put("customerId", entity.getPlaceOrderId());
+		Customer customer = baseManager.get("Customer.selectByPrimaryKey",paramMap);
+		Map<String, Object> paramMap1 = new HashMap<String, Object>();
+		paramMap1.put("customerId", entity.getReceivedOrderId());
+		CustomerSkill skill = baseManager.get("CustomerSkill.queryCustomerSkill",paramMap1);
+        if (customer == null){
+            //不存在下单用户
+            return 0;
+        }
+        if (skill==null){
+            //接单用户不存在技能
+            return 0;
+        }
+        Orders order = new Orders();
+        String orderId = DateUtil.dateFormat(new Date(), "yyyyMMddHHmmss")+ RadomUtil.generateNumber2(4);
+        order.setOrderId(Long.parseLong(orderId));
+        order.setOrderNo(Long.parseLong(entity.getOrderId()));
+        order.setCustomerSkillId(skill.getCustomerSkillId());
+        order.setCustomerId(Long.parseLong(entity.getPlaceOrderId()));
+        order.setOrderAmounts(new BigDecimal(entity.getOrderAmount()));
+        byte status = (byte) Integer.parseInt(entity.getOrderStatus());
+        order.setOrderStatus(status);
+        order.setServiceId(skill.getCustomerId());
+        order.setOrderNum(Integer.parseInt(entity.getOrderNum()));
+        order.setDiscountRate(new BigDecimal(entity.getDiscountType()));
+        order.setDiscountRate(new BigDecimal(entity.getServiceType()));
+        order.setStartTime(DateUtil.StrToDate(entity.getStartTime(),"yyyy-MM-dd HH:mm:dd"));
+        order.setEndTime(DateUtil.StrToDate(entity.getEndTime(),"yyyy-MM-dd HH:mm:dd"));
+        order.setCreateTime(new Date());
+        int insert = baseManager.insert(order);
+        return insert;
+    }
+
+    /**
+     * 修改订单
+     * @param entity
+     * @return
+     */
+    public int updateOrder(OrderVO entity) {
+        Map<String, Object> paramMap = new HashMap<String, Object>();
+        paramMap.put("orderId", entity.getOrderId());
+		paramMap.put("orderStatus", entity.getOrderStatus());
+		paramMap.put("remarkReason", entity.getRemarkReason());
+		int update = baseManager.update("Order.updateOrder",  paramMap);
+        return update;
+    }
 
 	public int saveUpdate(OrderVO entity) {
 		Skill  skill =  new Skill();

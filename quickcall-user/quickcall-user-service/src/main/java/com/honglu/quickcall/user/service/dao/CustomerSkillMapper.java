@@ -44,4 +44,11 @@ public interface CustomerSkillMapper {
      * @return
      */
     List<String> selectCustomerSkillHotLabel(@Param("customerId") Long customerId, @Param("skillItemId") Long skillItemId);
+
+    /**
+     * 根据客户ID查客户信息
+     * @param customerId
+     * @return
+     */
+    CustomerSkill queryCustomerSkillByCustomerId(@Param("customerId") Long customerId);
 }

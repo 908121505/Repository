@@ -241,7 +241,7 @@
     <update id="unlockCustomers" parameterType="map">
         update customer set cust_status = 1,block_end_time=null ,block_start_time=null where customer_id = #{id}
     </update>
-    
+
     <update id="lockCustomers" parameterType="map">
         update customer set cust_status = #{custStatus},block_end_time = #{blockEndTime},block_start_time = #{blockStartTime}
           where customer_id = #{id}
@@ -251,7 +251,7 @@
     <update id="lockForever" parameterType="map">
         update customer set cust_status = -1,block_start_time = #{blockStartTime} block_start_time=null where customer_id = #{id}
     </update>
-    
+
     <update id="lockSkill" parameterType="map">
         update customer_skill set skill_status = 2 where customer_id =#{id} and skill_name = #{skillName}
     </update>
@@ -259,5 +259,98 @@
     <select id="selectCustomerIdByPhone" resultType="java.lang.String" parameterType="java.lang.String">
         select customer_id from customer where phone = #{phone} limit 1
     </select>
+
+
+
+    <select id="queryPageList" resultType="com.calf.module.order.vo.ReceiveOrderVO" parameterType="map" >
+        select
+        cust.customer_id AS customerId,
+        cust.nick_name AS nickName,
+        skill.skill_name AS serviceType,
+        skill.receive_status AS receiveStatus,
+        skill.end_time_str AS endTime,
+        skill.service_unit AS serviceUnit,
+        ext.skill_ext_discont AS discountType,
+        skill.create_time AS createTime,
+        skill.modify_time AS modifyTime,
+        ext.skill_ext_range AS skillRange
+        from
+        customer cust
+        LEFT JOIN customer_skill skill ON cust.customer_id = skill.customer_id
+        LEFT JOIN skill_item_ext ext ON skill.skill_item_ext_id = ext.id
+        where 1= 1
+        <if test="userId != null" >
+            AND  cust.customer_id = #{userId}
+        </if>
+        <if test="userNickName != null" >
+            AND  cust.nick_name = #{userNickName}
+        </if>
+        <if test="createTime != null" >
+            AND  skill.create_time &gt;= #{createTime}
+        </if>
+        <if test="modifyTime != null" >
+            AND  skill.modify_time &gt;= #{modifyTime}
+        </if>
+        <if test="serviceType != null" >
+            AND  skill.skill_item_id = #{serviceType}
+        </if>
+        <if test="discountTypeMin != null" >
+            AND ext.skill_ext_discont &gt;= #{discountTypeMin}
+        </if>
+        <if test="discountTypeMax != null" >
+            AND ext.skill_ext_discont &lt; #{discountTypeMax}
+        </if>
+        LIMIT ${iDisplayStart},${iDisplayLength}
+    </select>
+
+    <select id="selectCount" resultType="java.lang.Integer" parameterType="map" >
+        select
+        count(*)
+        from
+        customer cust
+        LEFT JOIN customer_skill skill ON cust.customer_id = skill.customer_id
+        LEFT JOIN skill_item_ext ext ON skill.skill_item_ext_id = ext.id
+        where 1= 1
+        <if test="userId != null" >
+            AND  cust.customer_id = #{userId}
+        </if>
+        <if test="userNickName != null" >
+            AND  cust.nick_name = #{userNickName}
+        </if>
+        <if test="createTime != null" >
+            AND  cust.create_time &gt;= #{createTime}
+        </if>
+        <if test="modifyTime != null" >
+            AND  cust.modify_time &gt;= #{modifyTime}
+        </if>
+        <if test="serviceType != null" >
+            AND  skill.skill_item_id = #{serviceType}
+        </if>
+        <if test="discountTypeMin != null" >
+            AND ext.skill_ext_discont &gt;= #{discountTypeMin}
+        </if>
+        <if test="discountTypeMax != null" >
+            AND ext.skill_ext_discont &lt; #{discountTypeMax}
+        </if>
+    </select>
+
+    <select id="queryOrderDetail" resultType="com.calf.module.order.vo.ReceiveOrderVO" parameterType="map" >
+    select
+    cust.customer_id AS customerId,
+    cust.nick_name AS nickName,
+    skill.skill_name AS serviceType,
+    skill.receive_status AS receiveStatus,
+    skill.end_time_str AS endTime,
+    skill.service_unit AS serviceUnit,
+    skill.discount_rate AS discountRate,
+    skill.create_time AS createTime,
+    skill.modify_time AS modifyTime,
+	ext.skill_ext_range AS skillRange
+    from
+     customer cust
+    LEFT JOIN customer_skill skill ON cust.customer_id = skill.customer_id
+	LEFT JOIN skill_item_ext ext ON skill.skill_item_ext_id = ext.id
+    where cust.customer_id = #{customerId,jdbcType=BIGINT}
+  </select>
 
 </mapper>

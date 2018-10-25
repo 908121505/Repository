@@ -53,8 +53,10 @@
      select 
     <include refid="Base_Column_List" />
     from customer_skill
-    where customer_skill_id = #{customerSkillId,jdbcType=BIGINT}
+    where  customer_skill_id = #{customerSkillId,jdbcType=BIGINT}
   </select>
+
+
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
     delete from customer_skill
     where customer_skill_id = #{customerSkillId,jdbcType=BIGINT}
@@ -428,5 +430,12 @@
       GROUP BY e.label_id
       ORDER BY count(e.label_id) desc , e.evaluation_time desc
       LIMIT 0,3
+  </select>
+
+  <select id="queryCustomerSkillByCustomerId" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select
+    <include refid="Base_Column_List" />
+    from customer_skill
+    where customer_id = #{customerId,jdbcType=BIGINT}
   </select>
 </mapper>
