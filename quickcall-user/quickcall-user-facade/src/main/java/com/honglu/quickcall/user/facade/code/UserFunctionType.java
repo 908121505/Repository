@@ -27,6 +27,8 @@ public interface UserFunctionType {
 	String NoReadAttentionCount = "001009";
 	// 退出登录
 	String loginOut = "001010";
+	// 添加系统用户
+	String AddSystemUser = "001011";
 	// 系统相关 001300 - 001350
 	String MarketOnOff = "001300";
 	String AppConfig = "001301";
@@ -84,7 +86,7 @@ public interface UserFunctionType {
 
 	// 保存大V技能审核信息
 	public static final String SAVE_DV_SKILL_AUDIT = "0011136";
-	
+
 	/** 判断是否关注对方 */
 	public static final String CHECK_EACH_ATTENTION = "0011137";
 

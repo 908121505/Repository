@@ -30,6 +30,7 @@ import com.honglu.quickcall.user.facade.code.UserBizReturnCode;
 import com.honglu.quickcall.user.facade.constants.UserBizConstants;
 import com.honglu.quickcall.user.facade.entity.Customer;
 import com.honglu.quickcall.user.facade.enums.CustomerCusStateEnum;
+import com.honglu.quickcall.user.facade.exchange.request.AddSystemUserRequest;
 import com.honglu.quickcall.user.facade.exchange.request.BindVXorQQRequest;
 import com.honglu.quickcall.user.facade.exchange.request.GetSmsCodeRequest;
 import com.honglu.quickcall.user.facade.exchange.request.IsPhoneExistsRequest;
@@ -576,6 +577,20 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 		cus.setCustState(CustomerCusStateEnum.OFF_LINE.getType());
 		int row = customerMapper.updateByPrimaryKeySelective(cus);
 		return ResultUtils.resultSuccess();
+	}
+
+	@Override
+	public CommonResponse addSystemUser(AddSystemUserRequest request) {
+		String rongyunToken = RongYunUtil.getToken(String.valueOf(request.getCustomerId()), request.getNickName(),
+				request.getPhoto());
+		Customer customer = new Customer();
+		customer.setCustomerId(request.getCustomerId());
+		customer.setHeadPortraitUrl(request.getPhoto());
+		customer.setNickName(request.getNickName());
+		customer.setTokenCode(rongyunToken);
+		int row = customerMapper.insertSelective(customer);
+		return ResultUtils.resultSuccess();
+
 	}
 
 }

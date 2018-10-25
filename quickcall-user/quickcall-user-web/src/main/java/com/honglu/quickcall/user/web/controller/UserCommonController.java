@@ -22,6 +22,7 @@ import com.honglu.quickcall.common.api.util.RedisKeyConstants;
 import com.honglu.quickcall.common.core.util.UUIDUtils;
 import com.honglu.quickcall.common.third.OSS.OSSUtil;
 import com.honglu.quickcall.user.facade.code.UserBizReturnCode;
+import com.honglu.quickcall.user.facade.exchange.request.AddSystemUserRequest;
 import com.honglu.quickcall.user.facade.exchange.request.BindVXorQQRequest;
 import com.honglu.quickcall.user.facade.exchange.request.CustomerCenterRequest;
 import com.honglu.quickcall.user.facade.exchange.request.CustomerHomeRequest;
@@ -377,6 +378,29 @@ public class UserCommonController {
 		}
 		response = userCenterService.execute(params);
 		logger.info("userWeb.user.bindVXorQQ.response.data : " + JSONObject.toJSONString(response));
+		return response;
+
+	}
+
+	/**
+	 * 绑定微信或者QQ
+	 * 
+	 * @param params
+	 * @return
+	 */
+	@RequestMapping(value = "/addSystemUser", method = RequestMethod.POST)
+	@ResponseBody
+	public WebResponseModel addSystemUser(AddSystemUserRequest params) {
+
+		logger.info("userWeb.user.addSystemUser.request.data : " + JSONObject.toJSONString(params));
+		WebResponseModel response = new WebResponseModel();
+		if (params.getCustomerId() == null) {
+			response.setCode(UserBizReturnCode.paramError.code());
+			response.setMsg(UserBizReturnCode.paramError.desc());
+			return response;
+		}
+		response = userCenterService.execute(params);
+		logger.info("userWeb.user.addSystemUser.response.data : " + JSONObject.toJSONString(response));
 		return response;
 
 	}
