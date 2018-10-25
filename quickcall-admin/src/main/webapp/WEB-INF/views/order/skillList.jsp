@@ -185,6 +185,11 @@
                         }
                     },
                     {
+                        "data": "homeBlackColor",
+                        "sTitle": "首页背景颜色",
+                        'sClass': "text-center"
+                    },
+                    {
                         "data": "fontColor",
                         "sTitle": "字体颜色",
                         'sClass': "text-center",
@@ -340,7 +345,7 @@
                     aoData.push({"name": "skillStatus", "value": $("#skillStatusQuery").val()});
                 },
                 aoColumnDefs: [{
-                    "aTargets": 15,
+                    "aTargets": 16,
                     "mRender": function (data, type, row) {
 
                         var detail = "", del = "", status;

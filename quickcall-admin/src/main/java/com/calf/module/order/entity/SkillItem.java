@@ -37,6 +37,16 @@ public class SkillItem {
 
 	private Integer skillType;
 
+	private String homeBlackColor;
+
+	public String getHomeBlackColor() {
+		return homeBlackColor;
+	}
+
+	public void setHomeBlackColor(String homeBlackColor) {
+		this.homeBlackColor = homeBlackColor;
+	}
+
 	public Integer getSkillType() {
 		return skillType;
 	}
