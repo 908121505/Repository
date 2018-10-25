@@ -667,7 +667,7 @@ public class OrderServiceImpl implements IOrderService {
 		    Integer  orderNum = order.getOrderNum();
 			if(OrderSkillConstants.SERVICE_UNIT_HALF_HOUR.equals(serviceUnit)){
 				addMinute = orderNum * 30 ;
-			}else if(OrderSkillConstants.SERVICE_UNIT_HALF_HOUR.equals(serviceUnit)){
+			}else if(OrderSkillConstants.SERVICE_UNIT_HOUR.equals(serviceUnit)){
 				addMinute = orderNum * 60 ;
 			}
 			

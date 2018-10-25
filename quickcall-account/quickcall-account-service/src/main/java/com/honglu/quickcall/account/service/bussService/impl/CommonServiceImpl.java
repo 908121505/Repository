@@ -159,7 +159,7 @@ public class CommonServiceImpl implements CommonService {
 		record.setOrderStatus(orderStatus);
 		record.setOrderId(orderId);
 		record.setModifyTime(new Date());
-		record.setStartTime(startServiceTime);
+		record.setStartServiceTime(startServiceTime);
 		//修改订单状态为：已支付
 		orderMapper.updateByPrimaryKeySelective(record);
 		

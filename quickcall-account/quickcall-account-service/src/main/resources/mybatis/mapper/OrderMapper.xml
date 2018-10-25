@@ -359,7 +359,7 @@
       <if test="endTime != null" >
         end_time = #{endTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="endTime != null" >
+      <if test="expectEndTime != null" >
         expect_end_time = #{expectEndTime,jdbcType=TIMESTAMP},
       </if>
       <if test="orderTime != null" >
