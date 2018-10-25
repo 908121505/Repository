@@ -957,6 +957,9 @@ public class OrderServiceImpl implements IOrderService {
 
 			List<EvaluationLabel> list = new ArrayList<>();
 			for(Integer labelId : request.getLabelIds()){
+				if(labelId == null){
+					continue;
+				}
 				EvaluationLabel label = new EvaluationLabel();
 				label.setEvaluationId(UUIDUtils.getId());
 				label.setCustomerId(orderDetailVO.getServiceId());
