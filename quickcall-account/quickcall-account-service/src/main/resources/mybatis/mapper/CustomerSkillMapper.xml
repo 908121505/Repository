@@ -52,28 +52,28 @@
     from customer_skill
     where customer_skill_id = #{customerSkillId,jdbcType=BIGINT}
        <if test="weekIndex == 1" >
-        monday = #{monday,jdbcType=TINYINT},
+        AND  monday = #{skillSwitch,jdbcType=TINYINT}
       </if>
       <if test="weekIndex == 2" >
-        tuesday = #{tuesday,jdbcType=TINYINT},
+        AND  tuesday = #{skillSwitch,jdbcType=TINYINT}
       </if>
-      <if test="wednesday == 3" >
-        wednesday = #{wednesday,jdbcType=TINYINT},
+      <if test="weekIndex == 3" >
+        AND  wednesday = #{skillSwitch,jdbcType=TINYINT}
       </if>
       <if test="weekIndex == 4" >
-        thursday = #{thursday,jdbcType=TINYINT},
+        AND  thursday = #{skillSwitch,jdbcType=TINYINT}
       </if>
       <if test="weekIndex == 5" >
-        friday = #{friday,jdbcType=TINYINT},
+       AND   friday = #{skillSwitch,jdbcType=TINYINT}
       </if>
       <if test="weekIndex == 6" >
-        saturday = #{saturday,jdbcType=TINYINT},
+       AND   saturday = #{skillSwitch,jdbcType=TINYINT}
       </if>
       <if test="weekIndex == 7" >
-        sunday = #{sunday,jdbcType=TINYINT},
+        AND  sunday = #{skillSwitch,jdbcType=TINYINT}
       </if>
       <if test="endTimeStr != null" >
-        end_time_str <![CDATA[  > ]]> #{endTimeStr,jdbcType=VARCHAR},
+        AND  end_time_str <![CDATA[  > ]]> #{endTimeStr,jdbcType=VARCHAR}
       </if>
     
     
