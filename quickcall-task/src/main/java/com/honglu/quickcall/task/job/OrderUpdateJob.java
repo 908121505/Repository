@@ -49,7 +49,7 @@ public class OrderUpdateJob {
     		cal.setTime(currTime);
     		cal.add(Calendar.MINUTE, RECEIVE_OVER_TIME_MINUTES);
     		Date  endTime =  cal.getTime();
-    		Integer skillType = OrderSkillConstants.SKILL_TYPE_NO; 
+    		Integer skillType = OrderSkillConstants.SKILL_TYPE_YES; 
     		//获取接单设置超时
     		Integer  queryStatus = OrderSkillConstants.ORDER_STATUS_WAITING_RECEIVE;
     		Integer  updateStatus = OrderSkillConstants.ORDER_STATUS_CANCEL_SYSTEM_NOT_RECEIVE;
@@ -89,7 +89,7 @@ public class OrderUpdateJob {
     		cal.setTime(currTime);
     		cal.add(Calendar.HOUR_OF_DAY, END_OVER_TIME_HOUR);
     		Date  endTime =  cal.getTime();
-    		Integer skillType = OrderSkillConstants.SKILL_TYPE_NO; 
+    		Integer skillType = OrderSkillConstants.SKILL_TYPE_YES; 
     		//获取接单设置超时
     		Integer  queryStatus = OrderSkillConstants.ORDER_STATUS_GOING_DAV_APPAY_FINISH;
     		Integer  updateStatus = OrderSkillConstants.ORDER_STATUS_FINISH_DV_FINISH;
