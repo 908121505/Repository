@@ -1,6 +1,33 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="SkillItem" >
+ <!-- private String id;
+
+  private String skillItemName;
+
+  private String skillDescribe;
+
+  private String imageUrl;
+
+  private Integer sort;
+
+  private Integer skillStatus;
+
+  private String remark;
+
+  private String lockIcon;
+
+  private String unlockIcon;
+
+  private String backColor;
+
+  private String fontColor;
+
+  private Integer skillType;
+
+  private List<BigDecimal> discounts;-->
+
+
   <resultMap id="BaseResultMap" type="com.calf.module.order.entity.SkillItem" >
     <id column="id" property="id" jdbcType="BIGINT" javaType="string" />
     <result column="skill_item_name" property="skillItemName" jdbcType="VARCHAR" />
@@ -24,6 +51,7 @@
     id, skill_item_name, skill_describe, lock_icon,unlock_icon,back_color,font_color,sort, skill_status,skill_type,create_time,
     modify_time, create_man, modify_man, remark
   </sql>
+
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
     <include refid="Base_Column_List" />

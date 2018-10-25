@@ -1,5 +1,8 @@
 package com.calf.module.order.vo;
 
+import java.math.BigDecimal;
+import java.util.List;
+
 public class SkillItemVo {
     private String id;
 
@@ -24,6 +27,8 @@ public class SkillItemVo {
     private String fontColor;
 
     private Integer skillType;
+
+
 
     public Integer getSkillType() {
         return skillType;

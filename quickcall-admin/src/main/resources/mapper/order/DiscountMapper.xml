@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="Discount" >
+    <resultMap id="BaseResultMap" type="com.calf.module.order.entity.Discount">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="skill_item_id" property="skillItemId" jdbcType="BIGINT"/>
+        <result column="skill_ext_status" property="skillExtStatus" jdbcType="TINYINT"/>
+        <result column="skill_ext_discont" property="discount" jdbcType="DECIMAL"/>
+        <association property="skillItemName" column="skill_item_id" select="selectSkillName"/>
+    </resultMap>
+    
+    <sql id="Base_Column_List">
+        id,skill_item_id,skill_ext_status,skill_ext_discont
+    </sql>
+    
+    
+    <select id="slelectAllSkillName" resultType="com.calf.module.order.entity.SkillItemVo">
+          select id,skill_item_name as name from skill_item
+    </select>
+    
+    <select id="selectSkillName" parameterType="long" resultType="string">
+          select skill_item_name from skill_item where id = #{param1}
+    </select>
+
+    <select id="selectPageList" resultMap="BaseResultMap" parameterType="map" >
+        select
+        <include refid="Base_Column_List" />
+        from skill_item_ext
+        where  1 = 1 and skill_ext_type = 2
+        <if test="skillExtStatus != null" >
+            and  skill_ext_status = #{skillExtStatus}
+        </if>
+        <if test="skillItemId != null" >
+            and  skill_item_id = #{skillItemId}
+        </if>
+        LIMIT ${iDisplayStart},${iDisplayLength}
+    </select>
+
+    <select id="slectCount" resultType="java.lang.Integer" parameterType="map" >
+        select
+        count(1)
+        from skill_item_ext
+        where  1 = 1 and skill_ext_type = 2
+        <if test="skillExtStatus != null" >
+            and  skill_ext_status = #{skillExtStatus}
+        </if>
+        <if test="skillItemId != null" >
+            and  skill_item_id = #{skillItemId}
+        </if>
+    </select>
+    
+    <select id="selectDiscountById" resultMap="BaseResultMap" parameterType="long">
+          select <include refid="Base_Column_List"/>
+            from skill_item_ext where id = #{id}
+    </select>
+
+    <update id="updateDiscount" parameterType="com.calf.module.order.entity.Discount">
+        update skill_item_ext set skill_ext_discont = #{discount},skill_ext_status = #{skillExtStatus},skill_item_id=#{skillItemId} where id = #{id}
+    </update>
+
+    <insert id="insertDiscount" parameterType="com.calf.module.order.entity.Discount">
+        insert into  skill_item_ext(id,skill_item_id,skill_ext_status,skill_ext_discont,skill_ext_type) values (#{id},#{skillItemId},#{skillExtStatus},#{discount},2)
+    </insert>
+    
+    
+</mapper>

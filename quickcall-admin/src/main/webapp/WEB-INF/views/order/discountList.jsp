@@ -5,7 +5,7 @@
         <h1 class="page-title">订单管理</h1>
         <ul class="breadcrumb">
             <li>订单管理</li>
-            <li class="active">技能配置</li>
+            <li class="active">折扣管理</li>
         </ul>
     </div>
     <div class="main-content">
@@ -13,19 +13,20 @@
             <div class="col-md-2">
                 <div class="form-group">
                     <div class="input-group">
-                        <div class="input-group-addon">技能名称</div>
-                        <input class="form-control" type="text" id="nameQuery">
+                        <select class="form-control" id="skillTypeQuery">
+                            <option value="">--请选择--</option>
+                        </select>
                     </div>
                 </div>
             </div>
+
             <div class="col-md-2">
                 <div class="form-group">
                     <div class="input-group">
-                        <div class="input-group-addon">状态</div>
                         <select class="form-control" id="skillStatusQuery">
                             <option value="">--请选择--</option>
-                            <option value="0">可用</option>
-                            <option value="1">不可用</option>
+                            <option value="0">关闭</option>
+                            <option value="1">开启</option>
                         </select>
                     </div>
                 </div>
@@ -59,7 +60,27 @@
         <table id="example" class="table"></table>
     </div>
     <script>
-        var skillStatus = 0;
+
+        $(function() {
+            $.ajax({
+                url: "/discount/getAllSkillName",    //后台webservice里的方法名称
+                type: "post",
+                dataType: "json",
+                contentType: "application/json",
+                traditional: true,
+                success: function (data) {
+                    for(i=0;i<data.length;i++){
+                        $('#skillTypeQuery').append("<option value="+data[i].id+">"+data[i].name+"</option>")
+                    }
+
+                },
+                error: function (msg) {
+                    alert("出错了！");
+                }
+            });
+
+        });
+
 
         function Format(now, mask) {
             var d = now;
@@ -131,78 +152,17 @@
         //表格的初始化
         $(document).ready(function () {
             var table = $('#example').initTable({
-                sAjaxSource: "skill/initTable.htm",
+                sAjaxSource: "discount/initTable.htm",
                 aoColumns: [
                     {
-                        "data": "id",
-                        "sTitle": "技能ID",
+                        "data": "skillItemId",
+                        "sTitle": "品类ID",
                         'sClass': "text-center"
                     },
-                    {
-                        "data": "skillItemName",
-                        "sTitle": "技能名称",
-                        'sClass': "text-center"
-                    },
-                    {
-                        "data": "lockIcon",
-                        "sTitle": "未解锁图片",
-                        'sClass': "text-center",
-                        "mRender": function (data, type, full) {
-                            if (data == '' || data == null) {
-                                return "--";
-                            } else {
-                                return "<img src='" + data + "' height='50px;'/>";
-                            }
-
-                        }
-                    },
-                    {
-                        "data": "unlockIcon",
-                        "sTitle": "解锁图片",
-                        'sClass': "text-center",
-                        "mRender": function (data, type, full) {
-                            if (data == '' || data == null) {
-                                return "--";
-                            } else {
-                                return "<img src='" + data + "' height='50px;'/>";
-                            }
-
-                        }
-                    },
-                    {
-                        "data": "backColor",
-                        "sTitle": "背景颜色",
-                        'sClass': "text-center",
-                        "mRender": function (data, type, full) {
-                            if (data == '' || data == null) {
-                                return "--";
-                            } else {
-                                return "<div style=\"background-color:" + data + ";\">\n" +
-                                    "                    <br>背影颜色\n" +
-                                    "                </div>\n"
-                            }
-
-                        }
-                    },
-                    {
-                        "data": "fontColor",
-                        "sTitle": "字体颜色",
-                        'sClass': "text-center",
-                        "mRender": function (data, type, full) {
-                            if (data == '' || data == null) {
-                                return "--";
-                            } else {
-                                return "<div style=\"background-color:" + data + ";\">\n" +
-                                    "                    <br>背影颜色\n" +
-                                    "                </div>\n"
-                            }
-
-                        }
-                    },
 
                     {
-                        "data": "skillDescribe",
-                        "sTitle": "描述",
+                        "data": "discount",
+                        "sTitle": "折扣",
                         'sClass': "text-center"
                     },
                     /*   {
@@ -233,102 +193,28 @@
                             "sTitle":"价格步长",
                             'sClass':"text-center",
                         },*/
+
                     {
-                        "data": "skillStatus",
+                        "data": "skillItemName",
+                        "sTitle": "品类型",
+                        'sClass': "text-center"
+                    },
+
+
+                    {
+                        "data": "skillExtStatus",
                         "sTitle": "状态",
                         'sClass': "text-center",
-                        "mRender": function (data, type, full) {
-                            /* if(data==''||data==null){
-                                return	"--";
-                            }else */
-                            if (data == 0) {
-                                skillStatus = 0;
-                                return "<font color='red'>可用</font>";
-                            } else if (data == 1) {
-                                skillStatus = 1;
-                                return "<font color='red'>不可用</font>";
+                        "mRender": function(data, type, full) {
+                            if(data== 0 || data==null){
+                                return	"关闭";
+                            }else{
+                                return "开启";
                             }
-                        }
-                    },
-                    {
-                        "data": "skillType",
-                        "sTitle": "技能类型",
-                        'sClass': "text-center",
-                        "mRender": function (data, type, full) {
-                            /* if(data==''||data==null){
-                                return	"--";
-                            }else */
-                            if (data == 1) {
-                                return "<font color='red'>不可重复接单类型</font>";
-                            } else if (data == 2) {
-                                return "<font color='red'>可重复接单类型</font>";
-                            }
+
                         }
                     },
 
-                    {
-                        "data": "sort",
-                        "sTitle": "排序",
-                        'sClass': "text-center"
-                    },
-
-
-                    {
-                        "data": "remark",
-                        "sTitle": "备注",
-                        'sClass': "text-center"
-                    },
-                    {
-                        "data": "createMan",
-                        "sTitle": "创建人",
-                        'sClass': "text-center",
-                        "mRender": function (data, type, full) {
-                            if (data == '' || data == null) {
-                                return "--";
-                            } else {
-                                return data;
-                            }
-                        }
-                    },
-                    {
-                        "data": "createTime",
-                        "sTitle": "创建时间",
-                        'sClass': "text-center",
-                        "mRender": function (
-                            data, type,
-                            full) {
-                            if (data != null) {
-                                return Format(
-                                    new Date(
-                                        data),
-                                    "yyyy-MM-dd HH:mm:ss")
-                            } else {
-                                return '--';
-                            }
-                        }
-                    },
-                    {
-                        "data": "modifyMan",
-                        "sTitle": "修改人",
-                        'sClass': "text-center"
-                    },
-                    {
-                        "data": "modifyTime",
-                        "sTitle": "修改时间",
-                        'sClass': "text-center",
-                        "mRender": function (
-                            data, type,
-                            full) {
-                            if (data != null) {
-                                return Format(
-                                    new Date(
-                                        data),
-                                    "yyyy-MM-dd HH:mm:ss")
-                            } else {
-                                return '--';
-                            }
-                        }
-                    },
                     {
                         "data": "id",
                         "sTitle": "操作",
@@ -336,22 +222,17 @@
                     }
                 ],
                 fnServerParams: function (aoData) {  //查询条件
-                    aoData.push({"name": "name", "value": $("#nameQuery").val().replace(new RegExp(" ", "g"), "")});
-                    aoData.push({"name": "skillStatus", "value": $("#skillStatusQuery").val()});
+                  //  aoData.push({"name": "name", "value": $("#nameQuery").val().replace(new RegExp(" ", "g"), "")});
+                    aoData.push({"name": "skillExtStatus", "value": $("#skillStatusQuery").val()});
+                    aoData.push({"name": "skillItemId", "value": $("#skillTypeQuery").val()});
                 },
                 aoColumnDefs: [{
-                    "aTargets": 15,
+                    "aTargets": 4,
                     "mRender": function (data, type, row) {
 
                         var detail = "", del = "", status;
                         detail = "<a href='#' onclick='addAndUpdateRow(\"" + row.id + "\")' data-toggle='modal' class='padding-right-small label label-success'><i class='glyphicon glyphicon-edit'></i>详情</a>";
-                        del = "<a href='#' onclick='deleteRow(\"" + row.id + "\")' data-toggle='modal' class='padding-right-small label label-success'><i class='glyphicon glyphicon-edit'></i>删除</a>";
-                        if (skillStatus == 0) {
-                            status = "<a href='#' onclick='updateDownStatus(\"" + row.id + "\")' data-toggle='modal' class='padding-right-small label label-success'><i class='glyphicon glyphicon-edit'></i>下线</a>";
-                        } else if (skillStatus == 1) {
-                            status = "<a href='#' onclick='updateUpStatus(\"" + row.id + "\")' data-toggle='modal' class='padding-right-small label label-success'><i class='glyphicon glyphicon-edit'></i>上线</a>";
-                        }
-                        return status+"&nbsp;"+detail + "&nbsp;" + del;
+                        return detail;
                     }
                 }]
 
@@ -365,7 +246,7 @@
 
         //增加或者修改受影响的行数
         function addAndUpdateRow(id) {
-            $('#insertAndUpdate').addAndUpdateRow("skill/addAndUpdateHome.htm?id=" + id);
+            $('#insertAndUpdate').addAndUpdateRow("discount/addAndUpdateHome.htm?id=" + id);
         }
 
         function deleteRow(id) {
