@@ -56,7 +56,7 @@ public class QueryHomeBigvListServiceImpl implements QueryHomeBigvListService {
         // 循环封装数据
         for (SkillItem skillItem : skillList) {
             // 查询数据
-            List<CustomerSkill> customerSkillList = customerSkillMapper.selectAuditedSkillByPage(skillItem.getId(), 0, skillList.size() * 4);
+            List<CustomerSkill> customerSkillList = customerSkillMapper.selectAuditedSkillByPage(skillItem.getId(), 0, 4);
             if (customerSkillList.size() == 0) {
                 continue;
             }
