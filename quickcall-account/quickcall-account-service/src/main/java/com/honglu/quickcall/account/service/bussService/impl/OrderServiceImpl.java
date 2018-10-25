@@ -194,6 +194,7 @@ public class OrderServiceImpl implements IOrderService {
 	}
 	
 	
+	
 	@Override
 	public CommonResponse saveOrder(OrderSaveRequest request) {
 		if (request == null || request.getCustomerId() == null || request.getCustomerSkillId() == null) {
@@ -249,8 +250,22 @@ public class OrderServiceImpl implements IOrderService {
 			
 			
 			Long  customerSkillId =  request.getCustomerSkillId();
+			
+			Integer   weekIndex = DateUtils.getDayOfWeek();
+			Integer   skillSwitch = 1 ;
+			String  endTimeStr = DateUtils.formatDateHHSS(new Date()).replaceAll(":", "") ;
+			
 			//根据技能ID 获取等级获取价格信息
-			CustomerSkill   customerSkill = customerSkillMapper.selectByPrimaryKey(customerSkillId);
+			CustomerSkill   customerSkill = customerSkillMapper.selectByPrimaryKeyExt(customerSkillId, weekIndex, skillSwitch, endTimeStr);
+			
+			if(customerSkill == null ){
+				//TODO  大V技能不存在，无法下单
+				resultMap.put("retCode",  OrderSkillConstants.RET_CODE_DV_BUSY);
+				commonResponse.setData(resultMap);
+				//返回大V正忙，以及结束时间
+				return   commonResponse ;
+			}
+			
 			Integer  orderNum =  request.getOrderNum();
 			BigDecimal  price =  customerSkill.getDiscountPrice();
 			BigDecimal orderAmounts = new BigDecimal(orderNum).multiply(price);
