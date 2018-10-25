@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
+import shaded.org.apache.commons.lang3.StringUtils;
 
 import java.util.*;
 
@@ -81,6 +82,8 @@ public class InternalServiceImpl implements InternalService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public int sendMessage(String messageId) {
+        LOGGER.info("消息编号：{}，发送开始", messageId);
+
         Message entity = baseManager.get("MessageMapper.selectByPrimaryKey", new Object[]{messageId});
         entity.setBespeakSendTime(new Date());
         int count = baseManager.update("MessageMapper.update",entity);
@@ -170,9 +173,14 @@ public class InternalServiceImpl implements InternalService {
         int size = phoneSet.size();
         List<MessageCustomer> messageCustomerList = new ArrayList<MessageCustomer>();
         int i = 0;
-        while (phoneSet.iterator().hasNext()){
+        while (i < size){
+            i++;
             String phone = phoneSet.iterator().next();
             String customerId = baseManager.get("Customer.selectCustomerIdByPhone", new Object[]{phone});
+            if(StringUtils.isEmpty(customerId)){
+                LOGGER.info("手机号对应的客户信息不存在，手机号:{}" + phone);
+                continue;
+            }
             MessageCustomer messageCustomer = new MessageCustomer();
             String id = UUIDUtils.getId().toString();
             messageCustomer.setId(id);
