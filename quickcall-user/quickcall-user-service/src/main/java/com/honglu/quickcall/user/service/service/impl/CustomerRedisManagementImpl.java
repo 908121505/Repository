@@ -1,5 +1,7 @@
 package com.honglu.quickcall.user.service.service.impl;
 
+import cn.jiguang.commom.utils.StringUtils;
+import net.sf.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,9 +26,15 @@ public class CustomerRedisManagementImpl implements CustomerRedisManagement {
 	public Customer getCustomer(Long customerId) {
 		Customer customer = null;
 		try {
-			customer = customerMapper.selectByPrimaryKey(customerId);
-			JedisUtil.set(RedisKeyConstants.USER_CUSTOMER_INFO + customerId,
-					customer == null ? "" : JSON.toJSONString(customer));
+			String customerJson = JedisUtil.get(RedisKeyConstants.USER_CUSTOMER_INFO + customerId);
+			if(StringUtils.isNotEmpty(customerJson)){
+				JSONObject jsonObject=JSONObject.fromObject(customerJson);
+				customer=(Customer)JSONObject.toBean(jsonObject, Customer.class);
+			}else {
+				customer = customerMapper.selectByPrimaryKey(customerId);
+				JedisUtil.set(RedisKeyConstants.USER_CUSTOMER_INFO + customerId, customer == null ? "" : JSON.toJSONString(customer));
+			}
+
 		} catch (Exception e) {
 			logger.error("获取用户失败");
 			e.printStackTrace();
@@ -49,5 +57,6 @@ public class CustomerRedisManagementImpl implements CustomerRedisManagement {
 		// }
 		return customer;
 	}
+
 
 }

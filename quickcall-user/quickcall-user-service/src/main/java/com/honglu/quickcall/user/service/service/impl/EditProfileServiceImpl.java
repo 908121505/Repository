@@ -119,11 +119,9 @@ public class EditProfileServiceImpl implements EditProfileService {
 		if (result > 0) {
 
 			// 刷新融云用户信息
-			CodeSuccessReslut reslut = RongYunUtil.refreshUser(String.valueOf(customer.getCustomerId()),
-					customer.getNickName(), customer.getHeadPortraitUrl());
+			CodeSuccessReslut reslut = RongYunUtil.refreshUser(String.valueOf(customer.getCustomerId()), customer.getNickName(), null);
 			if (reslut.getCode() != 200) {
-				logger.error("刷新融云用户信息失败，用户id为：" + String.valueOf(customer.getCustomerId()) + "失败原因为："
-						+ reslut.getErrorMessage());
+				logger.error("刷新融云用户信息失败，用户id为：" + String.valueOf(customer.getCustomerId()) + "失败原因为：" + reslut.getErrorMessage());
 			} else {
 				logger.info("刷新融云用户信息成功！");
 			}
@@ -282,6 +280,15 @@ public class EditProfileServiceImpl implements EditProfileService {
 		}
 
 		if (result > 0) {
+
+			// 刷新融云用户信息
+			CodeSuccessReslut reslut = RongYunUtil.refreshUser(String.valueOf(params.getCustomerId()), null, params.getHeadPortraitUrl());
+			if (reslut.getCode() != 200) {
+				logger.error("刷新融云用户信息失败，用户id为：" + String.valueOf(customerAppearance.getCustomerId()) + "失败原因为：" + reslut.getErrorMessage());
+			} else {
+				logger.info("刷新融云用户信息成功！");
+			}
+
 			commonResponse.setCode(UserBizReturnCode.Success);
 			commonResponse.setMessage(UserBizReturnCode.Success.desc());
 			return commonResponse;
@@ -488,7 +495,9 @@ public class EditProfileServiceImpl implements EditProfileService {
 			UserEditInfoVO userEditInfoVO = customerMapper.queryUserEditInfo(params.getCustomerId());
 
 			if (userEditInfoVO == null) {
-				throw new BizException(UserBizReturnCode.paramError, "参数错误，用户数据不存在");
+				commonResponse.setCode(UserBizReturnCode.paramError);
+				commonResponse.setMessage("参数错误，用户数据不存在");
+				return commonResponse;
 			}
 
 			if (userEditInfoVO.getBirthday() != null) {
