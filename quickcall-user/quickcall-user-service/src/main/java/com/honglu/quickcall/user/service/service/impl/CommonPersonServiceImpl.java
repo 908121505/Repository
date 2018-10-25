@@ -401,6 +401,7 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 			logger.info("将验证码存入redis中的key值为:{},失效时间为:{}", (RedisKeyConstants.USER_VERIFYCODE + phoneNum + codeType),
 					Integer.parseInt(smscodeexpire));
 		}
+		logger.info("手机号:" + phoneNum + "发送状态:" + smsStr);
 		return ResultUtils.resultSuccess(smsStr);
 
 		/*

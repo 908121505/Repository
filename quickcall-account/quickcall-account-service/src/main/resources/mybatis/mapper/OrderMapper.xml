@@ -5,7 +5,7 @@
    <id column="order_id" property="orderId" jdbcType="BIGINT" />
     <result column="order_no" property="orderNo" jdbcType="BIGINT" />
     <result column="customer_skill_id" property="customerSkillId" jdbcType="BIGINT" />
-    <result column="customer_skill_item_id" property="skillItemId" jdbcType="BIGINT" />
+    <result column="skill_item_id" property="skillItemId" jdbcType="BIGINT" />
     <result column="customer_id" property="customerId" jdbcType="BIGINT" />
     <result column="service_id" property="serviceId" jdbcType="BIGINT" />
     <result column="trade_id" property="tradeId" jdbcType="BIGINT" />
@@ -80,7 +80,7 @@
       evaluate_start, customer_evaluate, order_describe, 
       create_time, modify_time, create_man, 
       modify_man, remark,select_reason,remark_reason)
-    values (#{orderId,jdbcType=BIGINT}, #{orderNo,jdbcType=BIGINT}, #{customerSkillId,jdbcType=BIGINT}, 
+    values (#{orderId,jdbcType=BIGINT}, #{orderNo,jdbcType=BIGINT}, #{customerSkillId,jdbcType=BIGINT},  #{skillItemId,jdbcType=BIGINT}, 
       #{customerId,jdbcType=BIGINT}, #{serviceId,jdbcType=BIGINT}, #{tradeId,jdbcType=BIGINT}, 
       #{paymentType,jdbcType=TINYINT}, #{orderNum,jdbcType=INTEGER}, #{serviceUnit,jdbcType=VARCHAR}, 
       #{servicePrice,jdbcType=DECIMAL}, #{orderAmounts,jdbcType=DECIMAL}, #{discountRate,jdbcType=DECIMAL}, 
