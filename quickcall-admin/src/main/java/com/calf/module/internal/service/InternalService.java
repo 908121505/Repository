@@ -27,6 +27,6 @@ public interface InternalService {
      * 发送消息
      * @param messageId
      */
-    void sendMessage(String messageId);
+    int sendMessage(String messageId);
 
 }
