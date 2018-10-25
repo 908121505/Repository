@@ -712,8 +712,6 @@ public class OrderServiceImpl implements IOrderService {
 		if(type != OrderSkillConstants.REQUEST_DV_CONFIRM_TYPE_YES   && type != OrderSkillConstants.REQUEST_DV_CONFIRM_TYPE_NO){
 			throw new BizException(AccountBizReturnCode.paramError, "大V同意/拒绝订单参数异常");
 		}
-		//TODO  大V接单需要判断是否可重复接单问题 
-		//TODO  大V接单成功，需要将其他待接单置位已取消
 		//查询订单详情
 		Order  order = orderMapper.selectByPrimaryKey(orderId);
 		Integer   newOrderStatus =  null ;
