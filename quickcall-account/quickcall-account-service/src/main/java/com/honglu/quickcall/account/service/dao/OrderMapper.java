@@ -117,4 +117,31 @@ public interface OrderMapper {
 	 * @return
 	 */
 	Order queryOrderByCustomerIdAndServiceId(@Param("customerId")Long customerId, @Param("serviceId")Long serviceId, @Param("list")List<Integer> statusList);
+
+
+	/***
+	 * 取消其它订单
+	 * @param orderId
+	 * @param queryStatus
+	 * @param updateStatus
+	 * @param skillType
+	 */
+	void updateOrderReceiveOrder(@Param("list")List<Long>  orderIdList,@Param("orderStatus")Integer orderStatus);
+
+	
+
+	/**
+	 * 查询用户是否接多单
+	 * @param serviceId
+	 * @param orderId
+	 * @param orderStatus
+	 * @param skillType
+	 * @return
+	 */
+	List<Order> selectOrderReceiveOrder(@Param("serviceId")Long  serviceId ,@Param("orderId")Long orderId, @Param("orderStatus")Integer orderStatus, @Param("skillType")Integer skillType);
+	
+	
+	
+	
+	
 }

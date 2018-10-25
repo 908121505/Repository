@@ -2,6 +2,7 @@ package com.honglu.quickcall.account.service.bussService.impl;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -159,7 +160,36 @@ public class CommonServiceImpl implements CommonService {
 		record.setOrderStatus(orderStatus);
 		record.setOrderId(orderId);
 		record.setModifyTime(new Date());
-		record.setStartTime(startServiceTime);
+		record.setStartServiceTime(startServiceTime);
+		//修改订单状态为：已支付
+		orderMapper.updateByPrimaryKeySelective(record);
+		
+	}
+
+
+
+	@Override
+	public void updateOrderReceiveOrder(List<Long>  orderIdList,Integer  orderStatus) {
+		orderMapper.updateOrderReceiveOrder(orderIdList,orderStatus);
+		
+	}
+
+
+
+	@Override
+	public List<Order> selectOrderReceiveOrder(Long  serviceId ,Long orderId, Integer queryStatus, Integer skillType) {
+		return orderMapper.selectOrderReceiveOrder(serviceId, orderId, queryStatus, skillType);
+	}
+
+
+
+	@Override
+	public void cancelUpdateOrder(Long orderId, Integer orderStatus, Date cancelTime) {
+		Order record = new Order();
+		record.setOrderStatus(orderStatus);
+		record.setOrderId(orderId);
+		record.setModifyTime(new Date());
+		record.setCustCancelTime(cancelTime);
 		//修改订单状态为：已支付
 		orderMapper.updateByPrimaryKeySelective(record);
 		

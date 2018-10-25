@@ -56,7 +56,7 @@ public class SendSmsUtil {
 			paramMap.put("appNum", 10);// 4:惠花花，5:秒购 10：轻音
 			paramMap.put("signName", singName);
 			paramMap.put("phone", tel);
-			paramMap.put("templateType", templateType);// 1:即时 2:系统 3:市场
+			paramMap.put("templateType", 1);// 1:即时 2:系统 3:市场
 			paramMap.put("codeParams", paramMap1);
 			String json = JSON.toJSONString(paramMap, true);
 			String res = HttpClientUtils.doPost(send_msg_url, json);

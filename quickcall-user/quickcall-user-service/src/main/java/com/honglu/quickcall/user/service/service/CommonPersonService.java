@@ -1,6 +1,7 @@
 package com.honglu.quickcall.user.service.service;
 
 import com.honglu.quickcall.common.api.exchange.CommonResponse;
+import com.honglu.quickcall.user.facade.exchange.request.AddSystemUserRequest;
 import com.honglu.quickcall.user.facade.exchange.request.BindVXorQQRequest;
 import com.honglu.quickcall.user.facade.exchange.request.GetSmsCodeRequest;
 import com.honglu.quickcall.user.facade.exchange.request.IsPhoneExistsRequest;
@@ -104,4 +105,13 @@ public interface CommonPersonService {
 	 * @return
 	 */
 	CommonResponse loginOut(LoginOutRequest request);
+
+	/**
+	 * 添加系统用户
+	 * 
+	 * @param request
+	 * @return
+	 */
+	CommonResponse addSystemUser(AddSystemUserRequest request);
+
 }

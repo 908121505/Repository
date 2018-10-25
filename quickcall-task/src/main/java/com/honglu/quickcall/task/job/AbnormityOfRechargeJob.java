@@ -51,7 +51,8 @@ public class AbnormityOfRechargeJob {
 
 		List<Recharge> rechargeList = rechargeMapper.queryAbnormityOfRecharge();
 		for (int i = 0; i < rechargeList.size(); i++) {
-			String params = "orderId=" + rechargeList.get(i).getOrdersn();
+			String params = "orderId=" + rechargeList.get(i).getOrdersn() + "&type="
+					+ rechargeList.get(i).getRechargeType();
 			String res = HttpClientUtils.doPostForm(aliPayOrderQuery, params);
 			if (res != null) {
 				Map maps = JSON.parseObject(res);

@@ -20,6 +20,8 @@ public class Order {
 
     
     private Long customerSkillId;
+    /**技能ID*/
+    private Long skillItemId;
 
    
     private Long customerId;
@@ -115,9 +117,21 @@ public class Order {
     private String selectReason;
     private String remarkReason;
     
+    
+    
 
     
-    public String getSelectReason() {
+    public Long getSkillItemId() {
+		return skillItemId;
+	}
+
+
+	public void setSkillItemId(Long skillItemId) {
+		this.skillItemId = skillItemId;
+	}
+
+
+	public String getSelectReason() {
 		return selectReason;
 	}
 

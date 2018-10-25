@@ -107,9 +107,6 @@ public class CustomerVo {
     }
 
     public Date getBlockStartTime() {
-        if(custStatus == -1){
-            return null;
-        }
         return blockStartTime;
     }
 

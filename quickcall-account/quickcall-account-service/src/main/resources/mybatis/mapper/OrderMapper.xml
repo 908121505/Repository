@@ -5,6 +5,7 @@
    <id column="order_id" property="orderId" jdbcType="BIGINT" />
     <result column="order_no" property="orderNo" jdbcType="BIGINT" />
     <result column="customer_skill_id" property="customerSkillId" jdbcType="BIGINT" />
+    <result column="skill_item_id" property="skillItemId" jdbcType="BIGINT" />
     <result column="customer_id" property="customerId" jdbcType="BIGINT" />
     <result column="service_id" property="serviceId" jdbcType="BIGINT" />
     <result column="trade_id" property="tradeId" jdbcType="BIGINT" />
@@ -44,7 +45,7 @@
   
   
   <sql id="Base_Column_List" >
-    order_id, order_no, customer_skill_id, customer_id, service_id, trade_id, payment_type, 
+    order_id, order_no, customer_skill_id, skill_item_id,customer_id, service_id, trade_id, payment_type, 
     order_num, service_unit, service_price, order_amounts, discount_rate, cust_cancel_time, 
     system_cancel_time, receive_order_time, start_service_time, appay_end_time, start_time, 
     end_time, expect_end_time,order_time,skill_type, order_status, payment_time, customer_is_evaluate, customer_message, 
@@ -68,7 +69,7 @@
 
 
   <insert id="insert" parameterType="com.honglu.quickcall.account.facade.entity.Order" >
-    insert into orders (order_id, order_no, customer_skill_id, 
+    insert into orders (order_id, order_no, customer_skill_id, skill_item_id,
       customer_id, service_id, trade_id, 
       payment_type, order_num, service_unit, 
       service_price, order_amounts, discount_rate, 
@@ -79,7 +80,7 @@
       evaluate_start, customer_evaluate, order_describe, 
       create_time, modify_time, create_man, 
       modify_man, remark,select_reason,remark_reason)
-    values (#{orderId,jdbcType=BIGINT}, #{orderNo,jdbcType=BIGINT}, #{customerSkillId,jdbcType=BIGINT}, 
+    values (#{orderId,jdbcType=BIGINT}, #{orderNo,jdbcType=BIGINT}, #{customerSkillId,jdbcType=BIGINT},  #{skillItemId,jdbcType=BIGINT}, 
       #{customerId,jdbcType=BIGINT}, #{serviceId,jdbcType=BIGINT}, #{tradeId,jdbcType=BIGINT}, 
       #{paymentType,jdbcType=TINYINT}, #{orderNum,jdbcType=INTEGER}, #{serviceUnit,jdbcType=VARCHAR}, 
       #{servicePrice,jdbcType=DECIMAL}, #{orderAmounts,jdbcType=DECIMAL}, #{discountRate,jdbcType=DECIMAL}, 
@@ -104,6 +105,9 @@
       </if>
       <if test="customerSkillId != null" >
         customer_skill_id,
+      </if>
+      <if test="skillItemId != null" >
+        skill_item_id,
       </if>
       <if test="customerId != null" >
         customer_id,
@@ -205,6 +209,9 @@
       </if>
       <if test="customerSkillId != null" >
         #{customerSkillId,jdbcType=BIGINT},
+      </if>
+      <if test="skillItemId != null" >
+        #{skillItemId,jdbcType=BIGINT},
       </if>
       <if test="customerId != null" >
         #{customerId,jdbcType=BIGINT},
@@ -311,6 +318,9 @@
       <if test="customerSkillId != null" >
         customer_skill_id = #{customerSkillId,jdbcType=BIGINT},
       </if>
+      <if test="skillItemId != null" >
+        skill_item_id = #{skillItemId,jdbcType=BIGINT},
+      </if>
       <if test="customerId != null" >
         customer_id = #{customerId,jdbcType=BIGINT},
       </if>
@@ -359,7 +369,7 @@
       <if test="endTime != null" >
         end_time = #{endTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="endTime != null" >
+      <if test="expectEndTime != null" >
         expect_end_time = #{expectEndTime,jdbcType=TIMESTAMP},
       </if>
       <if test="orderTime != null" >
@@ -414,6 +424,7 @@
    update orders
     set order_no = #{orderNo,jdbcType=BIGINT},
       customer_skill_id = #{customerSkillId,jdbcType=BIGINT},
+      skill_item_id = #{skillItemId,jdbcType=BIGINT},
       customer_id = #{customerId,jdbcType=BIGINT},
       service_id = #{serviceId,jdbcType=BIGINT},
       trade_id = #{tradeId,jdbcType=BIGINT},
@@ -687,6 +698,32 @@
     order  by  order_time  desc
     limit 1
   	</select>
+  	
+  	
+  	
+  	<!-- 查询同一时间存在的订单ID列表 -->
+  	<select id="selectOrderReceiveOrder" resultMap="BaseResultMap" parameterType="map" >
+
+		SELECT
+			<include refid="Base_Column_List" />
+		FROM
+			orders
+		WHERE
+			service_id = #{serviceId}
+		AND  order_status  = #{orderStatus}
+		AND  order_id <![CDATA[ != ]]>  #{orderId}
+  	</select>
+  	
+  	
+  	
+  <!-- 保存评价信息 -->
+  <update id="updateOrderReceiveOrder"  parameterType="map">
+    update orders set order_status = #{orderStatus}  where  order_id  in
+    
+    <foreach collection="list" item="orderId" open="("  close=")"  separator=",">
+      #{orderId}
+    </foreach>
+  </update>
   
   
   

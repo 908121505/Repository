@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.alibaba.fastjson.JSON;
 import com.honglu.quickcall.common.api.code.BizCode;
 import com.honglu.quickcall.common.api.exception.BizException;
 import com.honglu.quickcall.common.api.exchange.CommonResponse;
@@ -30,6 +31,7 @@ import com.honglu.quickcall.user.facade.code.UserBizReturnCode;
 import com.honglu.quickcall.user.facade.constants.UserBizConstants;
 import com.honglu.quickcall.user.facade.entity.Customer;
 import com.honglu.quickcall.user.facade.enums.CustomerCusStateEnum;
+import com.honglu.quickcall.user.facade.exchange.request.AddSystemUserRequest;
 import com.honglu.quickcall.user.facade.exchange.request.BindVXorQQRequest;
 import com.honglu.quickcall.user.facade.exchange.request.GetSmsCodeRequest;
 import com.honglu.quickcall.user.facade.exchange.request.IsPhoneExistsRequest;
@@ -177,7 +179,9 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 		login.setGtClientId(params.getGtClientId());
 		login.setCustState(CustomerCusStateEnum.ON_LINE.getType());
 		customerMapper.updateByPrimaryKeySelective(login);
-
+		customer = customerMapper.selectByPrimaryKey(customer.getCustomerId());
+		JedisUtil.set(RedisKeyConstants.USER_CUSTOMER_INFO + customer.getCustomerId(),
+				customer == null ? "" : JSON.toJSONString(customer));
 		return ResultUtils.resultSuccess(customer);
 	}
 
@@ -296,6 +300,8 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 		// 创建账户
 		accountDubboIntegrationService.createAccount(customer.getCustomerId());
 		customer = customerMapper.selectByPrimaryKey(customer.getCustomerId());
+		JedisUtil.set(RedisKeyConstants.USER_CUSTOMER_INFO + customer.getCustomerId(),
+				customer == null ? "" : JSON.toJSONString(customer));
 		return customer;
 	}
 
@@ -400,6 +406,7 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 			logger.info("将验证码存入redis中的key值为:{},失效时间为:{}", (RedisKeyConstants.USER_VERIFYCODE + phoneNum + codeType),
 					Integer.parseInt(smscodeexpire));
 		}
+		logger.info("手机号:" + phoneNum + "发送状态:" + smsStr);
 		return ResultUtils.resultSuccess(smsStr);
 
 		/*
@@ -576,6 +583,20 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 		cus.setCustState(CustomerCusStateEnum.OFF_LINE.getType());
 		int row = customerMapper.updateByPrimaryKeySelective(cus);
 		return ResultUtils.resultSuccess();
+	}
+
+	@Override
+	public CommonResponse addSystemUser(AddSystemUserRequest request) {
+		String rongyunToken = RongYunUtil.getToken(String.valueOf(request.getCustomerId()), request.getNickName(),
+				request.getPhoto());
+		Customer customer = new Customer();
+		customer.setCustomerId(request.getCustomerId());
+		customer.setHeadPortraitUrl(request.getPhoto());
+		customer.setNickName(request.getNickName());
+		customer.setTokenCode(rongyunToken);
+		int row = customerMapper.insertSelective(customer);
+		return ResultUtils.resultSuccess();
+
 	}
 
 }

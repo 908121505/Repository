@@ -601,9 +601,14 @@
   <!-- 查询客户的一个订单 -->
   <select id="selectCustomerOrder" resultType="com.honglu.quickcall.account.facade.entity.Order">
     select
+      service_id as serviceId,
       customer_id as customerId,
       order_status as orderStatus,
-      order_amounts as orderAmounts
+      order_amounts as orderAmounts,
+      skill_item_id as skillItemId,
+      service_price as servicePrice,
+      order_num as orderNum,
+      evaluate_start as evaluateStart
     from orders where order_id = #{orderId}
   </select>
 

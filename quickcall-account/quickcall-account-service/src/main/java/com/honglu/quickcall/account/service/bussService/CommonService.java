@@ -1,6 +1,7 @@
 package com.honglu.quickcall.account.service.bussService;
 
 import java.util.Date;
+import java.util.List;
 
 import com.honglu.quickcall.account.facade.entity.Order;
 import com.honglu.quickcall.account.facade.vo.OrderTempResponseVO;
@@ -36,6 +37,12 @@ public interface CommonService {
 	 * @param orderStatus
 	 */
 	public void updateOrder(Long orderId, Integer orderStatus);
+	/**
+	 * 根据订单ID更新订单状态
+	 * @param orderId
+	 * @param orderStatus
+	 */
+	public void cancelUpdateOrder(Long orderId, Integer orderStatus,Date cancelTime);
 	
 	/**
 	 * 根据订单ID更新订单状态
@@ -84,6 +91,24 @@ public interface CommonService {
 	 * @return
 	 */
 	public OrderTempResponseVO  getCountDownSeconds(Integer   oldOrderStatus ,Date  orderTime,Date  receiveOrderTime);
+	
+	
+	
+	/**
+	 * 大V接单取消已接收的订单
+	 * @param orderIdList
+	 */
+	public void updateOrderReceiveOrder(List<Long>  orderIdList,Integer  orderStatus);
+	/**
+	 * 大V接单查询是否有其他待接单订单
+	 * @param serviceId
+	 * @param orderId
+	 * @param queryStatus
+	 * @param skillType
+	 * @return
+	 */
+	public List<Order> selectOrderReceiveOrder(Long  serviceId ,Long orderId, Integer queryStatus, Integer skillType);
+	
 	
    
 }
