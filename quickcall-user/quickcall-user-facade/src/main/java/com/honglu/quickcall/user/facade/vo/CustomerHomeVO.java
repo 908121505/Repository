@@ -12,7 +12,7 @@ import java.util.List;
  */
 public class CustomerHomeVO implements Serializable {
 
-    private static final long serialVersionUID = -9023978444720261334L;
+    private static final long serialVersionUID = -960460053239452425L;
     /**
      * 登录客户ID
      */
@@ -86,10 +86,23 @@ public class CustomerHomeVO implements Serializable {
      * 用户技能列表
      **/
     private List<CustomerSkill> skillList;
+
     /**
-     * 分享url
+     * 分享标题
      */
-    private String shareUrl;
+    private String shareTitle;
+    /**
+     * 分享内容
+     */
+    private String shareContent;
+    /**
+     * 分享图标链接
+     */
+    private String shareIconUrl;
+    /**
+     * 查看原文链接
+     */
+    private String shareLinkUrl;
 
     /**
      * 用户技能对象
@@ -404,12 +417,36 @@ public class CustomerHomeVO implements Serializable {
         this.skillList = skillList;
     }
 
-    public String getShareUrl() {
-        return shareUrl;
+    public String getShareTitle() {
+        return shareTitle;
     }
 
-    public void setShareUrl(String shareUrl) {
-        this.shareUrl = shareUrl;
+    public void setShareTitle(String shareTitle) {
+        this.shareTitle = shareTitle;
+    }
+
+    public String getShareContent() {
+        return shareContent;
+    }
+
+    public void setShareContent(String shareContent) {
+        this.shareContent = shareContent;
+    }
+
+    public String getShareIconUrl() {
+        return shareIconUrl;
+    }
+
+    public void setShareIconUrl(String shareIconUrl) {
+        this.shareIconUrl = shareIconUrl;
+    }
+
+    public String getShareLinkUrl() {
+        return shareLinkUrl;
+    }
+
+    public void setShareLinkUrl(String shareLinkUrl) {
+        this.shareLinkUrl = shareLinkUrl;
     }
 
     @Override
@@ -433,7 +470,10 @@ public class CustomerHomeVO implements Serializable {
                 ", appearanceUrlList=" + appearanceUrlList +
                 ", interestList=" + interestList +
                 ", skillList=" + skillList +
-                ", shareUrl='" + shareUrl + '\'' +
+                ", shareTitle='" + shareTitle + '\'' +
+                ", shareContent='" + shareContent + '\'' +
+                ", shareIconUrl='" + shareIconUrl + '\'' +
+                ", shareLinkUrl='" + shareLinkUrl + '\'' +
                 '}';
     }
 }
