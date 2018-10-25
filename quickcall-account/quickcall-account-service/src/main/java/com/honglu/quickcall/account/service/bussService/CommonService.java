@@ -42,7 +42,7 @@ public interface CommonService {
 	 * @param orderId
 	 * @param orderStatus
 	 */
-	public void cancelUpdateOrder(Long orderId, Integer orderStatus,Date cancelTime);
+	public void cancelUpdateOrder(Long orderId, Integer orderStatus,Date cancelTime,String  selectReason,String   remarkReason);
 	
 	/**
 	 * 根据订单ID更新订单状态

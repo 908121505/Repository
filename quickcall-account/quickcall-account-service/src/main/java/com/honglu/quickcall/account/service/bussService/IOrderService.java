@@ -48,7 +48,7 @@ public interface IOrderService {
 	
 	
 	/**
-	 * 发起的订单页--去支付
+	 * 订单详情
 	 * @param request
 	 */
 	public CommonResponse  detailOrder(DetailOrderRequest  request);

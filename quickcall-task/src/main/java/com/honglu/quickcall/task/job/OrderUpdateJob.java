@@ -36,6 +36,9 @@ public class OrderUpdateJob {
     private final static  Integer   RECEIVE_OVER_TIME_MINUTES = -15;
     /**立即服务超时分钟数*/
     private final static  Integer   START_OVER_TIME_MINUTES = -5;
+    
+    /**叫醒类型服务结束和进行中时间*/
+    private final static  Integer   ORDER_END_TIME_MINUTES = 5;
 
     
     //接单设置
@@ -73,6 +76,23 @@ public class OrderUpdateJob {
 			queryStatus = OrderSkillConstants.ORDER_STATUS_WAITING_START;
 			updateStatus = OrderSkillConstants.ORDER_STATUS_CANCEL_NOT_START;
 			taskOrderMapper.startOrderOverTime(currTime, endTime, queryStatus, updateStatus, skillType);
+			
+			//叫醒自动转换为进行中状态
+			//用户未接立即服务超时
+			queryStatus = OrderSkillConstants.ORDER_STATUS_GOING_WAITING_START;
+			updateStatus = OrderSkillConstants.ORDER_STATUS_GOING_USER_ACCEPCT;
+			taskOrderMapper.appointOrderGoing(currTime,endTime, queryStatus, updateStatus, skillType);
+			
+			
+			cal = Calendar.getInstance();
+			
+			cal.add(Calendar.MINUTE, ORDER_END_TIME_MINUTES);
+			//叫醒自动转换为进行中状态
+			//用户未接立即服务超时
+			queryStatus = OrderSkillConstants.ORDER_STATUS_GOING_USER_ACCEPCT;
+			updateStatus = OrderSkillConstants.ORDER_STATUS_FINISHED_USER_ACCEPCT;
+			taskOrderMapper.appointOrderFinish(currTime,endTime, queryStatus, updateStatus, skillType);
+			
     	} catch (Exception e) {
     		LOGGER.error("job执行发生异常，异常信息：", e);
     	}

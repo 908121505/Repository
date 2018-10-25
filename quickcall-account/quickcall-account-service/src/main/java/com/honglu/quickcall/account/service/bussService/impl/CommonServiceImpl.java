@@ -185,12 +185,14 @@ public class CommonServiceImpl implements CommonService {
 
 
 	@Override
-	public void cancelUpdateOrder(Long orderId, Integer orderStatus, Date cancelTime) {
+	public void cancelUpdateOrder(Long orderId, Integer orderStatus,Date cancelTime,String  selectReason,String   remarkReason) {
 		Order record = new Order();
 		record.setOrderStatus(orderStatus);
 		record.setOrderId(orderId);
 		record.setModifyTime(new Date());
 		record.setCustCancelTime(cancelTime);
+		record.setSelectReason(selectReason);
+		record.setRemarkReason(remarkReason);
 		//修改订单状态为：已支付
 		orderMapper.updateByPrimaryKeySelective(record);
 		
@@ -288,9 +290,8 @@ public class CommonServiceImpl implements CommonService {
 			retList.add(OrderSkillConstants.ORDER_STATUS_CANCLE_USER_SELF_BEFORE_SERVICE);
 			retList.add(OrderSkillConstants.ORDER_STATUS_CANCEL_USER_NOT_ACCEPCT);
 			
-			
 		}else if(OrderSkillConstants.ORDER_STATUS_PARAM_PING_JIA == orderStatusParam){
-			
+			retList.add(999);
 			
 		}
 		

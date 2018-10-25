@@ -156,7 +156,7 @@ public interface OrderSkillConstants {
 	public static final Integer  ORDER_STATUS_CANCLE_USER_SELF_BEFORE_SERVICE = 20 ;
 	/**订单状态22.取消（大V发起开始服务用户5分钟未接）;*/
 	public static final Integer  ORDER_STATUS_CANCEL_USER_NOT_ACCEPCT = 22 ;
-	/**订单状态24.进行中（大V发起开始服务用户5分钟内同意，叫醒特享）;*/
+	/**订单状态24.待开始（大V发起开始服务用户5分钟内同意，叫醒特享）;*/
 	public static final Integer  ORDER_STATUS_GOING_WAITING_START = 24 ;
 	/**订单状态26.进行中（大V发起开始服务用户5分钟内同意）;*/
 	public static final Integer  ORDER_STATUS_GOING_USER_ACCEPCT = 26 ;
