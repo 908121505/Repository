@@ -7,12 +7,14 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import com.alibaba.dubbo.common.json.JSON;
 import com.honglu.quickcall.account.facade.code.AccountBizReturnCode;
 import com.honglu.quickcall.account.facade.constants.OrderSkillConstants;
 import com.honglu.quickcall.account.facade.entity.Account;
@@ -58,10 +60,13 @@ import com.honglu.quickcall.common.api.exception.BizException;
 import com.honglu.quickcall.common.api.exchange.CommonResponse;
 import com.honglu.quickcall.common.api.exchange.ResultUtils;
 import com.honglu.quickcall.common.api.util.DateUtils;
+import com.honglu.quickcall.common.api.util.JedisUtil;
+import com.honglu.quickcall.common.api.util.RedisKeyConstants;
 import com.honglu.quickcall.common.core.util.UUIDUtils;
 import com.honglu.quickcall.common.third.AliyunSms.utils.SendSmsUtil;
 import com.honglu.quickcall.common.third.rongyun.util.RongYunUtil;
 import com.honglu.quickcall.user.facade.business.UserCenterSendMqMessageService;
+import com.honglu.quickcall.user.facade.entity.Customer;
 
 /**
  * 
@@ -297,10 +302,27 @@ public class OrderServiceImpl implements IOrderService {
 			barrageMessageService.lpushMessage(orderId);
 			
 			
-			SendSmsUtil.sendSms(UUIDUtils.getUUID(), "18321334072", 2, customerSkill.getSkillName());
+			String  custStr = JedisUtil.get(RedisKeyConstants.USER_CUSTOMER_INFO+serviceId) ;
+			if(StringUtils.isNotBlank(custStr)){
+				try {
+					Customer customer = JSON.parse(custStr, Customer.class);
+					if(customer != null){
+						String  phone =  customer.getPhone();
+						if(StringUtils.isNotBlank(phone)){
+							SendSmsUtil.sendSms(UUIDUtils.getUUID(), phone, 2, customerSkill.getSkillName());
+						}
+//						GtPushUtil.sendLinkTemplateToSingle(customer.getGtClientId(), title, content, url);
+					}
+				} catch (Exception e) {
+				}
+			}
 			
 			//下单成功后推送IM消息
 			RongYunUtil.sendOrderMessage(serviceId, OrderSkillConstants.IM_MSG_CONTENT_RECEIVE_ORDER);
+			
+			
+			
+			
 			LOGGER.info("======>>>>>用户编号为：" + request.getCustomerId() + "下单成功");
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -320,12 +342,16 @@ public class OrderServiceImpl implements IOrderService {
 	 */
 	@Override
 	public CommonResponse queryReceiveOrderList(OrderReceiveOrderListRequest request) {
-		if (request == null || request.getCustomerId() == null) {
+		if (request == null || request.getCustomerId() == null || request.getOrderStatus() == null ) {
 			throw new BizException(AccountBizReturnCode.paramError, "查询接收订单参数异常");
 		}
 		LOGGER.info("======>>>>>queryReceiveOrderList()入参："+request.toString());
 		Long  customerId =  request.getCustomerId();
-		List<OrderReceiveOrderListVO>  resultList =  orderMapper.queryReceiveOrderList(customerId);
+		
+		Integer orderStatusParam = request.getOrderStatus();
+		List<Integer>  statusList = commonService.getReceiveOrderStatusList(orderStatusParam );
+		
+		List<OrderReceiveOrderListVO>  resultList =  orderMapper.queryReceiveOrderList(customerId,statusList);
 		
 		if(!CollectionUtils.isEmpty(resultList)){
 			for (OrderReceiveOrderListVO info : resultList) {
@@ -348,13 +374,15 @@ public class OrderServiceImpl implements IOrderService {
 	 */
 	@Override
 	public CommonResponse querySendOrderList(OrderSendOrderListRequest request) {
-		if (request == null || request.getCustomerId() == null) {
+		if (request == null || request.getCustomerId() == null || request.getOrderStatus() == null) {
 			throw new BizException(AccountBizReturnCode.paramError, "查询发起订单参数异常");
 		}
 		
 		LOGGER.info("======>>>>>querySendOrderList()入参："+request.toString());
 		Long  customerId =  request.getCustomerId();
-		List<OrderSendOrderListVO>  resultList =  orderMapper.querySendOrderList(customerId);
+		Integer orderStatusParam = request.getOrderStatus();
+		List<Integer>  statusList = commonService.getSendOrderStatusList(orderStatusParam );
+		List<OrderSendOrderListVO>  resultList =  orderMapper.querySendOrderList(customerId,statusList);
 		if(!CollectionUtils.isEmpty(resultList)){
 			for (OrderSendOrderListVO info : resultList) {
 				OrderTempResponseVO  responseVO = commonService.getCountDownSeconds(info.getOrderStatus(), info.getOrderTime(), info.getReceiveOrderTime());
@@ -614,6 +642,8 @@ public class OrderServiceImpl implements IOrderService {
 			newOrderStatus = OrderSkillConstants.ORDER_STATUS_FINISHED_USER_ACCEPCT;
 			//修改订单状态为：已完成
 			commonService.updateOrder(orderId, newOrderStatus);
+			//大V冻结
+			accountService.inAccount(order.getServiceId(), order.getOrderAmounts(), TransferTypeEnum.FROZEN, AccountBusinessTypeEnum.FroZen);
 			// ADUAN 订单服务完成推送MQ消息
 			userCenterSendMqMessageService.sendOrderCostMqMessage(orderId);
 			
@@ -839,6 +869,8 @@ public class OrderServiceImpl implements IOrderService {
 			}else{
 			//用户发起完成服务	
 				newOrderStatus = OrderSkillConstants.ORDER_STATUS_GOING_USRE_APPAY_FINISH ;
+				//冻结大V金额
+				accountService.inAccount(order.getServiceId(), order.getOrderAmounts(), TransferTypeEnum.FROZEN, AccountBusinessTypeEnum.FroZen);
 			}
 			//大V发起完成服务
 			if(OrderSkillConstants.REQUEST_DV_FINISH_TYPE == type){
