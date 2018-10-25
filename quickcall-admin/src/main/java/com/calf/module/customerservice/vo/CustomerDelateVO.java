@@ -2,24 +2,30 @@ package com.calf.module.customerservice.vo;
 
 
 /**
- * 用户反馈表bean
+ * 用户举报表bean
  * @author zhaozheyi
- * @date Wed Oct 24 15:43:12 CST 2018
+ * @date Thu Oct 25 13:23:42 CST 2018
  **/
-public class FeedBackVO {
+public class CustomerDelateVO {
 
 	/**主键ID**/
 	private Integer id;
 
-	/**反馈人ID**/
+	/**被举报人ID**/
 	private String customerId;
 	
 	private String nickName;
 	
 	private String phone;
 
-	/**反馈内容**/
-	private String feedBackContent;
+	/**举报人ID**/
+	private String delateCustId;
+
+	/**举报内容ID**/
+	private Integer delateId;
+
+	/**举报内容**/
+	private String delateContent;
 
 	/**处理状态(0=未处理,1=已处理)**/
 	private Integer handleStatus;
@@ -29,9 +35,6 @@ public class FeedBackVO {
 
 	/**创建时间**/
 	private String createTime;
-
-	/**联系方式**/
-	private String contactWay;
 
 	/**修改时间**/
 	private String modifyTime;
@@ -60,20 +63,20 @@ public class FeedBackVO {
 		return this.id;
 	}
 
-	public void setCustomerId(String customerId){
-		this.customerId = customerId;
+	public void setDelateId(Integer delateId){
+		this.delateId = delateId;
 	}
 
-	public String getCustomerId(){
-		return this.customerId;
+	public Integer getDelateId(){
+		return this.delateId;
 	}
 
-	public void setFeedBackContent(String feedBackContent){
-		this.feedBackContent = feedBackContent;
+	public void setDelateContent(String delateContent){
+		this.delateContent = delateContent;
 	}
 
-	public String getFeedBackContent(){
-		return this.feedBackContent;
+	public String getDelateContent(){
+		return this.delateContent;
 	}
 
 	public void setHandleStatus(Integer handleStatus){
@@ -98,14 +101,6 @@ public class FeedBackVO {
 
 	public String getCreateTime(){
 		return this.createTime;
-	}
-
-	public void setContactWay(String contactWay){
-		this.contactWay = contactWay;
-	}
-
-	public String getContactWay(){
-		return this.contactWay;
 	}
 
 	public void setModifyTime(String modifyTime){
@@ -148,12 +143,12 @@ public class FeedBackVO {
 		return this.handleUser;
 	}
 
-	public void setRemark(String remark){
-		this.remark = remark;
+	public String getCustomerId() {
+		return customerId;
 	}
 
-	public String getRemark(){
-		return this.remark;
+	public void setCustomerId(String customerId) {
+		this.customerId = customerId;
 	}
 
 	public String getNickName() {
@@ -170,6 +165,22 @@ public class FeedBackVO {
 
 	public void setPhone(String phone) {
 		this.phone = phone;
+	}
+
+	public String getDelateCustId() {
+		return delateCustId;
+	}
+
+	public void setDelateCustId(String delateCustId) {
+		this.delateCustId = delateCustId;
+	}
+
+	public void setRemark(String remark){
+		this.remark = remark;
+	}
+
+	public String getRemark(){
+		return this.remark;
 	}
 
 }

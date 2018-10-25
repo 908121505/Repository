@@ -90,6 +90,9 @@ public class BaseDao extends SqlSessionDaoSupport {
 	public int updateRow(String statementName, Map<String, Object> parameters) {
 		return getSqlSession().update(statementName, parameters);
 	}
+	public <T>int updateRow(String statementName,T entity){
+		return getSqlSession().update(statementName, entity);
+	}
 	/**
 	 * 批量更新
 	 * @param entities

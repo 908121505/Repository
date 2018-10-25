@@ -12,13 +12,13 @@ import java.util.ResourceBundle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.honglu.quickcall.account.facade.business.IAccountOrderService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.honglu.quickcall.account.facade.business.IAccountOrderService;
 import com.honglu.quickcall.account.facade.code.AccountBizReturnCode;
 import com.honglu.quickcall.common.api.code.BizCode;
 import com.honglu.quickcall.common.api.exception.BizException;
@@ -26,7 +26,7 @@ import com.honglu.quickcall.common.api.exception.RemoteException;
 import com.honglu.quickcall.common.api.exchange.CommonResponse;
 import com.honglu.quickcall.common.api.exchange.ResultUtils;
 import com.honglu.quickcall.common.api.util.JedisUtil;
-import com.honglu.quickcall.common.api.util.ResponseUtils;
+import com.honglu.quickcall.common.api.util.RedisKeyConstants;
 import com.honglu.quickcall.common.core.util.Detect;
 import com.honglu.quickcall.common.core.util.StringUtil;
 import com.honglu.quickcall.common.core.util.UUIDUtils;
@@ -85,7 +85,6 @@ import com.honglu.quickcall.user.service.service.CustomerRedisManagement;
 import com.honglu.quickcall.user.service.service.PersonInfoService;
 import com.honglu.quickcall.user.service.util.CountAge;
 import com.honglu.quickcall.user.service.util.JsonParseUtil;
-import com.honglu.quickcall.user.service.util.RedisKeyConstants;
 
 import cn.jiguang.commom.utils.StringUtils;
 
@@ -126,8 +125,10 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 	private static final Logger logger = LoggerFactory.getLogger(PersonInfoServiceImpl.class);
 
 	/** 用户默认的形象照 **/
-	private static String DEFAULT_CUSTOMER_APPEARANCE_URL = ResourceBundle.getBundle("thirdconfig").getString("DEFAULT_CUSTOMER_APPEARANCE_URL");
-//	private static String CUSTOMER_HOME_SHARE_H5_URL = ResourceBundle.getBundle("thirdconfig").getString("CUSTOMER_HOME_SHARE_H5_URL");
+	private static String DEFAULT_CUSTOMER_APPEARANCE_URL = ResourceBundle.getBundle("thirdconfig")
+			.getString("DEFAULT_CUSTOMER_APPEARANCE_URL");
+	// private static String CUSTOMER_HOME_SHARE_H5_URL =
+	// ResourceBundle.getBundle("thirdconfig").getString("CUSTOMER_HOME_SHARE_H5_URL");
 
 	/**
 	 * 首页搜索用户
@@ -590,13 +591,13 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 		CommonResponse commonResponse = new CommonResponse();
 		return commonResponse;
 	}
-	
+
 	@Override
 	public CommonResponse checkEachAttention(CheckEachAttentionRequest request) {
-		int n = fansMapper.queryIsFollow(request.getFansId(),request.getAttendedId());
-		int n1 = fansMapper.queryIsFollow(request.getAttendedId(),request.getFansId());
-		int status = n&n1;
-		status = status==0?0:1;
+		int n = fansMapper.queryIsFollow(request.getFansId(), request.getAttendedId());
+		int n1 = fansMapper.queryIsFollow(request.getAttendedId(), request.getFansId());
+		int status = n & n1;
+		status = status == 0 ? 0 : 1;
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("eachAttentionStatus", status);
 		return ResultUtils.resultSuccess(map);
@@ -799,14 +800,17 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 		customerHomeVO.setFansNum(fansMapper.queryFansNumByCustomerId(request.getViewCustomerId()).intValue());
 
 		// 查询用户形象照列表
-		List<String> appearanceList = customerAppearanceMapper.queryCustomerAuditedAppearance(request.getViewCustomerId(), 0);
-		customerHomeVO.setAppearanceUrlList(appearanceList.isEmpty() ? Arrays.asList(DEFAULT_CUSTOMER_APPEARANCE_URL) : appearanceList);
+		List<String> appearanceList = customerAppearanceMapper
+				.queryCustomerAuditedAppearance(request.getViewCustomerId(), 0);
+		customerHomeVO.setAppearanceUrlList(
+				appearanceList.isEmpty() ? Arrays.asList(DEFAULT_CUSTOMER_APPEARANCE_URL) : appearanceList);
 
 		// 查询用户兴趣
 		customerHomeVO.setInterestList(customerInterestMapper.queryCustomerInterestList(request.getViewCustomerId()));
 
 		// 查询声鉴卡
-		List<String> soundGuideCard = customerAppearanceMapper.queryCustomerAuditedAppearance(request.getViewCustomerId(), 2);
+		List<String> soundGuideCard = customerAppearanceMapper
+				.queryCustomerAuditedAppearance(request.getViewCustomerId(), 2);
 		customerHomeVO.setSoundGuideCard(soundGuideCard.isEmpty() ? null : soundGuideCard.get(0));
 
 		// 分享链接
@@ -815,7 +819,8 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 		// 查询用户技能 -- 条件是大V
 		List<CustomerHomeVO.CustomerSkill> skillList = new ArrayList<>();
 		if (Objects.equals(viewCustomer.getvStatus(), 2)) {
-			List<CustomerSkill> customerSkills = customerSkillMapper.selectCustomerAuditedSkill(request.getViewCustomerId());
+			List<CustomerSkill> customerSkills = customerSkillMapper
+					.selectCustomerAuditedSkill(request.getViewCustomerId());
 			for (CustomerSkill bean : customerSkills) {
 				CustomerHomeVO.CustomerSkill customerSkill = customerHomeVO.new CustomerSkill();
 				customerSkill.setCustomerSkillId(bean.getCustomerSkillId());
@@ -830,16 +835,18 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 				customerSkill.setSkillPrice(bean.getDiscountPrice());
 				customerSkill.setServiceUnit(bean.getServiceUnit());
 				// 查询技能评价标签
-				customerSkill.setCustomerLabel(customerSkillMapper.selectCustomerSkillHotLabel(request.getViewCustomerId(), bean.getSkillItemId()));
+				customerSkill.setCustomerLabel(customerSkillMapper
+						.selectCustomerSkillHotLabel(request.getViewCustomerId(), bean.getSkillItemId()));
 
 				// 声量 ADUAN -- 一期前段不显示
 				customerSkill.setSkillVolume(250);
 
 				// 判断是否可下单 ADUAN -- 待做
-				if(Objects.equals(request.getLoginCustomerId(), request.getViewCustomerId())){
+				if (Objects.equals(request.getLoginCustomerId(), request.getViewCustomerId())) {
 					customerSkill.setCanOrder(0); // 自己看自己的个人主页时 -- 直接返回 0=不可接单
-				}else{
-					customerSkill.setCanOrder(accountOrderService.checkReceiveOrderByCustomerSkillId(bean.getCustomerSkillId()));
+				} else {
+					customerSkill.setCanOrder(
+							accountOrderService.checkReceiveOrderByCustomerSkillId(bean.getCustomerSkillId()));
 				}
 
 				skillList.add(customerSkill);

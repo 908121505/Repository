@@ -477,36 +477,58 @@
 		  cs.skill_name  AS  skillItemName,
 		  st.unlock_icon  AS  icon,
 	      od.order_time  AS  orderTime,
-	      od.receive_order_time  AS receiveOrderTime
+	      od.receive_order_time  AS receiveOrderTime,
+	      od.customer_skill_id AS customerSkillId,
+		  cs.switch_status AS switchStatus
 	FROM
 		orders od LEFT JOIN   customer_skill  cs  ON  od.customer_skill_id  = cs.customer_skill_id
 	        LEFT JOIN   skill_item   st ON  cs.skill_item_id  =  st.id
 	    LEFT JOIN  customer  ct  ON  od.service_id  =  ct.customer_id 
 	WHERE  od.customer_id  = #{customerId}
+	
+	 <if test="statusList != null" >
+        AND  od.order_status  IN 
+        <foreach collection="statusList"  item="status"  open="("  close=")"  separator=",">
+         	#{status}
+        </foreach>
+      </if>
+      order by  order_time  desc 
   </select>
   
   
   <!-- 查询收到的订单 -->
   <select id="queryReceiveOrderList" resultType="com.honglu.quickcall.account.facade.vo.OrderReceiveOrderListVO"  >
 	SELECT
-		  od.order_id  AS orderId,
-		  ct.nick_name  AS nickName,
-		  od.customer_id AS customerId ,
-		  ct.head_portrait_url  AS  headPortraitUrl,
-		  od.service_price  AS  servicePrice ,
-		  od.service_unit  AS  serviceUnit,
-		  od.order_num AS  orderNum,
-		  od.order_amounts AS  orderAmount,
-		  od.order_status  AS orderStatus,
-		  cs.skill_name  AS  skillItemName,
-		  st.unlock_icon  AS  icon,
-	      od.order_time  AS  orderTime,
-	      od.receive_order_time  AS receiveOrderTime
+		od.order_id AS orderId,
+		ct.nick_name AS nickName,
+		od.customer_id AS customerId,
+		ct.head_portrait_url AS headPortraitUrl,
+		od.service_price AS servicePrice,
+		od.service_unit AS serviceUnit,
+		od.order_num AS orderNum,
+		od.order_amounts AS orderAmount,
+		od.order_status AS orderStatus,
+		cs.skill_name AS skillItemName,
+		st.unlock_icon AS icon,
+		od.order_time AS orderTime,
+		od.receive_order_time AS receiveOrderTime,
+		od.customer_skill_id AS customerSkillId,
+		cs.switch_status AS switchStatus
 	FROM
-		orders od LEFT JOIN   customer_skill  cs  ON  od.customer_skill_id  = cs.customer_skill_id
-	        LEFT JOIN   skill_item   st ON  cs.skill_item_id  =  st.id
-	    LEFT JOIN  customer  ct  ON  od.customer_id  =  ct.customer_id 
-	WHERE  od.service_id  = #{customerId}
+		orders od
+	LEFT JOIN customer_skill cs ON od.customer_skill_id = cs.customer_skill_id
+	LEFT JOIN skill_item st ON cs.skill_item_id = st.id
+	LEFT JOIN customer ct ON od.customer_id = ct.customer_id
+	WHERE  od.service_id  = #{customerId}  
+		 <if test="statusList != null" >
+        AND  od.order_status  IN 
+        <foreach collection="statusList"  item="status"  open="("  close=")"  separator=",">
+         	#{status}
+        </foreach>
+      </if>
+	order by  order_time  desc 
+	
+	
   </select>
   
   
@@ -532,7 +554,8 @@
 			od.start_service_time AS startTime,
 			od.end_time AS endTime ,
   			cs.skill_item_id   AS  skillItemId,
-  			od.receive_order_time  AS receiveOrderTime
+	  		od.receive_order_time AS receiveOrderTime
+			
 		FROM
 			orders od
 		LEFT JOIN customer ct ON ct.customer_id = od.customer_id

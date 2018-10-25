@@ -8,6 +8,15 @@ public class AddSystemUserRequest extends AbstractRequest {
 	private Long customerId;
 	private String nickName;
 	private String photo;
+	private String appId;
+
+	public String getAppId() {
+		return appId;
+	}
+
+	public void setAppId(String appId) {
+		this.appId = appId;
+	}
 
 	public Long getCustomerId() {
 		return customerId;

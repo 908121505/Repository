@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.alibaba.fastjson.JSON;
 import com.honglu.quickcall.common.api.code.BizCode;
 import com.honglu.quickcall.common.api.exception.BizException;
 import com.honglu.quickcall.common.api.exchange.CommonResponse;
@@ -178,7 +179,9 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 		login.setGtClientId(params.getGtClientId());
 		login.setCustState(CustomerCusStateEnum.ON_LINE.getType());
 		customerMapper.updateByPrimaryKeySelective(login);
-
+		customer = customerMapper.selectByPrimaryKey(customer.getCustomerId());
+		JedisUtil.set(RedisKeyConstants.USER_CUSTOMER_INFO + customer.getCustomerId(),
+				customer == null ? "" : JSON.toJSONString(customer));
 		return ResultUtils.resultSuccess(customer);
 	}
 
@@ -297,6 +300,8 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 		// 创建账户
 		accountDubboIntegrationService.createAccount(customer.getCustomerId());
 		customer = customerMapper.selectByPrimaryKey(customer.getCustomerId());
+		JedisUtil.set(RedisKeyConstants.USER_CUSTOMER_INFO + customer.getCustomerId(),
+				customer == null ? "" : JSON.toJSONString(customer));
 		return customer;
 	}
 
@@ -589,6 +594,7 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 		customer.setHeadPortraitUrl(request.getPhoto());
 		customer.setNickName(request.getNickName());
 		customer.setTokenCode(rongyunToken);
+		customer.setAppId(request.getAppId());
 		int row = customerMapper.insertSelective(customer);
 		return ResultUtils.resultSuccess();
 

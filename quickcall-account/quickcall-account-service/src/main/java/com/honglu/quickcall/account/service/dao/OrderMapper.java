@@ -31,10 +31,10 @@ public interface OrderMapper {
     int updateByPrimaryKey(Order record);
     
 	/**查询发出的订单*/
-	List<OrderSendOrderListVO> querySendOrderList(@Param("customerId")  Long customerId);
+	List<OrderSendOrderListVO> querySendOrderList(@Param("customerId")  Long customerId,@Param("statusList")List<Integer>  orderStatusList);
 
 	/**查询收到的订单*/
-	List<OrderReceiveOrderListVO> queryReceiveOrderList(@Param("customerId")  Long customerId);
+	List<OrderReceiveOrderListVO> queryReceiveOrderList(@Param("customerId")  Long customerId,@Param("statusList")List<Integer>  orderStatusList);
 
 
 	/**查询大V订单详情*/
@@ -139,4 +139,9 @@ public interface OrderMapper {
 	 * @return
 	 */
 	List<Order> selectOrderReceiveOrder(@Param("serviceId")Long  serviceId ,@Param("orderId")Long orderId, @Param("orderStatus")Integer orderStatus, @Param("skillType")Integer skillType);
+	
+	
+	
+	
+	
 }

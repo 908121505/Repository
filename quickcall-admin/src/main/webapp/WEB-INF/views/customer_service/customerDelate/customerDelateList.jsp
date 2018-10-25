@@ -1,12 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="shiro" uri="http://shiro.apache.org/tags" %>
-<shiro:hasPermission name="feedBack:select">
+<shiro:hasPermission name="customerDelate:select">
 <div class="content1">
     <div class="header">
-        <h1 class="page-title">产品问题反馈</h1>
+        <h1 class="page-title">举报内容管理</h1>
         <ul class="breadcrumb">
             <li>客服后台</li>
-            <li class="active">产品问题反馈</li>
+            <li class="active">举报内容管理</li>
         </ul>
     </div>
 
@@ -104,7 +104,7 @@
 			//表格的初始化
 			$(document).ready(function() {
 				var table = $('#example').initTable({
-					sAjaxSource:"feedBack/initTable.htm",
+					sAjaxSource:"customerDelate/initTable.htm",
 					aoColumns: [
 			            { 
 			              "data": "nickName",
@@ -112,8 +112,8 @@
 			              'sClass':"text-center"
 			            },
 			            { 
-			               "data": "feedBackContent",
-			               "sTitle":"反馈内容",
+			               "data": "delateContent",
+			               "sTitle":"举报内容",
 			               'sClass':"text-center",
 			               "mRender": function(data, type, full) {
                           		if(data.length>10){
@@ -180,10 +180,10 @@
 							"aTargets" : 7,
 							"mRender" : function(data,type, row) {
 								var detail = "",del = "";
-								<shiro:hasPermission name="feedBack:update">
+								<shiro:hasPermission name="customerDelate:update">
 								detail = "<a href='#' onclick='addAndUpdateRow(\""+ row.id +"\")' data-toggle='modal' class='padding-right-small label label-success'><i class='glyphicon glyphicon-edit'></i>修改</a>";
 								</shiro:hasPermission>
-								<shiro:hasPermission name="feedBack:delete">
+								<shiro:hasPermission name="customerDelate:delete">
                                 del = "<a href='#' onclick='deleteRow(\""+ row.id +"\")' data-toggle='modal' class='padding-right-small label label-success'><i class='glyphicon glyphicon-edit'></i>删除</a>";
                                 </shiro:hasPermission>
 								return  detail+"&nbsp;"+del;
@@ -199,11 +199,11 @@
 			});
 			//增加或者修改受影响的行数
 			function addAndUpdateRow(id){
-				$('#insertAndUpdate').addAndUpdateRow("feedBack/addAndUpdateHome.htm?id="+id);
+				$('#insertAndUpdate').addAndUpdateRow("customerDelate/addAndUpdateHome.htm?id="+id);
 			}
 
         function deleteRow(id){
-            $('#myModal').deleteRow("feedBack/del.htm?id="+id);
+            $('#myModal').deleteRow("customerDelate/del.htm?id="+id);
         }
 	</script>
 		<!---dialog选项-->
