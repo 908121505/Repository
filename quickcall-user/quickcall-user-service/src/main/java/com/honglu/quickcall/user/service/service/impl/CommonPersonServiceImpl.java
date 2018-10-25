@@ -2,6 +2,7 @@ package com.honglu.quickcall.user.service.service.impl;
 
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 import java.util.Random;
 import java.util.ResourceBundle;
@@ -17,11 +18,13 @@ import org.springframework.stereotype.Service;
 import com.alibaba.fastjson.JSON;
 import com.honglu.quickcall.common.api.code.BizCode;
 import com.honglu.quickcall.common.api.exception.BizException;
+import com.honglu.quickcall.common.api.exception.RemoteException;
 import com.honglu.quickcall.common.api.exchange.CommonResponse;
 import com.honglu.quickcall.common.api.exchange.ResultUtils;
 import com.honglu.quickcall.common.api.util.DateUtils;
 import com.honglu.quickcall.common.api.util.JedisUtil;
 import com.honglu.quickcall.common.api.util.RedisKeyConstants;
+import com.honglu.quickcall.common.core.util.Detect;
 import com.honglu.quickcall.common.core.util.MD5;
 import com.honglu.quickcall.common.core.util.UUIDUtils;
 import com.honglu.quickcall.common.third.AliyunSms.utils.SendSmsUtil;
@@ -30,6 +33,7 @@ import com.honglu.quickcall.common.third.rongyun.util.RongYunUtil;
 import com.honglu.quickcall.user.facade.code.UserBizReturnCode;
 import com.honglu.quickcall.user.facade.constants.UserBizConstants;
 import com.honglu.quickcall.user.facade.entity.Customer;
+import com.honglu.quickcall.user.facade.entity.SensitivityWord;
 import com.honglu.quickcall.user.facade.enums.CustomerCusStateEnum;
 import com.honglu.quickcall.user.facade.exchange.request.AddSystemUserRequest;
 import com.honglu.quickcall.user.facade.exchange.request.BindVXorQQRequest;
@@ -44,6 +48,7 @@ import com.honglu.quickcall.user.facade.exchange.request.UserIdCardInfoRequest;
 import com.honglu.quickcall.user.facade.exchange.request.UserLoginRequest;
 import com.honglu.quickcall.user.facade.exchange.request.UserRegisterRequest;
 import com.honglu.quickcall.user.service.dao.CustomerMapper;
+import com.honglu.quickcall.user.service.dao.SensitivityWordMapper;
 import com.honglu.quickcall.user.service.integration.AccountDubboIntegrationService;
 import com.honglu.quickcall.user.service.service.CommonPersonService;
 
@@ -62,12 +67,18 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 
 	@Autowired
 	private AccountDubboIntegrationService accountDubboIntegrationService;
+	@Autowired
+	private SensitivityWordMapper sensitivityWordMapper;
 
 	private static String resendexpire = ResourceBundle.getBundle("thirdconfig").getString("resend.expire");
 	private static String resendexpirehour = ResourceBundle.getBundle("thirdconfig").getString("resend.expire.hour");
 	private static String onehourfreq = ResourceBundle.getBundle("thirdconfig").getString("one.hour.freq");
 	private static String onedayfreq = ResourceBundle.getBundle("thirdconfig").getString("one.day.freq");
 	private static String smscodeexpire = ResourceBundle.getBundle("thirdconfig").getString("smscode.expire");
+	/**
+	 * 中文、英文、数字、下划线校验 4-24位
+	 */
+	private final static Pattern CH_EN_PATTERN = Pattern.compile("^[\\u4e00-\\u9fa5a-z\\d_]{4,24}$");
 
 	@Override
 	public CommonResponse regUserExist(IsPhoneExistsRequest params) {
@@ -201,6 +212,22 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 		String rongyunToken = null;
 		if (StringUtils.isNotBlank(params.getNickName()) && params.getCustomerId() != null
 				&& StringUtils.isNotBlank(params.getHeadPortraitUrl())) {
+
+			if (params.getNickName().length() > 24) {
+				throw new RemoteException(UserBizReturnCode.paramError, "您的昵称超出长度！");
+			}
+
+			// 中文、英文、数字、下划线校验 4-24位
+			Integer check = 2;
+			// 敏感词
+			Integer checkDetail = 1;
+			Integer checkResult = checkNickName(params.getNickName());
+			if (check.equals(checkResult)) {
+				throw new RemoteException(UserBizReturnCode.paramError, "用户名不符合规则");
+			} else if (checkDetail.equals(checkResult)) {
+				throw new RemoteException(UserBizReturnCode.nickNameSensitive, "您输入的昵称包含敏感字，请重新输入！");
+			}
+
 			/*
 			 * rongyunToken = RongYunUtil.getToken(String.valueOf(params.getCustomerId()),
 			 * params.getNickName(), params.getHeadPortraitUrl()); if (rongyunToken == null
@@ -226,6 +253,39 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 			throw new BizException(BizCode.ParamError, "设置昵称头像失败");
 		}
 		return ResultUtils.resultSuccess();
+	}
+
+	/**
+	 * 昵称规则校验
+	 *
+	 * @modify liuyinkai
+	 * @param nickName
+	 *            用户昵称
+	 * @return 0 - 通过，1 - 敏感词，2 - 中英文
+	 */
+	private Integer checkNickName(String nickName) {
+		try {
+			// 中文、英文、数字、下划线校验 4-24位
+			Matcher m = CH_EN_PATTERN.matcher(nickName);
+			if (!m.matches()) {
+				return 2;
+			}
+			// 昵称敏感词校验
+			List<SensitivityWord> sensitivityList = sensitivityWordMapper.querySensitiveName();
+			if (Detect.notEmpty(sensitivityList)) {
+				for (SensitivityWord obj : sensitivityList) {
+					if (nickName.contains(obj.getContent())) {
+						logger.info("昵称包含敏感词！");
+						return 1;
+					}
+				}
+			}
+		} catch (Exception e) {
+			logger.error("用户修改昵称校验异常！异常信息:{}", e.getMessage(), e);
+			e.printStackTrace();
+			return 1;
+		}
+		return 0;
 	}
 
 	@Override
