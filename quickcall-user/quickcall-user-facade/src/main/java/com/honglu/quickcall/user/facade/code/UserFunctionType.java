@@ -37,7 +37,10 @@ public interface UserFunctionType {
 	 * 推送APP消息
 	 */
 	String PUSH_APP_MSG = "001310";
-
+	/**
+	 * 查询首页大V列表
+	 */
+	String QUERY_FIRST_PAGE_BIGV_LIST = "001311";
 	/**
 	 * 未读消息数量查询
 	 */

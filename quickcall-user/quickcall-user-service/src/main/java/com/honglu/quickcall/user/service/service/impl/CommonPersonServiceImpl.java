@@ -594,6 +594,7 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 		customer.setHeadPortraitUrl(request.getPhoto());
 		customer.setNickName(request.getNickName());
 		customer.setTokenCode(rongyunToken);
+		customer.setAppId(request.getAppId());
 		int row = customerMapper.insertSelective(customer);
 		return ResultUtils.resultSuccess();
 
