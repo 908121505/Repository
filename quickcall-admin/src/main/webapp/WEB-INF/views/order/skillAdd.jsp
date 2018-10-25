@@ -76,6 +76,14 @@
 					</div>
 				</div>
 
+				<div class="form-group"  >
+					<label class="col-sm-4 control-label">首页背景颜色<font color="red">&nbsp;*</font></label>
+					<div class="col-sm-8">
+						<input type="text" id="homeBlackColor" class="form-control"
+							   name="homeBlackColor" value="${entity.homeBlackColor}">
+					</div>
+				</div>
+
 
 			<%--<div class="form-group" >
 					<label class="col-sm-4 control-label">最高价格<!-- <font color="red">&nbsp;*</font> --></label>
