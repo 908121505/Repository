@@ -8,7 +8,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.ResourceBundle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -812,8 +811,11 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 				.queryCustomerAuditedAppearance(request.getViewCustomerId(), 2);
 		customerHomeVO.setSoundGuideCard(soundGuideCard.isEmpty() ? null : soundGuideCard.get(0));
 
-		// 分享链接
-		customerHomeVO.setShareUrl("http://www.baidu.com");
+		// 查询分享信息
+		customerHomeVO.setShareTitle("测试");
+		customerHomeVO.setShareContent("ces");
+		customerHomeVO.setShareIconUrl("shanghai.aliyuncs.com/user/app/1538205551716.png");
+		customerHomeVO.setShareLinkUrl("http://www.baidu.com");
 
 		// 查询用户技能 -- 条件是大V
 		List<CustomerHomeVO.CustomerSkill> skillList = new ArrayList<>();
