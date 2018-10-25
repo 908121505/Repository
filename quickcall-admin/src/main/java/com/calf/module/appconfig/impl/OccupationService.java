@@ -3,7 +3,6 @@ package com.calf.module.appconfig.impl;
 import com.calf.cn.entity.DataTables;
 import com.calf.cn.service.BaseManager;
 import com.calf.cn.utils.SearchUtil;
-import com.calf.module.appconfig.entity.Interest;
 import com.calf.module.appconfig.entity.Occupation;
 import com.calf.module.common.impl.CommonUtilService;
 import org.springframework.beans.BeanUtils;
@@ -56,8 +55,12 @@ public class OccupationService {
         occupation.setCreateMan(commonUtilService.getCurrUser());
         occupation.setCreateTime(new Date());
         occupation.setType(0);
-        baseManager.insert(occupation);
-        return 0;
+        int result = baseManager.insert(occupation);
+        if(result > 0){
+            return 0;
+        }else {
+            return -1;
+        }
     }
 
     public int saveUpdate(Occupation entity) {
@@ -65,8 +68,12 @@ public class OccupationService {
         BeanUtils.copyProperties(entity, occupation);
         occupation.setModifyMan(commonUtilService.getCurrUser());
         occupation.setModifyTime(new Date());
-        baseManager.update(occupation);
-        return 0;
+        int result = baseManager.update(occupation);
+        if(result > 0){
+            return 0;
+        }else {
+            return -1;
+        }
     }
 
 }
