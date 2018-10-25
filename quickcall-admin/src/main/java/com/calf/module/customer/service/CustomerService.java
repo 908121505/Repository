@@ -2,11 +2,9 @@ package com.calf.module.customer.service;
 
 import com.calf.cn.service.BaseManager;
 import com.calf.module.customer.entity.CustomerVo;
-import net.sf.jsqlparser.expression.LongValue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -49,6 +47,7 @@ public class CustomerService {
 
             } else {
                 Map<String, Object> params = new HashMap<>();
+                params.put("blockStartTime",new Date());
                 params.put("id", customerVo.getCustomerId());
                 baseManager.update("Customer.lockForever", params);
                 //lockForever

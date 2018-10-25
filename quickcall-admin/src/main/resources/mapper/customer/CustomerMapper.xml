@@ -208,20 +208,28 @@
     <select id="selectCustomVo" parameterType="map" resultMap="BaseVOResultMap">
       select customer_id,app_id,nick_name,front_portrait_url,block_end_time,block_start_time,cust_status
       from customer
-      where 1=1
+      where (1=1
         <if test="nickName !=null and nickName != ''">and nick_name like concat('%',#{nickName},'%')</if>
+        <if test="type !=null and type != ''">and type = #{type}</if>
+        <if test="custStatus !=null and type != ''">and cust_status=#{custStatus}</if>
+        ) or (1=1
         <if test="appId !=null and appId != ''">and app_id like concat('%',#{appId},'%')</if>
         <if test="type !=null and type != ''">and type = #{type}</if>
         <if test="custStatus !=null and type != ''">and cust_status=#{custStatus}</if>
+        )
         order by create_time desc
         limit ${iDisplayStart},${iDisplayLength}
     </select>
     <select id="queryCountVo" resultType="int" parameterType="map" >
-        select count(*) from customer where 1=1
+        select count(*) from customer where (1=1
         <if test="nickName !=null and nickName != ''">and nick_name like concat('%',#{nickName},'%')</if>
+        <if test="type !=null and type != ''">and type = #{type}</if>
+        <if test="custStatus !=null and type != ''">and cust_status=#{custStatus}</if>
+        ) or (1=1
         <if test="appId !=null and appId != ''">and app_id like concat('%',#{appId},'%')</if>
         <if test="type !=null and type != ''">and type = #{type}</if>
         <if test="custStatus !=null and type != ''">and cust_status=#{custStatus}</if>
+        )
     </select>
     <select id="selectVoByPrimaryKey" resultMap="BaseVOResultMap" parameterType="java.lang.Long">
         select
@@ -231,7 +239,7 @@
     </select>
 
     <update id="unlockCustomers" parameterType="map">
-        update customer set cust_status = 1 where customer_id = #{id}
+        update customer set cust_status = 1,block_end_time=null ,block_start_time=null where customer_id = #{id}
     </update>
     
     <update id="lockCustomers" parameterType="map">
@@ -241,7 +249,7 @@
     </update>
 
     <update id="lockForever" parameterType="map">
-        update customer set cust_status = -1 where customer_id = #{id}
+        update customer set cust_status = -1,block_start_time = #{blockStartTime} block_start_time=null where customer_id = #{id}
     </update>
     
     <update id="lockSkill" parameterType="map">

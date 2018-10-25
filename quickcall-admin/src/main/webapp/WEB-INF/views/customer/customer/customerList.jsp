@@ -290,7 +290,7 @@
                 fnServerParams: function (aoData) {  //查询条件
                     aoData.push({"name": "nickName", "value": $("#nameQuery").val().replace(new RegExp(" ", "g"), "")});
                     aoData.push({"name": "type", "value": $("#customTypeQuery").val()});
-
+                    aoData.push({"name": "appId", "value": $("#nameQuery").val().replace(new RegExp(" ", "g"), "")});
                     var status = $('#customerStatusQuery').val();
                     if(status == 1){
                         aoData.push({"name": "custStatus", "value": 1});
