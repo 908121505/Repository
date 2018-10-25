@@ -46,6 +46,10 @@ public class AppHomeBigvListVO implements Serializable {
          */
         private String categoryTagUrl;
         /**
+         * 技能背景
+         */
+        private String skillBackColor;
+        /**
          * 主播昵称
          */
         private String nickName;
@@ -64,7 +68,7 @@ public class AppHomeBigvListVO implements Serializable {
         /**
          * 币种名称
          */
-        private String currencyName;
+        private String currencyName = "音符";
         /**
          * 服务单位名称
          */
@@ -197,6 +201,14 @@ public class AppHomeBigvListVO implements Serializable {
 
         public void setVoiceUrl(String voiceUrl) {
             this.voiceUrl = voiceUrl;
+        }
+
+        public String getSkillBackColor() {
+            return skillBackColor;
+        }
+
+        public void setSkillBackColor(String skillBackColor) {
+            this.skillBackColor = skillBackColor;
         }
 
         @Override
