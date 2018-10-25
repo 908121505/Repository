@@ -100,8 +100,8 @@ public class ScoreRankServiceImpl implements ScoreRankService {
             BigDecimal servicePriceScore = order.getServicePrice().multiply(new BigDecimal(ScoreRankConstants.PLATFORM_SINGLE_ORDER_PRICE_WEIGHT));
 
             // 计算评价得分
-            BigDecimal evaluateNum = new BigDecimal(order.getEvaluateStart()
-                    * ScoreRankConstants.EVALUATION_LEVEL_WEIGHT_MAP.get(order.getEvaluateStart()) * ScoreRankConstants.PLATFORM_ORDER_EVALUATION_WEIGHT);
+            BigDecimal evaluateNum = new BigDecimal(ScoreRankConstants.DEFAULT_EVALUATION_LEVEL
+                    * ScoreRankConstants.EVALUATION_LEVEL_WEIGHT_MAP.get(ScoreRankConstants.DEFAULT_EVALUATION_LEVEL) * ScoreRankConstants.PLATFORM_ORDER_EVALUATION_WEIGHT);
 
             // 计算总得分
             BigDecimal valueScore = orderTotalScore.add(servicePriceScore).multiply(evaluateNum);

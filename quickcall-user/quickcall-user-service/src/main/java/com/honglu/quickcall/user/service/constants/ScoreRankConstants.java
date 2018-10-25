@@ -27,7 +27,7 @@ public class ScoreRankConstants {
     /**
      * 默认订单评分
      */
-    private static final Integer DEFAULT_EVALUATION_LEVEL = 3;
+    public static final Integer DEFAULT_EVALUATION_LEVEL = 3;
     /**
      * 评分等级权重常量定义
      */
