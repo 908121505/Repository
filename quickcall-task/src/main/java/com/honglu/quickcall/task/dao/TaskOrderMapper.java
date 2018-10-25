@@ -2,8 +2,10 @@ package com.honglu.quickcall.task.dao;
 
 import java.util.Date;
 
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+@Mapper
 public interface TaskOrderMapper {
    
 	/**
