@@ -1,8 +1,15 @@
 package com.honglu.quickcall.common.third.push;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
+import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -10,9 +17,13 @@ import com.gexin.rp.sdk.base.IPushResult;
 import com.gexin.rp.sdk.base.impl.ListMessage;
 import com.gexin.rp.sdk.base.impl.SingleMessage;
 import com.gexin.rp.sdk.base.impl.Target;
+import com.gexin.rp.sdk.base.notify.Notify;
+import com.gexin.rp.sdk.base.payload.APNPayload;
+import com.gexin.rp.sdk.base.payload.MultiMedia;
 import com.gexin.rp.sdk.exceptions.RequestException;
 import com.gexin.rp.sdk.http.IGtPush;
 import com.gexin.rp.sdk.template.LinkTemplate;
+import com.gexin.rp.sdk.template.TransmissionTemplate;
 
 public class GtPushUtil {
 
@@ -112,10 +123,107 @@ public class GtPushUtil {
 		return template;
 	}
 
+	// 透传列表推
+	public static String sendNotificationTemplateToList(String alias, String alert, String title, String linkUrl) {
+		// 配置返回每个用户返回用户状态，可选
+		System.setProperty("gexin.rp.sdk.pushlist.needDetails", "true");
+		IGtPush push = new IGtPush(host, appKey, masterSecret);
+		// 通知透传模板
+		TransmissionTemplate template = notificationTemplateDemo(alert, title, linkUrl);
+		ListMessage message = new ListMessage();
+		// 设置消息离线，并设置离线时间
+		message.setOffline(true);
+		// 离线有效时间，单位为毫秒，可选
+		message.setOfflineExpireTime(24 * 1000 * 3600);
+		message.setData(template);
+		List<Target> targets = new ArrayList<Target>();
+		Set<String> set = new HashSet<String>();
+		Collections.addAll(set, alias.split(","));
+		for (String cid : set) {
+			Target target1 = new Target();
+			target1.setAppId(appId);
+			target1.setClientId(cid);
+			targets.add(target1);
+		}
+		// taskId用于在推送时去查找对应的message
+		String taskId = push.getContentId(message);
+		IPushResult ret = push.pushMessageToList(taskId, targets);
+		logger.info(ret.getResponse().toString());
+		return taskId;
+
+	}
+
+	public static TransmissionTemplate notificationTemplateDemo(String alert, String title, String linkUrl) {
+		TransmissionTemplate template = new TransmissionTemplate();
+		// 设置APPID与APPKEY
+		template.setAppId(appId);
+		template.setAppkey(appKey);
+		// 设置通知栏标题与内容
+
+		// template.setAPNInfo(arg0);
+		// .GtPushUtil. apnPayLoad
+		// 透传消息设置，1为强制启动应用，客户端接收到消息后就会立即启动应用；2为等待应用启动
+		template.setTransmissionType(2);
+		ObjectMapper json = new ObjectMapper();
+		Map<String, String> map = new HashMap<String, String>();
+		map.put("title", title);
+		map.put("linkUrl", linkUrl);
+		map.put("alert", alert);
+		String jsonparams = "";
+		try {
+			jsonparams = json.writeValueAsString(map);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			logger.info("个推参数拼接异常");
+		}
+		template.setTransmissionContent(jsonparams);
+
+		APNPayload payload = new APNPayload();
+
+		// 在已有数字基础上加1显示，设置为-1时，在已有数字上减1显示，设置为数字时，显示指定数字
+		payload.setAutoBadge("+1");
+		// payload.setContentAvailable(1);
+		payload.setSound("default");
+		payload.setCategory("$由客户端定义");
+		// 简单模式APNPayload.SimpleMsg
+		// payload.setAlertMsg(new APNPayload.SimpleAlertMsg("hello"));
+
+		// 字典模式使用APNPayload.DictionaryAlertMsg
+		payload.setAlertMsg(getDictionaryAlertMsg(alert, title));
+
+		// 添加多媒体资源
+		payload.addMultiMedia(new MultiMedia().setResType(MultiMedia.MediaType.video)
+				.setResUrl("http://ol5mrj259.bkt.clouddn.com/test2.mp4").setOnlyWifi(true));
+
+		template.setAPNInfo(payload);
+
+		// 多厂商配置属性
+		Notify notify = new Notify();
+		notify.setContent(alert);
+		notify.setPayload(jsonparams);
+		notify.setUrl(linkUrl);
+		notify.setTitle(title);
+		template.set3rdNotifyInfo(notify);
+
+		return template;
+
+	}
+
+	private static APNPayload.DictionaryAlertMsg getDictionaryAlertMsg(String body, String title) {
+		APNPayload.DictionaryAlertMsg alertMsg = new APNPayload.DictionaryAlertMsg();
+		alertMsg.setBody(body);
+
+		alertMsg.setTitle(title);
+
+		return alertMsg;
+	}
+
 	public static void main(String[] args) {
-		String cid = "34a8710a9b67e9227a4b73ed56e05bdc";
-		sendLinkTemplateToSingle(cid, "s", "aa", "http://www.baidu.com");
+		String cid = "9f9972a12abefe48274f3073a303f272";
+		// sendLinkTemplateToSingle(cid, "s", "aa", "http://www.baidu.com");
 		// sendLinkTemplateList(cid, "s", "aa", "http://www.baidu.com");
+		sendNotificationTemplateToList(cid, "正文", "标题", "http://www.baidu.com");
 	}
 
 }
