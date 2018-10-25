@@ -101,13 +101,13 @@ id,	customer_id,	audit_appearance,	appearance,	type,	audit_status,	sort,	status,
 
 	<!-- 据类型查询用户审核通过的照片 -->
 	<select id="queryCustomerAuditedAppearance" resultType="string">
-		SELECT audit_appearance
+		SELECT appearance
 		FROM customer_appearance
 		WHERE customer_id = #{customerId}
 		AND type = #{type}
 		AND status = 1
-		AND audit_appearance IS NOT NULL
-		AND audit_appearance != ''
+		AND appearance IS NOT NULL
+		AND appearance != ''
 		ORDER BY create_time DESC
 	</select>
 	<!-- 查询（根据用户id和类型查询） -->
