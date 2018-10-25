@@ -232,10 +232,11 @@ public class RongYunUtil {
 		 * RongYunUtil.publishPrivate(String.valueOf(fromUserId), otherIds, txtMessage,
 		 * null, null, null, null, null, null); System.out.println(code);
 		 */
-
-		sendSystemMessage(1810161659557030302L, "我喜欢亚波");
-		sendOrderMessage(1810161659557030302L, "你有一条新的订单哦");
-		sendActivityMessage(1810161659557030302L, "红包");
+		Long toCustomerId = 1810251630126313929L;
+		sendSystemMessage(toCustomerId, "我喜欢亚波1");
+		sendOrderMessage(toCustomerId, "你有一条新的订单哦1");
+		sendActivityMessage(toCustomerId, "红包1");
+		sendBespokeMessage(toCustomerId, "预约消息1");
 
 		/*
 		 * sendFansMessage(1810241141388482637L, "轻音_3575",

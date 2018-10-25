@@ -15,7 +15,7 @@ import java.util.Date;
 public class OrderSendOrderListVO implements  Serializable{
 
 	
-	private static final long serialVersionUID = -2246395099082397013L;
+	private static final long serialVersionUID = 1367501658632794310L;
 	/**主播ID*/
 	private Long  orderId;
 	/**主播昵称*/
@@ -53,7 +53,29 @@ public class OrderSendOrderListVO implements  Serializable{
 	/**接单时间*/
 	private Date  receiveOrderTime ;
 	
+	/**客户技能ID*/
+	private Long  customerSkillId;
 	
+	/**技能开关：1=开启,0=关闭*/
+	private Integer  switchStatus;
+	
+	
+	
+	
+	
+	
+	public Integer getSwitchStatus() {
+		return switchStatus;
+	}
+	public void setSwitchStatus(Integer switchStatus) {
+		this.switchStatus = switchStatus;
+	}
+	public Long getCustomerSkillId() {
+		return customerSkillId;
+	}
+	public void setCustomerSkillId(Long customerSkillId) {
+		this.customerSkillId = customerSkillId;
+	}
 	public Date getOrderTime() {
 		return orderTime;
 	}

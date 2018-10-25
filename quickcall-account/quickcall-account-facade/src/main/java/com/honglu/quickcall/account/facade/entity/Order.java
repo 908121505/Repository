@@ -52,6 +52,9 @@ public class Order {
 
     
     private Date custCancelTime;
+    
+    
+    private Date appointTime;
 
     
     private Date systemCancelTime;
@@ -97,7 +100,9 @@ public class Order {
     
     private String orderDescribe;
 
-    
+    /** 价值评价分（用于计算大V排名） **/
+    private BigDecimal valueScore;
+
     private Date createTime;
 
     
@@ -171,7 +176,17 @@ public class Order {
     }
 
     
-    public Long getOrderNo() {
+    public Date getAppointTime() {
+		return appointTime;
+	}
+
+
+	public void setAppointTime(Date appointTime) {
+		this.appointTime = appointTime;
+	}
+
+
+	public Long getOrderNo() {
         return orderNo;
     }
 
@@ -488,6 +503,12 @@ public class Order {
 	public void setExpectEndTime(Date expectEndTime) {
 		this.expectEndTime = expectEndTime;
 	}
-    
-    
+
+    public BigDecimal getValueScore() {
+        return valueScore;
+    }
+
+    public void setValueScore(BigDecimal valueScore) {
+        this.valueScore = valueScore;
+    }
 }

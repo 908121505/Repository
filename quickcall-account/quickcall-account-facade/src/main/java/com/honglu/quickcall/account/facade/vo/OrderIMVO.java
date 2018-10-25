@@ -28,6 +28,9 @@ public class OrderIMVO implements  Serializable{
 	private String  icon;
 	/**订单状态*/
 	private Integer  orderStatus;
+	
+	
+	
 	public Long getServiceId() {
 		return serviceId;
 	}

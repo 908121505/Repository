@@ -7,12 +7,14 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import com.alibaba.dubbo.common.json.JSON;
 import com.honglu.quickcall.account.facade.code.AccountBizReturnCode;
 import com.honglu.quickcall.account.facade.constants.OrderSkillConstants;
 import com.honglu.quickcall.account.facade.entity.Account;
@@ -58,10 +60,13 @@ import com.honglu.quickcall.common.api.exception.BizException;
 import com.honglu.quickcall.common.api.exchange.CommonResponse;
 import com.honglu.quickcall.common.api.exchange.ResultUtils;
 import com.honglu.quickcall.common.api.util.DateUtils;
+import com.honglu.quickcall.common.api.util.JedisUtil;
+import com.honglu.quickcall.common.api.util.RedisKeyConstants;
 import com.honglu.quickcall.common.core.util.UUIDUtils;
 import com.honglu.quickcall.common.third.AliyunSms.utils.SendSmsUtil;
 import com.honglu.quickcall.common.third.rongyun.util.RongYunUtil;
 import com.honglu.quickcall.user.facade.business.UserCenterSendMqMessageService;
+import com.honglu.quickcall.user.facade.entity.Customer;
 
 /**
  * 
@@ -101,55 +106,55 @@ public class OrderServiceImpl implements IOrderService {
 	
 	
 //	@Override
-	public CommonResponse queryDaVSkillExt(OrderDaVSkillRequest request) {
-		if (request == null || request.getCustomerId() == null) {
-			throw new BizException(AccountBizReturnCode.paramError, "查询技能信息参数异常");
-		}
-		LOGGER.info("======>>>>>queryDaVSkill()入参："+request.toString());
-		OrderDaVSkillVO  skill =  new OrderDaVSkillVO();
-		skill.setHeadPortraitUrl("http://test-guanjia.oss-cn-shanghai.aliyuncs.com/voice/user/headimg/c2bb9b11facd4ef98126d3a0ab495cd4.jpg");
-		skill.setNickName("测试");
-		skill.setServiceId(1000L);
-		List<OrderSkillItemVO> custSkillList = new  ArrayList<>();
-	
-		for (int i = 0; i < 3; i++) {
-			OrderSkillItemVO  vo =  new OrderSkillItemVO();
-			vo.setPrice(new BigDecimal(10 *(i +1)));
-			vo.setDiscontPrice(new BigDecimal(10 *(i +1)));
-			vo.setUserSkillItemId(1000L);
-			String  serviceUnit  = null ;
-			String  skillIcon = null ;
-			Integer  skillType = 1 ; 
-			String  skillItemName  = "哄睡" ;
-			if(i == 0){
-				skillType = 1 ; 
-				skillIcon  = "http://test-guanjia.oss-cn-shanghai.aliyuncs.com/voice/skill/1540189000614.png" ;
-				skillItemName  = "哄睡" ;
-				serviceUnit = "半小时";
-			}else if (i == 1){
-				skillType = 2 ;
-				skillIcon  = "http://test-guanjia.oss-cn-shanghai.aliyuncs.com/voice/skill/1540189035478.png" ;
-				skillItemName  = "情感咨询" ;
-				serviceUnit = "小时";
-			}else{
-				skillType = 1 ;
-				skillIcon  = "http://test-guanjia.oss-cn-shanghai.aliyuncs.com/voice/skill/1540189035478.png" ;
-				skillItemName  = "叫醒" ;
-				serviceUnit = "次";
-				
-			}
-			vo.setSkillType(skillType);
-			vo.setSkillIcon(skillIcon);
-			vo.setServiceUnit(serviceUnit);
-			vo.setSkillItemName(skillItemName);
-			custSkillList.add(vo);
-		}
-		skill.setCustSkillList(custSkillList );
-		CommonResponse commonResponse = commonService.getCommonResponse();
-		commonResponse.setData(skill);
-		LOGGER.info("======>>>>>用户编号为：" + request.getCustomerId() + "查询成功");
-		return commonResponse;
-	}
+//	public CommonResponse queryDaVSkillExt(OrderDaVSkillRequest request) {
+//		if (request == null || request.getCustomerId() == null) {
+//			throw new BizException(AccountBizReturnCode.paramError, "查询技能信息参数异常");
+//		}
+//		LOGGER.info("======>>>>>queryDaVSkill()入参："+request.toString());
+//		OrderDaVSkillVO  skill =  new OrderDaVSkillVO();
+//		skill.setHeadPortraitUrl("http://test-guanjia.oss-cn-shanghai.aliyuncs.com/voice/user/headimg/c2bb9b11facd4ef98126d3a0ab495cd4.jpg");
+//		skill.setNickName("测试");
+//		skill.setServiceId(1000L);
+//		List<OrderSkillItemVO> custSkillList = new  ArrayList<>();
+//	
+//		for (int i = 0; i < 3; i++) {
+//			OrderSkillItemVO  vo =  new OrderSkillItemVO();
+//			vo.setPrice(new BigDecimal(10 *(i +1)));
+//			vo.setDiscontPrice(new BigDecimal(10 *(i +1)));
+//			vo.setUserSkillItemId(1000L);
+//			String  serviceUnit  = null ;
+//			String  skillIcon = null ;
+//			Integer  skillType = 1 ; 
+//			String  skillItemName  = "哄睡" ;
+//			if(i == 0){
+//				skillType = 1 ; 
+//				skillIcon  = "http://test-guanjia.oss-cn-shanghai.aliyuncs.com/voice/skill/1540189000614.png" ;
+//				skillItemName  = "哄睡" ;
+//				serviceUnit = "半小时";
+//			}else if (i == 1){
+//				skillType = 2 ;
+//				skillIcon  = "http://test-guanjia.oss-cn-shanghai.aliyuncs.com/voice/skill/1540189035478.png" ;
+//				skillItemName  = "情感咨询" ;
+//				serviceUnit = "小时";
+//			}else{
+//				skillType = 1 ;
+//				skillIcon  = "http://test-guanjia.oss-cn-shanghai.aliyuncs.com/voice/skill/1540189035478.png" ;
+//				skillItemName  = "叫醒" ;
+//				serviceUnit = "次";
+//				
+//			}
+//			vo.setSkillType(skillType);
+//			vo.setSkillIcon(skillIcon);
+//			vo.setServiceUnit(serviceUnit);
+//			vo.setSkillItemName(skillItemName);
+//			custSkillList.add(vo);
+//		}
+//		skill.setCustSkillList(custSkillList );
+//		CommonResponse commonResponse = commonService.getCommonResponse();
+//		commonResponse.setData(skill);
+//		LOGGER.info("======>>>>>用户编号为：" + request.getCustomerId() + "查询成功");
+//		return commonResponse;
+//	}
 	
 	@Override
 	public CommonResponse queryDaVSkill(OrderDaVSkillRequest request) {
@@ -187,6 +192,7 @@ public class OrderServiceImpl implements IOrderService {
 		LOGGER.info("======>>>>>用户编号为：" + request.getCustomerId() + "查询成功");
 		return commonResponse;
 	}
+	
 	
 	
 	@Override
@@ -244,8 +250,22 @@ public class OrderServiceImpl implements IOrderService {
 			
 			
 			Long  customerSkillId =  request.getCustomerSkillId();
+			
+			Integer   weekIndex = DateUtils.getDayOfWeek();
+			Integer   skillSwitch = 1 ;
+			String  endTimeStr = DateUtils.formatDateHHSS(new Date()).replaceAll(":", "") ;
+			
 			//根据技能ID 获取等级获取价格信息
-			CustomerSkill   customerSkill = customerSkillMapper.selectByPrimaryKey(customerSkillId);
+			CustomerSkill   customerSkill = customerSkillMapper.selectByPrimaryKeyExt(customerSkillId, weekIndex, skillSwitch, endTimeStr);
+			
+			if(customerSkill == null ){
+				//TODO  大V技能不存在，无法下单
+				resultMap.put("retCode",  OrderSkillConstants.RET_CODE_DV_NOT_ACCEPTE_ORDER);
+				commonResponse.setData(resultMap);
+				//返回大V正忙，以及结束时间
+				return   commonResponse ;
+			}
+			
 			Integer  orderNum =  request.getOrderNum();
 			BigDecimal  price =  customerSkill.getDiscountPrice();
 			BigDecimal orderAmounts = new BigDecimal(orderNum).multiply(price);
@@ -272,9 +292,22 @@ public class OrderServiceImpl implements IOrderService {
 			
 			Long  skillItemId = customerSkill.getSkillItemId();
 			SkillItem  skillItem = skillItemMapper.selectByPrimaryKey(skillItemId);
-			if(skillItem != null){
-				record.setSkillType(skillItem.getSkillType());
+			Integer  skillType = skillItem.getSkillType();
+			record.setSkillType(skillType);
+//			if(skillItem != null){
+//			}
+			if(OrderSkillConstants.SKILL_TYPE_NO == skillType){
+				Date  appointTime = DateUtils.formatDate(request.getAppointTimeStr());
+				Calendar  cal =  Calendar.getInstance();
+				cal.setTime(appointTime);
+				cal.add(Calendar.MINUTE, 5);
+				Date  expectEndTime =  cal.getTime();
+				record.setAppointTime(appointTime);
+				record.setExpectEndTime(expectEndTime);
 			}
+			
+			
+			
 			record.setServiceUnit(customerSkill.getServiceUnit());
 			record.setServicePrice(customerSkill.getSkillPrice());
 			record.setDiscountRate(customerSkill.getDiscountRate());
@@ -297,10 +330,27 @@ public class OrderServiceImpl implements IOrderService {
 			barrageMessageService.lpushMessage(orderId);
 			
 			
-			SendSmsUtil.sendSms(UUIDUtils.getUUID(), "18321334072", 2, customerSkill.getSkillName());
+			String  custStr = JedisUtil.get(RedisKeyConstants.USER_CUSTOMER_INFO+serviceId) ;
+			if(StringUtils.isNotBlank(custStr)){
+				try {
+					Customer customer = JSON.parse(custStr, Customer.class);
+					if(customer != null){
+						String  phone =  customer.getPhone();
+						if(StringUtils.isNotBlank(phone)){
+							SendSmsUtil.sendSms(UUIDUtils.getUUID(), phone, 2, customerSkill.getSkillName());
+						}
+//						GtPushUtil.sendLinkTemplateToSingle(customer.getGtClientId(), title, content, url);
+					}
+				} catch (Exception e) {
+				}
+			}
 			
 			//下单成功后推送IM消息
 			RongYunUtil.sendOrderMessage(serviceId, OrderSkillConstants.IM_MSG_CONTENT_RECEIVE_ORDER);
+			
+			
+			
+			
 			LOGGER.info("======>>>>>用户编号为：" + request.getCustomerId() + "下单成功");
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -320,12 +370,16 @@ public class OrderServiceImpl implements IOrderService {
 	 */
 	@Override
 	public CommonResponse queryReceiveOrderList(OrderReceiveOrderListRequest request) {
-		if (request == null || request.getCustomerId() == null) {
+		if (request == null || request.getCustomerId() == null || request.getOrderStatus() == null ) {
 			throw new BizException(AccountBizReturnCode.paramError, "查询接收订单参数异常");
 		}
 		LOGGER.info("======>>>>>queryReceiveOrderList()入参："+request.toString());
 		Long  customerId =  request.getCustomerId();
-		List<OrderReceiveOrderListVO>  resultList =  orderMapper.queryReceiveOrderList(customerId);
+		
+		Integer orderStatusParam = request.getOrderStatus();
+		List<Integer>  statusList = commonService.getReceiveOrderStatusList(orderStatusParam );
+		
+		List<OrderReceiveOrderListVO>  resultList =  orderMapper.queryReceiveOrderList(customerId,statusList);
 		
 		if(!CollectionUtils.isEmpty(resultList)){
 			for (OrderReceiveOrderListVO info : resultList) {
@@ -348,13 +402,15 @@ public class OrderServiceImpl implements IOrderService {
 	 */
 	@Override
 	public CommonResponse querySendOrderList(OrderSendOrderListRequest request) {
-		if (request == null || request.getCustomerId() == null) {
+		if (request == null || request.getCustomerId() == null || request.getOrderStatus() == null) {
 			throw new BizException(AccountBizReturnCode.paramError, "查询发起订单参数异常");
 		}
 		
 		LOGGER.info("======>>>>>querySendOrderList()入参："+request.toString());
 		Long  customerId =  request.getCustomerId();
-		List<OrderSendOrderListVO>  resultList =  orderMapper.querySendOrderList(customerId);
+		Integer orderStatusParam = request.getOrderStatus();
+		List<Integer>  statusList = commonService.getSendOrderStatusList(orderStatusParam );
+		List<OrderSendOrderListVO>  resultList =  orderMapper.querySendOrderList(customerId,statusList);
 		if(!CollectionUtils.isEmpty(resultList)){
 			for (OrderSendOrderListVO info : resultList) {
 				OrderTempResponseVO  responseVO = commonService.getCountDownSeconds(info.getOrderStatus(), info.getOrderTime(), info.getReceiveOrderTime());
@@ -401,7 +457,7 @@ public class OrderServiceImpl implements IOrderService {
 				throw new BizException(AccountBizReturnCode.ORDER_STATUS_ERROR, "订单状态异常");
 			}
 			BigDecimal   payAmount =  order.getOrderAmounts();
-			commonService.cancelUpdateOrder(orderId, orderStatus,new Date());
+			commonService.cancelUpdateOrder(orderId, orderStatus,new Date(),request.getSelectReason(),request.getRemarkReason());
 			//金额不为空，说明需要退款给用户
 			if(payAmount != null){
 				Long  customerId =  order.getCustomerId();
@@ -614,6 +670,8 @@ public class OrderServiceImpl implements IOrderService {
 			newOrderStatus = OrderSkillConstants.ORDER_STATUS_FINISHED_USER_ACCEPCT;
 			//修改订单状态为：已完成
 			commonService.updateOrder(orderId, newOrderStatus);
+			//大V冻结
+			accountService.inAccount(order.getServiceId(), order.getOrderAmounts(), TransferTypeEnum.FROZEN, AccountBusinessTypeEnum.FroZen);
 			// ADUAN 订单服务完成推送MQ消息
 			userCenterSendMqMessageService.sendOrderCostMqMessage(orderId);
 			
@@ -653,8 +711,15 @@ public class OrderServiceImpl implements IOrderService {
 				throw new BizException(AccountBizReturnCode.ORDER_STATUS_ERROR, "订单状态异常");
 			}
 			
-			//用户同意，修改状态
-			newOrderStatus = OrderSkillConstants.ORDER_STATUS_GOING_USER_ACCEPCT;
+			Integer  skillType =  order.getSkillType();
+			if(OrderSkillConstants.SKILL_TYPE_YES == skillType){
+				
+				//用户同意，修改状态
+				newOrderStatus = OrderSkillConstants.ORDER_STATUS_GOING_USER_ACCEPCT;
+			}else{
+				//用户同意，修改状态:叫醒类型服务专享
+				newOrderStatus = OrderSkillConstants.ORDER_STATUS_GOING_WAITING_START;
+			}
 			
 			
 			Date  currTime =  new Date();
@@ -839,6 +904,8 @@ public class OrderServiceImpl implements IOrderService {
 			}else{
 			//用户发起完成服务	
 				newOrderStatus = OrderSkillConstants.ORDER_STATUS_GOING_USRE_APPAY_FINISH ;
+				//冻结大V金额
+				accountService.inAccount(order.getServiceId(), order.getOrderAmounts(), TransferTypeEnum.FROZEN, AccountBusinessTypeEnum.FroZen);
 			}
 			//大V发起完成服务
 			if(OrderSkillConstants.REQUEST_DV_FINISH_TYPE == type){
@@ -954,6 +1021,9 @@ public class OrderServiceImpl implements IOrderService {
 
 			List<EvaluationLabel> list = new ArrayList<>();
 			for(Integer labelId : request.getLabelIds()){
+				if(labelId == null){
+					continue;
+				}
 				EvaluationLabel label = new EvaluationLabel();
 				label.setEvaluationId(UUIDUtils.getId());
 				label.setCustomerId(orderDetailVO.getServiceId());

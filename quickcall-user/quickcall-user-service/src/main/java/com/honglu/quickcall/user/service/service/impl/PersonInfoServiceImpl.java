@@ -874,7 +874,7 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 
 		// 查询当前等级经验值
 		Integer currentLevelExperience = customerMapper.getGradeExperienceByLevelNo(customer.getCustomerLevel());
-		customerLevelVO.setCustomerExperience(currentLevelExperience);
+		customerLevelVO.setCurrentLevelExperience(currentLevelExperience);
 		// 查询下一等级经验值
 		Integer nextLevelExperience = customerMapper.getGradeExperienceByLevelNo(customer.getCustomerLevel());
 		customerLevelVO.setNextLevelExperience(nextLevelExperience);

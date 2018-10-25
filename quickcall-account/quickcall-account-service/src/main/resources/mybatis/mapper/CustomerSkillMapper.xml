@@ -46,6 +46,40 @@
     from customer_skill
     where customer_skill_id = #{customerSkillId,jdbcType=BIGINT}
   </select>
+  <select id="selectByPrimaryKeyExt" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from customer_skill
+    where customer_skill_id = #{customerSkillId,jdbcType=BIGINT}  AND switch_status = 1 AND receive_status =1 
+       <if test="weekIndex == 1" >
+        AND  monday = #{skillSwitch,jdbcType=TINYINT}
+      </if>
+      <if test="weekIndex == 2" >
+        AND  tuesday = #{skillSwitch,jdbcType=TINYINT}
+      </if>
+      <if test="weekIndex == 3" >
+        AND  wednesday = #{skillSwitch,jdbcType=TINYINT}
+      </if>
+      <if test="weekIndex == 4" >
+        AND  thursday = #{skillSwitch,jdbcType=TINYINT}
+      </if>
+      <if test="weekIndex == 5" >
+       AND   friday = #{skillSwitch,jdbcType=TINYINT}
+      </if>
+      <if test="weekIndex == 6" >
+       AND   saturday = #{skillSwitch,jdbcType=TINYINT}
+      </if>
+      <if test="weekIndex == 7" >
+        AND  sunday = #{skillSwitch,jdbcType=TINYINT}
+      </if>
+      <if test="endTimeStr != null" >
+        AND  end_time_str <![CDATA[  > ]]> #{endTimeStr,jdbcType=VARCHAR}
+      </if>
+      
+    
+    
+    
+  </select>
 
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
     delete from customer_skill
@@ -424,6 +458,19 @@
 			LEFT JOIN skill_item st ON cs.skill_item_id = st.id
 			WHERE
 				cs.customer_skill_id = #{customerSkillId}
+  </select>
+  
+    <!-- 获取全部技能分类 -->
+  <select id="selectPartSkill" resultType="com.honglu.quickcall.account.facade.vo.FirstPageSkillIteminfoVO" >
+
+		SELECT
+			id  as  skillItemId,
+			skill_item_name as  skillItemName,
+			unlock_icon   as  imageUrl
+		FROM
+			skill_item   
+		ORDER BY
+			sort DESC ,create_time  DESC
   </select>
   
   

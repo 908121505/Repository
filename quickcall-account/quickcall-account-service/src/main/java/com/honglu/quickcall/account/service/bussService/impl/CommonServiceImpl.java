@@ -1,5 +1,6 @@
 package com.honglu.quickcall.account.service.bussService.impl;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -184,15 +185,117 @@ public class CommonServiceImpl implements CommonService {
 
 
 	@Override
-	public void cancelUpdateOrder(Long orderId, Integer orderStatus, Date cancelTime) {
+	public void cancelUpdateOrder(Long orderId, Integer orderStatus,Date cancelTime,String  selectReason,String   remarkReason) {
 		Order record = new Order();
 		record.setOrderStatus(orderStatus);
 		record.setOrderId(orderId);
 		record.setModifyTime(new Date());
 		record.setCustCancelTime(cancelTime);
+		record.setSelectReason(selectReason);
+		record.setRemarkReason(remarkReason);
 		//修改订单状态为：已支付
 		orderMapper.updateByPrimaryKeySelective(record);
 		
+	}
+
+
+
+	//用户方
+	@Override
+	public List<Integer> getSendOrderStatusList(Integer orderStatusParam) {
+		List<Integer>  retList = new ArrayList<>();
+		if(OrderSkillConstants.ORDER_STATUS_PARAM_TOTAL == orderStatusParam){
+			retList = null ;
+		}else if(OrderSkillConstants.ORDER_STATUS_PARAM_WAITING_RECEIVE_ORDER == orderStatusParam){
+			retList.add(OrderSkillConstants.ORDER_STATUS_PARAM_WAITING_RECEIVE_ORDER);
+		}else if(OrderSkillConstants.ORDER_STATUS_PARAM_WAITING_START == orderStatusParam){
+			
+			retList.add(OrderSkillConstants.ORDER_STATUS_WAITING_START);
+			retList.add(OrderSkillConstants.ORDER_STATUS_GOING_WAITING_START);
+			
+			
+		}else if(OrderSkillConstants.ORDER_STATUS_PARAM_GOING == orderStatusParam){
+			retList.add(OrderSkillConstants.ORDER_STATUS_GOING_USER_ACCEPCT);
+			retList.add(OrderSkillConstants.ORDER_STATUS_GOING_DAV_APPAY_FINISH);
+		
+		}else if(OrderSkillConstants.ORDER_STATUS_PARAM_FINISHED == orderStatusParam){
+			
+			retList.add(OrderSkillConstants.ORDER_STATUS_FINISHED_AND_PINGJIA);
+		
+		
+		}else if(OrderSkillConstants.ORDER_STATUS_PARAM_REFUSED == orderStatusParam){
+			
+			retList.add(OrderSkillConstants.ORDER_STATUS_DAV_REFUSED_RECEIVE);
+		}else if(OrderSkillConstants.ORDER_STATUS_PARAM_CANCEL == orderStatusParam){
+			
+			retList.add(OrderSkillConstants.ORDER_STATUS_CANCEL_BEFORE_RECEIVE);
+			retList.add(OrderSkillConstants.ORDER_STATUS_CANCEL_SYSTEM_NOT_RECEIVE);
+			retList.add(OrderSkillConstants.ORDER_STATUS_CANCEL_DAV_START_ONE_ORDER);
+			retList.add(OrderSkillConstants.ORDER_STATUS_CANCEL_BEFORE_DAV_START);
+			retList.add(OrderSkillConstants.ORDER_STATUS_CANCEL_NOT_START);
+			retList.add(OrderSkillConstants.ORDER_STATUS_CANCLE_USER_SELF_BEFORE_SERVICE);
+			retList.add(OrderSkillConstants.ORDER_STATUS_CANCEL_USER_NOT_ACCEPCT);
+		
+		
+		}else if(OrderSkillConstants.ORDER_STATUS_PARAM_PING_JIA == orderStatusParam){
+			
+			retList.add(OrderSkillConstants.ORDER_STATUS_FINISHED_USER_ACCEPCT);
+			retList.add(OrderSkillConstants.ORDER_STATUS_FINISH_DV_FINISH);
+			retList.add(OrderSkillConstants.ORDER_STATUS_GOING_USRE_APPAY_FINISH);
+			retList.add(OrderSkillConstants.ORDER_STATUS_FINISH_DAV_FINISH_AFTER_SERVICE_TIME);
+			retList.add(OrderSkillConstants.ORDER_STATUS_FINISH_BOTH_NO_OPERATE);
+		}
+		
+		return retList;
+	}
+	
+	
+	//大V方
+	@Override
+	public List<Integer> getReceiveOrderStatusList(Integer orderStatusParam) {
+		List<Integer>  retList = new ArrayList<>();
+		if(OrderSkillConstants.ORDER_STATUS_PARAM_TOTAL == orderStatusParam){
+			retList = null ;
+		}else if(OrderSkillConstants.ORDER_STATUS_PARAM_WAITING_RECEIVE_ORDER == orderStatusParam){
+			retList.add(OrderSkillConstants.ORDER_STATUS_PARAM_WAITING_RECEIVE_ORDER);
+		}else if(OrderSkillConstants.ORDER_STATUS_PARAM_WAITING_START == orderStatusParam){
+			
+			retList.add(OrderSkillConstants.ORDER_STATUS_WAITING_START);
+			retList.add(OrderSkillConstants.ORDER_STATUS_GOING_WAITING_START);
+			
+			
+		}else if(OrderSkillConstants.ORDER_STATUS_PARAM_GOING == orderStatusParam){
+			retList.add(OrderSkillConstants.ORDER_STATUS_GOING_USER_ACCEPCT);
+			retList.add(OrderSkillConstants.ORDER_STATUS_GOING_DAV_APPAY_FINISH);
+			
+		}else if(OrderSkillConstants.ORDER_STATUS_PARAM_FINISHED == orderStatusParam){
+			
+			retList.add(OrderSkillConstants.ORDER_STATUS_FINISHED_AND_PINGJIA);
+			retList.add(OrderSkillConstants.ORDER_STATUS_FINISHED_USER_ACCEPCT);
+			retList.add(OrderSkillConstants.ORDER_STATUS_FINISH_DV_FINISH);
+			retList.add(OrderSkillConstants.ORDER_STATUS_GOING_USRE_APPAY_FINISH);
+			retList.add(OrderSkillConstants.ORDER_STATUS_FINISH_DAV_FINISH_AFTER_SERVICE_TIME);
+			retList.add(OrderSkillConstants.ORDER_STATUS_FINISH_BOTH_NO_OPERATE);
+			
+		}else if(OrderSkillConstants.ORDER_STATUS_PARAM_REFUSED == orderStatusParam){
+			
+			retList.add(OrderSkillConstants.ORDER_STATUS_DAV_REFUSED_RECEIVE);
+		}else if(OrderSkillConstants.ORDER_STATUS_PARAM_CANCEL == orderStatusParam){
+			
+			retList.add(OrderSkillConstants.ORDER_STATUS_CANCEL_BEFORE_RECEIVE);
+			retList.add(OrderSkillConstants.ORDER_STATUS_CANCEL_SYSTEM_NOT_RECEIVE);
+			retList.add(OrderSkillConstants.ORDER_STATUS_CANCEL_DAV_START_ONE_ORDER);
+			retList.add(OrderSkillConstants.ORDER_STATUS_CANCEL_BEFORE_DAV_START);
+			retList.add(OrderSkillConstants.ORDER_STATUS_CANCEL_NOT_START);
+			retList.add(OrderSkillConstants.ORDER_STATUS_CANCLE_USER_SELF_BEFORE_SERVICE);
+			retList.add(OrderSkillConstants.ORDER_STATUS_CANCEL_USER_NOT_ACCEPCT);
+			
+		}else if(OrderSkillConstants.ORDER_STATUS_PARAM_PING_JIA == orderStatusParam){
+			retList.add(999);
+			
+		}
+		
+		return retList;
 	}
 
 }

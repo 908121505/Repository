@@ -15,6 +15,7 @@
     <result column="service_price" property="servicePrice" jdbcType="DECIMAL" />
     <result column="order_amounts" property="orderAmounts" jdbcType="DECIMAL" />
     <result column="discount_rate" property="discountRate" jdbcType="DECIMAL" />
+    <result column="appoint_time" property="appointTime" jdbcType="TIMESTAMP" />
     <result column="cust_cancel_time" property="custCancelTime" jdbcType="TIMESTAMP" />
     <result column="system_cancel_time" property="systemCancelTime" jdbcType="TIMESTAMP" />
     <result column="receive_order_time" property="receiveOrderTime" jdbcType="TIMESTAMP" />
@@ -46,7 +47,7 @@
   
   <sql id="Base_Column_List" >
     order_id, order_no, customer_skill_id, skill_item_id,customer_id, service_id, trade_id, payment_type, 
-    order_num, service_unit, service_price, order_amounts, discount_rate, cust_cancel_time, 
+    order_num, service_unit, service_price, order_amounts, discount_rate, appoint_time,cust_cancel_time, 
     system_cancel_time, receive_order_time, start_service_time, appay_end_time, start_time, 
     end_time, expect_end_time,order_time,skill_type, order_status, payment_time, customer_is_evaluate, customer_message, 
     evaluate_start, customer_evaluate, order_describe, create_time, modify_time, create_man, 
@@ -72,7 +73,7 @@
     insert into orders (order_id, order_no, customer_skill_id, skill_item_id,
       customer_id, service_id, trade_id, 
       payment_type, order_num, service_unit, 
-      service_price, order_amounts, discount_rate, 
+      service_price, order_amounts, discount_rate, appoint_time,
       cust_cancel_time, system_cancel_time, receive_order_time, 
       start_service_time, appay_end_time, start_time, 
       end_time, expect_end_time,order_time,skill_type, order_status, 
@@ -84,7 +85,7 @@
       #{customerId,jdbcType=BIGINT}, #{serviceId,jdbcType=BIGINT}, #{tradeId,jdbcType=BIGINT}, 
       #{paymentType,jdbcType=TINYINT}, #{orderNum,jdbcType=INTEGER}, #{serviceUnit,jdbcType=VARCHAR}, 
       #{servicePrice,jdbcType=DECIMAL}, #{orderAmounts,jdbcType=DECIMAL}, #{discountRate,jdbcType=DECIMAL}, 
-      #{custCancelTime,jdbcType=TIMESTAMP}, #{systemCancelTime,jdbcType=TIMESTAMP}, #{receiveOrderTime,jdbcType=TIMESTAMP}, 
+      #{appointTime,jdbcType=TIMESTAMP}, #{custCancelTime,jdbcType=TIMESTAMP}, #{systemCancelTime,jdbcType=TIMESTAMP}, #{receiveOrderTime,jdbcType=TIMESTAMP}, 
       #{startServiceTime,jdbcType=TIMESTAMP}, #{appayEndTime,jdbcType=TIMESTAMP}, #{startTime,jdbcType=TIMESTAMP}, 
       #{endTime,jdbcType=TIMESTAMP},#{expectEndTime,jdbcType=TIMESTAMP}, #{orderTime,jdbcType=TIMESTAMP}, #{skillType,jdbcType=TINYINT}, #{orderStatus,jdbcType=TINYINT}, 
       #{paymentTime,jdbcType=TIMESTAMP}, #{customerIsEvaluate,jdbcType=TINYINT}, #{customerMessage,jdbcType=VARCHAR}, 
@@ -138,6 +139,9 @@
       </if>
       <if test="custCancelTime != null" >
         cust_cancel_time,
+      </if>
+      <if test="appointTime != null" >
+        appoint_time,
       </if>
       <if test="systemCancelTime != null" >
         system_cancel_time,
@@ -239,6 +243,9 @@
       </if>
       <if test="discountRate != null" >
         #{discountRate,jdbcType=DECIMAL},
+      </if>
+      <if test="appointTime != null" >
+        #{appointTime,jdbcType=TIMESTAMP},
       </if>
       <if test="custCancelTime != null" >
         #{custCancelTime,jdbcType=TIMESTAMP},
@@ -348,6 +355,9 @@
       <if test="discountRate != null" >
         discount_rate = #{discountRate,jdbcType=DECIMAL},
       </if>
+      <if test="appointTime != null" >
+        appoint_time = #{appointTime,jdbcType=TIMESTAMP},
+      </if>
       <if test="custCancelTime != null" >
         cust_cancel_time = #{custCancelTime,jdbcType=TIMESTAMP},
       </if>
@@ -434,6 +444,7 @@
       service_price = #{servicePrice,jdbcType=DECIMAL},
       order_amounts = #{orderAmounts,jdbcType=DECIMAL},
       discount_rate = #{discountRate,jdbcType=DECIMAL},
+      appoint_time = #{appointTime,jdbcType=TIMESTAMP},
       cust_cancel_time = #{custCancelTime,jdbcType=TIMESTAMP},
       system_cancel_time = #{systemCancelTime,jdbcType=TIMESTAMP},
       receive_order_time = #{receiveOrderTime,jdbcType=TIMESTAMP},
@@ -477,36 +488,58 @@
 		  cs.skill_name  AS  skillItemName,
 		  st.unlock_icon  AS  icon,
 	      od.order_time  AS  orderTime,
-	      od.receive_order_time  AS receiveOrderTime
+	      od.receive_order_time  AS receiveOrderTime,
+	      od.customer_skill_id AS customerSkillId,
+		  cs.switch_status AS switchStatus
 	FROM
 		orders od LEFT JOIN   customer_skill  cs  ON  od.customer_skill_id  = cs.customer_skill_id
 	        LEFT JOIN   skill_item   st ON  cs.skill_item_id  =  st.id
 	    LEFT JOIN  customer  ct  ON  od.service_id  =  ct.customer_id 
 	WHERE  od.customer_id  = #{customerId}
+	
+	 <if test="statusList != null" >
+        AND  od.order_status  IN 
+        <foreach collection="statusList"  item="status"  open="("  close=")"  separator=",">
+         	#{status}
+        </foreach>
+      </if>
+      order by  order_time  desc 
   </select>
   
   
   <!-- 查询收到的订单 -->
   <select id="queryReceiveOrderList" resultType="com.honglu.quickcall.account.facade.vo.OrderReceiveOrderListVO"  >
 	SELECT
-		  od.order_id  AS orderId,
-		  ct.nick_name  AS nickName,
-		  od.customer_id AS customerId ,
-		  ct.head_portrait_url  AS  headPortraitUrl,
-		  od.service_price  AS  servicePrice ,
-		  od.service_unit  AS  serviceUnit,
-		  od.order_num AS  orderNum,
-		  od.order_amounts AS  orderAmount,
-		  od.order_status  AS orderStatus,
-		  cs.skill_name  AS  skillItemName,
-		  st.unlock_icon  AS  icon,
-	      od.order_time  AS  orderTime,
-	      od.receive_order_time  AS receiveOrderTime
+		od.order_id AS orderId,
+		ct.nick_name AS nickName,
+		od.customer_id AS customerId,
+		ct.head_portrait_url AS headPortraitUrl,
+		od.service_price AS servicePrice,
+		od.service_unit AS serviceUnit,
+		od.order_num AS orderNum,
+		od.order_amounts AS orderAmount,
+		od.order_status AS orderStatus,
+		cs.skill_name AS skillItemName,
+		st.unlock_icon AS icon,
+		od.order_time AS orderTime,
+		od.receive_order_time AS receiveOrderTime,
+		od.customer_skill_id AS customerSkillId,
+		cs.switch_status AS switchStatus
 	FROM
-		orders od LEFT JOIN   customer_skill  cs  ON  od.customer_skill_id  = cs.customer_skill_id
-	        LEFT JOIN   skill_item   st ON  cs.skill_item_id  =  st.id
-	    LEFT JOIN  customer  ct  ON  od.customer_id  =  ct.customer_id 
-	WHERE  od.service_id  = #{customerId}
+		orders od
+	LEFT JOIN customer_skill cs ON od.customer_skill_id = cs.customer_skill_id
+	LEFT JOIN skill_item st ON cs.skill_item_id = st.id
+	LEFT JOIN customer ct ON od.customer_id = ct.customer_id
+	WHERE  od.service_id  = #{customerId}  
+		 <if test="statusList != null" >
+        AND  od.order_status  IN 
+        <foreach collection="statusList"  item="status"  open="("  close=")"  separator=",">
+         	#{status}
+        </foreach>
+      </if>
+	order by  order_time  desc 
+	
+	
   </select>
   
   
@@ -532,7 +565,8 @@
 			od.start_service_time AS startTime,
 			od.end_time AS endTime ,
   			cs.skill_item_id   AS  skillItemId,
-  			od.receive_order_time  AS receiveOrderTime
+	  		od.receive_order_time AS receiveOrderTime
+			
 		FROM
 			orders od
 		LEFT JOIN customer ct ON ct.customer_id = od.customer_id

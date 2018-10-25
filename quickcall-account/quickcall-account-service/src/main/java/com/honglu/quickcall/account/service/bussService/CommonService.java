@@ -42,7 +42,7 @@ public interface CommonService {
 	 * @param orderId
 	 * @param orderStatus
 	 */
-	public void cancelUpdateOrder(Long orderId, Integer orderStatus,Date cancelTime);
+	public void cancelUpdateOrder(Long orderId, Integer orderStatus,Date cancelTime,String  selectReason,String   remarkReason);
 	
 	/**
 	 * 根据订单ID更新订单状态
@@ -108,6 +108,20 @@ public interface CommonService {
 	 * @return
 	 */
 	public List<Order> selectOrderReceiveOrder(Long  serviceId ,Long orderId, Integer queryStatus, Integer skillType);
+	
+	
+	/**
+	 * 根据订单大类获取订单子类列表(用户方)
+	 * @param orderStatusParam
+	 * @return
+	 */
+	public  List<Integer>  getSendOrderStatusList(Integer orderStatusParam);
+	/**
+	 * 根据订单大类获取订单子类列表(大V方)
+	 * @param orderStatusParam
+	 * @return
+	 */
+	public  List<Integer>  getReceiveOrderStatusList(Integer orderStatusParam);
 	
 	
    

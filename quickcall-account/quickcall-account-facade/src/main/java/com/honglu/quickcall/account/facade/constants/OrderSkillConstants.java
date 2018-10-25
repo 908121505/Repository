@@ -43,6 +43,8 @@ public interface OrderSkillConstants {
 	public static final String  RET_CODE_BALANCE_NOT_ENOUTH = "2";
 	/**下单返回结果：3 大V正忙*/
 	public static final String  RET_CODE_DV_BUSY = "3";
+	/**下单返回结果：3 大V正忙*/
+	public static final String  RET_CODE_DV_NOT_ACCEPTE_ORDER = "5";
 	/**下单返回结果：4 系统错误*/
 	public static final String  RET_CODE_SYSTEM_ERROR = "4";
 	
@@ -107,6 +109,33 @@ public interface OrderSkillConstants {
 	
 	
 	
+	/**订单状态1.全部;   */
+	public static final Integer  ORDER_STATUS_PARAM_TOTAL = 1 ;
+	/**订单状态 2：待接单;   */
+	public static final Integer  ORDER_STATUS_PARAM_WAITING_RECEIVE_ORDER = 2 ;
+	/**订单状态3：待开始;   */
+	public static final Integer  ORDER_STATUS_PARAM_WAITING_START = 3 ;
+	/**订单状态 4：进行中;   */
+	public static final Integer  ORDER_STATUS_PARAM_GOING = 4 ;
+	/**订单状态 5：已完成;   */
+	public static final Integer  ORDER_STATUS_PARAM_FINISHED = 5 ;
+	/**订单状态6.已拒绝    */
+	public static final Integer  ORDER_STATUS_PARAM_REFUSED = 6 ;
+	/**订单状态7.已取消;   */
+	public static final Integer  ORDER_STATUS_PARAM_CANCEL = 7 ;
+	/**订单状态 8：待评价   */
+	public static final Integer  ORDER_STATUS_PARAM_PING_JIA = 8 ;
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	/**订单状态2.待接单;   */
 	public static final Integer  ORDER_STATUS_WAITING_RECEIVE = 2 ;
 	/**订单状态4.取消（用户下单后自主取消）*/
@@ -129,7 +158,7 @@ public interface OrderSkillConstants {
 	public static final Integer  ORDER_STATUS_CANCLE_USER_SELF_BEFORE_SERVICE = 20 ;
 	/**订单状态22.取消（大V发起开始服务用户5分钟未接）;*/
 	public static final Integer  ORDER_STATUS_CANCEL_USER_NOT_ACCEPCT = 22 ;
-	/**订单状态24.进行中（大V发起开始服务用户5分钟内同意，叫醒特享）;*/
+	/**订单状态24.待开始（大V发起开始服务用户5分钟内同意，叫醒特享）;*/
 	public static final Integer  ORDER_STATUS_GOING_WAITING_START = 24 ;
 	/**订单状态26.进行中（大V发起开始服务用户5分钟内同意）;*/
 	public static final Integer  ORDER_STATUS_GOING_USER_ACCEPCT = 26 ;
