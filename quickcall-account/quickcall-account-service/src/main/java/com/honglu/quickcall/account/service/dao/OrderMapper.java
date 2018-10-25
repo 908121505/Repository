@@ -139,4 +139,9 @@ public interface OrderMapper {
 	 * @return
 	 */
 	List<Order> selectOrderReceiveOrder(@Param("serviceId")Long  serviceId ,@Param("orderId")Long orderId, @Param("orderStatus")Integer orderStatus, @Param("skillType")Integer skillType);
+	
+	
+	
+	
+	
 }

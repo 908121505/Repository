@@ -37,6 +37,12 @@ public interface CommonService {
 	 * @param orderStatus
 	 */
 	public void updateOrder(Long orderId, Integer orderStatus);
+	/**
+	 * 根据订单ID更新订单状态
+	 * @param orderId
+	 * @param orderStatus
+	 */
+	public void cancelUpdateOrder(Long orderId, Integer orderStatus,Date cancelTime);
 	
 	/**
 	 * 根据订单ID更新订单状态

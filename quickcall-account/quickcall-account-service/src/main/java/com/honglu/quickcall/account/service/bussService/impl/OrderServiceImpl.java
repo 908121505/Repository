@@ -258,6 +258,7 @@ public class OrderServiceImpl implements IOrderService {
 					if(orderAmounts.compareTo(rechargeAmounts) >  0){
 						//大V忙
 						resultMap.put("retCode",  OrderSkillConstants.RET_CODE_BALANCE_NOT_ENOUTH);
+						commonResponse.setData(resultMap);
 						//返回余额不足状态  
 						return   commonResponse ;
 					}else{
@@ -396,21 +397,17 @@ public class OrderServiceImpl implements IOrderService {
 			}else if(OrderSkillConstants.ORDER_STATUS_WAITING_START_DA_APPAY_START_SERVICE  == oldOrderStatus){
 				//订单状态8.大V接受订单之后开始之前用户自主取消
 				orderStatus = OrderSkillConstants.ORDER_STATUS_CANCLE_USER_SELF_BEFORE_SERVICE;
+			}else{
+				throw new BizException(AccountBizReturnCode.ORDER_STATUS_ERROR, "订单状态异常");
 			}
 			BigDecimal   payAmount =  order.getOrderAmounts();
-			if(orderStatus == null){
-				throw new BizException(AccountBizReturnCode.paramError, "取消订单参数异常");
-			}else{
-				commonService.updateOrder(orderId, orderStatus);
-				//金额不为空，说明需要退款给用户
-				if(payAmount != null){
-					Long  customerId =  order.getCustomerId();
-					accountService.inAccount(customerId, payAmount,TransferTypeEnum.RECHARGE,AccountBusinessTypeEnum.OrderRefund);
-				}
+			commonService.cancelUpdateOrder(orderId, orderStatus,new Date());
+			//金额不为空，说明需要退款给用户
+			if(payAmount != null){
+				Long  customerId =  order.getCustomerId();
+				accountService.inAccount(customerId, payAmount,TransferTypeEnum.RECHARGE,AccountBusinessTypeEnum.OrderRefund);
 			}
 		}
-		
-		
 		
 		Long  serviceId =  order.getServiceId();
 		//用户取消订单通知大V查看详情
