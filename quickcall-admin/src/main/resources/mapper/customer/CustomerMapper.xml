@@ -256,4 +256,8 @@
         update customer_skill set skill_status = 2 where customer_id =#{id} and skill_name = #{skillName}
     </update>
 
+    <select id="selectCustomerIdByPhone" resultType="java.lang.String" parameterType="java.lang.String">
+        select customer_id from customer where phone = #{phone} limit 1
+    </select>
+
 </mapper>

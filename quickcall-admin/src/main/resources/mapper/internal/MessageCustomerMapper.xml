@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="MessageCustomerMapper">
+  <resultMap id="BaseResultMap" type="com.calf.module.internal.entity.MessageCustomer">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="phone" jdbcType="BIGINT" property="phone" />
+    <result column="receiver_id" jdbcType="BIGINT" property="receiverId" />
+    <result column="message_id" jdbcType="BIGINT" property="messageId" />
+    <result column="message_status" jdbcType="TINYINT" property="messageStatus" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime" />
+    <result column="create_man" jdbcType="VARCHAR" property="createMan" />
+    <result column="modify_man" jdbcType="VARCHAR" property="modifyMan" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, phone, receiver_id, message_id, message_status, create_time, modify_time, create_man, 
+    modify_man, remark
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from message_customer
+    where id = #{arg0}
+  </select>
+  <insert id="insert" parameterType="com.calf.module.internal.entity.MessageCustomer">
+    insert into message_customer (id, phone, receiver_id, 
+      message_id, message_status, create_time, 
+      modify_time, create_man, modify_man, 
+      remark)
+    values (#{id,jdbcType=BIGINT}, #{phone,jdbcType=BIGINT}, #{receiverId,jdbcType=BIGINT}, 
+      #{messageId,jdbcType=BIGINT}, #{messageStatus,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{modifyTime,jdbcType=TIMESTAMP}, #{createMan,jdbcType=VARCHAR}, #{modifyMan,jdbcType=VARCHAR}, 
+      #{remark,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.calf.module.internal.entity.MessageCustomer">
+    insert into message_customer
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="phone != null">
+        phone,
+      </if>
+      <if test="receiverId != null">
+        receiver_id,
+      </if>
+      <if test="messageId != null">
+        message_id,
+      </if>
+      <if test="messageStatus != null">
+        message_status,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="modifyTime != null">
+        modify_time,
+      </if>
+      <if test="createMan != null">
+        create_man,
+      </if>
+      <if test="modifyMan != null">
+        modify_man,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="phone != null">
+        #{phone,jdbcType=BIGINT},
+      </if>
+      <if test="receiverId != null">
+        #{receiverId,jdbcType=BIGINT},
+      </if>
+      <if test="messageId != null">
+        #{messageId,jdbcType=BIGINT},
+      </if>
+      <if test="messageStatus != null">
+        #{messageStatus,jdbcType=TINYINT},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyTime != null">
+        #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createMan != null">
+        #{createMan,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyMan != null">
+        #{modifyMan,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.calf.module.internal.entity.MessageCustomer">
+    update message_customer
+    <set>
+      <if test="phone != null">
+        phone = #{phone,jdbcType=BIGINT},
+      </if>
+      <if test="receiverId != null">
+        receiver_id = #{receiverId,jdbcType=BIGINT},
+      </if>
+      <if test="messageId != null">
+        message_id = #{messageId,jdbcType=BIGINT},
+      </if>
+      <if test="messageStatus != null">
+        message_status = #{messageStatus,jdbcType=TINYINT},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyTime != null">
+        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createMan != null">
+        create_man = #{createMan,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyMan != null">
+        modify_man = #{modifyMan,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.calf.module.internal.entity.MessageCustomer">
+    update message_customer
+    set phone = #{phone,jdbcType=BIGINT},
+      receiver_id = #{receiverId,jdbcType=BIGINT},
+      message_id = #{messageId,jdbcType=BIGINT},
+      message_status = #{messageStatus,jdbcType=TINYINT},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      create_man = #{createMan,jdbcType=VARCHAR},
+      modify_man = #{modifyMan,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>
