@@ -43,4 +43,18 @@ public interface TaskOrderMapper {
 	 */
 	void updateOrderStatusAfter12HourBoth(@Param("currTime")Date  currTime,@Param("endTime")Date  endTime,@Param("queryStatus")Integer queryStatus ,@Param("updateStatus")Integer  updateStatus,@Param("skillType")Integer  skillType);
 
+	/**
+	 * 叫醒自动转为进行中
+	 * @param endTime
+	 * @param queryStatus
+	 * @param updateStatus
+	 * @param skillType
+	 */
+	void appointOrderGoing(@Param("currTime")Date  currTime,@Param("endTime")Date  endTime,@Param("queryStatus")Integer queryStatus ,@Param("updateStatus")Integer  updateStatus,@Param("skillType")Integer  skillType);
+
+	/**
+	 * 叫醒自动结束
+	 */
+	void appointOrderFinish(@Param("currTime")Date  currTime,@Param("endTime")Date  endTime,@Param("queryStatus")Integer queryStatus ,@Param("updateStatus")Integer  updateStatus,@Param("skillType")Integer  skillType);
+
 }

@@ -269,7 +269,7 @@
                     {
                         "data": "sort",
                         "sTitle": "排序",
-                        'sClass': "text-center",
+                        'sClass': "text-center"
                     },
 
 
@@ -278,7 +278,6 @@
                         "sTitle": "备注",
                         'sClass': "text-center"
                     },
-
                     {
                         "data": "createMan",
                         "sTitle": "创建人",

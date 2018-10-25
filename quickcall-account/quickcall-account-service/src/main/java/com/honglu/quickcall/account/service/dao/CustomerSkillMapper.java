@@ -18,6 +18,9 @@ public interface CustomerSkillMapper {
     int insertSelective(CustomerSkill record);
 
     CustomerSkill selectByPrimaryKey(Long userSkillId);
+    
+    
+    CustomerSkill selectByPrimaryKeyExt(@Param("customerSkillId")Long customerSkillId,@Param("weekIndex")Integer  weekIndex ,@Param("skillSwitch")Integer skillSwitch,@Param("endTimeStr")String  endTimeStr);
 
     int updateByPrimaryKeySelective(CustomerSkill record);
 

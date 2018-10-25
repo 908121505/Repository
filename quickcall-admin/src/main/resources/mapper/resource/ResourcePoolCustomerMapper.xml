@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="ResourcePoolCustomer" >
+  <resultMap id="BaseResultMap" type="com.calf.module.resource.entity.ResourcePoolCustomer" >
+    <id column="id" property="id" jdbcType="BIGINT" javaType="INTEGER" />
+    <result column="resource_pool_id" property="resourcePoolId" jdbcType="VARCHAR" />
+    <result column="customer_id" property="customerId" jdbcType="VARCHAR" />
+    <result column="app_id" property="appId" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="TINYINT" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+    <result column="create_man" property="createMan" jdbcType="VARCHAR" />
+    <result column="modify_man" property="modifyMan" jdbcType="VARCHAR" />
+
+<!--    <association property="" >
+
+    </association>-->
+  </resultMap>
+
+
+  <sql id="Base_Column_List" >
+    id, resource_pool_id, customer_id,app_id, status,remark,
+    create_time,modify_time, create_man, modify_man
+  </sql>
+
+
+  <insert id="insertCustResourcePool" parameterType="com.calf.module.resource.entity.ResourcePoolCustomer" >
+    insert into resource_pool_customer (resource_pool_id, customer_id, app_id,status,remark,
+    create_time,modify_time, create_man, modify_man
+      )
+    values (
+            #{resourcePoolId,jdbcType=BIGINT},
+            #{customerId,jdbcType=BIGINT},
+            #{appId,jdbcType=VARCHAR},
+            #{status,jdbcType=TINYINT},
+            #{remark,jdbcType=VARCHAR},
+            #{createTime,jdbcType=TIMESTAMP},
+            #{modifyTime,jdbcType=TIMESTAMP},
+            #{createMan,jdbcType=VARCHAR},
+            #{modifyMan,jdbcType=VARCHAR}
+      )
+  </insert>
+
+  <select id="selectByResourcePoolId" resultType="com.calf.module.resource.entity.ResourcePoolCustomer" parameterType="java.lang.String" >
+    select id, resource_pool_id as resourcePoolId,customer_id as customerId,app_id as appId
+     from resource_pool_customer
+    where status = 1
+      and resource_pool_id = #{resource_pool_id,jdbcType=BIGINT}
+  </select>
+
+  <delete id="deleteByResourcePoolId" parameterType="map">
+    delete from resource_pool_customer where resource_pool_id = #{arg0}
+  </delete>
+
+  <update id="updateStatusDel" parameterType="Map" >
+    update resource_pool_customer
+     set status = #{status,jdbcType=TINYINT},
+        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+        modify_man = #{modifyMan,jdbcType=VARCHAR}
+     where resource_pool_id = #{resource_pool_id,jdbcType=BIGINT}
+  </update>
+
+</mapper>

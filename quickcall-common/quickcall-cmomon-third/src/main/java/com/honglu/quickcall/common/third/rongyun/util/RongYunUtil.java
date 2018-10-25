@@ -21,12 +21,13 @@ public class RongYunUtil {
 	public static String APPSECRET = ResourceBundle.getBundle("thirdconfig").getString("appsecret");
 
 	// 系统用户Id
-	public static String SYSTEM_COSTOMER_ID = ResourceBundle.getBundle("thirdconfig").getString("SYSTEM_COSTOMER_ID");
+	public static String SYSTEM_COSTOMER_ID = "1810201521499459795";
 	// 活动用户Id
-	public static String ACTIVITY_COSTOMER_ID = ResourceBundle.getBundle("thirdconfig")
-			.getString("ACTIVITY_COSTOMER_ID");
+	public static String ACTIVITY_COSTOMER_ID = "1810231738121684156";
 	// 订单用户ID
-	public static String ORDER_COSTOMER_ID = ResourceBundle.getBundle("thirdconfig").getString("ORDER_COSTOMER_ID");
+	public static String ORDER_COSTOMER_ID = "1810231739254693242";
+	// 预约用户Id
+	public static String BESPOKE_COSTOMER_ID = "1809282012067564328";
 
 	/**
 	 * 获取 Token 方法
@@ -136,7 +137,7 @@ public class RongYunUtil {
 
 		Long fromUserId = Long.parseLong(SYSTEM_COSTOMER_ID);
 		String imageUrl = "http://wdgj.oss-cn-shanghai.aliyuncs.com/voice/user/headimg/25d8dfa082314cb693f78faaf51581d8.jpg";
-		refreshUser(fromUserId + "", "系统消息", imageUrl);
+
 		sendMessage("系统消息", fromUserId, toCustomerId, content, 1, imageUrl, 10);
 	}
 
@@ -152,7 +153,7 @@ public class RongYunUtil {
 	public static void sendActivityMessage(Long toCustomerId, String content) {
 		Long fromUserId = Long.parseLong(ACTIVITY_COSTOMER_ID);
 		String imageUrl = "http://wdgj.oss-cn-shanghai.aliyuncs.com/voice/user/headimg/d13b199ed66f4ba1aedc6ac4b32e00cd.jpg";
-		refreshUser(fromUserId + "", "活动消息", imageUrl);
+
 		sendMessage("活动消息", fromUserId, toCustomerId, content, 1, imageUrl, 10);
 	}
 
@@ -168,8 +169,14 @@ public class RongYunUtil {
 	public static void sendOrderMessage(Long toCustomerId, String content) {
 		Long fromUserId = Long.parseLong(ORDER_COSTOMER_ID);
 		String imageUrl = "http://wdgj.oss-cn-shanghai.aliyuncs.com/voice/user/headimg/dd85f3b6b42e441eb48f2839752474cc.jpg";
-		refreshUser(fromUserId + "", "订单消息", imageUrl);
+
 		sendMessage("订单消息", fromUserId, toCustomerId, content, 1, imageUrl, 10);
+	}
+
+	public static void sendBespokeMessage(Long toCustomerId, String content) {
+		Long fromUserId = Long.parseLong(BESPOKE_COSTOMER_ID);
+		String imageUrl = "http://wdgj.oss-cn-shanghai.aliyuncs.com/voice/user/headimg/d122cdf6638e4765894b62fff69a68e6.jpg";
+		sendMessage("预约消息", fromUserId, toCustomerId, content, 1, imageUrl, 10);
 	}
 
 	/**
@@ -225,10 +232,11 @@ public class RongYunUtil {
 		 * RongYunUtil.publishPrivate(String.valueOf(fromUserId), otherIds, txtMessage,
 		 * null, null, null, null, null, null); System.out.println(code);
 		 */
-
-		sendSystemMessage(1810161659557030302L, "我喜欢亚波");
-		sendOrderMessage(1810161659557030302L, "你有一条新的订单哦");
-		sendActivityMessage(1810161659557030302L, "红包");
+		Long toCustomerId = 1810251630126313929L;
+		sendSystemMessage(toCustomerId, "我喜欢亚波1");
+		sendOrderMessage(toCustomerId, "你有一条新的订单哦1");
+		sendActivityMessage(toCustomerId, "红包1");
+		sendBespokeMessage(toCustomerId, "预约消息1");
 
 		/*
 		 * sendFansMessage(1810241141388482637L, "轻音_3575",

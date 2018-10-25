@@ -71,6 +71,9 @@ public class CustomerSkill {
     private String remark;
 
     /**********扩展查询字段********/
+    private String customerNickName;
+    private Integer customerSex;
+    private Date customerBirthday;
     private String skillBackColor;
     private String skillFontColor;
     private String skillVoiceUrl;
@@ -353,4 +356,27 @@ public class CustomerSkill {
         this.skillVoiceTime = skillVoiceTime;
     }
 
+    public String getCustomerNickName() {
+        return customerNickName;
+    }
+
+    public void setCustomerNickName(String customerNickName) {
+        this.customerNickName = customerNickName;
+    }
+
+    public Integer getCustomerSex() {
+        return customerSex;
+    }
+
+    public void setCustomerSex(Integer customerSex) {
+        this.customerSex = customerSex;
+    }
+
+    public Date getCustomerBirthday() {
+        return customerBirthday;
+    }
+
+    public void setCustomerBirthday(Date customerBirthday) {
+        this.customerBirthday = customerBirthday;
+    }
 }

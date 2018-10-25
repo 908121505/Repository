@@ -12,6 +12,7 @@ import java.util.ResourceBundle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.honglu.quickcall.common.constants.PropertiesConstant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -124,9 +125,6 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 	private final static Pattern CH_EN_PATTERN = Pattern.compile("^[\\u4e00-\\u9fa5a-z\\d_]{4,24}$");
 	private static final Logger logger = LoggerFactory.getLogger(PersonInfoServiceImpl.class);
 
-	/** 用户默认的形象照 **/
-	private static String DEFAULT_CUSTOMER_APPEARANCE_URL = ResourceBundle.getBundle("thirdconfig")
-			.getString("DEFAULT_CUSTOMER_APPEARANCE_URL");
 	// private static String CUSTOMER_HOME_SHARE_H5_URL =
 	// ResourceBundle.getBundle("thirdconfig").getString("CUSTOMER_HOME_SHARE_H5_URL");
 
@@ -599,6 +597,7 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 		int status = n & n1;
 		status = status == 0 ? 0 : 1;
 		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("AttentionStatus", n1 == 0?0:1);
 		map.put("eachAttentionStatus", status);
 		return ResultUtils.resultSuccess(map);
 	}
@@ -803,7 +802,7 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 		List<String> appearanceList = customerAppearanceMapper
 				.queryCustomerAuditedAppearance(request.getViewCustomerId(), 0);
 		customerHomeVO.setAppearanceUrlList(
-				appearanceList.isEmpty() ? Arrays.asList(DEFAULT_CUSTOMER_APPEARANCE_URL) : appearanceList);
+				appearanceList.isEmpty() ? Arrays.asList(PropertiesConstant.DEFAULT_CUSTOMER_APPEARANCE_URL) : appearanceList);
 
 		// 查询用户兴趣
 		customerHomeVO.setInterestList(customerInterestMapper.queryCustomerInterestList(request.getViewCustomerId()));
@@ -867,13 +866,14 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 		customerLevelVO.setCustomerId(request.getCustomerId());
 		customerLevelVO.setCustomerAppId(customer.getAppId());
 		customerLevelVO.setNickName(customer.getNickName());
+		customerLevelVO.setvStatus(customer.getvStatus());
 		customerLevelVO.setHeadPortraitUrl(customer.getHeadPortraitUrl());
 		customerLevelVO.setCustomerLevel(customer.getCustomerLevel());
 		customerLevelVO.setCustomerExperience(customer.getCumulateExperience());
 
 		// 查询当前等级经验值
 		Integer currentLevelExperience = customerMapper.getGradeExperienceByLevelNo(customer.getCustomerLevel());
-		customerLevelVO.setCustomerExperience(currentLevelExperience);
+		customerLevelVO.setCurrentLevelExperience(currentLevelExperience);
 		// 查询下一等级经验值
 		Integer nextLevelExperience = customerMapper.getGradeExperienceByLevelNo(customer.getCustomerLevel());
 		customerLevelVO.setNextLevelExperience(nextLevelExperience);

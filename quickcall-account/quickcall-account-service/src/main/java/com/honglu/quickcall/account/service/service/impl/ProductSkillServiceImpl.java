@@ -175,10 +175,14 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 		}
 		HashMap<Integer, List<SkillUnitPriceVO>> itemExtMap = new HashMap<Integer, List<SkillUnitPriceVO>>();
 		
+		Integer  firstRange = null ;
 		for (SkillItemExt itemExt : skillItemExtList) {
 			//需要使用常量进行限制
 			List<SkillUnitPriceVO> list = null;
 			Integer skillExtRange = itemExt.getSkillExtRange();
+			if(firstRange == null){
+				firstRange =itemExt.getSkillExtRange();
+			}
 			if (itemExtMap.containsKey(skillExtRange)) {
 				list = itemExtMap.get(skillExtRange);
 			} else {
@@ -192,6 +196,9 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 			list.add(unitPriceVO);
 			itemExtMap.put(skillExtRange, list);
 		}
+		
+		
+		
 
 		for (Map.Entry<Integer, List<SkillUnitPriceVO>> entry : itemExtMap.entrySet()) {
 			CustomerSkillExtVO extVO = new CustomerSkillExtVO();
@@ -205,9 +212,23 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 		if(StringUtils.isBlank(oldServiceUnit) ){
 			List<SkillUnitPriceVO>  list =  itemExtMap.get(1);
 			skillVO.setOldServiceUnit(list.get(0).getUnitName());
+		}
+		
+		
+		Integer  oldSkillRange = skillVO.getOldSkillRange();
+		if(oldSkillRange == null){
+			skillVO.setOldSkillRange(firstRange);
+		}
+		
+		Long  skillItemExtId  = skillVO.getOldSkillItemExtId();
+		if(skillItemExtId == null){
+			List<SkillUnitPriceVO>  list =  itemExtMap.get(1);
 			skillVO.setOldSkillPrice(list.get(0).getUnitPrice());
 			skillVO.setOldSkillItemExtId(list.get(0).getSkillItemExtId());
 		}
+		
+		
+		
 		List<BigDecimal> discontRateList = new ArrayList<BigDecimal>();
 		List<SkillItemExt> skillItemExtDiscountList = skillItemExtMapper.querySkillItemExtDiscountList(skillItemId, 1,2);
 		if(!CollectionUtils.isEmpty(skillItemExtDiscountList)){
