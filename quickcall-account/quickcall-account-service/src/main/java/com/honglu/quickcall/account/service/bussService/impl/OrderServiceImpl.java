@@ -261,7 +261,7 @@ public class OrderServiceImpl implements IOrderService {
 						//返回余额不足状态  
 						return   commonResponse ;
 					}else{
-						accountService.inAccount(customerId, orderAmounts,TransferTypeEnum.RECHARGE,AccountBusinessTypeEnum.PlaceOrder);
+						accountService.outAccount(customerId, orderAmounts,TransferTypeEnum.RECHARGE,AccountBusinessTypeEnum.PlaceOrder);
 					}
 				}
 			}
