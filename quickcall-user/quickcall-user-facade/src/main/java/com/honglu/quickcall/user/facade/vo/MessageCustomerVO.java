@@ -1,6 +1,9 @@
 package com.honglu.quickcall.user.facade.vo;
 
+import com.honglu.quickcall.common.api.util.DateUtils;
+
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * @author xiangxianjin
@@ -33,6 +36,11 @@ public class MessageCustomerVO implements Serializable {
      * 消息内容
      */
     private String messageContent;
+
+    /**
+     * 消息发送时间
+     */
+    private Date bespeakSendTime;
 
     public String getTitle() {
         return title;
@@ -74,6 +82,18 @@ public class MessageCustomerVO implements Serializable {
         this.messageContent = messageContent;
     }
 
+    public Date getBespeakSendTime() {
+        return bespeakSendTime;
+    }
+
+    public void setBespeakSendTime(Date bespeakSendTime) {
+        this.bespeakSendTime = bespeakSendTime;
+    }
+
+    public String getSendTime() {
+        return DateUtils.formatDate(this.bespeakSendTime);
+    }
+
     @Override
     public String toString() {
         return "MessageCustomerVO{" +
@@ -82,6 +102,7 @@ public class MessageCustomerVO implements Serializable {
                 ", backgroundImageUrl='" + backgroundImageUrl + '\'' +
                 ", messageDescribe='" + messageDescribe + '\'' +
                 ", messageContent='" + messageContent + '\'' +
+                ", bespeakSendTime='" + bespeakSendTime + '\'' +
                 '}';
     }
 }

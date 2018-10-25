@@ -3,7 +3,7 @@
 <link type="text/css" rel="stylesheet" href="resources/plugins/viewer/viewer.min.css" media="screen"/>
 <div class="content1">
     <div class="header">
-        <h1 class="page-title">客服后台</h1>
+        <h1 class="page-title">声鉴卡审核</h1>
         <ul class="breadcrumb">
             <li>客服后台</li>
             <li class="active">声鉴卡审核</li>
@@ -72,7 +72,7 @@
                             "data": "id",
                             "sTitle": "ID",
                             'sClass': "text-center",
-//                            "bVisible": false //此列不显示
+                            "bVisible": false //此列不显示
                         },
                         {
                             "data": "customerId",

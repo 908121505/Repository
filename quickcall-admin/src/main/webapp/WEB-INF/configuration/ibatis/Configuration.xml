@@ -37,5 +37,9 @@
         <typeAlias type="com.calf.module.appconfig.entity.Banner" alias="Banner"/>
         <typeAlias type="com.calf.module.appconfig.entity.EvaluationLabel" alias="EvaluationLabel"/>
 
+        <!-- 资源池 -->
+        <typeAlias type="com.calf.module.resource.entity.ResourcePool" alias="ResourcePool"/>
+        <typeAlias type="com.calf.module.resource.entity.ResourcePoolCustomer" alias="ResourcePoolCustomer"/>
+
     </typeAliases>
 </configuration>

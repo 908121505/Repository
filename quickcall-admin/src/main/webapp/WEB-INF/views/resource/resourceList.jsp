@@ -14,7 +14,7 @@
 					<div class="form-group">
 						<div class="input-group">
 							<div class="input-group-addon">资源池名称</div>
-							<input class="form-control" type="text" id="resourceName">
+							<input class="form-control" type="text" id="resourceNameSearch">
 						</div>
 					</div>
 				</div>
@@ -79,14 +79,14 @@
 					}
 		         ],
 		         fnServerParams: function (aoData) {  //查询条件
-                       aoData.push({ "name": "resourceName", "value": $("#resourceName").val() } );
+                       aoData.push({ "name": "resourceName", "value": $("#resourceNameSearch").val() } );
 				 } ,
                  aoColumnDefs : [{
 					"aTargets" : 6,
                      "mRender": function (data, type, row) {
                          var detail = "", del = "";
                          detail = "<a href='#' onclick='addAndUpdateRow(\"" + row.id + "\")' data-toggle='modal' class='padding-right-small label label-success'><i class='glyphicon glyphicon-edit'></i>编辑</a>";
-                         del = "<a href='#' onclick='deleteRow(\"" + row.id + "\",\"" + row.activeStatus + "\")' data-toggle='modal' class='padding-right-small label label-success'><i class='glyphicon glyphicon-edit'></i>删除</a>";
+                         del = "<a href='#' onclick='deleteRow(\"" + row.id + "\",\"" + row.activeStatus + "\")' data-toggle='modal' class='label label label-danger'><i class='glyphicon glyphicon-trash'></i>删除</a>";
                          return detail + "&nbsp;" + del;
                      }
 			}]
@@ -105,7 +105,7 @@
         }
 
         function deleteRow(id,activeStatus) {
-            if(activeStatus=="1"){//0=不可删除，1=可删除
+            if(activeStatus=="0"){//1=不可删除，0=可删除
             	$('#myModal').deleteRow('resource/delete.htm?id=' + id);
             }else{
                 alert("资源位正在使用则,无法删除!");

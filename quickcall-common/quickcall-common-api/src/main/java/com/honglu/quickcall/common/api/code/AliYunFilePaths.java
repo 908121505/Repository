@@ -51,4 +51,8 @@ public class AliYunFilePaths {
      * 用户声鉴卡文件存放路径
      */
     public static final String USER_VOICE_IDENTIFICATION_CARD_DIR = ROOT_PATH + "user/voiceIdentificationCard";
+    /**
+     * 弹窗广告图片存放路径
+     */
+    public static final String APP_ADVERTISEMENT = ROOT_PATH + "advertisement";
 }

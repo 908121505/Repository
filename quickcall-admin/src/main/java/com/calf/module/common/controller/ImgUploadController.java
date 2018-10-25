@@ -260,4 +260,48 @@ public class ImgUploadController {
         }
         return upload;
     }
+
+    /**
+     * 弹窗广告图片上传接口
+     *
+     * @param id
+     * @param file
+     * @return
+     * @throws IOException
+     */
+    @RequestMapping("/advertisement.htm")
+    @ResponseBody
+    public FileUpload advertisementImgUpload(@RequestParam("advertisementImgFile") MultipartFile file) throws IOException {
+        FileUpload upload = new FileUpload("error", "上传文件失败", null);
+
+        if (file == null) {
+            upload.setMsg("请选择一个文件上传！");
+            return upload;
+        }
+        try {
+            //MultipartFile转换FILE
+            CommonsMultipartFile cf = (CommonsMultipartFile) file;
+            DiskFileItem fi = (DiskFileItem) cf.getFileItem();
+            String md5Str = MD5Utils.getMD5(fi.getStoreLocation());
+
+            String imgFolder = AliYunFilePaths.APP_ADVERTISEMENT;
+            String fileName = System.currentTimeMillis() + "." + file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".") + 1);
+
+            //阿里云客户端
+            OSSClient ossClient = OSSUtil.getOSSClient();
+            //上传
+            boolean flag = OSSUtil.uploadInputStreamObject2OSS(ossClient, file.getInputStream(), fileName, imgFolder);
+            if (flag) {
+                upload.setResult("success");
+                upload.setMsg("上传文件成功！");
+                upload.setImgUrl(SFtpUtil.ossUrl + "/" + imgFolder + "/" + fileName);
+                upload.setMd5Str(md5Str);
+
+                log.info("上传弹窗广告图片成功：" + upload.getImgUrl());
+            }
+        } catch (Exception e) {
+            log.error("上传弹窗广告图片失败：", e);
+        }
+        return upload;
+    }
 }

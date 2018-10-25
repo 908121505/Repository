@@ -1,15 +1,14 @@
 package com.honglu.quickcall.user.service.dao;
 
-import java.math.BigDecimal;
-import java.util.List;
-import java.util.Map;
-
 import com.honglu.quickcall.account.facade.entity.Order;
+import com.honglu.quickcall.user.facade.entity.Customer;
+import com.honglu.quickcall.user.facade.vo.SearchPersonListVO;
 import com.honglu.quickcall.user.facade.vo.UserEditInfoVO;
 import org.apache.ibatis.annotations.Param;
 
-import com.honglu.quickcall.user.facade.entity.Customer;
-import com.honglu.quickcall.user.facade.vo.SearchPersonListVO;
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.Map;
 
 public interface CustomerMapper {
 
@@ -92,4 +91,12 @@ public interface CustomerMapper {
 	 * @return
 	 */
 	UserEditInfoVO queryUserEditInfo(@Param("customerId") Long customerId);
+
+	/**
+	 * 根据客户ID查客户信息
+	 * @param customerId
+	 * @return
+	 */
+	Customer queryCustomerByCustomerId(@Param("customerId") Long customerId);
+
 }

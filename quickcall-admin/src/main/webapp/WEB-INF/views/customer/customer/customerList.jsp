@@ -13,7 +13,7 @@
             <div class="col-md-2">
                 <div class="form-group">
                     <div class="input-group">
-                        <div class="input-group-addon">用户或UUID</div>
+                        <div class="input-group-addon">用户昵称或UID</div>
                         <input class="form-control" type="text" id="nameQuery">
                     </div>
                 </div>

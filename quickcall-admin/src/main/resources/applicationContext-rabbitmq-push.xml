@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:rabbit="http://www.springframework.org/schema/rabbit"
+       xsi:schemaLocation="
+            http://www.springframework.org/schema/beans
+                http://www.springframework.org/schema/beans/spring-beans.xsd
+            http://www.springframework.org/schema/rabbit
+                http://www.springframework.org/schema/rabbit/spring-rabbit-1.4.xsd">
+                   
+   <!-- 连接服务配置   需要确认publisher-confirms="true" -->
+   <rabbit:connection-factory id="RconnectionFactory"
+                              host="${mq.host}"
+                              username="${mq.username}"
+                              password="${mq.password}"
+                              port="${mq.port}" />
+
+   <rabbit:admin connection-factory="RconnectionFactory"/>
+
+   <!-- ======================================= mq队列 ===================================-->
+   <!-- 用户中心队列：用户获取经验值 -->
+   <rabbit:queue id="queue_admin_customer_message" durable="true" auto-delete="false" exclusive="false" name="queue_admin_customer_message"/>
+
+   <!-- mq通道 -->
+   <rabbit:direct-exchange name="admin-mq-exchange" durable="true" auto-delete="false" id="admin-mq-exchange">
+      <rabbit:bindings>
+         <rabbit:binding queue="queue_admin_customer_message" key="queue_admin_customer_message"/>
+      </rabbit:bindings>
+   </rabbit:direct-exchange>
+
+   <bean id="jsonMessageConverter"  class="com.honglu.quickcall.common.api.util.FastJsonMessageConverter" />
+   <rabbit:template exchange="admin-mq-exchange" id="amqpTemplate"  connection-factory="RconnectionFactory"  message-converter="jsonMessageConverter"/>
+</beans>
