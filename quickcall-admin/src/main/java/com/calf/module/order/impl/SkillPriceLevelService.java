@@ -136,7 +136,7 @@ public class SkillPriceLevelService {
 		sie1.setSkillExtPrice(entity.getHalfPrice());
 		sie1.setSkillExtThreshold(entity.getLevelThreshold());
 		sie1.setSkillExtStatus(entity.getLevelStatus()>>2);
-		int n = baseManager.insert("SkillItemExt.updateSelective", sie1);
+		int n = baseManager.update("SkillItemExt.updateSelective", sie1);
 		//一小时记录
 		SkillItemExt sie2 = new SkillItemExt();
 		sie2.setSkillItemId(Long.valueOf(entity.getSkillItemId()));
@@ -147,7 +147,7 @@ public class SkillPriceLevelService {
 		sie2.setSkillExtPrice(entity.getOnePrice());
 		sie2.setSkillExtThreshold(entity.getLevelThreshold());
 		sie2.setSkillExtStatus((entity.getLevelStatus()>>1)&1);
-		int n1 = baseManager.insert("SkillItemExt.updateSelective", sie2);
+		int n1 = baseManager.update("SkillItemExt.updateSelective", sie2);
 		//一次记录
 		SkillItemExt sie3 = new SkillItemExt();
 		sie3.setSkillItemId(Long.valueOf(entity.getSkillItemId()));
@@ -158,7 +158,7 @@ public class SkillPriceLevelService {
 		sie3.setSkillExtPrice(entity.getTimePrice());
 		sie3.setSkillExtThreshold(entity.getLevelThreshold());
 		sie3.setSkillExtStatus(entity.getLevelStatus()&1);
-		int n2 = baseManager.insert("SkillItemExt.updateSelective", sie3);
+		int n2 = baseManager.update("SkillItemExt.updateSelective", sie3);
 		return n+n1+n2;
 	} 
 	

@@ -62,7 +62,7 @@
 						<i class="glyphicon glyphicon-plus"></i> 增加
 					</button>
 				</div>
-				<shiro:hasPermission>
+				</shiro:hasPermission>
 			</div>
 			<table id="example" class="table"></table>
 		</div>

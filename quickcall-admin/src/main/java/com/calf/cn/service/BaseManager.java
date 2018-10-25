@@ -101,6 +101,16 @@ public class BaseManager {
 	}
 	
 	/**
+	 * 通过map删除
+	 * @param entity
+	 * @param parameters
+	 * @return
+	 */
+	public <T> int delete(String statementName, Map<String,Object> parameters) {
+		return baseDao.deleteRow(statementName, parameters);
+	}
+	
+	/**
 	 * mybatis原生删除
 	 * @param statementName
 	 * @param parameters
@@ -162,6 +172,16 @@ public class BaseManager {
 	 */
 	public int update(String statementName, Map<String, Object> parameters) {
 		return baseDao.updateRow(statementName, parameters);
+	}
+	
+	/**
+	 * mybatis 通过实体类更新
+	 * @param statementName
+	 * @param entity
+	 * @return 返回受影响的行数
+	 */
+	public <T> int update(String statementName,T entity){
+		return baseDao.updateRow(statementName,entity);
 	}
 
 	/**
