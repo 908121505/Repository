@@ -44,7 +44,7 @@ public class SendSmsUtil {
 			paramMap.put("requestId", uuId);
 			if (templateType == 1) {
 				paramMap.put("templateId", codeTemplateCode);
-				paramMap1.put("code", "1234");
+				paramMap1.put("code", codeParams);
 
 			} else if (templateType == 2) {
 				paramMap.put("templateId", orderTemplateCode);
