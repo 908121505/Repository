@@ -35,6 +35,10 @@ public class SearchPersonListVO implements  Serializable{
 	 */
 	private Long customerId;
 	/**
+	 * 主播展示的Id
+	 */
+	private String appId;
+	/**
 	 * 是否大V
 	 */
 	private Integer type;
@@ -94,5 +98,11 @@ public class SearchPersonListVO implements  Serializable{
 	}
 	public void setAge(Integer age) {
 		this.age = age;
+	}
+	public String getAppId() {
+		return appId;
+	}
+	public void setAppId(String appId) {
+		this.appId = appId;
 	}
 }

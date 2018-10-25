@@ -72,7 +72,7 @@
   </select>
   
   <select id="selectFuzzySearch" resultType="com.honglu.quickcall.user.facade.vo.SearchPersonListVO" >
-  	select customerId,nickName,headPortraitUrl,sex,type,age
+  	select customerId,appId,nickName,headPortraitUrl,sex,type,age
   	 <if test="customerId != null">
   	 	,IFNULL(fs.attention_state,0) AS attentionStatus,
   	 	(IFNULL(fs.attention_state,0))&amp;(IFNULL(fs1.attention_state,0)) AS eachAttentionStatus 
@@ -80,6 +80,7 @@
   	 from (
     select 
     customer_id AS customerId,
+    app_id AS appId,
     nick_name AS nickName,
     head_portrait_url AS headPortraitUrl,
     sex,
@@ -114,6 +115,7 @@
   <select id="selectPreciseSearch" resultType="com.honglu.quickcall.user.facade.vo.SearchPersonListVO" >
     select 
     customer_id AS customerId,
+    app_id AS appId,
     nick_name AS nickName,
     head_portrait_url AS headPortraitUrl,
     sex,
