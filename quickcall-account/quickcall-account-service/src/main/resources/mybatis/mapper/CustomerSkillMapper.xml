@@ -476,37 +476,42 @@
   
   
   <!-- 查询用户当天可用技能 -->
-    <select id="selectCustomerSkillByCustomerId" resultMap="BaseResultMap" >
-    select 
-    <include refid="Base_Column_List" />
-    from customer_skill
-    where customer_id = #{customer_id,jdbcType=BIGINT}  AND switch_status = 1 AND receive_status =1 
+    <select id="selectCustomerSkillByCustomerId" resultType="com.honglu.quickcall.account.facade.vo.CustomerSkillIMVO" >
+		SELECT
+			cs.service_unit  AS serviceUnit,
+		  cs.skill_price  AS  servicePrice,
+		  cs.skill_name  AS  skillItemName,
+		  st.unlock_icon  AS  icon,
+		  cs.customer_skill_id  AS  customerSkillId
+		FROM
+			customer_skill cs
+		LEFT JOIN skill_item st ON cs.skill_item_id = st.id
+    where cs.customer_id = #{customerId,jdbcType=BIGINT}  AND cs.switch_status = 1 AND cs.receive_status =1 
        <if test="weekIndex == 1" >
-        AND  monday = #{skillSwitch,jdbcType=TINYINT}
+        AND  cs.monday = #{skillSwitch,jdbcType=TINYINT}
       </if>
       <if test="weekIndex == 2" >
-        AND  tuesday = #{skillSwitch,jdbcType=TINYINT}
+        AND  cs.tuesday = #{skillSwitch,jdbcType=TINYINT}
       </if>
       <if test="weekIndex == 3" >
-        AND  wednesday = #{skillSwitch,jdbcType=TINYINT}
+        AND  cs.wednesday = #{skillSwitch,jdbcType=TINYINT}
       </if>
       <if test="weekIndex == 4" >
-        AND  thursday = #{skillSwitch,jdbcType=TINYINT}
+        AND  cs.thursday = #{skillSwitch,jdbcType=TINYINT}
       </if>
       <if test="weekIndex == 5" >
-       AND   friday = #{skillSwitch,jdbcType=TINYINT}
+       AND   cs.friday = #{skillSwitch,jdbcType=TINYINT}
       </if>
       <if test="weekIndex == 6" >
-       AND   saturday = #{skillSwitch,jdbcType=TINYINT}
+       AND   cs.saturday = #{skillSwitch,jdbcType=TINYINT}
       </if>
       <if test="weekIndex == 7" >
-        AND  sunday = #{skillSwitch,jdbcType=TINYINT}
+        AND  cs.sunday = #{skillSwitch,jdbcType=TINYINT}
       </if>
       <if test="endTimeStr != null" >
-        AND  end_time_str <![CDATA[  > ]]> #{endTimeStr,jdbcType=VARCHAR}
+        AND  cs.end_time_str <![CDATA[  > ]]> #{endTimeStr,jdbcType=VARCHAR}
       </if>
-      
-      order by  modify_time desc
+      order by  cs.modify_time desc
       limit 1
   </select>
   
