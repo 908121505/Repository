@@ -13,7 +13,7 @@
 			<h3 id="myModalLabel">编辑</h3>
 		</div>
 		<div class="modal-body" style="max-height: 700px; overflow-y: auto;"  id = "editBody">
-			<form class="form-horizontal" method="post" id="skillPriceLevelForm" name="skillPriceLevelForm" role="form"
+			<form class="form-horizontal" method="post" id="feedBackForm" name="feedBackForm" role="form"
 				action="feedBack/saveUpdate.htm?id=${entity.id}">
 				<div class="form-group">
 					<label class="col-sm-3 control-label">反馈内容<font color="red">&nbsp;*</font></label>

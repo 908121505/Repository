@@ -55,6 +55,7 @@ id,	customer_id,	feed_back_content,	handle_status,	handle_result,	create_time,	c
 			<if test="startTime !=null and startTime!=''">and fb.create_time <![CDATA[  >= ]]> #{startTime}</if>
         	<if test="endTime !=null and endTime!=''">and fb.create_time <![CDATA[  <= ]]> #{endTime}</if>
 		</where>
+		limit ${iDisplayStart},${iDisplayLength}
 	</select>
 	
 	<select id="queryFeedBackById" resultMap="feedBackVOMap">

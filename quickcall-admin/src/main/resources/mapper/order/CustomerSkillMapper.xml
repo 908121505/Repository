@@ -89,6 +89,12 @@
       <if test="certifyId != null" >
         certify_id,
       </if>
+      <if test="skillItemExtId != null" >
+        skill_item_ext_id,
+      </if>
+      <if test="skillRange != null" >
+        skill_range,
+      </if>
       <if test="customerId != null" >
         customer_id,
       </if>
@@ -171,6 +177,12 @@
       </if>
       <if test="certifyId != null" >
         #{certifyId,jdbcType=BIGINT},
+      </if>
+      <if test="skillItemExtId != null" >
+        #{skillItemExtId,jdbcType=BIGINT},
+      </if>
+      <if test="skillRange != null" >
+        #{skillRange,jdbcType=TINYINT},
       </if>
       <if test="customerId != null" >
         #{customerId,jdbcType=BIGINT},

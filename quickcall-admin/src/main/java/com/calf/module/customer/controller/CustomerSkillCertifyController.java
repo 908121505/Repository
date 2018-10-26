@@ -18,6 +18,7 @@ import com.calf.cn.service.BaseManager;
 import com.calf.cn.utils.SearchUtil;
 import com.calf.module.customer.entity.CustomerSkillCertify;
 import com.calf.module.customer.vo.CustomerSkillCertifyVO;
+import com.calf.module.order.entity.SkillItemExt;
 import com.honglu.quickcall.common.core.util.UUIDUtils;
 
 /**
@@ -89,13 +90,24 @@ public class CustomerSkillCertifyController implements BaseController<CustomerSk
 //			int count = baseManager.get("CustomerSkill.selectCustomerSkillExist",map);
 			if(csc.getIsAudited() == 0){
 				//如果没有则初始化用户技能表
+				SkillItemExt sie = baseManager.get("SkillItemExt.queryDefultPrice",new Object[]{csc.getSkillItemId()});
 				Map<String, Object> customerSkill = new HashMap<String, Object>();
 				customerSkill.put("customerSkillId", UUIDUtils.getId());
 				customerSkill.put("certifyId", entity.getCertifyId());
 				customerSkill.put("customerId", csc.getCustomerId());
 				customerSkill.put("skillItemId", csc.getSkillItemId());
 				customerSkill.put("skillName", entity.getSkillItemName());
-				baseManager.update("CustomerSkill.insertSelective",customerSkill);
+				customerSkill.put("skillItemExtId",sie.getId());
+				customerSkill.put("serviceUnit",sie.getSkillExtUnit());
+				customerSkill.put("skillPrice",sie.getSkillExtPrice());
+				customerSkill.put("skillItemExtId",sie.getId());
+				customerSkill.put("skillRange",sie.getSkillExtRange());
+				baseManager.insert("CustomerSkill.insertSelective",customerSkill);
+				Map<String, Object> skillScore = new HashMap<String, Object>();
+				skillScore.put("id", UUIDUtils.getId());
+				skillScore.put("customerId", csc.getCustomerId());
+				skillScore.put("skillItemId", csc.getSkillItemId());
+				baseManager.insert("BigvSkillScore.insertSelective",skillScore);
 			}
 		}
 		return baseManager.update("CustomerSkillCertify.updateEntity",param);
