@@ -11,6 +11,7 @@ import com.calf.module.resource.entity.ResourcePoolCustomer;
 import com.calf.module.resource.entity.ResourcePool;
 import com.calf.module.resource.vo.ResourcePoolVo;
 import com.github.pagehelper.util.StringUtil;
+import com.honglu.quickcall.account.facade.constants.OrderSkillConstants;
 import com.honglu.quickcall.common.core.util.UUIDUtils;
 
 import org.apache.commons.beanutils.BeanUtils;
@@ -48,15 +49,52 @@ public class ResourcePoolService{
         for(int i=0;i<poolList.size();i++){
             ResourcePoolVo rpo = poolList.get(i);
             String id = rpo.getId();
-            //int onlineNum = AAsevver.getOnlineCount(id);
-            //int inOrdernum = AAsevver.getInOrderCount(id);
-            int onlineNum = 234;
-            int inOrdernum = 123;
+            Map<String, Integer> map = getOnlineAndInOrderCount(id);
+            Integer onlineNum = map.get("online");
+            Integer inOrdernum = map.get("inOrder");
             rpo.setSoundOnline(onlineNum);
             rpo.setSoundOrder(inOrdernum);
             rpo.setSoundRemaining(onlineNum-inOrdernum);
         }
         return new DataTables<ResourcePoolVo>(sEcho, poolList, poolList.size(), total);
+    }
+
+    /**
+     *  查询资源池里的在线声优,已接单声优
+     * @param resourcePoolId 资源池ID
+     * @return
+     */
+    public Map<String,Integer> getOnlineAndInOrderCount(String resourcePoolId){
+        Map<String, Object> paramMap = new HashMap<String, Object>();
+        paramMap.put("resource_pool_id", resourcePoolId);
+        List<ResourcePoolCustomer> crpList = baseManager.query("ResourcePoolCustomer.selectByResourcePoolId", paramMap);
+        List<String> clist = new ArrayList<String>();
+        Integer online = 0;
+        Integer inOrder = 0;
+        if(crpList!=null&&crpList.size()>0){
+            for (int i = 0; i < crpList.size(); i++) {
+                String cid = crpList.get(i).getCustomerId();
+                clist.add(cid);
+            }
+            Map<String, Object> paramMapA = new HashMap<String, Object>();
+            paramMapA.put("clist",clist);
+            online = baseManager.get("ResourcePool.queryOnlineCount", paramMapA);
+
+            List<Integer> statusList = new ArrayList<Integer>();
+            statusList.add(OrderSkillConstants.ORDER_STATUS_WAITING_START);//待开始
+            statusList.add(OrderSkillConstants.ORDER_STATUS_WAITING_START_DA_APPAY_START_SERVICE);//大V发起开始服务
+            statusList.add(OrderSkillConstants.ORDER_STATUS_GOING_USER_ACCEPCT);//进行中
+            statusList.add(OrderSkillConstants.ORDER_STATUS_GOING_DAV_APPAY_FINISH);//进行中（大V发起完成服务）
+            //statusList.add(OrderSkillConstants.ORDER_STATUS_WAITING_START);//待开始
+            Map<String, Object> paramMapB = new HashMap<String, Object>();
+            paramMapB.put("clist",clist);
+            paramMapB.put("statusList",statusList);
+            inOrder = baseManager.get("ResourcePool.queryInOrderCount", paramMapB);
+        }
+        Map<String, Integer> map = new HashMap<String, Integer>();
+        map.put("online",online);//在线声优
+        map.put("inOrder",inOrder);//已接单声优
+        return map;
     }
 
     public void getResourcePoolDetail(Model model, String id){
