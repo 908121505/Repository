@@ -48,12 +48,12 @@ public class AbnormityOfRechargeJob {
 
 	private static String aliPayOrderQuery = ResourceBundle.getBundle("thirdconfig").getString("ALI_PAY_ORDER_QUERY");
 
-	// @Scheduled(cron = "* 0/15 * * * ?")
-	@Scheduled(cron = "0/5 * * * * ?")
+	@Scheduled(cron = "* 0/15 * * * ?")
+	// @Scheduled(cron = "0/5 * * * * ?")
 	public void execute() {
 
-		logger.info("充值回调异常修复  job 开启------------------------");
-		System.out.println(iAccountOrderService);
+		logger.info("充值回调异常修复  job 开启------------------------" + iAccountOrderService);
+
 		List<Recharge> rechargeList = rechargeMapper.queryAbnormityOfRecharge();
 		for (int i = 0; i < rechargeList.size(); i++) {
 			String params = "orderId=" + rechargeList.get(i).getOrdersn() + "&type="
