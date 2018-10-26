@@ -4,13 +4,13 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
 import com.calf.cn.service.BaseManager;
 import com.calf.cn.utils.DateUtil;
+import com.calf.cn.utils.JedisUtil;
 import com.calf.module.customer.entity.Customer;
 import com.calf.module.internal.constant.RedisCons;
 import com.calf.module.internal.entity.Message;
 import com.calf.module.internal.entity.MessageCustomer;
 import com.calf.module.internal.service.InternalService;
 import com.calf.module.mq.service.CustomerMessageService;
-import com.honglu.quickcall.common.api.util.JedisUtil;
 import com.honglu.quickcall.common.core.util.UUIDUtils;
 import com.honglu.quickcall.common.third.rongyun.util.RongYunUtil;
 import org.slf4j.Logger;
@@ -38,7 +38,7 @@ public class InternalServiceImpl implements InternalService {
     @Autowired
     private CustomerMessageService customerMessageService;
 
-    private static final int BATCH_INSERT_SIZE = 1000;
+    private static final int BATCH_INSERT_SIZE = 10;
 
     /**
      * 新增
@@ -95,7 +95,8 @@ public class InternalServiceImpl implements InternalService {
         //发送给指定用户
         if(entity.getSendType().intValue() == 0){
             String key = RedisCons.ADMIN_MESSAGE_CUSTOMER + entity.getMessageDescribe();
-            Set<String> phoneSet = JSON.parseObject(JedisUtil.get(key), new TypeReference<HashSet<String>>() {});
+            String phoneStr = JedisUtil.get(key);
+            Set<String> phoneSet = JSON.parseObject(phoneStr, new TypeReference<HashSet<String>>() {});
             if(!CollectionUtils.isEmpty(phoneSet)){
                 //保存记录
                 saveMessageCustomer(phoneSet, entity );
@@ -119,17 +120,17 @@ public class InternalServiceImpl implements InternalService {
      */
     private int sendMessageAllUser(Message entity){
         //TODO 直接查询全量用户，循环发送，此处有风险点：若用户几何级增长，轮询发送会出问题，折中取了近6月
-        Integer  pageSize =  BATCH_INSERT_SIZE;
+        Integer page = 1;
+        Integer pageSize =  BATCH_INSERT_SIZE;
         Map<String, Object>  params =  new HashMap<String, Object>();
         params.put("pageSize", pageSize);
         //当前时间
         params.put("endTime", DateUtil.getSixMonth()[0]);
         //六个月之前时间
         params.put("startTime", DateUtil.getSixMonth()[1]);
-        int page = 0;
         int pageIndex = 0;
         while (true) {
-            pageIndex = page > 0 ? page * pageSize + 1 : pageIndex;
+            pageIndex = (page-1) * pageSize;
             params.put("pageIndex", pageIndex);
             List<Customer>  customerList = baseManager.query("Customer.selectCustomerList",params);
             if(CollectionUtils.isEmpty(customerList)){
@@ -173,28 +174,27 @@ public class InternalServiceImpl implements InternalService {
         int size = phoneSet.size();
         List<MessageCustomer> messageCustomerList = new ArrayList<MessageCustomer>();
         int i = 0;
-        while (i < size){
+        for(String phone : phoneSet){
             i++;
-            String phone = phoneSet.iterator().next();
             String customerId = baseManager.get("Customer.selectCustomerIdByPhone", new Object[]{phone});
             if(StringUtils.isEmpty(customerId)){
-                LOGGER.info("手机号对应的客户信息不存在，手机号:{}" + phone);
-                continue;
+                LOGGER.info("手机号对应的客户信息不存在，手机号:{}" , phone);
+            }else{
+                MessageCustomer messageCustomer = new MessageCustomer();
+                String id = UUIDUtils.getId().toString();
+                messageCustomer.setId(id);
+                messageCustomer.setMessageId(Long.parseLong(entity.getMessageId()));
+                messageCustomer.setPhone(Long.parseLong(phone));
+                messageCustomer.setReceiverId(Long.parseLong(customerId));
+                messageCustomer.setMessageStatus(Byte.parseByte("0"));
+                messageCustomer.setCreateMan(entity.getCreateMan());
+                messageCustomer.setCreateTime(new Date());
+                messageCustomer.setModifyMan(entity.getModifyMan());
+                messageCustomer.setModifyTime(new Date());
+                messageCustomerList.add(messageCustomer);
+                this.imSendMessage(entity.getType().intValue(), customerId, entity.getMessageContent(), id);
             }
-            MessageCustomer messageCustomer = new MessageCustomer();
-            String id = UUIDUtils.getId().toString();
-            messageCustomer.setId(id);
-            messageCustomer.setMessageId(Long.parseLong(entity.getMessageId()));
-            messageCustomer.setPhone(Long.parseLong(phone));
-            messageCustomer.setReceiverId(Long.parseLong(customerId));
-            messageCustomer.setMessageStatus(Byte.parseByte("0"));
-            messageCustomer.setCreateMan(entity.getCreateMan());
-            messageCustomer.setCreateTime(new Date());
-            messageCustomer.setModifyMan(entity.getModifyMan());
-            messageCustomer.setModifyTime(new Date());
-            messageCustomerList.add(messageCustomer);
-            this.imSendMessage(entity.getType().intValue(), customerId, entity.getMessageContent(), id);
-            if (i % BATCH_INSERT_SIZE == 0 || i == (size - 1)) {
+            if (i % BATCH_INSERT_SIZE == 0 || i == size ) {
                 int batchCount = baseManager.batchInsert("MessageCustomerMapper.insertBatch", messageCustomerList);
                 messageCustomerList.clear();
                 LOGGER.info("保存客户站内消息详情成功，保存数量:" + batchCount);

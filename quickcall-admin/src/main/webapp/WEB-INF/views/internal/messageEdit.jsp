@@ -52,22 +52,24 @@
 					<label class="col-sm-2 control-label">发送对象<font color="red">&nbsp;*</font></label>
 					<div class="col-sm-10">
 						<label class="checkbox-inline">
-							<input type="radio" name="sendType" value="0" ${empty entity or entity.sendType=='0'?'checked':'' }>
+							<input type="radio" name="sendType" value="0" onclick="showUploadFile(0)"
+								${empty entity or entity.sendType=='0'?'checked':'' } >
 							指定用户
 						</label>
 						<label class="checkbox-inline">
-							<input type="radio" name="sendType" value="1" ${entity.sendType=='1'?'checked':'' }>
+							<input type="radio" name="sendType" value="1"  onclick="showUploadFile(1)"
+								${entity.sendType=='1'?'checked':'' }>
 							所有用户
 						</label>
 					</div>
 				</div>
-				<div class="form-group">
+				<div class="form-group" id="uploadFile">
 					<label class="col-sm-2 control-label">用户上传<c:if test="${entity eq null }"><font color="red">&nbsp;*</font></c:if>
 					</label>
 					<div class="col-sm-10">
 						<div class="input-group">
 							<input type="file" class="form-control" id="file" style="width: 60%;" name="file">
-							<span id="tip_customer" style="color: red;font-size: 14px;margin-left:20px; "></span>
+							<span id="tip_customer" style="color: red;font-size: 14px;margin-left:20px; ">${entity.messageDescribe==''? "未导入文件":"已导入文件"}</span>
 							<span class="input-group-btn">
 								<button class="btn btn-success" type="button" id="uploadCustomer">导入用户</button>
 							</span>
@@ -115,6 +117,14 @@
 <script type="text/javascript"
 	src="resources/js/My97DatePicker/WdatePicker.js" charset="utf-8"></script>
 <script type="text/javascript">
+	function showUploadFile(type) {
+		if(type == 1){
+		    $("#uploadFile").hide();
+		}else{
+            $("#uploadFile").show();
+		}
+    }
+
 	function check_fun(){
 		$("#tip").html("");
 
