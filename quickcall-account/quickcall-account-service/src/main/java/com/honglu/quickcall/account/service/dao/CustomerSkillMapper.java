@@ -40,4 +40,14 @@ public interface CustomerSkillMapper {
 	
 	
 	OrderIMVO selectCustSkillItem(Long customerSkillId);
+
+	/***
+	 * 判断用户当天是否可以接单
+	 * @param serviceId
+	 * @param weekIndex
+	 * @param skillSwitch
+	 * @param endTimeStr
+	 * @return
+	 */
+	CustomerSkill selectCustomerSkillByCustomerId(@Param("customerSkillId")Long customerSkillId,@Param("weekIndex")Integer  weekIndex ,@Param("skillSwitch")Integer skillSwitch,@Param("endTimeStr")String  endTimeStr);
 }

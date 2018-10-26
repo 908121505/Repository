@@ -596,7 +596,8 @@
 		od.order_id AS orderId,
 		od.order_time AS orderTime,
 		od.start_service_time AS startTime,
-		od.end_time AS endTime 
+		od.end_time AS endTime ,
+		od.receive_order_time  as  receiveOrderTime
 	FROM
 		orders od
 	LEFT JOIN customer ct ON ct.customer_id = od.service_id
