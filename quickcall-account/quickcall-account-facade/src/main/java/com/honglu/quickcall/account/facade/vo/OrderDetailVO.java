@@ -14,7 +14,7 @@ import java.util.Date;
  */
 public class OrderDetailVO implements  Serializable{
 
-	private static final long serialVersionUID = 2682387557580493341L;
+	private static final long serialVersionUID = -3999247576164334939L;
 	/**订单ID*/
 	private Long  orderId;
 	/**服务方编号*/
@@ -69,6 +69,18 @@ public class OrderDetailVO implements  Serializable{
 	/**大V接单时间*/
 	private Date  receiveOrderTime ;
 	
+    private BigDecimal discountRate;
+    
+    
+	
+	
+	
+	public BigDecimal getDiscountRate() {
+		return discountRate;
+	}
+	public void setDiscountRate(BigDecimal discountRate) {
+		this.discountRate = discountRate;
+	}
 	public Date getReceiveOrderTime() {
 		return receiveOrderTime;
 	}

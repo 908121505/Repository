@@ -323,6 +323,7 @@ public class OrderServiceImpl implements IOrderService {
 			record.setOrderNum(orderNum);
 			record.setOrderStatus(OrderSkillConstants.ORDER_STATUS_WAITING_RECEIVE);
 			record.setOrderTime(currTime);
+			record.setRemark(request.getRemark());
 			orderMapper.insert(record);
 			resultMap.put("retCode",  OrderSkillConstants.RET_CODE_SUCCESS);
 			resultMap.put("orderId", orderId+"");
