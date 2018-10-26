@@ -260,6 +260,16 @@
         select customer_id from customer where phone = #{phone} limit 1
     </select>
 
+    <select id="selectCustomerList" parameterType="map"  resultMap="BaseResultMap">
+		SELECT
+          <include refid="Base_Column_List"/>
+        FROM customer
+		WHERE
+			login_time  <![CDATA[ > #{startTime}  ]]>  and  login_time <![CDATA[ <  #{endTime} ]]>
+		ORDER BY
+			create_time DESC
+		LIMIT #{pageIndex},#{pageSize}
+	</select>
 
 
     <select id="queryPageList" resultType="com.calf.module.order.vo.ReceiveOrderVO" parameterType="map" >

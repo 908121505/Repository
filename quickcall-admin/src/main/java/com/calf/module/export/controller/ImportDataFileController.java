@@ -86,7 +86,7 @@ public class ImportDataFileController {
                 checkSet.add(phoneNum);
             }
             if(CollectionUtils.isNotEmpty(checkSet)){
-                Long idStr = UUIDUtils.getId();
+                String idStr = UUIDUtils.getUUID();
                 String listStr = JSON.toJSONString(checkSet);
                 //缓存有效期30天
                 JedisUtil.set(RedisCons.ADMIN_MESSAGE_CUSTOMER + idStr, listStr,30*24*60*60);
