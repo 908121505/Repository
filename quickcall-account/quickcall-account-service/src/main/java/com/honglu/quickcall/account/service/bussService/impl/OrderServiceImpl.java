@@ -822,15 +822,20 @@ public class OrderServiceImpl implements IOrderService {
 				commonService.dvReciveOrderUpdateOrder(orderId, newOrderStatus,new Date());
 				//大V接受订单通知消息
 				//大V同意需要将接收到的其他订单取消
-				
-				List<Order>  orderList = commonService.selectOrderReceiveOrder(order.getServiceId(), orderId, OrderSkillConstants.ORDER_STATUS_WAITING_RECEIVE, OrderSkillConstants.SKILL_TYPE_YES);
-				if(!CollectionUtils.isEmpty(orderList)){
-					List<Long>  orderIdList =  new ArrayList<Long>();
-					for (Order od : orderList) {
-						orderIdList.add(od.getOrderId());
+				//判断是否是叫醒类型
+				Integer  skillType = order.getSkillType();
+				if(OrderSkillConstants.SKILL_TYPE_YES == skillType){
+					List<Order>  orderList = commonService.selectOrderReceiveOrder(order.getServiceId(), orderId, OrderSkillConstants.ORDER_STATUS_WAITING_RECEIVE, OrderSkillConstants.SKILL_TYPE_YES);
+					if(!CollectionUtils.isEmpty(orderList)){
+						List<Long>  orderIdList =  new ArrayList<Long>();
+						for (Order od : orderList) {
+							orderIdList.add(od.getOrderId());
+						}
+						commonService.updateOrderReceiveOrder(orderIdList, OrderSkillConstants.ORDER_STATUS_CANCEL_DAV_START_ONE_ORDER);
 					}
-					commonService.updateOrderReceiveOrder(orderIdList, OrderSkillConstants.ORDER_STATUS_CANCEL_DAV_START_ONE_ORDER);
 				}
+				
+				
 				
 				//大V接受订单通知用户
 				RongYunUtil.sendOrderMessage(customerId, OrderSkillConstants.IM_MSG_CONTENT_DAV_REFUSE);
