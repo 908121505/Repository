@@ -107,4 +107,14 @@ public interface TaskOrderMapper {
 	 */
 	List<TaskOrder>  queryAppointOrderFinish(@Param("currTime")Date  currTime,@Param("endTime")Date  endTime,@Param("queryStatus")Integer queryStatus ,@Param("updateStatus")Integer  updateStatus,@Param("skillType")Integer  skillType);
 
+
+
+
+	/**
+	 * 根据订单ID列表更新订单状态
+	 * @param updateStatus
+	 * @param statusList
+	 */
+	void  updateOrderStatus(@Param("updateStatus")Integer  updateStatus,@Param("list")List<Long>  orderIdList);
+
 }

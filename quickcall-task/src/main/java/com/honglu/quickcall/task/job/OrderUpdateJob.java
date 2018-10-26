@@ -1,5 +1,6 @@
 package com.honglu.quickcall.task.job;
 
+import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -11,7 +12,11 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
+import com.alibaba.dubbo.config.annotation.Reference;
+import com.honglu.quickcall.account.facade.business.IAccountOrderService;
 import com.honglu.quickcall.account.facade.constants.OrderSkillConstants;
+import com.honglu.quickcall.account.facade.enums.AccountBusinessTypeEnum;
+import com.honglu.quickcall.account.facade.enums.TransferTypeEnum;
 import com.honglu.quickcall.task.dao.TaskOrderMapper;
 import com.honglu.quickcall.task.entity.TaskOrder;
 
@@ -32,6 +37,10 @@ public class OrderUpdateJob {
 
     @Autowired
     private TaskOrderMapper    taskOrderMapper;
+    
+
+    @Reference(version = "0.0.1", group = "accountCenter")
+    private IAccountOrderService iAccountOrderService;
 
     /**默认超时小时数*/
     private final static  Integer   END_OVER_TIME_HOUR = -12;
@@ -64,6 +73,7 @@ public class OrderUpdateJob {
     		//大V未接单返回给账户金额  先退款，再更新状态
     		List<TaskOrder>  orderList = taskOrderMapper.queryReceiveOrderOverTime(currTime, endTime, queryStatus, updateStatus, skillType);
     		refundToCustomer(orderList);
+    		
     		
     		taskOrderMapper.waittingReceiveOrderOverTime(currTime, endTime, queryStatus, updateStatus, skillType);
     		
@@ -178,19 +188,47 @@ public class OrderUpdateJob {
     
     
     
+    
+//    public  void  updateOrderStatusByOrderList(List<TaskOrder>  orderList,Integer  updateOrderStatus){
+//    	
+//    	if(!CollectionUtils.isEmpty(orderList)){
+//    		List<Long>  orderIdList =  new ArrayList<Long>();
+//    		for (TaskOrder order : orderList) {
+//    			orderIdList.add(order.getOrderId());
+//    		}
+//    		taskOrderMapper.updateOrderStatus(updateOrderStatus, orderIdList);
+//    	}
+//    }
+    
+    
+    /**
+     * 订单取消，退款给用户
+     * @param orderList
+     */
     public   void   refundToCustomer(List<TaskOrder>  orderList){
     	if(!CollectionUtils.isEmpty(orderList)){
 			for (TaskOrder order : orderList) {
+				Long  customerId =  order.getCustomerId();
+				BigDecimal  payAmount =  order.getOrderAmounts();
 				//调用接口退款给用户
+				iAccountOrderService.inAccount(customerId, payAmount,TransferTypeEnum.RECHARGE,AccountBusinessTypeEnum.OrderRefund);
+				LOGGER.info("用户ID："+customerId +"订单超时，系统自动退款给用户"+payAmount);
 			}
 		}
     }
     
-    //冻结大V金额
+    /**
+     * 订单结束，大V金额冻结
+     * @param orderList
+     */
     public   void   freezeToService(List<TaskOrder>  orderList){
     	if(!CollectionUtils.isEmpty(orderList)){
     		for (TaskOrder order : orderList) {
-    			//调用接口退款给用户
+    			Long  serviceId =  order.getServiceId();
+    			BigDecimal   payAmount =  order.getOrderAmounts();
+    			//大V冻结
+    			iAccountOrderService.inAccount(order.getServiceId(), order.getOrderAmounts(), TransferTypeEnum.FROZEN, AccountBusinessTypeEnum.FroZen);
+    			LOGGER.info("主播用户ID："+serviceId +"订单超时，系统自动退款给用户"+payAmount);
     		}
     	}
     }
