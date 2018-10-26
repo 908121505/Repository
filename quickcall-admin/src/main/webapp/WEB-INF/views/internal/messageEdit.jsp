@@ -63,7 +63,7 @@
 						</label>
 					</div>
 				</div>
-				<div class="form-group" id="uploadFile">
+				<div class="form-group" id="uploadFile" style="display: ${entity.sendType=='1'? 'none':'' }">
 					<label class="col-sm-2 control-label">用户上传<c:if test="${entity eq null }"><font color="red">&nbsp;*</font></c:if>
 					</label>
 					<div class="col-sm-10">
