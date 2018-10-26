@@ -211,6 +211,7 @@ public class OrderUpdateJob {
 				Long  customerId =  order.getCustomerId();
 				BigDecimal  payAmount =  order.getOrderAmounts();
 				//调用接口退款给用户
+				LOGGER.info("用户信息："+order.toString());
 				iAccountOrderService.inAccount(customerId, payAmount,TransferTypeEnum.RECHARGE,AccountBusinessTypeEnum.OrderRefund);
 				LOGGER.info("用户ID："+customerId +"订单超时，系统自动退款给用户"+payAmount);
 			}
