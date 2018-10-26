@@ -952,8 +952,8 @@ public class OrderServiceImpl implements IOrderService {
 				Long  serviceId = order.getServiceId();
 				RongYunUtil.sendOrderMessage(serviceId, OrderSkillConstants.IM_MSG_CONTENT_CUST_FINISH);
 			}
-			
-			commonService.updateOrder(orderId, newOrderStatus);
+			//设置请求结束时间
+			commonService.finishUpdateOrder(orderId, newOrderStatus,new  Date());
 		}else{
 			//订单不存在
 			throw new BizException(AccountBizReturnCode.ORDER_NOT_EXIST, "订单不存在，无法对订单操作");
