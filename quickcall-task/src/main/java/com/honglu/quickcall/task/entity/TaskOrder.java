@@ -13,7 +13,8 @@ import java.math.BigDecimal;
  */
 public class TaskOrder {
    
-
+    private  Long  orderId;
+    
     private Long customerId;
     
     private Long  serviceId;
@@ -44,6 +45,15 @@ public class TaskOrder {
 		this.orderAmounts = orderAmounts;
 	}
 
+	public Long getOrderId() {
+		return orderId;
+	}
+
+	public void setOrderId(Long orderId) {
+		this.orderId = orderId;
+	}
+
+	
    
 
 }
