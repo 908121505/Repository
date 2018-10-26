@@ -19,6 +19,7 @@
   <select id="queryReceiveOrderOverTime"   resultType="com.honglu.quickcall.task.entity.TaskOrder" >
     
 		SELECT
+		    order_id  AS orderId ,
 			customer_id AS customerId,
 			service_id AS serviceId,
 			order_amounts AS orderAmounts
@@ -48,6 +49,7 @@
   <!-- 大V未发起立即服务超时  查询-->
   <select id="queryStartOrderOverTime"   resultType="com.honglu.quickcall.task.entity.TaskOrder" >
 		SELECT
+		order_id  AS orderId ,
 			customer_id AS customerId,
 			service_id AS serviceId,
 			order_amounts AS orderAmounts
@@ -79,6 +81,7 @@
     <!-- 大V未发起立即服务超时  查询-->
   <select id="queryOrderStatusAfter12HourCust"   resultType="com.honglu.quickcall.task.entity.TaskOrder" >
 		SELECT
+		order_id  AS orderId ,
 			customer_id AS customerId,
 			service_id AS serviceId,
 			order_amounts AS orderAmounts
@@ -117,6 +120,7 @@
       <!-- 大V未发起立即服务超时  查询-->
   <select id="queryOrderStatusAfter12HourBoth"   resultType="com.honglu.quickcall.task.entity.TaskOrder" >
 		SELECT
+		order_id  AS orderId ,
 			customer_id AS customerId,
 			service_id AS serviceId,
 			order_amounts AS orderAmounts
@@ -163,6 +167,7 @@
       <!-- 叫醒自动结束查询-->
   <select id="queryAppointOrderFinish"   resultType="com.honglu.quickcall.task.entity.TaskOrder" >
 		SELECT
+		order_id  AS orderId ,
 			customer_id AS customerId,
 			service_id AS serviceId,
 			order_amounts AS orderAmounts
