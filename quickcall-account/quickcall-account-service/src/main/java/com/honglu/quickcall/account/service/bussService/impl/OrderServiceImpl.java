@@ -328,7 +328,9 @@ public class OrderServiceImpl implements IOrderService {
 			orderMapper.insert(record);
 			resultMap.put("retCode",  OrderSkillConstants.RET_CODE_SUCCESS);
 			resultMap.put("orderId", orderId+"");
+
 			// ADUAN 下单支付成功后 -- 发送弹幕消息
+			LOGGER.info("下单成功 -- 发送弹幕消息：", orderId);
 			barrageMessageService.lpushMessage(orderId);
 			
 			

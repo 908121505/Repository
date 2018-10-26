@@ -56,6 +56,7 @@ public class BarrageMessageServiceImpl implements BarrageMessageService {
     @Override
     public void lpushMessage(Long orderId) {
         try {
+            logger.info("下单成功 --- 发送弹幕消息：{}", orderId);
             // 查询订单信息
             OrderDetailVO orderDetailVO = orderMapper.queryBarrageOrderInfo(orderId);
 
