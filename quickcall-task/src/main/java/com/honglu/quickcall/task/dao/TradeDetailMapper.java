@@ -2,7 +2,7 @@ package com.honglu.quickcall.task.dao;
 
 import org.apache.ibatis.annotations.Mapper;
 
-import com.honglu.quickcall.account.facade.entity.TradeDetail;
+import com.honglu.quickcall.task.entity.TradeDetail;
 
 @Mapper
 public interface TradeDetailMapper {
