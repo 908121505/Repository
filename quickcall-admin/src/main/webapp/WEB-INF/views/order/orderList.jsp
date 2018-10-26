@@ -276,7 +276,7 @@
                         'sClass':"text-center", "sortable": false
                     },
                     {
-                        "data" : "orderStatus",
+                        "data" : "orderStatusVal",
                         "sTitle" : "订单状态",
                         'sClass' : "text-center", "sortable": false
                     },

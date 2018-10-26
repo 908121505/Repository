@@ -90,6 +90,10 @@ public class OrderService {
 				dis = dis * 10;
 				vo.setDiscountType(dis + "%");
 			}
+            SmallOrderStatusEnums status =SmallOrderStatusEnums.getSmallOrderStatusEnums(vo.getOrderStatus());
+			if (status!=null){
+                vo.setOrderStatusVal(status.getDesc());
+            }
 		}
 		String sEcho = (String) parameters.get("sEcho");
 		int total = baseManager.get("Order.selectCount", paramMap);
