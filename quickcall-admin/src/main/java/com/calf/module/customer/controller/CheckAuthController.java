@@ -5,16 +5,21 @@ import com.calf.cn.entity.DataTables;
 import com.calf.cn.service.BaseManager;
 import com.calf.cn.utils.SearchUtil;
 import com.calf.module.customer.entity.Customer;
+import com.honglu.quickcall.common.core.util.UUIDUtils;
+
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
+
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -75,16 +80,25 @@ public class CheckAuthController implements BaseController<Customer> {
     }
 
     @Override
+    @Transactional
     public int saveUpdate(Customer entity) {
         Subject currentUser = SecurityUtils.getSubject();
         entity.setModifyMan(currentUser.getPrincipal().toString());
         if (Objects.equals(entity.getvStatus(), 2)) {
             entity.setType(1);// 大V审核通过后，客户类型变为大V
+            Map<String,Object> params = new HashMap<>();
+            params.put("customerId", entity.getCustomerId());
+            int count = baseManager.get("BigvScore.queryCountByCustomerId",params);
+            if(count == 0){
+            	params.put("id",UUIDUtils.getId());
+            	params.put("customerId", entity.getCustomerId());
+            	baseManager.insert("BigvScore.insertSelective",params);
+            }
         }
         if(Objects.equals(entity.getvVoiceStatus(), 4)){
         	entity.setvVoiceUrl(entity.getvVoiceUrlTmp());
         }
-
+        
         return baseManager.update(entity);
     }
 
