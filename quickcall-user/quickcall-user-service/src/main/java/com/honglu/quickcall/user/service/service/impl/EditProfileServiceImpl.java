@@ -2,6 +2,7 @@ package com.honglu.quickcall.user.service.service.impl;
 
 import java.util.List;
 
+import com.honglu.quickcall.common.api.util.CommonUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,7 +48,6 @@ import com.honglu.quickcall.user.service.dao.InterestMapper;
 import com.honglu.quickcall.user.service.dao.SensitivityWordMapper;
 import com.honglu.quickcall.user.service.service.CustomerRedisManagement;
 import com.honglu.quickcall.user.service.service.EditProfileService;
-import com.honglu.quickcall.user.service.util.CommonUtil;
 import com.honglu.quickcall.user.service.util.CountAge;
 import com.honglu.quickcall.user.service.util.JsonParseUtil;
 
