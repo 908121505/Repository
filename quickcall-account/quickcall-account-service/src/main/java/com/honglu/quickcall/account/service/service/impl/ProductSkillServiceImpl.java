@@ -228,6 +228,15 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 		}
 		
 		
+		BigDecimal  skillPrice =  skillVO.getOldSkillPrice();
+		if(skillPrice == null){
+			List<SkillUnitPriceVO>  list =  itemExtMap.get(1);
+			skillVO.setOldSkillPrice(list.get(0).getUnitPrice());
+		}
+		
+		
+		
+		
 		
 		List<BigDecimal> discontRateList = new ArrayList<BigDecimal>();
 		List<SkillItemExt> skillItemExtDiscountList = skillItemExtMapper.querySkillItemExtDiscountList(skillItemId, 1,2);
