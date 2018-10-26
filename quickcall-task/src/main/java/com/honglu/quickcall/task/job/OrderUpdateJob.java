@@ -213,6 +213,7 @@ public class OrderUpdateJob {
 					BigDecimal  payAmount =  order.getOrderAmounts();
 					//调用接口退款给用户
 					LOGGER.info("用户信息："+order.toString());
+					System.out.println("============"+iAccountOrderService);
 					iAccountOrderService.inAccount(customerId, payAmount,TransferTypeEnum.RECHARGE,AccountBusinessTypeEnum.OrderRefund);
 					LOGGER.info("用户ID："+customerId +"订单超时，系统自动退款给用户"+payAmount);
 				}
@@ -233,6 +234,7 @@ public class OrderUpdateJob {
 					Long  serviceId =  order.getServiceId();
 					BigDecimal   payAmount =  order.getOrderAmounts();
 					//大V冻结
+					System.out.println("============"+iAccountOrderService);
 					iAccountOrderService.inAccount(order.getServiceId(), order.getOrderAmounts(), TransferTypeEnum.FROZEN, AccountBusinessTypeEnum.FroZen);
 					LOGGER.info("主播用户ID："+serviceId +"订单超时，系统自动退款给用户"+payAmount);
 				}

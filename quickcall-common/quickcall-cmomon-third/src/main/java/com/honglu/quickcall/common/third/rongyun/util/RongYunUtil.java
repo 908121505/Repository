@@ -232,7 +232,7 @@ public class RongYunUtil {
 		 * RongYunUtil.publishPrivate(String.valueOf(fromUserId), otherIds, txtMessage,
 		 * null, null, null, null, null, null); System.out.println(code);
 		 */
-		Long toCustomerId = 1810241825465521229L;
+		Long toCustomerId = 1810251709357713309L;
 		sendSystemMessage(toCustomerId, "我喜欢亚波1");
 		sendOrderMessage(toCustomerId, "你有一条新的订单哦1");
 		sendActivityMessage(toCustomerId, "红包1");
