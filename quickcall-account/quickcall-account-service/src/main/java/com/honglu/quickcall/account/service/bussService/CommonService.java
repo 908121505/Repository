@@ -122,6 +122,10 @@ public interface CommonService {
 	 * @return
 	 */
 	public  List<Integer>  getReceiveOrderStatusList(Integer orderStatusParam);
+
+
+
+	public void finishUpdateOrder(Long orderId, Integer orderStatus, Date cancelTime);
 	
 	
    

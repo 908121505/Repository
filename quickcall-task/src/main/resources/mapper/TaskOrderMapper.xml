@@ -74,7 +74,7 @@
 		 	order_status = #{updateStatus}
 		WHERE
 			order_status = #{queryStatus}
-		AND start_time <![CDATA[ < ]]> #{endTime}
+		AND appay_end_time <![CDATA[ < ]]> #{endTime}
   </update>
   
   
@@ -90,7 +90,7 @@
 		   orders
 		WHERE
 			order_status = #{queryStatus}
-		AND start_time <![CDATA[ < ]]> #{endTime}
+		AND appay_end_time <![CDATA[ < ]]> #{endTime}
   </select>
   
   
@@ -113,11 +113,11 @@
 		 	order_status = #{updateStatus}
 		WHERE
 			order_status = #{queryStatus}
-		AND start_time <![CDATA[ < ]]> #{endTime}
+		AND expect_end_time <![CDATA[ < ]]> #{endTime}
   </update>
   
   
-      <!-- 大V未发起立即服务超时  查询-->
+      <!-- 双方都没有主动结束：12小时未响应超时  查询-->
   <select id="queryOrderStatusAfter12HourBoth"   resultType="com.honglu.quickcall.task.entity.TaskOrder" >
 		SELECT
 		order_id  AS orderId ,
@@ -128,7 +128,7 @@
 		   orders
 		WHERE
 			order_status = #{queryStatus}
-		AND start_time <![CDATA[ < ]]> #{endTime}
+		AND expect_end_time <![CDATA[ < ]]> #{endTime}
   </select>
   
   <!-- ///////////////////////////////////////////////////////////////////-->
