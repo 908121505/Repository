@@ -8,9 +8,11 @@ import com.calf.cn.utils.SearchUtil;
 import com.calf.module.common.impl.CommonUtilService;
 import com.calf.module.customer.entity.Customer;
 import com.calf.module.enums.OrderStatusEnums;
+import com.calf.module.enums.SmallOrderStatusEnums;
 import com.calf.module.order.entity.*;
 import com.calf.module.order.vo.OrderStatusVO;
 import com.calf.module.order.vo.OrderVO;
+import com.calf.module.order.vo.SmallOrderStatusVO;
 import com.honglu.quickcall.common.core.util.UUIDUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -107,6 +109,19 @@ public class OrderService {
 		return statusVOS;
 	}
 
+	public List<SmallOrderStatusVO> getSamllOrderStatusList(){
+		//获取小类订单状态
+		List<SmallOrderStatusVO> statusVOS = new ArrayList<>();
+		for (SmallOrderStatusEnums orderStatusEnums : SmallOrderStatusEnums.values()) {
+			SmallOrderStatusVO vo = new SmallOrderStatusVO();
+			vo.setValue(orderStatusEnums.getValue());
+			vo.setDesc(orderStatusEnums.getDesc());
+			vo.setShow(false);
+			statusVOS.add(vo);
+		}
+		return statusVOS;
+	}
+
 	public List<SkillItem> getSkillItemsList(){
 		//获取服务类型
 		List<SkillItem> skillItems = baseManager.query("SkillItem.selectAll",null);
@@ -120,13 +135,28 @@ public class OrderService {
 		model.addAttribute("entity", order);
 	}
 
-	public void queryOrderDetail(Model model, String id) {
+	public OrderVO queryOrderDetail(Model model, String id) {
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		paramMap.put("orderId", id);
 		OrderVO order = baseManager.get("Order.queryOrderDetail",  paramMap);
-        OrderStatusEnums stauts = OrderStatusEnums.getOrderStautsEnums(order.getOrderStatus());
-        order.setOrderStatusVal(stauts==null?order.getOrderStatus():stauts.getDesc());
-		model.addAttribute("entity", order);
+        SmallOrderStatusEnums status = SmallOrderStatusEnums.getSmallOrderStatusEnums(order.getOrderStatus());
+        if (status==null) {
+			order.setOrderStatusVal(order.getOrderStatus());
+		}else{
+			order.setOrderStatusVal(status.getDesc());
+			String[] cancels = OrderStatusEnums.Cancel.getSubset().split(",");
+			boolean isShow = false;
+			for (String can:cancels){
+				if (can.equals(status.getValue())){
+					isShow = true;
+					break;
+				}
+			}
+			model.addAttribute("isShow", isShow);
+		}
+
+        model.addAttribute("entity", order);
+        return order;
 	}
 
 	public int saveAdd(OrderVO entity) {
@@ -153,19 +183,20 @@ public class OrderService {
 		Customer customer = baseManager.get("Customer.selectByPrimaryKey",paramMap);
 		Map<String, Object> paramMap1 = new HashMap<String, Object>();
 		paramMap1.put("customerId", entity.getReceivedOrderId());
-		CustomerSkill skill = baseManager.get("CustomerSkill.queryCustomerSkill",paramMap1);
+		List<CustomerSkill> skillList = baseManager.query("CustomerSkill.queryCustomerSkill",paramMap1);
         if (customer == null){
             //不存在下单用户
             return 0;
         }
-        if (skill==null){
+        if (skillList==null||skillList.size()<=0){
             //接单用户不存在技能
             return 0;
         }
+        CustomerSkill skill = skillList.get(0);
         Orders order = new Orders();
         String orderId = DateUtil.dateFormat(new Date(), "yyyyMMddHHmmss")+ RadomUtil.generateNumber2(4);
         order.setOrderId(Long.parseLong(orderId));
-        order.setOrderNo(Long.parseLong(entity.getOrderId()));
+        order.setOrderNo(Long.parseLong(orderId));
         order.setCustomerSkillId(skill.getCustomerSkillId());
         order.setCustomerId(Long.parseLong(entity.getPlaceOrderId()));
         order.setOrderAmounts(new BigDecimal(entity.getOrderAmount()));
@@ -174,7 +205,6 @@ public class OrderService {
         order.setServiceId(skill.getCustomerId());
         order.setOrderNum(Integer.parseInt(entity.getOrderNum()));
         order.setDiscountRate(new BigDecimal(entity.getDiscountType()));
-        order.setDiscountRate(new BigDecimal(entity.getServiceType()));
         order.setStartTime(DateUtil.StrToDate(entity.getStartTime(),"yyyy-MM-dd HH:mm:dd"));
         order.setEndTime(DateUtil.StrToDate(entity.getEndTime(),"yyyy-MM-dd HH:mm:dd"));
         order.setCreateTime(new Date());

@@ -204,7 +204,8 @@ public class RongYunUtil {
 			String headPortraitUrl, Integer type) {
 
 		Long otherId = toCustomerId;
-		SendUser sendUser = new SendUser(nickName, headPortraitUrl, sex, otherId);
+		// refreshUser(fromUserId + "", nickName, headPortraitUrl);
+		SendUser sendUser = new SendUser(nickName, headPortraitUrl, sex, fromUserId);
 		RongYunPushBean rongYunPushBean = new RongYunPushBean(1, content, 1, 0, type, fromUserId, otherId, 1, sendUser,
 				System.currentTimeMillis());
 		String jsonString = JSON.toJSONString(rongYunPushBean);

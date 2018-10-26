@@ -39,12 +39,24 @@
 					</div>
 				</div>
 			</div>
+			<%--<div class="row">
+				<div class="col-md-2">
+					<div class="form-group">
+						<div class="input-group">
+							<div class="input-group-addon">开始时间</div>
+							<input class="form-control" style="width:200px" type="text" id="start_time" onfocus="WdatePicker({skin:'whyGreen',dateFmt:'yyyy-MM-dd HH:mm:ss',minDate:'1950-01-01'})">
+							<div class="input-group-addon"> 到 结束时间</div>
+							<input class="form-control"  style="width:200px"  type="text" id="end_time" onfocus="WdatePicker({skin:'whyGreen',dateFmt:'yyyy-MM-dd HH:mm:ss',minDate:'1950-01-01'})">
+						</div>
+					</div>
+				</div>
+			</div>--%>
 			<div class="row">
 				<div class="col-md-2">
 					<div class="form-group">
 						<div class="input-group">
 							<div class="input-group-addon">开始时间</div>
-							<input class="form-control" type="text" id="start_time">
+							<input class="form-control" value="${showStartTime}" type="text" id="start_time" onfocus="WdatePicker({skin:'default',dateFmt:'yyyy-MM-dd HH:mm:ss',minDate:'1950-01-01'})">
 						</div>
 					</div>
 				</div>
@@ -53,7 +65,7 @@
 					<div class="form-group">
 						<div class="input-group">
 							<div class="input-group-addon">结束时间</div>
-							<input class="form-control" type="text" id="end_time">
+							<input class="form-control" value="${showEndTime}" type="text" id="end_time" onfocus="WdatePicker({skin:'default',dateFmt:'yyyy-MM-dd HH:mm:ss',minDate:'1950-01-01'})">
 						</div>
 					</div>
 				</div>
