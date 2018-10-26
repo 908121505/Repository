@@ -207,12 +207,18 @@ public class OrderUpdateJob {
      */
     public   void   refundToCustomer(List<TaskOrder>  orderList){
     	if(!CollectionUtils.isEmpty(orderList)){
-			for (TaskOrder order : orderList) {
-				Long  customerId =  order.getCustomerId();
-				BigDecimal  payAmount =  order.getOrderAmounts();
-				//调用接口退款给用户
-				iAccountOrderService.inAccount(customerId, payAmount,TransferTypeEnum.RECHARGE,AccountBusinessTypeEnum.OrderRefund);
-				LOGGER.info("用户ID："+customerId +"订单超时，系统自动退款给用户"+payAmount);
+			try {
+				for (TaskOrder order : orderList) {
+					Long  customerId =  order.getCustomerId();
+					BigDecimal  payAmount =  order.getOrderAmounts();
+					//调用接口退款给用户
+					LOGGER.info("用户信息："+order.toString());
+					System.out.println("============"+iAccountOrderService);
+					iAccountOrderService.inAccount(customerId, payAmount,TransferTypeEnum.RECHARGE,AccountBusinessTypeEnum.OrderRefund);
+					LOGGER.info("用户ID："+customerId +"订单超时，系统自动退款给用户"+payAmount);
+				}
+			} catch (Exception e) {
+				LOGGER.error("用户退款发生异常，异常信息",e);
 			}
 		}
     }
@@ -223,13 +229,18 @@ public class OrderUpdateJob {
      */
     public   void   freezeToService(List<TaskOrder>  orderList){
     	if(!CollectionUtils.isEmpty(orderList)){
-    		for (TaskOrder order : orderList) {
-    			Long  serviceId =  order.getServiceId();
-    			BigDecimal   payAmount =  order.getOrderAmounts();
-    			//大V冻结
-    			iAccountOrderService.inAccount(order.getServiceId(), order.getOrderAmounts(), TransferTypeEnum.FROZEN, AccountBusinessTypeEnum.FroZen);
-    			LOGGER.info("主播用户ID："+serviceId +"订单超时，系统自动退款给用户"+payAmount);
-    		}
+    		try {
+				for (TaskOrder order : orderList) {
+					Long  serviceId =  order.getServiceId();
+					BigDecimal   payAmount =  order.getOrderAmounts();
+					//大V冻结
+					System.out.println("============"+iAccountOrderService);
+					iAccountOrderService.inAccount(order.getServiceId(), order.getOrderAmounts(), TransferTypeEnum.FROZEN, AccountBusinessTypeEnum.FroZen);
+					LOGGER.info("主播用户ID："+serviceId +"订单超时，系统自动退款给用户"+payAmount);
+				}
+			} catch (Exception e) {
+				LOGGER.error("大V账户冻结发生异常，异常信息",e);
+			}
     	}
     }
     

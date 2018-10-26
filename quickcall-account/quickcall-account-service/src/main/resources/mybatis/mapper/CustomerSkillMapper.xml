@@ -474,5 +474,47 @@
   </select>
   
   
+  
+  <!-- 查询用户当天可用技能 -->
+    <select id="selectCustomerSkillByCustomerId" resultType="com.honglu.quickcall.account.facade.vo.CustomerSkillIMVO" >
+		SELECT
+			cs.service_unit  AS serviceUnit,
+		  cs.skill_price  AS  servicePrice,
+		  cs.skill_name  AS  skillItemName,
+		  st.unlock_icon  AS  icon,
+		  cs.customer_skill_id  AS  customerSkillId
+		FROM
+			customer_skill cs
+		LEFT JOIN skill_item st ON cs.skill_item_id = st.id
+    where cs.customer_id = #{customerId,jdbcType=BIGINT}  AND cs.switch_status = 1 AND cs.receive_status =1 
+       <if test="weekIndex == 1" >
+        AND  cs.monday = #{skillSwitch,jdbcType=TINYINT}
+      </if>
+      <if test="weekIndex == 2" >
+        AND  cs.tuesday = #{skillSwitch,jdbcType=TINYINT}
+      </if>
+      <if test="weekIndex == 3" >
+        AND  cs.wednesday = #{skillSwitch,jdbcType=TINYINT}
+      </if>
+      <if test="weekIndex == 4" >
+        AND  cs.thursday = #{skillSwitch,jdbcType=TINYINT}
+      </if>
+      <if test="weekIndex == 5" >
+       AND   cs.friday = #{skillSwitch,jdbcType=TINYINT}
+      </if>
+      <if test="weekIndex == 6" >
+       AND   cs.saturday = #{skillSwitch,jdbcType=TINYINT}
+      </if>
+      <if test="weekIndex == 7" >
+        AND  cs.sunday = #{skillSwitch,jdbcType=TINYINT}
+      </if>
+      <if test="endTimeStr != null" >
+        AND  cs.end_time_str <![CDATA[  > ]]> #{endTimeStr,jdbcType=VARCHAR}
+      </if>
+      order by  cs.modify_time desc
+      limit 1
+  </select>
+  
+  
 
 </mapper>

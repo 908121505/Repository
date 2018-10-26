@@ -565,7 +565,9 @@
 			od.start_service_time AS startTime,
 			od.end_time AS endTime ,
   			cs.skill_item_id   AS  skillItemId,
-	  		od.receive_order_time AS receiveOrderTime
+	  		od.receive_order_time AS receiveOrderTime,
+	  		od.remark as  remark,
+	  		od.discount_rate  as discountRate
 			
 		FROM
 			orders od
@@ -596,7 +598,10 @@
 		od.order_id AS orderId,
 		od.order_time AS orderTime,
 		od.start_service_time AS startTime,
-		od.end_time AS endTime 
+		od.end_time AS endTime ,
+		od.receive_order_time AS receiveOrderTime,
+		od.remark as  remark,
+		od.discount_rate  as discountRate
 	FROM
 		orders od
 	LEFT JOIN customer ct ON ct.customer_id = od.service_id
@@ -627,7 +632,7 @@
         cs.skill_item_id AS skillItemId,
         cs.skill_price AS price,
         od.order_num AS orderNum,
-        od.order_amounts AS orderAmounts,
+        od.order_amounts AS orderAmount,
         od.order_time AS orderTime
     FROM
         orders od

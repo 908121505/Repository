@@ -53,6 +53,13 @@ public class TaskOrder {
 		this.orderId = orderId;
 	}
 
+	@Override
+	public String toString() {
+		return "TaskOrder [orderId=" + orderId + ", customerId=" + customerId + ", serviceId=" + serviceId
+				+ ", orderAmounts=" + orderAmounts + "]";
+	}
+
+	
 	
    
 

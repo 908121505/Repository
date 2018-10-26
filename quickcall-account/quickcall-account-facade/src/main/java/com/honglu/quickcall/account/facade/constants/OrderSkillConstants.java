@@ -18,6 +18,8 @@ public interface OrderSkillConstants {
 	public  static final  Integer  IM_RETCODE_DV_BUSY = 2;
 	/** 3：订单存在*/
 	public  static final  Integer  IM_RETCODE_ORDER_EXIST = 3;
+	/** 4：大V不可下单*/
+	public  static final  Integer  IM_RETCODE_ORDER_COUND_ORDER = 4;
 	
 	
 	

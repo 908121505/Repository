@@ -3,18 +3,18 @@ package com.honglu.quickcall.account.facade.vo;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
-/**   
+/**
+ * 
  * Copyright © 2018 www.xiaoniu.com All rights reserved.
  * 
- * 功能描述：订单详情IM使用
+ * 功能描述：用户技能展示for IM
  * @Package: com.honglu.quickcall.account.facade.vo 
  * @author: chenliuguang   
- * @date: 2018年9月24日 下午1:17:55 
+ * @date: 2018年10月26日 下午3:43:26
  */
-public class OrderIMVO implements  Serializable{
+public class CustomerSkillIMVO implements  Serializable{
 
-	
-	private Long  orderId;
+	private static final long serialVersionUID = 5268284255984360674L;
 	/**产品价格*/
 	private BigDecimal  servicePrice;
 	/**产品单位*/
@@ -23,13 +23,16 @@ public class OrderIMVO implements  Serializable{
 	private String skillItemName ;
 	/**技能ICON*/
 	private String  icon;
-	/**订单状态*/
-	private Integer  orderStatus;
-	public Long getOrderId() {
-		return orderId;
+	/**用户技能ID*/
+	private Long  customerSkillId;
+	
+	
+	
+	public Long getCustomerSkillId() {
+		return customerSkillId;
 	}
-	public void setOrderId(Long orderId) {
-		this.orderId = orderId;
+	public void setCustomerSkillId(Long customerSkillId) {
+		this.customerSkillId = customerSkillId;
 	}
 	public BigDecimal getServicePrice() {
 		return servicePrice;
@@ -55,10 +58,8 @@ public class OrderIMVO implements  Serializable{
 	public void setIcon(String icon) {
 		this.icon = icon;
 	}
-	public Integer getOrderStatus() {
-		return orderStatus;
-	}
-	public void setOrderStatus(Integer orderStatus) {
-		this.orderStatus = orderStatus;
-	}
+	
+	
+	
+	
 }

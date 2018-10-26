@@ -10,7 +10,7 @@ import com.honglu.quickcall.user.facade.vo.AppHomeBigvListVO;
 import com.honglu.quickcall.user.service.dao.CustomerAppearanceMapper;
 import com.honglu.quickcall.user.service.dao.CustomerSkillMapper;
 import com.honglu.quickcall.user.service.dao.SkillItemMapper;
-import com.honglu.quickcall.user.service.service.QueryHomeBigvListService;
+import com.honglu.quickcall.user.service.service.QueryBigvListService;
 import com.honglu.quickcall.user.service.util.CountAge;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,13 +22,13 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * 查询首页大V列表Service实现类
+ * 查询大V列表Service实现类
  *
  * @author duanjun
  * @date 2018-10-25 14:24
  */
 @Service
-public class QueryHomeBigvListServiceImpl implements QueryHomeBigvListService {
+public class QueryBigvListServiceImpl implements QueryBigvListService {
     private static final Logger LOGGER = LoggerFactory.getLogger(CustomerRedisManagementImpl.class);
 
     @Autowired
