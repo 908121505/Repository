@@ -75,6 +75,7 @@ public class CustomerSkill {
     private Integer customerSex;
     private Date customerBirthday;
     private String skillBackColor;
+    private String skillHomeBackColor;
     private String skillFontColor;
     private String skillVoiceUrl;
     private BigDecimal skillVoiceTime;
@@ -378,5 +379,13 @@ public class CustomerSkill {
 
     public void setCustomerBirthday(Date customerBirthday) {
         this.customerBirthday = customerBirthday;
+    }
+
+    public String getSkillHomeBackColor() {
+        return skillHomeBackColor;
+    }
+
+    public void setSkillHomeBackColor(String skillHomeBackColor) {
+        this.skillHomeBackColor = skillHomeBackColor;
     }
 }

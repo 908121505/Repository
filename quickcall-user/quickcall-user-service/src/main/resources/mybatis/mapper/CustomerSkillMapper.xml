@@ -35,6 +35,7 @@
     <result column="customer_sex" property="customerSex" />
     <result column="customer_birthday" property="customerBirthday" jdbcType="TIMESTAMP" />
     <result column="skill_back_color" property="skillBackColor" jdbcType="VARCHAR" />
+    <result column="skill_home_black_color" property="skillHomeBackColor" jdbcType="VARCHAR" />
     <result column="skill_font_color" property="skillFontColor" jdbcType="VARCHAR" />
     <result column="skill_voice_url" property="skillVoiceUrl" jdbcType="VARCHAR" />
     <result column="skill_voice_time" property="skillVoiceTime" jdbcType="DECIMAL" />
@@ -384,6 +385,7 @@
         t2.skill_voice_url,
         t2.skill_voice_time,
         t3.back_color as skill_back_color,
+        t3.home_black_color as skill_home_black_color,
         t3.font_color as skill_font_color,
         t4.nick_name as customer_nick_name,
         t4.sex as customer_sex,
