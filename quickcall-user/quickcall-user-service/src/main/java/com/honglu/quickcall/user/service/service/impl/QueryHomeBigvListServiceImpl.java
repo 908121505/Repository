@@ -83,7 +83,7 @@ public class QueryHomeBigvListServiceImpl implements QueryHomeBigvListService {
             AppHomeBigvListVO.BigvInfoVO bigv = recomedBigv.new BigvInfoVO();
             bigv.setCustomerId(customerSkill.getCustomerId());
             bigv.setCustomerSkillId(customerSkill.getCustomerSkillId());
-            bigv.setSkillBackColor(customerSkill.getSkillBackColor());
+            bigv.setSkillBackColor(customerSkill.getSkillHomeBackColor());
             bigv.setNickName(customerSkill.getCustomerNickName());
             bigv.setSex(customerSkill.getCustomerSex());
             if (customerSkill.getCustomerBirthday() != null) {
