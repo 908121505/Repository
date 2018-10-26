@@ -211,8 +211,9 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 	public CommonResponse setHeardUrl(SetHeardUrlRequest params) {
 		// TODO Auto-generated method stub
 		String rongyunToken = null;
+		String img = params.getHeadPortraitUrl();
 		if (StringUtils.isNotBlank(params.getNickName()) && params.getCustomerId() != null) {
-			String img = params.getHeadPortraitUrl();
+
 			if (StringUtils.isBlank(img)) { // 手机号注册没有传头像，使用默认头像
 				if (params.getSex() == 0) {// 性別是女
 					img = defaultWoManImg;
@@ -243,7 +244,7 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 			 */
 			// 刷新融云用户信息
 			CodeSuccessReslut reslut = RongYunUtil.refreshUser(String.valueOf(params.getCustomerId()),
-					params.getNickName(), params.getHeadPortraitUrl());
+					params.getNickName(), img);
 			// 刷新失败
 			if (reslut.getCode() != 200) {
 				logger.error("刷新融云用户信息失败，用户id为：" + String.valueOf(params.getCustomerId()) + "失败原因为："
@@ -254,8 +255,7 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 
 		}
 
-		int row = customerMapper.customerSetHeardUrl(params.getTel(), params.getHeadPortraitUrl(), params.getNickName(),
-				params.getSex());
+		int row = customerMapper.customerSetHeardUrl(params.getTel(), img, params.getNickName(), params.getSex());
 		if (row <= 0) {
 			throw new BizException(BizCode.ParamError, "设置昵称头像失败");
 		}
