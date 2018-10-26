@@ -18,6 +18,7 @@
             <list>
                 <value>classpath:dbcp.properties</value>
                 <value>classpath:memcache.properties</value>
+                <value>classpath:rabbitMq.properties</value>
             </list>
         </property>
     </bean>
@@ -86,6 +87,9 @@
 
     <task:annotation-driven/>
     <context:annotation-config/>
+
+    <import resource="classpath:applicationContext-rabbitmq-pull.xml" />
+    <import resource="classpath:applicationContext-rabbitmq-push.xml" />
 
 </beans>
 

@@ -2,7 +2,7 @@
 <%@ taglib prefix="shiro" uri="http://shiro.apache.org/tags"%>
 <div class="content1">
     <div class="header">
-        <h1 class="page-title">APP配置</h1>
+        <h1 class="page-title">职业管理</h1>
         <ul class="breadcrumb">
             <li>APP配置</li>
             <li class="active">职业管理</li>

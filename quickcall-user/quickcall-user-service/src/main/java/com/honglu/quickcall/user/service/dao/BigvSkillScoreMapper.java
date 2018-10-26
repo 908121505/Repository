@@ -126,10 +126,10 @@ public interface BigvSkillScoreMapper {
     /**
      * 更新大V单项技能评分
      *
-     * @param serviceId
+     * @param customerId
      * @param skillItemId
      * @param valueScore
      * @return
      */
-    int updateBigvSkillScore(@Param("serviceId") Long serviceId, @Param("skillItemId") Long skillItemId, @Param("valueScore") BigDecimal valueScore);
+    int updateBigvSkillScore(@Param("customerId") Long customerId, @Param("skillItemId") Long skillItemId, @Param("valueScore") BigDecimal valueScore);
 }

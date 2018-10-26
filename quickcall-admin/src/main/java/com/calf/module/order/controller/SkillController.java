@@ -3,13 +3,11 @@ package com.calf.module.order.controller;
 import com.calf.cn.controller.BaseController;
 import com.calf.cn.entity.DataTables;
 import com.calf.module.order.impl.SkillItemService;
-import com.calf.module.order.impl.SkillService;
 import com.calf.module.order.vo.SkillItemVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import shaded.org.apache.commons.lang3.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,9 +15,6 @@ import javax.servlet.http.HttpServletRequest;
 @Controller
 @RequestMapping("/skill")
 public class SkillController implements BaseController<SkillItemVo>{
-
-	@Autowired
-	private SkillService  skillService;
 
 	@Autowired
 	private SkillItemService skillItemService;

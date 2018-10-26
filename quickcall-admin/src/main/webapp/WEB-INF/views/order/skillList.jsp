@@ -185,6 +185,11 @@
                         }
                     },
                     {
+                        "data": "homeBlackColor",
+                        "sTitle": "首页背景颜色",
+                        'sClass': "text-center"
+                    },
+                    {
                         "data": "fontColor",
                         "sTitle": "字体颜色",
                         'sClass': "text-center",
@@ -269,7 +274,7 @@
                     {
                         "data": "sort",
                         "sTitle": "排序",
-                        'sClass': "text-center",
+                        'sClass': "text-center"
                     },
 
 
@@ -278,7 +283,6 @@
                         "sTitle": "备注",
                         'sClass': "text-center"
                     },
-
                     {
                         "data": "createMan",
                         "sTitle": "创建人",
@@ -341,7 +345,7 @@
                     aoData.push({"name": "skillStatus", "value": $("#skillStatusQuery").val()});
                 },
                 aoColumnDefs: [{
-                    "aTargets": 15,
+                    "aTargets": 16,
                     "mRender": function (data, type, row) {
 
                         var detail = "", del = "", status;

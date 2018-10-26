@@ -1,13 +1,14 @@
 package com.calf.module.order.vo;
 
+import java.math.BigDecimal;
+import java.util.List;
+
 public class SkillItemVo {
     private String id;
 
     private String skillItemName;
 
     private String skillDescribe;
-
-    private String imageUrl;
 
     private Integer sort;
 
@@ -24,6 +25,16 @@ public class SkillItemVo {
     private String fontColor;
 
     private Integer skillType;
+
+    private String homeBlackColor;
+
+    public String getHomeBlackColor() {
+        return homeBlackColor;
+    }
+
+    public void setHomeBlackColor(String homeBlackColor) {
+        this.homeBlackColor = homeBlackColor;
+    }
 
     public Integer getSkillType() {
         return skillType;
@@ -87,14 +98,6 @@ public class SkillItemVo {
 
     public void setSkillDescribe(String skillDescribe) {
         this.skillDescribe = skillDescribe;
-    }
-
-    public String getImageUrl() {
-        return imageUrl;
-    }
-
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
     }
 
     public Integer getSort() {

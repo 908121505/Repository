@@ -89,6 +89,12 @@
       <if test="certifyId != null" >
         certify_id,
       </if>
+      <if test="skillItemExtId != null" >
+        skill_item_ext_id,
+      </if>
+      <if test="skillRange != null" >
+        skill_range,
+      </if>
       <if test="customerId != null" >
         customer_id,
       </if>
@@ -171,6 +177,12 @@
       </if>
       <if test="certifyId != null" >
         #{certifyId,jdbcType=BIGINT},
+      </if>
+      <if test="skillItemExtId != null" >
+        #{skillItemExtId,jdbcType=BIGINT},
+      </if>
+      <if test="skillRange != null" >
+        #{skillRange,jdbcType=TINYINT},
       </if>
       <if test="customerId != null" >
         #{customerId,jdbcType=BIGINT},
@@ -365,4 +377,20 @@
       remark = #{remark,jdbcType=VARCHAR}
     where customer_skill_id = #{customerSkillId,jdbcType=BIGINT}
   </update>
+
+  <update id="updateReceiveStatus" parameterType="map" >
+    update customer_skill
+    <set >
+      <if test="receiveStatus != null" >
+        receive_status = #{receiveStatus,jdbcType=TINYINT},
+      </if>
+    </set>
+    where customer_id = #{customerId,jdbcType=BIGINT}
+  </update>
+
+  <select id="queryCustomerSkill" resultMap="BaseResultMap" parameterType="map" >
+  	select * from customer_skill
+  	where customer_id = #{customerId}
+  </select>
+
 </mapper>

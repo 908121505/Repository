@@ -3,7 +3,7 @@
 <link type="text/css" rel="stylesheet" href="resources/plugins/viewer/viewer.min.css" media="screen"/>
 <div class="content1">
     <div class="header">
-        <h1 class="page-title">客服后台</h1>
+        <h1 class="page-title">形象照审核</h1>
         <ul class="breadcrumb">
             <li>客服后台</li>
             <li class="active">形象照审核</li>

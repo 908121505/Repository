@@ -6,7 +6,7 @@
     <result column="skill_item_id" property="skillItemId" jdbcType="BIGINT" />
     <result column="skill_ext_type" property="skillExtType" jdbcType="TINYINT" />
     <result column="skill_ext_range" property="skillExtRange" jdbcType="TINYINT" />
-    <result column="skill_ext_unit" property="skillExtUnit" jdbcType="TINYINT" />
+    <result column="skill_ext_unit" property="skillExtUnit" jdbcType="VARCHAR" />
     <result column="skill_ext_price" property="skillExtPrice" jdbcType="DECIMAL" />
     <result column="skill_ext_threshold" property="skillExtThreshold" jdbcType="INTEGER" />
     <result column="skill_ext_status" property="skillExtStatus" jdbcType="TINYINT" />
@@ -24,7 +24,15 @@
     remark
   </sql>
 
-
+	<select id="queryDefultPrice" resultMap="BaseResultMap">
+		select 
+		<include refid="Base_Column_List" />
+		from skill_item_ext
+		where skill_item_id = #{arg0} and skill_ext_status = 1 and skill_ext_type = 1
+		order by skill_ext_price asc,skill_ext_price asc 
+		limit 0,1
+	</select>
+	
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
     <include refid="Base_Column_List" />

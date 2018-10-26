@@ -7,11 +7,12 @@
     <result column="background_image_url" jdbcType="VARCHAR" property="backgroundImageUrl" />
     <result column="message_describe" jdbcType="VARCHAR" property="messageDescribe" />
     <result column="message_content" jdbcType="VARCHAR" property="messageContent" />
+    <result column="bespeak_send_time" jdbcType="TIMESTAMP" property="bespeakSendTime" />
   </resultMap>
 
   <select id="selectByMessageType" resultMap="BaseResultMap">
     select 
-      m.title, m.H5_url, m.background_image_url, m.message_describe, m.message_content
+      m.title, m.H5_url, m.background_image_url, m.message_describe, m.message_content, m.bespeak_send_time
     from message_customer mc, message m
     where mc.message_id = m.message_id
     and m.type = #{messageType}
