@@ -62,6 +62,7 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 
 	// 默认图片
 	private static String defaultImg = ResourceBundle.getBundle("thirdconfig").getString("defaultImg");
+	private static String defaultWoManImg = ResourceBundle.getBundle("thirdconfig").getString("defaultWoManImg");
 	@Autowired
 	private CustomerMapper customerMapper;
 
@@ -210,9 +211,15 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 	public CommonResponse setHeardUrl(SetHeardUrlRequest params) {
 		// TODO Auto-generated method stub
 		String rongyunToken = null;
-		if (StringUtils.isNotBlank(params.getNickName()) && params.getCustomerId() != null
-				&& StringUtils.isNotBlank(params.getHeadPortraitUrl())) {
-
+		if (StringUtils.isNotBlank(params.getNickName()) && params.getCustomerId() != null) {
+			String img = params.getHeadPortraitUrl();
+			if (StringUtils.isBlank(img)) { // 手机号注册没有传头像，使用默认头像
+				if (params.getSex() == 0) {// 性別是女
+					img = defaultWoManImg;
+				} else {// 性別是男
+					img = defaultImg;
+				}
+			}
 			if (params.getNickName().length() > 24) {
 				throw new RemoteException(UserBizReturnCode.paramError, "您的昵称超出长度！");
 			}
