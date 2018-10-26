@@ -75,8 +75,10 @@ public class ReceiveOrderService {
 	public void queryOrderDetail(Model model, String id) {
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		paramMap.put("customerId", id);
-		ReceiveOrderVO vo = baseManager.get("Customer.queryOrderDetail",  paramMap);
-		model.addAttribute("entity", vo);
+		List<ReceiveOrderVO> vos = baseManager.query("Customer.queryOrderDetail",  paramMap);
+		if (vos != null&&vos.size()>0){
+			model.addAttribute("entity", vos.get(0));
+		}
 	}
 
     /**

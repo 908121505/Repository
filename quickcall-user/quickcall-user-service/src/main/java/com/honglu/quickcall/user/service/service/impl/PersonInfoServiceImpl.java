@@ -12,6 +12,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.honglu.quickcall.common.constants.PropertiesConstant;
+import com.honglu.quickcall.user.facade.entity.*;
+import com.honglu.quickcall.user.facade.entity.example.AppShareConfigExample;
+import com.honglu.quickcall.user.service.dao.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,14 +37,6 @@ import com.honglu.quickcall.common.third.rongyun.models.CodeSuccessReslut;
 import com.honglu.quickcall.common.third.rongyun.util.RongYunUtil;
 import com.honglu.quickcall.user.facade.code.UserBizReturnCode;
 import com.honglu.quickcall.user.facade.constants.UserBizConstants;
-import com.honglu.quickcall.user.facade.entity.Customer;
-import com.honglu.quickcall.user.facade.entity.CustomerInterest;
-import com.honglu.quickcall.user.facade.entity.CustomerOccupation;
-import com.honglu.quickcall.user.facade.entity.CustomerSkill;
-import com.honglu.quickcall.user.facade.entity.CustomerSkillCertify;
-import com.honglu.quickcall.user.facade.entity.Fans;
-import com.honglu.quickcall.user.facade.entity.SensitivityWord;
-import com.honglu.quickcall.user.facade.entity.SkillItem;
 import com.honglu.quickcall.user.facade.exchange.request.AddOrCancelFansRequest;
 import com.honglu.quickcall.user.facade.exchange.request.CheckAttentionRequest;
 import com.honglu.quickcall.user.facade.exchange.request.CheckEachAttentionRequest;
@@ -70,17 +65,6 @@ import com.honglu.quickcall.user.facade.vo.InterestVO;
 import com.honglu.quickcall.user.facade.vo.MySkillVO;
 import com.honglu.quickcall.user.facade.vo.OccupationVO;
 import com.honglu.quickcall.user.facade.vo.SearchPersonListVO;
-import com.honglu.quickcall.user.service.dao.CustomerAppearanceMapper;
-import com.honglu.quickcall.user.service.dao.CustomerInterestMapper;
-import com.honglu.quickcall.user.service.dao.CustomerMapper;
-import com.honglu.quickcall.user.service.dao.CustomerOccupationMapper;
-import com.honglu.quickcall.user.service.dao.CustomerSkillCertifyMapper;
-import com.honglu.quickcall.user.service.dao.CustomerSkillMapper;
-import com.honglu.quickcall.user.service.dao.FansMapper;
-import com.honglu.quickcall.user.service.dao.InterestMapper;
-import com.honglu.quickcall.user.service.dao.OccupationMapper;
-import com.honglu.quickcall.user.service.dao.SensitivityWordMapper;
-import com.honglu.quickcall.user.service.dao.SkillItemMapper;
 import com.honglu.quickcall.user.service.service.CustomerRedisManagement;
 import com.honglu.quickcall.user.service.service.PersonInfoService;
 import com.honglu.quickcall.user.service.util.CountAge;
@@ -117,6 +101,8 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 	private CustomerAppearanceMapper customerAppearanceMapper;
 	@Autowired
 	private IAccountOrderService accountOrderService;
+	@Autowired
+	private AppShareConfigMapper appShareConfigMapper;
 
 	/**
 	 * 中文、英文、数字、下划线校验 4-24位
@@ -807,15 +793,21 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 		customerHomeVO.setInterestList(customerInterestMapper.queryCustomerInterestList(request.getViewCustomerId()));
 
 		// 查询声鉴卡
-		List<String> soundGuideCard = customerAppearanceMapper
-				.queryCustomerAuditedAppearance(request.getViewCustomerId(), 2);
+		List<String> soundGuideCard = customerAppearanceMapper.queryCustomerAuditedAppearance(request.getViewCustomerId(), 2);
 		customerHomeVO.setSoundGuideCard(soundGuideCard.isEmpty() ? null : soundGuideCard.get(0));
 
 		// 查询分享信息
-		customerHomeVO.setShareTitle("测试");
-		customerHomeVO.setShareContent("ces");
-		customerHomeVO.setShareIconUrl("shanghai.aliyuncs.com/user/app/1538205551716.png");
-		customerHomeVO.setShareLinkUrl("http://www.baidu.com");
+		AppShareConfigExample shareExample = new AppShareConfigExample();
+		shareExample.createCriteria().andTypeEqualTo(1);
+		shareExample.setOrderByClause("modify_time desc");
+		List<AppShareConfig> shareList = appShareConfigMapper.selectByExample(shareExample);
+		if(shareList != null && shareList.size() > 0){
+			AppShareConfig share = shareList.get(0);
+			customerHomeVO.setShareTitle(share.getTitle());
+			customerHomeVO.setShareContent(share.getContent());
+			customerHomeVO.setShareIconUrl(share.getIconUrl());
+			customerHomeVO.setShareLinkUrl(share.getLinkUrl());
+		}
 
 		// 查询用户技能 -- 条件是大V
 		List<CustomerHomeVO.CustomerSkill> skillList = new ArrayList<>();
@@ -836,8 +828,7 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 				customerSkill.setSkillPrice(bean.getDiscountPrice());
 				customerSkill.setServiceUnit(bean.getServiceUnit());
 				// 查询技能评价标签
-				customerSkill.setCustomerLabel(customerSkillMapper
-						.selectCustomerSkillHotLabel(request.getViewCustomerId(), bean.getSkillItemId()));
+				customerSkill.setCustomerLabel(customerSkillMapper.selectCustomerSkillHotLabel(request.getViewCustomerId(), bean.getSkillItemId()));
 
 				// 声量 ADUAN -- 一期前段不显示
 				customerSkill.setSkillVolume(250);
@@ -846,8 +837,7 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 				if (Objects.equals(request.getLoginCustomerId(), request.getViewCustomerId())) {
 					customerSkill.setCanOrder(0); // 自己看自己的个人主页时 -- 直接返回 0=不可接单
 				} else {
-					customerSkill.setCanOrder(
-							accountOrderService.checkReceiveOrderByCustomerSkillId(bean.getCustomerSkillId()));
+					customerSkill.setCanOrder(accountOrderService.checkReceiveOrderByCustomerSkillId(bean.getCustomerSkillId()));
 				}
 
 				skillList.add(customerSkill);
