@@ -40,6 +40,7 @@ import com.honglu.quickcall.account.facade.exchange.request.OrderSaveRequest;
 import com.honglu.quickcall.account.facade.exchange.request.OrderSendOrderListRequest;
 import com.honglu.quickcall.account.facade.exchange.request.QueryIngOrderCountRequest;
 import com.honglu.quickcall.account.facade.exchange.request.QueryRefundReasonRequest;
+import com.honglu.quickcall.account.facade.vo.CustomerSkillIMVO;
 import com.honglu.quickcall.account.facade.vo.OrderDaVSkillVO;
 import com.honglu.quickcall.account.facade.vo.OrderDetailForIMVO;
 import com.honglu.quickcall.account.facade.vo.OrderDetailVO;
@@ -323,10 +324,13 @@ public class OrderServiceImpl implements IOrderService {
 			record.setOrderNum(orderNum);
 			record.setOrderStatus(OrderSkillConstants.ORDER_STATUS_WAITING_RECEIVE);
 			record.setOrderTime(currTime);
+			record.setRemark(request.getRemark());
 			orderMapper.insert(record);
 			resultMap.put("retCode",  OrderSkillConstants.RET_CODE_SUCCESS);
 			resultMap.put("orderId", orderId+"");
+
 			// ADUAN 下单支付成功后 -- 发送弹幕消息
+			LOGGER.info("下单成功 -- 发送弹幕消息：", orderId);
 			barrageMessageService.lpushMessage(orderId);
 			
 			
@@ -520,16 +524,39 @@ public class OrderServiceImpl implements IOrderService {
 			throw new BizException(AccountBizReturnCode.paramError, "查询订单详情参数异常");
 		}
 		
-		//三种情况1：用户可以下单
-		//
 		/**
-		 * 1.用户可以下单
-		 * 2.大V正忙
-		 * 3.给出订单详情
+		 * 逻辑：
+		 * 1.判断serviceId是否有技能项（可以进行接单），
+		 * 2.判断二者之间有没有订单关系
+		 * 
+		 * 
 		 */
-		//
-		Long  customerId =  request.getCustomerId();
+		CommonResponse commonResponse = commonService.getCommonResponse();
+		OrderDetailForIMVO   orderDetailForIMVO =  new OrderDetailForIMVO();
+		//判断服务方可不可以下单
+		
+		Integer   weekIndex = DateUtils.getDayOfWeek();
+		Integer   skillSwitch = 1 ;
+		String  endTimeStr = DateUtils.formatDateHHSS(new Date()).replaceAll(":", "") ;
 		Long  serviceId =  request.getServiceId();
+		Long  customerId =  request.getCustomerId();
+		
+		orderDetailForIMVO.setServiceId(serviceId);
+		orderDetailForIMVO.setCustomerId(customerId);
+		//根据技能ID 获取等级获取价格信息
+		CustomerSkillIMVO   customerSkillIMVO = customerSkillMapper.selectCustomerSkillByCustomerId(serviceId, weekIndex, skillSwitch, endTimeStr);
+		
+		//服务方当天技能不存在，则关注对方
+		if(customerSkillIMVO == null){
+			orderDetailForIMVO.setRetCode(OrderSkillConstants.IM_RETCODE_ORDER_COUND_ORDER);//不可下单
+			commonResponse.setData(orderDetailForIMVO);
+			return commonResponse ;
+		}
+		
+		
+		//用户技能存在，则返回技能相关信息
+		
+		//判断双方是否存在订单关系
 		List<Integer> statusList = new ArrayList<Integer>();
 		statusList.add(OrderSkillConstants.ORDER_STATUS_WAITING_RECEIVE);//待接单
 		statusList.add(OrderSkillConstants.ORDER_STATUS_WAITING_START);//待开始
@@ -539,36 +566,39 @@ public class OrderServiceImpl implements IOrderService {
 		//判断双方有没有订单关系
 		Order  order = orderMapper.queryOrderByCustomerIdAndServiceId(customerId,serviceId,statusList);
 		
-		
-		OrderDetailForIMVO   orderVO =  new OrderDetailForIMVO();
-		if(order != null ){
-			orderVO.setRetCode(OrderSkillConstants.IM_RETCODE_ORDER_EXIST);
+		//双方存在订单关系
+		if(order != null){
+			orderDetailForIMVO.setRetCode(OrderSkillConstants.IM_RETCODE_ORDER_EXIST);//不可下单
 			OrderIMVO orderIMVO = new OrderIMVO();
 			Long  customerSkillId =  order.getCustomerSkillId();
 			orderIMVO = customerSkillMapper.selectCustSkillItem(customerSkillId);
 			orderIMVO.setOrderStatus(order.getOrderStatus());
-			orderIMVO.setServiceId(serviceId);
-			orderIMVO.setCustomerId(customerId);
-			orderVO.setOrderIMVO(orderIMVO);
-		}else{
-			//判断大V是否正忙
-			statusList = new ArrayList<Integer>();
-			statusList.add(OrderSkillConstants.ORDER_STATUS_WAITING_START);//待开始
-			statusList.add(OrderSkillConstants.ORDER_STATUS_WAITING_START_DA_APPAY_START_SERVICE);//大V发起开始服务
-			statusList.add(OrderSkillConstants.ORDER_STATUS_GOING_USER_ACCEPCT);//进行中
-			statusList.add(OrderSkillConstants.ORDER_STATUS_GOING_DAV_APPAY_FINISH);//进行中（大V发起完成服务）
-			List<Order>   gongIngOrderList = orderMapper.selectGongIngOrderListByCustomerId(serviceId, OrderSkillConstants.SKILL_TYPE_YES, statusList );
-			if(CollectionUtils.isEmpty(gongIngOrderList)){
-				orderVO.setRetCode(OrderSkillConstants.IM_RETCODE_CAN_ORDER);
-			}else{
-				//用户存在进行中或者即将进行中订单，说明大V正忙
-				orderVO.setRetCode(OrderSkillConstants.IM_RETCODE_DV_BUSY);
-			}
-			
+			orderIMVO.setOrderId(order.getOrderId());
+			orderDetailForIMVO.setOrderIMVO(orderIMVO);
+			commonResponse.setData(orderDetailForIMVO);
+			return commonResponse ;
 		}
 		
-		CommonResponse commonResponse = commonService.getCommonResponse();
-		commonResponse.setData(orderVO);
+		
+		//双方不存在订单关系，判断大V是否在忙
+		statusList = new ArrayList<Integer>();
+		statusList.add(OrderSkillConstants.ORDER_STATUS_WAITING_START);//待开始
+		statusList.add(OrderSkillConstants.ORDER_STATUS_WAITING_START_DA_APPAY_START_SERVICE);//大V发起开始服务
+		statusList.add(OrderSkillConstants.ORDER_STATUS_GOING_USER_ACCEPCT);//进行中
+		statusList.add(OrderSkillConstants.ORDER_STATUS_GOING_DAV_APPAY_FINISH);//进行中（大V发起完成服务）
+		List<Order>   gongIngOrderList = orderMapper.selectGongIngOrderListByCustomerId(serviceId, OrderSkillConstants.SKILL_TYPE_YES, statusList );
+		if(!CollectionUtils.isEmpty(gongIngOrderList)){
+			//用户存在进行中或者即将进行中订单，说明大V正忙
+			orderDetailForIMVO.setRetCode(OrderSkillConstants.IM_RETCODE_DV_BUSY);
+			commonResponse.setData(orderDetailForIMVO);
+			return commonResponse ;
+		}
+		
+		//大V可以下单
+		orderDetailForIMVO.setRetCode(OrderSkillConstants.IM_RETCODE_CAN_ORDER);
+		orderDetailForIMVO.setSkillIMVO(customerSkillIMVO);
+		
+		commonResponse.setData(orderDetailForIMVO);
 		LOGGER.info("======>>>>>查询发送的订单，用户编号为：" + customerId + "查询成功");
 		return commonResponse;
 	}
@@ -792,15 +822,20 @@ public class OrderServiceImpl implements IOrderService {
 				commonService.dvReciveOrderUpdateOrder(orderId, newOrderStatus,new Date());
 				//大V接受订单通知消息
 				//大V同意需要将接收到的其他订单取消
-				
-				List<Order>  orderList = commonService.selectOrderReceiveOrder(order.getServiceId(), orderId, OrderSkillConstants.ORDER_STATUS_WAITING_RECEIVE, OrderSkillConstants.SKILL_TYPE_YES);
-				if(!CollectionUtils.isEmpty(orderList)){
-					List<Long>  orderIdList =  new ArrayList<Long>();
-					for (Order od : orderList) {
-						orderIdList.add(od.getOrderId());
+				//判断是否是叫醒类型
+				Integer  skillType = order.getSkillType();
+				if(OrderSkillConstants.SKILL_TYPE_YES == skillType){
+					List<Order>  orderList = commonService.selectOrderReceiveOrder(order.getServiceId(), orderId, OrderSkillConstants.ORDER_STATUS_WAITING_RECEIVE, OrderSkillConstants.SKILL_TYPE_YES);
+					if(!CollectionUtils.isEmpty(orderList)){
+						List<Long>  orderIdList =  new ArrayList<Long>();
+						for (Order od : orderList) {
+							orderIdList.add(od.getOrderId());
+						}
+						commonService.updateOrderReceiveOrder(orderIdList, OrderSkillConstants.ORDER_STATUS_CANCEL_DAV_START_ONE_ORDER);
 					}
-					commonService.updateOrderReceiveOrder(orderIdList, OrderSkillConstants.ORDER_STATUS_CANCEL_DAV_START_ONE_ORDER);
 				}
+				
+				
 				
 				//大V接受订单通知用户
 				RongYunUtil.sendOrderMessage(customerId, OrderSkillConstants.IM_MSG_CONTENT_DAV_REFUSE);

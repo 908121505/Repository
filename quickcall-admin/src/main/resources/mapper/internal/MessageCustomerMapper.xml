@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="MessageCustomerMapper">
+  <resultMap id="BaseResultMap" type="com.calf.module.internal.entity.MessageCustomer">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="phone" jdbcType="BIGINT" property="phone" />
+    <result column="receiver_id" jdbcType="BIGINT" property="receiverId" />
+    <result column="message_id" jdbcType="BIGINT" property="messageId" />
+    <result column="message_status" jdbcType="TINYINT" property="messageStatus" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime" />
+    <result column="create_man" jdbcType="VARCHAR" property="createMan" />
+    <result column="modify_man" jdbcType="VARCHAR" property="modifyMan" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, phone, receiver_id, message_id, message_status, create_time, modify_time, create_man, 
+    modify_man, remark
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from message_customer
+    where id = #{arg0}
+  </select>
+  <insert id="insert" parameterType="com.calf.module.internal.entity.MessageCustomer">
+    insert into message_customer (id, phone, receiver_id, 
+      message_id, message_status, create_time, 
+      modify_time, create_man, modify_man, 
+      remark)
+    values (#{id}, #{phone}, #{receiverId}, 
+      #{messageId}, #{messageStatus}, #{createTime}, 
+      #{modifyTime}, #{createMan}, #{modifyMan}, 
+      #{remark})
+  </insert>
+
+  <insert id="insertBatch">
+    insert into message_customer (id, phone, receiver_id, 
+      message_id, message_status, create_time, 
+      modify_time, create_man, modify_man, 
+      remark) values
+    <foreach collection="list" item="item" index="index" separator="," >
+     (#{item.id}, #{item.phone}, #{item.receiverId}, #{item.messageId}, #{item.messageStatus}, #{item.createTime},
+      #{item.modifyTime}, #{item.createMan}, #{item.modifyMan}, #{item.remark})
+    </foreach>
+  </insert>
+  
+  <update id="updateByPrimaryKeySelective" parameterType="com.calf.module.internal.entity.MessageCustomer">
+    update message_customer
+    <set>
+      <if test="phone != null">
+        phone = #{phone},
+      </if>
+      <if test="receiverId != null">
+        receiver_id = #{receiverId},
+      </if>
+      <if test="messageId != null">
+        message_id = #{messageId},
+      </if>
+      <if test="messageStatus != null">
+        message_status = #{messageStatus},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime},
+      </if>
+      <if test="modifyTime != null">
+        modify_time = #{modifyTime},
+      </if>
+      <if test="createMan != null">
+        create_man = #{createMan},
+      </if>
+      <if test="modifyMan != null">
+        modify_man = #{modifyMan},
+      </if>
+      <if test="remark != null">
+        remark = #{remark},
+      </if>
+    </set>
+    where id = #{id}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.calf.module.internal.entity.MessageCustomer">
+    update message_customer
+    set phone = #{phone},
+      receiver_id = #{receiverId},
+      message_id = #{messageId},
+      message_status = #{messageStatus},
+      create_time = #{createTime},
+      modify_time = #{modifyTime},
+      create_man = #{createMan},
+      modify_man = #{modifyMan},
+      remark = #{remark}
+    where id = #{id}
+  </update>
+</mapper>

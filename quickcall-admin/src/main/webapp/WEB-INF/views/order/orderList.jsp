@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="shiro" uri="http://shiro.apache.org/tags"%>
-	<div class="content1">
+<link rel="stylesheet" href="//res.layui.com/layui/build/css/layui.css"  media="all">
+<div class="content1">
 		<div class="header">
 			<h1 class="page-title">订单管理</h1>
 			<ul class="breadcrumb">
@@ -14,65 +16,138 @@
 					<div class="form-group">
 						<div class="input-group">
 							<div class="input-group-addon">订单ID</div>
-							<input class="form-control" type="text" id="orderIdQuery">
+							<input class="form-control" type="text" id="order_id">
+						</div>
+					</div>
+				</div>
+
+				<div class="col-md-2">
+					<div class="form-group">
+						<div class="input-group">
+							<div class="input-group-addon">下单用户ID</div>
+							<input class="form-control" type="text" id="place_order_id">
+						</div>
+					</div>
+				</div>
+
+				<div class="col-md-2">
+					<div class="form-group">
+						<div class="input-group">
+							<div class="input-group-addon">接单用户ID</div>
+							<input class="form-control" type="text" id="received_order_id">
+						</div>
+					</div>
+				</div>
+			</div>
+			<%--<div class="row">
+				<div class="col-md-2">
+					<div class="form-group">
+						<div class="input-group">
+							<div class="input-group-addon">开始时间</div>
+							<input class="form-control" style="width:200px" type="text" id="start_time" onfocus="WdatePicker({skin:'whyGreen',dateFmt:'yyyy-MM-dd HH:mm:ss',minDate:'1950-01-01'})">
+							<div class="input-group-addon"> 到 结束时间</div>
+							<input class="form-control"  style="width:200px"  type="text" id="end_time" onfocus="WdatePicker({skin:'whyGreen',dateFmt:'yyyy-MM-dd HH:mm:ss',minDate:'1950-01-01'})">
+						</div>
+					</div>
+				</div>
+			</div>--%>
+			<div class="row">
+				<div class="col-md-2">
+					<div class="form-group">
+						<div class="input-group">
+							<div class="input-group-addon">开始时间</div>
+							<input class="form-control" value="${showStartTime}" type="text" id="start_time" onfocus="WdatePicker({skin:'default',dateFmt:'yyyy-MM-dd HH:mm:ss',minDate:'1950-01-01'})">
+						</div>
+					</div>
+				</div>
+
+				<div class="col-md-2">
+					<div class="form-group">
+						<div class="input-group">
+							<div class="input-group-addon">结束时间</div>
+							<input class="form-control" value="${showEndTime}" type="text" id="end_time" onfocus="WdatePicker({skin:'default',dateFmt:'yyyy-MM-dd HH:mm:ss',minDate:'1950-01-01'})">
+						</div>
+					</div>
+				</div>
+
+				<div class="col-md-2">
+					<div class="form-group">
+						<div class="input-group">
+							<div class="input-group-addon">下单用户昵称</div>
+							<input class="form-control" type="text" id="place_order_user_nick_name">
+						</div>
+					</div>
+				</div>
+
+				<div class="col-md-2">
+					<div class="form-group">
+						<div class="input-group">
+							<div class="input-group-addon">接单用户昵称</div>
+							<input class="form-control" type="text" id="receive_order_user_nick_name">
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-2">
+					<div class="form-group">
+						<div class="input-group">
+							<div class="input-group-addon">订单状态</div>
+							<select class="form-control" id="order_status">
+								<option value="-1">--请选择--</option>
+								<c:forEach items="${statusList}" var ="orderStatusVO" varStatus="status">
+									<option value="${orderStatusVO.subset}">${orderStatusVO.desc}</option>
+								</c:forEach>
+							</select>
 						</div>
 					</div>
 				</div>
 				<div class="col-md-2">
 					<div class="form-group">
 						<div class="input-group">
-							<div class="input-group-addon">用户昵称</div>
-							<input class="form-control" type="text" id="custNickNameQuery" value = "">
+							<div class="input-group-addon">服务类型</div>
+							<select class="form-control" id="service_type">
+								<option value="-1">--请选择--</option>
+								<c:forEach items="${services}" var ="skillItem" varStatus="status">
+									<option value="${skillItem.id}">${skillItem.skillItemName}</option>
+								</c:forEach>
+							</select>
 						</div>
 					</div>
 				</div>
 				<div class="col-md-2">
 					<div class="form-group">
 						<div class="input-group">
-							<div class="input-group-addon">主播昵称</div>
-							<input class="form-control" type="text" id="servNickNameQuery">
+							<div class="input-group-addon">折扣类型</div>
+							<select class="form-control" id="discount_type_val">
+								<option value="-1">--请选择--</option>
+								<option value="10-11">无折扣</option>
+								<option value="1-2">10%</option>
+								<option value="2-3">20%</option>
+								<option value="3-4">30%</option>
+								<option value="4-5">40%</option>
+								<option value="5-6">50%</option>
+								<option value="6-7">60%</option>
+								<option value="7-8">70%</option>
+								<option value="8-9">80%</option>
+								<option value="9-10">90%</option>
+							</select>
 						</div>
 					</div>
 				</div>
-				<div class="col-md-2">
-					<div class="form-group">
-						<div class="input-group">
-							<div class="input-group-addon">订单分类</div>
-							<input class="form-control" type="text" id="orderTypeQuery">
-						</div>
-					</div>
-				</div>
-				
-				
-				
-				
-				
-				
 				<div class="col-md-2">
 					<button type="button" class="btn btn-primary btn-small btn-block"
-						id="query">
+							id="query">
 						<i class="glyphicon glyphicon-search"></i> 查询
 					</button>
 				</div>
-				<!-- <div class="col-md-2">
+				<div class="col-md-2">
 					<button type="button" class="btn btn-info btn-small btn-block"
-						onclick="addAndUpdateRow(0)">
+							onclick="addAndUpdateRow(999)">
 						<i class="glyphicon glyphicon-plus"></i> 增加
 					</button>
-				</div> -->
-			</div>
-<!-- 			<div class="row">
-				<div class="col-md-2">
-					<div class="form-group">
-						<div class="input-group">
-							<div class="input-group-addon">有效时间</div>
-							<input class="form-control" type="date" id="sTime">
-							<div class="input-group-addon">到</div>
-							<input class="form-control" type="date" id="eTime">
-						</div>
-					</div>
 				</div>
-			</div> -->
+			</div>
 			<table id="example" class="table"></table>
 		</div>
 <script>
@@ -134,54 +209,81 @@
 		            { 
 		              "data": "orderId",
 		              "sTitle":"订单ID",
-		              'sClass':"text-center"
+		              'sClass':"text-center", "sortable": false
 		            },
 		            { 
-		               "data": "custNickName",
-		               "sTitle":"用户昵称",
-		               'sClass':"text-center",
+		               "data": "receivedOrderId",
+		               "sTitle":"接单用户ID",
+		               'sClass':"text-center", "sortable": false
 		            },
 		            { 
-		                "data": "servNickName",
-		                "sTitle":"大V昵称",
-		                'sClass':"text-center",
+		                "data": "receiveOrderUserNickName",
+		                "sTitle":"接单用户昵称",
+		                'sClass':"text-center", "sortable": false
 		            },
                     {
-                        "data": "orderType",
-                        "sTitle":"订单分类",
-                        'sClass':"text-center",
+                        "data": "placeOrderId",
+                        "sTitle":"下单用户ID",
+                        'sClass':"text-center", "sortable": false
                     },
                     {
-                        "data": "orderTime",
-                        "sTitle":"下单时间",
-                        'sClass':"text-center",
+                        "data": "placeOrderUserNickName",
+                        "sTitle":"下单用户昵称",
+                        'sClass':"text-center", "sortable": false
+                    },
+                    {
+                        "data": "serviceType",
+                        "sTitle":"服务类型",
+                        'sClass':"text-center", "sortable": false
+                    },
+                    {
+                        "data" : "startTime",
+                        "sTitle" : "开始时间",
+                        'sClass' : "text-center",
                         "mRender" : function(data, type,full) {
-							if (data != null) {
-								return Format(new Date(data),"yyyy-MM-dd HH:mm:ss")
-							} else {
-								return '--';
-							}
-						}
+                            if (data != null) {
+                                return Format(new Date(data),"yyyy-MM-dd HH:mm:ss")
+                            } else {
+                                return '--';
+                            }
+                        }
                     },
                     {
-                        "data": "price",
-                        "sTitle":"订单单价",
-                        'sClass':"text-center",
+                        "data" : "endTime",
+                        "sTitle" : "结束时间",
+                        'sClass' : "text-center", "sortable": false,
+                        "mRender" : function(data, type,full) {
+                            if (data != null) {
+                                return Format(new Date(data),"yyyy-MM-dd HH:mm:ss")
+                            } else {
+                                return '--';
+                            }
+                        }
                     },
                     {
-                        "data": "orderNum",
-                        "sTitle":"下单数量",
-                        'sClass':"text-center",
+                        "data": "unitPrice",
+                        "sTitle":"单价（次/音符、半小时/音符、小时/音符）",
+                        'sClass':"text-center", "sortable": false
                     },
                     {
-                        "data": "orderAmounts",
-                        "sTitle":"总价",
-                        'sClass':"text-center",
+                        "data": "discountType",
+                        "sTitle":"折扣类型",
+                        'sClass':"text-center", "sortable": false
                     },
                     {
-						"data" : "startTime",
-						"sTitle" : "开始时间",
-						'sClass' : "text-center",
+                        "data": "orderAmount",
+                        "sTitle":"订单金额(单位:元)",
+                        'sClass':"text-center", "sortable": false
+                    },
+                    {
+                        "data" : "orderStatus",
+                        "sTitle" : "订单状态",
+                        'sClass' : "text-center", "sortable": false
+                    },
+                    {
+						"data" : "orderCreateTime",
+						"sTitle" : "订单创建时间",
+						'sClass' : "text-center", "sortable": false,
 						"mRender" : function(data, type,full) {
 							if (data != null) {
 								return Format(new Date(data),"yyyy-MM-dd HH:mm:ss")
@@ -190,55 +292,32 @@
 							}
 						}
 					},
-                    {
-						"data" : "endTime",
-						"sTitle" : "结束时间",
-						'sClass' : "text-center",
-						"mRender" : function(data, type,full) {
-							if (data != null) {
-								return Format(new Date(data),"yyyy-MM-dd HH:mm:ss")
-							} else {
-								return '--';
-							}
-						}
-					},
-                    {
-						"data" : "finishTime",
-						"sTitle" : "完成时间",
-						'sClass' : "text-center",
-						"mRender" : function(data, type,full) {
-							if (data != null) {
-								return Format(new Date(data),"yyyy-MM-dd HH:mm:ss")
-							} else {
-								return '--';
-							}
-						}
-					},
-					{
-						"data" : "orderStatus",
-						"sTitle" : "订单状态",
-						'sClass' : "text-center"
-					}/*,
 					{
 						"data" : "orderId",
 						"sTitle" : "操作",
-						'sClass' : "text-center"
-					}*/
+						'sClass' : "text-center", "sortable": false
+					}
 		         ],
 		         fnServerParams: function (aoData) {  //查询条件
-                       aoData.push({ "name": "orderId", "value": $("#orderIdQuery").val() } );
-                       aoData.push({ "name": "custNickName", "value": $("#custNickNameQuery").val().replace(new RegExp(" ","g"),"") } );
-                       aoData.push({ "name": "servNickName", "value": $("#servNickNameQuery").val().replace(new RegExp(" ","g"),"") } );
-                       aoData.push({ "name": "orderType", "value": $("#orderTypeQuery").val().replace(new RegExp(" ","g"),"") } );
+				    aoData.push({"name":"orderId","value":$("#order_id").val()});
+				    aoData.push({"name":"placeOrderId","value":$("#place_order_id").val()});
+				    aoData.push({"name":"receivedOrderId","value":$("#received_order_id").val()});
+				    aoData.push({"name":"startTime","value":$("#start_time").val()});
+				    aoData.push({"name":"endTime","value":$("#end_time").val()});
+				    aoData.push({"name":"placeOrderUserNickName","value":$("#place_order_user_nick_name").val()});
+				    aoData.push({"name":"receiveOrderUserNickName","value":$("#receive_order_user_nick_name").val()});
+				    aoData.push({"name":"serviceType","value":$("#service_type").val()});
+				    aoData.push({"name":"orderStatus","value":$("#order_status").val()});
+				    aoData.push({"name":"discountTypeVal","value":$("#discount_type_val").val()});
                     } ,
                  aoColumnDefs : [ {
-					"aTargets" : 11
-					 /*,
-					"mRender" : function(data,type, row) {
-						var detail = "";
-						// detail = "<a href='#' onclick='viewOrderDetail(\""+ row.orderId+ "\")' data-toggle='modal' class='padding-right-small label label-success'><i class='glyphicon glyphicon-edit'></i>详情</a>";
-						return  detail;
-					}*/
+                     "aTargets": 13,
+                     "mRender": function (data, type, row) {
+                         var detail = "", del = "";
+                         detail = "<a href='#' onclick='addAndUpdateRow(\"" + data + "-detail\")' data-toggle='modal' class='padding-right-small label label-success'><i class='glyphicon glyphicon-edit'></i>详情</a>";
+                         del = "<a href='#' onclick='addAndUpdateRow(\"" + data + "-update\")' data-toggle='modal' class='padding-right-small label label-success'><i class='glyphicon glyphicon-edit'></i>编辑</a>";
+                         return detail + "&nbsp;" + del;
+                     }
 			} ] 
 	            
 			});
@@ -249,11 +328,61 @@
 
 		});
 
-		function viewOrderDetail(id) {
-			$('#order_detail_model').addAndUpdateRow("order/addAndUpdateHome.htm?id=" + id);
-		}
+        //订单状态
+        /*$(document).ready(function() {
+            $.ajax({
+                url:"../order/orderStatusList.htm",
+                type:"POST",
+                dataType: "json",
+                contentType: "application/json",
+                success: function (data) {
+                    var option = "";
+                    for (var resCode in data) {
+                        var resName =data[resCode];
+                        option += "<option value=\"" + resName.subset + "\" >" + resName.desc + "</option>";
+                    }
+                    $("#orderStatus").html("<option value=\"-1\">--请选择--</option>"+option); }
+            });
+        });
+		*/
+        //服务类型
+        // $(document).ready(function() {
+        //     $.ajax({
+        //         url:"../order/skillItemsList.htm",
+        //         type:"POST",
+        //         dataType: "json",
+        //         contentType: "application/json",
+        //         success: function (data) {
+        //             var option = "";
+        //             for (var resCode in data) {
+        //                 var resName =data[resCode];
+        //                 option += "<option value=\"" + resName.id + "\" >" + resName.skillItemName + "</option>";
+        //             }
+        //             $("#serviceType").html("<option value=\"-1\">--请选择--</option>"+option); }
+        //     });
+        // });
+
+        //增加或者修改受影响的行数
+        function addAndUpdateRow(id) {
+            $('#insertAndUpdate').addAndUpdateRow("order/addAndUpdateHome.htm?id=" + id);
+        }
 
 </script>
+		<!---dialog选项-->
+		<div>
+			<jsp:include page="/WEB-INF/views/common/delete_dialog.jsp"/>
+			<jsp:include page="/WEB-INF/views/common/addupdate_dialog.jsp"/>
+			<jsp:include page="/WEB-INF/views/common/updateStatus.jsp"/>
+
+			<div class="modal fade" id="order_detail_model" tabindex="-1"
+				 role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			</div>
+		</div>
+
+
+
+
+<%--</script>
 		<!---dialog选项-->
 		<div>
 			<jsp:include page="/WEB-INF/views/common/delete_dialog.jsp" />
@@ -262,4 +391,4 @@
 				 role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
 			</div>
 		</div>
-	</div>
+	</div>--%>

@@ -103,5 +103,11 @@ public class DiscountController implements BaseController<Discount> {
         return skillNames;
 
     }
+    @RequestMapping(value = "getSkillItemId")
+    @ResponseBody
+    public String getSkillItemId(String id){
+       System.out.println(id);
+        return "aaaaaa";
+    }
 
 }

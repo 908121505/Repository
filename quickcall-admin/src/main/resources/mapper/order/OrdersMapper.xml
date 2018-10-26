@@ -1,0 +1,457 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Orders">
+  <resultMap id="BaseResultMap" type="com.calf.module.order.entity.Orders">
+    <id column="order_id" jdbcType="BIGINT" property="orderId" />
+    <result column="order_no" jdbcType="BIGINT" property="orderNo" />
+    <result column="customer_skill_id" jdbcType="BIGINT" property="customerSkillId" />
+    <result column="customer_id" jdbcType="BIGINT" property="customerId" />
+    <result column="service_id" jdbcType="BIGINT" property="serviceId" />
+    <result column="trade_id" jdbcType="BIGINT" property="tradeId" />
+    <result column="payment_type" jdbcType="TINYINT" property="paymentType" />
+    <result column="order_num" jdbcType="INTEGER" property="orderNum" />
+    <result column="service_unit" jdbcType="VARCHAR" property="serviceUnit" />
+    <result column="service_price" jdbcType="DECIMAL" property="servicePrice" />
+    <result column="order_amounts" jdbcType="DECIMAL" property="orderAmounts" />
+    <result column="discount_rate" jdbcType="DECIMAL" property="discountRate" />
+    <result column="cust_cancel_time" jdbcType="TIMESTAMP" property="custCancelTime" />
+    <result column="system_cancel_time" jdbcType="TIMESTAMP" property="systemCancelTime" />
+    <result column="receive_order_time" jdbcType="TIMESTAMP" property="receiveOrderTime" />
+    <result column="start_service_time" jdbcType="TIMESTAMP" property="startServiceTime" />
+    <result column="appay_end_time" jdbcType="TIMESTAMP" property="appayEndTime" />
+    <result column="start_time" jdbcType="TIMESTAMP" property="startTime" />
+    <result column="expect_end_time" jdbcType="TIMESTAMP" property="expectEndTime" />
+    <result column="end_time" jdbcType="TIMESTAMP" property="endTime" />
+    <result column="order_time" jdbcType="TIMESTAMP" property="orderTime" />
+    <result column="skill_type" jdbcType="TINYINT" property="skillType" />
+    <result column="order_status" jdbcType="TINYINT" property="orderStatus" />
+    <result column="payment_time" jdbcType="TIMESTAMP" property="paymentTime" />
+    <result column="customer_is_evaluate" jdbcType="TINYINT" property="customerIsEvaluate" />
+    <result column="customer_message" jdbcType="VARCHAR" property="customerMessage" />
+    <result column="evaluate_start" jdbcType="INTEGER" property="evaluateStart" />
+    <result column="customer_evaluate" jdbcType="VARCHAR" property="customerEvaluate" />
+    <result column="order_describe" jdbcType="VARCHAR" property="orderDescribe" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime" />
+    <result column="create_man" jdbcType="VARCHAR" property="createMan" />
+    <result column="modify_man" jdbcType="VARCHAR" property="modifyMan" />
+    <result column="select_reason" jdbcType="VARCHAR" property="selectReason" />
+    <result column="remark_reason" jdbcType="VARCHAR" property="remarkReason" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    order_id, order_no, customer_skill_id, customer_id, service_id, trade_id, payment_type, 
+    order_num, service_unit, service_price, order_amounts, discount_rate, cust_cancel_time, 
+    system_cancel_time, receive_order_time, start_service_time, appay_end_time, start_time, 
+    expect_end_time, end_time, order_time, skill_type, order_status, payment_time, customer_is_evaluate, 
+    customer_message, evaluate_start, customer_evaluate, order_describe, create_time, 
+    modify_time, create_man, modify_man, select_reason, remark_reason, remark
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from orders
+    where order_id = #{orderId,jdbcType=BIGINT}
+  </select>
+  <insert id="insert" parameterType="com.calf.module.order.entity.Orders">
+    insert into orders (order_id, order_no, customer_skill_id, 
+      customer_id, service_id, trade_id, 
+      payment_type, order_num, service_unit, 
+      service_price, order_amounts, discount_rate, 
+      cust_cancel_time, system_cancel_time, receive_order_time, 
+      start_service_time, appay_end_time, start_time, 
+      expect_end_time, end_time, order_time, 
+      skill_type, order_status, payment_time, 
+      customer_is_evaluate, customer_message, evaluate_start, 
+      customer_evaluate, order_describe, create_time, 
+      modify_time, create_man, modify_man, 
+      select_reason, remark_reason, remark
+      )
+    values (#{orderId,jdbcType=BIGINT}, #{orderNo,jdbcType=BIGINT}, #{customerSkillId,jdbcType=BIGINT}, 
+      #{customerId,jdbcType=BIGINT}, #{serviceId,jdbcType=BIGINT}, #{tradeId,jdbcType=BIGINT}, 
+      #{paymentType,jdbcType=TINYINT}, #{orderNum,jdbcType=INTEGER}, #{serviceUnit,jdbcType=VARCHAR}, 
+      #{servicePrice,jdbcType=DECIMAL}, #{orderAmounts,jdbcType=DECIMAL}, #{discountRate,jdbcType=DECIMAL}, 
+      #{custCancelTime,jdbcType=TIMESTAMP}, #{systemCancelTime,jdbcType=TIMESTAMP}, #{receiveOrderTime,jdbcType=TIMESTAMP}, 
+      #{startServiceTime,jdbcType=TIMESTAMP}, #{appayEndTime,jdbcType=TIMESTAMP}, #{startTime,jdbcType=TIMESTAMP}, 
+      #{expectEndTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP}, #{orderTime,jdbcType=TIMESTAMP}, 
+      #{skillType,jdbcType=TINYINT}, #{orderStatus,jdbcType=TINYINT}, #{paymentTime,jdbcType=TIMESTAMP}, 
+      #{customerIsEvaluate,jdbcType=TINYINT}, #{customerMessage,jdbcType=VARCHAR}, #{evaluateStart,jdbcType=INTEGER}, 
+      #{customerEvaluate,jdbcType=VARCHAR}, #{orderDescribe,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{modifyTime,jdbcType=TIMESTAMP}, #{createMan,jdbcType=VARCHAR}, #{modifyMan,jdbcType=VARCHAR}, 
+      #{selectReason,jdbcType=VARCHAR}, #{remarkReason,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.calf.module.order.entity.Orders">
+    insert into orders
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="orderId != null">
+        order_id,
+      </if>
+      <if test="orderNo != null">
+        order_no,
+      </if>
+      <if test="customerSkillId != null">
+        customer_skill_id,
+      </if>
+      <if test="customerId != null">
+        customer_id,
+      </if>
+      <if test="serviceId != null">
+        service_id,
+      </if>
+      <if test="tradeId != null">
+        trade_id,
+      </if>
+      <if test="paymentType != null">
+        payment_type,
+      </if>
+      <if test="orderNum != null">
+        order_num,
+      </if>
+      <if test="serviceUnit != null">
+        service_unit,
+      </if>
+      <if test="servicePrice != null">
+        service_price,
+      </if>
+      <if test="orderAmounts != null">
+        order_amounts,
+      </if>
+      <if test="discountRate != null">
+        discount_rate,
+      </if>
+      <if test="custCancelTime != null">
+        cust_cancel_time,
+      </if>
+      <if test="systemCancelTime != null">
+        system_cancel_time,
+      </if>
+      <if test="receiveOrderTime != null">
+        receive_order_time,
+      </if>
+      <if test="startServiceTime != null">
+        start_service_time,
+      </if>
+      <if test="appayEndTime != null">
+        appay_end_time,
+      </if>
+      <if test="startTime != null">
+        start_time,
+      </if>
+      <if test="expectEndTime != null">
+        expect_end_time,
+      </if>
+      <if test="endTime != null">
+        end_time,
+      </if>
+      <if test="orderTime != null">
+        order_time,
+      </if>
+      <if test="skillType != null">
+        skill_type,
+      </if>
+      <if test="orderStatus != null">
+        order_status,
+      </if>
+      <if test="paymentTime != null">
+        payment_time,
+      </if>
+      <if test="customerIsEvaluate != null">
+        customer_is_evaluate,
+      </if>
+      <if test="customerMessage != null">
+        customer_message,
+      </if>
+      <if test="evaluateStart != null">
+        evaluate_start,
+      </if>
+      <if test="customerEvaluate != null">
+        customer_evaluate,
+      </if>
+      <if test="orderDescribe != null">
+        order_describe,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="modifyTime != null">
+        modify_time,
+      </if>
+      <if test="createMan != null">
+        create_man,
+      </if>
+      <if test="modifyMan != null">
+        modify_man,
+      </if>
+      <if test="selectReason != null">
+        select_reason,
+      </if>
+      <if test="remarkReason != null">
+        remark_reason,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="orderId != null">
+        #{orderId,jdbcType=BIGINT},
+      </if>
+      <if test="orderNo != null">
+        #{orderNo,jdbcType=BIGINT},
+      </if>
+      <if test="customerSkillId != null">
+        #{customerSkillId,jdbcType=BIGINT},
+      </if>
+      <if test="customerId != null">
+        #{customerId,jdbcType=BIGINT},
+      </if>
+      <if test="serviceId != null">
+        #{serviceId,jdbcType=BIGINT},
+      </if>
+      <if test="tradeId != null">
+        #{tradeId,jdbcType=BIGINT},
+      </if>
+      <if test="paymentType != null">
+        #{paymentType,jdbcType=TINYINT},
+      </if>
+      <if test="orderNum != null">
+        #{orderNum,jdbcType=INTEGER},
+      </if>
+      <if test="serviceUnit != null">
+        #{serviceUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="servicePrice != null">
+        #{servicePrice,jdbcType=DECIMAL},
+      </if>
+      <if test="orderAmounts != null">
+        #{orderAmounts,jdbcType=DECIMAL},
+      </if>
+      <if test="discountRate != null">
+        #{discountRate,jdbcType=DECIMAL},
+      </if>
+      <if test="custCancelTime != null">
+        #{custCancelTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="systemCancelTime != null">
+        #{systemCancelTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="receiveOrderTime != null">
+        #{receiveOrderTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="startServiceTime != null">
+        #{startServiceTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="appayEndTime != null">
+        #{appayEndTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="startTime != null">
+        #{startTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="expectEndTime != null">
+        #{expectEndTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTime != null">
+        #{endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="orderTime != null">
+        #{orderTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="skillType != null">
+        #{skillType,jdbcType=TINYINT},
+      </if>
+      <if test="orderStatus != null">
+        #{orderStatus,jdbcType=TINYINT},
+      </if>
+      <if test="paymentTime != null">
+        #{paymentTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="customerIsEvaluate != null">
+        #{customerIsEvaluate,jdbcType=TINYINT},
+      </if>
+      <if test="customerMessage != null">
+        #{customerMessage,jdbcType=VARCHAR},
+      </if>
+      <if test="evaluateStart != null">
+        #{evaluateStart,jdbcType=INTEGER},
+      </if>
+      <if test="customerEvaluate != null">
+        #{customerEvaluate,jdbcType=VARCHAR},
+      </if>
+      <if test="orderDescribe != null">
+        #{orderDescribe,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyTime != null">
+        #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createMan != null">
+        #{createMan,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyMan != null">
+        #{modifyMan,jdbcType=VARCHAR},
+      </if>
+      <if test="selectReason != null">
+        #{selectReason,jdbcType=VARCHAR},
+      </if>
+      <if test="remarkReason != null">
+        #{remarkReason,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.calf.module.order.entity.Orders">
+    update orders
+    <set>
+      <if test="orderNo != null">
+        order_no = #{orderNo,jdbcType=BIGINT},
+      </if>
+      <if test="customerSkillId != null">
+        customer_skill_id = #{customerSkillId,jdbcType=BIGINT},
+      </if>
+      <if test="customerId != null">
+        customer_id = #{customerId,jdbcType=BIGINT},
+      </if>
+      <if test="serviceId != null">
+        service_id = #{serviceId,jdbcType=BIGINT},
+      </if>
+      <if test="tradeId != null">
+        trade_id = #{tradeId,jdbcType=BIGINT},
+      </if>
+      <if test="paymentType != null">
+        payment_type = #{paymentType,jdbcType=TINYINT},
+      </if>
+      <if test="orderNum != null">
+        order_num = #{orderNum,jdbcType=INTEGER},
+      </if>
+      <if test="serviceUnit != null">
+        service_unit = #{serviceUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="servicePrice != null">
+        service_price = #{servicePrice,jdbcType=DECIMAL},
+      </if>
+      <if test="orderAmounts != null">
+        order_amounts = #{orderAmounts,jdbcType=DECIMAL},
+      </if>
+      <if test="discountRate != null">
+        discount_rate = #{discountRate,jdbcType=DECIMAL},
+      </if>
+      <if test="custCancelTime != null">
+        cust_cancel_time = #{custCancelTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="systemCancelTime != null">
+        system_cancel_time = #{systemCancelTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="receiveOrderTime != null">
+        receive_order_time = #{receiveOrderTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="startServiceTime != null">
+        start_service_time = #{startServiceTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="appayEndTime != null">
+        appay_end_time = #{appayEndTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="startTime != null">
+        start_time = #{startTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="expectEndTime != null">
+        expect_end_time = #{expectEndTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTime != null">
+        end_time = #{endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="orderTime != null">
+        order_time = #{orderTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="skillType != null">
+        skill_type = #{skillType,jdbcType=TINYINT},
+      </if>
+      <if test="orderStatus != null">
+        order_status = #{orderStatus,jdbcType=TINYINT},
+      </if>
+      <if test="paymentTime != null">
+        payment_time = #{paymentTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="customerIsEvaluate != null">
+        customer_is_evaluate = #{customerIsEvaluate,jdbcType=TINYINT},
+      </if>
+      <if test="customerMessage != null">
+        customer_message = #{customerMessage,jdbcType=VARCHAR},
+      </if>
+      <if test="evaluateStart != null">
+        evaluate_start = #{evaluateStart,jdbcType=INTEGER},
+      </if>
+      <if test="customerEvaluate != null">
+        customer_evaluate = #{customerEvaluate,jdbcType=VARCHAR},
+      </if>
+      <if test="orderDescribe != null">
+        order_describe = #{orderDescribe,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyTime != null">
+        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createMan != null">
+        create_man = #{createMan,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyMan != null">
+        modify_man = #{modifyMan,jdbcType=VARCHAR},
+      </if>
+      <if test="selectReason != null">
+        select_reason = #{selectReason,jdbcType=VARCHAR},
+      </if>
+      <if test="remarkReason != null">
+        remark_reason = #{remarkReason,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where order_id = #{orderId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.calf.module.order.entity.Orders">
+    update orders
+    set order_no = #{orderNo,jdbcType=BIGINT},
+      customer_skill_id = #{customerSkillId,jdbcType=BIGINT},
+      customer_id = #{customerId,jdbcType=BIGINT},
+      service_id = #{serviceId,jdbcType=BIGINT},
+      trade_id = #{tradeId,jdbcType=BIGINT},
+      payment_type = #{paymentType,jdbcType=TINYINT},
+      order_num = #{orderNum,jdbcType=INTEGER},
+      service_unit = #{serviceUnit,jdbcType=VARCHAR},
+      service_price = #{servicePrice,jdbcType=DECIMAL},
+      order_amounts = #{orderAmounts,jdbcType=DECIMAL},
+      discount_rate = #{discountRate,jdbcType=DECIMAL},
+      cust_cancel_time = #{custCancelTime,jdbcType=TIMESTAMP},
+      system_cancel_time = #{systemCancelTime,jdbcType=TIMESTAMP},
+      receive_order_time = #{receiveOrderTime,jdbcType=TIMESTAMP},
+      start_service_time = #{startServiceTime,jdbcType=TIMESTAMP},
+      appay_end_time = #{appayEndTime,jdbcType=TIMESTAMP},
+      start_time = #{startTime,jdbcType=TIMESTAMP},
+      expect_end_time = #{expectEndTime,jdbcType=TIMESTAMP},
+      end_time = #{endTime,jdbcType=TIMESTAMP},
+      order_time = #{orderTime,jdbcType=TIMESTAMP},
+      skill_type = #{skillType,jdbcType=TINYINT},
+      order_status = #{orderStatus,jdbcType=TINYINT},
+      payment_time = #{paymentTime,jdbcType=TIMESTAMP},
+      customer_is_evaluate = #{customerIsEvaluate,jdbcType=TINYINT},
+      customer_message = #{customerMessage,jdbcType=VARCHAR},
+      evaluate_start = #{evaluateStart,jdbcType=INTEGER},
+      customer_evaluate = #{customerEvaluate,jdbcType=VARCHAR},
+      order_describe = #{orderDescribe,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      create_man = #{createMan,jdbcType=VARCHAR},
+      modify_man = #{modifyMan,jdbcType=VARCHAR},
+      select_reason = #{selectReason,jdbcType=VARCHAR},
+      remark_reason = #{remarkReason,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR}
+    where order_id = #{orderId,jdbcType=BIGINT}
+  </update>
+</mapper>

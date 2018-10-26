@@ -14,12 +14,6 @@ public class SkillItem {
 	/**技能项名称**/
 	private String skillItemName;
 
-	/**背景图链接**/
-	private String imageUrl;
-
-	/**未解锁背景图链接**/
-	private String blackImageUrl;
-
 	/**未解锁后的图标**/
 	private String lockIcon;
 
@@ -57,12 +51,10 @@ public class SkillItem {
 	public SkillItem() {
 		super();
 	}
-	public SkillItem(Long id,String skillItemName,String imageUrl,String blackImageUrl,String lockIcon,String unlockIcon,String backColor,Integer sort,Integer skillStatus,String skillDescribe,String createTime,String modifyTime,String createMan,String modifyMan,String remark) {
+	public SkillItem(Long id,String skillItemName,String lockIcon,String unlockIcon,String backColor,Integer sort,Integer skillStatus,String skillDescribe,String createTime,String modifyTime,String createMan,String modifyMan,String remark) {
 		super();
 		this.id = id;
 		this.skillItemName = skillItemName;
-		this.imageUrl = imageUrl;
-		this.blackImageUrl = blackImageUrl;
 		this.lockIcon = lockIcon;
 		this.unlockIcon = unlockIcon;
 		this.backColor = backColor;
@@ -89,22 +81,6 @@ public class SkillItem {
 
 	public String getSkillItemName(){
 		return this.skillItemName;
-	}
-
-	public void setImageUrl(String imageUrl){
-		this.imageUrl = imageUrl;
-	}
-
-	public String getImageUrl(){
-		return this.imageUrl;
-	}
-
-	public void setBlackImageUrl(String blackImageUrl){
-		this.blackImageUrl = blackImageUrl;
-	}
-
-	public String getBlackImageUrl(){
-		return this.blackImageUrl;
 	}
 
 	public void setLockIcon(String lockIcon){

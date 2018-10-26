@@ -204,7 +204,8 @@ public class RongYunUtil {
 			String headPortraitUrl, Integer type) {
 
 		Long otherId = toCustomerId;
-		SendUser sendUser = new SendUser(nickName, headPortraitUrl, sex, otherId);
+		// refreshUser(fromUserId + "", nickName, headPortraitUrl);
+		SendUser sendUser = new SendUser(nickName, headPortraitUrl, sex, fromUserId);
 		RongYunPushBean rongYunPushBean = new RongYunPushBean(1, content, 1, 0, type, fromUserId, otherId, 1, sendUser,
 				System.currentTimeMillis());
 		String jsonString = JSON.toJSONString(rongYunPushBean);
@@ -232,7 +233,7 @@ public class RongYunUtil {
 		 * RongYunUtil.publishPrivate(String.valueOf(fromUserId), otherIds, txtMessage,
 		 * null, null, null, null, null, null); System.out.println(code);
 		 */
-		Long toCustomerId = 1810251630126313929L;
+		Long toCustomerId = 1810251709357713309L;
 		sendSystemMessage(toCustomerId, "我喜欢亚波1");
 		sendOrderMessage(toCustomerId, "你有一条新的订单哦1");
 		sendActivityMessage(toCustomerId, "红包1");

@@ -1,7 +1,6 @@
 package com.honglu.quickcall.task.entity;
 
 import java.math.BigDecimal;
-import java.util.Date;
 
 /**
  * 
@@ -14,25 +13,13 @@ import java.util.Date;
  */
 public class TaskOrder {
    
-	private Long orderId;
-
+    private  Long  orderId;
+    
     private Long customerId;
+    
+    private Long  serviceId;
 
     private BigDecimal orderAmounts;
-
-    private Date receiveOrderTime;
-
-    private Date orderTime;
-
-    private Integer orderStatus;
-
-	public Long getOrderId() {
-		return orderId;
-	}
-
-	public void setOrderId(Long orderId) {
-		this.orderId = orderId;
-	}
 
 	public Long getCustomerId() {
 		return customerId;
@@ -40,6 +27,14 @@ public class TaskOrder {
 
 	public void setCustomerId(Long customerId) {
 		this.customerId = customerId;
+	}
+
+	public Long getServiceId() {
+		return serviceId;
+	}
+
+	public void setServiceId(Long serviceId) {
+		this.serviceId = serviceId;
 	}
 
 	public BigDecimal getOrderAmounts() {
@@ -50,27 +45,22 @@ public class TaskOrder {
 		this.orderAmounts = orderAmounts;
 	}
 
-	public Date getReceiveOrderTime() {
-		return receiveOrderTime;
+	public Long getOrderId() {
+		return orderId;
 	}
 
-	public void setReceiveOrderTime(Date receiveOrderTime) {
-		this.receiveOrderTime = receiveOrderTime;
+	public void setOrderId(Long orderId) {
+		this.orderId = orderId;
 	}
 
-	public Date getOrderTime() {
-		return orderTime;
+	@Override
+	public String toString() {
+		return "TaskOrder [orderId=" + orderId + ", customerId=" + customerId + ", serviceId=" + serviceId
+				+ ", orderAmounts=" + orderAmounts + "]";
 	}
 
-	public void setOrderTime(Date orderTime) {
-		this.orderTime = orderTime;
-	}
+	
+	
+   
 
-	public Integer getOrderStatus() {
-		return orderStatus;
-	}
-
-	public void setOrderStatus(Integer orderStatus) {
-		this.orderStatus = orderStatus;
-	}
 }

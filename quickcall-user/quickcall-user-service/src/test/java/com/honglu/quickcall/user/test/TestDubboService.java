@@ -1,10 +1,8 @@
 package com.honglu.quickcall.user.test;
 
 import com.honglu.quickcall.account.facade.business.IAccountOrderService;
-import com.honglu.quickcall.user.facade.exchange.mqrequest.DoOrderCastMqRequest;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -26,5 +24,6 @@ public class TestDubboService {
     @Test
     public void testSend() {
         accountOrderService.checkReceiveOrderByCustomerSkillId(2222L);
+        //accountOrderService.checkReceiveOrderByCustomerSkillId(11111L, 2222L);
     }
 }

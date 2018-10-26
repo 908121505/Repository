@@ -10,7 +10,7 @@ import com.honglu.quickcall.user.facade.vo.AppHomeBigvListVO;
 import com.honglu.quickcall.user.service.dao.CustomerAppearanceMapper;
 import com.honglu.quickcall.user.service.dao.CustomerSkillMapper;
 import com.honglu.quickcall.user.service.dao.SkillItemMapper;
-import com.honglu.quickcall.user.service.service.QueryHomeBigvListService;
+import com.honglu.quickcall.user.service.service.QueryBigvListService;
 import com.honglu.quickcall.user.service.util.CountAge;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,13 +22,13 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * 查询首页大V列表Service实现类
+ * 查询大V列表Service实现类
  *
  * @author duanjun
  * @date 2018-10-25 14:24
  */
 @Service
-public class QueryHomeBigvListServiceImpl implements QueryHomeBigvListService {
+public class QueryBigvListServiceImpl implements QueryBigvListService {
     private static final Logger LOGGER = LoggerFactory.getLogger(CustomerRedisManagementImpl.class);
 
     @Autowired
@@ -56,7 +56,7 @@ public class QueryHomeBigvListServiceImpl implements QueryHomeBigvListService {
         // 循环封装数据
         for (SkillItem skillItem : skillList) {
             // 查询数据
-            List<CustomerSkill> customerSkillList = customerSkillMapper.selectAuditedSkillByPage(skillItem.getId(), 0, skillList.size() * 4);
+            List<CustomerSkill> customerSkillList = customerSkillMapper.selectAuditedSkillByPage(skillItem.getId(), 0, 4);
             if (customerSkillList.size() == 0) {
                 continue;
             }
@@ -83,7 +83,7 @@ public class QueryHomeBigvListServiceImpl implements QueryHomeBigvListService {
             AppHomeBigvListVO.BigvInfoVO bigv = recomedBigv.new BigvInfoVO();
             bigv.setCustomerId(customerSkill.getCustomerId());
             bigv.setCustomerSkillId(customerSkill.getCustomerSkillId());
-            bigv.setSkillBackColor(customerSkill.getSkillBackColor());
+            bigv.setSkillBackColor(customerSkill.getSkillHomeBackColor());
             bigv.setNickName(customerSkill.getCustomerNickName());
             bigv.setSex(customerSkill.getCustomerSex());
             if (customerSkill.getCustomerBirthday() != null) {

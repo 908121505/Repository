@@ -17,7 +17,6 @@ import com.calf.cn.entity.DataTables;
 import com.calf.cn.service.BaseManager;
 import com.calf.cn.utils.SearchUtil;
 import com.calf.module.common.impl.CommonUtilService;
-import com.calf.module.customerservice.entity.FeedBack;
 import com.calf.module.customerservice.vo.FeedBackVO;
 
 @Controller

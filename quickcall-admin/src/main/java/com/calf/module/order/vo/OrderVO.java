@@ -1,7 +1,5 @@
 package com.calf.module.order.vo;
 
-import java.math.BigDecimal;
-import java.util.Date;
 /**
  * 
  * Copyright © 2018 www.xiaoniu.com All rights reserved.
@@ -12,106 +10,164 @@ import java.util.Date;
  * @date: 2018年9月22日 下午4:36:37
  */
 public class OrderVO {
-   
+	//订单id
 	private String orderId;
-	private String servNickName ;
-	
-	private String  custNickName;
-	
-	private String  orderType;
-	
-	private BigDecimal  price;
-	
-    private Integer orderNum;
-    private BigDecimal orderAmounts;
-    
-    private Date confirmTime;
-    private Date startTime;
-    private Date endTime;
-    private Date orderTime;
-    private Date finishTime;
-    private Byte orderStatus;
+	//接单用户id
+	private String receivedOrderId;
+	//接单用户昵称
+	private String receiveOrderUserNickName;
+	//下单用户id
+	private String placeOrderId;
+	//下单用户昵称
+	private String placeOrderUserNickName;
+	//服务类型
+	private String serviceType;
+	//开始时间
+	private String startTime;
+	//结束时间
+	private String endTime;
+	//单价（次/音符、半小时/音符、小时/音符）
+	private String unitPrice;
+	//折扣类型
+	private String discountType;
+	//订单金额（单位：元）
+	private String orderAmount;
+	//订单创建时间
+	private String orderCreateTime;
+	//订单取消原因
+	private String remarkReason;
+	//订单数量
+	private String orderNum;
+	//订单状态
+	private String orderStatus;
+	//订单状态值
+	private String orderStatusVal;
+
 	public String getOrderId() {
 		return orderId;
 	}
+
 	public void setOrderId(String orderId) {
 		this.orderId = orderId;
 	}
-	public String getServNickName() {
-		return servNickName;
+
+	public String getReceivedOrderId() {
+		return receivedOrderId;
 	}
-	public void setServNickName(String servNickName) {
-		this.servNickName = servNickName;
+
+	public void setReceivedOrderId(String receivedOrderId) {
+		this.receivedOrderId = receivedOrderId;
 	}
-	public String getCustNickName() {
-		return custNickName;
+
+	public String getReceiveOrderUserNickName() {
+		return receiveOrderUserNickName;
 	}
-	public void setCustNickName(String custNickName) {
-		this.custNickName = custNickName;
+
+	public void setReceiveOrderUserNickName(String receiveOrderUserNickName) {
+		this.receiveOrderUserNickName = receiveOrderUserNickName;
 	}
-	public String getOrderType() {
-		return orderType;
+
+	public String getPlaceOrderId() {
+		return placeOrderId;
 	}
-	public void setOrderType(String orderType) {
-		this.orderType = orderType;
+
+	public void setPlaceOrderId(String placeOrderId) {
+		this.placeOrderId = placeOrderId;
 	}
-	public BigDecimal getPrice() {
-		return price;
+
+	public String getPlaceOrderUserNickName() {
+		return placeOrderUserNickName;
 	}
-	public void setPrice(BigDecimal price) {
-		this.price = price;
+
+	public void setPlaceOrderUserNickName(String placeOrderUserNickName) {
+		this.placeOrderUserNickName = placeOrderUserNickName;
 	}
-	public Integer getOrderNum() {
-		return orderNum;
+
+	public String getServiceType() {
+		return serviceType;
 	}
-	public void setOrderNum(Integer orderNum) {
-		this.orderNum = orderNum;
+
+	public void setServiceType(String serviceType) {
+		this.serviceType = serviceType;
 	}
-	public BigDecimal getOrderAmounts() {
-		return orderAmounts;
-	}
-	public void setOrderAmounts(BigDecimal orderAmounts) {
-		this.orderAmounts = orderAmounts;
-	}
-	public Date getConfirmTime() {
-		return confirmTime;
-	}
-	public void setConfirmTime(Date confirmTime) {
-		this.confirmTime = confirmTime;
-	}
-	public Date getStartTime() {
+
+	public String getStartTime() {
 		return startTime;
 	}
-	public void setStartTime(Date startTime) {
+
+	public void setStartTime(String startTime) {
 		this.startTime = startTime;
 	}
-	public Date getEndTime() {
+
+	public String getEndTime() {
 		return endTime;
 	}
-	public void setEndTime(Date endTime) {
+
+	public void setEndTime(String endTime) {
 		this.endTime = endTime;
 	}
-	public Date getOrderTime() {
-		return orderTime;
+
+	public String getUnitPrice() {
+		return unitPrice;
 	}
-	public void setOrderTime(Date orderTime) {
-		this.orderTime = orderTime;
+
+	public void setUnitPrice(String unitPrice) {
+		this.unitPrice = unitPrice;
 	}
-	public Date getFinishTime() {
-		return finishTime;
+
+	public String getDiscountType() {
+		return discountType;
 	}
-	public void setFinishTime(Date finishTime) {
-		this.finishTime = finishTime;
+
+	public void setDiscountType(String discountType) {
+		this.discountType = discountType;
 	}
-	public Byte getOrderStatus() {
+
+	public String getOrderAmount() {
+		return orderAmount;
+	}
+
+	public void setOrderAmount(String orderAmount) {
+		this.orderAmount = orderAmount;
+	}
+
+	public String getOrderStatus() {
 		return orderStatus;
 	}
-	public void setOrderStatus(Byte orderStatus) {
+
+	public void setOrderStatus(String orderStatus) {
 		this.orderStatus = orderStatus;
 	}
-    
 
-    
-    
-   
+	public String getOrderCreateTime() {
+		return orderCreateTime;
+	}
+
+	public void setOrderCreateTime(String orderCreateTime) {
+		this.orderCreateTime = orderCreateTime;
+	}
+
+	public String getRemarkReason() {
+		return remarkReason;
+	}
+
+	public void setRemarkReason(String remarkReason) {
+		this.remarkReason = remarkReason;
+	}
+
+	public String getOrderNum() {
+		return orderNum;
+	}
+
+	public void setOrderNum(String orderNum) {
+		this.orderNum = orderNum;
+	}
+
+	public String getOrderStatusVal() {
+		return orderStatusVal;
+	}
+
+	public void setOrderStatusVal(String orderStatusVal) {
+		this.orderStatusVal = orderStatusVal;
+	}
 }

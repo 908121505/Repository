@@ -13,11 +13,8 @@ import java.math.BigDecimal;
  */
 public class OrderIMVO implements  Serializable{
 
-	private static final long serialVersionUID = -4879817505879509695L;
-	/**主播ID*/
-	private Long  serviceId;
-	/**下单人iD*/
-	private Long  customerId;
+	
+	private Long  orderId;
 	/**产品价格*/
 	private BigDecimal  servicePrice;
 	/**产品单位*/
@@ -28,20 +25,11 @@ public class OrderIMVO implements  Serializable{
 	private String  icon;
 	/**订单状态*/
 	private Integer  orderStatus;
-	
-	
-	
-	public Long getServiceId() {
-		return serviceId;
+	public Long getOrderId() {
+		return orderId;
 	}
-	public void setServiceId(Long serviceId) {
-		this.serviceId = serviceId;
-	}
-	public Long getCustomerId() {
-		return customerId;
-	}
-	public void setCustomerId(Long customerId) {
-		this.customerId = customerId;
+	public void setOrderId(Long orderId) {
+		this.orderId = orderId;
 	}
 	public BigDecimal getServicePrice() {
 		return servicePrice;
@@ -73,10 +61,4 @@ public class OrderIMVO implements  Serializable{
 	public void setOrderStatus(Integer orderStatus) {
 		this.orderStatus = orderStatus;
 	}
-	
-	
-	
-	
-	
-	
 }

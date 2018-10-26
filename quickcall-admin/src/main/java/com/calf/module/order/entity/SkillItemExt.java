@@ -29,7 +29,7 @@ public class SkillItemExt {
     private Integer skillExtRange;
 
     
-    private Integer skillExtUnit;
+    private String skillExtUnit;
 
     
     private BigDecimal skillExtPrice;
@@ -56,7 +56,15 @@ public class SkillItemExt {
     private String remark;
 
 
-    public Long getId() {
+    public String getSkillExtUnit() {
+		return skillExtUnit;
+	}
+
+	public void setSkillExtUnit(String skillExtUnit) {
+		this.skillExtUnit = skillExtUnit;
+	}
+
+	public Long getId() {
         return id;
     }
 
@@ -81,16 +89,6 @@ public class SkillItemExt {
     
     public void setSkillExtRange(Integer skillExtRange) {
         this.skillExtRange = skillExtRange;
-    }
-
- 
-    public Integer getSkillExtUnit() {
-        return skillExtUnit;
-    }
-
-    
-    public void setSkillExtUnit(Integer skillExtUnit) {
-        this.skillExtUnit = skillExtUnit;
     }
 
     

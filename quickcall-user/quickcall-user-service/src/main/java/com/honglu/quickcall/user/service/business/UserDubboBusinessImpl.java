@@ -56,7 +56,7 @@ public class UserDubboBusinessImpl implements UserDubboBusiness {
 	@Autowired
 	private InternalMessageService internalMessageService;
 	@Autowired
-	private QueryHomeBigvListService queryHomeBigvListService;
+	private QueryBigvListService queryHomeBigvListService;
 
 	@Override
 	public CommonResponse excute(AbstractRequest request) {

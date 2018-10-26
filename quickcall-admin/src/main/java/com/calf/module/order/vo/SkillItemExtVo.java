@@ -11,7 +11,7 @@ public class SkillItemExtVo {
 
     private Integer skillExtRange;
 
-    private Integer skillExtUnit;
+    private String skillExtUnit;
 
     private BigDecimal skillExtPrice;
 
@@ -56,14 +56,6 @@ public class SkillItemExtVo {
         this.skillExtRange = skillExtRange;
     }
 
-    public Integer getSkillExtUnit() {
-        return skillExtUnit;
-    }
-
-    public void setSkillExtUnit(Integer skillExtUnit) {
-        this.skillExtUnit = skillExtUnit;
-    }
-
     public BigDecimal getSkillExtPrice() {
         return skillExtPrice;
     }
@@ -102,5 +94,13 @@ public class SkillItemExtVo {
 
 	public void setSkillItemName(String skillItemName) {
 		this.skillItemName = skillItemName;
+	}
+
+	public String getSkillExtUnit() {
+		return skillExtUnit;
+	}
+
+	public void setSkillExtUnit(String skillExtUnit) {
+		this.skillExtUnit = skillExtUnit;
 	}
 }
