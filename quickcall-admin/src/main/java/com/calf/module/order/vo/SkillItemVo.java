@@ -10,8 +10,6 @@ public class SkillItemVo {
 
     private String skillDescribe;
 
-    private String imageUrl;
-
     private Integer sort;
 
     private Integer skillStatus;
@@ -100,14 +98,6 @@ public class SkillItemVo {
 
     public void setSkillDescribe(String skillDescribe) {
         this.skillDescribe = skillDescribe;
-    }
-
-    public String getImageUrl() {
-        return imageUrl;
-    }
-
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
     }
 
     public Integer getSort() {

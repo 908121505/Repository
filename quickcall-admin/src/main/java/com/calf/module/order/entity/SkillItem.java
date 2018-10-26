@@ -11,8 +11,6 @@ public class SkillItem {
 
 	private String skillDescribe;
 
-	private String imageUrl;
-
 	private Integer sort;
 
 	private Integer skillStatus;
@@ -109,14 +107,6 @@ public class SkillItem {
 
 	public void setSkillDescribe(String skillDescribe) {
 		this.skillDescribe = skillDescribe == null ? null : skillDescribe.trim();
-	}
-
-	public String getImageUrl() {
-		return imageUrl;
-	}
-
-	public void setImageUrl(String imageUrl) {
-		this.imageUrl = imageUrl == null ? null : imageUrl.trim();
 	}
 
 	public Integer getSort() {
