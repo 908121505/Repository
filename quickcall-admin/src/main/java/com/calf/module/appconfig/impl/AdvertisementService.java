@@ -74,7 +74,7 @@ public class AdvertisementService {
         }
         //插入广告和app版本对应表
         String appVersionIds = advertisement.getAppVersionIdList();
-        if(StringUtil.isBlank(appVersionIds)) {
+        if(!StringUtil.isBlank(appVersionIds)) {
             String[] appVersionIdArr = appVersionIds.split(",");
             for (String appVersionId : appVersionIdArr) {
                 advertisement.setAppVersionId(appVersionId);
@@ -101,7 +101,7 @@ public class AdvertisementService {
             return -1;
         }
         //删除此广告在 广告与版本对应表中的数据 ad_app_version
-        if(StringUtil.isBlank(advertisement.getAppVersion())){
+        if(!StringUtil.isBlank(advertisement.getAppVersion())){
             Map<String, Object> paramMap = new HashMap<String, Object>();
             paramMap.put("advertisementId", advertisement.getId());
             int deleteAdAppCount = baseManager.delete("Advertisement.deleteAdAppVersion", paramMap);
@@ -112,7 +112,7 @@ public class AdvertisementService {
 
         //插入表 ad_app_version
         String appVersionIds = advertisement.getAppVersionIdList();
-        if(StringUtil.isBlank(appVersionIds)) {
+        if(!StringUtil.isBlank(appVersionIds)) {
             String[] appVersionIdArr = appVersionIds.split(",");
             for (String appVersionId : appVersionIdArr) {
                 advertisement.setAppVersionId(appVersionId);

@@ -96,7 +96,7 @@
                  <div class="form-group">
                     <label class="col-sm-2 control-label">当前生效版本<font color="red">&nbsp;*</font></label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control required" id="appVersion" name="appVersion" value="${entity.appVersion }"/>
+                        <input type="text" class="form-control required" id="appVersion" name="appVersion" value="${entity.appVersion }" readonly="readonly"/>
                     </div>
                 </div>
                 </c:if>

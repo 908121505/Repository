@@ -132,13 +132,25 @@
     insert into advertisement (id, title, name, 
       ad_describle, type, ad_status, 
       image_url, url,
-      start_time, end_time, create_time, 
+    <if test="startTime != null and startTime!=''" >
+      start_time,
+    </if>
+    <if test="endTime != null and endTime!=''" >
+      end_time,
+    </if>
+    create_time,
       modify_time, create_man, modify_man, 
       remark)
     values (#{id,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
       #{adDescrible,jdbcType=VARCHAR}, #{type,jdbcType=TINYINT}, #{adStatus,jdbcType=TINYINT}, 
       #{imageUrl,jdbcType=VARCHAR}, #{url,jdbcType=VARCHAR},
-      #{startTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP}, now(),
+    <if test="startTime != null and startTime!=''" >
+      #{startTime,jdbcType=TIMESTAMP},
+    </if>
+    <if test="endTime != null and endTime!=''" >
+      #{endTime,jdbcType=TIMESTAMP},
+    </if>
+      now(),
       #{modifyTime,jdbcType=TIMESTAMP}, #{createMan,jdbcType=VARCHAR}, #{modifyMan,jdbcType=VARCHAR}, 
       #{remark,jdbcType=VARCHAR})
   </insert>
@@ -559,9 +571,9 @@
     #{remark,jdbcType=VARCHAR})
   </insert>
 
-  <delete id="deleteAdAppVersion" parameterType="com.calf.module.appconfig.entity.Advertisement" >
+  <delete id="deleteAdAppVersion" parameterType="map" >
 
-    delete from advertisement
-    where advertisement_id = #{id,jdbcType=INTEGER}
+    delete from ad_app_version
+    where advertisement_id = #{advertisementId,jdbcType=INTEGER}
   </delete>
 </mapper>
