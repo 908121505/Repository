@@ -21,7 +21,7 @@
 		SELECT
 			customer_id AS customerId,
 			service_id AS serviceId,
-			order_amounts AS orderAmount
+			order_amounts AS orderAmounts
 		FROM  
 		   orders
 		WHERE
@@ -50,7 +50,7 @@
 		SELECT
 			customer_id AS customerId,
 			service_id AS serviceId,
-			order_amounts AS orderAmount
+			order_amounts AS orderAmounts
 		FROM  
 		   orders
 		WHERE
@@ -81,7 +81,7 @@
 		SELECT
 			customer_id AS customerId,
 			service_id AS serviceId,
-			order_amounts AS orderAmount
+			order_amounts AS orderAmounts
 			
 		FROM  
 		   orders
@@ -119,7 +119,7 @@
 		SELECT
 			customer_id AS customerId,
 			service_id AS serviceId,
-			order_amounts AS orderAmount
+			order_amounts AS orderAmounts
 		FROM  
 		   orders
 		WHERE
@@ -165,7 +165,7 @@
 		SELECT
 			customer_id AS customerId,
 			service_id AS serviceId,
-			order_amounts AS orderAmount
+			order_amounts AS orderAmounts
 		FROM  
 		   orders
 		WHERE
