@@ -38,7 +38,7 @@ public class InternalServiceImpl implements InternalService {
     @Autowired
     private CustomerMessageService customerMessageService;
 
-    private static final int BATCH_INSERT_SIZE = 10;
+    private static final int BATCH_INSERT_SIZE = 1000;
 
     /**
      * 新增
