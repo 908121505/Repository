@@ -4,11 +4,13 @@ import com.honglu.quickcall.common.api.exchange.CommonResponse;
 import com.honglu.quickcall.common.api.exchange.ResultUtils;
 import com.honglu.quickcall.common.constants.PropertiesConstant;
 import com.honglu.quickcall.user.facade.entity.CustomerSkill;
+import com.honglu.quickcall.user.facade.entity.ResourceConfig;
 import com.honglu.quickcall.user.facade.entity.SkillItem;
 import com.honglu.quickcall.user.facade.exchange.request.FirstPageBigvListRequest;
 import com.honglu.quickcall.user.facade.vo.AppHomeBigvListVO;
 import com.honglu.quickcall.user.service.dao.CustomerAppearanceMapper;
 import com.honglu.quickcall.user.service.dao.CustomerSkillMapper;
+import com.honglu.quickcall.user.service.dao.ResourceConfigMapper;
 import com.honglu.quickcall.user.service.dao.SkillItemMapper;
 import com.honglu.quickcall.user.service.service.QueryBigvListService;
 import com.honglu.quickcall.user.service.util.CountAge;
@@ -37,6 +39,8 @@ public class QueryBigvListServiceImpl implements QueryBigvListService {
     private CustomerSkillMapper customerSkillMapper;
     @Autowired
     private CustomerAppearanceMapper customerAppearanceMapper;
+    @Autowired
+    private ResourceConfigMapper resourceConfigMapper;
 
     @Override
     public CommonResponse queryHomeBigvList(FirstPageBigvListRequest request) {
@@ -103,5 +107,21 @@ public class QueryBigvListServiceImpl implements QueryBigvListService {
 
         recomedBigv.setDaVinfoList(recomedBigvList);
         return recomedBigv;
+    }
+
+
+    public CommonResponse queryBigvList(){
+        // 查询出资源位的配置信息
+        List<ResourceConfig> configs = resourceConfigMapper.selectAllResourceConfig();
+        if(configs == null || configs.size() == 0){
+            return ResultUtils.resultDataNotExist("资源位数据未配置");
+        }
+
+
+        // 查询一号资源位
+
+
+
+        return null;
     }
 }
