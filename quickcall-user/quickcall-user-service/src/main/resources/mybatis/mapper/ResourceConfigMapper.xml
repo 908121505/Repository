@@ -24,4 +24,20 @@
     from resource_config
     order by config_num asc
   </select>
+
+  <!-- 查询资源位配置启用技能 -->
+  <select id="selectEnableSkills" resultType="string">
+    select skill_item_id from resource_config_skill where resource_config_id = #{resourceConfigId} and status = 1
+  </select>
+
+  <!-- 查询资源位配置启用技能 -->
+  <select id="selectAllEnableSkills" resultType="string">
+    select skill_item_id from resource_config_skill where status = 1
+  </select>
+
+  <!-- 查询启用的大V + 技能排名列表 -->
+  <select id="selectEnabledBigvAndSkillRankData" resultType="com.honglu.quickcall.user.facade.entity.CustomerSkill">
+
+  </select>
+
 </mapper>

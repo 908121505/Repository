@@ -3,6 +3,7 @@ package com.honglu.quickcall.user.service.service.impl;
 import com.honglu.quickcall.account.facade.business.IAccountOrderService;
 import com.honglu.quickcall.common.api.exchange.CommonResponse;
 import com.honglu.quickcall.common.api.exchange.ResultUtils;
+import com.honglu.quickcall.common.api.util.DateUtils;
 import com.honglu.quickcall.common.constants.PropertiesConstant;
 import com.honglu.quickcall.user.facade.entity.BigvSkillScore;
 import com.honglu.quickcall.user.facade.entity.CustomerSkill;
@@ -19,10 +20,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * 查询大V列表Service实现类
@@ -60,7 +58,7 @@ public class QueryBigvListServiceImpl implements QueryBigvListService {
         resultList.add(getBigvList(recomedBigv, customerSkills));
 
         // 查询所有分类
-        List<SkillItem> skillList = skillItemMapper.selectAllSkill();
+        List<SkillItem> skillList = skillItemMapper.selectAllEnabledSkills();
         if (skillList == null || skillList.size() == 0) {
             return ResultUtils.resultSuccess(resultList);
         }
@@ -105,9 +103,17 @@ public class QueryBigvListServiceImpl implements QueryBigvListService {
             bigv.setSkillItemName(customerSkill.getSkillName());
             bigv.setVoiceTime(customerSkill.getSkillVoiceTime());
             bigv.setVoiceUrl(customerSkill.getSkillVoiceUrl());
-            // 查询第一张形象照
+            // 查询第一张形象照 性别(0=女,1=男)
             List<String> appearanceList = customerAppearanceMapper.queryCustomerAuditedAppearance(customerSkill.getCustomerId(), 0);
-            bigv.setCoverUrl(appearanceList.isEmpty() ? PropertiesConstant.DEFAULT_CUSTOMER_APPEARANCE_URL : appearanceList.get(0));
+            if(appearanceList == null || appearanceList.size() == 0){
+                if(Objects.equals(bigv.getSex(), 1)){
+                    bigv.setCoverUrl(PropertiesConstant.DEFAULT_CUSTOMER_APPEARANCE_URL_BOY);
+                }else {
+                    bigv.setCoverUrl(PropertiesConstant.DEFAULT_CUSTOMER_APPEARANCE_URL_GIRL);
+                }
+            }else{
+                bigv.setCoverUrl(appearanceList.get(0));
+            }
 
             recomedBigvList.add(bigv);
         }
@@ -116,7 +122,13 @@ public class QueryBigvListServiceImpl implements QueryBigvListService {
         return recomedBigv;
     }
 
+    /** 存储客户技能ID -- 用户去重 **/
+    private List<String> customerSkillId = new ArrayList<>();
 
+    public static void main(String[] args) {
+
+        System.out.println(DateUtils.formatDateHHSS(new Date()).replaceAll(":", ""));
+    }
     public CommonResponse queryBigvList() {
         // 查询出资源位的配置信息
         List<ResourceConfig> configs = resourceConfigMapper.selectAllResourceConfig();
@@ -127,8 +139,26 @@ public class QueryBigvListServiceImpl implements QueryBigvListService {
         // 查询有效大V总数
         int bigvCount = bigvScoreMapper.countValidBigvCount();
 
+        // 查询资源位所有启用的技能
+        List<String> configAllSkills = resourceConfigMapper.selectAllEnableSkills();
+
+        // 查询所有的技能分内列表
+        List<SkillItem> skillList = skillItemMapper.selectAllEnabledSkills();
+
+        // 查询大V + 技能综合排名表
+        List<CustomerSkill> bigvList = resourceConfigMapper.selectEnabledBigvAndSkillRankData(skillList.size() * 4 + 6);
+
         // 循环资源位查询数据
         for (ResourceConfig config : configs) {
+            // 查询出资源配置启用的品类
+            List<String> configSkills = resourceConfigMapper.selectEnableSkills(config.getResourceConfigId());
+            if(configSkills == null || configSkills.size() == 0){
+                LOGGER.warn("6帧资源配置位【{}】,未查询到启用的技能品类 -- 跳过该资源位", config.getConfigNum());
+                continue;
+            }
+
+
+
             // 自然推荐
             if (Objects.equals(config.getStrategy(), 1)) {
                 // 得到随机大V

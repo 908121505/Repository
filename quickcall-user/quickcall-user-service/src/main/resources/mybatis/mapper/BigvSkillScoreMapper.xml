@@ -271,6 +271,6 @@
     <!-- 更新大V单项技能评分 -->
     <update id="updateBigvSkillScore">
         UPDATE bigv_skill_score SET order_total = order_total + 1, score_total = score_total + #{valueScore}
-        WHERE customer_id = #{customerId} AND skill_item_id = #{skillItemId}
+        WHERE customer_skill_id = #{customerSkillId}
     </update>
 </mapper>
