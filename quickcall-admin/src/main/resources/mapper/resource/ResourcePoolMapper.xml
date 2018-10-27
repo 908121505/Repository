@@ -122,6 +122,28 @@
     select customer_id from customer where app_id=#{app_id,jdbcType=BIGINT}
   </select>
 
+  <select id="queryOnlineCount" resultType="java.lang.Integer" parameterType="Map">
+    select count(1) from customer c
+    where c.cust_state = 2
+    and c.v_status = 2
+    and c.customer_id in
+    <foreach collection="clist" index="index" item="item" open="(" separator="," close=")">
+      #{item}
+    </foreach>
+  </select>
+
+  <select id="queryInOrderCount" resultType="java.lang.Integer" parameterType="Map">
+    select count(1) from orders where
+     order_status in
+    <foreach collection="statusList" index="index" item="status" open="(" separator="," close=")">
+      #{status}
+    </foreach>
+     and service_id in
+    <foreach collection="clist" index="index" item="item" open="(" separator="," close=")">
+      #{item}
+    </foreach>
+  </select>
+
   <!-- 查询所有数据 -->
   <select id="selectAllValidData" resultMap="BaseResultMap">
     select
