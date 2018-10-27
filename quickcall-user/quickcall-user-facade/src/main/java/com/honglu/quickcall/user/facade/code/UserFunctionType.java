@@ -193,5 +193,10 @@ public interface UserFunctionType {
 	 * 查询我的站内信消息
 	 */
 	String INTERNAL_MESSAGE = "001201";
+	
+	/**
+	 * 技能项分类点击列表
+	 */
+	String QUERY_DV_LIST_BY_TYPE = "0011190";
 
 }
