@@ -172,6 +172,20 @@ public class RongYunUtil {
 
 		sendMessage("订单消息", fromUserId, toCustomerId, content, 1, imageUrl, 10);
 	}
+	/**
+	 * 发送订单消息
+	 * 
+	 * @param toCustomerId
+	 *            接收人的用户ID
+	 * @param content
+	 *            发送内容
+	 * 
+	 */
+	public static void sendOrderMessage(Long toCustomerId, String content,String  remarkName) {
+		Long fromUserId = Long.parseLong(ORDER_COSTOMER_ID);
+		String imageUrl = "http://wdgj.oss-cn-shanghai.aliyuncs.com/voice/user/headimg/dd85f3b6b42e441eb48f2839752474cc.jpg";
+		sendMessage("订单消息", fromUserId, toCustomerId, content, 1, imageUrl, 10,remarkName);
+	}
 
 	public static void sendBespokeMessage(Long toCustomerId, String content) {
 		Long fromUserId = Long.parseLong(BESPOKE_COSTOMER_ID);
@@ -206,6 +220,24 @@ public class RongYunUtil {
 		Long otherId = toCustomerId;
 		// refreshUser(fromUserId + "", nickName, headPortraitUrl);
 		SendUser sendUser = new SendUser(nickName, headPortraitUrl, sex, fromUserId);
+		RongYunPushBean rongYunPushBean = new RongYunPushBean(1, content, 1, 0, type, fromUserId, otherId, 1, sendUser,
+				System.currentTimeMillis());
+		String jsonString = JSON.toJSONString(rongYunPushBean);
+		TxtMessage txtMessage = new TxtMessage(jsonString, "");
+		String[] otherIds = new String[1];
+		otherIds[0] = String.valueOf(otherId);
+		Integer code = RongYunUtil.publishPrivate(String.valueOf(fromUserId), otherIds, txtMessage, null, null, null,
+				null, null, null);
+		System.out.println(code);
+	}
+	
+	@SuppressWarnings("unused")
+	private static void sendMessage(String nickName, Long fromUserId, Long toCustomerId, String content, Integer sex,
+			String headPortraitUrl, Integer type,String  remarkName) {
+		
+		Long otherId = toCustomerId;
+		// refreshUser(fromUserId + "", nickName, headPortraitUrl);
+		SendUser sendUser = new SendUser(nickName, headPortraitUrl, sex, fromUserId,remarkName);
 		RongYunPushBean rongYunPushBean = new RongYunPushBean(1, content, 1, 0, type, fromUserId, otherId, 1, sendUser,
 				System.currentTimeMillis());
 		String jsonString = JSON.toJSONString(rongYunPushBean);

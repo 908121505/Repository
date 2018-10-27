@@ -261,7 +261,9 @@ public class OrderUpdateJob {
     public void   sendOrderMessage(Long  customerId,Integer  cancelType,boolean  dvFlag){
     	
     	String  content =  null ;
+    	String  remarkName = null ;
     	if(dvFlag){
+    		remarkName = OrderSkillConstants.MSG_CONTENT_DAV ;
     		if(cancelType == CANCEL_ONE){
     			content =  OrderSkillConstants.IM_MSG_CONTENT_CANCEL_CUST_15MINUTE_TIMEOUT ;
     		}else if (cancelType == CANCEL_TWO){
@@ -272,6 +274,7 @@ public class OrderUpdateJob {
     			content =  OrderSkillConstants.IM_MSG_CONTENT_CANCEL_CUST_FINISH ;
     		}
     	}else{
+    		remarkName = OrderSkillConstants.MSG_CONTENT_C ;
     		if(cancelType == CANCEL_ONE){
     			content =  OrderSkillConstants.IM_MSG_CONTENT_CANCEL_DV_15MINUTE_TIMEOUT ;
     		}else if (cancelType == CANCEL_TWO){
@@ -286,7 +289,7 @@ public class OrderUpdateJob {
     		content = OrderSkillConstants.IM_MSG_CONTENT_DEFAULT ;
     	}
     	//下单成功后推送IM消息
-		RongYunUtil.sendOrderMessage(customerId, content);
+		RongYunUtil.sendOrderMessage(customerId, content,remarkName);
     }
     
     

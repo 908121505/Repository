@@ -350,7 +350,7 @@ public class OrderServiceImpl implements IOrderService {
 			}
 			
 			//下单成功后推送IM消息
-			RongYunUtil.sendOrderMessage(serviceId, OrderSkillConstants.IM_MSG_CONTENT_RECEIVE_ORDER);
+			RongYunUtil.sendOrderMessage(serviceId, OrderSkillConstants.IM_MSG_CONTENT_RECEIVE_ORDER,OrderSkillConstants.MSG_CONTENT_DAV);
 			
 			
 			
@@ -471,7 +471,7 @@ public class OrderServiceImpl implements IOrderService {
 		
 		Long  serviceId =  order.getServiceId();
 		//用户取消订单通知大V查看详情
-		RongYunUtil.sendOrderMessage(serviceId, OrderSkillConstants.IM_MSG_CONTENT_CANCEL_ORDER);
+		RongYunUtil.sendOrderMessage(serviceId, OrderSkillConstants.IM_MSG_CONTENT_CANCEL_ORDER,OrderSkillConstants.MSG_CONTENT_DAV);
 		
 		
 		CommonResponse commonResponse = commonService.getCommonResponse();
@@ -712,7 +712,7 @@ public class OrderServiceImpl implements IOrderService {
 		
 		//用户同意大V服务完成，通知大V查单订单状态
 		Long  serviceId = order.getServiceId();
-		RongYunUtil.sendOrderMessage(serviceId, OrderSkillConstants.IM_MSG_CONTENT_USER_CONFIRM_FINISH);
+		RongYunUtil.sendOrderMessage(serviceId, OrderSkillConstants.IM_MSG_CONTENT_USER_CONFIRM_FINISH,OrderSkillConstants.MSG_CONTENT_DAV);
 		
 		
 		CommonResponse commonResponse = commonService.getCommonResponse();
@@ -779,7 +779,7 @@ public class OrderServiceImpl implements IOrderService {
 		
 		//用户同意大V服务完成，通知大V查单订单状态
 		Long  serviceId = order.getServiceId();
-		RongYunUtil.sendOrderMessage(serviceId, OrderSkillConstants.IM_MSG_CONTENT_USER_CONFIRM_START_SERVICE);
+		RongYunUtil.sendOrderMessage(serviceId, OrderSkillConstants.IM_MSG_CONTENT_USER_CONFIRM_START_SERVICE,OrderSkillConstants.MSG_CONTENT_DAV);
 		
 		
 		CommonResponse commonResponse = commonService.getCommonResponse();
@@ -838,7 +838,7 @@ public class OrderServiceImpl implements IOrderService {
 				
 				
 				//大V接受订单通知用户
-				RongYunUtil.sendOrderMessage(customerId, OrderSkillConstants.IM_MSG_CONTENT_DAV_REFUSE);
+				RongYunUtil.sendOrderMessage(customerId, OrderSkillConstants.IM_MSG_CONTENT_DAV_REFUSE,OrderSkillConstants.MSG_CONTENT_C);
 				
 				
 			//大V不同意，状态为大V拒绝，退款给购买者
@@ -849,7 +849,7 @@ public class OrderServiceImpl implements IOrderService {
 				commonService.updateOrder(orderId, newOrderStatus);
 				
 				//大V拒绝订单通知用户
-				RongYunUtil.sendOrderMessage(customerId, OrderSkillConstants.IM_MSG_CONTENT_DAV_CONFIRM);
+				RongYunUtil.sendOrderMessage(customerId, OrderSkillConstants.IM_MSG_CONTENT_DAV_CONFIRM,OrderSkillConstants.MSG_CONTENT_DAV);
 			}
 		}else{
 			//订单不存在
@@ -887,7 +887,7 @@ public class OrderServiceImpl implements IOrderService {
 			
 			//大V开始服务请求，向用户发送消息
 			Long  customerId = order.getCustomerId();
-			RongYunUtil.sendOrderMessage(customerId, OrderSkillConstants.IM_MSG_CONTENT_DAV_START_SERVICE);
+			RongYunUtil.sendOrderMessage(customerId, OrderSkillConstants.IM_MSG_CONTENT_DAV_START_SERVICE,OrderSkillConstants.MSG_CONTENT_C);
 		}else{
 			//订单不存在
 			throw new BizException(AccountBizReturnCode.ORDER_NOT_EXIST, "订单不存在，无法对订单操作");
@@ -946,11 +946,11 @@ public class OrderServiceImpl implements IOrderService {
 			if(OrderSkillConstants.REQUEST_DV_FINISH_TYPE == type){
 				//大V发起完成，向用户发送消息
 				Long  customerId = order.getCustomerId();
-				RongYunUtil.sendOrderMessage(customerId, OrderSkillConstants.IM_MSG_CONTENT_DAV_FINISH);
+				RongYunUtil.sendOrderMessage(customerId, OrderSkillConstants.IM_MSG_CONTENT_DAV_FINISH,OrderSkillConstants.MSG_CONTENT_C);
 			}else{
 				//用户发起完成服务，向大V发送消息
 				Long  serviceId = order.getServiceId();
-				RongYunUtil.sendOrderMessage(serviceId, OrderSkillConstants.IM_MSG_CONTENT_CUST_FINISH);
+				RongYunUtil.sendOrderMessage(serviceId, OrderSkillConstants.IM_MSG_CONTENT_CUST_FINISH,OrderSkillConstants.MSG_CONTENT_DAV);
 			}
 			//设置请求结束时间
 			commonService.finishUpdateOrder(orderId, newOrderStatus,new  Date());

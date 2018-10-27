@@ -12,6 +12,12 @@ package com.honglu.quickcall.account.facade.constants;
 public interface OrderSkillConstants {
 	
 	
+	/**消息标识：大V方*/
+	public static final  String  MSG_CONTENT_DAV = "V";
+	/**消息标识：用户方*/
+	public static final  String  MSG_CONTENT_C = "C";
+	
+	
 	/**1：订单不存在，可以下单 */
 	public  static final  Integer  IM_RETCODE_CAN_ORDER = 1;
 	/** 2：订单不存在 大V在忙*/
