@@ -1,21 +1,8 @@
-package com.honglu.quickcall.user.service.util;
+package com.honglu.quickcall.common.api.util;
 
-import com.aliyun.oss.OSSClient;
-import com.honglu.quickcall.common.api.exchange.WebResponseModel;
-import com.honglu.quickcall.common.core.util.Detect;
-import com.honglu.quickcall.common.core.util.UUIDUtils;
-import com.honglu.quickcall.common.third.OSS.OSSUtil;
-import com.honglu.quickcall.user.facade.code.UserBizReturnCode;
-import com.honglu.quickcall.user.facade.entity.SensitivityWord;
-import com.honglu.quickcall.user.service.dao.SensitivityWordMapper;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
-
-import javax.servlet.http.HttpServletRequest;
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -133,47 +120,4 @@ public class CommonUtil {
         return ifPass;
     }
 
-    /**
-     * 上传文件
-     *
-     * @param request
-     * @param diskName 存放磁盘路径
-     * @return
-     */
-    public static  WebResponseModel uploadFile(HttpServletRequest request, String diskName) {
-        WebResponseModel response = new WebResponseModel();
-        try {
-            MultipartHttpServletRequest multiRequest = (MultipartHttpServletRequest) request;
-            MultipartFile file = multiRequest.getFile("file");
-
-            if (file == null || file.isEmpty()) {
-                response.setCode(UserBizReturnCode.paramError.code());
-                response.setMsg("文件为空");
-                return response;
-            }
-            // 提取文件后缀名
-            String fileName = file.getOriginalFilename();
-            String extName = fileName.substring(fileName.indexOf("."));
-
-            String imageName = UUIDUtils.getUUID() + extName;
-            //阿里云客户端
-            OSSClient ossClient = OSSUtil.getOSSClient();
-            //上传
-            boolean flag = OSSUtil.uploadInputStreamObject2OSS(ossClient, file.getInputStream(), imageName, diskName);
-            //文件访问路径拼接
-            if (flag) {
-                response.setCode(UserBizReturnCode.Success.code());
-                response.setMsg(UserBizReturnCode.Success.desc());
-                response.setData(OSSUtil.ossUrl + "/" + diskName + "/" + imageName);
-            } else {
-                response.setCode(UserBizReturnCode.Unknown.code());
-                response.setMsg("文件上传失败");
-            }
-        } catch (Exception e) {
-            logger.error("userWeb.certification upload file exception : ", e);
-            response.setCode(UserBizReturnCode.Unknown.code());
-            response.setMsg("文件上传失败，" + e.getMessage());
-        }
-        return response;
-    }
 }

@@ -5,6 +5,7 @@ import com.calf.cn.entity.DataTables;
 import com.calf.module.order.entity.SkillItem;
 import com.calf.module.order.impl.ReceiveOrderService;
 import com.calf.module.order.vo.ReceiveOrderVO;
+import org.apache.commons.httpclient.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -30,6 +32,8 @@ public class ReceiveOrderController implements BaseController<ReceiveOrderVO>{
 	public String home1(HttpServletRequest request,Model model) {
 		List<SkillItem> itemsList = receiveOrderService.getSkillItemsList();
 		model.addAttribute("itemsList",itemsList);
+		String showCurTime = DateUtil.formatDate(new Date(), "yyyy-MM-dd");
+		model.addAttribute("showCurTime",showCurTime+" 00:00:00");
 		return "order/receiveOrderList";
 	}
 

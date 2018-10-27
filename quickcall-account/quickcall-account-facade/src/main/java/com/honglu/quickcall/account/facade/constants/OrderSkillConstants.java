@@ -12,6 +12,12 @@ package com.honglu.quickcall.account.facade.constants;
 public interface OrderSkillConstants {
 	
 	
+	/**消息标识：大V方*/
+	public static final  String  MSG_CONTENT_DAV = "V";
+	/**消息标识：用户方*/
+	public static final  String  MSG_CONTENT_C = "C";
+	
+	
 	/**1：订单不存在，可以下单 */
 	public  static final  Integer  IM_RETCODE_CAN_ORDER = 1;
 	/** 2：订单不存在 大V在忙*/
@@ -35,6 +41,36 @@ public interface OrderSkillConstants {
 	public  static final  String  IM_MSG_CONTENT_DAV_START_SERVICE = "大V开始服务啦";
 	public  static final  String  IM_MSG_CONTENT_CUST_FINISH = "用户完成服务啦";
 	public  static final  String  IM_MSG_CONTENT_DAV_FINISH = "大V完成服务啦";
+	
+	
+	
+	public  static final  String  IM_MSG_CONTENT_CANCEL_CUST_15MINUTE_TIMEOUT = "15分钟主播未接单，订单取消";
+	public  static final  String  IM_MSG_CONTENT_CANCEL_DV_15MINUTE_TIMEOUT = "15分钟未接单，订单取消";
+	
+	/**大V5分钟未发起服务*/
+	public  static final  String  IM_MSG_CONTENT_CANCEL_CUST_5MINUTE_START_TIMEOUT = "5分钟主播未发起服务，订单取消";
+	/**大V5分钟未发起服务*/
+	public  static final  String  IM_MSG_CONTENT_CANCEL_DV_5MINUTE_START_TIMEOUT = "5分钟未发起服务，订单取消";
+	
+	
+	/**用户5分钟未接*/
+	public  static final  String  IM_MSG_CONTENT_CANCEL_CUST_5MINUTE_CONFIRM_TIMEOUT = "您5分钟未接受服务，订单取消";
+	/**用户5分钟未接*/
+	public  static final  String  IM_MSG_CONTENT_CANCEL_DV_5MINUTE_CONFIRM_TIMEOUT = "5分钟用户未接受服务，订单取消";
+	
+	
+	/**服务完成*/
+	public  static final  String  IM_MSG_CONTENT_CANCEL_CUST_FINISH = "您有新完成的消息";
+	public  static final  String  IM_MSG_CONTENT_DEFAULT = "您有新短消息";
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
 	////////////////////////IM消息内容//////////////////////////
 	
@@ -181,8 +217,8 @@ public interface OrderSkillConstants {
 	
 	
 	
-	/**订单状态18.订单完成（正常完成）;*/
-	public static final Integer  ORDER_STATUS_END = 18 ;
+//	/**订单状态18.订单完成（正常完成）;*/
+//	public static final Integer  ORDER_STATUS_END = 18 ;
 	
 	
 	

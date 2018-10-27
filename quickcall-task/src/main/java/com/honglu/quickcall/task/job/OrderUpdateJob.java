@@ -4,7 +4,9 @@ import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.ResourceBundle;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,13 +14,18 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
-import com.alibaba.dubbo.config.annotation.Reference;
-import com.honglu.quickcall.account.facade.business.IAccountOrderService;
 import com.honglu.quickcall.account.facade.constants.OrderSkillConstants;
 import com.honglu.quickcall.account.facade.enums.AccountBusinessTypeEnum;
 import com.honglu.quickcall.account.facade.enums.TransferTypeEnum;
+import com.honglu.quickcall.common.api.util.JedisUtil;
+import com.honglu.quickcall.common.api.util.RedisKeyConstants;
+import com.honglu.quickcall.common.core.util.UUIDUtils;
+import com.honglu.quickcall.common.third.rongyun.util.RongYunUtil;
+import com.honglu.quickcall.task.dao.AccountMapper;
 import com.honglu.quickcall.task.dao.TaskOrderMapper;
+import com.honglu.quickcall.task.dao.TradeDetailMapper;
 import com.honglu.quickcall.task.entity.TaskOrder;
+import com.honglu.quickcall.task.entity.TradeDetail;
 
 /**
  * 
@@ -38,10 +45,6 @@ public class OrderUpdateJob {
     @Autowired
     private TaskOrderMapper    taskOrderMapper;
     
-
-    @Reference(version = "0.0.1", group = "accountCenter")
-    private IAccountOrderService iAccountOrderService;
-
     /**默认超时小时数*/
     private final static  Integer   END_OVER_TIME_HOUR = -12;
     /**默认超时分钟数*/
@@ -49,8 +52,13 @@ public class OrderUpdateJob {
     /**立即服务超时分钟数*/
     private final static  Integer   START_OVER_TIME_MINUTES = -5;
     
-    /**叫醒类型服务结束和进行中时间*/
-    private final static  Integer   ORDER_END_TIME_MINUTES = 5;
+    
+    
+    
+    private  final static Integer  CANCEL_ONE =  1 ;
+    private  final static Integer  CANCEL_TWO =  2 ;
+    private  final static Integer  CANCEL_THREE =  3 ;
+    private  final static Integer  CANCEL_FOUR =  4 ;
 
     
     //接单设置
@@ -72,7 +80,7 @@ public class OrderUpdateJob {
     		
     		//大V未接单返回给账户金额  先退款，再更新状态
     		List<TaskOrder>  orderList = taskOrderMapper.queryReceiveOrderOverTime(currTime, endTime, queryStatus, updateStatus, skillType);
-    		refundToCustomer(orderList);
+    		refundToCustomer(orderList,CANCEL_ONE);
     		
     		
     		taskOrderMapper.waittingReceiveOrderOverTime(currTime, endTime, queryStatus, updateStatus, skillType);
@@ -91,7 +99,7 @@ public class OrderUpdateJob {
 			
     		//大V未发起立即服务超时给账户金额
     		orderList = taskOrderMapper.queryReceiveOrderOverTime(currTime, endTime, queryStatus, updateStatus, skillType);
-    		refundToCustomer(orderList);
+    		refundToCustomer(orderList,CANCEL_TWO);
     		
     		taskOrderMapper.startOrderOverTime(currTime, endTime, queryStatus, updateStatus, skillType);
 			
@@ -110,7 +118,7 @@ public class OrderUpdateJob {
 			
 			//大V未发起立即服务超时给账户金额
 			orderList = taskOrderMapper.queryStartOrderOverTime(currTime, endTime, queryStatus, updateStatus, skillType);
-			refundToCustomer(orderList);
+			refundToCustomer(orderList,CANCEL_THREE);
 			taskOrderMapper.startOrderOverTime(currTime, endTime, queryStatus, updateStatus, skillType);
 			
 			
@@ -122,16 +130,16 @@ public class OrderUpdateJob {
 			updateStatus = OrderSkillConstants.ORDER_STATUS_GOING_USER_ACCEPCT;
 			skillType = OrderSkillConstants.SKILL_TYPE_NO;
 			taskOrderMapper.appointOrderGoing(currTime,endTime, queryStatus, updateStatus, skillType);
+			//TODO  要给大V推送消息
 			
-			
-			cal = Calendar.getInstance();
-			
-			cal.add(Calendar.MINUTE, ORDER_END_TIME_MINUTES);
-			//叫醒自动转换为进行中状态
-			//用户未接立即服务超时
-			queryStatus = OrderSkillConstants.ORDER_STATUS_GOING_USER_ACCEPCT;
-			updateStatus = OrderSkillConstants.ORDER_STATUS_FINISHED_USER_ACCEPCT;
-			taskOrderMapper.appointOrderFinish(currTime,endTime, queryStatus, updateStatus, skillType);
+//			cal = Calendar.getInstance();
+//			
+//			cal.add(Calendar.MINUTE, ORDER_END_TIME_MINUTES);
+//			//叫醒自动转换为进行中状态
+//			//用户未接立即服务超时
+//			queryStatus = OrderSkillConstants.ORDER_STATUS_GOING_USER_ACCEPCT;
+//			updateStatus = OrderSkillConstants.ORDER_STATUS_FINISHED_USER_ACCEPCT;
+//			taskOrderMapper.appointOrderFinish(currTime,endTime, queryStatus, updateStatus, skillType);
 			
     	} catch (Exception e) {
     		LOGGER.error("job执行发生异常，异常信息：", e);
@@ -159,8 +167,7 @@ public class OrderUpdateJob {
     		List<TaskOrder>  orderList = taskOrderMapper.queryOrderStatusAfter12HourCust(currTime, endTime, queryStatus, updateStatus, skillType);
     		freezeToService(orderList);
     		taskOrderMapper.updateOrderStatusAfter12HourCust(currTime, endTime, queryStatus, updateStatus, skillType);
-    		
-    		
+    		sendMsgByOrderList(orderList, CANCEL_FOUR);
     		
     		
     		cal = Calendar.getInstance();
@@ -178,7 +185,7 @@ public class OrderUpdateJob {
     		freezeToService(orderList);
     		taskOrderMapper.updateOrderStatusAfter12HourBoth(currTime, endTime, queryStatus, updateStatus, skillType);
 
-    		
+    		sendMsgByOrderList(orderList, CANCEL_FOUR);
     		
     	} catch (Exception e) {
     		LOGGER.error("job执行发生异常，异常信息：", e);
@@ -202,20 +209,89 @@ public class OrderUpdateJob {
     
     
     /**
-     * 订单取消，退款给用户
+     * 订单结束推送消息
      * @param orderList
      */
-    public   void   refundToCustomer(List<TaskOrder>  orderList){
+    public   void   sendMsgByOrderList(List<TaskOrder>  orderList,Integer  cancelType){
     	if(!CollectionUtils.isEmpty(orderList)){
-			for (TaskOrder order : orderList) {
-				Long  customerId =  order.getCustomerId();
-				BigDecimal  payAmount =  order.getOrderAmounts();
-				//调用接口退款给用户
-				iAccountOrderService.inAccount(customerId, payAmount,TransferTypeEnum.RECHARGE,AccountBusinessTypeEnum.OrderRefund);
-				LOGGER.info("用户ID："+customerId +"订单超时，系统自动退款给用户"+payAmount);
+			try {
+				for (TaskOrder order : orderList) {
+					Long  customerId =  order.getCustomerId();
+					sendOrderMessage(customerId, cancelType, false);
+					sendOrderMessage(order.getServiceId(), cancelType, true);
+				}
+			} catch (Exception e) {
+				LOGGER.error("用户退款发生异常，异常信息",e);
 			}
 		}
     }
+    /**
+     * 订单取消，退款给用户
+     * @param orderList
+     */
+    public   void   refundToCustomer(List<TaskOrder>  orderList,Integer  cancelType){
+    	if(!CollectionUtils.isEmpty(orderList)){
+    		try {
+    			for (TaskOrder order : orderList) {
+    				Long  customerId =  order.getCustomerId();
+    				BigDecimal  payAmount =  order.getOrderAmounts();
+    				//调用接口退款给用户
+    				LOGGER.info("用户信息："+order.toString());
+    				inAccount(customerId, payAmount,TransferTypeEnum.RECHARGE,AccountBusinessTypeEnum.OrderRefund);
+    				LOGGER.info("用户ID："+customerId +"订单超时，系统自动退款给用户"+payAmount);
+    				
+    				sendOrderMessage(customerId, cancelType, false);
+    				sendOrderMessage(order.getServiceId(), cancelType, true);
+    			}
+    		} catch (Exception e) {
+    			LOGGER.error("用户退款发生异常，异常信息",e);
+    		}
+    	}
+    }
+    
+    
+    
+    /***
+     * 消息推送
+     * @param customerId
+     * @param serviceId
+     * @param cancelType 1:15分钟未接受订单   2:大V5分钟未发起立即服务   3：用户未接受大V立即服务   4：订单自动完成
+     * @param msgContent
+     */
+    public void   sendOrderMessage(Long  customerId,Integer  cancelType,boolean  dvFlag){
+    	
+    	String  content =  null ;
+    	String  remarkName = null ;
+    	if(dvFlag){
+    		remarkName = OrderSkillConstants.MSG_CONTENT_DAV ;
+    		if(cancelType == CANCEL_ONE){
+    			content =  OrderSkillConstants.IM_MSG_CONTENT_CANCEL_CUST_15MINUTE_TIMEOUT ;
+    		}else if (cancelType == CANCEL_TWO){
+    			content =  OrderSkillConstants.IM_MSG_CONTENT_CANCEL_CUST_5MINUTE_START_TIMEOUT ;
+    		}else if (cancelType == CANCEL_THREE){
+    			content =  OrderSkillConstants.IM_MSG_CONTENT_CANCEL_CUST_5MINUTE_CONFIRM_TIMEOUT ;
+    		}else if(cancelType == CANCEL_FOUR){
+    			content =  OrderSkillConstants.IM_MSG_CONTENT_CANCEL_CUST_FINISH ;
+    		}
+    	}else{
+    		remarkName = OrderSkillConstants.MSG_CONTENT_C ;
+    		if(cancelType == CANCEL_ONE){
+    			content =  OrderSkillConstants.IM_MSG_CONTENT_CANCEL_DV_15MINUTE_TIMEOUT ;
+    		}else if (cancelType == CANCEL_TWO){
+    			content =  OrderSkillConstants.IM_MSG_CONTENT_CANCEL_DV_5MINUTE_START_TIMEOUT ;
+    		}else if (cancelType == CANCEL_THREE){
+    			content =  OrderSkillConstants.IM_MSG_CONTENT_CANCEL_DV_5MINUTE_CONFIRM_TIMEOUT ;
+    		}else if(cancelType == CANCEL_FOUR){
+    			content =  OrderSkillConstants.IM_MSG_CONTENT_CANCEL_CUST_FINISH ;
+    		}
+    	}
+    	if(StringUtils.isNotBlank(content)){
+    		content = OrderSkillConstants.IM_MSG_CONTENT_DEFAULT ;
+    	}
+    	//下单成功后推送IM消息
+		RongYunUtil.sendOrderMessage(customerId, content,remarkName);
+    }
+    
     
     /**
      * 订单结束，大V金额冻结
@@ -223,15 +299,77 @@ public class OrderUpdateJob {
      */
     public   void   freezeToService(List<TaskOrder>  orderList){
     	if(!CollectionUtils.isEmpty(orderList)){
-    		for (TaskOrder order : orderList) {
-    			Long  serviceId =  order.getServiceId();
-    			BigDecimal   payAmount =  order.getOrderAmounts();
-    			//大V冻结
-    			iAccountOrderService.inAccount(order.getServiceId(), order.getOrderAmounts(), TransferTypeEnum.FROZEN, AccountBusinessTypeEnum.FroZen);
-    			LOGGER.info("主播用户ID："+serviceId +"订单超时，系统自动退款给用户"+payAmount);
-    		}
+    		try {
+				for (TaskOrder order : orderList) {
+					Long  serviceId =  order.getServiceId();
+					BigDecimal   payAmount =  order.getOrderAmounts();
+					//大V冻结
+					inAccount(order.getServiceId(), order.getOrderAmounts(), TransferTypeEnum.FROZEN, AccountBusinessTypeEnum.FroZen);
+					LOGGER.info("主播用户ID："+serviceId +"订单超时，系统自动退款给用户"+payAmount);
+				}
+			} catch (Exception e) {
+				LOGGER.error("大V账户冻结发生异常，异常信息",e);
+			}
     	}
     }
+    
+    
+    
+	@Autowired
+	private AccountMapper accountMapper;
+	@Autowired
+	private TradeDetailMapper tradeDetailMapper;
+
+	private final static String froZenTime = ResourceBundle.getBundle("thirdconfig").getString("froZenTime");
+    
+    public void inAccount(Long customerId, BigDecimal amount, TransferTypeEnum transferType,
+			AccountBusinessTypeEnum accountBusinessType) {
+
+		// 入账
+		accountMapper.inAccount(customerId, amount, transferType.getType());
+		// 记录流水
+		TradeDetail tradeDetail = new TradeDetail();
+		tradeDetail.setTradeId(UUIDUtils.getId());
+		tradeDetail.setCustomerId(customerId);
+		tradeDetail.setCreateTime(new Date());
+		tradeDetail.setType(accountBusinessType.getType());
+		tradeDetail.setInPrice(amount);
+		tradeDetailMapper.insertSelective(tradeDetail);
+
+		if (transferType == TransferTypeEnum.FROZEN) {
+			String userFrozenkey = RedisKeyConstants.ACCOUNT_USERFROZEN_USER + customerId;
+			String steamFrozenKey = RedisKeyConstants.ACCOUNT_USERFROZEN_USER + tradeDetail.getTradeId();
+			String frozenTimeKey = RedisKeyConstants.ACCOUNT_USERFROZEN_Time + tradeDetail.getTradeId();
+			String userFrozenValue = JedisUtil.get(userFrozenkey);
+			if (StringUtils.isNotBlank(userFrozenValue)) {
+				userFrozenValue = userFrozenValue + "," + tradeDetail.getTradeId();
+			} else {
+				JedisUtil.set(userFrozenkey, tradeDetail.getTradeId() + "");
+
+			}
+			JedisUtil.set(steamFrozenKey, amount + "");
+			// 缓存24小时
+			JedisUtil.set(frozenTimeKey, "1", Integer.parseInt(froZenTime));
+
+		}
+
+	}
+    
+    
+	public void outAccount(Long customerId, BigDecimal amount, TransferTypeEnum transferType,
+			AccountBusinessTypeEnum accountBusinessType) {
+		// 入账
+		accountMapper.outAccount(customerId, amount, transferType.getType());
+		// 记录流水
+		TradeDetail tradeDetail = new TradeDetail();
+		tradeDetail.setTradeId(UUIDUtils.getId());
+		tradeDetail.setCustomerId(customerId);
+		tradeDetail.setCreateTime(new Date());
+		tradeDetail.setType(accountBusinessType.getType());
+		tradeDetail.setOutPrice(amount);
+		tradeDetailMapper.insertSelective(tradeDetail);
+
+	}
     
     
     

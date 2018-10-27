@@ -76,15 +76,17 @@
 				<div class="form-group">
 					<label class="col-sm-3 control-label">订单状态<font color="red">&nbsp;*</font></label>
 					<div class="col-sm-6">
-						<input type="text" id="orderStatus" class="form-control"  name="orderStatus" readonly="readonly" value="${entity.orderStatus}">
+						<input type="text" id="orderStatus" class="form-control"  name="orderStatus" readonly="readonly" value="${orderStatus}">
 					</div>
 				</div>
+				<c:if test="${isShow==true}">
 				<div class="form-group">
 					<label class="col-sm-3 control-label">取消原因<font color="red">&nbsp;*</font></label>
 					<div class="col-sm-6">
 						<input type="text" id="remarkReason" class="form-control"  name="remarkReason" readonly="readonly" value="${entity.remarkReason}">
 					</div>
 				</div>
+				</c:if>
 
 			</form>
 		</div>

@@ -21,6 +21,7 @@ import com.honglu.quickcall.common.api.exception.BizException;
 import com.honglu.quickcall.common.api.exception.RemoteException;
 import com.honglu.quickcall.common.api.exchange.CommonResponse;
 import com.honglu.quickcall.common.api.exchange.ResultUtils;
+import com.honglu.quickcall.common.api.util.CommonUtil;
 import com.honglu.quickcall.common.api.util.DateUtils;
 import com.honglu.quickcall.common.api.util.JedisUtil;
 import com.honglu.quickcall.common.api.util.RedisKeyConstants;
@@ -62,6 +63,7 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 
 	// 默认图片
 	private static String defaultImg = ResourceBundle.getBundle("thirdconfig").getString("defaultImg");
+	private static String defaultWoManImg = ResourceBundle.getBundle("thirdconfig").getString("defaultWoManImg");
 	@Autowired
 	private CustomerMapper customerMapper;
 
@@ -210,22 +212,36 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 	public CommonResponse setHeardUrl(SetHeardUrlRequest params) {
 		// TODO Auto-generated method stub
 		String rongyunToken = null;
-		if (StringUtils.isNotBlank(params.getNickName()) && params.getCustomerId() != null
-				&& StringUtils.isNotBlank(params.getHeadPortraitUrl())) {
+		String img = params.getHeadPortraitUrl();
+		if (StringUtils.isNotBlank(params.getNickName()) && params.getCustomerId() != null) {
 
-			if (params.getNickName().length() > 24) {
-				throw new RemoteException(UserBizReturnCode.paramError, "您的昵称超出长度！");
+			if (StringUtils.isBlank(img)) { // 手机号注册没有传头像，使用默认头像
+				if (params.getSex() == 0) {// 性別是女
+					img = defaultWoManImg;
+				} else {// 性別是男
+					img = defaultImg;
+				}
 			}
-
-			// 中文、英文、数字、下划线校验 4-24位
-			Integer check = 2;
-			// 敏感词
-			Integer checkDetail = 1;
-			Integer checkResult = checkNickName(params.getNickName());
-			if (check.equals(checkResult)) {
+			// 字符格式校验
+			Boolean formatCheckResult = CommonUtil.checkNickName(params.getNickName());
+			if (!formatCheckResult) {
 				throw new RemoteException(UserBizReturnCode.paramError, "用户名不符合规则");
-			} else if (checkDetail.equals(checkResult)) {
-				throw new RemoteException(UserBizReturnCode.nickNameSensitive, "您输入的昵称包含敏感字，请重新输入！");
+			}
+			// 敏感词校验
+			List<SensitivityWord> sensitivityList = sensitivityWordMapper.querySensitiveName();
+			if (Detect.notEmpty(sensitivityList)) {
+				for (SensitivityWord obj : sensitivityList) {
+					if (params.getNickName().contains(obj.getContent())) {
+						logger.info("昵称包含敏感词！");
+						throw new RemoteException(UserBizReturnCode.nickNameSensitive, "您输入的昵称包含敏感字，请重新输入！");
+					}
+				}
+			}
+			// 昵称重复校验
+			int ifRepeat = customerMapper.selectCountByNickNameAndId(params.getNickName(),
+					params.getCustomerId().toString());
+			if (ifRepeat > 0) {
+				throw new RemoteException(UserBizReturnCode.paramError, "您输入的昵称已存在，请重新输入！");
 			}
 
 			/*
@@ -236,7 +252,7 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 			 */
 			// 刷新融云用户信息
 			CodeSuccessReslut reslut = RongYunUtil.refreshUser(String.valueOf(params.getCustomerId()),
-					params.getNickName(), params.getHeadPortraitUrl());
+					params.getNickName(), img);
 			// 刷新失败
 			if (reslut.getCode() != 200) {
 				logger.error("刷新融云用户信息失败，用户id为：" + String.valueOf(params.getCustomerId()) + "失败原因为："
@@ -247,8 +263,7 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 
 		}
 
-		int row = customerMapper.customerSetHeardUrl(params.getTel(), params.getHeadPortraitUrl(), params.getNickName(),
-				params.getSex());
+		int row = customerMapper.customerSetHeardUrl(params.getTel(), img, params.getNickName(), params.getSex());
 		if (row <= 0) {
 			throw new BizException(BizCode.ParamError, "设置昵称头像失败");
 		}

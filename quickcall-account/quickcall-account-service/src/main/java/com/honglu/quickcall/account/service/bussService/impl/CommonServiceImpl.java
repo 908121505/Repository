@@ -298,4 +298,18 @@ public class CommonServiceImpl implements CommonService {
 		return retList;
 	}
 
+
+
+	@Override
+	public void finishUpdateOrder(Long orderId, Integer orderStatus, Date cancelTime) {
+		Order record = new Order();
+		record.setOrderStatus(orderStatus);
+		record.setOrderId(orderId);
+		record.setModifyTime(new Date());
+		record.setAppayEndTime(cancelTime);
+		//修改订单状态为：已支付
+		orderMapper.updateByPrimaryKeySelective(record);
+		
+	}
+
 }

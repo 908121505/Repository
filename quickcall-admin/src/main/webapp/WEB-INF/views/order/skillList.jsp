@@ -24,8 +24,8 @@
                         <div class="input-group-addon">状态</div>
                         <select class="form-control" id="skillStatusQuery">
                             <option value="">--请选择--</option>
-                            <option value="0">可用</option>
-                            <option value="1">不可用</option>
+                            <option value="0">不可用</option>
+                            <option value="1">可用</option>
                         </select>
                     </div>
                 </div>
@@ -248,10 +248,10 @@
                             }else */
                             if (data == 0) {
                                 skillStatus = 0;
-                                return "<font color='red'>可用</font>";
+                                return "<font color='red'>不可用</font>";
                             } else if (data == 1) {
                                 skillStatus = 1;
-                                return "<font color='red'>不可用</font>";
+                                return "<font color='red'>可用</font>";
                             }
                         }
                     },
@@ -352,9 +352,9 @@
                         detail = "<a href='#' onclick='addAndUpdateRow(\"" + row.id + "\")' data-toggle='modal' class='padding-right-small label label-success'><i class='glyphicon glyphicon-edit'></i>详情</a>";
                         del = "<a href='#' onclick='deleteRow(\"" + row.id + "\")' data-toggle='modal' class='padding-right-small label label-success'><i class='glyphicon glyphicon-edit'></i>删除</a>";
                         if (skillStatus == 0) {
-                            status = "<a href='#' onclick='updateDownStatus(\"" + row.id + "\")' data-toggle='modal' class='padding-right-small label label-success'><i class='glyphicon glyphicon-edit'></i>下线</a>";
+                            status = "<a href='#' onclick='updateDownStatus(\"" + row.id + "\")' data-toggle='modal' class='padding-right-small label label-success'><i class='glyphicon glyphicon-edit'></i>上线</a>";
                         } else if (skillStatus == 1) {
-                            status = "<a href='#' onclick='updateUpStatus(\"" + row.id + "\")' data-toggle='modal' class='padding-right-small label label-success'><i class='glyphicon glyphicon-edit'></i>上线</a>";
+                            status = "<a href='#' onclick='updateUpStatus(\"" + row.id + "\")' data-toggle='modal' class='padding-right-small label label-success'><i class='glyphicon glyphicon-edit'></i>下线</a>";
                         }
                         return status+"&nbsp;"+detail + "&nbsp;" + del;
                     }

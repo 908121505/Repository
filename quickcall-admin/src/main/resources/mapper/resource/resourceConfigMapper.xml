@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ResourceConfigMapper">
+
+	<resultMap type="com.calf.module.resource.entity.ResourceConfig" id="resourceConfigMap">
+		<id property="resourceConfigId" column="resource_config_id" javaType="java.lang.Integer"></id>
+		<result property="configNum" column="config_num" javaType="java.lang.Integer"></result>
+		<result property="strategy" column="strategy" javaType="java.lang.Integer"></result>
+		<result property="resourcePoolId" column="resource_pool_id" javaType="java.lang.Long"></result>
+		<result property="createTime" column="create_time" javaType="java.lang.String"></result>
+		<result property="modifyTime" column="modify_time" javaType="java.lang.String"></result>
+		<result property="createMan" column="create_man" javaType="java.lang.String"></result>
+		<result property="modifyMan" column="modify_man" javaType="java.lang.String"></result>
+		<result property="remark" column="remark" javaType="java.lang.String"></result>
+	</resultMap>
+	
+	<resultMap type="com.calf.module.resource.vo.ResourceConfigVO" id="resourceConfigMapVO">
+		<id property="resourceConfigId" column="resource_config_id" javaType="java.lang.Integer"></id>
+		<result property="configNum" column="config_num" javaType="java.lang.Integer"></result>
+		<result property="strategy" column="strategy" javaType="java.lang.Integer"></result>
+		<result property="resourcePoolId" column="resource_pool_id" javaType="java.lang.Long"></result>
+		<result property="resourceName" column="resource_name" javaType="java.lang.String"></result>
+		<result property="createTime" column="create_time" javaType="java.lang.String"></result>
+		<result property="modifyTime" column="modify_time" javaType="java.lang.String"></result>
+		<result property="createMan" column="create_man" javaType="java.lang.String"></result>
+		<result property="modifyMan" column="modify_man" javaType="java.lang.String"></result>
+		<result property="remark" column="remark" javaType="java.lang.String"></result>
+	</resultMap>
+	
+	<resultMap type="com.calf.module.resource.entity.ResourceConfigExCust" id="resourceConfigExCustMap">
+		<id property="id" column="id" javaType="java.lang.Integer"></id>
+		<result property="resourceConfigId" column="resource_config_id" javaType="java.lang.Long"></result>
+		<result property="appId" column="app_id" javaType="java.lang.Long"></result>
+		<result property="status" column="status" javaType="java.lang.Integer"></result>
+		<result property="createTime" column="create_time" javaType="java.lang.String"></result>
+		<result property="modifyTime" column="modify_time" javaType="java.lang.String"></result>
+		<result property="createMan" column="create_man" javaType="java.lang.String"></result>
+		<result property="modifyMan" column="modify_man" javaType="java.lang.String"></result>
+		<result property="remark" column="remark" javaType="java.lang.String"></result>
+	</resultMap>
+
+	<!-- 通用查询结果列-->
+	<sql id="Base_Column_List">
+resource_config_id,	config_num,	strategy,	resource_pool_id,	create_time,	modify_time,	create_man,	modify_man,	remark
+	</sql>
+	
+	<select id="resourceConfigExCustList" resultMap="resourceConfigExCustMap">
+		select *
+	 	FROM resource_config_ex_cust 
+	 	where resource_config_id = #{resourceConfigId}
+	</select>
+	
+	<select id="queryResourceConfigList" resultMap="resourceConfigMapVO">
+		select
+		rc.resource_config_id,rc.config_num,rc.strategy,rc.resource_pool_id,rp.resource_name 
+	 	FROM resource_config rc
+	 	left join resource_pool rp on rc.resource_pool_id = rp.id 
+	 	limit ${iDisplayStart},${iDisplayLength}
+	</select>
+	
+	<select id="queryResourceConfigById" resultMap="resourceConfigMapVO">
+		select
+		<include refid="Base_Column_List" />
+	 	FROM resource_config
+	 	where resource_config_id = #{resourceConfigId}
+	</select>
+	
+	<select id="queryResourceConfigSkillById" resultType="java.lang.String">
+		select
+		 GROUP_CONCAT(skill_item_id) as skillItemId
+	 	FROM resource_config_skill
+	 	where resource_config_id = #{resourceConfigId} and status = 1
+	</select>
+	<!-- resultType="com.calf.module.resource.entity.ResourceConfigExCust"com.calf.module.resource.entity.ResourceConfigSkill> -->
+	<select id="queryResourceConfigExCustById" resultType="java.lang.String">
+		select
+		 app_id as appId
+	 	FROM resource_config_ex_cust
+	 	where resource_config_id = #{resourceConfigId} and status = 1
+	</select>
+	
+	<select id="queryCount" resultType="java.lang.Integer">
+		select count(*) 
+	 	FROM resource_config
+	</select>
+	
+	
+	<select id="queryTotalCus" resultType="java.lang.Integer">
+		select count(*) from customer 
+		where app_id in (select app_id from resource_pool_customer where resource_pool_id = #{resourcePoolId}) and 
+		app_id not in (select app_id from resource_config_ex_cust where resource_config_id = #{resourceConfigId}) 
+	</select>
+	
+	<select id="queryReceiptCus" resultType="java.lang.Integer">
+		select count(*) from customer cus
+		inner join orders ord  on cus.customer_id = ord.customer_id 
+		where cus.app_id in (select app_id from resource_pool_customer where resource_pool_id = #{resourcePoolId}) and 
+		cus.app_id not in (select app_id from resource_config_ex_cust where resource_config_id = #{resourceConfigId}) and
+		(ord.order_status not in (10,18,26,28) or ord.skill_type = 2)
+	</select>
+	
+	<select id="querySkillItemList" resultType="java.lang.String">
+		select GROUP_CONCAT(si.skill_item_name) from resource_config_skill rcs 
+		left join skill_item si on si.id = rcs.skill_item_id 
+		where rcs.resource_config_id = #{resourceConfigId}
+	</select>
+	
+	<!-- 查询（根据主键ID查询） -->
+	<select id="getEntityById" resultMap="resourceConfigMap" parameterType="java.lang.Integer">
+		 SELECT
+		 <include refid="Base_Column_List" />
+		 FROM resource_config
+		 WHERE resource_config_id = #{resourceConfigId}
+	</select>
+
+	<!-- 查询技能 -->
+	<select id="querySkillItemSelect" resultType="com.calf.module.order.entity.SkillItem" >
+		 SELECT
+		 id as id,skill_item_name as skillItemName
+		 FROM skill_item
+	</select>
+	<!-- 查询资源池 -->
+	<select id="queryResourcePoolSelect" resultType="com.calf.module.resource.entity.ResourcePool" >
+		 SELECT
+		 id as id,resource_name as resourceName
+		 FROM resource_pool 
+		 where status = 1
+	</select>
+
+	<!--删除：根据主键ID删除-->
+	<delete id="deleteEntity" parameterType="java.lang.Integer">
+		 DELETE FROM resource_config
+		 WHERE resource_config_id = #{resourceConfigId}
+	</delete>
+
+	<!-- 添加 -->
+	<insert id="saveEntity" parameterType="com.calf.module.resource.entity.ResourceConfig">
+		 INSERT INTO resource_config
+ 		(resource_config_id,config_num,strategy,resource_pool_id,create_time,modify_time,create_man,modify_man,remark) 
+		 VALUES 
+ 		(#{resourceConfigId},#{configNum},#{strategy},#{resourcePoolId},#{createTime},#{modifyTime},#{createMan},#{modifyMan},#{remark}) 
+	</insert>
+
+	<!-- 修 改-->
+	<update id="updateEntity" >
+		 UPDATE resource_config
+ 		 <set> 
+			<if test="configNum != null">
+				 config_num = #{configNum},
+			</if>
+			<if test="strategy != null">
+				 strategy = #{strategy},
+			</if>
+			<if test="resourcePoolId != null">
+				 resource_pool_id = #{resourcePoolId},
+			</if>
+			<if test="createTime != null">
+				 create_time = #{createTime},
+			</if>
+			<if test="modifyTime != null">
+				 modify_time = #{modifyTime},
+			</if>
+			<if test="createMan != null">
+				 create_man = #{createMan},
+			</if>
+			<if test="modifyMan != null">
+				 modify_man = #{modifyMan},
+			</if>
+			<if test="remark != null">
+				 remark = #{remark},
+			</if>
+
+ 		 </set>
+		 WHERE resource_config_id = #{resourceConfigId}
+	</update>
+	
+	<delete id="deleteResourceConfigSkill">
+		delete from resource_config_skill 
+		where resource_config_id = #{arg0}
+	</delete>
+	<delete id="deleteResourceConfigExCust">
+		delete from resource_config_ex_cust 
+		where resource_config_id = #{arg0}
+	</delete>
+	<insert id="insertBatchResourceConfigSkill" parameterType="list">
+		insert into resource_config_skill (skill_item_id,resource_config_id) values
+		<foreach collection="list" item="test" separator=",">
+        (#{test.skillItemId},#{test.resourceConfigId})
+    	</foreach>
+	</insert>
+	<insert id="insertBatchResourceConfigExCust" parameterType="list">
+		insert into resource_config_ex_cust (app_id,resource_config_id) values
+		<foreach collection="list" item="test" separator=",">
+		(#{test.appId},#{test.resourceConfigId})
+		</foreach>
+	</insert>
+
+</mapper>

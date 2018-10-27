@@ -2,6 +2,7 @@ package com.honglu.quickcall.user.service.service.impl;
 
 import java.util.List;
 
+import com.honglu.quickcall.common.api.util.CommonUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,7 +48,6 @@ import com.honglu.quickcall.user.service.dao.InterestMapper;
 import com.honglu.quickcall.user.service.dao.SensitivityWordMapper;
 import com.honglu.quickcall.user.service.service.CustomerRedisManagement;
 import com.honglu.quickcall.user.service.service.EditProfileService;
-import com.honglu.quickcall.user.service.util.CommonUtil;
 import com.honglu.quickcall.user.service.util.CountAge;
 import com.honglu.quickcall.user.service.util.JsonParseUtil;
 
@@ -90,6 +90,11 @@ public class EditProfileServiceImpl implements EditProfileService {
 		}
 
 		Customer customer = customerMapper.selectByPrimaryKey(params.getCustomerId());
+		if (customer == null) {
+			commonResponse.setCode(UserBizReturnCode.paramError);
+			commonResponse.setMessage("参数错误，用户数据不存在");
+			return commonResponse;
+		}
 		String newNickname = params.getNickName();
 		customer.setNickName(newNickname);
 
@@ -148,6 +153,12 @@ public class EditProfileServiceImpl implements EditProfileService {
 		}
 
 		Customer customer = customerMapper.selectByPrimaryKey(params.getCustomerId());
+		if (customer == null) {
+			commonResponse.setCode(UserBizReturnCode.paramError);
+			commonResponse.setMessage("参数错误，用户数据不存在");
+			return commonResponse;
+		}
+
 		String newSign = params.getSignName();
 		customer.setSignName(newSign);
 
@@ -190,6 +201,11 @@ public class EditProfileServiceImpl implements EditProfileService {
 		}
 
 		Customer customer = customerMapper.selectByPrimaryKey(params.getCustomerId());
+		if (customer == null) {
+			commonResponse.setCode(UserBizReturnCode.paramError);
+			commonResponse.setMessage("参数错误，用户数据不存在");
+			return commonResponse;
+		}
 		String newStarSign = params.getStarSign();
 		customer.setStarSign(newStarSign);
 
@@ -221,23 +237,25 @@ public class EditProfileServiceImpl implements EditProfileService {
 		CustomerInterest customerInterest = new CustomerInterest();
 		customerInterest.setCustomerId(params.getCustomerId());
 
-		Customer customer = customerRedisManagement.getCustomer(params.getCustomerId());
+		Customer customer = customerMapper.selectByPrimaryKey(params.getCustomerId());
+		if (customer == null) {
+			commonResponse.setCode(UserBizReturnCode.paramError);
+			commonResponse.setMessage("参数错误，用户数据不存在");
+			return commonResponse;
+		}
 		String interests = params.getInterestId();
 		String[] interest = interests.split(",");
-		if (null != customer) {
-			// 更新customer_interest表
-			customerInterestMapper.deleteByCustomerId(params.getCustomerId());
+		// 更新customer_interest表
+		customerInterestMapper.deleteByCustomerId(params.getCustomerId());
 
-			for (String str : interest) {
-				customerInterest.setInterestId(Integer.parseInt(str));
-				customerInterestMapper.insertSelective(customerInterest);
-			}
-			commonResponse.setCode(UserBizReturnCode.Success);
-			commonResponse.setMessage(UserBizReturnCode.Success.desc());
-			return commonResponse;
-		} else {
-			throw new BizException(UserBizReturnCode.paramError, "参数错误，customer不存在，修改失败");
+		for (String str : interest) {
+			customerInterest.setInterestId(Integer.parseInt(str));
+			customerInterestMapper.insertSelective(customerInterest);
 		}
+		commonResponse.setCode(UserBizReturnCode.Success);
+		commonResponse.setMessage(UserBizReturnCode.Success.desc());
+		return commonResponse;
+
 	}
 
 	@Override
@@ -431,15 +449,19 @@ public class EditProfileServiceImpl implements EditProfileService {
 		if (params.getCustomerId() == null) {
 			throw new BizException(UserBizReturnCode.paramError, "customerId不能为空");
 		}
-
-		// 取账号信息并存redis
-		Customer customer = customerRedisManagement.getCustomer(params.getCustomerId());
-
-		Integer newGender = params.getGender();
 		// 如果newGender 为空或者不等于 0、1 则返回错误
+		Integer newGender = params.getGender();
 		if (null != newGender && newGender != 0 && newGender != 1) {
 			throw new RemoteException(UserBizReturnCode.paramError, "性别参数错误，修改失败");
 		}
+
+		Customer customer = customerMapper.selectByPrimaryKey(params.getCustomerId());
+		if (customer == null) {
+			commonResponse.setCode(UserBizReturnCode.paramError);
+			commonResponse.setMessage("参数错误，用户数据不存在");
+			return commonResponse;
+		}
+
 		customer.setSex(newGender);
 		// 更新性别
 		int result = customerMapper.updateByPrimaryKeySelective(customer);
@@ -467,7 +489,13 @@ public class EditProfileServiceImpl implements EditProfileService {
 			throw new BizException(UserBizReturnCode.paramError, "birthday不能为空");
 		}
 
-		Customer customer = customerRedisManagement.getCustomer(params.getCustomerId());
+		Customer customer = customerMapper.selectByPrimaryKey(params.getCustomerId());
+		if (customer == null) {
+			commonResponse.setCode(UserBizReturnCode.paramError);
+			commonResponse.setMessage("参数错误，用户数据不存在");
+			return commonResponse;
+		}
+
 		customer.setBirthday(params.getBirthday());
 		// 更新生日
 		int result = customerMapper.updateByPrimaryKeySelective(customer);

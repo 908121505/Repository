@@ -33,11 +33,11 @@
     where id = #{id,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="com.calf.module.appconfig.entity.Occupation" >
-    insert into occupation (id, name, occu_describe, 
+    insert into occupation ( name, occu_describe,
       type, create_time, modify_time, 
       create_man, modify_man, remark
       )
-    values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{occuDescribe,jdbcType=VARCHAR}, 
+    values (#{name,jdbcType=VARCHAR}, #{occuDescribe,jdbcType=VARCHAR},
       #{type,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP}, #{modifyTime,jdbcType=TIMESTAMP}, 
       #{createMan,jdbcType=VARCHAR}, #{modifyMan,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}
       )

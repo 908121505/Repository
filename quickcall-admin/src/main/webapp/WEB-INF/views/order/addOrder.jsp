@@ -19,22 +19,22 @@
 			<form class="form-horizontal" method="post" id="skillForm" name="skillForm" role="form"
 				action="order/saveInsert.htm">
 
-				<div class="form-group">
+				<%--<div class="form-group">
 					<label class="col-sm-3 control-label">订单ID<font color="red">&nbsp;*</font></label>
 					<div class="col-sm-6">
 						<input type="text" id="orderId" class="form-control"  name="orderId">
 					</div>
-				</div>
+				</div>--%>
 				<div class="form-group">
 					<label class="col-sm-3 control-label">订单开始时间<font color="red">&nbsp;*</font></label>
 					<div class="col-sm-6">
-						<input type="text" id="startTime" class="form-control"  name="startTime">
+						<input class="form-control" name="startTime" type="text" id="startTime" onfocus="WdatePicker({skin:'default',dateFmt:'yyyy-MM-dd HH:mm:ss',minDate:'1950-01-01'})">
 					</div>
 				</div>
 				<div class="form-group">
 					<label class="col-sm-3 control-label">订单结束时间<font color="red">&nbsp;*</font></label>
 					<div class="col-sm-6">
-						<input type="text" id="endTime" class="form-control"  name="endTime">
+						<input class="form-control" name="endTime" type="text" id="endTime" onfocus="WdatePicker({skin:'default',dateFmt:'yyyy-MM-dd HH:mm:ss',minDate:'1950-01-01'})">
 					</div>
 				</div>
 				<div class="form-group">
@@ -52,13 +52,32 @@
 				<div class="form-group">
 					<label class="col-sm-3 control-label">服务类型<font color="red">&nbsp;*</font></label>
 					<div class="col-sm-6">
-						<input type="text" id="serviceType" class="form-control"  name="serviceType">
+						<select class="form-control" name="serviceType" id="serviceType">
+							<option value="-1">--请选择--</option>
+							<c:forEach items="${services}" var ="skillItem" varStatus="status">
+								<option value="${skillItem.id}">${skillItem.skillItemName}</option>
+							</c:forEach>
+						</select>
+						<%--<input type="text" id="serviceType" class="form-control"  name="serviceType">--%>
 					</div>
 				</div>
 				<div class="form-group">
 					<label class="col-sm-3 control-label">折扣类型<font color="red">&nbsp;*</font></label>
 					<div class="col-sm-6">
-						<input type="text" id="discountType" class="form-control"  name="discountType">
+						<select class="form-control" name="discountType" id="discountType">
+							<option value="-1">--请选择--</option>
+							<option value="10">无折扣</option>
+							<option value="1">10%</option>
+							<option value="2">20%</option>
+							<option value="3">30%</option>
+							<option value="4">40%</option>
+							<option value="5">50%</option>
+							<option value="6">60%</option>
+							<option value="7">70%</option>
+							<option value="8">80%</option>
+							<option value="9">90%</option>
+						</select>
+						<%--<input type="text" id="discountType" class="form-control"  name="discountType">--%>
 					</div>
 				</div>
 				<div class="form-group">
@@ -76,7 +95,13 @@
 				<div class="form-group">
 					<label class="col-sm-3 control-label">订单状态<font color="red">&nbsp;*</font></label>
 					<div class="col-sm-6">
-						<input type="text" id="orderStatus" class="form-control"  name="orderStatus">
+						<select class="form-control" name="orderStatus" id="orderStatus">
+							<option value="-1">--请选择--</option>
+							<c:forEach items="${smallStatus}" var ="smallOrderStatusVO" varStatus="status">
+								<option value="${smallOrderStatusVO.value}">${smallOrderStatusVO.desc}</option>
+							</c:forEach>
+						</select>
+						<%--<input type="text" id="orderStatus" class="form-control"  name="orderStatus">--%>
 					</div>
 				</div>
 			</form>

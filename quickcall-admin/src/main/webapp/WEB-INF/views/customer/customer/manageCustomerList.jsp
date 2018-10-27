@@ -43,7 +43,7 @@
 					<label class="col-sm-4 control-label">用户类型<font color="red">&nbsp;*</font></label>
 					<div class="col-sm-8">
 						<input type="text" id="type" class="form-control"
-							   name="type" value="${entity.type == 0?'普通用户':'声优用户'}" readonly="readonly" disabled="disabled">
+							   name="type" value="${entity.vStatus == 2?'声优用户':'普通用户'}" readonly="readonly" disabled="disabled">
 					</div>
 				</div>
 				<%-- 4=已封禁-无法接单,6=已封禁-无法接指定技能,8=已封禁-账户登录权限,10=已封禁-设备登录权限--%>
