@@ -352,9 +352,9 @@
                         detail = "<a href='#' onclick='addAndUpdateRow(\"" + row.id + "\")' data-toggle='modal' class='padding-right-small label label-success'><i class='glyphicon glyphicon-edit'></i>详情</a>";
                         del = "<a href='#' onclick='deleteRow(\"" + row.id + "\")' data-toggle='modal' class='padding-right-small label label-success'><i class='glyphicon glyphicon-edit'></i>删除</a>";
                         if (skillStatus == 0) {
-                            status = "<a href='#' onclick='updateDownStatus(\"" + row.id + "\")' data-toggle='modal' class='padding-right-small label label-success'><i class='glyphicon glyphicon-edit'></i>下线</a>";
+                            status = "<a href='#' onclick='updateDownStatus(\"" + row.id + "\")' data-toggle='modal' class='padding-right-small label label-success'><i class='glyphicon glyphicon-edit'></i>上线</a>";
                         } else if (skillStatus == 1) {
-                            status = "<a href='#' onclick='updateUpStatus(\"" + row.id + "\")' data-toggle='modal' class='padding-right-small label label-success'><i class='glyphicon glyphicon-edit'></i>上线</a>";
+                            status = "<a href='#' onclick='updateUpStatus(\"" + row.id + "\")' data-toggle='modal' class='padding-right-small label label-success'><i class='glyphicon glyphicon-edit'></i>下线</a>";
                         }
                         return status+"&nbsp;"+detail + "&nbsp;" + del;
                     }

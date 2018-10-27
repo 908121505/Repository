@@ -28,6 +28,16 @@ public class CustomerVo {
 
     private String closureDate; //封禁时间
 
+    private Integer vStatus; //（2：大V 用户,非2普通用户// ）
+
+    public Integer getvStatus() {
+        return vStatus;
+    }
+
+    public void setvStatus(Integer vStatus) {
+        this.vStatus = vStatus;
+    }
+
     public String getClosureDate() {
         return closureDate;
     }

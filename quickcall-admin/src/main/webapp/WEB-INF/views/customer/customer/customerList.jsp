@@ -30,7 +30,7 @@
                         <select class="form-control" id="customTypeQuery">
                             <option value="">--请选择--</option>
                             <option value="0">普通用户</option>
-                            <option value="1">声优用户</option>
+                            <option value="2">声优用户</option>
                         </select>
                     </div>
                 </div>
@@ -289,7 +289,7 @@
                 ],
                 fnServerParams: function (aoData) {  //查询条件
                     aoData.push({"name": "nickName", "value": $("#nameQuery").val().replace(new RegExp(" ", "g"), "")});
-                    aoData.push({"name": "type", "value": $("#customTypeQuery").val()});
+                    aoData.push({"name": "vStatus", "value": $("#customTypeQuery").val()});
                     aoData.push({"name": "appId", "value": $("#nameQuery").val().replace(new RegExp(" ", "g"), "")});
                     var status = $('#customerStatusQuery').val();
                     if(status == 1){
