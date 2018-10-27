@@ -148,9 +148,10 @@ public class OrderUpdateJob {
     }
     
     
-    @Scheduled(cron = "30 0/30 * * * ?")
+//    @Scheduled(cron = "30 0/30 * * * ?")
+    @Scheduled(cron = "30 0/5 * * * ?")
     public void updateOrderStatusAfter12Hour() {
-    	LOGGER.info("=============修改订单状态自动任务开始=================");
+    	LOGGER.info(">>>>>>>>>>>>>>>>>>12小时超job开始开始<<<<<<<<<<<<<<<<<<<<<");
     	try {
     		Date  currTime = new Date();
     		Calendar  cal = Calendar.getInstance();
@@ -190,7 +191,7 @@ public class OrderUpdateJob {
     	} catch (Exception e) {
     		LOGGER.error("job执行发生异常，异常信息：", e);
     	}
-    	LOGGER.info("=============修改订单状态自动任务结束=================");
+    	LOGGER.info(">>>>>>>>>>>>>>>>>>12小时超job开始结束<<<<<<<<<<<<<<<<<<<<<");
     }
     
     
