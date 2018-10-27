@@ -26,7 +26,7 @@
   </select>
 
   <!-- 查询资源位配置启用技能 -->
-  <select id="selectEnableSkills" resultType="string">
+  <select id="selectResourceEnableSkills" resultType="string">
     select skill_item_id from resource_config_skill where resource_config_id = #{resourceConfigId} and status = 1
   </select>
 
@@ -36,8 +36,48 @@
   </select>
 
   <!-- 查询启用的大V + 技能排名列表 -->
-  <select id="selectEnabledBigvAndSkillRankData" resultType="com.honglu.quickcall.user.facade.entity.CustomerSkill">
-
+  <select id="selectEnabledBigvAndSkillRankData" resultType="com.honglu.quickcall.user.facade.entity.BigvSkillScore">
+    SELECT bss.customer_id as customerId,
+            bss.customer_skill_id as customerSkillId, bss.skill_item_id as skillItemId
+      ,(
+            SELECT count(o.order_id) FROM orders o
+            WHERE o.customer_skill_id = bss.customer_skill_id AND o.skill_type = 1 AND o.order_status IN (10, 18, 26, 28)
+        ) AS skillOrderd
+    FROM `bigv_skill_score` bss
+    INNER JOIN customer_skill cs ON cs.customer_skill_id = bss.customer_skill_id AND cs.switch_status = 1 AND cs.receive_status = 1
+        <include refid="SKILL_EXIST_CONDITON"/>
+    WHERE
+        bss.skill_item_id IN
+        <foreach collection="configSkills"  item="itemId"  open="("  close=")"  separator=","  >
+          #{itemId}
+        </foreach>
+    GROUP BY bss.customer_id
+    ORDER BY scoreTotal DESC
   </select>
 
+
+  <sql id="SKILL_EXIST_CONDITON">
+    <if test="weekIndex == 1" >
+      AND ( cs.monday = 0  or (cs.monday = 1  and  cs.end_time_str <![CDATA[  > ]]> #{cs.endTimeStr,jdbcType=VARCHAR}) )
+    </if>
+    <if test="weekIndex == 2" >
+      AND ( cs.tuesday = 0  or (cs.tuesday = 1  and  cs.end_time_str <![CDATA[  > ]]> #{cs.endTimeStr,jdbcType=VARCHAR}) )
+    </if>
+    <if test="weekIndex == 3" >
+      AND ( cs.wednesday = 0  or (cs.wednesday = 1  and  cs.end_time_str <![CDATA[  > ]]> #{cs.endTimeStr,jdbcType=VARCHAR}) )
+    </if>
+    <if test="weekIndex == 4" >
+      AND ( cs.thursday = 0  or (cs.thursday = 1  and  cs.end_time_str <![CDATA[  > ]]> #{cs.endTimeStr,jdbcType=VARCHAR}) )
+    </if>
+    <if test="weekIndex == 5" >
+      AND ( cs.friday = 0  or (cs.friday = 1  and  cs.end_time_str <![CDATA[  > ]]> #{cs.endTimeStr,jdbcType=VARCHAR}) )
+    </if>
+    <if test="weekIndex == 6" >
+      AND ( cs.saturday = 0  or (cs.saturday = 1  and  cs.end_time_str <![CDATA[  > ]]> #{cs.endTimeStr,jdbcType=VARCHAR}) )
+    </if>
+    <if test="weekIndex == 7" >
+      AND ( cs.sunday = 0  or (cs.sunday = 1  and  cs.end_time_str <![CDATA[  > ]]> #{cs.endTimeStr,jdbcType=VARCHAR}) )
+    </if>
+
+  </sql>
 </mapper>
