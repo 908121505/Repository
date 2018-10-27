@@ -83,10 +83,18 @@
                     aoColumnDefs: [{}],
                     aoColumns: [
                         {
+                            "data": "index",
+                            "sTitle": "序号",
+                            'sClass': "text-center",
+                            "mRender": function (data, type, full, meta) {
+                                return meta.row+1 + meta.settings._iDisplayStart;
+                            }
+                        },
+                        {
                             "data": "id",
                             "sTitle": "ID",
                             'sClass': "text-center",
-//                            "bVisible": false //此列不显示
+                            "bVisible": false //此列不显示
                         },
                         {
                             "data": "title",
