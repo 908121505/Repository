@@ -45,11 +45,11 @@
 					<div class="col-sm-10">
 						<label class="checkbox-inline">
 							<input type="radio" name="skillStatus" value="1" ${empty entity or entity.skillStatus=='1'?'checked':'' }>
-							不可用
+							可用
 						</label>
 						<label class="checkbox-inline">
 							<input type="radio" name="skillStatus" value="0" ${entity.skillStatus=='0'?'checked':'' }>
-							可用
+							不可用
 						</label>
 					</div>
 				</div>

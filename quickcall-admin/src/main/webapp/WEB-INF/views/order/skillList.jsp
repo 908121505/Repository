@@ -24,8 +24,8 @@
                         <div class="input-group-addon">状态</div>
                         <select class="form-control" id="skillStatusQuery">
                             <option value="">--请选择--</option>
-                            <option value="0">可用</option>
-                            <option value="1">不可用</option>
+                            <option value="0">不可用</option>
+                            <option value="1">可用</option>
                         </select>
                     </div>
                 </div>
@@ -248,10 +248,10 @@
                             }else */
                             if (data == 0) {
                                 skillStatus = 0;
-                                return "<font color='red'>可用</font>";
+                                return "<font color='red'>不可用</font>";
                             } else if (data == 1) {
                                 skillStatus = 1;
-                                return "<font color='red'>不可用</font>";
+                                return "<font color='red'>可用</font>";
                             }
                         }
                     },
