@@ -574,6 +574,10 @@ public class OrderServiceImpl implements IOrderService {
 			orderIMVO = customerSkillMapper.selectCustSkillItem(customerSkillId);
 			orderIMVO.setOrderStatus(order.getOrderStatus());
 			orderIMVO.setOrderId(order.getOrderId());
+			orderIMVO.setServicePrice(order.getServicePrice());
+			orderIMVO.setServiceUnit(order.getServiceUnit());
+			orderDetailForIMVO.setServiceId(order.getServiceId());
+			orderDetailForIMVO.setCustomerId(order.getCustomerId());
 			orderDetailForIMVO.setOrderIMVO(orderIMVO);
 			commonResponse.setData(orderDetailForIMVO);
 			return commonResponse ;
@@ -587,6 +591,8 @@ public class OrderServiceImpl implements IOrderService {
 		statusList.add(OrderSkillConstants.ORDER_STATUS_GOING_USER_ACCEPCT);//进行中
 		statusList.add(OrderSkillConstants.ORDER_STATUS_GOING_DAV_APPAY_FINISH);//进行中（大V发起完成服务）
 		List<Order>   gongIngOrderList = orderMapper.selectGongIngOrderListByCustomerId(serviceId, OrderSkillConstants.SKILL_TYPE_YES, statusList );
+		//不管大V是否在忙，都展示大V技能信息
+		orderDetailForIMVO.setSkillIMVO(customerSkillIMVO);
 		if(!CollectionUtils.isEmpty(gongIngOrderList)){
 			//用户存在进行中或者即将进行中订单，说明大V正忙
 			orderDetailForIMVO.setRetCode(OrderSkillConstants.IM_RETCODE_DV_BUSY);
