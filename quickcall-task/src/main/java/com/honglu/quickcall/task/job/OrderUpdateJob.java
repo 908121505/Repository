@@ -126,7 +126,7 @@ public class OrderUpdateJob {
 			
 			//叫醒自动转换为进行中状态
 			
-			
+			cal.setTime(currTime);
 			
 			//用户未接立即服务超时
 			queryStatus = OrderSkillConstants.ORDER_STATUS_GOING_WAITING_START;
