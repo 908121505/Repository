@@ -1,6 +1,33 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="SkillItem" >
+ <!-- private String id;
+
+  private String skillItemName;
+
+  private String skillDescribe;
+
+  private String imageUrl;
+
+  private Integer sort;
+
+  private Integer skillStatus;
+
+  private String remark;
+
+  private String lockIcon;
+
+  private String unlockIcon;
+
+  private String backColor;
+
+  private String fontColor;
+
+  private Integer skillType;
+
+  private List<BigDecimal> discounts;-->
+
+
   <resultMap id="BaseResultMap" type="com.calf.module.order.entity.SkillItem" >
     <id column="id" property="id" jdbcType="BIGINT" javaType="string" />
     <result column="skill_item_name" property="skillItemName" jdbcType="VARCHAR" />
@@ -8,8 +35,10 @@
     <result column="lock_icon" property="lockIcon" jdbcType="VARCHAR"/>
     <result column="unlock_icon" property="unlockIcon" jdbcType="VARCHAR"/>
     <result column="back_color" property="backColor" jdbcType="VARCHAR"/>
+    <result column="home_black_color" property="homeBlackColor" jdbcType="VARCHAR"/>
     <result column="sort" property="sort" jdbcType="SMALLINT" />
     <result column="skill_status" property="skillStatus" jdbcType="TINYINT" />
+    <result column="skill_type" property="skillType" jdbcType="TINYINT"/>
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
     <result column="create_man" property="createMan" jdbcType="VARCHAR" />
@@ -20,14 +49,18 @@
 
 
   <sql id="Base_Column_List" >
-    id, skill_item_name, skill_describe, lock_icon,unlock_icon,back_color,font_color,sort, skill_status, create_time,
+    id, skill_item_name, skill_describe, lock_icon,unlock_icon,back_color,home_black_color,font_color,sort, skill_status,skill_type,create_time,
     modify_time, create_man, modify_man, remark
   </sql>
+
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
     <include refid="Base_Column_List" />
     from skill_item
     where id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="selectAllSkillItem" resultType="map">
+  	select id as skillItemId,skill_item_name as skillItemName from skill_item 
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
     delete from skill_item
@@ -37,14 +70,14 @@
 
   <insert id="insert" parameterType="com.calf.module.order.entity.SkillItem" >
     insert into skill_item (id, skill_item_name, skill_describe, 
-      lock_icon,unlock_icon,back_color, sort,font_color,
-      skill_status, create_time, modify_time, 
-      create_man, modify_man, remark
+      lock_icon,unlock_icon,back_color, font_color,sort,
+      skill_status, skill_type,create_time, modify_time,
+      create_man, modify_man, remark,home_black_color
       )
     values (#{id,jdbcType=BIGINT}, #{skillItemName,jdbcType=VARCHAR}, #{skillDescribe,jdbcType=VARCHAR}, 
       #{lockIcon,jdbcType=VARCHAR},#{unlockIcon,jdbcType=VARCHAR},#{backColor,jdbcType=VARCHAR},#{fontColor jdbcType=VARCHAR},#{sort,jdbcType=SMALLINT},
-      #{skillStatus,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP}, #{modifyTime,jdbcType=TIMESTAMP}, 
-      #{createMan,jdbcType=VARCHAR}, #{modifyMan,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}
+      #{skillStatus,jdbcType=TINYINT},#{skillType,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP}, #{modifyTime,jdbcType=TIMESTAMP},
+      #{createMan,jdbcType=VARCHAR}, #{modifyMan,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR},#{homeBlackColor,jdbcType=VARCHAR}
       )
   </insert>
   
@@ -80,6 +113,11 @@
       <if test="skillStatus != null" >
         skill_status,
       </if>
+
+      <if test="skillType != null" >
+        skill_type,
+      </if>
+
       <if test="createTime != null" >
         create_time,
       </if>
@@ -94,6 +132,9 @@
       </if>
       <if test="remark != null" >
         remark,
+      </if>
+      <if test="homeBlackColor != null" >
+        home_black_color,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
@@ -124,6 +165,10 @@
       <if test="skillStatus != null" >
         #{skillStatus,jdbcType=TINYINT},
       </if>
+      <if test="skillType != null" >
+        #{skillType,jdbcType=TINYINT},
+      </if>
+
       <if test="createTime != null" >
         #{createTime,jdbcType=TIMESTAMP},
       </if>
@@ -138,6 +183,9 @@
       </if>
       <if test="remark != null" >
         #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="homeBlackColor != null" >
+        #{homeBlackColor,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -171,6 +219,10 @@
       <if test="skillStatus != null" >
         skill_status = #{skillStatus,jdbcType=TINYINT},
       </if>
+      <if test="skillType != null" >
+        skill_type = #{skillType,jdbcType=TINYINT},
+      </if>
+
       <if test="createTime != null" >
         create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
@@ -185,6 +237,9 @@
       </if>
       <if test="remark != null" >
         remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="homeBlackColor != null" >
+        home_black_color = #{homeBlackColor,jdbcType=VARCHAR},
       </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
@@ -201,11 +256,13 @@
       font_color = #{fontColor,jdbcType=VARCHAR},
       sort = #{sort,jdbcType=SMALLINT},
       skill_status = #{skillStatus,jdbcType=TINYINT},
+      skill_type = #{skillType,jdbcType=TINYINT},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       modify_time = #{modifyTime,jdbcType=TIMESTAMP},
       create_man = #{createMan,jdbcType=VARCHAR},
       modify_man = #{modifyMan,jdbcType=VARCHAR},
-      remark = #{remark,jdbcType=VARCHAR}
+      remark = #{remark,jdbcType=VARCHAR},
+      home_black_color = #{homeBlackColor,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
 
@@ -250,5 +307,11 @@
     from skill_item
     where skill_status=1
     order by create_time desc
+  </select>
+  <!-- 查询所有消息技能数据 -->
+  <select id="selectAll" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from skill_item
   </select>
 </mapper>

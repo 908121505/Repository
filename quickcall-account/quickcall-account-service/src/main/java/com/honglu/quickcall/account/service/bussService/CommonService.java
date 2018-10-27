@@ -1,11 +1,10 @@
 package com.honglu.quickcall.account.service.bussService;
 
-import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
 import com.honglu.quickcall.account.facade.entity.Order;
-import com.honglu.quickcall.account.facade.entity.Skill;
+import com.honglu.quickcall.account.facade.vo.OrderTempResponseVO;
 import com.honglu.quickcall.common.api.exchange.CommonResponse;
 import com.honglu.quickcall.user.facade.enums.PushAppMsgTypeEnum;
 
@@ -21,12 +20,6 @@ import com.honglu.quickcall.user.facade.enums.PushAppMsgTypeEnum;
 public interface CommonService {
 	
 	public CommonResponse  getCommonResponse();
-	/**
-	 * 根据技能信息获取技能价格列表
-	 * @param skill
-	 * @return
-	 */
-	public List<BigDecimal>   getPriceList(Skill  skill);
 	
 	
 	
@@ -39,12 +32,39 @@ public interface CommonService {
 	public  void  pushMessage(PushAppMsgTypeEnum msgType,Long  sellerId,Long  customerId);
 	
 	/**
-	 * 
 	 * 根据订单ID更新订单状态
 	 * @param orderId
 	 * @param orderStatus
 	 */
-	public void updateOrder(Long orderId, Integer orderStatus,String  refundReason);
+	public void updateOrder(Long orderId, Integer orderStatus);
+	/**
+	 * 根据订单ID更新订单状态
+	 * @param orderId
+	 * @param orderStatus
+	 */
+	public void cancelUpdateOrder(Long orderId, Integer orderStatus,Date cancelTime,String  selectReason,String   remarkReason);
+	
+	/**
+	 * 根据订单ID更新订单状态
+	 * @param orderId
+	 * @param orderStatus
+	 * @param startServiceTime
+	 */
+	public void dvStartServiceUpdateOrder(Long orderId, Integer orderStatus,Date  startServiceTime);
+	/**
+	 * 根据订单ID更新订单状态
+	 * @param orderId
+	 * @param orderStatus
+	 * @param startTime
+	 */
+	public void confirmOrderUpdateOrder(Long orderId, Integer orderStatus,Date  startTime,Date  endTime);
+	/**
+	 * 大V接单修改订单信息
+	 * @param orderId
+	 * @param orderStatus
+	 * @param receiveOrderTime
+	 */
+	public void dvReciveOrderUpdateOrder(Long orderId, Integer orderStatus,Date  receiveOrderTime);
 	/**
 	 * 支付修改订单状态
 	 * @param orderId
@@ -56,11 +76,57 @@ public interface CommonService {
 	
 	
 	/***
-	 * 跟新订单状态
+	 * 更新订单状态
 	 * @param order
 	 * @return
 	 */
 	public void  getNewOrder(Order  order);
+	
+	
+	/**
+	 * 获取新的数据
+	 * @param oldOrderStatus  订单状态
+	 * @param orderTime  下单时间
+	 * @param receiveOrderTime  接单时间
+	 * @return
+	 */
+	public OrderTempResponseVO  getCountDownSeconds(Integer   oldOrderStatus ,Date  orderTime,Date  receiveOrderTime);
+	
+	
+	
+	/**
+	 * 大V接单取消已接收的订单
+	 * @param orderIdList
+	 */
+	public void updateOrderReceiveOrder(List<Long>  orderIdList,Integer  orderStatus);
+	/**
+	 * 大V接单查询是否有其他待接单订单
+	 * @param serviceId
+	 * @param orderId
+	 * @param queryStatus
+	 * @param skillType
+	 * @return
+	 */
+	public List<Order> selectOrderReceiveOrder(Long  serviceId ,Long orderId, Integer queryStatus, Integer skillType);
+	
+	
+	/**
+	 * 根据订单大类获取订单子类列表(用户方)
+	 * @param orderStatusParam
+	 * @return
+	 */
+	public  List<Integer>  getSendOrderStatusList(Integer orderStatusParam);
+	/**
+	 * 根据订单大类获取订单子类列表(大V方)
+	 * @param orderStatusParam
+	 * @return
+	 */
+	public  List<Integer>  getReceiveOrderStatusList(Integer orderStatusParam);
+
+
+
+	public void finishUpdateOrder(Long orderId, Integer orderStatus, Date cancelTime);
+	
 	
    
 }

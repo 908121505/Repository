@@ -1,7 +1,6 @@
 package com.calf.module.order.vo;
 
 import java.math.BigDecimal;
-import java.util.Date;
 
 public class SkillItemExtVo {
     private Long id;
@@ -12,7 +11,7 @@ public class SkillItemExtVo {
 
     private Integer skillExtRange;
 
-    private Integer skillExtUnit;
+    private String skillExtUnit;
 
     private BigDecimal skillExtPrice;
 
@@ -21,6 +20,9 @@ public class SkillItemExtVo {
     private BigDecimal skillExtDiscont;
 
     private String remark;
+    
+    private String skillItemName;
+    
 
     public Long getId() {
         return id;
@@ -54,14 +56,6 @@ public class SkillItemExtVo {
         this.skillExtRange = skillExtRange;
     }
 
-    public Integer getSkillExtUnit() {
-        return skillExtUnit;
-    }
-
-    public void setSkillExtUnit(Integer skillExtUnit) {
-        this.skillExtUnit = skillExtUnit;
-    }
-
     public BigDecimal getSkillExtPrice() {
         return skillExtPrice;
     }
@@ -93,4 +87,20 @@ public class SkillItemExtVo {
     public void setRemark(String remark) {
         this.remark = remark;
     }
+
+	public String getSkillItemName() {
+		return skillItemName;
+	}
+
+	public void setSkillItemName(String skillItemName) {
+		this.skillItemName = skillItemName;
+	}
+
+	public String getSkillExtUnit() {
+		return skillExtUnit;
+	}
+
+	public void setSkillExtUnit(String skillExtUnit) {
+		this.skillExtUnit = skillExtUnit;
+	}
 }

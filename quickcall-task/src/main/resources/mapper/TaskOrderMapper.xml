@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.honglu.quickcall.task.dao.TaskOrderMapper" >
+
+
+<!-- 待接单订单超时 -->
+  <update id="waittingReceiveOrderOverTime"  >
+    
+		UPDATE 
+			orders
+		SET 
+			system_cancel_time = #{currTime},
+		 	order_status = #{updateStatus}
+		WHERE
+			order_status = #{queryStatus}
+		AND order_time   <![CDATA[ < ]]> #{endTime}
+  </update>
+<!-- 待接单订单超时 查询-->
+  <select id="queryReceiveOrderOverTime"   resultType="com.honglu.quickcall.task.entity.TaskOrder" >
+    
+		SELECT
+		    order_id  AS orderId ,
+			customer_id AS customerId,
+			service_id AS serviceId,
+			order_amounts AS orderAmounts
+		FROM  
+		   orders
+		WHERE
+			order_status = #{queryStatus}
+		AND order_time   <![CDATA[ < ]]> #{endTime}
+  </select>
+  
+  <!-- ///////////////////////////////////////////////////////////////////-->
+  
+<!-- 大V未发起立即服务超时 -->
+  <update id="startOrderOverTime"  >
+    
+		UPDATE 
+			orders
+		SET 
+			system_cancel_time = #{currTime},
+		 	order_status = #{updateStatus}
+		WHERE
+			order_status = #{queryStatus}
+		AND receive_order_time <![CDATA[ < ]]> #{endTime}
+  </update>
+  
+  
+  <!-- 大V未发起立即服务超时  查询-->
+  <select id="queryStartOrderOverTime"   resultType="com.honglu.quickcall.task.entity.TaskOrder" >
+		SELECT
+		order_id  AS orderId ,
+			customer_id AS customerId,
+			service_id AS serviceId,
+			order_amounts AS orderAmounts
+		FROM  
+		   orders
+		WHERE
+			order_status = #{queryStatus}
+		AND receive_order_time <![CDATA[ < ]]> #{endTime}
+  </select>
+  
+  <!-- ///////////////////////////////////////////////////////////////////-->
+  
+  
+  
+<!-- 用户未接立即服务超时超时 -->
+  <update id="updateOrderStatusAfter12HourCust"  >
+    
+		UPDATE 
+			orders
+		SET 
+			system_cancel_time = #{currTime},
+		 	order_status = #{updateStatus}
+		WHERE
+			order_status = #{queryStatus}
+		AND appay_end_time <![CDATA[ < ]]> #{endTime}
+  </update>
+  
+  
+    <!-- 大V未发起立即服务超时  查询-->
+  <select id="queryOrderStatusAfter12HourCust"   resultType="com.honglu.quickcall.task.entity.TaskOrder" >
+		SELECT
+		order_id  AS orderId ,
+			customer_id AS customerId,
+			service_id AS serviceId,
+			order_amounts AS orderAmounts
+			
+		FROM  
+		   orders
+		WHERE
+			order_status = #{queryStatus}
+		AND appay_end_time <![CDATA[ < ]]> #{endTime}
+  </select>
+  
+  
+  <!-- ///////////////////////////////////////////////////////////////////-->
+  
+  
+  
+  
+  
+  
+  
+  
+<!-- 双方都没有主动结束：12小时未响应超时 -->
+  <update id="updateOrderStatusAfter12HourBoth" >
+    
+		UPDATE 
+			orders
+		SET 
+			system_cancel_time = #{currTime},
+		 	order_status = #{updateStatus}
+		WHERE
+			order_status = #{queryStatus}
+		AND expect_end_time <![CDATA[ < ]]> #{endTime}
+  </update>
+  
+  
+      <!-- 双方都没有主动结束：12小时未响应超时  查询-->
+  <select id="queryOrderStatusAfter12HourBoth"   resultType="com.honglu.quickcall.task.entity.TaskOrder" >
+		SELECT
+		order_id  AS orderId ,
+			customer_id AS customerId,
+			service_id AS serviceId,
+			order_amounts AS orderAmounts
+		FROM  
+		   orders
+		WHERE
+			order_status = #{queryStatus}
+		AND expect_end_time <![CDATA[ < ]]> #{endTime}
+  </select>
+  
+  <!-- ///////////////////////////////////////////////////////////////////-->
+  
+<!-- 叫醒自动进行中 -->
+  <update id="appointOrderGoing" >
+    
+		UPDATE 
+			orders
+		SET 
+		 	order_status = #{updateStatus}
+		WHERE
+			order_status = #{queryStatus}
+		AND appoint_time <![CDATA[ < ]]> #{endTime}
+		AND  skill_type  = #{skillType}
+  </update>
+  
+  
+  <!-- ///////////////////////////////////////////////////////////////////-->
+<!-- 叫醒自动结束 -->
+  <update id="appointOrderFinish" >
+    
+		UPDATE 
+			orders
+		SET 
+			end_time = #{currTime},
+		 	order_status = #{updateStatus}
+		WHERE
+			order_status = #{queryStatus}
+		AND expect_end_time <![CDATA[ < ]]> #{endTime}
+		AND  skill_type  = #{skillType}
+  </update>
+ 
+  
+    
+      <!-- 叫醒自动结束查询-->
+  <select id="queryAppointOrderFinish"   resultType="com.honglu.quickcall.task.entity.TaskOrder" >
+		SELECT
+		order_id  AS orderId ,
+			customer_id AS customerId,
+			service_id AS serviceId,
+			order_amounts AS orderAmounts
+		FROM  
+		   orders
+		WHERE
+			order_status = #{queryStatus}
+		AND expect_end_time <![CDATA[ < ]]> #{endTime}
+		AND  skill_type  = #{skillType}
+  </select>
+  
+</mapper>

@@ -4,58 +4,52 @@
        xmlns:rabbit="http://www.springframework.org/schema/rabbit"
        xsi:schemaLocation="
             http://www.springframework.org/schema/beans
-                http://www.springframework.org/schema/beans/spring-beans.xsd
+            http://www.springframework.org/schema/beans/spring-beans.xsd
             http://www.springframework.org/schema/rabbit
-                http://www.springframework.org/schema/rabbit/spring-rabbit-1.4.xsd
+            http://www.springframework.org/schema/rabbit/spring-rabbit-1.4.xsd
             http://www.springframework.org/schema/task  
-                http://www.springframework.org/schema/task/spring-task-4.1.xsd">
-                   
-   <!-- 连接服务配置   需要确认publisher-confirms="true" -->
-   <rabbit:connection-factory id="RconnectionFactory" host="${mq.host}" username="${mq.username}"
-        password="${mq.password}" port="${mq.port}" />
+            http://www.springframework.org/schema/task/spring-task-4.1.xsd">
 
-   <rabbit:admin connection-factory="RconnectionFactory"/>
+    <!-- 连接服务配置   需要确认publisher-confirms="true" -->
+    <rabbit:connection-factory id="RconnectionFactory"
+                               host="${mq.host}"
+                               username="${mq.username}"
+                               password="${mq.password}"
+                               port="${mq.port}"/>
 
-   <rabbit:queue id="queue_accountCenter_pay" durable="true" auto-delete="false" exclusive="false" name="queue_accountCenter_pay"/>
-	<!-- queue 队列声明-->
-   <rabbit:queue id="queue_activity" durable="true" auto-delete="false" exclusive="false" name="queue_activity"/>
-    
-   <!-- exchange queue binging key 绑定 -->
-   <rabbit:direct-exchange name="accountCenter-mq-exchange" durable="true" auto-delete="false" id="accountCenter-mq-exchange">
-      <rabbit:bindings>
-         <rabbit:binding queue="queue_accountCenter_pay" key="queue_accountCenter_pay_key"/>
-         <rabbit:binding queue="queue_accountCenter_pay" key="queue_batchTransfeer_key"/>
-      </rabbit:bindings>
-   </rabbit:direct-exchange>
-   
-     <!-- exchange queue binging key 绑定 -->
-    <rabbit:direct-exchange name="activity-mq-exchange" durable="true" auto-delete="false" id="activity-mq-exchange">
+    <rabbit:admin connection-factory="RconnectionFactory"/>
+
+    <!-- ======================================= mq队列 ===================================-->
+    <!-- 用户中心队列：用户获取经验值 -->
+    <rabbit:queue id="queue_accountCenter_for_order" durable="true" auto-delete="false" exclusive="false" name="queue_accountCenter_for_order"/>
+
+    <!-- exchange queue binging key 绑定 -->
+    <rabbit:direct-exchange name="accountCenter-mq-exchange" durable="true" auto-delete="false" id="accountCenter-mq-exchange">
         <rabbit:bindings>
-             <rabbit:binding queue="queue_activity" key="queue_activity_key"/>
+            <rabbit:binding queue="queue_accountCenter_for_order" key="queue_accountCenter_for_order_key"/>
         </rabbit:bindings>
     </rabbit:direct-exchange>
 
-   <!-- 死信队列 -->
-   <rabbit:queue name="dead-letter-queue">
-      <rabbit:queue-arguments>
-         <entry key="x-message-ttl" value="5000" value-type="java.lang.Long" />
-         <entry key="x-dead-letter-exchange" value="dead-letter-exchange" />
-         <entry key="x-dead-letter-routing-key" value="dead" />
-      </rabbit:queue-arguments>
-   </rabbit:queue>
+    <!-- 死信队列 -->
+    <rabbit:queue name="dead-letter-queue">
+        <rabbit:queue-arguments>
+            <entry key="x-message-ttl" value="5000" value-type="java.lang.Long"/>
+            <entry key="x-dead-letter-exchange" value="dead-letter-exchange"/>
+            <entry key="x-dead-letter-routing-key" value="dead"/>
+        </rabbit:queue-arguments>
+    </rabbit:queue>
 
-   <!-- 死信队列转发到的普通队列 -->
-   <rabbit:queue name="dead" />
-   <rabbit:queue name="paydead" />
-   <rabbit:direct-exchange name="dead-letter-exchange"
-                           durable="true" auto-delete="false" id="dead-letter-exchange">
-      <rabbit:bindings>
-         <rabbit:binding queue="dead"/>
-         <rabbit:binding queue="paydead"/>
-      </rabbit:bindings>
-   </rabbit:direct-exchange>
+    <!-- 死信队列转发到的普通队列 -->
+    <rabbit:queue name="dead"/>
+    <rabbit:queue name="paydead"/>
+    <rabbit:direct-exchange name="dead-letter-exchange" durable="true" auto-delete="false" id="dead-letter-exchange">
+        <rabbit:bindings>
+            <rabbit:binding queue="dead"/>
+            <rabbit:binding queue="paydead"/>
+        </rabbit:bindings>
+    </rabbit:direct-exchange>
 
-   <!-- 将jackson替换为fastjson的一个实现 spring amqp默认的是jackson 的一个插件,目的将生产者生产的数据转换为json存入消息队列，由于fastjson的速度快于jackson,-->
-   <bean id="jsonMessageConverter"  class="com.honglu.quickcall.common.api.util.FastJsonMessageConverter" />
-   <rabbit:template exchange="accountCenter-mq-exchange" id="amqpTemplate"  connection-factory="RconnectionFactory"  message-converter="jsonMessageConverter"/>
+    <!-- 将jackson替换为fastjson的一个实现 spring amqp默认的是jackson 的一个插件,目的将生产者生产的数据转换为json存入消息队列，由于fastjson的速度快于jackson,-->
+    <bean id="jsonMessageConverter" class="com.honglu.quickcall.common.api.util.FastJsonMessageConverter"/>
+    <rabbit:template exchange="accountCenter-mq-exchange" id="amqpTemplate" connection-factory="RconnectionFactory" message-converter="jsonMessageConverter"/>
 </beans>

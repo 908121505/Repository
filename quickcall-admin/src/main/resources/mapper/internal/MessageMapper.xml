@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="MessageMapper">
+  <resultMap id="BaseResultMap" type="com.calf.module.internal.entity.Message">
+    <id column="message_id" jdbcType="VARCHAR" property="messageId" />
+    <result column="message_content" jdbcType="VARCHAR" property="messageContent" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="H5_url" jdbcType="VARCHAR" property="h5Url" />
+    <result column="send_status" jdbcType="TINYINT" property="sendStatus" />
+    <result column="send_type" jdbcType="TINYINT" property="sendType" />
+    <result column="bespeak_send_time" jdbcType="TIMESTAMP" property="bespeakSendTime" />
+    <result column="background_image_url" jdbcType="VARCHAR" property="backgroundImageUrl" />
+    <result column="message_describe" jdbcType="VARCHAR" property="messageDescribe" />
+    <result column="type" jdbcType="TINYINT" property="type" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime" />
+    <result column="create_man" jdbcType="VARCHAR" property="createMan" />
+    <result column="modify_man" jdbcType="VARCHAR" property="modifyMan" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    message_id, message_content, title, H5_url, send_status, send_type, bespeak_send_time, 
+    background_image_url, message_describe, type, create_time, modify_time, create_man, 
+    modify_man, remark
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from message
+    where message_id = #{arg0}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from message where message_id = #{arg0}
+  </delete>
+  <insert id="insert" parameterType="com.calf.module.internal.entity.Message">
+    insert into message (message_id, message_content, title, 
+      H5_url, send_status, send_type, 
+      bespeak_send_time, background_image_url, 
+      message_describe, type, create_time, 
+      modify_time, create_man, modify_man, 
+      remark)
+    values (#{messageId}, #{messageContent}, #{title}, #{h5Url}, #{sendStatus}, #{sendType}, #{bespeakSendTime}, #{backgroundImageUrl},
+      #{messageDescribe}, #{type}, #{createTime}, #{modifyTime}, #{createMan}, #{modifyMan}, #{remark})
+  </insert>
+
+  <insert id="insertBatch">
+    insert into message (message_id, message_content, title,
+      H5_url, send_status, send_type,
+      bespeak_send_time, background_image_url,
+      message_describe, type, create_time,
+      modify_time, create_man, modify_man,
+      remark)
+    values
+    <foreach collection="list" item="item" index="index" separator="," >
+      (#{item.messageId}, #{item.messageContent}, #{item.title},#{item.h5Url}, #{item.sendStatus}, #{item.sendType}
+      ,#{item.bespeakSendTime}, #{item.backgroundImageUrl},#{item.messageDescribe}, #{item.type}, #{item.createTime}
+      ,#{item.modifyTime}, #{item.createMan}, #{item.modifyMan}, #{item.remark)
+    </foreach>
+  </insert>
+
+  <update id="update" parameterType="com.calf.module.internal.entity.Message">
+    update message
+    <set>
+      <if test="messageContent != null">
+        message_content = #{messageContent},
+      </if>
+      <if test="title != null">
+        title = #{title},
+      </if>
+      <if test="h5Url != null">
+        H5_url = #{h5Url},
+      </if>
+      <if test="sendStatus != null">
+        send_status = #{sendStatus},
+      </if>
+      <if test="sendType != null">
+        send_type = #{sendType},
+      </if>
+      <if test="bespeakSendTime != null">
+        bespeak_send_time = #{bespeakSendTime},
+      </if>
+      <if test="backgroundImageUrl != null">
+        background_image_url = #{backgroundImageUrl},
+      </if>
+      <if test="messageDescribe != null">
+        message_describe = #{messageDescribe},
+      </if>
+      <if test="type != null">
+        type = #{type},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime},
+      </if>
+      <if test="modifyTime != null">
+        modify_time = #{modifyTime},
+      </if>
+      <if test="createMan != null">
+        create_man = #{createMan},
+      </if>
+      <if test="modifyMan != null">
+        modify_man = #{modifyMan},
+      </if>
+      <if test="remark != null">
+        remark = #{remark},
+      </if>
+    </set>
+    where message_id = #{messageId}
+  </update>
+
+  <select id="queryCount" parameterType="java.util.Map" resultType="java.lang.Integer">
+    select count(1) from message
+    <where>
+      <if test="sendStatus != null">
+        and send_status = #{sendStatus}
+      </if>
+      <if test="type != null">
+        and type = #{type}
+      </if>
+      <if test="startTime != '' and startTime != null" >
+        <![CDATA[ and create_time >= #{startTime} ]]>
+      </if>
+      <if test="endTime != '' and endTime != null" >
+        <![CDATA[ and create_time <= #{endTime} ]]>
+      </if>
+    </where>
+  </select>
+
+  <select id="selectMessage" parameterType="java.util.Map" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from message
+    <where>
+      <if test="sendStatus != null">
+        and send_status = #{sendStatus}
+      </if>
+      <if test="type != null">
+        and type = #{type}
+      </if>
+      <if test="startTime != '' and startTime != null" >
+        <![CDATA[ and create_time >= #{startTime} ]]>
+      </if>
+      <if test="endTime != '' and endTime != null" >
+        <![CDATA[ and create_time <= #{endTime} ]]>
+      </if>
+    </where>
+    order by create_time desc
+    limit ${iDisplayStart},${iDisplayLength}
+  </select>
+
+</mapper>

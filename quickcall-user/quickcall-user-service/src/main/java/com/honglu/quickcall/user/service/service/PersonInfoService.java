@@ -1,7 +1,26 @@
 package com.honglu.quickcall.user.service.service;
 
 import com.honglu.quickcall.common.api.exchange.CommonResponse;
-import com.honglu.quickcall.user.facade.exchange.request.*;
+import com.honglu.quickcall.user.facade.exchange.request.AddOrCancelFansRequest;
+import com.honglu.quickcall.user.facade.exchange.request.CheckAttentionRequest;
+import com.honglu.quickcall.user.facade.exchange.request.CheckEachAttentionRequest;
+import com.honglu.quickcall.user.facade.exchange.request.CustomerCenterRequest;
+import com.honglu.quickcall.user.facade.exchange.request.CustomerHomeRequest;
+import com.honglu.quickcall.user.facade.exchange.request.CustomerLevelRequest;
+import com.honglu.quickcall.user.facade.exchange.request.NoReadAttentionCountRequest;
+import com.honglu.quickcall.user.facade.exchange.request.QueryAttentionFansListRequest;
+import com.honglu.quickcall.user.facade.exchange.request.QueryInterestListRequest;
+import com.honglu.quickcall.user.facade.exchange.request.QueryOccupationListRequest;
+import com.honglu.quickcall.user.facade.exchange.request.ReadAttentionRequest;
+import com.honglu.quickcall.user.facade.exchange.request.SaveBirthRequest;
+import com.honglu.quickcall.user.facade.exchange.request.SaveGenderRequest;
+import com.honglu.quickcall.user.facade.exchange.request.SaveInterestRequest;
+import com.honglu.quickcall.user.facade.exchange.request.SaveNickNameRequest;
+import com.honglu.quickcall.user.facade.exchange.request.SaveOccupationRequest;
+import com.honglu.quickcall.user.facade.exchange.request.SaveSignNameRequest;
+import com.honglu.quickcall.user.facade.exchange.request.SaveSkillAuditRequest;
+import com.honglu.quickcall.user.facade.exchange.request.SearchPersonRequest;
+import com.honglu.quickcall.user.facade.exchange.request.queryMyskillRequest;
 
 /**
  * 
@@ -70,7 +89,15 @@ public interface PersonInfoService {
 	 * @return
 	 */
 	CommonResponse readAttention(ReadAttentionRequest params);
-	
+
+	/**
+	 * 关注未读数量
+	 * 
+	 * @param params
+	 * @return
+	 */
+	CommonResponse noReadAttentionCount(NoReadAttentionCountRequest params);
+
 	/**
 	 * 首页查询用户列表
 	 * 
@@ -97,6 +124,7 @@ public interface PersonInfoService {
 
 	/**
 	 * 查询客户个人主页数据接口
+	 * 
 	 * @param request
 	 * @return
 	 */
@@ -104,8 +132,16 @@ public interface PersonInfoService {
 
 	/**
 	 * 我的等级页面 -- 展示数据接口
+	 * 
 	 * @param request
 	 * @return
 	 */
 	CommonResponse queryCustomerLevel(CustomerLevelRequest request);
+
+	/**
+	 * 查询是否互相关注
+	 * @param request
+	 * @return
+	 */
+	CommonResponse checkEachAttention(CheckEachAttentionRequest request);
 }

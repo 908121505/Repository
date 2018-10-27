@@ -6,8 +6,9 @@
     <result column="skill_item_id" property="skillItemId" jdbcType="BIGINT" />
     <result column="skill_ext_type" property="skillExtType" jdbcType="TINYINT" />
     <result column="skill_ext_range" property="skillExtRange" jdbcType="TINYINT" />
-    <result column="skill_ext_unit" property="skillExtUnit" jdbcType="TINYINT" />
+    <result column="skill_ext_unit" property="skillExtUnit" jdbcType="VARCHAR" />
     <result column="skill_ext_price" property="skillExtPrice" jdbcType="DECIMAL" />
+    <result column="skill_ext_threshold" property="skillExtThreshold" jdbcType="INTEGER" />
     <result column="skill_ext_status" property="skillExtStatus" jdbcType="TINYINT" />
     <result column="skill_ext_discont" property="skillExtDiscont" jdbcType="DECIMAL" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
@@ -18,12 +19,20 @@
   </resultMap>
   
   <sql id="Base_Column_List" >
-    id, skill_item_id, skill_ext_type, skill_ext_range, skill_ext_unit, skill_ext_price, 
+    id, skill_item_id, skill_ext_type, skill_ext_range, skill_ext_unit, skill_ext_price,skill_ext_threshold, 
     skill_ext_status, skill_ext_discont, create_time, modify_time, create_man, modify_man, 
     remark
   </sql>
 
-
+	<select id="queryDefultPrice" resultMap="BaseResultMap">
+		select 
+		<include refid="Base_Column_List" />
+		from skill_item_ext
+		where skill_item_id = #{arg0} and skill_ext_status = 1 and skill_ext_type = 1
+		order by skill_ext_price asc,skill_ext_price asc 
+		limit 0,1
+	</select>
+	
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
     <include refid="Base_Column_List" />
@@ -31,11 +40,76 @@
     where id = #{id,jdbcType=BIGINT}
   </select>
   
+  <select id="selectPriceLevelPage" resultType="com.calf.module.order.vo.SkillPriceLevelVO">
+  	select 
+    	distinct sie.skill_item_id as skillItemId,si.skill_item_name as skillItemName,sie.skill_ext_range as priceLevel,half.skill_ext_price as halfPrice,
+   	  one.skill_ext_price as onePrice,time.skill_ext_price as timePrice,half.skill_ext_threshold as levelThreshold,
+   	  (half.skill_ext_status*4+one.skill_ext_status*2+time.skill_ext_status) as levelStatus 
+    from skill_item_ext sie 
+    left join skill_item_ext half on sie.skill_item_id = half.skill_item_id and half.skill_ext_unit = '半小时' and sie.skill_ext_range = half.skill_ext_range
+    left join skill_item_ext one on sie.skill_item_id = one.skill_item_id and one.skill_ext_unit = '一小时' and sie.skill_ext_range = one.skill_ext_range
+    left join skill_item_ext time on sie.skill_item_id = time.skill_item_id and time.skill_ext_unit = '次'  and sie.skill_ext_range = time.skill_ext_range
+    left join skill_item si on sie.skill_item_id = si.id 
+    where sie.skill_ext_type = '1'
+    <if test="skillItemName != null" >
+      and  si.skill_item_name like concat('%',#{skillItemName},'%')
+    </if>
+    <if test="priceLevel != null" >
+      and  sie.skill_ext_range = #{priceLevel}
+    </if>
+    <if test="levelStatus != null" >
+      and  half.skill_ext_status = FLOOR(#{levelStatus}/4)
+      and one.skill_ext_status = FLOOR((#{levelStatus} % 4)/2)
+      and time.skill_ext_status = #{levelStatus} % 2
+    </if>
+    <if test="skillItemId != null" >
+      and  sie.skill_item_id = #{skillItemId}
+    </if>
+    <if test="iDisplayStart != null and iDisplayLength != null" >
+    	LIMIT ${iDisplayStart},${iDisplayLength}
+    </if>
+  </select>
+  
+  <select id="selectPriceLevelCount" resultType="java.lang.Integer">
+  	select count(*) from (
+  	select 
+    	distinct si.skill_item_name as skillItemName,sie.skill_ext_range as priceLevel,half.skill_ext_price as halfPrice,
+   	  one.skill_ext_price as onePrice,time.skill_ext_price as timePrice,half.skill_ext_threshold as levelThreshold,
+   	  (half.skill_ext_status*4+one.skill_ext_status*2+time.skill_ext_status) as levelStatus 
+    from skill_item_ext sie 
+    left join skill_item_ext half on sie.skill_item_id = half.skill_item_id and half.skill_ext_unit = '半小时' and sie.skill_ext_range = half.skill_ext_range
+    left join skill_item_ext one on sie.skill_item_id = one.skill_item_id and one.skill_ext_unit = '一小时' and sie.skill_ext_range = one.skill_ext_range
+    left join skill_item_ext time on sie.skill_item_id = time.skill_item_id and time.skill_ext_unit = '次'  and sie.skill_ext_range = time.skill_ext_range
+    left join skill_item si on sie.skill_item_id = si.id
+    where sie.skill_ext_type = '1'
+    <if test="skillItemName != null" >
+      and  si.skill_item_name like concat('%',#{skillItemName},'%')
+    </if>
+    <if test="priceLevel != null" >
+      and  sie.skill_ext_range = #{priceLevel}
+    </if>
+    <if test="levelStatus != null" >
+      and  half.skill_ext_status = FLOOR(#{levelStatus}/4)
+      and one.skill_ext_status = FLOOR((#{levelStatus} % 4)/2)
+      and time.skill_ext_status = #{levelStatus} % 2
+    </if>
+    ) tmp
+  </select>
+  
+  <select id="selectThisLevelCount" resultType="java.lang.Integer">
+  	select count(*) from skill_item_ext 
+  	where skill_ext_type = 1 and skill_item_id = #{skillItemId} and skill_ext_range = #{priceLevel}
+  </select>
+  
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from skill_item_ext
     where id = #{id,jdbcType=BIGINT}
   </delete>
   
+  <delete id="deletePriceLevel" parameterType="java.lang.Integer" >
+    delete from skill_item_ext
+    where skill_item_id = #{arg0} and skill_ext_range = #{arg1}
+  </delete>
   
   <insert id="insert" parameterType="com.calf.module.order.entity.SkillItemExt" >
       insert into skill_item_ext (id, skill_item_id, skill_ext_type, 
@@ -72,6 +146,9 @@
       </if>
       <if test="skillExtStatus != null" >
         skill_ext_status,
+      </if>
+      <if test="skillExtThreshold != null" >
+        skill_ext_threshold,
       </if>
       <if test="skillExtDiscont != null" >
         skill_ext_discont,
@@ -114,6 +191,9 @@
       <if test="skillExtStatus != null" >
         #{skillExtStatus,jdbcType=TINYINT},
       </if>
+      <if test="skillExtThreshold != null" >
+         #{skillExtThreshold,jdbcType=INTEGER},
+      </if>
       <if test="skillExtDiscont != null" >
         #{skillExtDiscont,jdbcType=DECIMAL},
       </if>
@@ -134,7 +214,53 @@
       </if>
     </trim>
   </insert>
-
+	
+	<update id="updateSelective" parameterType="com.calf.module.order.entity.SkillItemExt">
+		update skill_item_ext  
+		<set >
+      <if test="skillExtPrice != null" >
+        skill_ext_price = #{skillExtPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="skillExtStatus != null" >
+        skill_ext_status = #{skillExtStatus,jdbcType=TINYINT},
+      </if>
+      <if test="skillExtThreshold != null" >
+        skill_ext_threshold = #{skillExtThreshold,jdbcType=INTEGER},
+      </if>
+      <if test="skillExtDiscont != null" >
+        skill_ext_discont = #{skillExtDiscont,jdbcType=DECIMAL},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyTime != null" >
+        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createMan != null" >
+        create_man = #{createMan,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyMan != null" >
+        modify_man = #{modifyMan,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <where>
+   		<if test="skillExtType != null" >
+        	skill_ext_type = #{skillExtType,jdbcType=TINYINT}
+      	</if>
+       	<if test="skillExtRange != null" >
+        	and skill_ext_range = #{skillExtRange,jdbcType=TINYINT}
+      	</if>
+      	<if test="skillItemId != null" >
+        	and skill_item_id = #{skillItemId,jdbcType=BIGINT}
+      	</if>
+      	<if test="skillExtUnit != null" >
+        	and skill_ext_unit = #{skillExtUnit,jdbcType=VARCHAR}
+     	 </if>
+    </where>
+	</update>
 
   <update id="updateByPrimaryKeySelective" parameterType="com.calf.module.order.entity.SkillItemExt" >
     update skill_item_ext
@@ -195,9 +321,9 @@
     where id = #{id,jdbcType=BIGINT}
   </update>
 
-  <select id="selectPageList" resultMap="BaseResultMap" parameterType="map" >
+  <select id="selectPageList" resultType="com.calf.module.order.vo.SkillItemExtVo" parameterType="map" >
     select
-    <include refid="Base_Column_List" />
+    	<include refid="Base_Column_List" />
     from skill_item_ext
     where  1 = 1
     <if test="skillExtStatus != null" >
@@ -209,7 +335,7 @@
     LIMIT ${iDisplayStart},${iDisplayLength}
   </select>
 
-  <select id="slectCount" resultType="java.lang.Integer" parameterType="map" >
+  <select id="selectPageListCount" resultType="java.lang.Integer" parameterType="map" >
     select
     count(1)
     from skill_item_ext

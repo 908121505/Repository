@@ -6,7 +6,6 @@ import com.calf.cn.entity.DataTables;
 import com.calf.cn.service.BaseManager;
 import com.calf.cn.utils.SearchUtil;
 import com.calf.module.common.impl.CommonUtilService;
-import com.calf.module.order.entity.Skill;
 import com.calf.module.order.entity.SkillItem;
 import com.calf.module.order.vo.SkillItemVo;
 import com.honglu.quickcall.common.core.util.UUIDUtils;
@@ -18,7 +17,10 @@ import org.springframework.ui.Model;
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
-//技能项的服务
+
+/**
+ * 技能项的服务
+ */
 @Service("skillItemService")
 public class SkillItemService {
 
@@ -89,5 +91,9 @@ public class SkillItemService {
         }
         return map;
     }
-
+    
+    public List<Map<String,Object>> getAllSkillItem(){
+    	 List<Map<String, Object>> skillList = baseManager.query("SkillItem.selectAllSkillItem", null);
+    	 return skillList;
+    }
 }

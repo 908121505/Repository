@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="FeedBack">
+	<resultMap type="com.calf.module.customerservice.entity.FeedBack" id="feedBackMap">
+		<id property="id" column="id" javaType="java.lang.Integer"></id>
+		<result property="customerId" column="customer_id" javaType="java.lang.Long"></result>
+		<result property="feedBackContent" column="feed_back_content" javaType="java.lang.String"></result>
+		<result property="handleStatus" column="handle_status" javaType="java.lang.Integer"></result>
+		<result property="handleResult" column="handle_result" javaType="java.lang.String"></result>
+		<result property="createTime" column="create_time" javaType="java.lang.String"></result>
+		<result property="contactWay" column="contact_way" javaType="java.lang.String"></result>
+		<result property="modifyTime" column="modify_time" javaType="java.lang.String"></result>
+		<result property="handleTime" column="handle_time" javaType="java.lang.String"></result>
+		<result property="createMan" column="create_man" javaType="java.lang.String"></result>
+		<result property="modifyMan" column="modify_man" javaType="java.lang.String"></result>
+		<result property="handleUser" column="handle_user" javaType="java.lang.String"></result>
+		<result property="remark" column="remark" javaType="java.lang.String"></result>
+	</resultMap>
+	
+	<resultMap type="com.calf.module.customerservice.vo.FeedBackVO" id="feedBackVOMap">
+		<id property="id" column="id" javaType="java.lang.Integer"></id>
+		<result property="customerId" column="customer_id" javaType="java.lang.String"></result>
+		<result property="nickName" column="nick_name" javaType="java.lang.String"></result>
+		<result property="phone" column="phone" javaType="java.lang.String"></result>
+		<result property="feedBackContent" column="feed_back_content" javaType="java.lang.String"></result>
+		<result property="handleStatus" column="handle_status" javaType="java.lang.Integer"></result>
+		<result property="handleResult" column="handle_result" javaType="java.lang.String"></result>
+		<result property="createTime" column="create_time" javaType="java.lang.String"></result>
+		<result property="contactWay" column="contact_way" javaType="java.lang.String"></result>
+		<result property="modifyTime" column="modify_time" javaType="java.lang.String"></result>
+		<result property="handleTime" column="handle_time" javaType="java.lang.String"></result>
+		<result property="createMan" column="create_man" javaType="java.lang.String"></result>
+		<result property="modifyMan" column="modify_man" javaType="java.lang.String"></result>
+		<result property="handleUser" column="handle_user" javaType="java.lang.String"></result>
+		<result property="remark" column="remark" javaType="java.lang.String"></result>
+	</resultMap>
+
+	<!-- 通用查询结果列-->
+	<sql id="Base_Column_List">
+id,	customer_id,	feed_back_content,	handle_status,	handle_result,	create_time,	contact_way,	modify_time,	handle_time,	create_man,	modify_man,	handle_user,	remark
+	</sql>
+	
+	<select id="queryFeedBackList" resultMap="feedBackVOMap">
+		select 
+		cus.nick_name,cus.phone,fb.id,fb.customer_id,fb.feed_back_content,
+		fb.handle_status,fb.handle_result,fb.create_time,fb.contact_way,
+		fb.modify_time,fb.handle_time,fb.create_man,fb.modify_man,fb.handle_user,
+		fb.remark 
+		from feed_back fb
+		left join customer cus on cus.customer_id = fb.customer_id
+		<where>
+			<if test="nickName != null">and  cus.nick_name like concat('%',#{nickName},'%')</if>
+			<if test="phone != null">and  cus.phone = #{phone}</if>
+			<if test="startTime !=null and startTime!=''">and fb.create_time <![CDATA[  >= ]]> #{startTime}</if>
+        	<if test="endTime !=null and endTime!=''">and fb.create_time <![CDATA[  <= ]]> #{endTime}</if>
+		</where>
+		limit ${iDisplayStart},${iDisplayLength}
+	</select>
+	
+	<select id="queryFeedBackById" resultMap="feedBackVOMap">
+		select 
+		cus.nick_name,cus.phone,fb.id,fb.customer_id,fb.feed_back_content,
+		fb.handle_status,fb.handle_result,fb.create_time,fb.contact_way,
+		fb.modify_time,fb.handle_time,fb.create_man,fb.modify_man,fb.handle_user,
+		fb.remark 
+		from feed_back fb
+		left join customer cus on cus.customer_id = fb.customer_id
+		where fb.id = #{id}
+	</select>
+	
+	<select id="queryCount" resultType="java.lang.Integer">
+		select count(*)
+		from feed_back fb
+		left join customer cus on cus.customer_id = fb.customer_id
+		<where>
+			<if test="nickName != null">and  cus.nick_name like concat('%',#{nickName},'%')</if>
+			<if test="phone != null">and  cus.phone = #{phone}</if>
+			<if test="startTime !=null and startTime!=''">and fb.create_time <![CDATA[  >= ]]> #{startTime}</if>
+        	<if test="endTime !=null and endTime!=''">and fb.create_time <![CDATA[  <= ]]> #{endTime}</if>
+		</where>
+	</select>
+	
+	<!-- 查询（根据主键ID查询） -->
+	<select id="getEntityById" resultMap="feedBackMap" parameterType="java.lang.Integer">
+		 SELECT
+		 <include refid="Base_Column_List" />
+		 FROM feed_back
+		 WHERE id = #{id}
+	</select>
+
+	<!-- 查询（根据主键ID查询） -->
+	<select id="findAll" resultMap="feedBackMap" parameterType="java.lang.Integer">
+		 SELECT
+		 <include refid="Base_Column_List" />
+		 FROM feed_back
+		 WHERE id = #{id}
+	</select>
+
+	<!--删除：根据主键ID删除-->
+	<delete id="deleteEntity" parameterType="java.lang.Integer">
+		 DELETE FROM feed_back
+		 WHERE id = #{id}
+	</delete>
+
+	<!-- 添加 -->
+	<insert id="saveEntity" parameterType="com.calf.module.customerservice.entity.FeedBack">
+		 INSERT INTO feed_back
+ 		(id,customer_id,feed_back_content,handle_status,handle_result,create_time,contact_way,modify_time,handle_time,create_man,modify_man,handle_user,remark) 
+		 VALUES 
+ 		(#{id},#{customerId},#{feedBackContent},#{handleStatus},#{handleResult},#{createTime},#{contactWay},#{modifyTime},#{handleTime},#{createMan},#{modifyMan},#{handleUser},#{remark}) 
+	</insert>
+
+	<!-- 修 改-->
+	<update id="updateEntity" >
+		 UPDATE feed_back
+ 		 <set> 
+			<if test="customerId != null">
+				 customer_id = #{customerId},
+			</if>
+			<if test="feedBackContent != null">
+				 feed_back_content = #{feedBackContent},
+			</if>
+			<if test="handleStatus != null">
+				 handle_status = #{handleStatus},
+			</if>
+			<if test="handleResult != null">
+				 handle_result = #{handleResult},
+			</if>
+			<if test="createTime != null">
+				 create_time = #{createTime},
+			</if>
+			<if test="contactWay != null">
+				 contact_way = #{contactWay},
+			</if>
+			<if test="modifyTime != null">
+				 modify_time = #{modifyTime},
+			</if>
+			<if test="handleTime != null">
+				 handle_time = #{handleTime},
+			</if>
+			<if test="createMan != null">
+				 create_man = #{createMan},
+			</if>
+			<if test="modifyMan != null">
+				 modify_man = #{modifyMan},
+			</if>
+			<if test="handleUser != null">
+				 handle_user = #{handleUser},
+			</if>
+			<if test="remark != null">
+				 remark = #{remark},
+			</if>
+
+ 		 </set>
+		 WHERE id = #{id}
+	</update>
+
+</mapper>

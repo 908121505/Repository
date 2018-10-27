@@ -24,6 +24,12 @@
   <select id="queryFansNumByCustomerId" resultType="java.lang.Long" parameterType="java.lang.Long" >
     SELECT COUNT(*) FROM fans WHERE anchor_id=#{customerId} AND attention_state=1; 
   </select>
+  
+   <select id="queryNoReadFansNumByCustomerId" resultType="java.lang.Integer" parameterType="java.lang.Long" >
+    SELECT COUNT(*) FROM fans WHERE anchor_id=#{customerId} AND attention_state=1 and read_state=0
+  </select>
+  
+  
   <select id="queryAttentionNumByCustomerId" resultType="int" parameterType="java.lang.Long" >
     SELECT COUNT(*) FROM fans WHERE fans_id=#{customerId} AND attention_state=1; 
   </select>
@@ -183,7 +189,7 @@
 		    ct.nick_name  AS  nickName,
 		    <![CDATA[ TIMESTAMPDIFF(YEAR, ct.birthday, CURDATE()) AS age  ]]>,
 		    ct.sex    AS sex,
-		    fs.attention_state  AS  attentionStatus,
+		    fs1.attention_state  AS  attentionStatus,
 		    ct.type AS type,
 		    (IFNULL(fs.attention_state,0))&amp;(IFNULL(fs1.attention_state,0)) AS eachAttentionStatus 
 		FROM

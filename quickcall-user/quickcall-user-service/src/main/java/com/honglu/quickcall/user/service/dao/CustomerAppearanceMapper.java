@@ -1,6 +1,7 @@
 package com.honglu.quickcall.user.service.dao;
 
 import com.honglu.quickcall.user.facade.entity.CustomerAppearance;
+import com.honglu.quickcall.user.facade.vo.AppearanceVO;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -66,5 +67,7 @@ public interface CustomerAppearanceMapper{
 	int insertAppearance(CustomerAppearance record);
 
 	int updateAppearance(CustomerAppearance record);
+
+	List<AppearanceVO> selectAppearanceVOByCustomerIdAndType(@Param("customerId") Long customerId, @Param("type") Integer type);
 
 }

@@ -19,6 +19,17 @@ public interface CustomerSkillMapper {
 
     int updateByPrimaryKey(CustomerSkill record);
 
+
+    /**
+     * 查询审核通过的技能
+     *
+     * @param skillItemId
+     * @param pageIndex
+     * @param pageSize
+     * @return
+     */
+    List<CustomerSkill> selectAuditedSkillByPage(@Param("skillItemId") Long skillItemId, @Param("pageIndex") Integer pageIndex, @Param("pageSize") Integer pageSize);
+
     /**
      * 查询用户审核通过的技能
      * @param customerId
@@ -33,4 +44,11 @@ public interface CustomerSkillMapper {
      * @return
      */
     List<String> selectCustomerSkillHotLabel(@Param("customerId") Long customerId, @Param("skillItemId") Long skillItemId);
+
+    /**
+     * 根据客户ID查客户信息
+     * @param customerId
+     * @return
+     */
+    CustomerSkill queryCustomerSkillByCustomerId(@Param("customerId") Long customerId);
 }

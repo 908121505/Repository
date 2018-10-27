@@ -44,11 +44,13 @@ public interface OrderRequestType {
     /**客户再来一单*/
     public static final  String  CUST_COPY_ORDER = "19032";
     /**客户申请退款/完成*/
-    public static final  String  CUST_APPLAY_REFUND = "19033";
+    public static final  String  CUST_CONFIRM_FINISH_REFUND = "19033";
     /**客户同意/拒绝订单*/
     public static final  String  CUST_CONFIRM_ORDER = "19034";
     /**订单详情*/
     public static final  String  DETAIL_ORDER = "19035";
+    /**订单详情*/
+    public static final  String  DETAIL_ORDER_FOR_IM = "19037";
     /**订单取消*/
     public static final  String  CANCEL_ORDER = "19036";
     

@@ -74,6 +74,17 @@ public class DateUtils {
      * @param date
      * @return
      */
+    public static String formatDateHHSS(Date date) {
+    	dateFormat = new SimpleDateFormat("HH:mm");
+    	return dateFormat.format(date);
+    }
+    
+    /**
+     * 格式化Date日期
+     *
+     * @param date
+     * @return
+     */
     public static String formatDateReachDate(Date date) {
         dateFormat = new SimpleDateFormat(format);
         return dateFormat.format(date);
@@ -234,6 +245,63 @@ public class DateUtils {
         } catch (Exception e) {//兼容性更强,异常后返回数据
            return 0;
         }
+    }
+    
+    /**
+     * 获取两个时间之间的秒数
+     * @param startTime
+     * @param endTime
+     * @return
+     */
+    public static Long getDiffSeconds(Date  startTime,Date  endTime)  {
+    	if(startTime == null ||  endTime == null){
+    		return 0L;
+    	}
+    	return (endTime.getTime() -  startTime.getTime())/1000;
+    }
+    
+    /**
+     * 根据秒数获取倒计时字符串
+     * @param second
+     * @return
+     */
+    public static String getDiffSeconds(long  second)  {
+		long  remainStr = 3500 ;
+		long hour =  remainStr / 3600 ;
+		long minutes =  (remainStr - hour * 3600 ) / 60 ;
+		long seconds =  remainStr % 60;
+		String  hourStr = null ;
+		if(hour == 0){
+			hourStr  = "";
+		}else if(hour > 0){
+			hourStr = hour +":";
+		}
+		String  minuteStr = null ;
+		if(minutes == 0){
+			minuteStr  = "00";
+		}else if(minutes > 0){
+			if(minutes > 9){
+				minuteStr = "" +minutes ;
+			}else{
+				minuteStr = "0" +minutes ;
+			}
+		}
+		
+		
+		String  secondsStr = null ;
+		if(seconds == 0){
+			secondsStr  = "00";
+		}else if(seconds > 0){
+			if(seconds > 9){
+				secondsStr = "" +seconds ;
+			}else{
+				secondsStr = "0" +seconds ;
+			}
+		}
+		
+		return  (hourStr +minuteStr + ":"+secondsStr);  
+		
+		
     }
     
     

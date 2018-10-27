@@ -13,7 +13,7 @@ import java.math.BigDecimal;
  */
 public class DaVinfoVO implements  Serializable{
 	
-	private static final long serialVersionUID = 6078246456866990616L;
+	private static final long serialVersionUID = 8728649787886013092L;
 	/**客户Id*/
 	private Long  customerId;
 	/**用户技能ID*/
@@ -37,7 +37,34 @@ public class DaVinfoVO implements  Serializable{
     /**主播封面URL*/
     private String  coverUrl;
     
+    /**技能分类名称*/
+    private  String  skillItemName;
+    /**声音时长*/
+    private  BigDecimal  voiceTime ;
+    /**声音URL*/
+    private  String  voiceUrl;
     
+    
+    
+    
+	public String getSkillItemName() {
+		return skillItemName;
+	}
+	public void setSkillItemName(String skillItemName) {
+		this.skillItemName = skillItemName;
+	}
+	public BigDecimal getVoiceTime() {
+		return voiceTime;
+	}
+	public void setVoiceTime(BigDecimal voiceTime) {
+		this.voiceTime = voiceTime;
+	}
+	public String getVoiceUrl() {
+		return voiceUrl;
+	}
+	public void setVoiceUrl(String voiceUrl) {
+		this.voiceUrl = voiceUrl;
+	}
 	public Long getCustomerId() {
 		return customerId;
 	}

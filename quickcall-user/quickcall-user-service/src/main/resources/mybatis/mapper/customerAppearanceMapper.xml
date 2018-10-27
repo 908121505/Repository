@@ -101,14 +101,14 @@ id,	customer_id,	audit_appearance,	appearance,	type,	audit_status,	sort,	status,
 
 	<!-- 据类型查询用户审核通过的照片 -->
 	<select id="queryCustomerAuditedAppearance" resultType="string">
-		SELECT audit_appearance
+		SELECT appearance
 		FROM customer_appearance
 		WHERE customer_id = #{customerId}
 		AND type = #{type}
 		AND status = 1
-		AND audit_appearance IS NOT NULL
-		AND audit_appearance != ''
-		ORDER BY create_time DESC
+		AND appearance IS NOT NULL
+		AND appearance != ''
+		ORDER BY create_time ASC
 	</select>
 	<!-- 查询（根据用户id和类型查询） -->
 	<select id="selectByCustomerIdAndType" resultMap="customerAppearanceMap">
@@ -135,10 +135,26 @@ id,	customer_id,	audit_appearance,	appearance,	type,	audit_status,	sort,	status,
 			<if test="appearance != null">
 				appearance = #{appearance},
 			</if>
+			<if test="auditStatus != null">
+				audit_status = #{auditStatus},
+			</if>
 
 				modify_time = now()
 
 		</set>
 		WHERE id = #{id}
 	</update>
+
+
+	<select id="selectAppearanceVOByCustomerIdAndType" resultType="com.honglu.quickcall.user.facade.vo.AppearanceVO">
+		SELECT
+		  id,
+		  customer_id as customerId,
+		  audit_appearance AS auditAppearance,
+		  appearance,
+		  audit_status AS auditStatus
+		FROM customer_appearance
+		WHERE customer_id = #{customerId} and type = #{type}
+		ORDER BY create_time
+	</select>
 </mapper>

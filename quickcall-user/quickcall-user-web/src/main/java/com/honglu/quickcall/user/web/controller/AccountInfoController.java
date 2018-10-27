@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.honglu.quickcall.common.api.exchange.WebResponseModel;
 import com.honglu.quickcall.user.facade.exchange.request.AddOrCancelFansRequest;
 import com.honglu.quickcall.user.facade.exchange.request.CheckAttentionRequest;
+import com.honglu.quickcall.user.facade.exchange.request.CheckEachAttentionRequest;
+import com.honglu.quickcall.user.facade.exchange.request.NoReadAttentionCountRequest;
 import com.honglu.quickcall.user.facade.exchange.request.QueryAttentionFansListRequest;
 import com.honglu.quickcall.user.facade.exchange.request.QueryInterestListRequest;
 import com.honglu.quickcall.user.facade.exchange.request.QueryOccupationListRequest;
@@ -145,7 +147,17 @@ public class AccountInfoController {
 		WebResponseModel response = userCenterService.execute(params);
 		return response;
 	}
-
+	
+	/**
+	 * 检查是否关注对方
+	 */
+	@RequestMapping(value = "/checkEachAttention", method = RequestMethod.POST)
+	@ResponseBody
+	public WebResponseModel checkEachAttention(CheckEachAttentionRequest params) {
+		WebResponseModel response = userCenterService.execute(params);
+		return response;
+	}
+	
 	/**
 	 * 检查是否关注对方
 	 */
@@ -165,7 +177,17 @@ public class AccountInfoController {
 		WebResponseModel response = userCenterService.execute(params);
 		return response;
 	}
-	
+
+	/**
+	 * 关注未读数量
+	 */
+	@RequestMapping(value = "/noReadAttentionCount", method = RequestMethod.POST)
+	@ResponseBody
+	public WebResponseModel noReadAttentionCount(NoReadAttentionCountRequest params) {
+		WebResponseModel response = userCenterService.execute(params);
+		return response;
+	}
+
 	/**
 	 * 我的技能
 	 */

@@ -7,7 +7,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -33,7 +32,7 @@ public class EditProfileController {
      * @return
      */
     @PostMapping(value = "/updateNickName")
-    public WebResponseModel updateNickName(@RequestBody UpdateNickNameReq params) {
+    public WebResponseModel updateNickName(UpdateNickNameReq params) {
         logger.info("修改昵称 请求参数：" + params.toString());
         WebResponseModel response = userCenterService.execute(params);
         return response;
@@ -45,7 +44,7 @@ public class EditProfileController {
      * @return
      */
     @PostMapping(value = "/updateHeadPortrait")
-    public WebResponseModel updateHeadPortrait(@RequestBody UpdateHeadPortraitReq params) {
+    public WebResponseModel updateHeadPortrait(UpdateHeadPortraitReq params) {
         logger.info("修改头像 请求参数：" + params.toString());
         WebResponseModel response = userCenterService.execute(params);
         return response;
@@ -57,7 +56,7 @@ public class EditProfileController {
      * @return
      */
     @PostMapping(value = "/updateSignName")
-    public WebResponseModel updateSignName(@RequestBody UpdateSignNameReq params) {
+    public WebResponseModel updateSignName(UpdateSignNameReq params) {
         logger.info("修改个性签名 请求参数：" + params.toString());
         WebResponseModel response = userCenterService.execute(params);
         return response;
@@ -69,7 +68,7 @@ public class EditProfileController {
      * @return
      */
     @PostMapping(value = "/updateStarSign")
-    public WebResponseModel updateStarSign(@RequestBody UpdateStarSignReq params) {
+    public WebResponseModel updateStarSign(UpdateStarSignReq params) {
         logger.info("修改星座 请求参数：" + params.toString());
         WebResponseModel response = userCenterService.execute(params);
         return response;
@@ -93,7 +92,7 @@ public class EditProfileController {
      * @return
      */
     @PostMapping(value = "/updateInterest")
-    public WebResponseModel updateInterest(@RequestBody UpdateInterestReq params) {
+    public WebResponseModel updateInterest(UpdateInterestReq params) {
         logger.info("修改兴趣 请求参数：" + params.toString());
         WebResponseModel response = userCenterService.execute(params);
         return response;
@@ -105,7 +104,7 @@ public class EditProfileController {
      * @return
      */
     @PostMapping(value = "/updateAppearance")
-    public WebResponseModel updateAppearance(@RequestBody UpdateAppearanceReq params) {
+    public WebResponseModel updateAppearance(UpdateAppearanceReq params) {
         logger.info("修改形象照 请求参数：" + params.toString());
         WebResponseModel response = userCenterService.execute(params);
         return response;
@@ -117,7 +116,7 @@ public class EditProfileController {
      * @return
      */
     @PostMapping(value = "/removeAppearance")
-    public WebResponseModel removeAppearance(@RequestBody RemoveAppearanceReq params) {
+    public WebResponseModel removeAppearance(RemoveAppearanceReq params) {
         logger.info("删除形象照 请求参数：" + params.toString());
         WebResponseModel response = userCenterService.execute(params);
         return response;
@@ -129,7 +128,7 @@ public class EditProfileController {
      * @return
      */
     @PostMapping(value = "/updateVoiceIdentificationCard")
-    public WebResponseModel updateVoiceIdentificationCard(@RequestBody UpdateVoiceIdentificationCardReq params) {
+    public WebResponseModel updateVoiceIdentificationCard(UpdateVoiceIdentificationCardReq params) {
         logger.info("修改声鉴卡 请求参数：" + params.toString());
         WebResponseModel response = userCenterService.execute(params);
         return response;
@@ -141,12 +140,48 @@ public class EditProfileController {
      * @return
      */
     @PostMapping(value = "/removeVoiceIdentificationCard")
-    public WebResponseModel removeVoiceIdentificationCard(@RequestBody RemoveVoiceIdentificationCardReq params) {
+    public WebResponseModel removeVoiceIdentificationCard(RemoveVoiceIdentificationCardReq params) {
         logger.info("删除声鉴卡 请求参数：" + params.toString());
         WebResponseModel response = userCenterService.execute(params);
         return response;
     }
 
+    /**
+     * 修改性别
+     *
+     * @param params
+     * @return
+     */
+    @PostMapping(value = "/updateGender")
+    public WebResponseModel updateGender(UpdateGenderReq params) {
+        logger.info("修改性别 请求参数：" + params.toString());
+        WebResponseModel response = userCenterService.execute(params);
+        return response;
+    }
+    /**
+     * 修改年龄
+     *
+     * @param params
+     * @return
+     */
+    @PostMapping(value = "/updateBirthday")
+    public WebResponseModel updateBirthday(UpdateBirthdayReq params) {
+        logger.info("修改年龄 请求参数：" + params.toString());
+        WebResponseModel response = userCenterService.execute(params);
+        return response;
+    }
+    /**
+     * 编辑资料页面，查询用户信息
+     *
+     * @param params
+     * @return
+     */
+    @PostMapping(value = "/queryUserEditInfo")
+    public WebResponseModel queryUserEditInfo(QueryUserEditInfoReq params) {
+        logger.info("编辑资料页面，查询用户信息 请求参数：" + params.toString());
+        WebResponseModel response = userCenterService.execute(params);
+        return response;
+    }
 
 
 }

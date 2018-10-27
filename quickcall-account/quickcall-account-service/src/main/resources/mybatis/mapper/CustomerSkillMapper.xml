@@ -46,6 +46,40 @@
     from customer_skill
     where customer_skill_id = #{customerSkillId,jdbcType=BIGINT}
   </select>
+  <select id="selectByPrimaryKeyExt" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from customer_skill
+    where customer_skill_id = #{customerSkillId,jdbcType=BIGINT}  AND switch_status = 1 AND receive_status =1 
+       <include refid="SKILL_EXIST_CONDITON"></include>
+  </select>
+  
+  
+  
+  <sql id="SKILL_EXIST_CONDITON">
+      <if test="weekIndex == 1" >
+        AND ( monday = 0  or (monday = 1  and  end_time_str <![CDATA[  > ]]> #{endTimeStr,jdbcType=VARCHAR}) )
+      </if>
+      <if test="weekIndex == 2" >
+        AND ( tuesday = 0  or (tuesday = 1  and  end_time_str <![CDATA[  > ]]> #{endTimeStr,jdbcType=VARCHAR}) )
+      </if>
+      <if test="weekIndex == 3" >
+        AND ( wednesday = 0  or (wednesday = 1  and  end_time_str <![CDATA[  > ]]> #{endTimeStr,jdbcType=VARCHAR}) )
+      </if>
+      <if test="weekIndex == 4" >
+        AND ( thursday = 0  or (thursday = 1  and  end_time_str <![CDATA[  > ]]> #{endTimeStr,jdbcType=VARCHAR}) )
+      </if>
+      <if test="weekIndex == 5" >
+        AND ( friday = 0  or (friday = 1  and  end_time_str <![CDATA[  > ]]> #{endTimeStr,jdbcType=VARCHAR}) )
+      </if>
+      <if test="weekIndex == 6" >
+        AND ( saturday = 0  or (saturday = 1  and  end_time_str <![CDATA[  > ]]> #{endTimeStr,jdbcType=VARCHAR}) )
+      </if>
+      <if test="weekIndex == 7" >
+        AND ( sunday = 0  or (sunday = 1  and  end_time_str <![CDATA[  > ]]> #{endTimeStr,jdbcType=VARCHAR}) )
+      </if>
+  
+  </sql>
 
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
     delete from customer_skill
@@ -382,6 +416,7 @@
     from customer_skill
     where customer_id = #{customerId,jdbcType=BIGINT}
   </select>
+
   
   
   	<update id="batchUpdate" >
@@ -411,4 +446,87 @@
     	customer_skill_id = #{skill.customerSkillId,jdbcType=BIGINT} ;
 		</foreach>
 	</update>
+
+	
+	  <select id="selectCustSkillItem" resultType="com.honglu.quickcall.account.facade.vo.OrderIMVO" parameterType="java.lang.Long" >
+			SELECT
+			  cs.service_unit  AS  serviceUnit,
+			  cs.discount_price  AS  servicePrice,
+			  cs.skill_name  AS  skillItemName,
+			  st.unlock_icon  AS  icon
+			FROM
+				customer_skill cs
+			LEFT JOIN skill_item st ON cs.skill_item_id = st.id
+			WHERE
+				cs.customer_skill_id = #{customerSkillId}
+  </select>
+  
+    <!-- 获取全部技能分类 -->
+  <select id="selectPartSkill" resultType="com.honglu.quickcall.account.facade.vo.FirstPageSkillIteminfoVO" >
+
+		SELECT
+			id  as  skillItemId,
+			skill_item_name as  skillItemName,
+			unlock_icon   as  imageUrl
+		FROM
+			skill_item   
+		ORDER BY
+			sort DESC ,create_time  DESC
+  </select>
+  
+  
+  
+  <!-- 查询用户当天可用技能 -->
+    <select id="selectCustomerSkillByCustomerId" resultType="com.honglu.quickcall.account.facade.vo.CustomerSkillIMVO" >
+		SELECT
+			cs.service_unit  AS serviceUnit,
+		  cs.skill_price  AS  servicePrice,
+		  cs.skill_name  AS  skillItemName,
+		  st.unlock_icon  AS  icon,
+		  cs.customer_skill_id  AS  customerSkillId
+		FROM
+			customer_skill cs
+		LEFT JOIN skill_item st ON cs.skill_item_id = st.id
+    where cs.customer_id = #{customerId,jdbcType=BIGINT}  AND cs.switch_status = 1 AND cs.receive_status =1 
+<!--        <if test="weekIndex == 1" >
+        AND  cs.monday = #{skillSwitch,jdbcType=TINYINT}
+      </if>
+      <if test="weekIndex == 2" >
+        AND  cs.tuesday = #{skillSwitch,jdbcType=TINYINT}
+      </if>
+      <if test="weekIndex == 3" >
+        AND  cs.wednesday = #{skillSwitch,jdbcType=TINYINT}
+      </if>
+      <if test="weekIndex == 4" >
+        AND  cs.thursday = #{skillSwitch,jdbcType=TINYINT}
+      </if>
+      <if test="weekIndex == 5" >
+       AND   cs.friday = #{skillSwitch,jdbcType=TINYINT}
+      </if>
+      <if test="weekIndex == 6" >
+       AND   cs.saturday = #{skillSwitch,jdbcType=TINYINT}
+      </if>
+      <if test="weekIndex == 7" >
+        AND  cs.sunday = #{skillSwitch,jdbcType=TINYINT}
+      </if>
+      <if test="endTimeStr != null" >
+        AND  cs.end_time_str <![CDATA[  > ]]> #{endTimeStr,jdbcType=VARCHAR}
+      </if> -->
+      <include refid="SKILL_EXIST_CONDITON"></include>
+      order by  cs.modify_time desc
+      limit 1
+  </select>
+  
+  
+    <!-- 更新客户在线状态 -->
+    <update id="updateBigvScore" >
+	UPDATE 
+		bigv_score
+	SET 
+		cust_status = #{receiveStatus}
+	WHERE
+		customer_id =#{customerId}
+	</update>
+  
+
 </mapper>

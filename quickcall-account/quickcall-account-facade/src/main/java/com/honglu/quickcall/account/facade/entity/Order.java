@@ -20,6 +20,8 @@ public class Order {
 
     
     private Long customerSkillId;
+    /**技能ID*/
+    private Long skillItemId;
 
    
     private Long customerId;
@@ -50,6 +52,9 @@ public class Order {
 
     
     private Date custCancelTime;
+    
+    
+    private Date appointTime;
 
     
     private Date systemCancelTime;
@@ -68,6 +73,8 @@ public class Order {
 
     
     private Date endTime;
+    
+    private Date expectEndTime;
 
     
     private Date orderTime;
@@ -93,7 +100,9 @@ public class Order {
     
     private String orderDescribe;
 
-    
+    /** 价值评价分（用于计算大V排名） **/
+    private BigDecimal valueScore;
+
     private Date createTime;
 
     
@@ -107,9 +116,57 @@ public class Order {
 
     
     private String remark;
+    /**技能类型*/
+    private Integer  skillType;
+    
+    private String selectReason;
+    private String remarkReason;
+    
+    
+    
 
     
-    public Long getOrderId() {
+    public Long getSkillItemId() {
+		return skillItemId;
+	}
+
+
+	public void setSkillItemId(Long skillItemId) {
+		this.skillItemId = skillItemId;
+	}
+
+
+	public String getSelectReason() {
+		return selectReason;
+	}
+
+
+	public void setSelectReason(String selectReason) {
+		this.selectReason = selectReason;
+	}
+
+
+	public String getRemarkReason() {
+		return remarkReason;
+	}
+
+
+	public void setRemarkReason(String remarkReason) {
+		this.remarkReason = remarkReason;
+	}
+
+
+	public Integer getSkillType() {
+		return skillType;
+	}
+
+
+	public void setSkillType(Integer skillType) {
+		this.skillType = skillType;
+	}
+
+
+	public Long getOrderId() {
         return orderId;
     }
 
@@ -119,7 +176,17 @@ public class Order {
     }
 
     
-    public Long getOrderNo() {
+    public Date getAppointTime() {
+		return appointTime;
+	}
+
+
+	public void setAppointTime(Date appointTime) {
+		this.appointTime = appointTime;
+	}
+
+
+	public Long getOrderNo() {
         return orderNo;
     }
 
@@ -425,5 +492,23 @@ public class Order {
     
     public void setRemark(String remark) {
         this.remark = remark == null ? null : remark.trim();
+    }
+
+
+	public Date getExpectEndTime() {
+		return expectEndTime;
+	}
+
+
+	public void setExpectEndTime(Date expectEndTime) {
+		this.expectEndTime = expectEndTime;
+	}
+
+    public BigDecimal getValueScore() {
+        return valueScore;
+    }
+
+    public void setValueScore(BigDecimal valueScore) {
+        this.valueScore = valueScore;
     }
 }

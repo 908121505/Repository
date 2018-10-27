@@ -31,7 +31,11 @@
     <result column="remark" property="remark" jdbcType="VARCHAR" />
 
     <!-- 扩展查询字段 -->
+    <result column="customer_nick_name" property="customerNickName" jdbcType="VARCHAR" />
+    <result column="customer_sex" property="customerSex" />
+    <result column="customer_birthday" property="customerBirthday" jdbcType="TIMESTAMP" />
     <result column="skill_back_color" property="skillBackColor" jdbcType="VARCHAR" />
+    <result column="skill_home_black_color" property="skillHomeBackColor" jdbcType="VARCHAR" />
     <result column="skill_font_color" property="skillFontColor" jdbcType="VARCHAR" />
     <result column="skill_voice_url" property="skillVoiceUrl" jdbcType="VARCHAR" />
     <result column="skill_voice_time" property="skillVoiceTime" jdbcType="DECIMAL" />
@@ -50,8 +54,10 @@
      select 
     <include refid="Base_Column_List" />
     from customer_skill
-    where customer_skill_id = #{customerSkillId,jdbcType=BIGINT}
+    where  customer_skill_id = #{customerSkillId,jdbcType=BIGINT}
   </select>
+
+
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
     delete from customer_skill
     where customer_skill_id = #{customerSkillId,jdbcType=BIGINT}
@@ -368,8 +374,39 @@
   </update>
 
   <!-- 查询客户审核通过的技能 -->
+  <select id="selectAuditedSkillByPage" resultMap="BaseResultMap">
+   SELECT
+        t.customer_id,
+        t.customer_skill_id,
+        t.skill_item_id,
+        t.skill_name,
+        t.discount_price,
+        t.service_unit,
+        t2.skill_voice_url,
+        t2.skill_voice_time,
+        t3.back_color as skill_back_color,
+        t3.home_black_color as skill_home_black_color,
+        t3.font_color as skill_font_color,
+        t4.nick_name as customer_nick_name,
+        t4.sex as customer_sex,
+        t4.birthday as customer_birthday
+    FROM customer_skill t
+    LEFT JOIN customer_skill_certify t2 ON t2.certify_id = t.certify_id
+    LEFT JOIN skill_item t3 ON t3.id = t.skill_item_id
+    LEFT JOIN customer t4 ON t4.customer_id = t.customer_id
+    WHERE 1=1
+      <if test="skillItemId != null" >
+        AND t.skill_item_id = #{skillItemId}
+      </if>
+    AND t.skill_status = 1
+    ORDER BY t.create_time ASC
+    limit #{pageIndex}, #{pageSize}
+  </select>
+
+  <!-- 查询客户审核通过的技能 -->
   <select id="selectCustomerAuditedSkill" resultMap="BaseResultMap">
    SELECT
+        t.customer_skill_id,
         t.skill_item_id,
         t.skill_name,
         t.discount_price,
@@ -378,12 +415,10 @@
         t2.skill_voice_time,
         t3.back_color as skill_back_color,
         t3.font_color as skill_font_color
-    FROM
-        customer_skill t
+    FROM customer_skill t
     LEFT JOIN customer_skill_certify t2 ON t2.certify_id = t.certify_id
     LEFT JOIN skill_item t3 ON t3.id = t.skill_item_id
-    WHERE
-        t.customer_id = #{customerId}
+    WHERE t.customer_id = #{customerId}
     AND t.skill_status = 1
     ORDER BY t.create_time ASC
   </select>
@@ -397,5 +432,12 @@
       GROUP BY e.label_id
       ORDER BY count(e.label_id) desc , e.evaluation_time desc
       LIMIT 0,3
+  </select>
+
+  <select id="queryCustomerSkillByCustomerId" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select
+    <include refid="Base_Column_List" />
+    from customer_skill
+    where customer_id = #{customerId,jdbcType=BIGINT}
   </select>
 </mapper>

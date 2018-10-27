@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import com.honglu.quickcall.account.facade.entity.TradeDetail;
 import com.honglu.quickcall.account.facade.enums.AccountBusinessTypeEnum;
 import com.honglu.quickcall.account.facade.enums.TransferTypeEnum;
 import com.honglu.quickcall.common.api.util.JedisUtil;
@@ -21,7 +20,14 @@ import com.honglu.quickcall.common.core.util.UUIDUtils;
 import com.honglu.quickcall.task.dao.AccountMapper;
 import com.honglu.quickcall.task.dao.TradeDetailMapper;
 import com.honglu.quickcall.task.entity.Account;
+import com.honglu.quickcall.task.entity.TradeDetail;
 
+/**
+ * 冻结金额24小时回账 job
+ * 
+ * @author liyingtang
+ *
+ */
 @Component
 public class FrozenSteamJob {
 	public static final Logger logger = LoggerFactory.getLogger(FrozenSteamJob.class);
@@ -38,7 +44,7 @@ public class FrozenSteamJob {
 	@Scheduled(cron = "* 0/15 * * * ?")
 	public void execute() {
 
-		logger.info("冻结金额24小时后   到账户越操作 job 开启------------------------");
+		logger.info("冻结金额12小时后   到账户越操作 job 开启------------------------");
 
 		List<Account> list = accountMapper.queryFrozenAccouont();
 		if (list != null && list.size() > 0) {
@@ -95,7 +101,7 @@ public class FrozenSteamJob {
 			}
 		}
 
-		logger.info("冻结金额24小时后   到账户越操作 job 结束------------------------");
+		logger.info("冻结金额12小时后   到账户越操作 job 结束------------------------");
 
 	}
 

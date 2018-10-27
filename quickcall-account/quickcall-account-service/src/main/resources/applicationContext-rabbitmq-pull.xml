@@ -5,30 +5,33 @@
        xmlns:task="http://www.springframework.org/schema/task"
        xsi:schemaLocation="
             http://www.springframework.org/schema/beans
-                http://www.springframework.org/schema/beans/spring-beans.xsd
+            http://www.springframework.org/schema/beans/spring-beans.xsd
             http://www.springframework.org/schema/rabbit
-                http://www.springframework.org/schema/rabbit/spring-rabbit-1.4.xsd
+            http://www.springframework.org/schema/rabbit/spring-rabbit-1.4.xsd
             http://www.springframework.org/schema/task
-                http://www.springframework.org/schema/task/spring-task-4.1.xsd">
+            http://www.springframework.org/schema/task/spring-task-4.1.xsd">
     <!-- 连接服务配置  -->
-    <rabbit:connection-factory id="RCconnectionFactory" host="${mq.host}" username="${mq.username}"
-                               password="${mq.password}" port="${mq.port}"  />
-    <rabbit:admin connection-factory="RCconnectionFactory" />
+    <rabbit:connection-factory id="RCconnectionFactory"
+                               host="${mq.host}"
+                               username="${mq.username}"
+                               password="${mq.password}"
+                               port="${mq.port}"/>
 
-    <rabbit:queue id="queue_userCenter_forAccount" durable="true" auto-delete="false" exclusive="false" name="queue_userCenter_forAccount"/>
+    <rabbit:admin connection-factory="RCconnectionFactory"/>
 
-    <rabbit:direct-exchange name="userCenter-mq-exchange" durable="true" auto-delete="false" id="userCenter-mq-exchange">
+    <rabbit:queue id="queue_accountCenter_for_order" durable="true" auto-delete="false" exclusive="false" name="queue_accountCenter_for_order"/>
+    <rabbit:direct-exchange name="accountCenter-mq-exchange" durable="true" auto-delete="false" id="userCenter-mq-exchange">
         <rabbit:bindings>
-            <rabbit:binding queue="queue_userCenter_forAccount" key="queue_userCenter_forAccount_key"/>
+            <rabbit:binding queue="queue_accountCenter_for_order" key="queue_accountCenter_for_order_key"/>
         </rabbit:bindings>
     </rabbit:direct-exchange>
 
-    <task:executor id="taskExecutor" pool-size="4-256" queue-capacity="128" />
+    <task:executor id="taskExecutor" pool-size="4-256" queue-capacity="128"/>
+
     <!-- queue litener  观察 监听模式 当有消息到达时会通知监听在对应的队列上的监听对象-->
-   <!--  <rabbit:listener-container connection-factory="RCconnectionFactory" acknowledge="manual" task-executor="taskExecutor">
-        <rabbit:listener queues="queue_userCenter_forAccount" ref="userCenterForAccountMqLitener"/>
+    <!--  <rabbit:listener-container connection-factory="RCconnectionFactory" acknowledge="manual" task-executor="taskExecutor">
+         <rabbit:listener queues="queue_userCenter_forAccount" ref="userCenterForAccountMqLitener"/>
+     </rabbit:listener-container> -->
 
-    </rabbit:listener-container> -->
-
-    <bean id="userCenterForAccountMqLitener"  class="com.honglu.quickcall.account.service.mq.pull.UserCenterForAccountMqLitener" />
+    <bean id="accountCenterForOrderMqLitener" class="com.honglu.quickcall.account.service.mq.pull.AccountCenterForOrderMqLitener"/>
 </beans>

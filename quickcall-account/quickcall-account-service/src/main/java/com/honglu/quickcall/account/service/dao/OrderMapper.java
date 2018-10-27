@@ -2,10 +2,11 @@ package com.honglu.quickcall.account.service.dao;
 
 import java.util.List;
 
-import com.honglu.quickcall.account.facade.entity.EvaluationLabel;
 import org.apache.ibatis.annotations.Param;
 
+import com.honglu.quickcall.account.facade.entity.EvaluationLabel;
 import com.honglu.quickcall.account.facade.entity.Order;
+import com.honglu.quickcall.account.facade.vo.OrderDaVSkillVO;
 import com.honglu.quickcall.account.facade.vo.OrderDetailVO;
 import com.honglu.quickcall.account.facade.vo.OrderReceiveOrderListVO;
 import com.honglu.quickcall.account.facade.vo.OrderSendOrderListVO;
@@ -30,10 +31,10 @@ public interface OrderMapper {
     int updateByPrimaryKey(Order record);
     
 	/**查询发出的订单*/
-	List<OrderSendOrderListVO> querySendOrderList(@Param("customerId")  Long customerId);
+	List<OrderSendOrderListVO> querySendOrderList(@Param("customerId")  Long customerId,@Param("statusList")List<Integer>  orderStatusList);
 
 	/**查询收到的订单*/
-	List<OrderReceiveOrderListVO> queryReceiveOrderList(@Param("customerId")  Long customerId);
+	List<OrderReceiveOrderListVO> queryReceiveOrderList(@Param("customerId")  Long customerId,@Param("statusList")List<Integer>  orderStatusList);
 
 
 	/**查询大V订单详情*/
@@ -76,4 +77,71 @@ public interface OrderMapper {
 	 * @return
 	 */
 	int deleteEvaluationLabels(@Param("orderId") Long orderId);
+	
+	
+	
+	/**
+	 * 根据客户编号获取客户信息
+	 * @param customerId
+	 * @return
+	 */
+	OrderDaVSkillVO  getCustomerByCustomerId(@Param("customerId") Long customerId);
+
+
+	/**
+	 * 根据客户编号查询用户可能在进行中的订单列表
+	 * 具体规则如下：
+	 *   skillType :未不可重复接单状态
+	 *   orderStatus:已接单 进行中  已完成  
+	 * @param customerId
+	 * @return
+	 */
+	List<Order> selectGongIngOrderListByCustomerId(@Param("customerId")Long customerId,@Param("skillType")Integer  skillType,@Param("list")List<Integer>  statusList);
+	
+	/**
+	 * 根据客户编号查询用户可能在进行中的订单列表
+	 * 具体规则如下：
+	 *   skillType :未不可重复接单状态
+	 *   orderStatus:已接单 进行中  已完成  
+	 * @param customerId
+	 * @return
+	 */
+	Integer selectGongIngOrderListByCustomerSkillId(@Param("customerSkillId")Long customerSkillId,@Param("skillType")Integer  skillType,@Param("list")List<Integer>  statusList);
+
+
+	/**
+	 * 查询双方是否有订单关系
+	 * @param customerId
+	 * @param serviceId
+	 * @param statusList
+	 * @return
+	 */
+	Order queryOrderByCustomerIdAndServiceId(@Param("customerId")Long customerId, @Param("serviceId")Long serviceId, @Param("list")List<Integer> statusList);
+
+
+	/***
+	 * 取消其它订单
+	 * @param orderId
+	 * @param queryStatus
+	 * @param updateStatus
+	 * @param skillType
+	 */
+	void updateOrderReceiveOrder(@Param("list")List<Long>  orderIdList,@Param("orderStatus")Integer orderStatus);
+
+	
+
+	/**
+	 * 查询用户是否接多单
+	 * @param serviceId
+	 * @param orderId
+	 * @param orderStatus
+	 * @param skillType
+	 * @return
+	 */
+	List<Order> selectOrderReceiveOrder(@Param("serviceId")Long  serviceId ,@Param("orderId")Long orderId, @Param("orderStatus")Integer orderStatus, @Param("skillType")Integer skillType);
+	
+	
+	
+	
+	
 }

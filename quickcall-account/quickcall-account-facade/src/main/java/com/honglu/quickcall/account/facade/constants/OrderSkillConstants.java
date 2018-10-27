@@ -11,6 +11,97 @@ package com.honglu.quickcall.account.facade.constants;
  */
 public interface OrderSkillConstants {
 	
+	
+	/**消息标识：大V方*/
+	public static final  String  MSG_CONTENT_DAV = "V";
+	/**消息标识：用户方*/
+	public static final  String  MSG_CONTENT_C = "C";
+	
+	
+	/**1：订单不存在，可以下单 */
+	public  static final  Integer  IM_RETCODE_CAN_ORDER = 1;
+	/** 2：订单不存在 大V在忙*/
+	public  static final  Integer  IM_RETCODE_DV_BUSY = 2;
+	/** 3：订单存在*/
+	public  static final  Integer  IM_RETCODE_ORDER_EXIST = 3;
+	/** 4：大V不可下单*/
+	public  static final  Integer  IM_RETCODE_ORDER_COUND_ORDER = 4;
+	
+	
+	
+	
+	
+	////////////////////////IM消息内容//////////////////////////
+	public  static final  String  IM_MSG_CONTENT_RECEIVE_ORDER = "有人下单啦";
+	public  static final  String  IM_MSG_CONTENT_CANCEL_ORDER = "订单取消啦";
+	public  static final  String  IM_MSG_CONTENT_USER_CONFIRM_FINISH= "订单完成啦";
+	public  static final  String  IM_MSG_CONTENT_USER_CONFIRM_START_SERVICE = "用户同意开始服务啦";
+	public  static final  String  IM_MSG_CONTENT_DAV_REFUSE = "大V接单啦";
+	public  static final  String  IM_MSG_CONTENT_DAV_CONFIRM = "大V拒绝接单啦";
+	public  static final  String  IM_MSG_CONTENT_DAV_START_SERVICE = "大V开始服务啦";
+	public  static final  String  IM_MSG_CONTENT_CUST_FINISH = "用户完成服务啦";
+	public  static final  String  IM_MSG_CONTENT_DAV_FINISH = "大V完成服务啦";
+	
+	
+	
+	public  static final  String  IM_MSG_CONTENT_CANCEL_CUST_15MINUTE_TIMEOUT = "15分钟主播未接单，订单取消";
+	public  static final  String  IM_MSG_CONTENT_CANCEL_DV_15MINUTE_TIMEOUT = "15分钟未接单，订单取消";
+	
+	/**大V5分钟未发起服务*/
+	public  static final  String  IM_MSG_CONTENT_CANCEL_CUST_5MINUTE_START_TIMEOUT = "5分钟主播未发起服务，订单取消";
+	/**大V5分钟未发起服务*/
+	public  static final  String  IM_MSG_CONTENT_CANCEL_DV_5MINUTE_START_TIMEOUT = "5分钟未发起服务，订单取消";
+	
+	
+	/**用户5分钟未接*/
+	public  static final  String  IM_MSG_CONTENT_CANCEL_CUST_5MINUTE_CONFIRM_TIMEOUT = "您5分钟未接受服务，订单取消";
+	/**用户5分钟未接*/
+	public  static final  String  IM_MSG_CONTENT_CANCEL_DV_5MINUTE_CONFIRM_TIMEOUT = "5分钟用户未接受服务，订单取消";
+	
+	
+	/**服务完成*/
+	public  static final  String  IM_MSG_CONTENT_CANCEL_CUST_FINISH = "您有新完成的消息";
+	public  static final  String  IM_MSG_CONTENT_DEFAULT = "您有新短消息";
+	
+	
+	
+	
+	
+	
+	
+	
+	
+
+	////////////////////////IM消息内容//////////////////////////
+	
+	
+	/**下单返回结果：1 成功*/
+	public static final String  RET_CODE_SUCCESS = "1";
+	/**下单返回结果：2 余额不足*/
+	public static final String  RET_CODE_BALANCE_NOT_ENOUTH = "2";
+	/**下单返回结果：3 大V正忙*/
+	public static final String  RET_CODE_DV_BUSY = "3";
+	/**下单返回结果：3 大V正忙*/
+	public static final String  RET_CODE_DV_NOT_ACCEPTE_ORDER = "5";
+	/**下单返回结果：4 系统错误*/
+	public static final String  RET_CODE_SYSTEM_ERROR = "4";
+	
+	/**默认空字符串*/
+	public static final String  DEFAULT_NULL_STR = "";
+	
+	/**半小时秒数：1800秒*/
+	public  static final  Integer  HALF_HOUR_SECONDS = 1800;
+	/**一小时秒数：3600秒*/
+	public  static final  Integer  ONE_HOUR_SECONDS = 3600;
+	/**服务单位：一小时*/
+	public  static final  String  SERVICE_UNIT_HOUR = "一小时";
+	/**服务单位：半小时*/
+	public  static final  String  SERVICE_UNIT_HALF_HOUR = "半小时";
+	/**服务单位：次*/
+	public  static final  String  SERVICE_UNIT_TIMES = "次";
+	
+	
+	
 	/**默认每页显示条数*/
 	public static  final  Integer  DEFAULT_PAGE_SIZE = 6;
     
@@ -37,16 +128,49 @@ public interface OrderSkillConstants {
 	public static final Integer  REQUEST_DV_CONFIRM_TYPE_NO = 2 ;
 	
 	
-	/**大V请求退款类型：同意*/
-	public static final Integer  REQUEST_DV_REFUND_TYPE_YES = 1 ;
-	/**大V请求退款类型：拒绝*/
-	public static final Integer  REQUEST_DV_REFUND_TYPE_NO = 2 ;
+	/**用户请求完成服务类型：1 */
+	public static final Integer  REQUEST_DV_FINISH_TYPE = 1 ;
+	/**大V请求完成服务类型：2 */
+	public static final Integer  REQUEST_CUST_FINISH_TYPE = 2 ;
 	
 	
 	/**订单详情请求类型1：客户端*/
 	public static final Integer  REQUEST_TYPE_CUST = 1 ;
 	/**订单详情请求类型2：服务端*/
 	public static final Integer  REQUEST_TYPE_DV = 2 ;
+	
+	
+	/**技能类型类型1：不可重复接单*/
+	public static final Integer  SKILL_TYPE_YES = 1 ;
+	/**技能类型类型2：可重复接单*/
+	public static final Integer  SKILL_TYPE_NO = 2 ;
+	
+	
+	
+	/**订单状态1.全部;   */
+	public static final Integer  ORDER_STATUS_PARAM_TOTAL = 1 ;
+	/**订单状态 2：待接单;   */
+	public static final Integer  ORDER_STATUS_PARAM_WAITING_RECEIVE_ORDER = 2 ;
+	/**订单状态3：待开始;   */
+	public static final Integer  ORDER_STATUS_PARAM_WAITING_START = 3 ;
+	/**订单状态 4：进行中;   */
+	public static final Integer  ORDER_STATUS_PARAM_GOING = 4 ;
+	/**订单状态 5：已完成;   */
+	public static final Integer  ORDER_STATUS_PARAM_FINISHED = 5 ;
+	/**订单状态6.已拒绝    */
+	public static final Integer  ORDER_STATUS_PARAM_REFUSED = 6 ;
+	/**订单状态7.已取消;   */
+	public static final Integer  ORDER_STATUS_PARAM_CANCEL = 7 ;
+	/**订单状态 8：待评价   */
+	public static final Integer  ORDER_STATUS_PARAM_PING_JIA = 8 ;
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	
@@ -72,7 +196,7 @@ public interface OrderSkillConstants {
 	public static final Integer  ORDER_STATUS_CANCLE_USER_SELF_BEFORE_SERVICE = 20 ;
 	/**订单状态22.取消（大V发起开始服务用户5分钟未接）;*/
 	public static final Integer  ORDER_STATUS_CANCEL_USER_NOT_ACCEPCT = 22 ;
-	/**订单状态24.进行中（大V发起开始服务用户5分钟内同意，叫醒特享）;*/
+	/**订单状态24.待开始（大V发起开始服务用户5分钟内同意，叫醒特享）;*/
 	public static final Integer  ORDER_STATUS_GOING_WAITING_START = 24 ;
 	/**订单状态26.进行中（大V发起开始服务用户5分钟内同意）;*/
 	public static final Integer  ORDER_STATUS_GOING_USER_ACCEPCT = 26 ;
@@ -82,7 +206,7 @@ public interface OrderSkillConstants {
 	public static final Integer  ORDER_STATUS_FINISHED_USER_ACCEPCT = 30 ;
 	/**订单状态32.已完成（大V发起已完成服务，12小时客户不响应自动完成）*/
 	public static final Integer  ORDER_STATUS_FINISH_DV_FINISH = 32 ;
-	/**订单状态34.进行中（用户发起完成服务）*/
+	/**订单状态34.已完成（用户发起完成服务）*/
 	public static final Integer  ORDER_STATUS_GOING_USRE_APPAY_FINISH = 34 ;
 	/**订单状态36.已完成（大V在服务时间外完成）;*/
 	public static final Integer  ORDER_STATUS_FINISH_DAV_FINISH_AFTER_SERVICE_TIME = 36 ;
@@ -93,8 +217,8 @@ public interface OrderSkillConstants {
 	
 	
 	
-	/**订单状态18.订单完成（正常完成）;*/
-	public static final Integer  ORDER_STATUS_END = 18 ;
+//	/**订单状态18.订单完成（正常完成）;*/
+//	public static final Integer  ORDER_STATUS_END = 18 ;
 	
 	
 	

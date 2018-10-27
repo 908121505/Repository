@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Appearance">
+
+    <resultMap type="com.calf.module.customerservice.entity.CustomerAppearance" id="customerAppearanceMap">
+        <id property="id" column="id" javaType="java.lang.String"></id>
+        <result property="customerId" column="customer_id" javaType="java.lang.String"></result>
+        <result property="auditAppearance" column="audit_appearance" javaType="java.lang.String"></result>
+        <result property="appearance" column="appearance" javaType="java.lang.String"></result>
+        <result property="type" column="type" javaType="java.lang.Integer"></result>
+        <result property="auditStatus" column="audit_status" javaType="java.lang.Integer"></result>
+        <result property="sort" column="sort" javaType="java.lang.Integer"></result>
+        <result property="status" column="status" javaType="java.lang.Integer"></result>
+        <result property="createTime" column="create_time" javaType="java.util.Date"></result>
+        <result property="modifyTime" column="modify_time" javaType="java.util.Date"></result>
+        <result property="createMan" column="create_man" javaType="java.lang.String"></result>
+        <result property="modifyMan" column="modify_man" javaType="java.lang.String"></result>
+        <result property="remark" column="remark" javaType="java.lang.String"></result>
+    </resultMap>
+
+    <!-- 通用查询结果列-->
+    <sql id="Base_Column_List">
+		id,	customer_id,	audit_appearance,	appearance,	type,	audit_status,	sort,	status,	create_time,	modify_time,	create_man,	modify_man,	remark
+	</sql>
+
+    <!-- 查询（根据主键ID查询） -->
+    <select id="getEntityById" resultMap="customerAppearanceMap" parameterType="java.lang.Long">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM customer_appearance
+        WHERE id = #{id}
+    </select>
+
+    <!-- 查询（根据主键ID查询） -->
+    <select id="findAll" resultMap="customerAppearanceMap" parameterType="java.lang.Long">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM customer_appearance
+        WHERE id = #{id}
+    </select>
+
+    <!--删除：根据主键ID删除-->
+    <delete id="deleteEntity" parameterType="java.lang.Long">
+		 DELETE FROM customer_appearance
+		 WHERE id = #{id}
+	</delete>
+
+    <!-- 添加 -->
+    <insert id="saveEntity" parameterType="com.calf.module.customerservice.entity.CustomerAppearance">
+		 INSERT INTO customer_appearance
+ 		(id,customer_id,audit_appearance,appearance,type,audit_status,sort,status,create_time,modify_time,create_man,modify_man,remark) 
+		 VALUES 
+ 		(#{id},#{customerId},#{auditAppearance},#{appearance},#{type},#{auditStatus},#{sort},#{status},#{createTime},#{modifyTime},#{createMan},#{modifyMan},#{remark}) 
+	</insert>
+
+    <!-- 修 改-->
+    <update id="updateEntity" parameterType="com.calf.module.customerservice.entity.CustomerAppearance">
+        UPDATE customer_appearance
+        <set>
+            <if test="customerId != null">
+                customer_id = #{customerId},
+            </if>
+            <if test="auditAppearance != null">
+                audit_appearance = #{auditAppearance},
+            </if>
+            <if test="appearance != null">
+                appearance = #{appearance},
+            </if>
+            <if test="type != null">
+                type = #{type},
+            </if>
+            <if test="auditStatus != null">
+                audit_status = #{auditStatus},
+            </if>
+            <if test="sort != null">
+                sort = #{sort},
+            </if>
+            <if test="status != null">
+                status = #{status},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime},
+            </if>
+            <if test="modifyTime != null">
+                modify_time = #{modifyTime},
+            </if>
+            <if test="createMan != null">
+                create_man = #{createMan},
+            </if>
+            <if test="modifyMan != null">
+                modify_man = #{modifyMan},
+            </if>
+            <if test="remark != null">
+                remark = #{remark},
+            </if>
+
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <!-- 据类型查询用户审核通过的照片 -->
+    <select id="queryCustomerAuditedAppearance" resultType="string">
+		SELECT audit_appearance
+		FROM customer_appearance
+		WHERE customer_id = #{customerId}
+		AND type = #{type}
+		AND status = 1
+		AND audit_appearance IS NOT NULL
+		AND audit_appearance != ''
+		ORDER BY create_time DESC
+	</select>
+    <!-- 查询（根据用户id和类型查询） -->
+    <select id="selectByCustomerIdAndType" resultMap="customerAppearanceMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM customer_appearance
+        WHERE customer_id = #{customerId} and type = #{type}
+    </select>
+
+    <insert id="insertAppearance" parameterType="com.calf.module.customerservice.entity.CustomerAppearance">
+		INSERT INTO customer_appearance
+		(id,customer_id,audit_appearance,type)
+		VALUES
+		(#{id},#{customerId},#{auditAppearance},#{type})
+	</insert>
+
+    <update id="updateAppearance" parameterType="com.calf.module.customerservice.entity.CustomerAppearance">
+        UPDATE customer_appearance
+        <set>
+
+            <if test="auditAppearance != null">
+                audit_appearance = #{auditAppearance},
+            </if>
+            <if test="appearance != null">
+                appearance = #{appearance},
+            </if>
+
+            modify_time = now()
+
+        </set>
+        WHERE id = #{id}
+    </update>
+
+
+    <select id="selectPageList" resultMap="customerAppearanceMap" parameterType="map">
+        select
+        <include refid="Base_Column_List"/>
+        from customer_appearance LIMIT ${iDisplayStart},${iDisplayLength}
+    </select>
+    <select id="selectCount" resultType="java.lang.Integer">
+		select
+		count(1)
+		from customer_appearance
+	</select>
+
+    <select id="selectAppearancePageList" resultType="com.calf.module.customerservice.entity.CustomerAppearance"
+            parameterType="map">
+        SELECT
+        a.id,
+        a.customer_id customerId,
+        a.audit_appearance auditAppearance,
+        a.appearance appearance,
+        a.type TYPE,
+        a.audit_status auditStatus,
+        a.sort sort,
+        a.status STATUS,
+        a.create_time createTime,
+        a.modify_time modifyTime,
+        a.create_man createMan,
+        a.modify_man modifyMan,
+        a.remark,
+        c.nick_name nickName
+        FROM
+        customer_appearance a
+        LEFT JOIN customer c
+        ON a.customer_id = c.customer_id
+        WHERE 1=1
+        <if test="type !=null ">and a.type = #{type}</if>
+        <if test="nickName !=null and nickName!='' ">and c.nick_name like concat('%',#{nickName},'%')</if>
+        <if test="customerId !=null and customerId!='' ">and a.customer_id = #{customerId}</if>
+        <if test="auditStatus !=null and auditStatus!='' ">and a.audit_status = #{auditStatus}</if>
+        ORDER BY a.create_time DESC
+        LIMIT ${iDisplayStart}, ${iDisplayLength}
+    </select>
+    <select id="selectAppearanceCount" resultType="java.lang.Integer" parameterType="map">
+        select
+        count(1)
+        from customer_appearance a
+        LEFT JOIN customer c
+        ON a.customer_id = c.customer_id
+        where 1=1
+        <if test="type !=null ">and a.type = #{type}</if>
+        <if test="nickName !=null and nickName!='' ">and c.nick_name like concat('%',#{nickName},'%')</if>
+        <if test="customerId !=null and customerId!='' ">and a.customer_id = #{customerId}</if>
+        <if test="auditStatus !=null and auditStatus!='' ">and a.audit_status = #{auditStatus}</if>
+    </select>
+
+    <update id="approve" parameterType="map">
+		UPDATE customer_appearance
+		SET appearance = audit_appearance, audit_status = 1
+		WHERE id = #{id}
+	</update>
+
+    <update id="reject" parameterType="map">
+		UPDATE customer_appearance
+		SET audit_status = 2
+		WHERE id = #{id}
+	</update>
+
+</mapper>

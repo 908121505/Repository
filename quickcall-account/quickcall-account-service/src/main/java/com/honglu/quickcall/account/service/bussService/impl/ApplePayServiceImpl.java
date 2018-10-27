@@ -184,8 +184,8 @@ public class ApplePayServiceImpl implements ApplePayService {
                 rechargeMapper.updateByOrderNo(recharge);
 
                 // 2. 账户充值操作
-                accountService.inAccount(rechargeVO.getCustomerId(), rechargeVO.getAmount(), TransferTypeEnum.RECHARGE,
-                    AccountBusinessTypeEnum.Recharge);
+                accountService.inAccount(rechargeVO.getCustomerId(), rechargeVO.getAmount().multiply(BigDecimal.valueOf(100))
+                        , TransferTypeEnum.RECHARGE, AccountBusinessTypeEnum.Recharge);
                 return ResultUtils.resultSuccess();
                 /**************************************** +自己的业务逻辑end ******************************************/
 

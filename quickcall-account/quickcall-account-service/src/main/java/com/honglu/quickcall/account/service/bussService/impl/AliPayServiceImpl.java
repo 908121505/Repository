@@ -177,19 +177,24 @@ public class AliPayServiceImpl implements AliPayService {
 		// TODO Auto-generated method stub
 		logger.info("支付回调参数===========" + JSON.toJSONString(params));
 
+		// RMB转换轻音货币 比例1:100
+		BigDecimal amount = params.getAmount().multiply(new BigDecimal("100"));
 		Recharge recharge = new Recharge();
 		recharge.setCustomerId(params.getAccountId());
 		recharge.setFinishDate(new Date());
 		recharge.setOrdersn(params.getOrderNo());
-		if (params.getPayState() == 1) {
-			recharge.setState(2);// 状态。1-申请支付，2-支付成功 3支付失败
+		if (rechargeMapper.selectByOrderNo(params.getOrderNo()).getState() == 1) {
 
-			accountService.inAccount(params.getAccountId(), params.getAmount(), TransferTypeEnum.RECHARGE,
-					AccountBusinessTypeEnum.Recharge);
-		} else if (params.getPayState() == 0) {
-			recharge.setState(3);// 状态。1-申请支付，2-支付成功 3支付失败
+			if (params.getPayState() == 1) {
+				recharge.setState(2);// 状态。1-申请支付，2-支付成功 3支付失败
+
+				accountService.inAccount(params.getAccountId(), amount, TransferTypeEnum.RECHARGE,
+						AccountBusinessTypeEnum.Recharge);
+			} else if (params.getPayState() == 0) {
+				recharge.setState(3);// 状态。1-申请支付，2-支付成功 3支付失败
+			}
+			rechargeMapper.updateByOrderNo(recharge);
 		}
-		rechargeMapper.updateByOrderNo(recharge);
 		return ResultUtils.resultSuccess();
 	}
 

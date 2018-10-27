@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -32,6 +34,7 @@ import com.honglu.quickcall.common.api.util.JSONUtil;
 
 @Service("productSkillService")
 public class ProductSkillServiceImpl implements IProductSkillService {
+	private static final Logger LOGGER = LoggerFactory.getLogger(ProductSkillServiceImpl.class);
 
 	
 	@Autowired
@@ -51,7 +54,6 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 		String coverUrl = "http://test-guanjia.oss-cn-shanghai.aliyuncs.com/voice/skill/1539668863932.png";
 		String bussTagUrl = "http://test-guanjia.oss-cn-shanghai.aliyuncs.com/voice/skill/1539668863932.png";
 		String categoryTagUrl = "http://test-guanjia.oss-cn-shanghai.aliyuncs.com/voice/skill/1539668869623.png";
-
 		for (int i = 0; i < 6; i++) {
 			daVinfoList.add(getDaVinfoVO("半小时", bussTagUrl, categoryTagUrl, coverUrl));
 		}
@@ -93,7 +95,7 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 			}
 			listVO.setSkillItemId(1000L);
 			List<DaVinfoVO> daVinfoList = new ArrayList<DaVinfoVO>();
-			for (int j = 0; j < 5; j++) {
+			for (int j = 0; j < 4; j++) {
 				daVinfoList.add(getDaVinfoVO(unitName, bussTagUrl, categoryTagUrl, coverUrl));
 			}
 			listVO.setDaVinfoList(daVinfoList);
@@ -117,6 +119,9 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 		infoVO.setUnitName(unitName);
 		infoVO.setCoverUrl(coverUrl);
 		infoVO.setCurrencyName(Math.random() > 0.5 ? "币" : "元");
+		infoVO.setSkillItemName("哄睡");
+		infoVO.setVoiceTime(new BigDecimal(10));
+		infoVO.setVoiceUrl("http://test-guanjia.oss-cn-shanghai.aliyuncs.com/voice/user/audio/51d8d1dbace54c41a56208864c1c9284.mp3");
 		return infoVO;
 	}
 
@@ -167,21 +172,20 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 	 */
 	public void getSkillExtList(Long skillItemId,CustomerSkillVO skillVO) {
 		List<CustomerSkillExtVO> resultList = new ArrayList<CustomerSkillExtVO>();
-		List<SkillItemExt> skillItemExtList = skillItemExtMapper.querySkillItemExtList(skillItemId, 1);
+		List<SkillItemExt> skillItemExtList = skillItemExtMapper.querySkillItemExtList(skillItemId, 1,1);
 		if (CollectionUtils.isEmpty(skillItemExtList)) {
 			return;
 		}
 		HashMap<Integer, List<SkillUnitPriceVO>> itemExtMap = new HashMap<Integer, List<SkillUnitPriceVO>>();
-		List<BigDecimal> discontRateList = new ArrayList<BigDecimal>();
+		
+		Integer  firstRange = null ;
 		for (SkillItemExt itemExt : skillItemExtList) {
-			Integer  type = itemExt.getSkillExtType();
 			//需要使用常量进行限制
-			if(type == 2){
-				discontRateList.add(itemExt.getSkillExtDiscont());
-				continue ;
-			}
 			List<SkillUnitPriceVO> list = null;
 			Integer skillExtRange = itemExt.getSkillExtRange();
+			if(firstRange == null){
+				firstRange =itemExt.getSkillExtRange();
+			}
 			if (itemExtMap.containsKey(skillExtRange)) {
 				list = itemExtMap.get(skillExtRange);
 			} else {
@@ -195,6 +199,9 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 			list.add(unitPriceVO);
 			itemExtMap.put(skillExtRange, list);
 		}
+		
+		
+		
 
 		for (Map.Entry<Integer, List<SkillUnitPriceVO>> entry : itemExtMap.entrySet()) {
 			CustomerSkillExtVO extVO = new CustomerSkillExtVO();
@@ -203,15 +210,65 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 			resultList.add(extVO);
 		}
 		
-		
-		skillVO.setDiscontRateList(discontRateList);
 		skillVO.setSkillExtList(resultList);
+		String  oldServiceUnit = skillVO.getOldServiceUnit();
+		if(StringUtils.isBlank(oldServiceUnit) ){
+			List<SkillUnitPriceVO>  list =  itemExtMap.get(1);
+			skillVO.setOldServiceUnit(list.get(0).getUnitName());
+		}
+		
+		
+		Integer  oldSkillRange = skillVO.getOldSkillRange();
+		if(oldSkillRange == null){
+			skillVO.setOldSkillRange(firstRange);
+		}
+		
+		Long  skillItemExtId  = skillVO.getOldSkillItemExtId();
+		if(skillItemExtId == null){
+			List<SkillUnitPriceVO>  list =  itemExtMap.get(1);
+			skillVO.setOldSkillPrice(list.get(0).getUnitPrice());
+			skillVO.setOldSkillItemExtId(list.get(0).getSkillItemExtId());
+		}
+		
+		
+		BigDecimal  skillPrice =  skillVO.getOldSkillPrice();
+		if(skillPrice == null){
+			List<SkillUnitPriceVO>  list =  itemExtMap.get(1);
+			skillVO.setOldSkillPrice(list.get(0).getUnitPrice());
+		}
+		
+		
+		
+		
+		
+		List<BigDecimal> discontRateList = new ArrayList<BigDecimal>();
+		List<SkillItemExt> skillItemExtDiscountList = skillItemExtMapper.querySkillItemExtDiscountList(skillItemId, 1,2);
+		if(!CollectionUtils.isEmpty(skillItemExtDiscountList)){
+			for (SkillItemExt skillItemExt : skillItemExtDiscountList) {
+				discontRateList.add(skillItemExt.getSkillExtDiscont());
+			}
+			skillVO.setDiscontRateList(discontRateList);
+			BigDecimal  oldDiscountRate = skillVO.getOldDiscountRate();
+			if(oldDiscountRate == null){
+				skillVO.setOldDiscountRate(skillItemExtDiscountList.get(0).getSkillExtDiscont());
+			}else{
+				if(oldDiscountRate.compareTo(BigDecimal.ZERO) == 0){
+					skillVO.setOldDiscountRate(skillItemExtDiscountList.get(0).getSkillExtDiscont());
+				}
+			}
+			
+		}
+		
+		
+		
+		
+		
 	}
 	
 	
 
 
-//	@Override
+	@Override
 	public CustomerSkillInfoVO querySkillInfoPersonal(Long customerId) {
 
 		CustomerSkillInfoVO resultVO = new CustomerSkillInfoVO();
@@ -238,6 +295,7 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 			skillVO.setOldServiceUnit(custSkill.getServiceUnit());
 			skillVO.setSkillItemName(custSkill.getSkillName());
 			skillVO.setSwitchStatus(custSkill.getSwitchStatus());
+			skillVO.setOldSkillPrice(custSkill.getDiscountPrice());
 			// 根据技能ID获取可选技能信息
 			Long skillItemId = custSkill.getSkillItemId();
 			getSkillExtList(skillItemId,skillVO);
@@ -365,7 +423,7 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 			return ;
 		}
 		String  endTimeStr = request.getEndServiceTimeStr();
-		int  receiveStatus = request.getReceiveStatus();
+		Integer  receiveStatus = request.getReceiveStatus();
 		Integer sunday = request.getSunday();
 		Integer saturday = request.getSaturday();
 		Integer tuesday = request.getTuesday();
@@ -380,15 +438,25 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 			CustomerSkill custSkill = new CustomerSkill();
 			custSkill.setCustomerId(customerId);
 			custSkill.setCustomerSkillId(csrv.getCustomerSkillId());
-			Long  skillItemExtId = csrv.getSkillItemExtId();
-			custSkill.setSkillItemExtId(skillItemExtId);
 			Long  skillItemId = csrv.getSkillItemId();
 			//根据技能ID获取技能信息
 			SkillItem  skillItem = skillItemMapper.selectByPrimaryKey(skillItemId);
 			if(skillItem != null){
 				custSkill.setSkillName(skillItem.getSkillItemName());
 			}
-			custSkill.setDiscountRate(csrv.getDiscountRate());
+			
+			//获取价格
+			Long  skillItemExtId = csrv.getSkillItemExtId();
+			SkillItemExt  skillItemExt =  skillItemExtMapper.selectByPrimaryKey(skillItemExtId);
+			BigDecimal  skillExtPrice = skillItemExt.getSkillExtPrice() ;
+			custSkill.setSkillPrice(skillExtPrice);
+			//计算折扣价格
+			BigDecimal  discountRate = csrv.getDiscountRate();
+			custSkill.setDiscountPrice(skillExtPrice.multiply(discountRate.divide(new BigDecimal(10))));
+			custSkill.setSkillRange(skillItemExt.getSkillExtRange());
+			custSkill.setSkillItemExtId(skillItemExtId);
+			custSkill.setServiceUnit(skillItemExt.getSkillExtUnit());
+			custSkill.setDiscountRate(discountRate);
 			custSkill.setSkillItemId(skillItemId);
 			custSkill.setSwitchStatus(csrv.getSwitchStatus());
 			custSkill.setMonday(monday);
@@ -403,7 +471,16 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 			custSkill.setEndTimeStr(endTimeStr);
 			updateList.add(custSkill);
 		}
+		//在技能审核的时候已经初始化用户技能信息
 		customerSkillMapper.batchUpdate(updateList);
+		
+		//更新bigv_score表
+		try {
+			customerSkillMapper.updateBigvScore(customerId, receiveStatus);
+		} catch (Exception e) {
+			LOGGER.error("更新用户状态发生异常，异常信息：",e);
+		}
+		
 
 	}
 

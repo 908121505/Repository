@@ -2,7 +2,7 @@
 <%@ taglib prefix="shiro" uri="http://shiro.apache.org/tags"%>
 <div class="content1">
     <div class="header">
-        <h1 class="page-title">APP配置</h1>
+        <h1 class="page-title">职业管理</h1>
         <ul class="breadcrumb">
             <li>APP配置</li>
             <li class="active">职业管理</li>
@@ -180,9 +180,5 @@
         <div>
             <jsp:include page="/WEB-INF/views/common/delete_dialog.jsp" />
             <jsp:include page="/WEB-INF/views/common/addupdate_dialog.jsp" />
-
-            <div class="modal fade" id="insertAndUpdate" tabindex="-1"
-                 role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-            </div>
         </div>
     </div>

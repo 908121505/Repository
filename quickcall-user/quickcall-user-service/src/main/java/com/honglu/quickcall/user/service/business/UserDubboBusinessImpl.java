@@ -1,7 +1,6 @@
 package com.honglu.quickcall.user.service.business;
 
 import com.honglu.quickcall.user.facade.exchange.request.*;
-import com.honglu.quickcall.user.facade.exchange.request.editprofile.*;
 import com.honglu.quickcall.user.service.service.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,6 +16,22 @@ import com.honglu.quickcall.common.api.exchange.CommonResponse;
 import com.honglu.quickcall.user.facade.business.UserDubboBusiness;
 import com.honglu.quickcall.user.facade.code.UserBizReturnCode;
 import com.honglu.quickcall.user.facade.code.UserFunctionType;
+import com.honglu.quickcall.user.facade.exchange.request.editprofile.QueryBlacklistReq;
+import com.honglu.quickcall.user.facade.exchange.request.editprofile.QueryInterestListReq;
+import com.honglu.quickcall.user.facade.exchange.request.editprofile.QueryUserEditInfoReq;
+import com.honglu.quickcall.user.facade.exchange.request.editprofile.RemoveAppearanceReq;
+import com.honglu.quickcall.user.facade.exchange.request.editprofile.RemoveBlacklistReq;
+import com.honglu.quickcall.user.facade.exchange.request.editprofile.RemoveVoiceIdentificationCardReq;
+import com.honglu.quickcall.user.facade.exchange.request.editprofile.SaveBlacklistReq;
+import com.honglu.quickcall.user.facade.exchange.request.editprofile.UpdateAppearanceReq;
+import com.honglu.quickcall.user.facade.exchange.request.editprofile.UpdateBirthdayReq;
+import com.honglu.quickcall.user.facade.exchange.request.editprofile.UpdateGenderReq;
+import com.honglu.quickcall.user.facade.exchange.request.editprofile.UpdateHeadPortraitReq;
+import com.honglu.quickcall.user.facade.exchange.request.editprofile.UpdateInterestReq;
+import com.honglu.quickcall.user.facade.exchange.request.editprofile.UpdateNickNameReq;
+import com.honglu.quickcall.user.facade.exchange.request.editprofile.UpdateSignNameReq;
+import com.honglu.quickcall.user.facade.exchange.request.editprofile.UpdateStarSignReq;
+import com.honglu.quickcall.user.facade.exchange.request.editprofile.UpdateVoiceIdentificationCardReq;
 
 @Component
 @Service("User.UserDubboBusiness")
@@ -34,6 +49,14 @@ public class UserDubboBusinessImpl implements UserDubboBusiness {
 	private EditProfileService editProfileService;
 	@Autowired
 	private BlacklistService blacklistService;
+	@Autowired
+	private DelateService delateService;
+	@Autowired
+	private FeedBackService feedBackService;
+	@Autowired
+	private InternalMessageService internalMessageService;
+	@Autowired
+	private QueryBigvListService queryHomeBigvListService;
 
 	@Override
 	public CommonResponse excute(AbstractRequest request) {
@@ -60,6 +83,10 @@ public class UserDubboBusinessImpl implements UserDubboBusiness {
 				break;
 			case UserFunctionType.getSmsCode:
 				response = commonPersonService.getSmsCode((GetSmsCodeRequest) request);
+				break;
+			/** 查询首页大V列表 **/
+			case UserFunctionType.QUERY_FIRST_PAGE_BIGV_LIST:
+				response = queryHomeBigvListService.queryHomeBigvList((FirstPageBigvListRequest) request);
 				break;
 			case UserFunctionType.UNREAD_MESSAGE_NUM:
 				response = userMessageService.queryUserUnreadMessageNum((UserUnreadMessageNumRequest) request);
@@ -106,6 +133,9 @@ public class UserDubboBusinessImpl implements UserDubboBusiness {
 				break;
 			case UserFunctionType.CHECK_ATTENTION:// 判断是否关注对方
 				response = personInfoService.checkAttention((CheckAttentionRequest) request);
+				break;
+			case UserFunctionType.CHECK_EACH_ATTENTION:// 判断是否互相关注对方
+				response = personInfoService.checkEachAttention((CheckEachAttentionRequest) request);
 				break;
 			///////////////////////////////////////////////////////////////////////////
 			case UserFunctionType.SaveOccupation:// 保存职业
@@ -173,6 +203,34 @@ public class UserDubboBusinessImpl implements UserDubboBusiness {
 				break;
 			case UserFunctionType.saveBlacklist:
 				response = blacklistService.saveBlacklist((SaveBlacklistReq) request);
+				break;
+			case UserFunctionType.updateGender:
+				response = editProfileService.updateGender((UpdateGenderReq) request);
+				break;
+			case UserFunctionType.updateBirthday:
+				response = editProfileService.updateBirthday((UpdateBirthdayReq) request);
+				break;
+			case UserFunctionType.queryUserEditInfo:
+				response = editProfileService.queryUserEditInfo((QueryUserEditInfoReq) request);
+				break;
+			case UserFunctionType.getAllDelate:
+				response = delateService.getAllDelatesExcludeOther();
+				break;
+			case UserFunctionType.insertDelate:
+				response = delateService.insertDelate((DelateInsertRequest) request);
+				break;
+
+			case UserFunctionType.NoReadAttentionCount:
+				response = personInfoService.noReadAttentionCount((NoReadAttentionCountRequest) request);
+				break;
+			case UserFunctionType.insertFeedBack:
+				response = feedBackService.insertFeedBack((FeedBackInsertRequest) request);
+				break;
+			case UserFunctionType.INTERNAL_MESSAGE:
+				response = internalMessageService.queryMessages((InternalMessageRequest) request);
+				break;
+			case UserFunctionType.AddSystemUser:
+				response = commonPersonService.addSystemUser((AddSystemUserRequest) request);
 				break;
 			default:
 				throw new BizException(UserBizReturnCode.BizFunctionTypeNotMatch,

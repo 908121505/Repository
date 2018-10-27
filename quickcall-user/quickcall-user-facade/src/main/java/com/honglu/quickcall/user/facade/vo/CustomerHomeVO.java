@@ -12,7 +12,7 @@ import java.util.List;
  */
 public class CustomerHomeVO implements Serializable {
 
-    private static final long serialVersionUID = -9023978444720261334L;
+    private static final long serialVersionUID = -960460053239452425L;
     /**
      * 登录客户ID
      */
@@ -88,15 +88,40 @@ public class CustomerHomeVO implements Serializable {
     private List<CustomerSkill> skillList;
 
     /**
+     * 分享标题
+     */
+    private String shareTitle;
+    /**
+     * 分享内容
+     */
+    private String shareContent;
+    /**
+     * 分享图标链接
+     */
+    private String shareIconUrl;
+    /**
+     * 查看原文链接
+     */
+    private String shareLinkUrl;
+
+    /**
      * 用户技能对象
      */
     public class CustomerSkill implements Serializable{
         private static final long serialVersionUID = 2871296634994569921L;
 
         /**
+         * 客户技能ID
+         */
+        private Long customerSkillId;
+        /**
          * 技能ID
          */
         private Long skillId;
+        /**
+         * 是否可下单：1是；2否
+         */
+        private Integer canOrder;
         /**
          * 技能名称
          */
@@ -134,12 +159,28 @@ public class CustomerHomeVO implements Serializable {
          */
         private List<String> customerLabel;
 
+        public Long getCustomerSkillId() {
+            return customerSkillId;
+        }
+
+        public void setCustomerSkillId(Long customerSkillId) {
+            this.customerSkillId = customerSkillId;
+        }
+
         public Long getSkillId() {
             return skillId;
         }
 
         public void setSkillId(Long skillId) {
             this.skillId = skillId;
+        }
+
+        public Integer getCanOrder() {
+            return canOrder;
+        }
+
+        public void setCanOrder(Integer canOrder) {
+            this.canOrder = canOrder;
         }
 
         public String getSkillName() {
@@ -376,6 +417,38 @@ public class CustomerHomeVO implements Serializable {
         this.skillList = skillList;
     }
 
+    public String getShareTitle() {
+        return shareTitle;
+    }
+
+    public void setShareTitle(String shareTitle) {
+        this.shareTitle = shareTitle;
+    }
+
+    public String getShareContent() {
+        return shareContent;
+    }
+
+    public void setShareContent(String shareContent) {
+        this.shareContent = shareContent;
+    }
+
+    public String getShareIconUrl() {
+        return shareIconUrl;
+    }
+
+    public void setShareIconUrl(String shareIconUrl) {
+        this.shareIconUrl = shareIconUrl;
+    }
+
+    public String getShareLinkUrl() {
+        return shareLinkUrl;
+    }
+
+    public void setShareLinkUrl(String shareLinkUrl) {
+        this.shareLinkUrl = shareLinkUrl;
+    }
+
     @Override
     public String toString() {
         return "CustomerHomeVO{" +
@@ -383,6 +456,7 @@ public class CustomerHomeVO implements Serializable {
                 ", viewCustomerId=" + viewCustomerId +
                 ", customerAppId='" + customerAppId + '\'' +
                 ", nickName='" + nickName + '\'' +
+                ", headPortraitUrl='" + headPortraitUrl + '\'' +
                 ", sex=" + sex +
                 ", age=" + age +
                 ", customerLevel=" + customerLevel +
@@ -396,6 +470,10 @@ public class CustomerHomeVO implements Serializable {
                 ", appearanceUrlList=" + appearanceUrlList +
                 ", interestList=" + interestList +
                 ", skillList=" + skillList +
+                ", shareTitle='" + shareTitle + '\'' +
+                ", shareContent='" + shareContent + '\'' +
+                ", shareIconUrl='" + shareIconUrl + '\'' +
+                ", shareLinkUrl='" + shareLinkUrl + '\'' +
                 '}';
     }
 }

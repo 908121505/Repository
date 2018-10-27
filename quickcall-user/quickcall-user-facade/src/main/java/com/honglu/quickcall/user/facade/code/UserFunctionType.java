@@ -23,6 +23,12 @@ public interface UserFunctionType {
 
 	// 阅读关注(底部tab 点击关注)
 	String readAttention = "001008";
+	// 关注未读数量
+	String NoReadAttentionCount = "001009";
+	// 退出登录
+	String loginOut = "001010";
+	// 添加系统用户
+	String AddSystemUser = "001011";
 	// 系统相关 001300 - 001350
 	String MarketOnOff = "001300";
 	String AppConfig = "001301";
@@ -31,7 +37,10 @@ public interface UserFunctionType {
 	 * 推送APP消息
 	 */
 	String PUSH_APP_MSG = "001310";
-
+	/**
+	 * 查询首页大V列表
+	 */
+	String QUERY_FIRST_PAGE_BIGV_LIST = "001311";
 	/**
 	 * 未读消息数量查询
 	 */
@@ -80,6 +89,9 @@ public interface UserFunctionType {
 
 	// 保存大V技能审核信息
 	public static final String SAVE_DV_SKILL_AUDIT = "0011136";
+
+	/** 判断是否关注对方 */
+	public static final String CHECK_EACH_ATTENTION = "0011137";
 
 	/**
 	 * 修改昵称
@@ -149,6 +161,37 @@ public interface UserFunctionType {
 	 * 添加黑名单
 	 */
 	String saveBlacklist = "0011162";
+	/**
+	 * 修改性别
+	 */
+	String updateGender = "0011163";
+	/**
+	 * 修改年龄
+	 */
+	String updateBirthday = "0011164";
+	/**
+	 * 编辑资料页面数据展示
+	 */
+	String queryUserEditInfo = "0011165";
 
+	/**
+	 * 查询所有非其他原因的举报
+	 */
+	String getAllDelate = "0011170";
+
+	/**
+	 * 插入举报
+	 */
+	String insertDelate = "0011171";
+
+	/**
+	 * 插入反馈
+	 */
+	String insertFeedBack = "0011180";
+
+	/**
+	 * 查询我的站内信消息
+	 */
+	String INTERNAL_MESSAGE = "001201";
 
 }

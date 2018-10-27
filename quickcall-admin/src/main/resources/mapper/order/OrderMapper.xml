@@ -341,24 +341,24 @@
   <!-- 查询内容 -->
   <sql id="SELECT_SQL_BODY">
 			orders od
-		LEFT JOIN customer cust ON od.buyer_id = cust.customer_id
-		LEFT JOIN customer sust ON od.seller_id = sust.customer_id
-		LEFT JOIN product p ON od.product_id = p.product_id
+		LEFT JOIN customer cust ON od.customer_id = cust.customer_id
+		LEFT JOIN customer sust ON od.service_id = sust.customer_id
+		LEFT JOIN customer_skill  p  ON od.customer_skill_id = p.customer_skill_id
   </sql>
   <!-- 查询内容 -->
   <sql id="SELECT_SQL_CONTENT">
 		order_id AS orderId,
 		sust.nick_name AS servNickName,
 		cust.nick_name AS custNickName,
-		p.name AS orderType,
-		p.price AS price,
+		p.skill_name AS orderType,
+		p.skill_price AS price,
 		order_num AS orderNum,
 		order_amounts AS orderAmounts,
-		confirm_time AS confirmTime,
+		end_time AS confirmTime,
 		start_time AS startTime,
 		end_time AS endTime,
 		order_time AS orderTime,
-		finish_time AS finishTime,
+		end_time AS finishTime,
 		order_status AS orderStatus
   </sql>
   <!-- 查询内容 -->
@@ -376,16 +376,148 @@
         AND  p.name LIKE  concat('%',#{orderType},'%') 
     </if>
   </sql>
+
+  <select id="queryOrderDetail" resultType="com.calf.module.order.vo.OrderVO" parameterType="map" >
+    select
+        order_id AS orderId,
+		revice.customer_id AS receivedOrderId,
+        revice.nick_name AS receiveOrderUserNickName,
+		place.customer_id AS placeOrderId,
+		place.nick_name AS placeOrderUserNickName,
+		skill.skill_name AS serviceType,
+		od.start_time AS startTime,
+		od.end_time AS endTime,
+		od.service_price AS unitPrice,
+		ext.skill_ext_discont AS discountType,
+		od.order_amounts AS orderAmount,
+		od.order_status AS orderStatus,
+		od.create_time AS orderCreateTime,
+		od.remark_reason AS remarkReason,
+		od.order_num AS orderNum
+    from
+        orders od
+		LEFT JOIN customer place ON od.customer_id = place.customer_id
+		LEFT JOIN customer revice ON od.service_id = revice.customer_id
+		LEFT JOIN customer_skill  skill  ON od.customer_skill_id = skill.customer_skill_id
+		LEFT JOIN skill_item_ext ext ON skill.skill_item_ext_id = ext.id
+    where order_id = #{orderId,jdbcType=BIGINT}
+  </select>
  
-   <select id="selectPageList" resultType="com.calf.module.order.vo.OrderVO" parameterType="map" >
-    select 
+   <select id="queryPageList" resultType="com.calf.module.order.vo.OrderVO" parameterType="map" >
+    select
+     order_id AS orderId,
+     revice.customer_id AS receivedOrderId,
+     revice.nick_name AS receiveOrderUserNickName,
+     place.customer_id AS placeOrderId,
+     place.nick_name AS placeOrderUserNickName,
+     skill.skill_name AS serviceType,
+     od.start_time AS startTime,
+     od.end_time AS endTime,
+     od.service_price AS unitPrice,
+     ext.skill_ext_discont AS discountType,
+     od.order_amounts AS orderAmount,
+     od.order_status AS orderStatus,
+     od.create_time AS orderCreateTime
+    from
+        orders od
+		LEFT JOIN customer place ON od.customer_id = place.customer_id
+		LEFT JOIN customer revice ON od.service_id = revice.customer_id
+		LEFT JOIN customer_skill  skill  ON od.customer_skill_id = skill.customer_skill_id
+        LEFT JOIN skill_item_ext ext ON skill.skill_item_ext_id = ext.id
+    where 1= 1
+     <if test="orderId != null" >
+       AND  od.order_id =   #{orderId}
+     </if>
+     <if test="placeOrderId != null" >
+       AND  place.customer_id = #{placeOrderId}
+     </if>
+     <if test="placeOrderUserNickName != null" >
+       AND  place.nick_name LIKE  concat('%',#{placeOrderUserNickName},'%')
+     </if>
+     <if test="receivedOrderId != null" >
+       AND  revice.customer_id = #{receivedOrderId}
+     </if>
+     <if test="receiveOrderUserNickName != null" >
+       AND  revice.nick_name LIKE  concat('%',#{receiveOrderUserNickName},'%')
+     </if>
+     <if test="startTime != null" >
+       AND  od.start_time &gt;= #{startTime}
+     </if>
+     <if test="endTime != null" >
+       AND  od.end_time &lt;= #{endTime}
+     </if>
+     <if test="serviceType != null" >
+       AND  skill.skill_item_id = #{serviceType}
+     </if>
+     <if test="orderStatus != null" >
+       AND order_status in (#{orderStatus})
+     </if>
+     <if test="discountTypeMin != null" >
+       AND ext.skill_ext_discont &gt;= #{discountTypeMin}
+     </if>
+     <if test="discountTypeMax != null" >
+       AND ext.skill_ext_discont &lt; #{discountTypeMax}
+     </if>
+      LIMIT ${iDisplayStart},${iDisplayLength}
+  </select>
+
+  <select id="selectCount" resultType="java.lang.Integer" parameterType="map" >
+    select
+    count(1)
+    from
+    orders od
+    LEFT JOIN customer place ON od.customer_id = place.customer_id
+    LEFT JOIN customer revice ON od.service_id = revice.customer_id
+    LEFT JOIN customer_skill  skill  ON od.customer_skill_id = skill.customer_skill_id
+    LEFT JOIN skill_item_ext ext ON skill.skill_item_ext_id = ext.id
+    where 1= 1
+    <if test="orderId != null" >
+      AND  order_id =   #{orderId}
+    </if>
+    <if test="placeOrderId != null" >
+      AND  place.customer_id = #{placeOrderId}
+    </if>
+    <if test="placeOrderUserNickName != null" >
+      AND  place.nick_name LIKE  concat('%',#{placeOrderUserNickName},'%')
+    </if>
+    <if test="receivedOrderId != null" >
+      AND  revice.customer_id = #{receivedOrderId}
+    </if>
+    <if test="receiveOrderUserNickName != null" >
+      AND  revice.nick_name LIKE  concat('%',#{receiveOrderUserNickName},'%')
+    </if>
+    <if test="startTime != null" >
+      AND  start_time &gt;= #{startTime}
+    </if>
+    <if test="endTime != null" >
+      AND  end_time &lt;= #{endTime}
+    </if>
+    <if test="serviceType != null" >
+      AND  skill.skill_item_id = #{serviceType}
+    </if>
+    <if test="orderStatus != null" >
+      AND order_status in (#{orderStatus})
+    </if>
+    <if test="discountTypeMin != null" >
+      AND ext.skill_ext_discont &gt;= #{discountTypeMin}
+    </if>
+    <if test="discountTypeMax != null" >
+      AND ext.skill_ext_discont &lt; #{discountTypeMax}
+    </if>
+  </select>
+
+
+  <select id="selectPageList" resultType="com.calf.module.order.vo.OrderVO" parameterType="map" >
+    select
     <include refid="SELECT_SQL_CONTENT" />
-    from 
+    from
     <include refid="SELECT_SQL_BODY" />
     where 1= 1
     <include refid="SELECT_SQL_CONDITION" />
     LIMIT ${iDisplayStart},${iDisplayLength}
   </select>
+
+
    <select id="slectCount" resultType="java.lang.Integer" parameterType="map" >
     select 
     count(1)
@@ -448,7 +580,18 @@
     </if>
     where customer_id = #{userId}
    </update>
-  
-  
+
+  <update id="updateOrder" parameterType="Map" >
+    update orders
+    <set >
+      <if test="orderStatus != null" >
+        order_status = #{orderStatus,jdbcType=TINYINT},
+      </if>
+      <if test="remarkReason != null" >
+        remark_reason = #{remarkReason,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where order_id = #{orderId,jdbcType=BIGINT}
+  </update>
   
 </mapper>

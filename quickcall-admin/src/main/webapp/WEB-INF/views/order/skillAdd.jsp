@@ -45,18 +45,47 @@
 					<div class="col-sm-10">
 						<label class="checkbox-inline">
 							<input type="radio" name="skillStatus" value="1" ${empty entity or entity.skillStatus=='1'?'checked':'' }>
-							不可用
+							可用
 						</label>
 						<label class="checkbox-inline">
 							<input type="radio" name="skillStatus" value="0" ${entity.skillStatus=='0'?'checked':'' }>
-							可用
+							不可用
 						</label>
 					</div>
 				</div>
-				
-				
-				
-				<%--<div class="form-group" >
+
+				<div class="form-group">
+					<label class="col-sm-2 control-label">技能类型<font color="red">&nbsp;*</font></label>
+					<div class="col-sm-10">
+						<label class="checkbox-inline">
+							<input type="radio" name="skillType" value="1" ${empty entity or entity.skillType=='1'?'checked':'' }>
+							不可重复接单类型
+						</label>
+						<label class="checkbox-inline">
+							<input type="radio" name="skillType" value="2" ${entity.skillType=='2'?'checked':'' }>
+							可重复接单类型
+						</label>
+					</div>
+				</div>
+
+				<div class="form-group"  >
+					<label class="col-sm-4 control-label">备注<font color="red">&nbsp;*</font></label>
+					<div class="col-sm-8">
+						<input type="text" id="remark" class="form-control"
+							   name="remark" value="${entity.remark}">
+					</div>
+				</div>
+
+				<div class="form-group"  >
+					<label class="col-sm-4 control-label">首页背景颜色<font color="red">&nbsp;*</font></label>
+					<div class="col-sm-8">
+						<input type="text" id="homeBlackColor" class="form-control"
+							   name="homeBlackColor" value="${entity.homeBlackColor}">
+					</div>
+				</div>
+
+
+			<%--<div class="form-group" >
 					<label class="col-sm-4 control-label">最高价格<!-- <font color="red">&nbsp;*</font> --></label>
 					<div class="col-sm-8">
 						<input type="text" id="maxPrice" class="form-control" name="maxPrice" value="${entity.maxPrice}">
