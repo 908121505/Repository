@@ -12,7 +12,7 @@
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
-<title>网贷管家后台管理系统</title>
+<title>轻音后台管理系统</title>
 <base href="<%=basePath%>" />
 <link rel="stylesheet" type="text/css" href="resources/bootstrap/css/bootstrap.css">
 <link rel="stylesheet" type="text/css" href="resources/datatables/css/jquery.dataTables.css">
