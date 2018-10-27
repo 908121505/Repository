@@ -155,5 +155,6 @@ id,	customer_id,	audit_appearance,	appearance,	type,	audit_status,	sort,	status,
 		  audit_status AS auditStatus
 		FROM customer_appearance
 		WHERE customer_id = #{customerId} and type = #{type}
+		ORDER BY create_time
 	</select>
 </mapper>
