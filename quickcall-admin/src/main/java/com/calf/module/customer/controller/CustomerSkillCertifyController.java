@@ -93,7 +93,8 @@ public class CustomerSkillCertifyController implements BaseController<CustomerSk
 				//如果没有则初始化用户技能表
 				SkillItemExt sie = baseManager.get("SkillItemExt.queryDefultPrice",new Object[]{csc.getSkillItemId()});
 				Map<String, Object> customerSkill = new HashMap<String, Object>();
-				customerSkill.put("customerSkillId", UUIDUtils.getId());
+				Long customerSkillId = UUIDUtils.getId();
+				customerSkill.put("customerSkillId",customerSkillId );
 				customerSkill.put("certifyId", entity.getCertifyId());
 				customerSkill.put("customerId", csc.getCustomerId());
 				customerSkill.put("skillItemId", csc.getSkillItemId());
@@ -108,6 +109,7 @@ public class CustomerSkillCertifyController implements BaseController<CustomerSk
 				skillScore.put("id", UUIDUtils.getId());
 				skillScore.put("customerId", csc.getCustomerId());
 				skillScore.put("skillItemId", csc.getSkillItemId());
+				skillScore.put("customerSkillId", customerSkillId);
 				baseManager.insert("BigvSkillScore.insertSelective",skillScore);
 			}
 		}
