@@ -58,25 +58,25 @@
   
   <sql id="SKILL_EXIST_CONDITON">
       <if test="weekIndex == 1" >
-        AND ( monday = 0  or (monday = 1  and  end_time_str <![CDATA[  > ]]> #{endTimeStr,jdbcType=VARCHAR}) 
+        AND ( monday = 0  or (monday = 1  and  end_time_str <![CDATA[  > ]]> #{endTimeStr,jdbcType=VARCHAR}) )
       </if>
       <if test="weekIndex == 2" >
-        AND ( tuesday = 0  or (tuesday = 1  and  end_time_str <![CDATA[  > ]]> #{endTimeStr,jdbcType=VARCHAR}) 
+        AND ( tuesday = 0  or (tuesday = 1  and  end_time_str <![CDATA[  > ]]> #{endTimeStr,jdbcType=VARCHAR}) )
       </if>
       <if test="weekIndex == 3" >
-        AND ( wednesday = 0  or (wednesday = 1  and  end_time_str <![CDATA[  > ]]> #{endTimeStr,jdbcType=VARCHAR}) 
+        AND ( wednesday = 0  or (wednesday = 1  and  end_time_str <![CDATA[  > ]]> #{endTimeStr,jdbcType=VARCHAR}) )
       </if>
       <if test="weekIndex == 4" >
-        AND ( thursday = 0  or (thursday = 1  and  end_time_str <![CDATA[  > ]]> #{endTimeStr,jdbcType=VARCHAR}) 
+        AND ( thursday = 0  or (thursday = 1  and  end_time_str <![CDATA[  > ]]> #{endTimeStr,jdbcType=VARCHAR}) )
       </if>
       <if test="weekIndex == 5" >
-        AND ( friday = 0  or (friday = 1  and  end_time_str <![CDATA[  > ]]> #{endTimeStr,jdbcType=VARCHAR}) 
+        AND ( friday = 0  or (friday = 1  and  end_time_str <![CDATA[  > ]]> #{endTimeStr,jdbcType=VARCHAR}) )
       </if>
       <if test="weekIndex == 6" >
-        AND ( saturday = 0  or (saturday = 1  and  end_time_str <![CDATA[  > ]]> #{endTimeStr,jdbcType=VARCHAR}) 
+        AND ( saturday = 0  or (saturday = 1  and  end_time_str <![CDATA[  > ]]> #{endTimeStr,jdbcType=VARCHAR}) )
       </if>
       <if test="weekIndex == 7" >
-        AND ( sunday = 0  or (sunday = 1  and  end_time_str <![CDATA[  > ]]> #{endTimeStr,jdbcType=VARCHAR}) 
+        AND ( sunday = 0  or (sunday = 1  and  end_time_str <![CDATA[  > ]]> #{endTimeStr,jdbcType=VARCHAR}) )
       </if>
   
   </sql>
