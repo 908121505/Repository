@@ -45,11 +45,11 @@ public class OrderUpdateJob {
     @Autowired
     private TaskOrderMapper    taskOrderMapper;
     
-    /**默认超时小时数*/
+    /**默认超时小时数      扣减12小时*/
     private final static  Integer   END_OVER_TIME_HOUR = -12;
-    /**默认超时分钟数*/
+    /**默认超时分钟数   扣减15分钟*/
     private final static  Integer   RECEIVE_OVER_TIME_MINUTES = -15;
-    /**立即服务超时分钟数*/
+    /**立即服务超时分钟数   扣减5分钟*/
     private final static  Integer   START_OVER_TIME_MINUTES = -5;
     
     
@@ -125,6 +125,9 @@ public class OrderUpdateJob {
 			
 			
 			//叫醒自动转换为进行中状态
+			
+			
+			
 			//用户未接立即服务超时
 			queryStatus = OrderSkillConstants.ORDER_STATUS_GOING_WAITING_START;
 			updateStatus = OrderSkillConstants.ORDER_STATUS_GOING_USER_ACCEPCT;
