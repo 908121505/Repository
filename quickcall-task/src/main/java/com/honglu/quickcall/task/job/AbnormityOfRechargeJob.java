@@ -12,9 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import com.alibaba.dubbo.config.annotation.Reference;
 import com.alibaba.fastjson.JSON;
-import com.honglu.quickcall.account.facade.business.IAccountOrderService;
 import com.honglu.quickcall.account.facade.enums.AccountBusinessTypeEnum;
 import com.honglu.quickcall.account.facade.enums.TransferTypeEnum;
 import com.honglu.quickcall.common.api.util.HttpClientUtils;
@@ -43,8 +41,8 @@ public class AbnormityOfRechargeJob {
 	@Autowired
 	private TradeDetailMapper tradeDetailMapper;
 
-	@Reference(version = "0.0.1", group = "accountCenter")
-	private IAccountOrderService iAccountOrderService;
+//	@Reference(version = "0.0.1", group = "accountCenter")
+//	private IAccountOrderService iAccountOrderService;
 
 	private static String aliPayOrderQuery = ResourceBundle.getBundle("thirdconfig").getString("ALI_PAY_ORDER_QUERY");
 
@@ -53,7 +51,7 @@ public class AbnormityOfRechargeJob {
 	public void execute() {
 
 		logger.info("充值回调异常修复  job 开启------------------------");
-		System.out.println(iAccountOrderService);
+//		System.out.println(iAccountOrderService);
 		List<Recharge> rechargeList = rechargeMapper.queryAbnormityOfRecharge();
 		for (int i = 0; i < rechargeList.size(); i++) {
 			String params = "orderId=" + rechargeList.get(i).getOrdersn() + "&type="
