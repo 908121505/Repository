@@ -20,6 +20,7 @@ import com.calf.module.customer.entity.CustomerSkillCertify;
 import com.calf.module.customer.vo.CustomerSkillCertifyVO;
 import com.calf.module.order.entity.SkillItemExt;
 import com.honglu.quickcall.common.core.util.UUIDUtils;
+import com.honglu.quickcall.common.third.rongyun.util.RongYunUtil;
 
 /**
  *用户技能审核页面
@@ -92,7 +93,8 @@ public class CustomerSkillCertifyController implements BaseController<CustomerSk
 				//如果没有则初始化用户技能表
 				SkillItemExt sie = baseManager.get("SkillItemExt.queryDefultPrice",new Object[]{csc.getSkillItemId()});
 				Map<String, Object> customerSkill = new HashMap<String, Object>();
-				customerSkill.put("customerSkillId", UUIDUtils.getId());
+				Long customerSkillId = UUIDUtils.getId();
+				customerSkill.put("customerSkillId",customerSkillId );
 				customerSkill.put("certifyId", entity.getCertifyId());
 				customerSkill.put("customerId", csc.getCustomerId());
 				customerSkill.put("skillItemId", csc.getSkillItemId());
@@ -107,10 +109,17 @@ public class CustomerSkillCertifyController implements BaseController<CustomerSk
 				skillScore.put("id", UUIDUtils.getId());
 				skillScore.put("customerId", csc.getCustomerId());
 				skillScore.put("skillItemId", csc.getSkillItemId());
+				skillScore.put("customerSkillId", customerSkillId);
 				baseManager.insert("BigvSkillScore.insertSelective",skillScore);
 			}
 		}
-		return baseManager.update("CustomerSkillCertify.updateEntity",param);
+		int n = baseManager.update("CustomerSkillCertify.updateEntity",param);
+		if(entity.getAuditStatus() == 2){
+			RongYunUtil.sendSystemMessage(csc.getCustomerId(), "技能审核通过文案：您的\""+entity.getSkillItemName()+"\"技能已通过审核，可以提供服务啦");
+		}else{
+			RongYunUtil.sendSystemMessage(csc.getCustomerId(), "很遗憾，您申请的\""+entity.getSkillItemName()+"\"技能未通过审核，请重新提交审核材料");
+		}
+		return n;
 	}
 
 	@Override

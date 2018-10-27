@@ -11,5 +11,6 @@ public class PropertiesConstant {
     /**
      * 默认大V形象照
      **/
-    public final static String DEFAULT_CUSTOMER_APPEARANCE_URL = ResourceBundle.getBundle("thirdconfig").getString("DEFAULT_CUSTOMER_APPEARANCE_URL");
+    public final static String DEFAULT_CUSTOMER_APPEARANCE_URL_BOY = ResourceBundle.getBundle("thirdconfig").getString("DEFAULT_CUSTOMER_APPEARANCE_URL_BOY");
+    public final static String DEFAULT_CUSTOMER_APPEARANCE_URL_GIRL = ResourceBundle.getBundle("thirdconfig").getString("DEFAULT_CUSTOMER_APPEARANCE_URL_GIRL");
 }

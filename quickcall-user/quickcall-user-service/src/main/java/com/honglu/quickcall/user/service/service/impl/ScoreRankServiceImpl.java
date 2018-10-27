@@ -140,7 +140,7 @@ public class ScoreRankServiceImpl implements ScoreRankService {
      */
     private void updateToBigvScore(Long customerId, Long skillItemId, Long customerSkillId, BigDecimal score) {
         // 存入技能排名表
-        if (bigvSkillScoreMapper.updateBigvSkillScore(customerId, skillItemId, score) == 0) {
+        if (bigvSkillScoreMapper.updateBigvSkillScore(customerSkillId, score) == 0) {
             // 更新失败则插入
             BigvSkillScore bigvSkillScore = new BigvSkillScore();
             bigvSkillScore.setId(UUIDUtils.getId());
