@@ -20,6 +20,7 @@ import com.calf.module.customer.entity.CustomerSkillCertify;
 import com.calf.module.customer.vo.CustomerSkillCertifyVO;
 import com.calf.module.order.entity.SkillItemExt;
 import com.honglu.quickcall.common.core.util.UUIDUtils;
+import com.honglu.quickcall.common.third.rongyun.util.RongYunUtil;
 
 /**
  *用户技能审核页面
@@ -110,7 +111,13 @@ public class CustomerSkillCertifyController implements BaseController<CustomerSk
 				baseManager.insert("BigvSkillScore.insertSelective",skillScore);
 			}
 		}
-		return baseManager.update("CustomerSkillCertify.updateEntity",param);
+		int n = baseManager.update("CustomerSkillCertify.updateEntity",param);
+		if(entity.getAuditStatus() == 2){
+			RongYunUtil.sendSystemMessage(csc.getCustomerId(), "技能审核通过文案：您的\""+entity.getSkillItemName()+"\"技能已通过审核，可以提供服务啦");
+		}else{
+			RongYunUtil.sendSystemMessage(csc.getCustomerId(), "很遗憾，您申请的\""+entity.getSkillItemName()+"\"技能未通过审核，请重新提交审核材料");
+		}
+		return n;
 	}
 
 	@Override
