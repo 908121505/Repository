@@ -1,15 +1,17 @@
 package com.honglu.quickcall.user.service.service.impl;
 
+import com.honglu.quickcall.account.facade.business.IAccountOrderService;
 import com.honglu.quickcall.common.api.exchange.CommonResponse;
 import com.honglu.quickcall.common.api.exchange.ResultUtils;
 import com.honglu.quickcall.common.constants.PropertiesConstant;
+import com.honglu.quickcall.user.facade.entity.BigvSkillScore;
 import com.honglu.quickcall.user.facade.entity.CustomerSkill;
+import com.honglu.quickcall.user.facade.entity.ResourceConfig;
 import com.honglu.quickcall.user.facade.entity.SkillItem;
+import com.honglu.quickcall.user.facade.entity.example.BigvScoreExample;
 import com.honglu.quickcall.user.facade.exchange.request.FirstPageBigvListRequest;
 import com.honglu.quickcall.user.facade.vo.AppHomeBigvListVO;
-import com.honglu.quickcall.user.service.dao.CustomerAppearanceMapper;
-import com.honglu.quickcall.user.service.dao.CustomerSkillMapper;
-import com.honglu.quickcall.user.service.dao.SkillItemMapper;
+import com.honglu.quickcall.user.service.dao.*;
 import com.honglu.quickcall.user.service.service.QueryBigvListService;
 import com.honglu.quickcall.user.service.util.CountAge;
 import org.slf4j.Logger;
@@ -20,6 +22,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * 查询大V列表Service实现类
@@ -37,6 +40,14 @@ public class QueryBigvListServiceImpl implements QueryBigvListService {
     private CustomerSkillMapper customerSkillMapper;
     @Autowired
     private CustomerAppearanceMapper customerAppearanceMapper;
+    @Autowired
+    private ResourceConfigMapper resourceConfigMapper;
+    @Autowired
+    private IAccountOrderService accountOrderService;
+    @Autowired
+    private BigvScoreMapper bigvScoreMapper;
+    @Autowired
+    private BigvSkillScoreMapper bigvSkillScoreMapper;
 
     @Override
     public CommonResponse queryHomeBigvList(FirstPageBigvListRequest request) {
@@ -103,5 +114,63 @@ public class QueryBigvListServiceImpl implements QueryBigvListService {
 
         recomedBigv.setDaVinfoList(recomedBigvList);
         return recomedBigv;
+    }
+
+
+    public CommonResponse queryBigvList() {
+        // 查询出资源位的配置信息
+        List<ResourceConfig> configs = resourceConfigMapper.selectAllResourceConfig();
+        if (configs == null || configs.size() == 0) {
+            return ResultUtils.resultDataNotExist("资源位数据未配置");
+        }
+
+        // 查询有效大V总数
+        int bigvCount = bigvScoreMapper.countValidBigvCount();
+
+        // 循环资源位查询数据
+        for (ResourceConfig config : configs) {
+            // 自然推荐
+            if (Objects.equals(config.getStrategy(), 1)) {
+                // 得到随机大V
+                Long customerId = getRandomBigv(bigvCount, config);
+
+            }
+            // 运营推荐
+            else {
+
+            }
+        }
+
+
+        return null;
+    }
+
+    /**
+     * 得到随机的大V
+     *
+     * @param bigvCount
+     * @param config
+     * @return
+     */
+    private Long getRandomBigv(int bigvCount, ResourceConfig config) {
+        // 获取随机大V的定位置
+        int point = getRandomBigvPoint(bigvCount, config.getConfigNum());
+
+        // 判断大V是否可接单
+//        accountOrderService.checkReceiveOrderByCustomerSkillId(bean.getCustomerSkillId());
+
+        return 111L;
+    }
+
+    /**
+     * 得到随机大V的定位置
+     *
+     * @param bigvCount
+     * @param configNum
+     * @return
+     */
+    private int getRandomBigvPoint(int bigvCount, Integer configNum) {
+
+        return 0;
     }
 }

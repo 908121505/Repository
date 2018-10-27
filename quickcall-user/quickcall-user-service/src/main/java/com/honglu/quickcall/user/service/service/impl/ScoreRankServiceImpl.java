@@ -69,7 +69,7 @@ public class ScoreRankServiceImpl implements ScoreRankService {
         bigvSkillScoreMapper.updateValueScoreToOrder(order.getOrderId(), score);
 
         // 更新评分到大V技能评分表和总评分排名表
-        updateToBigvScore(order.getServiceId(), order.getSkillItemId(), score);
+        updateToBigvScore(order.getServiceId(), order.getSkillItemId(), order.getCustomerSkillId(), score);
 
     }
 
@@ -91,7 +91,7 @@ public class ScoreRankServiceImpl implements ScoreRankService {
             BigDecimal evaluationScore = order.getValueScore().divide(DEFAULT_EVALUATE_SCORE).multiply(calculateEvaluateScore(order.getEvaluateStart()));
 
             // 更新评分到大V技能评分表和总评分排名表
-            updateToBigvScore(order.getServiceId(), order.getSkillItemId(), evaluationScore.subtract(order.getValueScore()));
+            updateToBigvScore(order.getServiceId(), order.getSkillItemId(), order.getCustomerSkillId(), evaluationScore.subtract(order.getValueScore()));
         } else {
             // 计算该订单对应的技能的评分
             BigDecimal score = calculateOrderSkillScore(order, order.getEvaluateStart());
@@ -100,7 +100,7 @@ public class ScoreRankServiceImpl implements ScoreRankService {
             bigvSkillScoreMapper.updateValueScoreToOrder(order.getOrderId(), score);
 
             // 更新评分到大V技能评分表和总评分排名表
-            updateToBigvScore(order.getServiceId(), order.getSkillItemId(), score);
+            updateToBigvScore(order.getServiceId(), order.getSkillItemId(), order.getCustomerSkillId(), score);
         }
     }
 
@@ -138,7 +138,7 @@ public class ScoreRankServiceImpl implements ScoreRankService {
      * @param skillItemId
      * @param score
      */
-    private void updateToBigvScore(Long customerId, Long skillItemId, BigDecimal score) {
+    private void updateToBigvScore(Long customerId, Long skillItemId, Long customerSkillId, BigDecimal score) {
         // 存入技能排名表
         if (bigvSkillScoreMapper.updateBigvSkillScore(customerId, skillItemId, score) == 0) {
             // 更新失败则插入
@@ -146,6 +146,7 @@ public class ScoreRankServiceImpl implements ScoreRankService {
             bigvSkillScore.setId(UUIDUtils.getId());
             bigvSkillScore.setCustomerId(customerId);
             bigvSkillScore.setSkillItemId(skillItemId);
+            bigvSkillScore.setCustomerSkillId(customerSkillId);
             bigvSkillScore.setOrderTotal(1);
             bigvSkillScore.setScoreTotal(score);
             bigvSkillScoreMapper.insert(bigvSkillScore);

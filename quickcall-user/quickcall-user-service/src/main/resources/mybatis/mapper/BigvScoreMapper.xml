@@ -6,6 +6,8 @@
     <result column="customer_id" property="customerId" jdbcType="BIGINT" />
     <result column="order_total" property="orderTotal" jdbcType="INTEGER" />
     <result column="score_total" property="scoreTotal" jdbcType="DECIMAL" />
+    <result column="online_status" property="onlineStatus" jdbcType="INTEGER" />
+    <result column="cust_status" property="custStatus" jdbcType="INTEGER" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
     <result column="create_man" property="createMan" jdbcType="VARCHAR" />
@@ -71,8 +73,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, customer_id, order_total, score_total, create_time, modify_time, create_man,
-    modify_man, remark
+    id, customer_id, order_total, score_total, online_status, cust_status,
+    create_time, modify_time, create_man, modify_man, remark
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.honglu.quickcall.user.facade.entity.example.BigvScoreExample" >
     select
@@ -117,4 +119,13 @@
       WHERE customer_id = #{customerId}
   </update>
 
+  <!-- 统计大V在线数 -->
+  <select id="countOnlineBigvCount" resultType="int">
+    select count(*) from bigv_score where cust_status = 1 and online_status = 1
+  </select>
+
+  <!-- 统计有效大V数 -->
+  <select id="countValidBigvCount" resultType="int">
+    select count(*) from bigv_score where cust_status = 1
+  </select>
 </mapper>

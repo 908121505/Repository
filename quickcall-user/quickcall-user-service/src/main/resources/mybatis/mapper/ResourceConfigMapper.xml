@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.honglu.quickcall.user.service.dao.ResourceConfigMapper" >
+  <resultMap id="BaseResultMap" type="com.honglu.quickcall.user.facade.entity.ResourceConfig" >
+    <id column="resource_config_id" property="resourceConfigId" jdbcType="INTEGER" />
+    <result column="config_num" property="configNum" jdbcType="INTEGER" />
+    <result column="strategy" property="strategy" jdbcType="INTEGER" />
+    <result column="resource_pool_id" property="resourcePoolId" jdbcType="BIGINT" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+    <result column="create_man" property="createMan" jdbcType="VARCHAR" />
+    <result column="modify_man" property="modifyMan" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    resource_config_id, config_num, strategy, resource_pool_id, create_time, modify_time,
+    create_man, modify_man, remark
+  </sql>
+
+  <!-- 查询所有6帧资源位的配置 -->
+  <select id="selectAllResourceConfig" resultMap="BaseResultMap">
+    select
+      <include refid="Base_Column_List" />
+    from resource_config
+    order by config_num asc
+  </select>
+</mapper>
