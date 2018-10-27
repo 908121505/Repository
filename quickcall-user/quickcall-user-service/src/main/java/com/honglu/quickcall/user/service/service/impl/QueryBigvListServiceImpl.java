@@ -10,8 +10,10 @@ import com.honglu.quickcall.user.facade.entity.CustomerSkill;
 import com.honglu.quickcall.user.facade.entity.ResourceConfig;
 import com.honglu.quickcall.user.facade.entity.SkillItem;
 import com.honglu.quickcall.user.facade.entity.example.BigvScoreExample;
+import com.honglu.quickcall.user.facade.exchange.request.DaVListBySkillItemIdRequest;
 import com.honglu.quickcall.user.facade.exchange.request.FirstPageBigvListRequest;
 import com.honglu.quickcall.user.facade.vo.AppHomeBigvListVO;
+import com.honglu.quickcall.user.facade.vo.DaVinfoVO;
 import com.honglu.quickcall.user.service.dao.*;
 import com.honglu.quickcall.user.service.service.QueryBigvListService;
 import com.honglu.quickcall.user.service.util.CountAge;
@@ -46,6 +48,7 @@ public class QueryBigvListServiceImpl implements QueryBigvListService {
     private BigvScoreMapper bigvScoreMapper;
     @Autowired
     private BigvSkillScoreMapper bigvSkillScoreMapper;
+    
 
     @Override
     public CommonResponse queryHomeBigvList(FirstPageBigvListRequest request) {
@@ -203,4 +206,31 @@ public class QueryBigvListServiceImpl implements QueryBigvListService {
 
         return 0;
     }
+    
+    //获取分类大V列表
+    @Override
+	public CommonResponse queryClassifyBigvList(DaVListBySkillItemIdRequest request) {
+		Long skillItemId = request.getSkillItemId();
+		Integer pageIndex = request.getPageIndex();
+		Integer pageSize = request.getPageSize();
+		Integer start = null;
+		if(pageIndex!=null && pageSize!=null){
+			start = pageIndex*pageSize;
+		}
+		List<DaVinfoVO> daVinfoVOList =  customerSkillMapper.queryCustomerListBySkillItem(skillItemId,start,pageSize);
+		for (DaVinfoVO daVinfoVO : daVinfoVOList) {
+			// 查询第一张形象照 性别(0=女,1=男)
+			 List<String> appearanceList = customerAppearanceMapper.queryCustomerAuditedAppearance(daVinfoVO.getCustomerId(), 0);
+            if(appearanceList == null || appearanceList.size() == 0){
+                if(Objects.equals(daVinfoVO.getSex(), 1)){
+                	daVinfoVO.setCoverUrl(PropertiesConstant.DEFAULT_CUSTOMER_APPEARANCE_URL_BOY);
+                }else {
+                	daVinfoVO.setCoverUrl(PropertiesConstant.DEFAULT_CUSTOMER_APPEARANCE_URL_GIRL);
+                }
+            }else{
+            	daVinfoVO.setCoverUrl(appearanceList.get(0));
+            }
+		}
+		return ResultUtils.resultSuccess(daVinfoVOList);
+	}
 }

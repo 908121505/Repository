@@ -125,6 +125,16 @@
 
 <script type="text/javascript">
     function check_fun() {
+
+        var appVersionSelectValue = $("#appVersionSelect").val();
+        if(appVersionSelectValue != null){
+            var appVersionSelectValueStr = appVersionSelectValue.toString();
+            if(appVersionSelectValueStr.indexOf("clear") != -1 && appVersionSelectValueStr != "clear"){
+                $("#tip").html("清空当前生效版本选项不能与其他选项同时选择！");
+                return false;
+            }
+        }
+
         <%--$("#tip").html("");--%>
 
         <%--var title = $("#banner_title").val();--%>
@@ -163,8 +173,8 @@
         <%--return false;--%>
         <%--}--%>
 
-        <%--var startTime = $("#banner_startTime").val();--%>
-        <%--var endTime = $("#banner_endTime").val();--%>
+        var startTime = $("#banner_startTime").val();
+        var endTime = $("#banner_endTime").val();
         <%--if(startTime == null || startTime.trim() == ''){--%>
         <%--$("#tip").html("请输入开始时间");--%>
         <%--return false;--%>
@@ -173,10 +183,10 @@
         <%--$("#tip").html("请输入结束时间");--%>
         <%--return false;--%>
         <%--}--%>
-        <%--if(endTime <= startTime){--%>
-        <%--$("#tip").html("开始时间必须大于结束时间");--%>
-        <%--return false;--%>
-        <%--}--%>
+        if(endTime <= startTime){
+        $("#tip").html("开始时间必须大于结束时间");
+        return false;
+        }
 
         <%--var versionRule = $("#appVersionRule").val();--%>
         <%--var version = $("#appVersion").val();--%>
@@ -240,8 +250,6 @@
         });
     });
 
-    if (${empty entity}) {
-    }
     $(document).ready(function () {
 
         $.ajax({
@@ -252,7 +260,9 @@
             success: function (data) {
 
                 if(data.length > 0){
-//                    $('#appVersionSelect').append("<option value=\"\">请选择</option>")
+                    if (${not empty entity}) {
+                        $('#appVersionSelect').append("<option value='clear'>清空当前生效版本</option>")
+                    }
                     var i;
                     for (i = 0; i < data.length; i++) {
                         $('#appVersionSelect').append("<option value="+data[i].id+">"+data[i].appVersion+"</option>")
