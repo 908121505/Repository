@@ -232,6 +232,9 @@ public class UserDubboBusinessImpl implements UserDubboBusiness {
 			case UserFunctionType.AddSystemUser:
 				response = commonPersonService.addSystemUser((AddSystemUserRequest) request);
 				break;
+			case UserFunctionType.QUERY_DV_LIST_BY_TYPE:
+				response = queryHomeBigvListService.queryClassifyBigvList((DaVListBySkillItemIdRequest)request);
+				break;
 			default:
 				throw new BizException(UserBizReturnCode.BizFunctionTypeNotMatch,
 						UserBizReturnCode.BizFunctionTypeNotMatch.desc());
