@@ -1,11 +1,5 @@
 package com.honglu.quickcall.user.service.business;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
-
 import com.honglu.quickcall.common.api.code.BizCode;
 import com.honglu.quickcall.common.api.exception.BaseException;
 import com.honglu.quickcall.common.api.exception.BizException;
@@ -14,70 +8,14 @@ import com.honglu.quickcall.common.api.exchange.CommonResponse;
 import com.honglu.quickcall.user.facade.business.UserDubboBusiness;
 import com.honglu.quickcall.user.facade.code.UserBizReturnCode;
 import com.honglu.quickcall.user.facade.code.UserFunctionType;
-import com.honglu.quickcall.user.facade.exchange.request.AddOrCancelFansRequest;
-import com.honglu.quickcall.user.facade.exchange.request.AddSystemUserRequest;
-import com.honglu.quickcall.user.facade.exchange.request.AppVersionManageRequest;
-import com.honglu.quickcall.user.facade.exchange.request.BindVXorQQRequest;
-import com.honglu.quickcall.user.facade.exchange.request.CheckAttentionRequest;
-import com.honglu.quickcall.user.facade.exchange.request.CheckEachAttentionRequest;
-import com.honglu.quickcall.user.facade.exchange.request.CustomerCenterRequest;
-import com.honglu.quickcall.user.facade.exchange.request.CustomerHomeRequest;
-import com.honglu.quickcall.user.facade.exchange.request.CustomerLevelRequest;
-import com.honglu.quickcall.user.facade.exchange.request.DaVListBySkillItemIdRequest;
-import com.honglu.quickcall.user.facade.exchange.request.DelateInsertRequest;
-import com.honglu.quickcall.user.facade.exchange.request.FeedBackInsertRequest;
-import com.honglu.quickcall.user.facade.exchange.request.FirstPageBigvListRequest;
-import com.honglu.quickcall.user.facade.exchange.request.GetSmsCodeRequest;
-import com.honglu.quickcall.user.facade.exchange.request.InternalMessageRequest;
-import com.honglu.quickcall.user.facade.exchange.request.IsPhoneExistsRequest;
-import com.honglu.quickcall.user.facade.exchange.request.NoReadAttentionCountRequest;
-import com.honglu.quickcall.user.facade.exchange.request.QueryAttentionFansListRequest;
-import com.honglu.quickcall.user.facade.exchange.request.QueryInterestListRequest;
-import com.honglu.quickcall.user.facade.exchange.request.QueryOccupationListRequest;
-import com.honglu.quickcall.user.facade.exchange.request.ReadAttentionRequest;
-import com.honglu.quickcall.user.facade.exchange.request.SaveBirthRequest;
-import com.honglu.quickcall.user.facade.exchange.request.SaveCertificationRequest;
-import com.honglu.quickcall.user.facade.exchange.request.SaveDvVoiceRequest;
-import com.honglu.quickcall.user.facade.exchange.request.SaveGenderRequest;
-import com.honglu.quickcall.user.facade.exchange.request.SaveInterestRequest;
-import com.honglu.quickcall.user.facade.exchange.request.SaveNickNameRequest;
-import com.honglu.quickcall.user.facade.exchange.request.SaveOccupationRequest;
-import com.honglu.quickcall.user.facade.exchange.request.SaveSignNameRequest;
-import com.honglu.quickcall.user.facade.exchange.request.SaveSkillAuditRequest;
-import com.honglu.quickcall.user.facade.exchange.request.SearchPersonRequest;
-import com.honglu.quickcall.user.facade.exchange.request.SetHeardUrlRequest;
-import com.honglu.quickcall.user.facade.exchange.request.SetPwdRequest;
-import com.honglu.quickcall.user.facade.exchange.request.UserIdCardInfoRequest;
-import com.honglu.quickcall.user.facade.exchange.request.UserLoginRequest;
-import com.honglu.quickcall.user.facade.exchange.request.UserRegisterRequest;
-import com.honglu.quickcall.user.facade.exchange.request.UserUnreadMessageNumRequest;
-import com.honglu.quickcall.user.facade.exchange.request.queryMyskillRequest;
-import com.honglu.quickcall.user.facade.exchange.request.editprofile.QueryBlacklistReq;
-import com.honglu.quickcall.user.facade.exchange.request.editprofile.QueryInterestListReq;
-import com.honglu.quickcall.user.facade.exchange.request.editprofile.QueryUserEditInfoReq;
-import com.honglu.quickcall.user.facade.exchange.request.editprofile.RemoveAppearanceReq;
-import com.honglu.quickcall.user.facade.exchange.request.editprofile.RemoveBlacklistReq;
-import com.honglu.quickcall.user.facade.exchange.request.editprofile.RemoveVoiceIdentificationCardReq;
-import com.honglu.quickcall.user.facade.exchange.request.editprofile.SaveBlacklistReq;
-import com.honglu.quickcall.user.facade.exchange.request.editprofile.UpdateAppearanceReq;
-import com.honglu.quickcall.user.facade.exchange.request.editprofile.UpdateBirthdayReq;
-import com.honglu.quickcall.user.facade.exchange.request.editprofile.UpdateGenderReq;
-import com.honglu.quickcall.user.facade.exchange.request.editprofile.UpdateHeadPortraitReq;
-import com.honglu.quickcall.user.facade.exchange.request.editprofile.UpdateInterestReq;
-import com.honglu.quickcall.user.facade.exchange.request.editprofile.UpdateNickNameReq;
-import com.honglu.quickcall.user.facade.exchange.request.editprofile.UpdateSignNameReq;
-import com.honglu.quickcall.user.facade.exchange.request.editprofile.UpdateStarSignReq;
-import com.honglu.quickcall.user.facade.exchange.request.editprofile.UpdateVoiceIdentificationCardReq;
-import com.honglu.quickcall.user.service.service.AppVersionManageService;
-import com.honglu.quickcall.user.service.service.BlacklistService;
-import com.honglu.quickcall.user.service.service.CommonPersonService;
-import com.honglu.quickcall.user.service.service.DelateService;
-import com.honglu.quickcall.user.service.service.EditProfileService;
-import com.honglu.quickcall.user.service.service.FeedBackService;
-import com.honglu.quickcall.user.service.service.InternalMessageService;
-import com.honglu.quickcall.user.service.service.PersonInfoService;
-import com.honglu.quickcall.user.service.service.QueryBigvListService;
-import com.honglu.quickcall.user.service.service.UserMessageService;
+import com.honglu.quickcall.user.facade.exchange.request.*;
+import com.honglu.quickcall.user.facade.exchange.request.editprofile.*;
+import com.honglu.quickcall.user.service.service.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 @Component
 @Service("User.UserDubboBusiness")
@@ -287,6 +225,12 @@ public class UserDubboBusinessImpl implements UserDubboBusiness {
 			case UserFunctionType.appVersionManage:
 				response = appVersionManageService.findAppVersionInfo((AppVersionManageRequest) request);
 				break;
+			case UserFunctionType.AddBookingMessage:
+				response = userMessageService.saveBookingMessage((BookingMessageSaveRequest) request);
+				break;
+			case UserFunctionType.QueryBookingMessage:
+					response = userMessageService.queryBookingMessage((BookingMessageQueryRequest) request);
+					break;
 			default:
 				throw new BizException(UserBizReturnCode.BizFunctionTypeNotMatch,
 						UserBizReturnCode.BizFunctionTypeNotMatch.desc());
