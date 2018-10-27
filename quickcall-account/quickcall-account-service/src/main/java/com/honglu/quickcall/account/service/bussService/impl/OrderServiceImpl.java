@@ -1085,7 +1085,9 @@ public class OrderServiceImpl implements IOrderService {
 				label.setLabelId(labelId);
 				list.add(label);
 			}
-			orderMapper.saveEvaluationLabels(list);
+			if (list.size()>0){
+				orderMapper.saveEvaluationLabels(list);
+			}
 		}
 
 		commonService.updateOrder(request.getOrderId(), OrderSkillConstants.ORDER_STATUS_FINISHED_AND_PINGJIA);
