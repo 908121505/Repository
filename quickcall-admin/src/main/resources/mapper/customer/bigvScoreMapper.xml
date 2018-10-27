@@ -95,6 +95,9 @@ id,	customer_id,	order_total,	score_total,	create_time,	modify_time,	create_man,
  		  	<if test="customerId != null">
 				 customer_id,
 			</if>
+			<if test="customerSkillId != null">
+				 customer_skill_id,
+			</if>
 			<if test="orderTotal != null">
 				 order_total,
 			</if>
@@ -123,6 +126,9 @@ id,	customer_id,	order_total,	score_total,	create_time,	modify_time,	create_man,
  		  	</if>
  		  	<if test="customerId != null">
 				 #{customerId},
+			</if>
+			<if test="customerSkillId != null">
+				 #{customerSkillId},
 			</if>
 			<if test="orderTotal != null">
 				 #{orderTotal},
