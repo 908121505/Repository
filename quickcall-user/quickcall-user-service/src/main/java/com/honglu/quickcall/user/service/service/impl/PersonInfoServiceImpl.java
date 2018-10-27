@@ -527,7 +527,6 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 					Fans fan = new Fans();
 					fan.setId(UUIDUtils.getId());
 					fan.setAttentionState(UserBizConstants.ATTENTION_STATUS_ATTENED);
-					fan.setCreateTime(new Date());
 					fan.setFansId(fansId);
 					fan.setAnchorId(attendedId);
 					fansMapper.insert(fan);
@@ -538,7 +537,6 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 						Fans record = new Fans();
 						record.setId(fans.getId());
 						record.setAttentionState(UserBizConstants.ATTENTION_STATUS_ATTENED);
-						record.setModifyTime(new Date());
 						fansMapper.updateByPrimaryKey(record);
 					}
 				}
@@ -551,7 +549,6 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 						Fans record = new Fans();
 						record.setId(fans.getId());
 						record.setAttentionState(UserBizConstants.ATTENTION_STATUS_UN_ATTENED);
-						record.setModifyTime(new Date());
 						fansMapper.updateByPrimaryKey(record);
 					}
 				}
