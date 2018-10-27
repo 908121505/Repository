@@ -873,11 +873,13 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 		Integer currentLevelExperience = customerMapper.getGradeExperienceByLevelNo(customer.getCustomerLevel());
 		customerLevelVO.setCurrentLevelExperience(currentLevelExperience);
 		// 查询下一等级经验值
-		Integer nextLevelExperience = customerMapper.getGradeExperienceByLevelNo(customer.getCustomerLevel());
+		Integer nextLevelExperience = customerMapper.getGradeExperienceByLevelNo(customer.getCustomerLevel() + 1);
 		customerLevelVO.setNextLevelExperience(nextLevelExperience);
 
 		// 距离下一级所需经验值
-		customerLevelVO.setNeedExperienceNum(nextLevelExperience - customer.getCumulateExperience());
+		if(nextLevelExperience != null){
+			customerLevelVO.setNeedExperienceNum(nextLevelExperience - customer.getCumulateExperience());
+		}
 
 		// 查询等级特权 ADUAN -- 一期不做
 
