@@ -1,6 +1,6 @@
 package com.honglu.quickcall.user.service.dao;
 
-import com.honglu.quickcall.user.facade.entity.CustomerSkill;
+import com.honglu.quickcall.user.facade.entity.BigvSkillScore;
 import com.honglu.quickcall.user.facade.entity.ResourceConfig;
 import org.apache.ibatis.annotations.Param;
 
@@ -19,7 +19,7 @@ public interface ResourceConfigMapper {
      * @param resourceConfigId
      * @return
      */
-    List<String> selectEnableSkills(@Param("resourceConfigId") Integer resourceConfigId);
+    List<String> selectResourceEnableSkills(@Param("resourceConfigId") Integer resourceConfigId);
 
     /**
      * 查询资源位配置启用技能
@@ -31,5 +31,9 @@ public interface ResourceConfigMapper {
      * 查询启用的大V + 技能排名列表
      * @return
      */
-    List<CustomerSkill> selectEnabledBigvAndSkillRankData(@Param("pageSize") Integer pageSize);
+    List<BigvSkillScore> selectEnabledBigvAndSkillRankData(
+            @Param("configSkills") List<String> configSkills,
+            @Param("weekIndex") Integer weekIndex,
+            @Param("endTimeStr") String endTimeStr);
+
 }
