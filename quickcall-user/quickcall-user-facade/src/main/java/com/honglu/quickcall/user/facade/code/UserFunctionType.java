@@ -29,6 +29,8 @@ public interface UserFunctionType {
 	String loginOut = "001010";
 	// 添加系统用户
 	String AddSystemUser = "001011";
+	// 版本更新管理
+	String appVersionManage = "001012";
 	// 系统相关 001300 - 001350
 	String MarketOnOff = "001300";
 	String AppConfig = "001301";
@@ -193,7 +195,7 @@ public interface UserFunctionType {
 	 * 查询我的站内信消息
 	 */
 	String INTERNAL_MESSAGE = "001201";
-	
+
 	/**
 	 * 技能项分类点击列表
 	 */

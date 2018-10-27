@@ -40,6 +40,14 @@
         <!-- 资源池 -->
         <typeAlias type="com.calf.module.resource.entity.ResourcePool" alias="ResourcePool"/>
         <typeAlias type="com.calf.module.resource.entity.ResourcePoolCustomer" alias="ResourcePoolCustomer"/>
+        
+        <!-- 版本管理 -->
+        <typeAlias type="com.calf.module.appversion.entity.AppVersionManage"
+			alias="AppVersionManage" />
+		<typeAlias type="com.calf.module.appversion.entity.AppType"
+			alias="AppType" />   
+
+
 
     </typeAliases>
 </configuration>
