@@ -457,6 +457,9 @@ public class OrderServiceImpl implements IOrderService {
 			}else if(OrderSkillConstants.ORDER_STATUS_WAITING_START_DA_APPAY_START_SERVICE  == oldOrderStatus){
 				//订单状态8.大V接受订单之后开始之前用户自主取消
 				orderStatus = OrderSkillConstants.ORDER_STATUS_CANCLE_USER_SELF_BEFORE_SERVICE;
+			}else if(OrderSkillConstants.ORDER_STATUS_GOING_WAITING_START  == oldOrderStatus){
+				//订单状态23.取消（叫醒预约时间之前取消）
+				orderStatus = OrderSkillConstants.ORDER_STATUS_CANCEL_BEFORE_APPOINT_TIME;
 			}else{
 				throw new BizException(AccountBizReturnCode.ORDER_STATUS_ERROR, "订单状态异常");
 			}
@@ -756,7 +759,7 @@ public class OrderServiceImpl implements IOrderService {
 				//用户同意，修改状态:叫醒类型服务专享
 				newOrderStatus = OrderSkillConstants.ORDER_STATUS_GOING_WAITING_START;
 			}
-			
+			//TODO 需要考虑叫醒服务情况
 			
 			Date  currTime =  new Date();
 			

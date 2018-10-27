@@ -6,8 +6,16 @@ import com.honglu.quickcall.user.facade.exchange.UserCenterRequest;
 public class AppVersionManageRequest extends UserCenterRequest {
 	private String appType;
 	private Integer versionType;
-	private String baseVersionName;
-	private String channel;
+
+	private String headVersionUrl;
+
+	public String getHeadVersionUrl() {
+		return headVersionUrl;
+	}
+
+	public void setHeadVersionUrl(String headVersionUrl) {
+		this.headVersionUrl = headVersionUrl;
+	}
 
 	public String getAppType() {
 		return appType;
@@ -23,22 +31,6 @@ public class AppVersionManageRequest extends UserCenterRequest {
 
 	public void setVersionType(Integer versionType) {
 		this.versionType = versionType;
-	}
-
-	public String getBaseVersionName() {
-		return baseVersionName;
-	}
-
-	public void setBaseVersionName(String baseVersionName) {
-		this.baseVersionName = baseVersionName;
-	}
-
-	public String getChannel() {
-		return channel;
-	}
-
-	public void setChannel(String channel) {
-		this.channel = channel;
 	}
 
 	@Override
