@@ -579,7 +579,7 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 		int status = n & n1;
 		status = status == 0 ? 0 : 1;
 		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("AttentionStatus", n1 == 0?0:1);
+		map.put("attentionStatus", n1 == 0?0:1);
 		map.put("eachAttentionStatus", status);
 		return ResultUtils.resultSuccess(map);
 	}
