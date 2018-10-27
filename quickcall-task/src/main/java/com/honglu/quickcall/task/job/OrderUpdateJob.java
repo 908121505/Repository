@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.ResourceBundle;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -16,10 +17,15 @@ import org.springframework.util.CollectionUtils;
 import com.honglu.quickcall.account.facade.constants.OrderSkillConstants;
 import com.honglu.quickcall.account.facade.enums.AccountBusinessTypeEnum;
 import com.honglu.quickcall.account.facade.enums.TransferTypeEnum;
+import com.honglu.quickcall.common.api.util.JedisUtil;
+import com.honglu.quickcall.common.api.util.RedisKeyConstants;
+import com.honglu.quickcall.common.core.util.UUIDUtils;
 import com.honglu.quickcall.common.third.rongyun.util.RongYunUtil;
+import com.honglu.quickcall.task.dao.AccountMapper;
 import com.honglu.quickcall.task.dao.TaskOrderMapper;
+import com.honglu.quickcall.task.dao.TradeDetailMapper;
 import com.honglu.quickcall.task.entity.TaskOrder;
-import com.honglu.quickcall.task.service.IAccountOrderService;
+import com.honglu.quickcall.task.entity.TradeDetail;
 
 /**
  * 
@@ -39,10 +45,6 @@ public class OrderUpdateJob {
     @Autowired
     private TaskOrderMapper    taskOrderMapper;
     
-
-    @Autowired
-	private IAccountOrderService accountOrderService;
-
     /**默认超时小时数*/
     private final static  Integer   END_OVER_TIME_HOUR = -12;
     /**默认超时分钟数*/
@@ -235,8 +237,7 @@ public class OrderUpdateJob {
     				BigDecimal  payAmount =  order.getOrderAmounts();
     				//调用接口退款给用户
     				LOGGER.info("用户信息："+order.toString());
-    				System.out.println("============"+accountOrderService);
-    				accountOrderService.inAccount(customerId, payAmount,TransferTypeEnum.RECHARGE,AccountBusinessTypeEnum.OrderRefund);
+    				inAccount(customerId, payAmount,TransferTypeEnum.RECHARGE,AccountBusinessTypeEnum.OrderRefund);
     				LOGGER.info("用户ID："+customerId +"订单超时，系统自动退款给用户"+payAmount);
     				
     				sendOrderMessage(customerId, cancelType, false);
@@ -300,8 +301,7 @@ public class OrderUpdateJob {
 					Long  serviceId =  order.getServiceId();
 					BigDecimal   payAmount =  order.getOrderAmounts();
 					//大V冻结
-					System.out.println("============"+accountOrderService);
-					accountOrderService.inAccount(order.getServiceId(), order.getOrderAmounts(), TransferTypeEnum.FROZEN, AccountBusinessTypeEnum.FroZen);
+					inAccount(order.getServiceId(), order.getOrderAmounts(), TransferTypeEnum.FROZEN, AccountBusinessTypeEnum.FroZen);
 					LOGGER.info("主播用户ID："+serviceId +"订单超时，系统自动退款给用户"+payAmount);
 				}
 			} catch (Exception e) {
@@ -309,6 +309,64 @@ public class OrderUpdateJob {
 			}
     	}
     }
+    
+    
+    
+	@Autowired
+	private AccountMapper accountMapper;
+	@Autowired
+	private TradeDetailMapper tradeDetailMapper;
+
+	private final static String froZenTime = ResourceBundle.getBundle("thirdconfig").getString("froZenTime");
+    
+    public void inAccount(Long customerId, BigDecimal amount, TransferTypeEnum transferType,
+			AccountBusinessTypeEnum accountBusinessType) {
+
+		// 入账
+		accountMapper.inAccount(customerId, amount, transferType.getType());
+		// 记录流水
+		TradeDetail tradeDetail = new TradeDetail();
+		tradeDetail.setTradeId(UUIDUtils.getId());
+		tradeDetail.setCustomerId(customerId);
+		tradeDetail.setCreateTime(new Date());
+		tradeDetail.setType(accountBusinessType.getType());
+		tradeDetail.setInPrice(amount);
+		tradeDetailMapper.insertSelective(tradeDetail);
+
+		if (transferType == TransferTypeEnum.FROZEN) {
+			String userFrozenkey = RedisKeyConstants.ACCOUNT_USERFROZEN_USER + customerId;
+			String steamFrozenKey = RedisKeyConstants.ACCOUNT_USERFROZEN_USER + tradeDetail.getTradeId();
+			String frozenTimeKey = RedisKeyConstants.ACCOUNT_USERFROZEN_Time + tradeDetail.getTradeId();
+			String userFrozenValue = JedisUtil.get(userFrozenkey);
+			if (StringUtils.isNotBlank(userFrozenValue)) {
+				userFrozenValue = userFrozenValue + "," + tradeDetail.getTradeId();
+			} else {
+				JedisUtil.set(userFrozenkey, tradeDetail.getTradeId() + "");
+
+			}
+			JedisUtil.set(steamFrozenKey, amount + "");
+			// 缓存24小时
+			JedisUtil.set(frozenTimeKey, "1", Integer.parseInt(froZenTime));
+
+		}
+
+	}
+    
+    
+	public void outAccount(Long customerId, BigDecimal amount, TransferTypeEnum transferType,
+			AccountBusinessTypeEnum accountBusinessType) {
+		// 入账
+		accountMapper.outAccount(customerId, amount, transferType.getType());
+		// 记录流水
+		TradeDetail tradeDetail = new TradeDetail();
+		tradeDetail.setTradeId(UUIDUtils.getId());
+		tradeDetail.setCustomerId(customerId);
+		tradeDetail.setCreateTime(new Date());
+		tradeDetail.setType(accountBusinessType.getType());
+		tradeDetail.setOutPrice(amount);
+		tradeDetailMapper.insertSelective(tradeDetail);
+
+	}
     
     
     
