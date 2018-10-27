@@ -1070,6 +1070,7 @@ public class OrderServiceImpl implements IOrderService {
 			orderMapper.saveEvaluationLabels(list);
 		}
 
+		commonService.updateOrder(request.getOrderId(), OrderSkillConstants.ORDER_STATUS_FINISHED_AND_PINGJIA);
 		// ADUAN -- 用户评价，计算主播评分排名，发送MQ消息
 		userCenterSendMqMessageService.sendEvaluationOrderMqMessage(request.getOrderId());
 

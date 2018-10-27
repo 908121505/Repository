@@ -211,8 +211,8 @@ public interface OrderSkillConstants {
 	
 	
 	
-	/**订单状态18.订单完成（正常完成）;*/
-	public static final Integer  ORDER_STATUS_END = 18 ;
+//	/**订单状态18.订单完成（正常完成）;*/
+//	public static final Integer  ORDER_STATUS_END = 18 ;
 	
 	
 	
