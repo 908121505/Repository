@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -32,6 +34,7 @@ import com.honglu.quickcall.common.api.util.JSONUtil;
 
 @Service("productSkillService")
 public class ProductSkillServiceImpl implements IProductSkillService {
+	private static final Logger LOGGER = LoggerFactory.getLogger(ProductSkillServiceImpl.class);
 
 	
 	@Autowired
@@ -420,7 +423,7 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 			return ;
 		}
 		String  endTimeStr = request.getEndServiceTimeStr();
-		int  receiveStatus = request.getReceiveStatus();
+		Integer  receiveStatus = request.getReceiveStatus();
 		Integer sunday = request.getSunday();
 		Integer saturday = request.getSaturday();
 		Integer tuesday = request.getTuesday();
@@ -470,6 +473,14 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 		}
 		//在技能审核的时候已经初始化用户技能信息
 		customerSkillMapper.batchUpdate(updateList);
+		
+		//更新bigv_score表
+		try {
+			customerSkillMapper.updateBigvScore(customerId, receiveStatus);
+		} catch (Exception e) {
+			LOGGER.error("更新用户状态发生异常，异常信息：",e);
+		}
+		
 
 	}
 

@@ -33,6 +33,9 @@ public interface CustomerSkillMapper {
 
 	/**批量更新数据*/
 	void batchUpdate(@Param("list")  List<CustomerSkill> updateList);
+	
+	
+	void  updateBigvScore(@Param("customerId")Long  customerId,@Param("onlineStatus")Integer  onlineStatus);
 
 	List<FirstPageSkillIteminfoVO> selectPartSkill();
 

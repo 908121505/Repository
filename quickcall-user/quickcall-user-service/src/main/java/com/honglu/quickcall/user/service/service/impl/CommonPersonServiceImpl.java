@@ -21,6 +21,7 @@ import com.honglu.quickcall.common.api.exception.BizException;
 import com.honglu.quickcall.common.api.exception.RemoteException;
 import com.honglu.quickcall.common.api.exchange.CommonResponse;
 import com.honglu.quickcall.common.api.exchange.ResultUtils;
+import com.honglu.quickcall.common.api.util.CommonUtil;
 import com.honglu.quickcall.common.api.util.DateUtils;
 import com.honglu.quickcall.common.api.util.JedisUtil;
 import com.honglu.quickcall.common.api.util.RedisKeyConstants;
@@ -221,19 +222,26 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 					img = defaultImg;
 				}
 			}
-			if (params.getNickName().length() > 24) {
-				throw new RemoteException(UserBizReturnCode.paramError, "您的昵称超出长度！");
-			}
-
-			// 中文、英文、数字、下划线校验 4-24位
-			Integer check = 2;
-			// 敏感词
-			Integer checkDetail = 1;
-			Integer checkResult = checkNickName(params.getNickName());
-			if (check.equals(checkResult)) {
+			// 字符格式校验
+			Boolean formatCheckResult = CommonUtil.checkNickName(params.getNickName());
+			if (!formatCheckResult) {
 				throw new RemoteException(UserBizReturnCode.paramError, "用户名不符合规则");
-			} else if (checkDetail.equals(checkResult)) {
-				throw new RemoteException(UserBizReturnCode.nickNameSensitive, "您输入的昵称包含敏感字，请重新输入！");
+			}
+			// 敏感词校验
+			List<SensitivityWord> sensitivityList = sensitivityWordMapper.querySensitiveName();
+			if (Detect.notEmpty(sensitivityList)) {
+				for (SensitivityWord obj : sensitivityList) {
+					if (params.getNickName().contains(obj.getContent())) {
+						logger.info("昵称包含敏感词！");
+						throw new RemoteException(UserBizReturnCode.nickNameSensitive, "您输入的昵称包含敏感字，请重新输入！");
+					}
+				}
+			}
+			// 昵称重复校验
+			int ifRepeat = customerMapper.selectCountByNickNameAndId(params.getNickName(),
+					params.getCustomerId().toString());
+			if (ifRepeat > 0) {
+				throw new RemoteException(UserBizReturnCode.paramError, "您输入的昵称已存在，请重新输入！");
 			}
 
 			/*
