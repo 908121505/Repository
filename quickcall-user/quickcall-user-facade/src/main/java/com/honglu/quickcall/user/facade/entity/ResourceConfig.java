@@ -12,9 +12,9 @@ public class ResourceConfig {
 
     private Integer resourceConfigId;
 
-    private Byte configNum;
+    private Integer configNum;
 
-    private Byte strategy;
+    private Integer strategy;
 
     private Long resourcePoolId;
 
@@ -36,19 +36,19 @@ public class ResourceConfig {
         this.resourceConfigId = resourceConfigId;
     }
 
-    public Byte getConfigNum() {
+    public Integer getConfigNum() {
         return configNum;
     }
 
-    public void setConfigNum(Byte configNum) {
+    public void setConfigNum(Integer configNum) {
         this.configNum = configNum;
     }
 
-    public Byte getStrategy() {
+    public Integer getStrategy() {
         return strategy;
     }
 
-    public void setStrategy(Byte strategy) {
+    public void setStrategy(Integer strategy) {
         this.strategy = strategy;
     }
 

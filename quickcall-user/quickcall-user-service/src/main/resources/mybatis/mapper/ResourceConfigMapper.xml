@@ -3,8 +3,8 @@
 <mapper namespace="com.honglu.quickcall.user.service.dao.ResourceConfigMapper" >
   <resultMap id="BaseResultMap" type="com.honglu.quickcall.user.facade.entity.ResourceConfig" >
     <id column="resource_config_id" property="resourceConfigId" jdbcType="INTEGER" />
-    <result column="config_num" property="configNum" jdbcType="TINYINT" />
-    <result column="strategy" property="strategy" jdbcType="TINYINT" />
+    <result column="config_num" property="configNum" jdbcType="INTEGER" />
+    <result column="strategy" property="strategy" jdbcType="INTEGER" />
     <result column="resource_pool_id" property="resourcePoolId" jdbcType="BIGINT" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />

@@ -24,4 +24,16 @@ public interface BigvScoreMapper {
      * @return
      */
     int updateBigvScore(@Param("customerId") Long customerId, @Param("valueScore") BigDecimal valueScore);
+
+    /**
+     * 查询在线大V数量
+     * @return
+     */
+    int countOnlineBigvCount();
+
+    /**
+     * 查询有效大V数
+     * @return
+     */
+    int countValidBigvCount();
 }

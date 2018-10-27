@@ -119,4 +119,13 @@
       WHERE customer_id = #{customerId}
   </update>
 
+  <!-- 统计大V在线数 -->
+  <select id="countOnlineBigvCount" resultType="int">
+    select count(*) from bigv_score where cust_status = 1 and online_status = 1
+  </select>
+
+  <!-- 统计有效大V数 -->
+  <select id="countValidBigvCount" resultType="int">
+    select count(*) from bigv_score where cust_status = 1
+  </select>
 </mapper>
