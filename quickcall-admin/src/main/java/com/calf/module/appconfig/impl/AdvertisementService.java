@@ -5,12 +5,14 @@ import com.calf.cn.service.BaseManager;
 import com.calf.cn.utils.SearchUtil;
 import com.calf.module.appconfig.entity.Advertisement;
 import com.calf.module.common.impl.CommonUtilService;
+import com.honglu.quickcall.common.core.util.StringUtil;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 
 import javax.servlet.http.HttpServletRequest;
@@ -26,6 +28,7 @@ import java.util.Map;
  * @date 2018/10/25 10:28
  */
 @Service
+@Transactional
 public class AdvertisementService {
 
     private static final Logger logger = LoggerFactory.getLogger(AdvertisementService.class);
@@ -40,16 +43,6 @@ public class AdvertisementService {
         Map<String, Object> paramMap = new HashMap<String, Object>();
         paramMap.put("iDisplayStart", parameters.get("iDisplayStart"));
         paramMap.put("iDisplayLength", parameters.get("iDisplayLength"));
-       /* String startTime = (String) parameters.get("startTime");
-        if (StringUtils.isNotBlank(startTime)) {
-            startTime = startTime + " 00:00:00";
-            paramMap.put("startTime", startTime);
-        }
-        String eTime = (String) parameters.get("endTime");
-        if (StringUtils.isNotBlank(eTime)) {
-            eTime = eTime + " 23:59:59";
-            paramMap.put("endTime", eTime);
-        }*/
 
         paramMap.put("name", parameters.get("name"));
         paramMap.put("startTime", parameters.get("startTime"));
@@ -73,12 +66,26 @@ public class AdvertisementService {
         advertisement.setCreateMan(commonUtilService.getCurrUser());
         advertisement.setType(0);
         advertisement.setAdStatus(1);
-        int result = baseManager.insert(advertisement);
-        if(result > 0){
-            return 0;
-        }else {
+
+        //插入广告表
+        int insertAdCount = baseManager.insert(advertisement);
+        if(insertAdCount < 1){
             return -1;
         }
+        //插入广告和app版本对应表
+        String appVersionIds = advertisement.getAppVersionIdList();
+        if(!StringUtil.isBlank(appVersionIds)) {
+            String[] appVersionIdArr = appVersionIds.split(",");
+            for (String appVersionId : appVersionIdArr) {
+                advertisement.setAppVersionId(appVersionId);
+                int insertAdAppCount = baseManager.insert("Advertisement.insertAdAppVersion", advertisement);
+                if (insertAdAppCount < 1) {
+                    return -1;
+                }
+            }
+        }
+
+        return 0;
     }
 
     public int saveUpdate(Advertisement entity) {
@@ -87,12 +94,37 @@ public class AdvertisementService {
         advertisement.setModifyMan(commonUtilService.getCurrUser());
         advertisement.setType(0);
         advertisement.setAdStatus(1);
-        int result = baseManager.update(advertisement);
-        if(result > 0){
-            return 0;
-        }else {
+
+        //更新广告表 advertisement
+        int updateAdCount = baseManager.update(advertisement);
+        if(updateAdCount < 1){
             return -1;
         }
+        //删除此广告在 广告与版本对应表中的数据 ad_app_version
+        if(!StringUtil.isBlank(advertisement.getAppVersion())){
+            Map<String, Object> paramMap = new HashMap<String, Object>();
+            paramMap.put("advertisementId", advertisement.getId());
+            int deleteAdAppCount = baseManager.delete("Advertisement.deleteAdAppVersion", paramMap);
+            if(deleteAdAppCount < 1){
+                return -1;
+            }
+        }
+
+        //插入表 ad_app_version
+        String appVersionIds = advertisement.getAppVersionIdList();
+        if(!StringUtil.isBlank(appVersionIds)) {
+            String[] appVersionIdArr = appVersionIds.split(",");
+            for (String appVersionId : appVersionIdArr) {
+                advertisement.setAppVersionId(appVersionId);
+                int insertAdAppCount = baseManager.insert("Advertisement.insertAdAppVersion", advertisement);
+                if (insertAdAppCount < 1) {
+                    return -1;
+                }
+            }
+        }
+
+        return 0;
+
     }
 
     public int disable(String id) {
@@ -103,5 +135,11 @@ public class AdvertisementService {
             return 0;
         }
         return -1;
+    }
+
+    public List getAppVersionList() {
+        Map<String, Object> paramMap = new HashMap<String, Object>();
+        List<Map<String, Object>> appVersionList = baseManager.query("Advertisement.selectAppVersionList", paramMap);
+        return appVersionList;
     }
 }

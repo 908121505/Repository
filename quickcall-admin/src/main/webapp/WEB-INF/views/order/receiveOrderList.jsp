@@ -15,7 +15,7 @@
 					<div class="form-group">
 						<div class="input-group">
 							<div class="input-group-addon">创建时间</div>
-							<input class="form-control" type="text" id="create_time">
+							<input class="form-control" type="text" value="${showCurTime}" id="create_time" onfocus="WdatePicker({skin:'default',dateFmt:'yyyy-MM-dd HH:mm:ss',minDate:'1950-01-01'})">
 						</div>
 					</div>
 				</div>
@@ -24,7 +24,7 @@
 					<div class="form-group">
 						<div class="input-group">
 							<div class="input-group-addon">修改时间</div>
-							<input class="form-control" type="text" id="modify_time">
+							<input class="form-control" type="text" value="${showCurTime}" id="modify_time" onfocus="WdatePicker({skin:'default',dateFmt:'yyyy-MM-dd HH:mm:ss',minDate:'1950-01-01'})">
 						</div>
 					</div>
 				</div>

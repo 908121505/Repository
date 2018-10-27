@@ -51,7 +51,7 @@ public interface TaskOrderMapper {
 	 */
 	void updateOrderStatusAfter12HourCust(@Param("currTime")Date  currTime,@Param("endTime")Date  endTime,@Param("queryStatus")Integer queryStatus ,@Param("updateStatus")Integer  updateStatus,@Param("skillType")Integer  skillType);
 	/**
-	 *用户未接立即服务超时超时查询
+	 *用户12小时未响应大V结束服务
 	 * @param currTime
 	 * @param endTime
 	 * @param queryStatus

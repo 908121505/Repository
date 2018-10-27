@@ -62,6 +62,7 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 
 	// 默认图片
 	private static String defaultImg = ResourceBundle.getBundle("thirdconfig").getString("defaultImg");
+	private static String defaultWoManImg = ResourceBundle.getBundle("thirdconfig").getString("defaultWoManImg");
 	@Autowired
 	private CustomerMapper customerMapper;
 
@@ -210,9 +211,16 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 	public CommonResponse setHeardUrl(SetHeardUrlRequest params) {
 		// TODO Auto-generated method stub
 		String rongyunToken = null;
-		if (StringUtils.isNotBlank(params.getNickName()) && params.getCustomerId() != null
-				&& StringUtils.isNotBlank(params.getHeadPortraitUrl())) {
+		String img = params.getHeadPortraitUrl();
+		if (StringUtils.isNotBlank(params.getNickName()) && params.getCustomerId() != null) {
 
+			if (StringUtils.isBlank(img)) { // 手机号注册没有传头像，使用默认头像
+				if (params.getSex() == 0) {// 性別是女
+					img = defaultWoManImg;
+				} else {// 性別是男
+					img = defaultImg;
+				}
+			}
 			if (params.getNickName().length() > 24) {
 				throw new RemoteException(UserBizReturnCode.paramError, "您的昵称超出长度！");
 			}
@@ -236,7 +244,7 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 			 */
 			// 刷新融云用户信息
 			CodeSuccessReslut reslut = RongYunUtil.refreshUser(String.valueOf(params.getCustomerId()),
-					params.getNickName(), params.getHeadPortraitUrl());
+					params.getNickName(), img);
 			// 刷新失败
 			if (reslut.getCode() != 200) {
 				logger.error("刷新融云用户信息失败，用户id为：" + String.valueOf(params.getCustomerId()) + "失败原因为："
@@ -247,8 +255,7 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 
 		}
 
-		int row = customerMapper.customerSetHeardUrl(params.getTel(), params.getHeadPortraitUrl(), params.getNickName(),
-				params.getSex());
+		int row = customerMapper.customerSetHeardUrl(params.getTel(), img, params.getNickName(), params.getSex());
 		if (row <= 0) {
 			throw new BizException(BizCode.ParamError, "设置昵称头像失败");
 		}

@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
  * Description: 弹窗广告管理
@@ -74,7 +75,7 @@ public class AdvertisementController implements BaseController<Advertisement> {
     }
 
     /**
-     * 删除禁用
+     * 删除禁用(广告逻辑删除)
      * @param id
      * @return
      */
@@ -82,6 +83,16 @@ public class AdvertisementController implements BaseController<Advertisement> {
     @RequestMapping(value = "/disable")
     public int disable(String id){
         return advertisementService.disable(id);
+    }
+
+    /**
+     * 获取版本列表
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/getAppVersionList")
+    public List getAppVersionList(){
+        return advertisementService.getAppVersionList();
     }
 
 }

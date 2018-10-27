@@ -23,7 +23,7 @@
                 <div class="form-group">
                     <div class="input-group">
                         <div class="input-group-addon">广告名称</div>
-                        <input class="form-control" type="text" id="name">
+                        <input class="form-control" type="text" id="adName">
                     </div>
                 </div>
             </div>
@@ -76,7 +76,7 @@
                 var table = $('#example').initTable({
                     sAjaxSource: "advertisement/initTable.htm",
                     fnServerParams: function (aoData) {  //查询条件
-                        aoData.push({"name": "name", "value": $("#name").val().trim()});
+                        aoData.push({"name": "name", "value": $("#adName").val().trim()});
                         aoData.push({"name": "startTime", "value": $("#sTime").val()});
                         aoData.push({"name": "endTime", "value": $("#eTime").val()});
                     },

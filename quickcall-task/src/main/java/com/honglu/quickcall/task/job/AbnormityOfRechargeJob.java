@@ -15,7 +15,6 @@ import org.springframework.stereotype.Component;
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.alibaba.fastjson.JSON;
 import com.honglu.quickcall.account.facade.business.IAccountOrderService;
-import com.honglu.quickcall.account.facade.entity.TradeDetail;
 import com.honglu.quickcall.account.facade.enums.AccountBusinessTypeEnum;
 import com.honglu.quickcall.account.facade.enums.TransferTypeEnum;
 import com.honglu.quickcall.common.api.util.HttpClientUtils;
@@ -24,6 +23,7 @@ import com.honglu.quickcall.task.dao.AccountMapper;
 import com.honglu.quickcall.task.dao.RechargeMapper;
 import com.honglu.quickcall.task.dao.TradeDetailMapper;
 import com.honglu.quickcall.task.entity.Recharge;
+import com.honglu.quickcall.task.entity.TradeDetail;
 
 /**
  * 充值回调异常修复 job
@@ -48,8 +48,8 @@ public class AbnormityOfRechargeJob {
 
 	private static String aliPayOrderQuery = ResourceBundle.getBundle("thirdconfig").getString("ALI_PAY_ORDER_QUERY");
 
-	// @Scheduled(cron = "* 0/15 * * * ?")
-	@Scheduled(cron = "0/5 * * * * ?")
+	@Scheduled(cron = "* 0/2 * * * ?")
+	// @Scheduled(cron = "0/5 * * * * ?")
 	public void execute() {
 
 		logger.info("充值回调异常修复  job 开启------------------------");

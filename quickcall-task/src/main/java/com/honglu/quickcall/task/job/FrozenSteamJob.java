@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import com.honglu.quickcall.account.facade.entity.TradeDetail;
 import com.honglu.quickcall.account.facade.enums.AccountBusinessTypeEnum;
 import com.honglu.quickcall.account.facade.enums.TransferTypeEnum;
 import com.honglu.quickcall.common.api.util.JedisUtil;
@@ -21,6 +20,7 @@ import com.honglu.quickcall.common.core.util.UUIDUtils;
 import com.honglu.quickcall.task.dao.AccountMapper;
 import com.honglu.quickcall.task.dao.TradeDetailMapper;
 import com.honglu.quickcall.task.entity.Account;
+import com.honglu.quickcall.task.entity.TradeDetail;
 
 /**
  * 冻结金额24小时回账 job

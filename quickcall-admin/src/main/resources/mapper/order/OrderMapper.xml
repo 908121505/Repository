@@ -426,7 +426,7 @@
         LEFT JOIN skill_item_ext ext ON skill.skill_item_ext_id = ext.id
     where 1= 1
      <if test="orderId != null" >
-       AND  order_id =   #{orderId}
+       AND  od.order_id =   #{orderId}
      </if>
      <if test="placeOrderId != null" >
        AND  place.customer_id = #{placeOrderId}
@@ -441,10 +441,10 @@
        AND  revice.nick_name LIKE  concat('%',#{receiveOrderUserNickName},'%')
      </if>
      <if test="startTime != null" >
-       AND  start_time &gt;= #{startTime}
+       AND  od.start_time &gt;= #{startTime}
      </if>
      <if test="endTime != null" >
-       AND  end_time &lt;= #{endTime}
+       AND  od.end_time &lt;= #{endTime}
      </if>
      <if test="serviceType != null" >
        AND  skill.skill_item_id = #{serviceType}

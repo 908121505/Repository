@@ -6,6 +6,9 @@ import com.calf.module.order.entity.SkillItem;
 import com.calf.module.order.impl.OrderService;
 import com.calf.module.order.vo.OrderStatusVO;
 import com.calf.module.order.vo.OrderVO;
+import com.calf.module.order.vo.SmallOrderStatusVO;
+import com.honglu.quickcall.common.api.util.DateUtils;
+import org.apache.commons.httpclient.util.DateUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -34,6 +38,12 @@ public class OrderController implements BaseController<OrderVO>{
 		List<SkillItem> itemsList = orderService.getSkillItemsList();
 		model.addAttribute("services",itemsList);
 		model.addAttribute("statusList",statusList);
+		Date curDate = new Date();
+		Date sDate = DateUtils.getAddDate(curDate, -60 * 24);
+		String startTime = DateUtil.formatDate(sDate, "yyyy-MM-dd");
+		String endTime = DateUtil.formatDate(new Date(), "yyyy-MM-dd");
+		model.addAttribute("showStartTime",startTime+" 00:00:00");
+		model.addAttribute("showEndTime",endTime+" 23:59:59");
 		return "order/orderList";
 	}
 
@@ -58,12 +68,31 @@ public class OrderController implements BaseController<OrderVO>{
 	public String addAndUpdateHome(Model model, String id) {
 		if(StringUtils.isNotBlank(id)&&(!"999".equals(id))){
 			String ids[] = id.split("-");
-			orderService.queryOrderDetail(model,ids[0]);
+			OrderVO order = orderService.queryOrderDetail(model,ids[0]);
 			if (ids[1].equals("detail")){
+				List<SmallOrderStatusVO> list = orderService.getSamllOrderStatusList();
+				for (SmallOrderStatusVO vo:list){
+					if (vo.getValue().equals(order.getOrderStatus())){
+						model.addAttribute("orderStatus",vo.getDesc());
+						break;
+					}
+				}
 				return "order/detailOrder";
 			}
+			List<SmallOrderStatusVO> lists = orderService.getSamllOrderStatusList();
+			for (SmallOrderStatusVO vo:lists){
+				if (vo.getValue().equals(order.getOrderStatus())){
+					vo.setShow(true);
+					break;
+				}
+			}
+			model.addAttribute("editSmallStatus",lists);
 			return  "order/editOrder";
 		}
+		List<SmallOrderStatusVO> list = orderService.getSamllOrderStatusList();
+		List<SkillItem> itemsList = orderService.getSkillItemsList();
+		model.addAttribute("smallStatus",list);
+		model.addAttribute("services",itemsList);
 		return  "order/addOrder";
 	}
 
