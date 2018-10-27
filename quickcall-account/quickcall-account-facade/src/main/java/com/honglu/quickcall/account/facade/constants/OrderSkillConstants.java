@@ -194,8 +194,10 @@ public interface OrderSkillConstants {
 	public static final Integer  ORDER_STATUS_WAITING_START_DA_APPAY_START_SERVICE = 18 ;
 	/**订单状态20.取消（大V发起开始服务用户自主取消）;*/
 	public static final Integer  ORDER_STATUS_CANCLE_USER_SELF_BEFORE_SERVICE = 20 ;
-	/**订单状态22.取消（大V发起开始服务用户5分钟未接）;*/
+	/**订单状态22.取消（大V发起开始服务用户5分钟未接）/叫醒服务预约时间;*/
 	public static final Integer  ORDER_STATUS_CANCEL_USER_NOT_ACCEPCT = 22 ;
+	/**订单状态23.取消（叫醒预约时间之前取消）*/
+	public static final Integer  ORDER_STATUS_CANCEL_BEFORE_APPOINT_TIME = 23 ;
 	/**订单状态24.待开始（大V发起开始服务用户5分钟内同意，叫醒特享）;*/
 	public static final Integer  ORDER_STATUS_GOING_WAITING_START = 24 ;
 	/**订单状态26.进行中（大V发起开始服务用户5分钟内同意）;*/

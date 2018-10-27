@@ -13,6 +13,7 @@
 		 	order_status = #{updateStatus}
 		WHERE
 			order_status = #{queryStatus}
+			<!-- 下单时间在截止时间之后 -->
 		AND order_time   <![CDATA[ < ]]> #{endTime}
   </update>
 <!-- 待接单订单超时 查询-->
@@ -27,6 +28,7 @@
 		   orders
 		WHERE
 			order_status = #{queryStatus}
+			<!-- 下单时间在截止时间之后 -->
 		AND order_time   <![CDATA[ < ]]> #{endTime}
   </select>
   

@@ -2,6 +2,7 @@ package com.honglu.quickcall.account.web.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.honglu.quickcall.account.facade.exchange.request.BarrageMessageRequest;
+import com.honglu.quickcall.account.facade.exchange.request.FirstBarrageRequest;
 import com.honglu.quickcall.account.web.service.AccountCenterService;
 import com.honglu.quickcall.common.api.exchange.BaseController;
 import com.honglu.quickcall.common.api.exchange.WebResponseModel;
@@ -38,6 +39,18 @@ public class BarrageMessageController extends BaseController {
         LOGGER.info(this.getRemoteHost(request) + "accountWeb barrage message request data : " + JSONObject.toJSONString(params));
         WebResponseModel response = accountCenterService.execute(params);
         LOGGER.info("accountWeb barrage message response data : " + JSONObject.toJSONString(response));
+        return response;
+    }
+
+    /**
+     * 每个用户每天只弹窗一次
+     */
+    @RequestMapping(value = "/getPopWindowStatus", method = RequestMethod.POST)
+    @ResponseBody
+    public WebResponseModel getPopWindowStatus(FirstBarrageRequest request) {
+        LOGGER.info("accountWeb first barrage request data : " + JSONObject.toJSONString(request));
+        WebResponseModel response = accountCenterService.execute(request);
+        LOGGER.info("accountWeb first barrage response data : " + JSONObject.toJSONString(response));
         return response;
     }
 }

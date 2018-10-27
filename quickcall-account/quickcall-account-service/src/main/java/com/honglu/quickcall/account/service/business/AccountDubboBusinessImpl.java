@@ -1,5 +1,6 @@
 package com.honglu.quickcall.account.service.business;
 
+import com.honglu.quickcall.account.facade.exchange.request.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,36 +9,6 @@ import org.springframework.stereotype.Service;
 import com.honglu.quickcall.account.facade.business.AccountDubboBusiness;
 import com.honglu.quickcall.account.facade.code.AccountFunctionType;
 import com.honglu.quickcall.account.facade.code.OrderRequestType;
-import com.honglu.quickcall.account.facade.exchange.request.AlipayNotifyRequest;
-import com.honglu.quickcall.account.facade.exchange.request.ApplePayRequest;
-import com.honglu.quickcall.account.facade.exchange.request.ApplePurchaseRequest;
-import com.honglu.quickcall.account.facade.exchange.request.BarrageMessageRequest;
-import com.honglu.quickcall.account.facade.exchange.request.BindAliaccountRequest;
-import com.honglu.quickcall.account.facade.exchange.request.CancelOrderRequest;
-import com.honglu.quickcall.account.facade.exchange.request.ConfirmOrderRequest;
-import com.honglu.quickcall.account.facade.exchange.request.CreateUserAccountRequest;
-import com.honglu.quickcall.account.facade.exchange.request.CustConfirmFinishRequest;
-import com.honglu.quickcall.account.facade.exchange.request.DaVListBySkillItemIdRequest;
-import com.honglu.quickcall.account.facade.exchange.request.DetailOrderForIMRequest;
-import com.honglu.quickcall.account.facade.exchange.request.DetailOrderRequest;
-import com.honglu.quickcall.account.facade.exchange.request.DvReceiveOrderRequest;
-import com.honglu.quickcall.account.facade.exchange.request.DvStartServiceRequest;
-import com.honglu.quickcall.account.facade.exchange.request.FinishOrderRequest;
-import com.honglu.quickcall.account.facade.exchange.request.FirstPageDaVinfoRequest;
-import com.honglu.quickcall.account.facade.exchange.request.FirstPageSkillinfoRequest;
-import com.honglu.quickcall.account.facade.exchange.request.OrderDaVSkillRequest;
-import com.honglu.quickcall.account.facade.exchange.request.OrderEvaluationRequest;
-import com.honglu.quickcall.account.facade.exchange.request.OrderEvaluationSubmitRequest;
-import com.honglu.quickcall.account.facade.exchange.request.OrderReceiveOrderListRequest;
-import com.honglu.quickcall.account.facade.exchange.request.OrderSaveRequest;
-import com.honglu.quickcall.account.facade.exchange.request.OrderSendOrderListRequest;
-import com.honglu.quickcall.account.facade.exchange.request.QueryAccountRequest;
-import com.honglu.quickcall.account.facade.exchange.request.QueryIngOrderCountRequest;
-import com.honglu.quickcall.account.facade.exchange.request.QueryRefundReasonRequest;
-import com.honglu.quickcall.account.facade.exchange.request.RechargeRequest;
-import com.honglu.quickcall.account.facade.exchange.request.SkillInfoRequest;
-import com.honglu.quickcall.account.facade.exchange.request.SkillUpdateRequest;
-import com.honglu.quickcall.account.facade.exchange.request.WhthdrawRequest;
 import com.honglu.quickcall.account.service.bussService.AliPayService;
 import com.honglu.quickcall.account.service.bussService.ApplePayService;
 import com.honglu.quickcall.account.service.bussService.BarrageMessageService;
@@ -216,6 +187,10 @@ public class AccountDubboBusinessImpl implements AccountDubboBusiness {
 			case AccountFunctionType.GET_BARRAGE_MESSAGE:
 				response = barrageMessageService.rpopMessage((BarrageMessageRequest) request);
 				break;
+			/** 获取弹幕消息 **/
+			case AccountFunctionType.FirstOnceWindowEverthDay:
+				response = barrageMessageService.popWindowOnce((FirstBarrageRequest) request);
+					break;
 			default:
 
 			}

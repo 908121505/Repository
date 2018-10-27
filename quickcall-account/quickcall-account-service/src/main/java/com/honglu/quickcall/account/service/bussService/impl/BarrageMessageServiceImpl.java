@@ -2,6 +2,7 @@ package com.honglu.quickcall.account.service.bussService.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.honglu.quickcall.account.facade.exchange.request.BarrageMessageRequest;
+import com.honglu.quickcall.account.facade.exchange.request.FirstBarrageRequest;
 import com.honglu.quickcall.account.facade.vo.BarrageMessageVO;
 import com.honglu.quickcall.account.facade.vo.OrderDetailVO;
 import com.honglu.quickcall.account.service.bussService.BarrageMessageService;
@@ -18,8 +19,12 @@ import org.springframework.stereotype.Service;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -52,6 +57,11 @@ public class BarrageMessageServiceImpl implements BarrageMessageService {
      * 弹幕消息最大队列树
      */
     private static final Long MAX_QUEUE_NUM = 1000L;
+
+    /**
+     * 每天每个用户只弹窗一次
+     */
+    private static final String FirstPopWindowOnceKey = "everyday:PopWindow:once:";
 
     @Override
     public void lpushMessage(Long orderId) {
@@ -146,4 +156,26 @@ public class BarrageMessageServiceImpl implements BarrageMessageService {
         return ResultUtils.resultSuccess(Collections.emptyList());
     }
 
+    @Override
+    public CommonResponse popWindowOnce(FirstBarrageRequest request) {
+        String key = FirstPopWindowOnceKey+request.getCustomerId();
+        String value = JedisUtil.get(key);
+        if (StringUtils.isNotBlank(value)){
+            return ResultUtils.resultSuccess(false);
+        }
+        JedisUtil.set(key,String.valueOf(request.getCustomerId()),getRemainSecondsOneDay(new Date()));
+        return ResultUtils.resultSuccess(true);
+    }
+
+    /**
+     * 当期时间离今天结束还有多少秒
+     * @param currentDate
+     * @return
+     */
+    private static Integer getRemainSecondsOneDay(Date currentDate) {
+        LocalDateTime midnight = LocalDateTime.ofInstant(currentDate.toInstant(), ZoneId.systemDefault()).plusDays(1).withHour(0).withMinute(0) .withSecond(0).withNano(0);
+        LocalDateTime currentDateTime = LocalDateTime.ofInstant(currentDate.toInstant(), ZoneId.systemDefault());
+        long seconds = ChronoUnit.SECONDS.between(currentDateTime, midnight);
+        return (int) seconds;
+    }
 }

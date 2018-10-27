@@ -45,11 +45,11 @@ public class OrderUpdateJob {
     @Autowired
     private TaskOrderMapper    taskOrderMapper;
     
-    /**默认超时小时数*/
+    /**默认超时小时数      扣减12小时*/
     private final static  Integer   END_OVER_TIME_HOUR = -12;
-    /**默认超时分钟数*/
+    /**默认超时分钟数   扣减15分钟*/
     private final static  Integer   RECEIVE_OVER_TIME_MINUTES = -15;
-    /**立即服务超时分钟数*/
+    /**立即服务超时分钟数   扣减5分钟*/
     private final static  Integer   START_OVER_TIME_MINUTES = -5;
     
     
@@ -125,6 +125,9 @@ public class OrderUpdateJob {
 			
 			
 			//叫醒自动转换为进行中状态
+			
+			cal.setTime(currTime);
+			
 			//用户未接立即服务超时
 			queryStatus = OrderSkillConstants.ORDER_STATUS_GOING_WAITING_START;
 			updateStatus = OrderSkillConstants.ORDER_STATUS_GOING_USER_ACCEPCT;
@@ -148,9 +151,10 @@ public class OrderUpdateJob {
     }
     
     
-    @Scheduled(cron = "30 0/30 * * * ?")
+//    @Scheduled(cron = "30 0/30 * * * ?")
+    @Scheduled(cron = "30 0/5 * * * ?")
     public void updateOrderStatusAfter12Hour() {
-    	LOGGER.info("=============修改订单状态自动任务开始=================");
+    	LOGGER.info(">>>>>>>>>>>>>>>>>>12小时超job开始开始<<<<<<<<<<<<<<<<<<<<<");
     	try {
     		Date  currTime = new Date();
     		Calendar  cal = Calendar.getInstance();
@@ -190,7 +194,7 @@ public class OrderUpdateJob {
     	} catch (Exception e) {
     		LOGGER.error("job执行发生异常，异常信息：", e);
     	}
-    	LOGGER.info("=============修改订单状态自动任务结束=================");
+    	LOGGER.info(">>>>>>>>>>>>>>>>>>12小时超job开始结束<<<<<<<<<<<<<<<<<<<<<");
     }
     
     
