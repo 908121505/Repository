@@ -5,8 +5,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import javax.print.DocFlavor.STRING;
-
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,14 +13,13 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
-import com.alibaba.dubbo.config.annotation.Reference;
-import com.honglu.quickcall.account.facade.business.IAccountOrderService;
 import com.honglu.quickcall.account.facade.constants.OrderSkillConstants;
 import com.honglu.quickcall.account.facade.enums.AccountBusinessTypeEnum;
 import com.honglu.quickcall.account.facade.enums.TransferTypeEnum;
 import com.honglu.quickcall.common.third.rongyun.util.RongYunUtil;
 import com.honglu.quickcall.task.dao.TaskOrderMapper;
 import com.honglu.quickcall.task.entity.TaskOrder;
+import com.honglu.quickcall.task.service.IAccountOrderService;
 
 /**
  * 
@@ -43,8 +40,8 @@ public class OrderUpdateJob {
     private TaskOrderMapper    taskOrderMapper;
     
 
-    @Reference(version = "0.0.1", group = "accountCenter")
-	private IAccountOrderService iAccountOrderService;
+    @Autowired
+	private IAccountOrderService accountOrderService;
 
     /**默认超时小时数*/
     private final static  Integer   END_OVER_TIME_HOUR = -12;
@@ -53,8 +50,6 @@ public class OrderUpdateJob {
     /**立即服务超时分钟数*/
     private final static  Integer   START_OVER_TIME_MINUTES = -5;
     
-    /**叫醒类型服务结束和进行中时间*/
-    private final static  Integer   ORDER_END_TIME_MINUTES = 5;
     
     
     
@@ -240,8 +235,8 @@ public class OrderUpdateJob {
     				BigDecimal  payAmount =  order.getOrderAmounts();
     				//调用接口退款给用户
     				LOGGER.info("用户信息："+order.toString());
-    				System.out.println("============"+iAccountOrderService);
-    				iAccountOrderService.inAccount(customerId, payAmount,TransferTypeEnum.RECHARGE,AccountBusinessTypeEnum.OrderRefund);
+    				System.out.println("============"+accountOrderService);
+    				accountOrderService.inAccount(customerId, payAmount,TransferTypeEnum.RECHARGE,AccountBusinessTypeEnum.OrderRefund);
     				LOGGER.info("用户ID："+customerId +"订单超时，系统自动退款给用户"+payAmount);
     				
     				sendOrderMessage(customerId, cancelType, false);
@@ -305,8 +300,8 @@ public class OrderUpdateJob {
 					Long  serviceId =  order.getServiceId();
 					BigDecimal   payAmount =  order.getOrderAmounts();
 					//大V冻结
-					System.out.println("============"+iAccountOrderService);
-					iAccountOrderService.inAccount(order.getServiceId(), order.getOrderAmounts(), TransferTypeEnum.FROZEN, AccountBusinessTypeEnum.FroZen);
+					System.out.println("============"+accountOrderService);
+					accountOrderService.inAccount(order.getServiceId(), order.getOrderAmounts(), TransferTypeEnum.FROZEN, AccountBusinessTypeEnum.FroZen);
 					LOGGER.info("主播用户ID："+serviceId +"订单超时，系统自动退款给用户"+payAmount);
 				}
 			} catch (Exception e) {
