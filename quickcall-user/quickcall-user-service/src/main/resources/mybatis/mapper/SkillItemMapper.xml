@@ -2,33 +2,41 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.honglu.quickcall.user.service.dao.SkillItemMapper">
-
-    <resultMap type="com.honglu.quickcall.user.facade.entity.SkillItem" id="skillItemMap">
-        <id property="id" column="id" javaType="java.lang.Long"></id>
-        <result property="skillItemName" column="skill_item_name" javaType="java.lang.String"></result>
-        <result property="lockIcon" column="lock_icon" javaType="java.lang.String"></result>
-        <result property="unlockIcon" column="unlock_icon" javaType="java.lang.String"></result>
-        <result property="backColor" column="back_color" javaType="java.lang.String"></result>
-        <result property="sort" column="sort" javaType="java.lang.Integer"></result>
-        <result property="skillStatus" column="skill_status" javaType="java.lang.Integer"></result>
-        <result property="skillDescribe" column="skill_describe" javaType="java.lang.String"></result>
-        <result property="createTime" column="create_time" javaType="java.lang.String"></result>
-        <result property="modifyTime" column="modify_time" javaType="java.lang.String"></result>
-        <result property="createMan" column="create_man" javaType="java.lang.String"></result>
-        <result property="modifyMan" column="modify_man" javaType="java.lang.String"></result>
-        <result property="remark" column="remark" javaType="java.lang.String"></result>
+    <resultMap id="BaseResultMap" type="com.honglu.quickcall.account.facade.entity.SkillItem">
+        <id column="id" property="id" jdbcType="BIGINT" javaType="string" />
+        <result column="skill_item_name" property="skillItemName" jdbcType="VARCHAR" />
+        <result column="skill_describe" property="skillDescribe" jdbcType="VARCHAR" />
+        <result column="lock_icon" property="lockIcon" jdbcType="VARCHAR"/>
+        <result column="unlock_icon" property="unlockIcon" jdbcType="VARCHAR"/>
+        <result column="back_color" property="backColor" jdbcType="VARCHAR"/>
+        <result column="sort" property="sort" jdbcType="SMALLINT" />
+        <result column="skill_status" property="skillStatus" jdbcType="TINYINT" />
+        <result column="skill_type" property="skillType" jdbcType="TINYINT"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+        <result column="create_man" property="createMan" jdbcType="VARCHAR" />
+        <result column="modify_man" property="modifyMan" jdbcType="VARCHAR" />
+        <result column="remark" property="remark" jdbcType="VARCHAR" />
+        <result column="font_color" property="fontColor" jdbcType="VARCHAR"/>
     </resultMap>
 
     <!-- 通用查询结果列-->
-    <sql id="Base_Column_List">
-		id,	skill_item_name, lock_icon,	unlock_icon,	back_color,	sort,	skill_status,
-		skill_describe,	create_time,	modify_time,	create_man,	modify_man,	remark
-	</sql>
+    <sql id="Base_Column_List" >
+        id, skill_item_name, skill_describe, lock_icon,unlock_icon,back_color,font_color,sort, skill_status,skill_type,
+        create_time, modify_time, create_man, modify_man, remark
+    </sql>
 
     <!-- 查询所有技能项 -->
-    <select id="selectAllSkill" resultMap="skillItemMap">
+    <select id="selectAllSkill" resultMap="BaseResultMap">
         SELECT
         <include refid="Base_Column_List"/>
         FROM skill_item
+    </select>
+
+    <!-- 查询所有技能项 -->
+    <select id="selectAllEnabledSkills" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM skill_item where skill_status = 1
     </select>
 </mapper>

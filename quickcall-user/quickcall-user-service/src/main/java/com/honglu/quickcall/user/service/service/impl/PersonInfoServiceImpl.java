@@ -780,11 +780,17 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 		// 查询粉丝数
 		customerHomeVO.setFansNum(fansMapper.queryFansNumByCustomerId(request.getViewCustomerId()).intValue());
 
-		// 查询用户形象照列表
-		List<String> appearanceList = customerAppearanceMapper
-				.queryCustomerAuditedAppearance(request.getViewCustomerId(), 0);
-		customerHomeVO.setAppearanceUrlList(
-				appearanceList.isEmpty() ? Arrays.asList(PropertiesConstant.DEFAULT_CUSTOMER_APPEARANCE_URL) : appearanceList);
+		// 查询用户形象照列表 性别(0=女,1=男)
+		List<String> appearanceList = customerAppearanceMapper.queryCustomerAuditedAppearance(request.getViewCustomerId(), 0);
+		if(appearanceList == null || appearanceList.size() == 0){
+			if(Objects.equals(customerHomeVO.getSex(), 1)){
+				customerHomeVO.setAppearanceUrlList(Arrays.asList(PropertiesConstant.DEFAULT_CUSTOMER_APPEARANCE_URL_BOY));
+			}else {
+				customerHomeVO.setAppearanceUrlList(Arrays.asList(PropertiesConstant.DEFAULT_CUSTOMER_APPEARANCE_URL_GIRL));
+			}
+		}else{
+			customerHomeVO.setAppearanceUrlList(appearanceList);
+		}
 
 		// 查询用户兴趣
 		customerHomeVO.setInterestList(customerInterestMapper.queryCustomerInterestList(request.getViewCustomerId()));

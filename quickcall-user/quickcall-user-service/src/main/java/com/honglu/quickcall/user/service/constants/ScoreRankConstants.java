@@ -31,7 +31,7 @@ public class ScoreRankConstants {
     /**
      * 评分等级权重常量定义
      */
-    public static Map<Integer, Integer> EVALUATION_LEVEL_WEIGHT_MAP = new HashMap<>();
+    public static Map<Integer, Double> EVALUATION_LEVEL_WEIGHT_MAP = new HashMap<>();
     /**
      * 单笔订单件数权重常量定义
      */
@@ -39,11 +39,12 @@ public class ScoreRankConstants {
 
     static {
         /********************************* 评分等级权重配置 *********************************/
-        EVALUATION_LEVEL_WEIGHT_MAP.put(1, 5);
-        EVALUATION_LEVEL_WEIGHT_MAP.put(2, 20);
-        EVALUATION_LEVEL_WEIGHT_MAP.put(3, 50);
-        EVALUATION_LEVEL_WEIGHT_MAP.put(4, 85);
-        EVALUATION_LEVEL_WEIGHT_MAP.put(5, 100);
+        EVALUATION_LEVEL_WEIGHT_MAP.put(0, 0.01);
+        EVALUATION_LEVEL_WEIGHT_MAP.put(1, 5.0);
+        EVALUATION_LEVEL_WEIGHT_MAP.put(2, 20.0);
+        EVALUATION_LEVEL_WEIGHT_MAP.put(3, 50.0);
+        EVALUATION_LEVEL_WEIGHT_MAP.put(4, 85.0);
+        EVALUATION_LEVEL_WEIGHT_MAP.put(5, 100.0);
 
         /********************************* 单笔订单件数权重配置 *********************************/
         SINGLE_ORDER_NUM_WEIGHT_MAP.put(1, Double.valueOf(1));

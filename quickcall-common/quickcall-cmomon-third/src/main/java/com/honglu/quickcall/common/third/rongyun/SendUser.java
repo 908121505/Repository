@@ -12,6 +12,17 @@ public class SendUser {
 	private String portrait;// 发送文字消息默认用1
 	private Integer sex;// 默认传0
 	private Long userId;// 默认传10
+	private String remarkName;//备注
+	
+	
+
+	public String getRemarkName() {
+		return remarkName;
+	}
+
+	public void setRemarkName(String remarkName) {
+		this.remarkName = remarkName;
+	}
 
 	public String getName() {
 		return name;
@@ -52,5 +63,16 @@ public class SendUser {
 		this.sex = sex;
 		this.userId = userId;
 	}
+
+	public SendUser(String name, String portrait, Integer sex, Long userId, String remarkName) {
+		super();
+		this.name = name;
+		this.portrait = portrait;
+		this.sex = sex;
+		this.userId = userId;
+		this.remarkName = remarkName;
+	}
+	
+	
 
 }
