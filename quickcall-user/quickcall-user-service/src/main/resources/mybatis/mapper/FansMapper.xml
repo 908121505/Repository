@@ -189,7 +189,7 @@
 		    ct.nick_name  AS  nickName,
 		    <![CDATA[ TIMESTAMPDIFF(YEAR, ct.birthday, CURDATE()) AS age  ]]>,
 		    ct.sex    AS sex,
-		    fs.attention_state  AS  attentionStatus,
+		    fs1.attention_state  AS  attentionStatus,
 		    ct.type AS type,
 		    (IFNULL(fs.attention_state,0))&amp;(IFNULL(fs1.attention_state,0)) AS eachAttentionStatus 
 		FROM
