@@ -36,7 +36,7 @@ public interface ResourceConfigMapper {
      * @param resourceConfigId
      * @return
      */
-    List<Long> selectExCustomerIds(@Param("resourceConfigId") Integer resourceConfigId);
+    List<Long> selectResourceExCustomerIds(@Param("resourceConfigId") Integer resourceConfigId);
 
     /**
      * 查询启用的大V + 技能排名列表 + 未被下单的总数
