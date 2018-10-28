@@ -320,7 +320,7 @@ public class OrderUpdateJob {
      * @param cancelType 1:15分钟未接受订单   2:大V5分钟未发起立即服务   3：用户未接受大V立即服务   4：订单自动完成
      * @param msgContent
      */
-    public void   sendOrderMessage(Long  customerId,Integer  cancelType,boolean  dvFlag){
+    public synchronized  void   sendOrderMessage(Long  customerId,Integer  cancelType,boolean  dvFlag){
     	
     	String  content =  null ;
     	String  remarkName = null ;
@@ -347,6 +347,8 @@ public class OrderUpdateJob {
 //    			content =  OrderSkillConstants.IM_MSG_CONTENT_CANCEL_CUST_FINISH ;
     		}
     	}
+    	
+    	LOGGER.info("----------------给customerId"+customerId+"推送消息："+content);
     	if(StringUtils.isNotBlank(content)){
 //    		content = OrderSkillConstants.IM_MSG_CONTENT_DEFAULT ;
     		LOGGER.info("给customerId"+customerId+"推送消息："+content);
