@@ -440,6 +440,14 @@
     from customer_skill
     where customer_id = #{customerId,jdbcType=BIGINT}
   </select>
+
+  <select id="queryCustomerSkill" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select
+    skill_item_id
+    from customer_skill
+    where customer_id = #{customerId,jdbcType=BIGINT}
+    limit 1;
+  </select>
   
   <select id="queryCustomerListBySkillItem" resultType ="com.honglu.quickcall.user.facade.vo.DaVinfoVO">
   		select * from(
@@ -453,18 +461,18 @@
 	LEFT JOIN customer_skill_certify csc on csc.customer_id = cus.customer_id and csc.skill_item_id = si.id
 	where cs.switch_status = 1 and cs.receive_status = 1 and cus.cust_status = 1 and cus.v_status = 2 and cus.cust_state = 2 and cs.skill_status = 1   and 
 	(
-		case when WEEKDAY(now())=0 THEN monday=1
-				 when WEEKDAY(now())=1 THEN tuesday=1
-				 when WEEKDAY(now())=2 THEN wednesday=1 
-				 when WEEKDAY(now())=3 THEN thursday=1 
-				 when WEEKDAY(now())=4 THEN friday=1 
-				 when WEEKDAY(now())=5 THEN saturday=1 
-				 when WEEKDAY(now())=6 THEN sunday=1 
+		case when WEEKDAY(now())=0 THEN (monday=0 or end_time_str <![CDATA[>]]> CONCAT(EXTRACT(HOUR from now()),EXTRACT(MINUTE from now())))
+				 when WEEKDAY(now())=1 THEN (tuesday=0 or end_time_str <![CDATA[>]]> CONCAT(EXTRACT(HOUR from now()),EXTRACT(MINUTE from now())))
+				 when WEEKDAY(now())=2 THEN (wednesday=0 or end_time_str <![CDATA[>]]> CONCAT(EXTRACT(HOUR from now()),EXTRACT(MINUTE from now())))
+				 when WEEKDAY(now())=3 THEN (thursday=0 or end_time_str <![CDATA[>]]> CONCAT(EXTRACT(HOUR from now()),EXTRACT(MINUTE from now())))
+				 when WEEKDAY(now())=4 THEN (friday=0 or end_time_str <![CDATA[>]]> CONCAT(EXTRACT(HOUR from now()),EXTRACT(MINUTE from now())))
+				 when WEEKDAY(now())=5 THEN (saturday=0 or end_time_str <![CDATA[>]]> CONCAT(EXTRACT(HOUR from now()),EXTRACT(MINUTE from now())))
+				 when WEEKDAY(now())=6 THEN (sunday=0 or end_time_str <![CDATA[>]]> CONCAT(EXTRACT(HOUR from now()),EXTRACT(MINUTE from now())))
 		 end
 	)
 	and (select count(*) from orders ord where ord.customer_skill_id = cs.customer_skill_id and (ord.order_status  in (10,18,26,28) and ord.skill_type != 2))=0
 	and si.id = #{skillItemId} 
-	ORDER BY bss.score_total desc
+	ORDER BY cus.cust_state desc,bss.score_total desc 
 ) tmp 
 	<if test="start != null and size != null" >
 	LIMIT #{start},#{size}

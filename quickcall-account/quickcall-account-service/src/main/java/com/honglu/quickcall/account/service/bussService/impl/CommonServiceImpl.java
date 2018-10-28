@@ -144,7 +144,10 @@ public class CommonServiceImpl implements CommonService {
 		record.setOrderStatus(orderStatus);
 		record.setOrderId(orderId);
 		record.setModifyTime(new Date());
-		record.setStartTime(startTime);
+		Calendar  cal = Calendar.getInstance();
+		cal.setTime(startTime);
+		cal.add(Calendar.MINUTE, 5);
+		record.setStartTime(cal.getTime());
 		if(endTime != null){
 			record.setExpectEndTime(endTime);
 		}
