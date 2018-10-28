@@ -10,6 +10,19 @@
     <result column="bespeak_send_time" jdbcType="TIMESTAMP" property="bespeakSendTime" />
   </resultMap>
 
+  <resultMap id="BaseResultMap1" type="com.honglu.quickcall.user.facade.entity.MessageCustomer">
+    <result column="id" jdbcType="BIGINT" property="id" />
+    <result column="phone" jdbcType="BIGINT" property="phone" />
+    <result column="receiver_id" jdbcType="BIGINT" property="receiverId" />
+    <result column="message_id" jdbcType="BIGINT" property="messageId" />
+    <result column="message_status" jdbcType="TINYINT" property="messageStatus" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime" />
+    <result column="create_man" jdbcType="VARCHAR" property="createMan" />
+    <result column="modify_man" jdbcType="VARCHAR" property="modifyMan" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+  </resultMap>
+
   <select id="selectByMessageType" resultMap="BaseResultMap">
     select 
       m.title, m.H5_url, m.background_image_url, m.message_describe, m.message_content, m.bespeak_send_time
@@ -25,5 +38,19 @@
     where m.type = #{messageType}
     and mc.receiver_id = #{customerId}
   </update>
+
+  <insert id="insertMessage" parameterType="MessageCustomer">
+      insert into message_customer (
+        id, phone, receiver_id,
+        message_id, message_status, create_time,
+        modify_time,create_man, modify_man,
+        remark
+      )
+    values (#{id,jdbcType=BIGINT}, #{phone,jdbcType=BIGINT}, #{receiverId,jdbcType=BIGINT},
+            #{messageId,jdbcType=BIGINT}, #{messageStatus,jdbcType=TINYINT},#{createTime,jdbcType=TIMESTAMP},
+            #{modifyTime,jdbcType=TIMESTAMP}, #{createMan,jdbcType=VARCHAR}, #{modifyMan,jdbcType=VARCHAR},
+            #{remark,jdbcType=VARCHAR}
+      )
+  </insert>
 
 </mapper>
