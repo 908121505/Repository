@@ -489,7 +489,7 @@ public class OrderUpdateJob {
             return;
         }
         // 计算客户需要获取的经验值
-        Integer experience = order.getOrderAmounts().multiply(new BigDecimal(100)).intValue();
+        Integer experience = order.getOrderAmounts().intValue();
 
         LOGGER.info("客户下单获取经验值--客户ID：" + customer.getCustomerId() + " ， 增加经验值：" + experience);
         // 更新用户经验值和等级
