@@ -50,6 +50,7 @@ public class CustomerMessageListener implements ChannelAwareMessageListener {
 
 		} catch (Exception e) {
 			LOGGER.error("mq消息消费异常,UserCenterMqExperienceListener 消息的请求参数为：" + json);
+			// channel.basicReject(message.getMessageProperties().getDeliveryTag(), true);
 			throw new AmqpRejectAndDontRequeueException("消费异常，不再重复消费，错误消息："+e.getMessage());
 		}
 	}
