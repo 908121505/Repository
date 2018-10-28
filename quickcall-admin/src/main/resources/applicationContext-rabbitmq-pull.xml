@@ -32,7 +32,7 @@
     <!-- 异步的线程池 -->
     <task:executor id="taskExecutor" pool-size="4-256" queue-capacity="128" />
     <!-- queue litener  观察 监听模式 当有消息到达时会通知监听在对应的队列上的监听对象-->
-    <rabbit:listener-container connection-factory="RCconnectionFactory" acknowledge="manual" task-executor="taskExecutor">
+    <rabbit:listener-container connection-factory="RCconnectionFactory" acknowledge="auto" task-executor="taskExecutor">
         <rabbit:listener queues="queue_admin_customer_message" ref="customerMessageListener"/>
     </rabbit:listener-container>
 
