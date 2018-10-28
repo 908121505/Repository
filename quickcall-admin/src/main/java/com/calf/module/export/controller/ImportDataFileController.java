@@ -76,12 +76,14 @@ public class ImportDataFileController {
                     String tip = "第" + rowNum + "行手机号码格式不准确，手机号：" + phoneNum + "！";
                     errorMessage += tip;
                     LOGGER.warn(tip);
+                    continue;
                 }
                 if(checkSet.contains(phoneNum)){
                     //手机号码重复
                     String tip = "第" + rowNum + "行存在重复手机号，手机号：" + phoneNum + "，不再重复导入！";
                     errorMessage += tip;
                     LOGGER.warn(tip);
+                    continue;
                 }
                 checkSet.add(phoneNum);
             }
