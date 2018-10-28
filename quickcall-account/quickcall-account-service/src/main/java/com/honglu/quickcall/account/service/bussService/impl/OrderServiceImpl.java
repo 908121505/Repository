@@ -330,23 +330,6 @@ public class OrderServiceImpl implements IOrderService {
 			barrageMessageService.lpushMessage(orderId);
 			
 			
-//			String  custStr = JedisUtil.get(RedisKeyConstants.USER_CUSTOMER_INFO+serviceId) ;
-//			LOGGER.info("11111111111111111111111111111"+custStr);
-//			if(StringUtils.isNotBlank(custStr)){
-//				try {
-//					Customer customer = JSON.parse(custStr, Customer.class);
-//					if(customer != null){
-//						String  phone =  customer.getPhone();
-//						if(StringUtils.isNotBlank(phone)){
-//							SendSmsUtil.sendSms(UUIDUtils.getUUID(), phone, 2, customerSkill.getSkillName());
-//						}
-//						
-//						//用户下单需要使用个推推送消息
-//						GtPushUtil.sendNotificationTemplateToList(customer.getGtClientId(), OrderSkillConstants.GT_MSG_ORDER_TITLE, OrderSkillConstants.GT_MSG_CONTENT_RECEIVE_ORDER, OrderSkillConstants.GT_MSG_CONTENT_RECEIVE_ORDER_URL);
-//					}
-//				} catch (Exception e) {
-//				}
-//			}
 			
 			//获取大V手机号码
 			Customer  service =  commonService.getPhoneByCustomerId(serviceId);
