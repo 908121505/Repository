@@ -29,6 +29,19 @@ public interface OrderSkillConstants {
 	
 	
 	
+	/***个推消息*/
+	public  static final  String  GT_MSG_ORDER_TITLE = "订单消息";
+	public  static final  String  GT_MSG_CONTENT_RECEIVE_ORDER = "您有新的订单，请及时查看";
+	public  static final  String  GT_MSG_CONTENT_RECEIVE_ORDER_URL = "https://www.baidu.com";
+	
+	
+	
+	public  static final  String  GT_MSG_CONTENT_START_SERVICE_TO_DAV = "您已发起立即服务，请提醒用户5分钟内响应，超时订单将失效";
+	public  static final  String  GT_MSG_CONTENT_START_SERVICE_TO_DAV_URL = "https://www.baidu.com";
+	
+	
+	public  static final  String  GT_MSG_CONTENT_START_SERVICE_TO_CUST = "对方发起立即服务，请在5分钟内确认，超时未响应订单将失效";
+	public  static final  String  GT_MSG_CONTENT_START_SERVICE_TO_CUST_URL = "https://www.baidu.com";
 	
 	
 	////////////////////////IM消息内容//////////////////////////

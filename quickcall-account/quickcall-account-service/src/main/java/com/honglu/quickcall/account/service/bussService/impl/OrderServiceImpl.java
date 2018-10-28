@@ -14,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import com.alibaba.dubbo.common.json.JSON;
 import com.honglu.quickcall.account.facade.code.AccountBizReturnCode;
 import com.honglu.quickcall.account.facade.constants.OrderSkillConstants;
 import com.honglu.quickcall.account.facade.entity.Account;
@@ -61,10 +60,9 @@ import com.honglu.quickcall.common.api.exception.BizException;
 import com.honglu.quickcall.common.api.exchange.CommonResponse;
 import com.honglu.quickcall.common.api.exchange.ResultUtils;
 import com.honglu.quickcall.common.api.util.DateUtils;
-import com.honglu.quickcall.common.api.util.JedisUtil;
-import com.honglu.quickcall.common.api.util.RedisKeyConstants;
 import com.honglu.quickcall.common.core.util.UUIDUtils;
 import com.honglu.quickcall.common.third.AliyunSms.utils.SendSmsUtil;
+import com.honglu.quickcall.common.third.push.GtPushUtil;
 import com.honglu.quickcall.common.third.rongyun.util.RongYunUtil;
 import com.honglu.quickcall.user.facade.business.UserCenterSendMqMessageService;
 import com.honglu.quickcall.user.facade.entity.Customer;
@@ -334,20 +332,58 @@ public class OrderServiceImpl implements IOrderService {
 			barrageMessageService.lpushMessage(orderId);
 			
 			
-			String  custStr = JedisUtil.get(RedisKeyConstants.USER_CUSTOMER_INFO+serviceId) ;
-			if(StringUtils.isNotBlank(custStr)){
-				try {
-					Customer customer = JSON.parse(custStr, Customer.class);
-					if(customer != null){
-						String  phone =  customer.getPhone();
-						if(StringUtils.isNotBlank(phone)){
-							SendSmsUtil.sendSms(UUIDUtils.getUUID(), phone, 2, customerSkill.getSkillName());
-						}
-//						GtPushUtil.sendLinkTemplateToSingle(customer.getGtClientId(), title, content, url);
-					}
-				} catch (Exception e) {
+//			String  custStr = JedisUtil.get(RedisKeyConstants.USER_CUSTOMER_INFO+serviceId) ;
+//			LOGGER.info("11111111111111111111111111111"+custStr);
+//			if(StringUtils.isNotBlank(custStr)){
+//				try {
+//					Customer customer = JSON.parse(custStr, Customer.class);
+//					if(customer != null){
+//						String  phone =  customer.getPhone();
+//						if(StringUtils.isNotBlank(phone)){
+//							SendSmsUtil.sendSms(UUIDUtils.getUUID(), phone, 2, customerSkill.getSkillName());
+//						}
+//						
+//						//用户下单需要使用个推推送消息
+//						GtPushUtil.sendNotificationTemplateToList(customer.getGtClientId(), OrderSkillConstants.GT_MSG_ORDER_TITLE, OrderSkillConstants.GT_MSG_CONTENT_RECEIVE_ORDER, OrderSkillConstants.GT_MSG_CONTENT_RECEIVE_ORDER_URL);
+//					}
+//				} catch (Exception e) {
+//				}
+//			}
+			
+			//获取大V手机号码
+			Customer  service =  commonService.getPhoneByCustomerId(serviceId);
+			LOGGER.info("11111111111111111111111111111"+service);
+			if(service != null){
+				String  phone =  service.getPhone();
+				LOGGER.info("22222222222222222222"+phone);
+				if(StringUtils.isNotBlank(phone)){
+					SendSmsUtil.sendSms(UUIDUtils.getUUID(), phone, 2, customerSkill.getSkillName());
+				}
+				
+				String  gtId =  service.getGtClientId();
+				if(StringUtils.isNotBlank(gtId)){
+					//用户下单需要使用个推推送消息
+					GtPushUtil.sendNotificationTemplateToList(gtId, OrderSkillConstants.GT_MSG_ORDER_TITLE, OrderSkillConstants.GT_MSG_CONTENT_RECEIVE_ORDER, OrderSkillConstants.GT_MSG_CONTENT_RECEIVE_ORDER_URL);
 				}
 			}
+//			//获取用户手机号码
+//			Customer  customer =  commonService.getPhoneByCustomerId(serviceId);
+//			LOGGER.info("11111111111111111111111111111"+service);
+//			if(service != null){
+//				
+//				String  gtId =  customer.getGtClientId();
+//				LOGGER.info("33333333333333333333333"+gtId);
+//				if(StringUtils.isNotBlank(gtId)){
+//					//用户下单需要使用个推推送消息
+//					GtPushUtil.sendNotificationTemplateToList(gtId, OrderSkillConstants.GT_MSG_ORDER_TITLE, OrderSkillConstants.GT_MSG_CONTENT_RECEIVE_ORDER, OrderSkillConstants.GT_MSG_CONTENT_RECEIVE_ORDER_URL);
+//				}
+//			}
+			
+			
+			
+			
+			
+			
 			
 			//下单成功后推送IM消息
 			RongYunUtil.sendOrderMessage(serviceId, OrderSkillConstants.IM_MSG_CONTENT_RECEIVE_ORDER,OrderSkillConstants.MSG_CONTENT_DAV);
@@ -922,6 +958,31 @@ public class OrderServiceImpl implements IOrderService {
 			//大V开始服务请求，向用户发送消息
 			Long  customerId = order.getCustomerId();
 			Long  serviceId = order.getServiceId();
+			
+			//获取大V手机号码
+			Customer  service =  commonService.getPhoneByCustomerId(serviceId);
+			LOGGER.info("11111111111111111111111111111"+service);
+			if(service != null){
+				String  gtId =  service.getGtClientId();
+				if(StringUtils.isNotBlank(gtId)){
+					GtPushUtil.sendNotificationTemplateToList(gtId, OrderSkillConstants.GT_MSG_ORDER_TITLE, OrderSkillConstants.GT_MSG_CONTENT_START_SERVICE_TO_DAV, OrderSkillConstants.GT_MSG_CONTENT_START_SERVICE_TO_DAV_URL);
+				}
+			}
+			//获取用户手机号码
+			Customer  customer =  commonService.getPhoneByCustomerId(customerId);
+			LOGGER.info("11111111111111111111111111111"+customer);
+			if(customer != null){
+				String  gtId =  customer.getGtClientId();
+				LOGGER.info("33333333333333333333333"+gtId);
+				if(StringUtils.isNotBlank(gtId)){
+					//用户下单需要使用个推推送消息
+					GtPushUtil.sendNotificationTemplateToList(gtId, OrderSkillConstants.GT_MSG_ORDER_TITLE, OrderSkillConstants.GT_MSG_CONTENT_START_SERVICE_TO_CUST, OrderSkillConstants.GT_MSG_CONTENT_START_SERVICE_TO_CUST_URL);
+				}
+			}
+			
+			
+			
+			
 			RongYunUtil.sendOrderMessage(customerId, OrderSkillConstants.IM_MSG_CONTENT_DAV_START_SERVICE_TO_CUST,OrderSkillConstants.MSG_CONTENT_C);
 			RongYunUtil.sendOrderMessage(serviceId, OrderSkillConstants.IM_MSG_CONTENT_DAV_START_SERVICE_TO_DAV,OrderSkillConstants.MSG_CONTENT_DAV);
 		}else{

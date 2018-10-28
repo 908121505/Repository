@@ -14,7 +14,7 @@ public class Banner {
 	private Integer bannerId;
 
 	/** banner类型：1-首页顶部banner；2-首页中部banner；3-分类页banner；······ **/
-	private Byte bannerType;
+	private Integer bannerType;
 
 	/** 标题/说明 **/
 	private String title;
@@ -23,7 +23,7 @@ public class Banner {
 	private String imageUrl;
 
 	/** 点击跳转类型：0-不跳转；1-HTML页面；2-个人主页；3-分类页；····· **/
-	private Byte clickType;
+	private Integer clickType;
 
 	/** 跳转URL连接 **/
 	private String url;
@@ -32,7 +32,7 @@ public class Banner {
 	private Short sort;
 
 	/** 状态 1：开启 0：关闭 **/
-	private Byte bannerStatus;
+	private Integer bannerStatus;
 
 	/** 开始时间 **/
 	private String startTime;
@@ -43,7 +43,7 @@ public class Banner {
 	/**
 	 * 设备类型 0-所有,1-ios,2-andriod
 	 */
-	private Byte deviceType;
+	private Integer deviceType;
 
 	/**
 	 * app版本
@@ -79,11 +79,11 @@ public class Banner {
 		this.bannerId = bannerId;
 	}
 
-	public Byte getBannerType() {
+	public Integer getBannerType() {
 		return bannerType;
 	}
 
-	public void setBannerType(Byte bannerType) {
+	public void setBannerType(Integer bannerType) {
 		this.bannerType = bannerType;
 	}
 
@@ -103,11 +103,11 @@ public class Banner {
 		this.imageUrl = imageUrl;
 	}
 
-	public Byte getClickType() {
+	public Integer getClickType() {
 		return clickType;
 	}
 
-	public void setClickType(Byte clickType) {
+	public void setClickType(Integer clickType) {
 		this.clickType = clickType;
 	}
 
@@ -127,11 +127,11 @@ public class Banner {
 		this.sort = sort;
 	}
 
-	public Byte getBannerStatus() {
+	public Integer getBannerStatus() {
 		return bannerStatus;
 	}
 
-	public void setBannerStatus(Byte bannerStatus) {
+	public void setBannerStatus(Integer bannerStatus) {
 		this.bannerStatus = bannerStatus;
 	}
 
@@ -151,11 +151,11 @@ public class Banner {
 		this.endTime = endTime;
 	}
 
-	public Byte getDeviceType() {
+	public Integer getDeviceType() {
 		return deviceType;
 	}
 
-	public void setDeviceType(Byte deviceType) {
+	public void setDeviceType(Integer deviceType) {
 		this.deviceType = deviceType;
 	}
 
