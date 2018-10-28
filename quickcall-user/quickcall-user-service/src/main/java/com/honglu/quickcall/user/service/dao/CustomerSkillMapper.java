@@ -63,14 +63,20 @@ public interface CustomerSkillMapper {
     
 	 /**
      * 分类显示大V列表
-     * @param customerId
      * @param skillItemId
-     * @param pageIndex
-     * @param pageSize
+     * @param start
+     * @param size
      * @return
      */
     List<DaVinfoVO> queryCustomerListBySkillItem(@Param("skillItemId") Long skillItemId,
     		@Param("start") Integer start, @Param("size") Integer size);
+
+    /**
+     * 根据客户技能ID查询返回给前端的大V数据
+     * @param customerSkillId
+     * @return
+     */
+    CustomerSkill selectBigvInfoVoByCustomerSkillId(Long customerSkillId);
 
     /**
      * 技能订单数
@@ -79,5 +85,5 @@ public interface CustomerSkillMapper {
      * @return
      */
     int selectSkillOrderNo(@Param("customerId") Long customerId, @Param("customerSkillId") Long customerSkillId);
-    
+
 }
