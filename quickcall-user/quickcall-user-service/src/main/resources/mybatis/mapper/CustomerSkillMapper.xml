@@ -451,8 +451,8 @@
   
   <select id="queryCustomerListBySkillItem" resultType ="com.honglu.quickcall.user.facade.vo.DaVinfoVO">
   		select * from(
-	select cus.customer_id as customerId,
-	cs.customer_skill_id as customerSkillId,
+	select cus.customer_id as customerId, 
+	cs.customer_skill_id as customerSkillId, 
 	cus.nick_name as nickName,
 	cus.sex as sex,
 	(YEAR (NOW()) - YEAR (cus.birthday)) AS age,
@@ -478,9 +478,9 @@
 				 when WEEKDAY(now())=6 THEN (sunday=0 or end_time_str <![CDATA[>]]> CONCAT(EXTRACT(HOUR from now()),EXTRACT(MINUTE from now())))
 		 end
 	)
-	and (select count(*) from orders ord where ord.customer_skill_id = cs.customer_skill_id and (ord.order_status  in (10,18,26,28) and ord.skill_type != 2))=0
+	and (select count(*) from orders ord where ord.customer_id = cs.customer_id and ord.order_status in (10,18,26,28) and ord.skill_type != 2)=0
 	and si.id = #{skillItemId} 
-	ORDER BY cus.cust_state desc,bss.score_total desc
+	ORDER BY cus.cust_state desc,bss.score_total desc 
 ) tmp 
 	<if test="start != null and size != null" >
 	LIMIT #{start},#{size}
