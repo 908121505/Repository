@@ -333,10 +333,10 @@ public class OrderServiceImpl implements IOrderService {
 			
 			//获取大V手机号码
 			Customer  service =  commonService.getPhoneByCustomerId(serviceId);
-			LOGGER.info("11111111111111111111111111111"+service);
+			LOGGER.info("用户下单大V信息："+service);
 			if(service != null){
 				String  phone =  service.getPhone();
-				LOGGER.info("22222222222222222222"+phone);
+				LOGGER.info("用户下单大V手机号码"+phone);
 				if(StringUtils.isNotBlank(phone)){
 					SendSmsUtil.sendSms(UUIDUtils.getUUID(), phone, 2, customerSkill.getSkillName());
 				}
@@ -917,19 +917,20 @@ public class OrderServiceImpl implements IOrderService {
 			
 			//获取大V手机号码
 			Customer  service =  commonService.getPhoneByCustomerId(serviceId);
-			LOGGER.info("11111111111111111111111111111"+service);
+			LOGGER.info("大V发起服务，大V信息"+service);
 			if(service != null){
 				String  gtId =  service.getGtClientId();
+				LOGGER.info("大V发起服务，大V个推ID"+gtId);
 				if(StringUtils.isNotBlank(gtId)){
 					GtPushUtil.sendNotificationTemplateToList(gtId, OrderSkillConstants.GT_MSG_ORDER_TITLE, OrderSkillConstants.GT_MSG_CONTENT_START_SERVICE_TO_DAV, OrderSkillConstants.GT_MSG_CONTENT_START_SERVICE_TO_DAV_URL);
 				}
 			}
 			//获取用户手机号码
 			Customer  customer =  commonService.getPhoneByCustomerId(customerId);
-			LOGGER.info("11111111111111111111111111111"+customer);
+			LOGGER.info("大V发起服务，用户信息"+customer);
 			if(customer != null){
 				String  gtId =  customer.getGtClientId();
-				LOGGER.info("33333333333333333333333"+gtId);
+				LOGGER.info("大V发起服务，用户个推ID"+gtId);
 				if(StringUtils.isNotBlank(gtId)){
 					//用户下单需要使用个推推送消息
 					GtPushUtil.sendNotificationTemplateToList(gtId, OrderSkillConstants.GT_MSG_ORDER_TITLE, OrderSkillConstants.GT_MSG_CONTENT_START_SERVICE_TO_CUST, OrderSkillConstants.GT_MSG_CONTENT_START_SERVICE_TO_CUST_URL);
