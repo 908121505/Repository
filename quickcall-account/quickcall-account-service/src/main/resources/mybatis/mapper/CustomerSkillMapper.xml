@@ -470,6 +470,7 @@
 			unlock_icon   as  imageUrl
 		FROM
 			skill_item   
+		where skill_status = 1
 		ORDER BY
 			sort DESC ,create_time  DESC
   </select>

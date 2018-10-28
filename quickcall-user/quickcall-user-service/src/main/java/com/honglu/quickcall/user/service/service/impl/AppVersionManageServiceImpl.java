@@ -42,9 +42,8 @@ public class AppVersionManageServiceImpl implements AppVersionManageService {
 			outPacket.setVersionNumber(list.get(0).getVersionNumber());
 			outPacket.setCode(list.get(0).getRemark());
 			outPacket.setMd5(list.get(0).getEncryption());
-			return ResultUtils.resultSuccess(outPacket);
 		}
-		return ResultUtils.resultSuccess("已经是最新版本");
+		return ResultUtils.resultSuccess(outPacket);
 	}
 
 }
