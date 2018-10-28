@@ -440,6 +440,14 @@
     from customer_skill
     where customer_id = #{customerId,jdbcType=BIGINT}
   </select>
+
+  <select id="queryCustomerSkill" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select
+    skill_item_id
+    from customer_skill
+    where customer_id = #{customerId,jdbcType=BIGINT}
+    limit 1;
+  </select>
   
   <select id="queryCustomerListBySkillItem" resultType ="com.honglu.quickcall.user.facade.vo.DaVinfoVO">
   		select * from(

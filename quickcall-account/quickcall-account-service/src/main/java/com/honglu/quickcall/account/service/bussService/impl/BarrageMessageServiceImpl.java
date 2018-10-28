@@ -1,11 +1,14 @@
 package com.honglu.quickcall.account.service.bussService.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.honglu.quickcall.account.facade.entity.Advertisement;
 import com.honglu.quickcall.account.facade.exchange.request.BarrageMessageRequest;
 import com.honglu.quickcall.account.facade.exchange.request.FirstBarrageRequest;
 import com.honglu.quickcall.account.facade.vo.BarrageMessageVO;
 import com.honglu.quickcall.account.facade.vo.OrderDetailVO;
+import com.honglu.quickcall.account.facade.vo.PopWindowVO;
 import com.honglu.quickcall.account.service.bussService.BarrageMessageService;
+import com.honglu.quickcall.account.service.dao.AdvertisementMapper;
 import com.honglu.quickcall.account.service.dao.OrderMapper;
 import com.honglu.quickcall.common.api.exchange.CommonResponse;
 import com.honglu.quickcall.common.api.exchange.ResultUtils;
@@ -40,6 +43,9 @@ public class BarrageMessageServiceImpl implements BarrageMessageService {
 
     @Autowired
     private OrderMapper orderMapper;
+
+    @Autowired
+    private AdvertisementMapper advertisementMapper;
 
     /**
      * 弹幕消息队列redis key
@@ -158,13 +164,21 @@ public class BarrageMessageServiceImpl implements BarrageMessageService {
 
     @Override
     public CommonResponse popWindowOnce(FirstBarrageRequest request) {
-        String key = FirstPopWindowOnceKey+request.getCustomerId();
+        PopWindowVO vo = new PopWindowVO();
+        String key = FirstPopWindowOnceKey+request.getDeviceId();
         String value = JedisUtil.get(key);
         if (StringUtils.isNotBlank(value)){
-            return ResultUtils.resultSuccess(false);
+            vo.setShowWindow(false);
+        }else{
+            vo.setShowWindow(true);
+            JedisUtil.set(key,String.valueOf(request.getDeviceId()),getRemainSecondsOneDay(new Date()));
         }
-        JedisUtil.set(key,String.valueOf(request.getCustomerId()),getRemainSecondsOneDay(new Date()));
-        return ResultUtils.resultSuccess(true);
+        Advertisement advertisement = advertisementMapper.selectAdvertisement();
+        if (advertisement!=null){
+            vo.setHeadPortraitUrl(advertisement.getImageUrl());
+            vo.setSourceUrl(advertisement.getUrl());
+        }
+        return ResultUtils.resultSuccess(vo);
     }
 
     /**

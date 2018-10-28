@@ -4,8 +4,6 @@ import com.honglu.quickcall.user.facade.entity.SkillItem;
 
 import java.util.List;
 
-import org.apache.ibatis.annotations.Param;
-
 /**
  * SkillItemMapper数据库操作接口类bean
  * @author zhaozheyi
@@ -18,6 +16,11 @@ public interface SkillItemMapper{
 	 * 查询所有技能
 	 **/
 	List<SkillItem>  selectAllSkill ();
+
+	/**
+	 * 查询所有技能
+	 **/
+	SkillItem  selectSkillItem (Long skillItemId);
 
 	/**
 	 * 查询所有可用的技能

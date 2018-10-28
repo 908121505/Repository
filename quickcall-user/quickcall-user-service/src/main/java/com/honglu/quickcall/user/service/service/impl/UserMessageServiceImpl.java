@@ -4,17 +4,12 @@ import com.honglu.quickcall.common.api.exchange.CommonResponse;
 import com.honglu.quickcall.common.api.exchange.ResultUtils;
 import com.honglu.quickcall.common.api.util.JedisUtil;
 import com.honglu.quickcall.common.third.rongyun.util.RongYunUtil;
-import com.honglu.quickcall.user.facade.entity.Customer;
-import com.honglu.quickcall.user.facade.entity.MessageCustomer;
-import com.honglu.quickcall.user.facade.entity.MessageReservation;
+import com.honglu.quickcall.user.facade.entity.*;
 import com.honglu.quickcall.user.facade.exchange.request.BookingMessageQueryRequest;
 import com.honglu.quickcall.user.facade.exchange.request.BookingMessageSaveRequest;
 import com.honglu.quickcall.user.facade.exchange.request.UserUnreadMessageNumRequest;
 import com.honglu.quickcall.user.facade.vo.MessageReservationVO;
-import com.honglu.quickcall.user.service.dao.CustomerMapper;
-import com.honglu.quickcall.user.service.dao.MessageCustomerMapper;
-import com.honglu.quickcall.user.service.dao.MessageMapper;
-import com.honglu.quickcall.user.service.dao.MessageReservationMapper;
+import com.honglu.quickcall.user.service.dao.*;
 import com.honglu.quickcall.user.service.service.UserMessageService;
 import com.honglu.quickcall.user.service.util.DateUtil;
 import com.honglu.quickcall.user.service.util.RadomUtil;
@@ -42,9 +37,12 @@ public class UserMessageServiceImpl implements UserMessageService {
     private MessageReservationMapper messageReservationMapper;
     @Autowired
     private MessageCustomerMapper messageCustomerMapper;
-
     @Autowired
     private CustomerMapper customerMapper;
+    @Autowired
+    private CustomerSkillMapper customerSkillMapper;
+    @Autowired
+    private SkillItemMapper skillItemMapper;
 
     static String reidsKey = "bookingMessage:";
 
@@ -110,10 +108,11 @@ public class UserMessageServiceImpl implements UserMessageService {
 
     @Override
     public CommonResponse queryBookingMessage(BookingMessageQueryRequest params) {
-        List<MessageReservation> messageReservationList = messageReservationMapper.queryBookingMessage(params.getReceiverId());
+        List<MessageReservation> messageReservationList = messageReservationMapper.queryBookingMessage(params.getCustomerId());
         List<MessageReservationVO> mrsList = new ArrayList<>();
         for (MessageReservation mr: messageReservationList){
             Customer customer = customerMapper.selectByPrimaryKey(mr.getCustomerId());
+            CustomerSkill customerSkill = customerSkillMapper.queryCustomerSkill(mr.getReceiverId());
             MessageReservationVO mrv = new MessageReservationVO();
             mrv.setId(mr.getId());
             mrv.setCustomerId(mr.getCustomerId());
@@ -121,6 +120,13 @@ public class UserMessageServiceImpl implements UserMessageService {
             mrv.setCreateTime(DateUtil.dateFormat(mr.getCreateTime(),"yyyy-MM-dd HH:mm:ss"));
             if (customer!=null){
                 mrv.setCustomerName(customer.getNickName());
+                mrv.setCustomerIconUrl(customer.getHeadPortraitUrl());
+            }
+            if(customerSkill!=null){
+                SkillItem skillItem = skillItemMapper.selectSkillItem(customerSkill.getSkillItemId());
+                if(skillItem!=null){
+                    mrv.setSkillIconUrl(skillItem.getUnlockIcon());
+                }
             }
             String[] pus = mr.getPriceUnit().split("-");
             if (pus.length>1){
