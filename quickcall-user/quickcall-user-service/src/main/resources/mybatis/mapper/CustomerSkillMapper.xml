@@ -456,7 +456,7 @@
 	cus.nick_name as nickName,
 	cus.sex as sex,
 	(YEAR (NOW()) - YEAR (cus.birthday)) AS age,
-	cs.skill_price as price,
+	cs.discount_price as price,
 	cs.service_unit as unitName,
 	si.skill_item_name as skillItemName,
 	si.back_color as backColor,

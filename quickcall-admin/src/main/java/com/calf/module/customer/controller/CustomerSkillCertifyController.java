@@ -102,6 +102,7 @@ public class CustomerSkillCertifyController implements BaseController<CustomerSk
 				customerSkill.put("skillItemExtId",sie.getId());
 				customerSkill.put("serviceUnit",sie.getSkillExtUnit());
 				customerSkill.put("skillPrice",sie.getSkillExtPrice());
+				customerSkill.put("discountPrice",sie.getSkillExtPrice());
 				customerSkill.put("skillItemExtId",sie.getId());
 				customerSkill.put("skillRange",sie.getSkillExtRange());
 				baseManager.insert("CustomerSkill.insertSelective",customerSkill);
