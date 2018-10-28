@@ -23,7 +23,7 @@
 				<div class="form-group">
 					<label class="col-sm-3 control-label">当前策略<font color="red">&nbsp;*</font></label>
 					<div class="col-sm-6">
-					<select id = "strategy" name="strategy" class="form-control" >
+					<select id = "strategy" name="strategy" class="form-control" onchange="changeStrantegy()">
                            <option value="1" ${entity.strategy==1?"selected='selected'" :""}>自然推荐</option> 
                            <option value="2" ${entity.strategy==2?"selected='selected'" :""}>运营推荐</option> 
                     </select>
@@ -41,7 +41,7 @@
                     	</select>
 					</div>
 				</div>
-				<div class="form-group">
+				<div class="form-group hid" >
 					<label class="col-sm-3 control-label">资源池<font color="red">&nbsp;*</font></label>
 					<div class="col-sm-6">
 						<select id = "resourcePoolId" name="resourcePoolId" class="form-control" >
@@ -53,7 +53,7 @@
                     	</select>
 					</div>
 				</div>
-				<div class="form-group">
+				<div class="form-group hid" >
 					<label class="col-sm-3 control-label">排除声优<font color="red">&nbsp;*</font></label>
 					<div class="col-sm-6">
 					<textarea id="exCusList" name="exCusList" rows="6" cols="20"class="form-control" >${entity.exCusList}</textarea>
@@ -80,8 +80,21 @@
   		var ids = skill.split(',');
   		$('#skillItemId').selectpicker("val",ids).trigger("change");
   		
-  		
+  		changeStrantegy();
 	});
+	
+	function changeStrantegy(){
+		var val = $('#strategy').val();
+		if(val==1){
+			$(".hid").each(function() {
+				$(this).hide();
+			});
+		}else if(val==2){
+			$(".hid").each(function() {
+				$(this).show();
+			});
+		}
+	}
 	
 	function check_fun(){
 		 $("#tip").html("");
