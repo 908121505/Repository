@@ -41,7 +41,7 @@ public class ImportDataFileController {
     /**
      * 手机格式正则校验
      */
-    private static Pattern PHONE_PATTERN = Pattern.compile("^((17[0-9])|(13[0-9])|(14[5|7])|(15([0-3]|[5-9]))|(18[0,5-9]))\\d{8}$");
+    private static Pattern PHONE_PATTERN = Pattern.compile("^((1[0-9]))\\d{9}$");
 
     /**
      * 导入消息记录
@@ -73,15 +73,17 @@ public class ImportDataFileController {
                 Matcher m = PHONE_PATTERN.matcher(phoneNum);
                 if(!m.matches()){
                     //手机号码格式不准确
-                    String tip = "第" + rowNum + "行手机号码格式不准确，手机号：" + phoneNum + "！";
+                    String tip = "第" + (rowNum+1) + "行手机号码格式不准确，手机号：" + phoneNum + "！";
                     errorMessage += tip;
                     LOGGER.warn(tip);
+                    continue;
                 }
                 if(checkSet.contains(phoneNum)){
                     //手机号码重复
-                    String tip = "第" + rowNum + "行存在重复手机号，手机号：" + phoneNum + "，不再重复导入！";
+                    String tip = "第" + (rowNum+1) + "行存在重复手机号，手机号：" + phoneNum + "，不再重复导入！";
                     errorMessage += tip;
                     LOGGER.warn(tip);
+                    continue;
                 }
                 checkSet.add(phoneNum);
             }

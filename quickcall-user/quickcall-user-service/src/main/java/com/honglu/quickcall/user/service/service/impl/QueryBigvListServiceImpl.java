@@ -15,7 +15,6 @@ import com.honglu.quickcall.user.facade.vo.AppHomeBigvListVO;
 import com.honglu.quickcall.user.facade.vo.DaVinfoVO;
 import com.honglu.quickcall.user.service.dao.*;
 import com.honglu.quickcall.user.service.service.QueryBigvListService;
-import com.honglu.quickcall.user.service.util.CountAge;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -214,7 +213,7 @@ public class QueryBigvListServiceImpl implements QueryBigvListService {
                 if (bigv != null) {
                     // 加入排除列表
                     exCustomerIds.add(bigv.getCustomerId());
-                    bigvInfoVo = getBigvByCustomerSkillId(recomedBigv, customerIdMap.get(configNum).getCustomerSkillId());
+                    bigvInfoVo = getBigvByCustomerSkillId(recomedBigv, bigv.getCustomerSkillId());
                 }
             }
             if (bigvInfoVo == null) {
@@ -249,9 +248,7 @@ public class QueryBigvListServiceImpl implements QueryBigvListService {
         List<AppHomeBigvListVO.BigvInfoVO> recomedBigvList = new ArrayList<>();
         // 封装数据
         for (CustomerSkill customerSkill : customerSkills) {
-            AppHomeBigvListVO.BigvInfoVO bigv = recomedBigv.new BigvInfoVO();
-            packetBigvInfo(bigv, customerSkill);
-            recomedBigvList.add(bigv);
+            recomedBigvList.add(packetBigvInfo(recomedBigv, customerSkill));
         }
         return recomedBigvList;
     }
@@ -312,25 +309,23 @@ public class QueryBigvListServiceImpl implements QueryBigvListService {
         if (customerSkill == null) {
             return null;
         }
-        AppHomeBigvListVO.BigvInfoVO bigv = recomedBigv.new BigvInfoVO();
-        packetBigvInfo(bigv, customerSkill);
-        return bigv;
+        return packetBigvInfo(recomedBigv, customerSkill);
     }
 
     /**
      * 打包大V信息
-     *
-     * @param bigv
+     *  @param recomedBigv
      * @param customerSkill
      */
-    private void packetBigvInfo(AppHomeBigvListVO.BigvInfoVO bigv, CustomerSkill customerSkill) {
+    private AppHomeBigvListVO.BigvInfoVO packetBigvInfo(AppHomeBigvListVO recomedBigv, CustomerSkill customerSkill) {
+        AppHomeBigvListVO.BigvInfoVO bigv = recomedBigv.new BigvInfoVO();
         bigv.setCustomerId(customerSkill.getCustomerId());
         bigv.setCustomerSkillId(customerSkill.getCustomerSkillId());
         bigv.setSkillBackColor(customerSkill.getSkillHomeBackColor());
         bigv.setNickName(customerSkill.getCustomerNickName());
         bigv.setSex(customerSkill.getCustomerSex());
         if (customerSkill.getCustomerBirthday() != null) {
-            bigv.setAge(CountAge.getAgeByBirth(customerSkill.getCustomerBirthday()));
+            bigv.setAge(DateUtils.getAgeByBirthYear(customerSkill.getCustomerBirthday()));
         }
         bigv.setPrice(customerSkill.getDiscountPrice());
         bigv.setUnitName(customerSkill.getServiceUnit());
@@ -348,6 +343,7 @@ public class QueryBigvListServiceImpl implements QueryBigvListService {
         } else {
             bigv.setCoverUrl(appearanceList.get(0));
         }
+        return bigv;
     }
 
     private int cacluRandomLimitBeginIndex(Integer configNum, int bigvNum) {

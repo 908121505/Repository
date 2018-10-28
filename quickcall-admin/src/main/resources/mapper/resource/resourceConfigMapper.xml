@@ -56,6 +56,7 @@ resource_config_id,	config_num,	strategy,	resource_pool_id,	create_time,	modify_
 		rc.resource_config_id,rc.config_num,rc.strategy,rc.resource_pool_id,rp.resource_name 
 	 	FROM resource_config rc
 	 	left join resource_pool rp on rc.resource_pool_id = rp.id 
+	 	order by rc.config_num asc 
 	 	limit ${iDisplayStart},${iDisplayLength}
 	</select>
 	
@@ -96,7 +97,7 @@ resource_config_id,	config_num,	strategy,	resource_pool_id,	create_time,	modify_
 		select count(*) from customer cus 
 		where cus.app_id in (select app_id from resource_pool_customer where resource_pool_id = #{resourcePoolId}) and 
 		cus.app_id not in (select app_id from resource_config_ex_cust where resource_config_id = #{resourceConfigId}) and
-		(select count(*) from orders ord where ord.order_status in (10,18,26,28) and ord.skill_type != 2 and ord.customer_id = cus.customer_id)=0
+		(select count(*) from orders ord where ord.order_status in (10,18,26,28) and ord.skill_type != 2 and ord.customer_id = cus.customer_id)!=0
 	</select>
 	
 	<select id="querySkillItemList" resultType="java.lang.String">
