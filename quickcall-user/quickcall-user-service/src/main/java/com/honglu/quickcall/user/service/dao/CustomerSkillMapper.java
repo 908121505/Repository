@@ -87,6 +87,6 @@ public interface CustomerSkillMapper {
      * @param customerSkillId
      * @return
      */
-    int selectSkillOrderNo(@Param("customerId") Long customerId, @Param("customerSkillId") Long customerSkillId);
+    int selectSkillOrderNo( @Param("customerSkillId") Long customerSkillId);
 
 }
