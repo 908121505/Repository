@@ -56,6 +56,7 @@ resource_config_id,	config_num,	strategy,	resource_pool_id,	create_time,	modify_
 		rc.resource_config_id,rc.config_num,rc.strategy,rc.resource_pool_id,rp.resource_name 
 	 	FROM resource_config rc
 	 	left join resource_pool rp on rc.resource_pool_id = rp.id 
+	 	order by rc.config_num asc 
 	 	limit ${iDisplayStart},${iDisplayLength}
 	</select>
 	
