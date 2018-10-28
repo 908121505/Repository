@@ -397,7 +397,7 @@ public class EditProfileServiceImpl implements EditProfileService {
 		} else {
 			CustomerAppearance customerAppearanceNew = new CustomerAppearance();
 			id = UUIDUtils.getId();
-			customerAppearanceNew.setId(UUIDUtils.getId());
+			customerAppearanceNew.setId(id);
 			customerAppearanceNew.setAuditAppearance(params.getVoiceIdentificationCard());
 			customerAppearanceNew.setCustomerId(params.getCustomerId());
 			customerAppearanceNew.setType(AppearanceTypeEnum.VOICE_IDENTIFICATION_CARD.getCode());
