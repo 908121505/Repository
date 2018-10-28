@@ -37,12 +37,6 @@ public class CustomerGetExperienceServiceImpl implements CustomerGetExperienceSe
             return;
         }
 
-        // 服务完成
-        if (!ifDoneOrder(order.getOrderStatus())) {
-            LOGGER.warn("客户下单消费获取经验值 -- 订单未完成，订单状态：" + order.getOrderStatus());
-            return;
-        }
-
         // 查询下单人
         Customer customer = customerMapper.selectByPrimaryKey(order.getCustomerId());
         if (customer == null) {
@@ -57,12 +51,4 @@ public class CustomerGetExperienceServiceImpl implements CustomerGetExperienceSe
         customerMapper.updateCustomerExperienceAndLevel(customer.getCustomerId(), experience);
     }
 
-    private boolean ifDoneOrder(Integer orderStatus) {
-        return Objects.equals(orderStatus, OrderSkillConstants.ORDER_STATUS_FINISHED_USER_ACCEPCT) // 30.已完成（用户同意对方）
-                || Objects.equals(orderStatus, OrderSkillConstants.ORDER_STATUS_FINISH_DV_FINISH) // 32.已完成（大V发起已完成服务，12小时客户不响应自动完成）
-                || Objects.equals(orderStatus, OrderSkillConstants.ORDER_STATUS_GOING_USRE_APPAY_FINISH) // 34.已完成（用户发起完成服务）
-                || Objects.equals(orderStatus, OrderSkillConstants.ORDER_STATUS_FINISH_DAV_FINISH_AFTER_SERVICE_TIME) // 36.已完成（大V在服务时间外完成）
-                || Objects.equals(orderStatus, OrderSkillConstants.ORDER_STATUS_FINISH_BOTH_NO_OPERATE) // 38.已完成（双方12小时内未发起完成服务）
-                || Objects.equals(orderStatus, OrderSkillConstants.ORDER_STATUS_FINISHED_AND_PINGJIA); // 40.已完成（用户评价完成）
-    }
 }
