@@ -109,3 +109,19 @@
     }
 
 </script>
+
+<%--
+<script language='javascript'>
+    $(function(){
+        $(document).ready(function(){
+            $("#orderStatus").change(function(){
+                var hideselect = $(this).val();
+                if(hideselect == 6||hideselect == 8||hideselect == 10){
+                    $("#remarkReasonDev").show().addClass("show");
+                }else{
+                    $("#remarkReasonDev").hide().removeClass("show");
+                }
+            })
+        })
+    });
+</script>--%>
