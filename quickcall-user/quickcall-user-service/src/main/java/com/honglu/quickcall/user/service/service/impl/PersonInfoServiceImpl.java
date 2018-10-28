@@ -824,7 +824,8 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 				} else {
 					customerSkill.setCanOrder(accountOrderService.checkReceiveOrderByCustomerSkillId(bean.getCustomerSkillId()));
 				}
-
+				// 查询技能订单数-wq
+				customerSkill.setSkillOrderNo(customerSkillMapper.selectSkillOrderNo(request.getViewCustomerId(), bean.getCustomerSkillId()));
 				skillList.add(customerSkill);
 			}
 		}

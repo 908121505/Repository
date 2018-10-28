@@ -470,4 +470,14 @@
 	LIMIT #{start},#{size}
 	</if>
   </select>
+
+  <select id="selectSkillOrderNo" resultType="int" >
+    select count(1)
+     from orders
+     where customer_id = #{customerId,jdbcType=BIGINT}
+     <if test="customerSkillId != null" >
+      and customer_skill_id = #{customerSkillId,jdbcType=BIGINT}
+     </if>
+  </select>
+
 </mapper>

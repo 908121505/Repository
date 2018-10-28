@@ -64,5 +64,13 @@ public interface CustomerSkillMapper {
      */
     List<DaVinfoVO> queryCustomerListBySkillItem(@Param("skillItemId") Long skillItemId,
     		@Param("start") Integer start, @Param("size") Integer size);
+
+    /**
+     * 技能订单数
+     * @param customerId
+     * @param customerSkillId
+     * @return
+     */
+    int selectSkillOrderNo(@Param("customerId") Long customerId, @Param("customerSkillId") Long customerSkillId);
     
 }
