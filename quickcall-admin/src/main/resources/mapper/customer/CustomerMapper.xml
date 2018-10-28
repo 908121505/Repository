@@ -270,7 +270,7 @@
     </update>
 
     <update id="lockForever" parameterType="map">
-        update customer set cust_status = -1,block_start_time = #{blockStartTime} block_start_time=null where customer_id = #{id}
+        update customer set cust_status = -1,block_start_time = #{blockStartTime} ,block_end_time=null where customer_id = #{id}
     </update>
 
     <update id="lockSkill" parameterType="map">
