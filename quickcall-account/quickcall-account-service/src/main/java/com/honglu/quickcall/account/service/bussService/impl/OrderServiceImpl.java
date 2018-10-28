@@ -1113,6 +1113,7 @@ public class OrderServiceImpl implements IOrderService {
 			if (list.size()>0){
 				orderMapper.saveEvaluationLabels(list);
 			}
+			RongYunUtil.sendOrderMessage(orderDetailVO.getServiceId(), OrderSkillConstants.IM_MSG_CONTENT_PING_JIA_FINISH,OrderSkillConstants.MSG_CONTENT_DAV);
 		}
 
 		commonService.updateOrder(request.getOrderId(), OrderSkillConstants.ORDER_STATUS_FINISHED_AND_PINGJIA);
