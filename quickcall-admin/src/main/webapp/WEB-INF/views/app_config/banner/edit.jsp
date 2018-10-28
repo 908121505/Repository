@@ -44,7 +44,11 @@
 					<label class="col-sm-2 control-label">链接<font color="red">&nbsp;*</font></label>
 					<div class="col-sm-10">
 						<input type="text" class="form-control" id="banner_url" name="url" value="${entity.url }"><br>
-						<font color="red">(注：根据跳转方式输入相应的类容：HTML页面->url链接；个人主页->个人ID；分类页->类别ID&类别名称)</font>
+						<font color="red">
+							配置说明：<br>
+							1.HTML页面：直接配置网页链接<br>
+							2.个人主页：voice://com.yanjing.voice/native?name=person_home&extra_user_id=要跳转的用户ID<br>
+							3.分类页：voice://com.yanjing.voice/native?name=category&category_id=要跳转的分类ID&category_name=要跳转的分类名称</font>
 					</div>
 				</div>
 				<div class="form-group">
