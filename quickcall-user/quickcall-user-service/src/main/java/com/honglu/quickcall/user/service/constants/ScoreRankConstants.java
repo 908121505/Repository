@@ -40,19 +40,19 @@ public class ScoreRankConstants {
     static {
         /********************************* 评分等级权重配置 *********************************/
         EVALUATION_LEVEL_WEIGHT_MAP.put(0, 0.01);
-        EVALUATION_LEVEL_WEIGHT_MAP.put(1, 5.0);
-        EVALUATION_LEVEL_WEIGHT_MAP.put(2, 20.0);
-        EVALUATION_LEVEL_WEIGHT_MAP.put(3, 50.0);
-        EVALUATION_LEVEL_WEIGHT_MAP.put(4, 85.0);
-        EVALUATION_LEVEL_WEIGHT_MAP.put(5, 100.0);
+        EVALUATION_LEVEL_WEIGHT_MAP.put(1, 0.05);
+        EVALUATION_LEVEL_WEIGHT_MAP.put(2, 0.2);
+        EVALUATION_LEVEL_WEIGHT_MAP.put(3, 0.5);
+        EVALUATION_LEVEL_WEIGHT_MAP.put(4, 0.8);
+        EVALUATION_LEVEL_WEIGHT_MAP.put(5, 1.0);
 
         /********************************* 单笔订单件数权重配置 *********************************/
-        SINGLE_ORDER_NUM_WEIGHT_MAP.put(1, Double.valueOf(1));
-        SINGLE_ORDER_NUM_WEIGHT_MAP.put(5, Double.valueOf(1.2));
-        SINGLE_ORDER_NUM_WEIGHT_MAP.put(10, Double.valueOf(1.3));
-        SINGLE_ORDER_NUM_WEIGHT_MAP.put(20, Double.valueOf(1.5));
-        SINGLE_ORDER_NUM_WEIGHT_MAP.put(50, Double.valueOf(2));
-        SINGLE_ORDER_NUM_WEIGHT_MAP.put(100, Double.valueOf(3));
+        SINGLE_ORDER_NUM_WEIGHT_MAP.put(1, 1.0);
+        SINGLE_ORDER_NUM_WEIGHT_MAP.put(5, 1.2);
+        SINGLE_ORDER_NUM_WEIGHT_MAP.put(10, 1.3);
+        SINGLE_ORDER_NUM_WEIGHT_MAP.put(20, 1.5);
+        SINGLE_ORDER_NUM_WEIGHT_MAP.put(50, 2.0);
+        SINGLE_ORDER_NUM_WEIGHT_MAP.put(100, 3.0);
     }
 
     /**
