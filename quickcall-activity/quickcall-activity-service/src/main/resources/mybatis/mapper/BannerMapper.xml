@@ -38,7 +38,7 @@
       and banner_type = #{bannerType}
     </if>
     <if test="deviceType != null">
-      and device_type = #{deviceType}
+      and device_type  <![CDATA[ != ]]> #{deviceType}
     </if>
     <if test="appVersion != null">
       and app_version = #{appVersion}
