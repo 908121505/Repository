@@ -48,19 +48,28 @@ public class ResourceConfigController implements BaseController<ResourceConfigVO
         	Map<String, Object> map = new HashMap<>();
         	map.put("resourceConfigId", resourcesConfigVO.getResourceConfigId());
         	map.put("resourcePoolId", resourcesConfigVO.getResourcePoolId());
-        	//获取声优总量
-			int tot = baseManager.get("ResourceConfigMapper.queryTotalCus", map);
-			map.put("resourceConfigId", resourcesConfigVO.getResourceConfigId());
-        	map.put("resourcePoolId", resourcesConfigVO.getResourcePoolId());
-        	//获取已接单数量
-			int rec = baseManager.get("ResourceConfigMapper.queryReceiptCus", map);
-			map.put("resourceConfigId", resourcesConfigVO.getResourceConfigId());
-        	map.put("resourcePoolId", resourcesConfigVO.getResourcePoolId());
+        	//判断自然推荐
+        	if(resourcesConfigVO.getStrategy() == 1){
+        		resourcesConfigVO.setTotalCusNum(0);
+    			resourcesConfigVO.setReceiptCusNum(0);
+    			resourcesConfigVO.setSurplusCusNum(0);
+    			resourcesConfigVO.setResourceName("");
+        	}else{
+	        	//获取声优总量
+				int tot = baseManager.get("ResourceConfigMapper.queryTotalCus", map);
+				map.put("resourceConfigId", resourcesConfigVO.getResourceConfigId());
+	        	map.put("resourcePoolId", resourcesConfigVO.getResourcePoolId());
+	        	//获取已接单数量
+				int rec = baseManager.get("ResourceConfigMapper.queryReceiptCus", map);
+				map.put("resourceConfigId", resourcesConfigVO.getResourceConfigId());
+	        	map.put("resourcePoolId", resourcesConfigVO.getResourcePoolId());
+	        	
+				resourcesConfigVO.setTotalCusNum(tot);
+				resourcesConfigVO.setReceiptCusNum(rec);
+				resourcesConfigVO.setSurplusCusNum(tot-rec);
+        	}
         	//获取所有技能名称
 			String skillName = baseManager.get("ResourceConfigMapper.querySkillItemList", map);
-			resourcesConfigVO.setTotalCusNum(tot);
-			resourcesConfigVO.setReceiptCusNum(rec);
-			resourcesConfigVO.setSurplusCusNum(tot-rec);
 			resourcesConfigVO.setSkillName(skillName);
 		}
         return new DataTables<>(sEcho, banners, banners.size(), total);

@@ -1,22 +1,23 @@
 package com.honglu.quickcall.user.service.service.impl;
 
-import com.honglu.quickcall.account.facade.entity.Order;
-import com.honglu.quickcall.common.core.util.UUIDUtils;
-import com.honglu.quickcall.user.facade.entity.BigvScore;
-import com.honglu.quickcall.user.facade.entity.BigvSkillScore;
-import com.honglu.quickcall.user.facade.exchange.mqrequest.DoOrderCastMqRequest;
-import com.honglu.quickcall.user.facade.exchange.mqrequest.EvaluationOrderMqRequest;
-import com.honglu.quickcall.user.service.constants.ScoreRankConstants;
-import com.honglu.quickcall.user.service.dao.BigvScoreMapper;
-import com.honglu.quickcall.user.service.dao.BigvSkillScoreMapper;
-import com.honglu.quickcall.user.service.dao.CustomerMapper;
-import com.honglu.quickcall.user.service.service.ScoreRankService;
+import java.math.BigDecimal;
+import java.util.Objects;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
-import java.util.Objects;
+import com.honglu.quickcall.account.facade.entity.Order;
+import com.honglu.quickcall.common.core.util.UUIDUtils;
+import com.honglu.quickcall.user.facade.constants.ScoreRankConstants;
+import com.honglu.quickcall.user.facade.entity.BigvScore;
+import com.honglu.quickcall.user.facade.entity.BigvSkillScore;
+import com.honglu.quickcall.user.facade.exchange.mqrequest.DoOrderCastMqRequest;
+import com.honglu.quickcall.user.facade.exchange.mqrequest.EvaluationOrderMqRequest;
+import com.honglu.quickcall.user.service.dao.BigvScoreMapper;
+import com.honglu.quickcall.user.service.dao.BigvSkillScoreMapper;
+import com.honglu.quickcall.user.service.dao.CustomerMapper;
+import com.honglu.quickcall.user.service.service.ScoreRankService;
 
 /**
  * 刷新评分排名表服务接口实现类

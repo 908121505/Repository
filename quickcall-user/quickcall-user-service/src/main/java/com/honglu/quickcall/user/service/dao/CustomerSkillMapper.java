@@ -69,7 +69,10 @@ public interface CustomerSkillMapper {
      * @return
      */
     List<DaVinfoVO> queryCustomerListBySkillItem(@Param("skillItemId") Long skillItemId,
-    		@Param("start") Integer start, @Param("size") Integer size);
+									    		@Param("weekIndex") Integer weekIndex,
+									            @Param("endTimeStr") String endTimeStr,
+									    		@Param("start") Integer start, 
+									    		@Param("size") Integer size);
 
     /**
      * 根据客户技能ID查询返回给前端的大V数据

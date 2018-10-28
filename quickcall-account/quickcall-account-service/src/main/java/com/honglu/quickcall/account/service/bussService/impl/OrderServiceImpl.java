@@ -333,10 +333,10 @@ public class OrderServiceImpl implements IOrderService {
 			
 			//获取大V手机号码
 			Customer  service =  commonService.getPhoneByCustomerId(serviceId);
-			LOGGER.info("11111111111111111111111111111"+service);
+			LOGGER.info("用户下单大V信息："+service);
 			if(service != null){
 				String  phone =  service.getPhone();
-				LOGGER.info("22222222222222222222"+phone);
+				LOGGER.info("用户下单大V手机号码"+phone);
 				if(StringUtils.isNotBlank(phone)){
 					SendSmsUtil.sendSms(UUIDUtils.getUUID(), phone, 2, customerSkill.getSkillName());
 				}
@@ -917,19 +917,20 @@ public class OrderServiceImpl implements IOrderService {
 			
 			//获取大V手机号码
 			Customer  service =  commonService.getPhoneByCustomerId(serviceId);
-			LOGGER.info("11111111111111111111111111111"+service);
+			LOGGER.info("大V发起服务，大V信息"+service);
 			if(service != null){
 				String  gtId =  service.getGtClientId();
+				LOGGER.info("大V发起服务，大V个推ID"+gtId);
 				if(StringUtils.isNotBlank(gtId)){
 					GtPushUtil.sendNotificationTemplateToList(gtId, OrderSkillConstants.GT_MSG_ORDER_TITLE, OrderSkillConstants.GT_MSG_CONTENT_START_SERVICE_TO_DAV, OrderSkillConstants.GT_MSG_CONTENT_START_SERVICE_TO_DAV_URL);
 				}
 			}
 			//获取用户手机号码
 			Customer  customer =  commonService.getPhoneByCustomerId(customerId);
-			LOGGER.info("11111111111111111111111111111"+customer);
+			LOGGER.info("大V发起服务，用户信息"+customer);
 			if(customer != null){
 				String  gtId =  customer.getGtClientId();
-				LOGGER.info("33333333333333333333333"+gtId);
+				LOGGER.info("大V发起服务，用户个推ID"+gtId);
 				if(StringUtils.isNotBlank(gtId)){
 					//用户下单需要使用个推推送消息
 					GtPushUtil.sendNotificationTemplateToList(gtId, OrderSkillConstants.GT_MSG_ORDER_TITLE, OrderSkillConstants.GT_MSG_CONTENT_START_SERVICE_TO_CUST, OrderSkillConstants.GT_MSG_CONTENT_START_SERVICE_TO_CUST_URL);
@@ -980,6 +981,9 @@ public class OrderServiceImpl implements IOrderService {
 			}
 			Long  serviceId = order.getServiceId();
 			Long  customerId =  order.getCustomerId();
+			
+			Integer  sendMsgIndex =  null ;
+			
 			//大V发起完成服务
 			if(OrderSkillConstants.REQUEST_DV_FINISH_TYPE == type){
 				//判断时间是否在服务时间内
@@ -987,10 +991,11 @@ public class OrderServiceImpl implements IOrderService {
 				if(expectEndTime.before(new Date())){
 					//已经在服务时间之外了，可以立即结束
 					newOrderStatus = OrderSkillConstants.ORDER_STATUS_FINISH_DAV_FINISH_AFTER_SERVICE_TIME ;
-					// ADUAN 订单服务完成推送MQ消息
-					userCenterSendMqMessageService.sendOrderCostMqMessage(orderId);
+//					// ADUAN 订单服务完成推送MQ消息
+//					userCenterSendMqMessageService.sendOrderCostMqMessage(orderId);
 					//用户未评价
 					RongYunUtil.sendOrderMessage(serviceId, OrderSkillConstants.IM_MSG_CONTENT_CUST_NOT_PING_JIA,OrderSkillConstants.MSG_CONTENT_DAV);
+					sendMsgIndex = 1 ;
 				}else{
 					//大V在服务时间内发起完成服务
 					newOrderStatus = OrderSkillConstants.ORDER_STATUS_GOING_DAV_APPAY_FINISH ;
@@ -999,22 +1004,22 @@ public class OrderServiceImpl implements IOrderService {
 			}else{
 			//用户发起完成服务	
 				newOrderStatus = OrderSkillConstants.ORDER_STATUS_GOING_USRE_APPAY_FINISH ;
-				// ADUAN 订单服务完成推送MQ消息
-				userCenterSendMqMessageService.sendOrderCostMqMessage(orderId);
+				sendMsgIndex =  1 ;
 				//冻结大V金额
 				accountService.inAccount(order.getServiceId(), order.getOrderAmounts(), TransferTypeEnum.FROZEN, AccountBusinessTypeEnum.FroZen);
 				RongYunUtil.sendOrderMessage(serviceId, OrderSkillConstants.IM_MSG_CONTENT_CUST_NOT_PING_JIA,OrderSkillConstants.MSG_CONTENT_DAV);
 			}
-			//大V发起完成服务
-//			if(OrderSkillConstants.REQUEST_DV_FINISH_TYPE == type){
-				//大V发起完成，向用户发送消息
-//				RongYunUtil.sendOrderMessage(customerId, OrderSkillConstants.IM_MSG_CONTENT_DAV_FINISH,OrderSkillConstants.MSG_CONTENT_C);
-//			}else{
-				//用户发起完成服务，向大V发送消息
-//				RongYunUtil.sendOrderMessage(serviceId, OrderSkillConstants.IM_MSG_CONTENT_CUST_FINISH,OrderSkillConstants.MSG_CONTENT_DAV);
-//			}
+			
+			
 			//设置请求结束时间
 			commonService.finishUpdateOrder(orderId, newOrderStatus,new  Date());
+			if(sendMsgIndex !=null){
+				// ADUAN 订单服务完成推送MQ消息
+				userCenterSendMqMessageService.sendOrderCostMqMessage(orderId);
+			}
+			
+			
+			
 		}else{
 			//订单不存在
 			throw new BizException(AccountBizReturnCode.ORDER_NOT_EXIST, "订单不存在，无法对订单操作");
@@ -1131,7 +1136,8 @@ public class OrderServiceImpl implements IOrderService {
 			if (list.size()>0){
 				orderMapper.saveEvaluationLabels(list);
 			}
-			RongYunUtil.sendOrderMessage(orderDetailVO.getServiceId(), OrderSkillConstants.IM_MSG_CONTENT_PING_JIA_FINISH,OrderSkillConstants.MSG_CONTENT_DAV);
+			RongYunUtil.sendOrderMessage(orderDetailVO.getServiceId(), OrderSkillConstants.IM_MSG_CONTENT_PING_JIA_FINISH_TO_DV,OrderSkillConstants.MSG_CONTENT_DAV);
+			RongYunUtil.sendOrderMessage(orderDetailVO.getCustomerId(), OrderSkillConstants.IM_MSG_CONTENT_PING_JIA_FINISH_TO_CUST,OrderSkillConstants.MSG_CONTENT_C);
 		}
 
 		commonService.updateOrder(request.getOrderId(), OrderSkillConstants.ORDER_STATUS_FINISHED_AND_PINGJIA);

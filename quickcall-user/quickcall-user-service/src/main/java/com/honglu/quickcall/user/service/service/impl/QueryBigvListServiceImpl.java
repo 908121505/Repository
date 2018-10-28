@@ -55,7 +55,7 @@ public class QueryBigvListServiceImpl implements QueryBigvListService {
 
         // 查询首页6帧资源位数据
         AppHomeBigvListVO recomedBigv = new AppHomeBigvListVO();
-        recomedBigv.setSkillItemName("推荐大V");
+        recomedBigv.setSkillItemName("推荐列表");
         List<CustomerSkill> customerSkills = customerSkillMapper.selectAuditedSkillByPage(null, 0, 6);
         packetCustomerSkillList(recomedBigv, customerSkills);
         resultList.add(recomedBigv);
@@ -93,7 +93,7 @@ public class QueryBigvListServiceImpl implements QueryBigvListService {
 
         /****** 查询首页6帧资源位数据*****/
         AppHomeBigvListVO recomedBigv = new AppHomeBigvListVO();
-        recomedBigv.setSkillItemName("推荐声优");
+        recomedBigv.setSkillItemName("推荐列表");
         List<AppHomeBigvListVO.BigvInfoVO> bigvList = queryConfigBigvList(recomedBigv, weekIndex, endTimeStr);
         if (bigvList != null && bigvList.size() > 0) {
             recomedBigv.setDaVinfoList(bigvList);
@@ -381,7 +381,9 @@ public class QueryBigvListServiceImpl implements QueryBigvListService {
         if (pageIndex != null && pageSize != null) {
             start = pageIndex * pageSize;
         }
-        List<DaVinfoVO> daVinfoVOList = customerSkillMapper.queryCustomerListBySkillItem(skillItemId, start, pageSize);
+        Integer weekIndex = DateUtils.getDayOfWeek();
+        String endTimeStr = DateUtils.formatDateHHSS(new Date()).replaceAll(":", "");
+        List<DaVinfoVO> daVinfoVOList = customerSkillMapper.queryCustomerListBySkillItem(skillItemId,weekIndex,endTimeStr,start,pageSize);
         for (DaVinfoVO daVinfoVO : daVinfoVOList) {
             // 查询第一张形象照 性别(0=女,1=男)
             List<String> appearanceList = customerAppearanceMapper.queryCustomerAuditedAppearance(daVinfoVO.getCustomerId(), 0);

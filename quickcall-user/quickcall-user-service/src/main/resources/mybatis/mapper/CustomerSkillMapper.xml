@@ -450,39 +450,38 @@
   </select>
   
   <select id="queryCustomerListBySkillItem" resultType ="com.honglu.quickcall.user.facade.vo.DaVinfoVO">
-  		select * from(
-	select cus.customer_id as customerId, 
-	cs.customer_skill_id as customerSkillId, 
-	cus.nick_name as nickName,
-	cus.sex as sex,
-	(YEAR (NOW()) - YEAR (cus.birthday)) AS age,
-	cs.skill_price as price,
-	cs.service_unit as unitName,
-	si.skill_item_name as skillItemName,
-	si.back_color as backColor,
-	csc.skill_voice_url as voiceUrl,
-	csc.skill_voice_time as voiceTime
-	from customer_skill cs 
-	LEFT JOIN customer cus	on cus.customer_id = cs.customer_id
-	LEFT JOIN skill_item si on cs.skill_item_id = si.id 
-	LEFT JOIN bigv_skill_score bss on bss.customer_skill_id = cs.customer_skill_id
-	LEFT JOIN customer_skill_certify csc on csc.customer_id = cus.customer_id and csc.skill_item_id = si.id
-	where cs.switch_status = 1 and cs.receive_status = 1 and cus.cust_status = 1 and cus.v_status = 2 and cus.cust_state = 2 and cs.skill_status = 1   and 
-	(
-		case when WEEKDAY(now())=0 THEN (monday=0 or end_time_str <![CDATA[>]]> CONCAT(EXTRACT(HOUR from now()),EXTRACT(MINUTE from now())))
-				 when WEEKDAY(now())=1 THEN (tuesday=0 or end_time_str <![CDATA[>]]> CONCAT(EXTRACT(HOUR from now()),EXTRACT(MINUTE from now())))
-				 when WEEKDAY(now())=2 THEN (wednesday=0 or end_time_str <![CDATA[>]]> CONCAT(EXTRACT(HOUR from now()),EXTRACT(MINUTE from now())))
-				 when WEEKDAY(now())=3 THEN (thursday=0 or end_time_str <![CDATA[>]]> CONCAT(EXTRACT(HOUR from now()),EXTRACT(MINUTE from now())))
-				 when WEEKDAY(now())=4 THEN (friday=0 or end_time_str <![CDATA[>]]> CONCAT(EXTRACT(HOUR from now()),EXTRACT(MINUTE from now())))
-				 when WEEKDAY(now())=5 THEN (saturday=0 or end_time_str <![CDATA[>]]> CONCAT(EXTRACT(HOUR from now()),EXTRACT(MINUTE from now())))
-				 when WEEKDAY(now())=6 THEN (sunday=0 or end_time_str <![CDATA[>]]> CONCAT(EXTRACT(HOUR from now()),EXTRACT(MINUTE from now())))
-		 end
-	)
-	and (select count(*) from orders ord where ord.customer_id = cs.customer_id and ord.order_status in (10,18,26,28) and ord.skill_type != 2)=0
+  		select * from( SELECT
+            bss.customer_id as customerId, 
+            bss.customer_skill_id as customerSkillId,
+             bss.skill_item_id as skillItemId,
+            csk.skill_name as skillItemName, 
+            csk.discount_price as price,
+             csk.service_unit as unitName,
+            csc.skill_voice_url as voiceUrl,
+             csc.skill_voice_time as voiceTime,
+            si.back_color as backColor, 
+            si.home_black_color as skillHomeBackColor, 
+            si.font_color as skillFontColor,
+            c.nick_name as nickName, 
+            c.sex as sex, 
+            (YEAR (NOW()) - YEAR (c.birthday)) AS age,
+            bss.score_total
+            ,(SELECT count(o.order_id) FROM orders o
+              WHERE o.customer_skill_id = bss.customer_skill_id
+                    AND o.skill_type = (select si.skill_type from skill_item si where si.id = bss.skill_item_id)
+                    AND o.order_status IN (10, 18, 26, 28)
+            ) AS skillOrdered
+        FROM bigv_skill_score bss
+        INNER JOIN customer_skill csk ON csk.customer_skill_id = bss.customer_skill_id AND csk.skill_status = 1
+                    <include refid="SKILL_EXIST_CONDITON"/>
+        LEFT JOIN customer_skill_certify csc ON csc.certify_id = csk.certify_id
+        LEFT JOIN skill_item si ON si.id = bss.skill_item_id
+        LEFT JOIN customer c ON c.customer_id = bss.customer_id
+        WHERE 1=1 
 	<if test="skillItemId == '' or skillItemId != null">
-	and si.id = #{skillItemId} 
+	and bss.skill_item_id = #{skillItemId}
 	</if>
-	ORDER BY cus.cust_state desc,bss.score_total desc 
+	ORDER BY skillOrdered ASC, bss.score_total DESC
 ) tmp 
 	<if test="start != null and size != null" >
 	LIMIT #{start},#{size}
@@ -519,5 +518,30 @@
      where
       customer_skill_id = #{customerSkillId,jdbcType=BIGINT}
   </select>
+  
+  <sql id="SKILL_EXIST_CONDITON">
+        <if test="weekIndex == 1" >
+            AND ( csk.monday = 0  or (csk.monday = 1  and  csk.end_time_str <![CDATA[  > ]]> #{endTimeStr,jdbcType=VARCHAR}) )
+        </if>
+        <if test="weekIndex == 2" >
+            AND ( csk.tuesday = 0  or (csk.tuesday = 1  and  csk.end_time_str <![CDATA[  > ]]> #{endTimeStr,jdbcType=VARCHAR}) )
+        </if>
+        <if test="weekIndex == 3" >
+            AND ( csk.wednesday = 0  or (csk.wednesday = 1  and  csk.end_time_str <![CDATA[  > ]]> #{endTimeStr,jdbcType=VARCHAR}) )
+        </if>
+        <if test="weekIndex == 4" >
+            AND ( csk.thursday = 0  or (csk.thursday = 1  and  csk.end_time_str <![CDATA[  > ]]> #{endTimeStr,jdbcType=VARCHAR}) )
+        </if>
+        <if test="weekIndex == 5" >
+            AND ( csk.friday = 0  or (csk.friday = 1  and  csk.end_time_str <![CDATA[  > ]]> #{endTimeStr,jdbcType=VARCHAR}) )
+        </if>
+        <if test="weekIndex == 6" >
+            AND ( csk.saturday = 0  or (csk.saturday = 1  and  csk.end_time_str <![CDATA[  > ]]> #{endTimeStr,jdbcType=VARCHAR}) )
+        </if>
+        <if test="weekIndex == 7" >
+            AND ( csk.sunday = 0  or (csk.sunday = 1  and  csk.end_time_str <![CDATA[  > ]]> #{endTimeStr,jdbcType=VARCHAR}) )
+        </if>
+
+    </sql>
 
 </mapper>
