@@ -53,13 +53,13 @@
           WHERE o.customer_skill_id = bss.customer_skill_id
                 AND o.skill_type = (select si.skill_type from skill_item si where si.id = bss.customer_skill_id)
                 AND o.order_status IN (10, 18, 26, 28)
-          ) AS skillOrderd
+          ) AS skillOrdered
         </if>
       FROM `bigv_skill_score` bss
       INNER JOIN customer_skill cs ON cs.customer_skill_id = bss.customer_skill_id AND cs.skill_status = 1 AND cs.switch_status = 1 AND cs.receive_status = 1
       <include refid="SKILL_EXIST_CONDITON"/>
-      WHERE
-      bss.skill_item_id IN
+      WHERE  1 = 1
+       AND bss.skill_item_id IN
       <foreach collection="configSkills"  item="configSkill"  open="("  close=")"  separator=","  >
         #{configSkill}
       </foreach>
@@ -72,23 +72,21 @@
       GROUP BY bss.customer_id
     ) tt
     <if test="skillOrdered == 0">
-      where tt.skillOrderd=0
+      where tt.skillOrdered=0
     </if>
   </select>
 
   <!-- 查询启用的大V + 技能排名列表 -->
   <select id="selectEnabledBigvAndSkillRankData" resultType="com.honglu.quickcall.user.facade.entity.BigvSkillScore">
     SELECT  tt.customer_id as customerId, tt.customer_skill_id as customerSkillId  FROM (
-      SELECT bss.customer_id as customerId,
-            bss.customer_skill_id as customerSkillId,
-            bss.skill_item_id as skillItemId,
+      SELECT bss.customer_id, bss.customer_skill_id, bss.skill_item_id,
             sum(bss.score_total) as scoreTotal
           <if test="skillOrdered == 0">
             ,(SELECT count(o.order_id) FROM orders o
                 WHERE o.customer_skill_id = bss.customer_skill_id
                       AND o.skill_type = (select si.skill_type from skill_item si where si.id = bss.customer_skill_id)
                       AND o.order_status IN (10, 18, 26, 28)
-            ) AS skillOrderd
+            ) AS skillOrdered
           </if>
       FROM `bigv_skill_score` bss
       INNER JOIN customer_skill cs ON cs.customer_skill_id = bss.customer_skill_id AND cs.skill_status = 1 AND cs.switch_status = 1 AND cs.receive_status = 1
@@ -105,11 +103,16 @@
             </foreach>
           </if>
       GROUP BY bss.customer_id
-      ORDER BY scoreTotal DESC
+      <if test="skillOrdered == 0">
+        ORDER BY skillOrdered asc, scoreTotal DESC
+      </if>
+      <if test="skillOrdered != 0">
+        ORDER BY scoreTotal DESC
+      </if>
       LIMIT #{beginIndex},#{endIndex}
     ) tt
     <if test="skillOrdered == 0">
-      where tt.skillOrderd=0
+      where tt.skillOrdered=0
     </if>
     ORDER BY RAND() LIMIT 1
   </select>
@@ -118,11 +121,13 @@
   <select id="selectRandomBigvFromResourcePool" resultType="com.honglu.quickcall.user.facade.entity.BigvSkillScore">
       SELECT t.customer_id as customerId, t.customer_skill_id as customerSkillId FROM(
       SELECT pc.customer_id, cs.customer_skill_id
-          ,(SELECT count(o.order_id) FROM orders o
-              WHERE o.customer_skill_id = cs.customer_skill_id
-                    AND o.skill_type = (select si.skill_type from skill_item si where si.id = cs.customer_skill_id)
-                    AND o.order_status IN (10, 18, 26, 28)
-          ) AS skillOrderd
+          <if test="skillOrdered == 0">
+              ,(SELECT count(o.order_id) FROM orders o
+                  WHERE o.customer_skill_id = cs.customer_skill_id
+                        AND o.skill_type = (select si.skill_type from skill_item si where si.id = cs.customer_skill_id)
+                        AND o.order_status IN (10, 18, 26, 28)
+              ) AS skillOrdered
+          </if>
       FROM resource_pool_customer pc
       INNER JOIN customer_skill cs ON cs.customer_id = pc.customer_id AND cs.skill_status = 1
       AND cs.skill_item_id IN
@@ -141,7 +146,7 @@
       AND pc.`status` = 1
       ) t
       <if test="skillOrdered == 0">
-        where t.skillOrderd = 0
+        where t.skillOrdered = 0
       </if>
       ORDER BY RAND() LIMIT 1
   </select>
@@ -159,7 +164,7 @@
               WHERE o.customer_skill_id = bss.customer_skill_id
                     AND o.skill_type = (select si.skill_type from skill_item si where si.id = bss.customer_skill_id)
                     AND o.order_status IN (10, 18, 26, 28)
-            ) AS skillOrderd
+            ) AS skillOrdered
         FROM bigv_skill_score bss
         INNER JOIN customer_skill cs ON cs.customer_skill_id = bss.customer_skill_id AND cs.skill_status = 1
                     <include refid="SKILL_EXIST_CONDITON"/>
@@ -167,7 +172,7 @@
         LEFT JOIN skill_item si ON si.id = bss.skill_item_id
         LEFT JOIN customer c ON c.customer_id = bss.customer_id
         WHERE bss.skill_item_id = #{skillItemId}
-        ORDER BY skillOrderd ASC, bss.score_total DESC
+        ORDER BY skillOrdered ASC, bss.score_total DESC
         LIMIT 0, 4
     </select>
 
