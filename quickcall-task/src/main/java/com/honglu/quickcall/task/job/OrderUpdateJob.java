@@ -329,7 +329,7 @@ public class OrderUpdateJob {
     		if(cancelType == CANCEL_ONE){
     			content =  OrderSkillConstants.IM_MSG_CONTENT_CANCEL_DV_15MINUTE_TIMEOUT ;
     		}else if (cancelType == CANCEL_TWO){
-//    			content =  OrderSkillConstants.IM_MSG_CONTENT_CANCEL_CUST_5MINUTE_START_TIMEOUT ;
+    			content =  OrderSkillConstants.IM_MSG_CONTENT_CANCEL_DV_5MINUTE_START_TIMEOUT ;
     		}else if (cancelType == CANCEL_THREE){
     			content =  OrderSkillConstants.IM_MSG_CONTENT_CANCEL_DV_5MINUTE_CONFIRM_TIMEOUT ;
     		}else if(cancelType == CANCEL_FOUR){
@@ -340,7 +340,7 @@ public class OrderUpdateJob {
     		if(cancelType == CANCEL_ONE){
     			content =  OrderSkillConstants.IM_MSG_CONTENT_CANCEL_CUST_15MINUTE_TIMEOUT ;
     		}else if (cancelType == CANCEL_TWO){
-//    			content =  OrderSkillConstants.IM_MSG_CONTENT_CANCEL_DV_5MINUTE_START_TIMEOUT ;
+    			content =  OrderSkillConstants.IM_MSG_CONTENT_CANCEL_CUST_5MINUTE_START_TIMEOUT ;
     		}else if (cancelType == CANCEL_THREE){
     			content =  OrderSkillConstants.IM_MSG_CONTENT_CANCEL_CUST_5MINUTE_CONFIRM_TIMEOUT ;
     		}else if(cancelType == CANCEL_FOUR){
@@ -349,6 +349,7 @@ public class OrderUpdateJob {
     	}
     	if(StringUtils.isNotBlank(content)){
 //    		content = OrderSkillConstants.IM_MSG_CONTENT_DEFAULT ;
+    		LOGGER.info("给customerId"+customerId+"推送消息："+content);
     		//下单成功后推送IM消息
     		RongYunUtil.sendOrderMessage(customerId, content,remarkName);
     	}
