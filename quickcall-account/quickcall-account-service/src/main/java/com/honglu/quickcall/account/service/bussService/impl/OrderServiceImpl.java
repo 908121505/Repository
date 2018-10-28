@@ -775,10 +775,13 @@ public class OrderServiceImpl implements IOrderService {
 			String  serviceUnit = order.getServiceUnit();
 		    int  addMinute =  0 ;
 		    Integer  orderNum = order.getOrderNum();
+		    
 			if(OrderSkillConstants.SERVICE_UNIT_HALF_HOUR.equals(serviceUnit)){
 				addMinute = orderNum * 30 ;
 			}else if(OrderSkillConstants.SERVICE_UNIT_HOUR.equals(serviceUnit)){
 				addMinute = orderNum * 60 ;
+			}else{
+				addMinute = 12 * 60 ;
 			}
 			
 			Calendar cal =  Calendar.getInstance();
@@ -950,6 +953,8 @@ public class OrderServiceImpl implements IOrderService {
 				if(expectEndTime.before(new Date())){
 					//已经在服务时间之外了，可以立即结束
 					newOrderStatus = OrderSkillConstants.ORDER_STATUS_FINISH_DAV_FINISH_AFTER_SERVICE_TIME ;
+					// ADUAN 订单服务完成推送MQ消息
+					userCenterSendMqMessageService.sendOrderCostMqMessage(orderId);
 				}else{
 					//大V在服务时间内发起完成服务
 					newOrderStatus = OrderSkillConstants.ORDER_STATUS_GOING_DAV_APPAY_FINISH ;
@@ -957,6 +962,8 @@ public class OrderServiceImpl implements IOrderService {
 			}else{
 			//用户发起完成服务	
 				newOrderStatus = OrderSkillConstants.ORDER_STATUS_GOING_USRE_APPAY_FINISH ;
+				// ADUAN 订单服务完成推送MQ消息
+				userCenterSendMqMessageService.sendOrderCostMqMessage(orderId);
 				//冻结大V金额
 				accountService.inAccount(order.getServiceId(), order.getOrderAmounts(), TransferTypeEnum.FROZEN, AccountBusinessTypeEnum.FroZen);
 			}
