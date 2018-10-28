@@ -13,6 +13,7 @@
 		 	order_status = #{updateStatus}
 		WHERE
 			order_status = #{queryStatus}
+			<!-- 下单时间在截止时间之后 -->
 		AND order_time   <![CDATA[ < ]]> #{endTime}
   </update>
 <!-- 待接单订单超时 查询-->
@@ -27,7 +28,9 @@
 		   orders
 		WHERE
 			order_status = #{queryStatus}
+			<!-- 下单时间在截止时间之后 -->
 		AND order_time   <![CDATA[ < ]]> #{endTime}
+		AND create_time <![CDATA[ > ]]>  #{queryEndTime}
   </select>
   
   <!-- ///////////////////////////////////////////////////////////////////-->
@@ -44,6 +47,7 @@
 			order_status = #{queryStatus}
 		AND receive_order_time <![CDATA[ < ]]> #{endTime}
   </update>
+
   
   
   <!-- 大V未发起立即服务超时  查询-->
@@ -58,6 +62,7 @@
 		WHERE
 			order_status = #{queryStatus}
 		AND receive_order_time <![CDATA[ < ]]> #{endTime}
+		AND create_time <![CDATA[ > ]]>  #{queryEndTime}
   </select>
   
   <!-- ///////////////////////////////////////////////////////////////////-->
@@ -91,6 +96,7 @@
 		WHERE
 			order_status = #{queryStatus}
 		AND appay_end_time <![CDATA[ < ]]> #{endTime}
+		AND create_time <![CDATA[ > ]]>  #{queryEndTime}
   </select>
   
   
@@ -129,6 +135,7 @@
 		WHERE
 			order_status = #{queryStatus}
 		AND expect_end_time <![CDATA[ < ]]> #{endTime}
+		AND create_time <![CDATA[ > ]]>  #{queryEndTime}
   </select>
   
   <!-- ///////////////////////////////////////////////////////////////////-->
@@ -145,6 +152,23 @@
 		AND appoint_time <![CDATA[ < ]]> #{endTime}
 		AND  skill_type  = #{skillType}
   </update>
+  
+        <!-- 叫醒自动结束查询-->
+  <select id="queryAppointOrderGoing"   resultType="com.honglu.quickcall.task.entity.TaskOrder" >
+		SELECT
+		    order_id  AS orderId ,
+			customer_id AS customerId,
+			service_id AS serviceId,
+			order_amounts AS orderAmounts
+		FROM  
+		   orders
+		WHERE
+			order_status = #{queryStatus}
+		AND appoint_time <![CDATA[ < ]]> #{endTime}
+		AND  skill_type  = #{skillType}
+		AND create_time <![CDATA[ > ]]>  #{queryEndTime}
+		
+  </select>
   
   
   <!-- ///////////////////////////////////////////////////////////////////-->
@@ -177,6 +201,38 @@
 			order_status = #{queryStatus}
 		AND expect_end_time <![CDATA[ < ]]> #{endTime}
 		AND  skill_type  = #{skillType}
+		
   </select>
+  
+  
+    
+<!-- 用户未接立即服务超时超时 -->
+  <update id="updateOrderStatus"  >
+    
+		UPDATE 
+			orders
+		SET 
+			system_cancel_time = #{cancelTime},
+		 	order_status = #{updateStatus}
+		WHERE
+			order_id  IN 
+			<foreach collection="list" item="orderId"    open="("  close=")"  separator=",">
+			#{orderId}
+			</foreach>
+  </update>
+<!-- 用户未接立即服务超时超时 -->
+  <update id="updateOrderStatusForFinish"  >
+    
+		UPDATE 
+			orders
+		SET 
+			end_time = #{finishTime},
+		 	order_status = #{updateStatus}
+		WHERE
+			order_id  IN 
+			<foreach collection="list" item="orderId"    open="("  close=")"  separator=",">
+			#{orderId}
+			</foreach>
+  </update>
   
 </mapper>

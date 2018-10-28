@@ -32,31 +32,39 @@ public interface OrderSkillConstants {
 	
 	
 	////////////////////////IM消息内容//////////////////////////
-	public  static final  String  IM_MSG_CONTENT_RECEIVE_ORDER = "有人下单啦";
-	public  static final  String  IM_MSG_CONTENT_CANCEL_ORDER = "订单取消啦";
-	public  static final  String  IM_MSG_CONTENT_USER_CONFIRM_FINISH= "订单完成啦";
-	public  static final  String  IM_MSG_CONTENT_USER_CONFIRM_START_SERVICE = "用户同意开始服务啦";
-	public  static final  String  IM_MSG_CONTENT_DAV_REFUSE = "大V接单啦";
-	public  static final  String  IM_MSG_CONTENT_DAV_CONFIRM = "大V拒绝接单啦";
-	public  static final  String  IM_MSG_CONTENT_DAV_START_SERVICE = "大V开始服务啦";
-	public  static final  String  IM_MSG_CONTENT_CUST_FINISH = "用户完成服务啦";
-	public  static final  String  IM_MSG_CONTENT_DAV_FINISH = "大V完成服务啦";
+	public  static final  String  IM_MSG_CONTENT_RECEIVE_ORDER = "您有新的订单，请及时查看";
+	public  static final  String  IM_MSG_CONTENT_CANCEL_ORDER_TO_DV = "用户取消订单，赶快去了解原因吧~";
+	public  static final  String  IM_MSG_CONTENT_CANCEL_ORDER_TO_CUST = "您已取消订单，音符已退还至您的账户";
+//	public  static final  String  IM_MSG_CONTENT_USER_CONFIRM_FINISH= "订单完成啦";
+//	public  static final  String  IM_MSG_CONTENT_USER_CONFIRM_START_SERVICE = "用户同意开始服务啦";
+	
+	public  static final  String  IM_MSG_CONTENT_DAV_REFUSE_TO_CUST = "对方已接单，快去找ta沟通开始时间吧~";
+	public  static final  String  IM_MSG_CONTENT_DAV_REFUSE_TO_DV = "您已接单，快去联系用户协商开始时间吧~";
+	
+	public  static final  String  IM_MSG_CONTENT_DAV_CONFIRM_TO_CUST = "很抱歉，对方拒绝了您的订单，音符将会返还至您的账户";
+	public  static final  String  IM_MSG_CONTENT_DAV_CONFIRM_TO_DAV = "您已拒接，订单已取消";
+	public  static final  String  IM_MSG_CONTENT_DAV_START_SERVICE_TO_CUST = "对方发起立即服务，请在5分钟内确认，超时未响应订单将失效";
+	public  static final  String  IM_MSG_CONTENT_DAV_START_SERVICE_TO_DAV = "您已发起立即服务，请提醒用户5分钟内响应，超时订单将失效";
+	public  static final  String  IM_MSG_CONTENT_CUST_FINISH = "对方申请完成订单，快去看看吧！";
+	public  static final  String  IM_MSG_CONTENT_PING_JIA_FINISH = "对方已经完成评价";
+	public  static final  String  IM_MSG_CONTENT_CUST_NOT_PING_JIA = "订单已完成，快让用户对您本次服务进行评价吧~";
+//	public  static final  String  IM_MSG_CONTENT_DAV_FINISH = "大V完成服务啦";
 	
 	
 	
-	public  static final  String  IM_MSG_CONTENT_CANCEL_CUST_15MINUTE_TIMEOUT = "15分钟主播未接单，订单取消";
-	public  static final  String  IM_MSG_CONTENT_CANCEL_DV_15MINUTE_TIMEOUT = "15分钟未接单，订单取消";
+	public  static final  String  IM_MSG_CONTENT_CANCEL_CUST_15MINUTE_TIMEOUT = "您因超时未接单，订单已失效";
+	public  static final  String  IM_MSG_CONTENT_CANCEL_DV_15MINUTE_TIMEOUT = "很抱歉，对方超时未接单，订单已失效，音符将会退换至您的账户";
 	
-	/**大V5分钟未发起服务*/
-	public  static final  String  IM_MSG_CONTENT_CANCEL_CUST_5MINUTE_START_TIMEOUT = "5分钟主播未发起服务，订单取消";
-	/**大V5分钟未发起服务*/
-	public  static final  String  IM_MSG_CONTENT_CANCEL_DV_5MINUTE_START_TIMEOUT = "5分钟未发起服务，订单取消";
+//	/**大V5分钟未发起服务*/
+//	public  static final  String  IM_MSG_CONTENT_CANCEL_CUST_5MINUTE_START_TIMEOUT = "5分钟主播未发起服务，订单取消";
+//	/**大V5分钟未发起服务*/
+//	public  static final  String  IM_MSG_CONTENT_CANCEL_DV_5MINUTE_START_TIMEOUT = "5分钟未发起服务，订单取消";
 	
 	
 	/**用户5分钟未接*/
-	public  static final  String  IM_MSG_CONTENT_CANCEL_CUST_5MINUTE_CONFIRM_TIMEOUT = "您5分钟未接受服务，订单取消";
+	public  static final  String  IM_MSG_CONTENT_CANCEL_CUST_5MINUTE_CONFIRM_TIMEOUT = "您未确认本次立即服务，订单已失效";
 	/**用户5分钟未接*/
-	public  static final  String  IM_MSG_CONTENT_CANCEL_DV_5MINUTE_CONFIRM_TIMEOUT = "5分钟用户未接受服务，订单取消";
+	public  static final  String  IM_MSG_CONTENT_CANCEL_DV_5MINUTE_CONFIRM_TIMEOUT = "用户未确认本次立即服务，订单已失效";
 	
 	
 	/**服务完成*/
@@ -93,6 +101,8 @@ public interface OrderSkillConstants {
 	public  static final  Integer  HALF_HOUR_SECONDS = 1800;
 	/**一小时秒数：3600秒*/
 	public  static final  Integer  ONE_HOUR_SECONDS = 3600;
+	/**服务单位：一小时*/
+	public  static final  String  SERVICE_UNIT_ONE_HOUR = "小时";
 	/**服务单位：一小时*/
 	public  static final  String  SERVICE_UNIT_HOUR = "一小时";
 	/**服务单位：半小时*/
@@ -194,8 +204,10 @@ public interface OrderSkillConstants {
 	public static final Integer  ORDER_STATUS_WAITING_START_DA_APPAY_START_SERVICE = 18 ;
 	/**订单状态20.取消（大V发起开始服务用户自主取消）;*/
 	public static final Integer  ORDER_STATUS_CANCLE_USER_SELF_BEFORE_SERVICE = 20 ;
-	/**订单状态22.取消（大V发起开始服务用户5分钟未接）;*/
+	/**订单状态22.取消（大V发起开始服务用户5分钟未接）/叫醒服务预约时间;*/
 	public static final Integer  ORDER_STATUS_CANCEL_USER_NOT_ACCEPCT = 22 ;
+	/**订单状态23.取消（叫醒预约时间之前取消）*/
+	public static final Integer  ORDER_STATUS_CANCEL_BEFORE_APPOINT_TIME = 23 ;
 	/**订单状态24.待开始（大V发起开始服务用户5分钟内同意，叫醒特享）;*/
 	public static final Integer  ORDER_STATUS_GOING_WAITING_START = 24 ;
 	/**订单状态26.进行中（大V发起开始服务用户5分钟内同意）;*/

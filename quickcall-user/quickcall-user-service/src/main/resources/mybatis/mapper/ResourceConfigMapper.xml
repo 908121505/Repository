@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.honglu.quickcall.user.service.dao.ResourceConfigMapper" >
-  <resultMap id="BaseResultMap" type="com.honglu.quickcall.user.facade.entity.ResourceConfig" >
-    <id column="resource_config_id" property="resourceConfigId" jdbcType="INTEGER" />
-    <result column="config_num" property="configNum" jdbcType="INTEGER" />
-    <result column="strategy" property="strategy" jdbcType="INTEGER" />
-    <result column="resource_pool_id" property="resourcePoolId" jdbcType="BIGINT" />
-    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
-    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
-    <result column="create_man" property="createMan" jdbcType="VARCHAR" />
-    <result column="modify_man" property="modifyMan" jdbcType="VARCHAR" />
-    <result column="remark" property="remark" jdbcType="VARCHAR" />
-  </resultMap>
+    <resultMap id="BaseResultMap" type="com.honglu.quickcall.user.facade.entity.ResourceConfig" >
+        <id column="resource_config_id" property="resourceConfigId" jdbcType="INTEGER" />
+        <result column="config_num" property="configNum" jdbcType="TINYINT" />
+        <result column="strategy" property="strategy" jdbcType="TINYINT" />
+        <result column="resource_pool_id" property="resourcePoolId" jdbcType="BIGINT" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+        <result column="create_man" property="createMan" jdbcType="VARCHAR" />
+        <result column="modify_man" property="modifyMan" jdbcType="VARCHAR" />
+        <result column="remark" property="remark" jdbcType="VARCHAR" />
+    </resultMap>
+
   <sql id="Base_Column_List" >
     resource_config_id, config_num, strategy, resource_pool_id, create_time, modify_time,
     create_man, modify_man, remark
@@ -26,7 +27,7 @@
   </select>
 
   <!-- 查询资源位配置启用技能 -->
-  <select id="selectEnableSkills" resultType="string">
+  <select id="selectResourceEnableSkills" resultType="java.lang.Long">
     select skill_item_id from resource_config_skill where resource_config_id = #{resourceConfigId} and status = 1
   </select>
 
@@ -35,9 +36,169 @@
     select skill_item_id from resource_config_skill where status = 1
   </select>
 
-  <!-- 查询启用的大V + 技能排名列表 -->
-  <select id="selectEnabledBigvAndSkillRankData" resultType="com.honglu.quickcall.user.facade.entity.CustomerSkill">
-
+  <!-- 查询配置位排除的customerId -->
+  <select id="selectExCustomerIds" resultType="java.lang.Long">
+    SELECT c.customer_id
+    FROM resource_config_ex_cust rc
+    INNER JOIN customer c ON c.app_id = rc.app_id
+    WHERE rc.resource_config_id = #{resourceConfigId}
   </select>
 
+  <!-- 查询启用的大V + 技能排名列表条数 -->
+  <select id="countEnabledBigvAndSkillRankData" resultType="int">
+    SELECT count(tt.customer_id) FROM (
+      SELECT bss.customer_id
+        <if test="skillOrdered == 0">
+          ,(
+          SELECT count(o.order_id) FROM orders o
+          WHERE o.customer_skill_id = bss.customer_skill_id
+                AND o.skill_type = (select si.skill_type from skill_item si where si.id = bss.customer_skill_id)
+                AND o.order_status IN (10, 18, 26, 28)
+          ) AS skillOrdered
+        </if>
+      FROM `bigv_skill_score` bss
+      INNER JOIN customer_skill csk ON csk.customer_skill_id = bss.customer_skill_id AND csk.skill_status = 1 AND csk.switch_status = 1 AND csk.receive_status = 1
+      <include refid="SKILL_EXIST_CONDITON"/>
+      WHERE  1 = 1
+       AND bss.skill_item_id IN
+      <foreach collection="configSkills"  item="configSkill"  open="("  close=")"  separator=","  >
+        #{configSkill}
+      </foreach>
+      <if test="exCustomerIds != null and exCustomerIds.size > 0">
+        and bss.customer_id NOT IN
+        <foreach collection="exCustomerIds"  item="customerId"  open="("  close=")"  separator=","  >
+          #{customerId}
+        </foreach>
+      </if>
+      GROUP BY bss.customer_id
+    ) tt
+    <if test="skillOrdered == 0">
+      where tt.skillOrdered=0
+    </if>
+  </select>
+
+  <!-- 查询启用的大V + 技能排名列表 -->
+  <select id="selectEnabledBigvAndSkillRankData" resultType="com.honglu.quickcall.user.facade.entity.BigvSkillScore">
+    SELECT  tt.customer_id as customerId, tt.customer_skill_id as customerSkillId  FROM (
+      SELECT bss.customer_id, bss.customer_skill_id, bss.skill_item_id,
+            sum(bss.score_total) as scoreTotal
+          <if test="skillOrdered == 0">
+            ,(SELECT count(o.order_id) FROM orders o
+                WHERE o.customer_skill_id = bss.customer_skill_id
+                      AND o.skill_type = (select si.skill_type from skill_item si where si.id = bss.customer_skill_id)
+                      AND o.order_status IN (10, 18, 26, 28)
+            ) AS skillOrdered
+          </if>
+      FROM `bigv_skill_score` bss
+      INNER JOIN customer_skill csk ON csk.customer_skill_id = bss.customer_skill_id AND csk.skill_status = 1 AND csk.switch_status = 1 AND csk.receive_status = 1
+          <include refid="SKILL_EXIST_CONDITON"/>
+      WHERE
+          bss.skill_item_id IN
+          <foreach collection="configSkills"  item="configSkill"  open="("  close=")"  separator=","  >
+            #{configSkill}
+          </foreach>
+          <if test="exCustomerIds != null and exCustomerIds.size > 0">
+            and bss.customer_id NOT IN
+            <foreach collection="exCustomerIds"  item="customerId"  open="("  close=")"  separator=","  >
+              #{customerId}
+            </foreach>
+          </if>
+      GROUP BY bss.customer_id
+      <if test="skillOrdered == 0">
+        ORDER BY skillOrdered asc, scoreTotal DESC
+      </if>
+      <if test="skillOrdered != 0">
+        ORDER BY scoreTotal DESC
+      </if>
+      LIMIT #{beginIndex},#{endIndex}
+    ) tt
+    <if test="skillOrdered == 0">
+      where tt.skillOrdered=0
+    </if>
+    ORDER BY RAND() LIMIT 1
+  </select>
+
+  <!-- 随机从推荐池里面查询一个大V（未被下单的） -->
+  <select id="selectRandomBigvFromResourcePool" resultType="com.honglu.quickcall.user.facade.entity.BigvSkillScore">
+      SELECT t.customer_id as customerId, t.customer_skill_id as customerSkillId FROM(
+      SELECT pc.customer_id, csk.customer_skill_id
+          <if test="skillOrdered == 0">
+              ,(SELECT count(o.order_id) FROM orders o
+                  WHERE o.customer_skill_id = csk.customer_skill_id
+                        AND o.skill_type = (select si.skill_type from skill_item si where si.id = csk.customer_skill_id)
+                        AND o.order_status IN (10, 18, 26, 28)
+              ) AS skillOrdered
+          </if>
+      FROM resource_pool_customer pc
+      INNER JOIN customer_skill csk ON csk.customer_id = pc.customer_id AND csk.skill_status = 1
+      AND csk.skill_item_id IN
+          <foreach collection="configSkills"  item="configSkill"  open="("  close=")"  separator=","  >
+            #{configSkill}
+          </foreach>
+      AND csk.switch_status = 1 AND csk.receive_status = 1
+          <include refid="SKILL_EXIST_CONDITON"/>
+      WHERE pc.resource_pool_id = #{resourcePoolId}
+          <if test="exCustomerIds != null and exCustomerIds.size > 0">
+            and pc.customer_id NOT IN
+            <foreach collection="exCustomerIds"  item="customerId"  open="("  close=")"  separator=","  >
+              #{customerId}
+            </foreach>
+          </if>
+      AND pc.`status` = 1
+      ) t
+      <if test="skillOrdered == 0">
+        where t.skillOrdered = 0
+      </if>
+      ORDER BY RAND() LIMIT 1
+  </select>
+
+    <!-- 根据大V排名查询大V数据 -->
+    <select id="selectRankBigvListBySkillItemId" resultType="com.honglu.quickcall.user.facade.entity.CustomerSkill">
+        SELECT
+            bss.customer_id as customerId, bss.customer_skill_id as customerSkillId, bss.skill_item_id as skillItemId,
+            csk.skill_name as skillName, csk.discount_price as discountRate, csk.service_unit as serviceUnit,
+            csc.skill_voice_url as skillVoiceUrl, csc.skill_voice_time as skillVoiceTime,
+            si.back_color as skillBackColor, si.home_black_color as skillHomeBackColor, si.font_color as skillFontColor,
+            c.nick_name as customerNickName, c.sex as customerSex, c.birthday as customerBirthday,
+            bss.score_total
+            ,(SELECT count(o.order_id) FROM orders o
+              WHERE o.customer_skill_id = bss.customer_skill_id
+                    AND o.skill_type = (select si.skill_type from skill_item si where si.id = bss.customer_skill_id)
+                    AND o.order_status IN (10, 18, 26, 28)
+            ) AS skillOrdered
+        FROM bigv_skill_score bss
+        INNER JOIN customer_skill csk ON csk.customer_skill_id = bss.customer_skill_id AND csk.skill_status = 1
+                    <include refid="SKILL_EXIST_CONDITON"/>
+        LEFT JOIN customer_skill_certify csc ON csc.certify_id = csk.certify_id
+        LEFT JOIN skill_item si ON si.id = bss.skill_item_id
+        LEFT JOIN customer c ON c.customer_id = bss.customer_id
+        WHERE bss.skill_item_id = #{skillItemId}
+        ORDER BY skillOrdered ASC, bss.score_total DESC
+        LIMIT 0, 4
+    </select>
+
+    <sql id="SKILL_EXIST_CONDITON">
+        <if test="weekIndex == 1" >
+            AND ( csk.monday = 0  or (csk.monday = 1  and  csk.end_time_str <![CDATA[  > ]]> #{endTimeStr,jdbcType=VARCHAR}) )
+        </if>
+        <if test="weekIndex == 2" >
+            AND ( csk.tuesday = 0  or (csk.tuesday = 1  and  csk.end_time_str <![CDATA[  > ]]> #{endTimeStr,jdbcType=VARCHAR}) )
+        </if>
+        <if test="weekIndex == 3" >
+            AND ( csk.wednesday = 0  or (csk.wednesday = 1  and  csk.end_time_str <![CDATA[  > ]]> #{endTimeStr,jdbcType=VARCHAR}) )
+        </if>
+        <if test="weekIndex == 4" >
+            AND ( csk.thursday = 0  or (csk.thursday = 1  and  csk.end_time_str <![CDATA[  > ]]> #{endTimeStr,jdbcType=VARCHAR}) )
+        </if>
+        <if test="weekIndex == 5" >
+            AND ( csk.friday = 0  or (csk.friday = 1  and  csk.end_time_str <![CDATA[  > ]]> #{endTimeStr,jdbcType=VARCHAR}) )
+        </if>
+        <if test="weekIndex == 6" >
+            AND ( csk.saturday = 0  or (csk.saturday = 1  and  csk.end_time_str <![CDATA[  > ]]> #{endTimeStr,jdbcType=VARCHAR}) )
+        </if>
+        <if test="weekIndex == 7" >
+            AND ( csk.sunday = 0  or (csk.sunday = 1  and  csk.end_time_str <![CDATA[  > ]]> #{endTimeStr,jdbcType=VARCHAR}) )
+        </if>
+
+    </sql>
 </mapper>

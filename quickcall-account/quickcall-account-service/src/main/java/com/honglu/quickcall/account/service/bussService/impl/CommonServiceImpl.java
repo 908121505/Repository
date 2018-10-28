@@ -144,7 +144,10 @@ public class CommonServiceImpl implements CommonService {
 		record.setOrderStatus(orderStatus);
 		record.setOrderId(orderId);
 		record.setModifyTime(new Date());
-		record.setStartTime(startTime);
+		Calendar  cal = Calendar.getInstance();
+		cal.setTime(startTime);
+		cal.add(Calendar.MINUTE, 5);
+		record.setStartTime(cal.getTime());
 		if(endTime != null){
 			record.setExpectEndTime(endTime);
 		}
@@ -235,6 +238,7 @@ public class CommonServiceImpl implements CommonService {
 			retList.add(OrderSkillConstants.ORDER_STATUS_CANCEL_NOT_START);
 			retList.add(OrderSkillConstants.ORDER_STATUS_CANCLE_USER_SELF_BEFORE_SERVICE);
 			retList.add(OrderSkillConstants.ORDER_STATUS_CANCEL_USER_NOT_ACCEPCT);
+			retList.add(OrderSkillConstants.ORDER_STATUS_CANCEL_BEFORE_APPOINT_TIME);
 		
 		
 		}else if(OrderSkillConstants.ORDER_STATUS_PARAM_PING_JIA == orderStatusParam){
@@ -289,6 +293,7 @@ public class CommonServiceImpl implements CommonService {
 			retList.add(OrderSkillConstants.ORDER_STATUS_CANCEL_NOT_START);
 			retList.add(OrderSkillConstants.ORDER_STATUS_CANCLE_USER_SELF_BEFORE_SERVICE);
 			retList.add(OrderSkillConstants.ORDER_STATUS_CANCEL_USER_NOT_ACCEPCT);
+			retList.add(OrderSkillConstants.ORDER_STATUS_CANCEL_BEFORE_APPOINT_TIME);
 			
 		}else if(OrderSkillConstants.ORDER_STATUS_PARAM_PING_JIA == orderStatusParam){
 			retList.add(999);

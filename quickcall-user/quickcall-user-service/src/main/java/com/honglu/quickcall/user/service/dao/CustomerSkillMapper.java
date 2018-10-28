@@ -1,6 +1,8 @@
 package com.honglu.quickcall.user.service.dao;
 
 import com.honglu.quickcall.user.facade.entity.CustomerSkill;
+import com.honglu.quickcall.user.facade.vo.DaVinfoVO;
+
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -51,4 +53,37 @@ public interface CustomerSkillMapper {
      * @return
      */
     CustomerSkill queryCustomerSkillByCustomerId(@Param("customerId") Long customerId);
+
+    /**
+     * 根据客户ID查客户信息
+     * @param customerId
+     * @return
+     */
+    CustomerSkill queryCustomerSkill(@Param("customerId") Long customerId);
+    
+	 /**
+     * 分类显示大V列表
+     * @param skillItemId
+     * @param start
+     * @param size
+     * @return
+     */
+    List<DaVinfoVO> queryCustomerListBySkillItem(@Param("skillItemId") Long skillItemId,
+    		@Param("start") Integer start, @Param("size") Integer size);
+
+    /**
+     * 根据客户技能ID查询返回给前端的大V数据
+     * @param customerSkillId
+     * @return
+     */
+    CustomerSkill selectBigvInfoVoByCustomerSkillId(Long customerSkillId);
+
+    /**
+     * 技能订单数
+     * @param customerId
+     * @param customerSkillId
+     * @return
+     */
+    int selectSkillOrderNo(@Param("customerId") Long customerId, @Param("customerSkillId") Long customerSkillId);
+
 }

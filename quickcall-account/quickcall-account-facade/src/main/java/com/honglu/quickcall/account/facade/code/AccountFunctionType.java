@@ -30,6 +30,8 @@ public interface AccountFunctionType {
     //账户相关操作从 002200 - 002299
     //创建账户
     String CreateUserAccount = "002200";
+    //每个用户每天只弹一次窗口
+    String FirstOnceWindowEverthDay = "022202";
     //入账
     String InAccount  ="002201";
     //出账
