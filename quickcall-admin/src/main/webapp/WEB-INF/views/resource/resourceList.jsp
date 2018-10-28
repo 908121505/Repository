@@ -39,13 +39,17 @@
 
 		//表格的初始化
 		$(document).ready(function() {
+
 			var table = $('#example').initTable({
 				sAjaxSource:"resource/initTable.htm",
 				aoColumns: [
 		            { 
-		              "data": "id",
-		              "sTitle":"序号",
-		              'sClass':"text-center"
+						  "data": "index",
+						  "sTitle":"序号",
+						  'sClass':"text-center",
+						  "mRender": function (data, type, full, meta) {
+							  return meta.row+1 + meta.settings._iDisplayStart;
+						  }
 		            },
 		            { 
 		               "data": "resourceName",
@@ -82,14 +86,14 @@
                        aoData.push({ "name": "resourceName", "value": $("#resourceNameSearch").val() } );
 				 } ,
                  aoColumnDefs : [{
-					"aTargets" : 6,
+                     "aTargets" : 6,
                      "mRender": function (data, type, row) {
                          var detail = "", del = "";
                          detail = "<a href='#' onclick='addAndUpdateRow(\"" + row.id + "\")' data-toggle='modal' class='padding-right-small label label-success'><i class='glyphicon glyphicon-edit'></i>编辑</a>";
                          del = "<a href='#' onclick='deleteRow(\"" + row.id + "\",\"" + row.activeStatus + "\")' data-toggle='modal' class='label label label-danger'><i class='glyphicon glyphicon-trash'></i>删除</a>";
                          return detail + "&nbsp;" + del;
                      }
-			}]
+                 }]
 	            
 			});
 			
