@@ -5,9 +5,13 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.alibaba.dubbo.common.json.JSON;
 import com.honglu.quickcall.account.facade.constants.OrderSkillConstants;
 import com.honglu.quickcall.account.facade.entity.Order;
 import com.honglu.quickcall.account.facade.vo.OrderTempResponseVO;
@@ -16,7 +20,10 @@ import com.honglu.quickcall.account.service.dao.OrderMapper;
 import com.honglu.quickcall.common.api.code.BizCode;
 import com.honglu.quickcall.common.api.exchange.CommonResponse;
 import com.honglu.quickcall.common.api.util.DateUtils;
+import com.honglu.quickcall.common.api.util.JedisUtil;
+import com.honglu.quickcall.common.api.util.RedisKeyConstants;
 import com.honglu.quickcall.user.facade.business.UserPushAppMsgBusiness;
+import com.honglu.quickcall.user.facade.entity.Customer;
 import com.honglu.quickcall.user.facade.enums.PushAppMsgTypeEnum;
 import com.honglu.quickcall.user.facade.exchange.request.PushAppMsgRequest;
 
@@ -314,6 +321,25 @@ public class CommonServiceImpl implements CommonService {
 		record.setAppayEndTime(cancelTime);
 		//修改订单状态为：已支付
 		orderMapper.updateByPrimaryKeySelective(record);
+		
+	}
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(CommonServiceImpl.class);
+
+
+	@Override
+	public Customer getPhoneByCustomerId(Long customerId) {
+		String  custStr = JedisUtil.get(RedisKeyConstants.USER_CUSTOMER_INFO+customerId) ;
+		if(StringUtils.isNotBlank(custStr)){
+			try {
+				Customer customer = JSON.parse(custStr, Customer.class);
+				return customer;
+				
+			} catch (Exception e) {
+				LOGGER.error("从Redis中获取客户信息发生异常，异常信息：",e);
+			}
+		}
+		return null;
 		
 	}
 
