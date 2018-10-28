@@ -13,7 +13,7 @@
 		<div class="modal-header">
 			<button type="button" class="close" data-dismiss="modal"
 				aria-hidden="true">X</button>
-			<h3 id="myModalLabel">价格等级详情</h3>
+			<h3 id="myModalLabel">接单详情</h3>
 		</div>
 		<div class="modal-body" style="max-height: 700px; overflow-y: auto;"  id = "editBody">
 			<form class="form-horizontal" method="post" id="editOrderForm" name="editOrderForm" role="form"
@@ -83,7 +83,7 @@
 						</select>
 					</div>
 				</div>
-				<div class="form-group" id="remarkReasonDev">
+				<div class="form-group" id="remarkReasonDev" hidden="hidden">
 					<label class="col-sm-3 control-label">取消原因<font color="red">&nbsp;*</font></label>
 					<div class="col-sm-6">
 						<input type="text" placeholder="如果状态选取消，请写上取消原因" id="remarkReason" class="form-control"  name="remarkReason" value="${entity.remarkReason}">
@@ -108,4 +108,21 @@
         return true;
     }
 
+</script>
+
+<script language='javascript'>
+    $(function(){
+        $(document).ready(function(){
+            $("#orderStatus").change(function(){
+                var hideSelect = $(this).val();
+                if(hideSelect == 4||hideSelect == 6||
+                    hideSelect == 12||hideSelect == 14||
+                    hideSelect == 16||hideSelect == 20){
+                    $("#remarkReasonDev").show().addClass("show");
+                }else{
+                    $("#remarkReasonDev").hide().removeClass("show");
+                }
+            })
+        })
+    });
 </script>

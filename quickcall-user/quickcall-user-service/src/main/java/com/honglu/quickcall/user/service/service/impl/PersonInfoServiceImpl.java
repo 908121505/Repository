@@ -131,8 +131,10 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 		List<SearchPersonListVO> customerList = null;
 		// 匹配搜索关键字是模糊搜索还是精准搜索
 		if (pattern.matcher(keyword).matches()) {
+			//精准搜索
 			customerList = customerMapper.selectPreciseSearch(keyword, currentCustomer);
 		} else {
+			//模糊搜索
 			customerList = customerMapper.selectFuzzySearch(keyword, currentCustomer, params.getPageIndex(),
 					params.getPageSize());
 		}
@@ -574,13 +576,16 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 
 	@Override
 	public CommonResponse checkEachAttention(CheckEachAttentionRequest request) {
+		//查询关注状态
 		int n = fansMapper.queryIsFollow(request.getFansId(), request.getAttendedId());
 		int n1 = fansMapper.queryIsFollow(request.getAttendedId(), request.getFansId());
+		//双方关注状态算出互相关注状态
 		int status = n & n1;
 		status = status == 0 ? 0 : 1;
 		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("AttentionStatus", n1 == 0?0:1);
+		map.put("attentionStatus", n1 == 0?0:1);
 		map.put("eachAttentionStatus", status);
+		logger.info("查询 FansId="+request.getFansId()+";AttendedId="+request.getAttendedId()+";互相关注状态成功");
 		return ResultUtils.resultSuccess(map);
 	}
 
@@ -641,30 +646,6 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 			}
 		}
 
-		// //已经解锁的技能列表
-		// List<MySkillVO> haveSkill = new ArrayList<MySkillVO>();
-		// //未解锁的技能列表
-		// List<MySkillVO> noHaveSkill = new ArrayList<MySkillVO>();
-		// MySkillVO m1 = new
-		// MySkillVO("甜蜜互动","http://test-guanjia.oss-cn-shanghai.aliyuncs.com/voice/banner/1539583182452.png",1,1809221430063474300L,1);
-		// MySkillVO m2 = new
-		// MySkillVO("午夜畅聊","http://test-guanjia.oss-cn-shanghai.aliyuncs.com/voice/banner/1539583354838.png",2,1809221430063474300L,"http://test-guanjia.oss-cn-shanghai.aliyuncs.com/voice/user/audio/db91943b9bb04d6b97127dce1a37a9fe.mp3",new
-		// BigDecimal(8.0),1);
-		// MySkillVO m3 = new
-		// MySkillVO("游戏互动","http://test-guanjia.oss-cn-shanghai.aliyuncs.com/voice/banner/1539583368153.png",1,1809221430063474300L,1);
-		// MySkillVO m4 = new
-		// MySkillVO("哄睡","http://test-guanjia.oss-cn-shanghai.aliyuncs.com/voice/banner/1539583182452.png",0,1809221430063474300L,0);
-		// MySkillVO m5 = new
-		// MySkillVO("声优聊天","http://test-guanjia.oss-cn-shanghai.aliyuncs.com/voice/banner/1539583182452.png",0,1809221430063474300L,1);
-		// MySkillVO m6 = new
-		// MySkillVO("哄睡","http://test-guanjia.oss-cn-shanghai.aliyuncs.com/voice/banner/1539583182452.png",0,1809221430063474300L,1);
-		// haveSkill.add(m1);
-		// haveSkill.add(m2);
-		// noHaveSkill.add(m3);
-		// noHaveSkill.add(m4);
-		// noHaveSkill.add(m5);
-		// noHaveSkill.add(m6);
-		// Map<String,Object> map = new HashMap<String,Object>();
 		logger.info("用户编号为：" + params.getCustomerId() + "查询我的技能成功");
 		map.put("unlockList", haveSkill);
 		map.put("lockList", noHaveSkill);
@@ -709,6 +690,7 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 		} else {
 			throw new BizException(AccountBizReturnCode.JdbcError, "操作数据库异常");
 		}
+		logger.info("上传认证信息成功,customerId="+params.getCustomerId()+";skillItemId="+params.getSkillItemId());
 		return commonResponse;
 	}
 
