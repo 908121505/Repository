@@ -146,6 +146,31 @@
       ORDER BY RAND() LIMIT 1
   </select>
 
+    <!-- 根据大V排名查询大V数据 -->
+    <select id="selectRankBigvListBySkillItemId" resultType="com.honglu.quickcall.user.facade.entity.CustomerSkill">
+        SELECT
+            bss.customer_id as customerId, bss.customer_skill_id as customerSkillId, bss.skill_item_id as skillItemId,
+            cs.skill_name as skillName, cs.discount_price as discountRate, cs.service_unit as serviceUnit,
+            csc.skill_voice_url as skillVoiceUrl, csc.skill_voice_time as skillVoiceTime,
+            si.back_color as skillBackColor, si.home_black_color as skillHomeBackColor, si.font_color as skillFontColor,
+            c.nick_name as customerNickName, c.sex as customerSex, c.birthday as customerBirthday,
+            bss.score_total
+            ,(SELECT count(o.order_id) FROM orders o
+              WHERE o.customer_skill_id = bss.customer_skill_id
+                    AND o.skill_type = (select si.skill_type from skill_item si where si.id = bss.customer_skill_id)
+                    AND o.order_status IN (10, 18, 26, 28)
+            ) AS skillOrderd
+        FROM bigv_skill_score bss
+        INNER JOIN customer_skill cs ON cs.customer_skill_id = bss.customer_skill_id AND cs.skill_status = 1
+                    <include refid="SKILL_EXIST_CONDITON"/>
+        LEFT JOIN customer_skill_certify csc ON csc.certify_id = cs.certify_id
+        LEFT JOIN skill_item si ON si.id = bss.skill_item_id
+        LEFT JOIN customer c ON c.customer_id = bss.customer_id
+        WHERE bss.skill_item_id = #{skillItemId}
+        ORDER BY skillOrderd ASC, bss.score_total DESC
+        LIMIT 0, 4
+    </select>
+
   <sql id="SKILL_EXIST_CONDITON">
     <if test="weekIndex == 1" >
       AND ( cs.monday = 0  or (cs.monday = 1  and  cs.end_time_str <![CDATA[  > ]]> #{cs.endTimeStr,jdbcType=VARCHAR}) )

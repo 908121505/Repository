@@ -87,7 +87,11 @@ public interface ResourceConfigMapper {
      * 根据大V排名查询大V数据
      *
      * @param skillItemId
+     * @param weekIndex
+     * @param endTimeStr
      * @return
      */
-    List<CustomerSkill> selectRankBigvListBySkillItemId(@Param("skillItemId") Long skillItemId);
+    List<CustomerSkill> selectRankBigvListBySkillItemId(@Param("skillItemId") Long skillItemId,
+                                                        @Param("weekIndex") Integer weekIndex,
+                                                        @Param("endTimeStr") String endTimeStr);
 }
