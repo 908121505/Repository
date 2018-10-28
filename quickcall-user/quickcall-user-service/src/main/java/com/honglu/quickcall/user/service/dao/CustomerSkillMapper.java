@@ -77,4 +77,13 @@ public interface CustomerSkillMapper {
      * @return
      */
     CustomerSkill selectBigvInfoVoByCustomerSkillId(Long customerSkillId);
+
+    /**
+     * 技能订单数
+     * @param customerId
+     * @param customerSkillId
+     * @return
+     */
+    int selectSkillOrderNo(@Param("customerId") Long customerId, @Param("customerSkillId") Long customerSkillId);
+
 }
