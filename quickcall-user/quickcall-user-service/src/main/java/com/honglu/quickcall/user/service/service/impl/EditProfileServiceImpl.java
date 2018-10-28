@@ -48,7 +48,6 @@ import com.honglu.quickcall.user.service.dao.CustomerMapper;
 import com.honglu.quickcall.user.service.dao.InterestMapper;
 import com.honglu.quickcall.user.service.dao.SensitivityWordMapper;
 import com.honglu.quickcall.user.service.service.EditProfileService;
-import com.honglu.quickcall.user.service.util.CountAge;
 import com.honglu.quickcall.user.service.util.JsonParseUtil;
 
 import cn.jiguang.commom.utils.StringUtils;
