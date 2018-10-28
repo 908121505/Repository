@@ -171,6 +171,9 @@ public class ScoreRankServiceImpl implements ScoreRankService {
      * @return
      */
     private static BigDecimal calculateEvaluateScore(Integer evaluateStars) {
+        if(evaluateStars == null){
+            evaluateStars = 0;
+        }
         return new BigDecimal(evaluateStars
                 * ScoreRankConstants.EVALUATION_LEVEL_WEIGHT_MAP.get(evaluateStars)
                 * ScoreRankConstants.PLATFORM_ORDER_EVALUATION_WEIGHT);
