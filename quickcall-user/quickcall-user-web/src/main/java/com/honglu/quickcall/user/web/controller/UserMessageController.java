@@ -78,7 +78,7 @@ public class UserMessageController {
     @RequestMapping(value = "/getBookingMessage", method = RequestMethod.POST)
     @ResponseBody
     public WebResponseModel getBookingMessage(BookingMessageQueryRequest request) {
-        if (StringUtils.isBlank(String.valueOf(request.getReceiverId()))) {
+        if (StringUtils.isBlank(String.valueOf(request.getCustomerId()))) {
             WebResponseModel response = new WebResponseModel();
             response.setCode(UserBizReturnCode.paramError.code());
             response.setMsg(UserBizReturnCode.paramError.desc());

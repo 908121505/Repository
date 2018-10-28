@@ -53,6 +53,13 @@ public interface CustomerSkillMapper {
      * @return
      */
     CustomerSkill queryCustomerSkillByCustomerId(@Param("customerId") Long customerId);
+
+    /**
+     * 根据客户ID查客户信息
+     * @param customerId
+     * @return
+     */
+    CustomerSkill queryCustomerSkill(@Param("customerId") Long customerId);
     
 	 /**
      * 分类显示大V列表

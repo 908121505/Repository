@@ -14,14 +14,14 @@ public class BookingMessageQueryRequest extends UserCenterRequest {
     /**
      * 消息接受者（大V用户ID）
      */
-    private Long receiverId;
+    private Long customerId;
 
-    public Long getReceiverId() {
-        return receiverId;
+    public Long getCustomerId() {
+        return customerId;
     }
 
-    public void setReceiverId(Long receiverId) {
-        this.receiverId = receiverId;
+    public void setCustomerId(Long customerId) {
+        this.customerId = customerId;
     }
 
     @Override
