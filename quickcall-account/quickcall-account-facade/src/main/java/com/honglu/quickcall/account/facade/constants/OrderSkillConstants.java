@@ -54,6 +54,7 @@ public interface OrderSkillConstants {
 	
 	public  static final  String  IM_MSG_CONTENT_DAV_REFUSE_TO_CUST = "对方已接单，快去找ta沟通开始时间吧~";
 	public  static final  String  IM_MSG_CONTENT_DAV_REFUSE_TO_DV = "您已接单，快去联系用户协商开始时间吧~";
+	public  static final  String  IM_MSG_CONTENT_DAV_CUST_CONFIRM_TO_DV = "对方已同意您的完成服务请求";
 	
 	public  static final  String  IM_MSG_CONTENT_DAV_CONFIRM_TO_CUST = "很抱歉，对方拒绝了您的订单，音符将会返还至您的账户";
 	public  static final  String  IM_MSG_CONTENT_DAV_CONFIRM_TO_DAV = "您已拒接，订单已取消";
