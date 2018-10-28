@@ -1,6 +1,7 @@
 package com.honglu.quickcall.user.service.dao;
 
 
+import com.honglu.quickcall.user.facade.entity.MessageCustomer;
 import com.honglu.quickcall.user.facade.vo.MessageCustomerVO;
 import org.apache.ibatis.annotations.Param;
 
@@ -28,5 +29,12 @@ public interface MessageCustomerMapper {
      * @return
      */
     int updateByMessageType(@Param("messageType")Integer messageType, @Param("customerId")Long customerId);
+
+    /**
+     * 保存
+     * @param messageCustomer
+     * @return
+     */
+    int insertMessage(MessageCustomer messageCustomer);
 
 }

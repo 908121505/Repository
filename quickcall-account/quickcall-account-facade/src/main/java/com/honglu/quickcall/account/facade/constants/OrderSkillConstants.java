@@ -32,12 +32,12 @@ public interface OrderSkillConstants {
 	
 	
 	////////////////////////IM消息内容//////////////////////////
-	public  static final  String  IM_MSG_CONTENT_RECEIVE_ORDER = "有人下单啦";
+	public  static final  String  IM_MSG_CONTENT_RECEIVE_ORDER = "您有新的订单，请及时查看";
 	public  static final  String  IM_MSG_CONTENT_CANCEL_ORDER = "订单取消啦";
 	public  static final  String  IM_MSG_CONTENT_USER_CONFIRM_FINISH= "订单完成啦";
 	public  static final  String  IM_MSG_CONTENT_USER_CONFIRM_START_SERVICE = "用户同意开始服务啦";
-	public  static final  String  IM_MSG_CONTENT_DAV_REFUSE = "大V接单啦";
-	public  static final  String  IM_MSG_CONTENT_DAV_CONFIRM = "大V拒绝接单啦";
+	public  static final  String  IM_MSG_CONTENT_DAV_REFUSE = "对方已接单，快去找TA吧~";
+	public  static final  String  IM_MSG_CONTENT_DAV_CONFIRM = "很抱歉对方拒绝了您的订单，音符将会返还至您的账户";
 	public  static final  String  IM_MSG_CONTENT_DAV_START_SERVICE = "大V开始服务啦";
 	public  static final  String  IM_MSG_CONTENT_CUST_FINISH = "用户完成服务啦";
 	public  static final  String  IM_MSG_CONTENT_DAV_FINISH = "大V完成服务啦";
@@ -93,6 +93,8 @@ public interface OrderSkillConstants {
 	public  static final  Integer  HALF_HOUR_SECONDS = 1800;
 	/**一小时秒数：3600秒*/
 	public  static final  Integer  ONE_HOUR_SECONDS = 3600;
+	/**服务单位：一小时*/
+	public  static final  String  SERVICE_UNIT_ONE_HOUR = "小时";
 	/**服务单位：一小时*/
 	public  static final  String  SERVICE_UNIT_HOUR = "一小时";
 	/**服务单位：半小时*/

@@ -94,6 +94,11 @@ public class OrderService {
 			if (status!=null){
                 vo.setOrderStatusVal(status.getDesc());
             }
+            if (StringUtils.isNotBlank(vo.getOrderAmount())){
+            	double amount = Double.parseDouble(vo.getOrderAmount());
+				double amountSum = Math.ceil(amount);
+            	vo.setOrderAmount(String.valueOf(amountSum));
+			}
 		}
 		String sEcho = (String) parameters.get("sEcho");
 		int total = baseManager.get("Order.selectCount", paramMap);

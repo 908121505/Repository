@@ -99,6 +99,9 @@ id,	customer_id,	skill_item_id,	order_total,	score_total,	create_time,	modify_ti
 			<if test="skillItemId != null">
 				 skill_item_id,
 			</if>
+			<if test="customerSkillId != null">
+				 customer_skill_id,
+			</if>
 			<if test="orderTotal != null">
 				 order_total,
 			</if>
@@ -130,6 +133,9 @@ id,	customer_id,	skill_item_id,	order_total,	score_total,	create_time,	modify_ti
 			</if>
 			<if test="skillItemId != null">
 				#{skillItemId},
+			</if>
+			<if test="customerSkillId != null">
+				 #{customerSkillId},
 			</if>
 			<if test="orderTotal != null">
 				 #{orderTotal},
