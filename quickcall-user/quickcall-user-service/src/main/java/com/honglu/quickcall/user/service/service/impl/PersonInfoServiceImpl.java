@@ -579,7 +579,7 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 		int status = n & n1;
 		status = status == 0 ? 0 : 1;
 		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("AttentionStatus", n1 == 0?0:1);
+		map.put("attentionStatus", n1 == 0?0:1);
 		map.put("eachAttentionStatus", status);
 		return ResultUtils.resultSuccess(map);
 	}
@@ -870,11 +870,13 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 		Integer currentLevelExperience = customerMapper.getGradeExperienceByLevelNo(customer.getCustomerLevel());
 		customerLevelVO.setCurrentLevelExperience(currentLevelExperience);
 		// 查询下一等级经验值
-		Integer nextLevelExperience = customerMapper.getGradeExperienceByLevelNo(customer.getCustomerLevel());
+		Integer nextLevelExperience = customerMapper.getGradeExperienceByLevelNo(customer.getCustomerLevel() + 1);
 		customerLevelVO.setNextLevelExperience(nextLevelExperience);
 
 		// 距离下一级所需经验值
-		customerLevelVO.setNeedExperienceNum(nextLevelExperience - customer.getCumulateExperience());
+		if(nextLevelExperience != null){
+			customerLevelVO.setNeedExperienceNum(nextLevelExperience - customer.getCumulateExperience());
+		}
 
 		// 查询等级特权 ADUAN -- 一期不做
 

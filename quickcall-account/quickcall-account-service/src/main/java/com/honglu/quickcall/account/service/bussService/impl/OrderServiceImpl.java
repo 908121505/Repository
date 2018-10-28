@@ -457,6 +457,9 @@ public class OrderServiceImpl implements IOrderService {
 			}else if(OrderSkillConstants.ORDER_STATUS_WAITING_START_DA_APPAY_START_SERVICE  == oldOrderStatus){
 				//订单状态8.大V接受订单之后开始之前用户自主取消
 				orderStatus = OrderSkillConstants.ORDER_STATUS_CANCLE_USER_SELF_BEFORE_SERVICE;
+			}else if(OrderSkillConstants.ORDER_STATUS_GOING_WAITING_START  == oldOrderStatus){
+				//订单状态23.取消（叫醒预约时间之前取消）
+				orderStatus = OrderSkillConstants.ORDER_STATUS_CANCEL_BEFORE_APPOINT_TIME;
 			}else{
 				throw new BizException(AccountBizReturnCode.ORDER_STATUS_ERROR, "订单状态异常");
 			}
@@ -535,11 +538,45 @@ public class OrderServiceImpl implements IOrderService {
 		OrderDetailForIMVO   orderDetailForIMVO =  new OrderDetailForIMVO();
 		//判断服务方可不可以下单
 		
+		Long  serviceId =  request.getServiceId();
+		Long  customerId =  request.getCustomerId();
+		//判断双方是否存在订单关系
+		List<Integer> statusList = new ArrayList<Integer>();
+		statusList.add(OrderSkillConstants.ORDER_STATUS_WAITING_RECEIVE);//待接单
+		statusList.add(OrderSkillConstants.ORDER_STATUS_WAITING_START);//待开始
+		statusList.add(OrderSkillConstants.ORDER_STATUS_WAITING_START_DA_APPAY_START_SERVICE);//大V发起开始服务
+		statusList.add(OrderSkillConstants.ORDER_STATUS_GOING_WAITING_START);//进行中（大V发起完成服务）
+		statusList.add(OrderSkillConstants.ORDER_STATUS_GOING_USER_ACCEPCT);//进行中
+		statusList.add(OrderSkillConstants.ORDER_STATUS_GOING_DAV_APPAY_FINISH);//进行中（大V发起完成服务）
+		//判断双方有没有订单关系
+		Order  order = orderMapper.queryOrderByCustomerIdAndServiceId(customerId,serviceId,statusList);
+		
+		if(order == null){
+			order = orderMapper.queryOrderByCustomerIdAndServiceId(serviceId,customerId,statusList);
+		}
+		
+		/****1.必须首先判断双方存在订单关系 */
+		if(order != null){
+			orderDetailForIMVO.setRetCode(OrderSkillConstants.IM_RETCODE_ORDER_EXIST);//不可下单
+			OrderIMVO orderIMVO = new OrderIMVO();
+			Long  customerSkillId =  order.getCustomerSkillId();
+			orderIMVO = customerSkillMapper.selectCustSkillItem(customerSkillId);
+			orderIMVO.setOrderStatus(order.getOrderStatus());
+			orderIMVO.setOrderId(order.getOrderId());
+			orderIMVO.setServicePrice(order.getServicePrice());
+			orderIMVO.setServiceUnit(order.getServiceUnit());
+			orderDetailForIMVO.setServiceId(order.getServiceId());
+			orderDetailForIMVO.setCustomerId(order.getCustomerId());
+			orderDetailForIMVO.setOrderIMVO(orderIMVO);
+			commonResponse.setData(orderDetailForIMVO);
+			return commonResponse ;
+		}
+		
+		
 		Integer   weekIndex = DateUtils.getDayOfWeek();
 		Integer   skillSwitch = 1 ;
 		String  endTimeStr = DateUtils.formatDateHHSS(new Date()).replaceAll(":", "") ;
-		Long  serviceId =  request.getServiceId();
-		Long  customerId =  request.getCustomerId();
+	
 		
 		orderDetailForIMVO.setServiceId(serviceId);
 		orderDetailForIMVO.setCustomerId(customerId);
@@ -556,32 +593,7 @@ public class OrderServiceImpl implements IOrderService {
 		
 		//用户技能存在，则返回技能相关信息
 		
-		//判断双方是否存在订单关系
-		List<Integer> statusList = new ArrayList<Integer>();
-		statusList.add(OrderSkillConstants.ORDER_STATUS_WAITING_RECEIVE);//待接单
-		statusList.add(OrderSkillConstants.ORDER_STATUS_WAITING_START);//待开始
-		statusList.add(OrderSkillConstants.ORDER_STATUS_WAITING_START_DA_APPAY_START_SERVICE);//大V发起开始服务
-		statusList.add(OrderSkillConstants.ORDER_STATUS_GOING_USER_ACCEPCT);//进行中
-		statusList.add(OrderSkillConstants.ORDER_STATUS_GOING_DAV_APPAY_FINISH);//进行中（大V发起完成服务）
-		//判断双方有没有订单关系
-		Order  order = orderMapper.queryOrderByCustomerIdAndServiceId(customerId,serviceId,statusList);
-		
-		//双方存在订单关系
-		if(order != null){
-			orderDetailForIMVO.setRetCode(OrderSkillConstants.IM_RETCODE_ORDER_EXIST);//不可下单
-			OrderIMVO orderIMVO = new OrderIMVO();
-			Long  customerSkillId =  order.getCustomerSkillId();
-			orderIMVO = customerSkillMapper.selectCustSkillItem(customerSkillId);
-			orderIMVO.setOrderStatus(order.getOrderStatus());
-			orderIMVO.setOrderId(order.getOrderId());
-			orderIMVO.setServicePrice(order.getServicePrice());
-			orderIMVO.setServiceUnit(order.getServiceUnit());
-			orderDetailForIMVO.setServiceId(order.getServiceId());
-			orderDetailForIMVO.setCustomerId(order.getCustomerId());
-			orderDetailForIMVO.setOrderIMVO(orderIMVO);
-			commonResponse.setData(orderDetailForIMVO);
-			return commonResponse ;
-		}
+
 		
 		
 		//双方不存在订单关系，判断大V是否在忙
@@ -756,7 +768,7 @@ public class OrderServiceImpl implements IOrderService {
 				//用户同意，修改状态:叫醒类型服务专享
 				newOrderStatus = OrderSkillConstants.ORDER_STATUS_GOING_WAITING_START;
 			}
-			
+			//TODO 需要考虑叫醒服务情况
 			
 			Date  currTime =  new Date();
 			
@@ -855,7 +867,7 @@ public class OrderServiceImpl implements IOrderService {
 				commonService.updateOrder(orderId, newOrderStatus);
 				
 				//大V拒绝订单通知用户
-				RongYunUtil.sendOrderMessage(customerId, OrderSkillConstants.IM_MSG_CONTENT_DAV_CONFIRM,OrderSkillConstants.MSG_CONTENT_DAV);
+				RongYunUtil.sendOrderMessage(customerId, OrderSkillConstants.IM_MSG_CONTENT_DAV_CONFIRM,OrderSkillConstants.MSG_CONTENT_C);
 			}
 		}else{
 			//订单不存在
@@ -1073,7 +1085,9 @@ public class OrderServiceImpl implements IOrderService {
 				label.setLabelId(labelId);
 				list.add(label);
 			}
-			orderMapper.saveEvaluationLabels(list);
+			if (list.size()>0){
+				orderMapper.saveEvaluationLabels(list);
+			}
 		}
 
 		commonService.updateOrder(request.getOrderId(), OrderSkillConstants.ORDER_STATUS_FINISHED_AND_PINGJIA);

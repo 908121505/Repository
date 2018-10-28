@@ -1,9 +1,9 @@
  package com.honglu.quickcall.user.service.manager;
 
  import com.honglu.quickcall.common.core.processer.Adapter;
- import org.slf4j.Logger;
- import org.slf4j.LoggerFactory;
- import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 
  /**
@@ -40,5 +40,4 @@
              }
          }
      }
-
  }

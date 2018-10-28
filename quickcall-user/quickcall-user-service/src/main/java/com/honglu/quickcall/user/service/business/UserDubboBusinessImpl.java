@@ -1,13 +1,5 @@
 package com.honglu.quickcall.user.service.business;
 
-import com.honglu.quickcall.user.facade.exchange.request.*;
-import com.honglu.quickcall.user.service.service.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
-
 import com.honglu.quickcall.common.api.code.BizCode;
 import com.honglu.quickcall.common.api.exception.BaseException;
 import com.honglu.quickcall.common.api.exception.BizException;
@@ -16,22 +8,14 @@ import com.honglu.quickcall.common.api.exchange.CommonResponse;
 import com.honglu.quickcall.user.facade.business.UserDubboBusiness;
 import com.honglu.quickcall.user.facade.code.UserBizReturnCode;
 import com.honglu.quickcall.user.facade.code.UserFunctionType;
-import com.honglu.quickcall.user.facade.exchange.request.editprofile.QueryBlacklistReq;
-import com.honglu.quickcall.user.facade.exchange.request.editprofile.QueryInterestListReq;
-import com.honglu.quickcall.user.facade.exchange.request.editprofile.QueryUserEditInfoReq;
-import com.honglu.quickcall.user.facade.exchange.request.editprofile.RemoveAppearanceReq;
-import com.honglu.quickcall.user.facade.exchange.request.editprofile.RemoveBlacklistReq;
-import com.honglu.quickcall.user.facade.exchange.request.editprofile.RemoveVoiceIdentificationCardReq;
-import com.honglu.quickcall.user.facade.exchange.request.editprofile.SaveBlacklistReq;
-import com.honglu.quickcall.user.facade.exchange.request.editprofile.UpdateAppearanceReq;
-import com.honglu.quickcall.user.facade.exchange.request.editprofile.UpdateBirthdayReq;
-import com.honglu.quickcall.user.facade.exchange.request.editprofile.UpdateGenderReq;
-import com.honglu.quickcall.user.facade.exchange.request.editprofile.UpdateHeadPortraitReq;
-import com.honglu.quickcall.user.facade.exchange.request.editprofile.UpdateInterestReq;
-import com.honglu.quickcall.user.facade.exchange.request.editprofile.UpdateNickNameReq;
-import com.honglu.quickcall.user.facade.exchange.request.editprofile.UpdateSignNameReq;
-import com.honglu.quickcall.user.facade.exchange.request.editprofile.UpdateStarSignReq;
-import com.honglu.quickcall.user.facade.exchange.request.editprofile.UpdateVoiceIdentificationCardReq;
+import com.honglu.quickcall.user.facade.exchange.request.*;
+import com.honglu.quickcall.user.facade.exchange.request.editprofile.*;
+import com.honglu.quickcall.user.service.service.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 @Component
 @Service("User.UserDubboBusiness")
@@ -57,6 +41,9 @@ public class UserDubboBusinessImpl implements UserDubboBusiness {
 	private InternalMessageService internalMessageService;
 	@Autowired
 	private QueryBigvListService queryHomeBigvListService;
+
+	@Autowired
+	private AppVersionManageService appVersionManageService;
 
 	@Override
 	public CommonResponse excute(AbstractRequest request) {
@@ -232,6 +219,18 @@ public class UserDubboBusinessImpl implements UserDubboBusiness {
 			case UserFunctionType.AddSystemUser:
 				response = commonPersonService.addSystemUser((AddSystemUserRequest) request);
 				break;
+			case UserFunctionType.QUERY_DV_LIST_BY_TYPE:
+				response = queryHomeBigvListService.queryClassifyBigvList((DaVListBySkillItemIdRequest) request);
+				break;
+			case UserFunctionType.appVersionManage:
+				response = appVersionManageService.findAppVersionInfo((AppVersionManageRequest) request);
+				break;
+			case UserFunctionType.AddBookingMessage:
+				response = userMessageService.saveBookingMessage((BookingMessageSaveRequest) request);
+				break;
+			case UserFunctionType.QueryBookingMessage:
+					response = userMessageService.queryBookingMessage((BookingMessageQueryRequest) request);
+					break;
 			default:
 				throw new BizException(UserBizReturnCode.BizFunctionTypeNotMatch,
 						UserBizReturnCode.BizFunctionTypeNotMatch.desc());

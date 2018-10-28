@@ -100,27 +100,31 @@ public class AdvertisementService {
         if(updateAdCount < 1){
             return -1;
         }
-        //删除此广告在 广告与版本对应表中的数据 ad_app_version
-        if(!StringUtil.isBlank(advertisement.getAppVersion())){
-            Map<String, Object> paramMap = new HashMap<String, Object>();
-            paramMap.put("advertisementId", advertisement.getId());
-            int deleteAdAppCount = baseManager.delete("Advertisement.deleteAdAppVersion", paramMap);
-            if(deleteAdAppCount < 1){
-                return -1;
-            }
-        }
 
-        //插入表 ad_app_version
         String appVersionIds = advertisement.getAppVersionIdList();
         if(!StringUtil.isBlank(appVersionIds)) {
-            String[] appVersionIdArr = appVersionIds.split(",");
-            for (String appVersionId : appVersionIdArr) {
-                advertisement.setAppVersionId(appVersionId);
-                int insertAdAppCount = baseManager.insert("Advertisement.insertAdAppVersion", advertisement);
-                if (insertAdAppCount < 1) {
+
+            //如果版本多选框不为空，则删除此广告在 广告与版本对应表中的数据 ad_app_version
+            if(!StringUtil.isBlank(advertisement.getAppVersion())){
+                Map<String, Object> paramMap = new HashMap<String, Object>();
+                paramMap.put("advertisementId", advertisement.getId());
+                int deleteAdAppCount = baseManager.delete("Advertisement.deleteAdAppVersion", paramMap);
+                if(deleteAdAppCount < 1){
                     return -1;
                 }
             }
+            //用户选择的不是清空，则插入表 ad_app_version
+            if(!"clear".equals(appVersionIds)){
+                String[] appVersionIdArr = appVersionIds.split(",");
+                for (String appVersionId : appVersionIdArr) {
+                    advertisement.setAppVersionId(appVersionId);
+                    int insertAdAppCount = baseManager.insert("Advertisement.insertAdAppVersion", advertisement);
+                    if (insertAdAppCount < 1) {
+                        return -1;
+                    }
+                }
+            }
+
         }
 
         return 0;
