@@ -11,6 +11,7 @@ import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.honglu.quickcall.common.api.util.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -87,7 +88,6 @@ import com.honglu.quickcall.user.service.dao.SensitivityWordMapper;
 import com.honglu.quickcall.user.service.dao.SkillItemMapper;
 import com.honglu.quickcall.user.service.service.CustomerRedisManagement;
 import com.honglu.quickcall.user.service.service.PersonInfoService;
-import com.honglu.quickcall.user.service.util.CountAge;
 import com.honglu.quickcall.user.service.util.JsonParseUtil;
 
 import cn.jiguang.commom.utils.StringUtils;
@@ -727,7 +727,7 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 		customerCenterVO.setHeadPortraitUrl(customer.getHeadPortraitUrl());
 		customerCenterVO.setSex(customer.getSex());
 		if (customer.getBirthday() != null) {
-			customerCenterVO.setAge(CountAge.getAgeByBirth(customer.getBirthday()));
+			customerCenterVO.setAge(DateUtils.getAgeByBirthYear(customer.getBirthday()));
 		}
 		customerCenterVO.setCustomerLevel(customer.getCustomerLevel());
 		customerCenterVO.setSignName(customer.getSignName());
@@ -764,7 +764,7 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 		customerHomeVO.setHeadPortraitUrl(viewCustomer.getHeadPortraitUrl());
 		customerHomeVO.setSex(viewCustomer.getSex());
 		if (viewCustomer.getBirthday() != null) {
-			customerHomeVO.setAge(CountAge.getAgeByBirth(viewCustomer.getBirthday()));
+			customerHomeVO.setAge(DateUtils.getAgeByBirthYear(viewCustomer.getBirthday()));
 		}
 		customerHomeVO.setCustomerLevel(viewCustomer.getCustomerLevel());
 		customerHomeVO.setSignName(viewCustomer.getSignName());

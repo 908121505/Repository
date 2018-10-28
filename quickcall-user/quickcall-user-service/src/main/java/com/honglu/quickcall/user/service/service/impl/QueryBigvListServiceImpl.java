@@ -15,7 +15,6 @@ import com.honglu.quickcall.user.facade.vo.AppHomeBigvListVO;
 import com.honglu.quickcall.user.facade.vo.DaVinfoVO;
 import com.honglu.quickcall.user.service.dao.*;
 import com.honglu.quickcall.user.service.service.QueryBigvListService;
-import com.honglu.quickcall.user.service.util.CountAge;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -326,7 +325,7 @@ public class QueryBigvListServiceImpl implements QueryBigvListService {
         bigv.setNickName(customerSkill.getCustomerNickName());
         bigv.setSex(customerSkill.getCustomerSex());
         if (customerSkill.getCustomerBirthday() != null) {
-            bigv.setAge(CountAge.getAgeByBirth(customerSkill.getCustomerBirthday()));
+            bigv.setAge(DateUtils.getAgeByBirthYear(customerSkill.getCustomerBirthday()));
         }
         bigv.setPrice(customerSkill.getDiscountPrice());
         bigv.setUnitName(customerSkill.getServiceUnit());
