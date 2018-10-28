@@ -6,6 +6,7 @@ import java.util.List;
 import com.honglu.quickcall.account.facade.entity.Order;
 import com.honglu.quickcall.account.facade.vo.OrderTempResponseVO;
 import com.honglu.quickcall.common.api.exchange.CommonResponse;
+import com.honglu.quickcall.user.facade.entity.Customer;
 import com.honglu.quickcall.user.facade.enums.PushAppMsgTypeEnum;
 
 /**
@@ -18,6 +19,13 @@ import com.honglu.quickcall.user.facade.enums.PushAppMsgTypeEnum;
  * @date: 2018年9月22日 下午3:16:34
  */
 public interface CommonService {
+	
+	
+	/**
+	 * 根据客户ID获取客户手机号码
+	 * @param customerId
+	 */
+	public Customer  getPhoneByCustomerId(Long  customerId);
 	
 	public CommonResponse  getCommonResponse();
 	
