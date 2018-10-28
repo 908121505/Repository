@@ -5,6 +5,7 @@ import com.calf.module.internal.service.InternalService;
 import com.honglu.quickcall.common.api.code.MqMessageServiceCode;
 import com.rabbitmq.client.Channel;
 import org.apache.log4j.Logger;
+import org.springframework.amqp.AmqpRejectAndDontRequeueException;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.core.ChannelAwareMessageListener;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,8 +52,7 @@ public class CustomerMessageListener implements ChannelAwareMessageListener {
 		} catch (Exception e) {
 			LOGGER.error("mq消息消费异常,UserCenterMqExperienceListener 消息的请求参数为：" + json);
 			// channel.basicReject(message.getMessageProperties().getDeliveryTag(), true);
-			// throw new
-			// AmqpRejectAndDontRequeueException("消费异常，不再重复消费，错误消息："+e.getMessage());
+			throw new AmqpRejectAndDontRequeueException("消费异常，不再重复消费，错误消息："+e.getMessage());
 		}
 	}
 }
