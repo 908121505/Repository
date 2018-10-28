@@ -381,7 +381,9 @@ public class QueryBigvListServiceImpl implements QueryBigvListService {
         if (pageIndex != null && pageSize != null) {
             start = pageIndex * pageSize;
         }
-        List<DaVinfoVO> daVinfoVOList = customerSkillMapper.queryCustomerListBySkillItem(skillItemId, start, pageSize);
+        Integer weekIndex = DateUtils.getDayOfWeek();
+        String endTimeStr = DateUtils.formatDateHHSS(new Date()).replaceAll(":", "");
+        List<DaVinfoVO> daVinfoVOList = customerSkillMapper.queryCustomerListBySkillItem(skillItemId,weekIndex,endTimeStr,start,pageSize);
         for (DaVinfoVO daVinfoVO : daVinfoVOList) {
             // 查询第一张形象照 性别(0=女,1=男)
             List<String> appearanceList = customerAppearanceMapper.queryCustomerAuditedAppearance(daVinfoVO.getCustomerId(), 0);
