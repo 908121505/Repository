@@ -69,7 +69,7 @@
 					<div class="col-sm-10">
 						<div class="input-group">
 							<input type="file" class="form-control" id="file" style="width: 60%;" name="file">
-							<span id="tip_customer" style="color: red;font-size: 14px;margin-left:20px; ">${entity.messageDescribe==''? "未导入文件":"已导入文件"}</span>
+							<span id="tip_customer" style="color: red;font-size: 14px;margin-left:20px; ">${empty entity?'未导入文件':'已导入文件'}</span>
 							<span class="input-group-btn">
 								<button class="btn btn-success" type="button" id="uploadCustomer">导入用户</button>
 							</span>
