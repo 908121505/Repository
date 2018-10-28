@@ -31,13 +31,16 @@ public interface UserFunctionType {
 	String AddSystemUser = "001011";
 	// 版本更新管理
 	String appVersionManage = "001012";
+	// 是否是大V
+	String IsBigVidentity = "001013";
+
 	// 系统相关 001300 - 001350
 	String MarketOnOff = "001300";
 	String AppConfig = "001301";
-	//保存预约消息
+	// 保存预约消息
 	String AddBookingMessage = "221101";
 
-	//获取预约消息
+	// 获取预约消息
 	String QueryBookingMessage = "221102";
 
 	/**

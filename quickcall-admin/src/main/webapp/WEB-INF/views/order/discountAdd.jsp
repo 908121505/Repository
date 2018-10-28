@@ -286,7 +286,7 @@
     $(function () {
         var s = "${entity.skillItemId}";
         $.ajax({
-            url: "/discount/getAllSkillName",    //后台webservice里的方法名称
+            url: "discount/getAllSkillName",    //后台webservice里的方法名称
             type: "post",
             dataType: "json",
             contentType: "application/json",
