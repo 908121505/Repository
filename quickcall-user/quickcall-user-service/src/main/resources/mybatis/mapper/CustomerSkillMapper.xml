@@ -486,4 +486,38 @@
 	LIMIT #{start},#{size}
 	</if>
   </select>
+
+  <!-- 根据客户技能ID查询返回给前端的大V数据 -->
+  <select id="selectBigvInfoVoByCustomerSkillId" resultMap="BaseResultMap">
+    SELECT
+        t.customer_id,
+        t.customer_skill_id,
+        t.skill_item_id,
+        t.skill_name,
+        t.discount_price,
+        t.service_unit,
+        t2.skill_voice_url,
+        t2.skill_voice_time,
+        t3.back_color as skill_back_color,
+        t3.home_black_color as skill_home_black_color,
+        t3.font_color as skill_font_color,
+        t4.nick_name as customer_nick_name,
+        t4.sex as customer_sex,
+        t4.birthday as customer_birthday
+    FROM customer_skill t
+    LEFT JOIN customer_skill_certify t2 ON t2.certify_id = t.certify_id
+    LEFT JOIN skill_item t3 ON t3.id = t.skill_item_id
+    LEFT JOIN customer t4 ON t4.customer_id = t.customer_id
+    WHERE t.customer_skill_id = 1810241702023921150 AND t.skill_status = 1
+  </select>
+
+  <select id="selectSkillOrderNo" resultType="int" >
+    select count(1)
+     from orders
+     where customer_id = #{customerId,jdbcType=BIGINT}
+     <if test="customerSkillId != null" >
+      and customer_skill_id = #{customerSkillId,jdbcType=BIGINT}
+     </if>
+  </select>
+
 </mapper>
