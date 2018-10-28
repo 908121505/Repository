@@ -33,12 +33,12 @@ public interface OrderSkillConstants {
 	public  static final  String  GT_MSG_ORDER_TITLE = "订单消息";
 	public  static final  String  GT_MSG_CONTENT_RECEIVE_ORDER = "您有新的订单，请及时查看";
 	//大V提示需要跳转到接单记录页面
-	public  static final  String  GT_MSG_CONTENT_RECEIVE_ORDER_URL = "voice://com.yanjing.voice/native?name=order_center&index=1&need_login=0";
+	public  static final  String  GT_MSG_CONTENT_RECEIVE_ORDER_URL = "voice://com.yanjing.voice/native?name=order_center&index=0&need_login=1";
 	
 //	voice://com.yanjing.voice/native?name=order_center&index=1&need_login=1    index-0接单记录1-点单记录
 	
 	public  static final  String  GT_MSG_CONTENT_START_SERVICE_TO_DAV = "您已发起立即服务，请提醒用户5分钟内响应，超时订单将失效";
-	public  static final  String  GT_MSG_CONTENT_START_SERVICE_TO_DAV_URL = "voice://com.yanjing.voice/native?name=order_center&index=1&need_login=0";
+	public  static final  String  GT_MSG_CONTENT_START_SERVICE_TO_DAV_URL = "voice://com.yanjing.voice/native?name=order_center&index=0&need_login=1";
 	
 	
 	public  static final  String  GT_MSG_CONTENT_START_SERVICE_TO_CUST = "对方发起立即服务，请在5分钟内确认，超时未响应订单将失效";
