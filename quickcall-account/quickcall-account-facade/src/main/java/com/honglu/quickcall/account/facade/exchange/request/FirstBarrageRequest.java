@@ -12,13 +12,13 @@ import com.honglu.quickcall.common.api.exchange.AbstractRequest;
 public class FirstBarrageRequest extends AbstractRequest {
 
     /**客户编号*/
-    private Long deviceId;
+    private String deviceId;
 
-    public Long getDeviceId() {
+    public String getDeviceId() {
         return deviceId;
     }
 
-    public void setDeviceId(Long deviceId) {
+    public void setDeviceId(String deviceId) {
         this.deviceId = deviceId;
     }
 
