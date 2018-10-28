@@ -59,7 +59,8 @@ public interface OrderSkillConstants {
 	public  static final  String  IM_MSG_CONTENT_DAV_START_SERVICE_TO_CUST = "对方发起立即服务，请在5分钟内确认，超时未响应订单将失效";
 	public  static final  String  IM_MSG_CONTENT_DAV_START_SERVICE_TO_DAV = "您已发起立即服务，请提醒用户5分钟内响应，超时订单将失效";
 	public  static final  String  IM_MSG_CONTENT_CUST_FINISH = "对方申请完成订单，快去看看吧！";
-	public  static final  String  IM_MSG_CONTENT_PING_JIA_FINISH = "对方已经完成评价";
+	public  static final  String  IM_MSG_CONTENT_PING_JIA_FINISH_TO_CUST = "评价成功";
+	public  static final  String  IM_MSG_CONTENT_PING_JIA_FINISH_TO_DV = "对方已经完成评价";
 	public  static final  String  IM_MSG_CONTENT_CUST_NOT_PING_JIA = "订单已完成，快让用户对您本次服务进行评价吧~";
 //	public  static final  String  IM_MSG_CONTENT_DAV_FINISH = "大V完成服务啦";
 	

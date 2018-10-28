@@ -381,15 +381,29 @@ public class EditProfileServiceImpl implements EditProfileService {
 			throw new BizException(UserBizReturnCode.paramError, "参数错误，customerId不存在");
 		}
 
-		CustomerAppearance customerAppearanceNew = new CustomerAppearance();
-		Long id = UUIDUtils.getId();
-		customerAppearanceNew.setId(id);
-		customerAppearanceNew.setAuditAppearance(params.getVoiceIdentificationCard());
-		customerAppearanceNew.setCustomerId(params.getCustomerId());
-		customerAppearanceNew.setType(AppearanceTypeEnum.VOICE_IDENTIFICATION_CARD.getCode());
-		int result = customerAppearanceMapper.insertAppearance(customerAppearanceNew);
 
-		logger.info("修改声鉴卡 updateVoiceIdentificationCard,插入数量" + result);
+		// 先判断表中是否存在这个用户声鉴卡记录，存在则更新，不存在则插入
+		int result = 0;
+		Long id = null;
+		CustomerAppearance customerAppearance = customerAppearanceMapper.selectByCustomerIdAndType(
+				params.getCustomerId(), AppearanceTypeEnum.VOICE_IDENTIFICATION_CARD.getCode());
+		if (null != customerAppearance) {
+			id = customerAppearance.getId();
+			customerAppearance.setAuditAppearance(params.getVoiceIdentificationCard());
+			customerAppearance.setAuditStatus(0);
+			result = customerAppearanceMapper.updateAppearance(customerAppearance);
+			logger.info("修改声鉴卡 updateVoiceIdentificationCard,更新数量" + result);
+
+		} else {
+			CustomerAppearance customerAppearanceNew = new CustomerAppearance();
+			id = UUIDUtils.getId();
+			customerAppearanceNew.setId(UUIDUtils.getId());
+			customerAppearanceNew.setAuditAppearance(params.getVoiceIdentificationCard());
+			customerAppearanceNew.setCustomerId(params.getCustomerId());
+			customerAppearanceNew.setType(AppearanceTypeEnum.VOICE_IDENTIFICATION_CARD.getCode());
+			result = customerAppearanceMapper.insertAppearance(customerAppearanceNew);
+			logger.info("修改声鉴卡 updateVoiceIdentificationCard,插入数量" + result);
+		}
 
 		if (result > 0) {
 			commonResponse.setCode(UserBizReturnCode.Success);
