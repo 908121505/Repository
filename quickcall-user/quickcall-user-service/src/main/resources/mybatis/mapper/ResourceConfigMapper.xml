@@ -52,7 +52,7 @@
           ,(
           SELECT count(o.order_id) FROM orders o
           WHERE o.customer_skill_id = bss.customer_skill_id
-                AND o.skill_type = (select si.skill_type from skill_item si where si.id = bss.customer_skill_id)
+                AND o.skill_type = (select si.skill_type from skill_item si where si.id = bss.skill_item_id)
                 AND o.order_status IN (10, 18, 26, 28)
           ) AS skillOrdered
         </if>
@@ -85,7 +85,7 @@
           <if test="skillOrdered == 0">
             ,(SELECT count(o.order_id) FROM orders o
                 WHERE o.customer_skill_id = bss.customer_skill_id
-                      AND o.skill_type = (select si.skill_type from skill_item si where si.id = bss.customer_skill_id)
+                      AND o.skill_type = (select si.skill_type from skill_item si where si.id = bss.skill_item_id)
                       AND o.order_status IN (10, 18, 26, 28)
             ) AS skillOrdered
           </if>
@@ -125,7 +125,7 @@
           <if test="skillOrdered == 0">
               ,(SELECT count(o.order_id) FROM orders o
                   WHERE o.customer_skill_id = csk.customer_skill_id
-                        AND o.skill_type = (select si.skill_type from skill_item si where si.id = csk.customer_skill_id)
+                        AND o.skill_type = (select si.skill_type from skill_item si where si.id = csk.skill_item_id)
                         AND o.order_status IN (10, 18, 26, 28)
               ) AS skillOrdered
           </if>
@@ -156,14 +156,14 @@
     <select id="selectRankBigvListBySkillItemId" resultType="com.honglu.quickcall.user.facade.entity.CustomerSkill">
         SELECT
             bss.customer_id as customerId, bss.customer_skill_id as customerSkillId, bss.skill_item_id as skillItemId,
-            csk.skill_name as skillName, csk.discount_price as discountRate, csk.service_unit as serviceUnit,
+            csk.skill_name as skillName, csk.discount_price as discountPrice, csk.service_unit as serviceUnit,
             csc.skill_voice_url as skillVoiceUrl, csc.skill_voice_time as skillVoiceTime,
             si.back_color as skillBackColor, si.home_black_color as skillHomeBackColor, si.font_color as skillFontColor,
             c.nick_name as customerNickName, c.sex as customerSex, c.birthday as customerBirthday,
             bss.score_total
             ,(SELECT count(o.order_id) FROM orders o
               WHERE o.customer_skill_id = bss.customer_skill_id
-                    AND o.skill_type = (select si.skill_type from skill_item si where si.id = bss.customer_skill_id)
+                    AND o.skill_type = (select si.skill_type from skill_item si where si.id = bss.skill_item_id)
                     AND o.order_status IN (10, 18, 26, 28)
             ) AS skillOrdered
         FROM bigv_skill_score bss

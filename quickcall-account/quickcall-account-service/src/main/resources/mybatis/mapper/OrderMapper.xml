@@ -652,6 +652,7 @@
         cs.skill_name AS skillName,
         cs.skill_item_id AS skillItemId,
         od.service_id as serviceId,
+        od.customer_id as customerId,
         od.customer_is_evaluate as customerIsEvaluate
     FROM
         orders od
