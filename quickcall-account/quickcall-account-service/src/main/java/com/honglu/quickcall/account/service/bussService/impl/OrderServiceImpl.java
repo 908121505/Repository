@@ -293,8 +293,6 @@ public class OrderServiceImpl implements IOrderService {
 			SkillItem  skillItem = skillItemMapper.selectByPrimaryKey(skillItemId);
 			Integer  skillType = skillItem.getSkillType();
 			record.setSkillType(skillType);
-//			if(skillItem != null){
-//			}
 			if(OrderSkillConstants.SKILL_TYPE_NO == skillType){
 				Date  appointTime = DateUtils.formatDate(request.getAppointTimeStr());
 				Calendar  cal =  Calendar.getInstance();
@@ -366,38 +364,13 @@ public class OrderServiceImpl implements IOrderService {
 					GtPushUtil.sendNotificationTemplateToList(gtId, OrderSkillConstants.GT_MSG_ORDER_TITLE, OrderSkillConstants.GT_MSG_CONTENT_RECEIVE_ORDER, OrderSkillConstants.GT_MSG_CONTENT_RECEIVE_ORDER_URL);
 				}
 			}
-//			//获取用户手机号码
-//			Customer  customer =  commonService.getPhoneByCustomerId(serviceId);
-//			LOGGER.info("11111111111111111111111111111"+service);
-//			if(service != null){
-//				
-//				String  gtId =  customer.getGtClientId();
-//				LOGGER.info("33333333333333333333333"+gtId);
-//				if(StringUtils.isNotBlank(gtId)){
-//					//用户下单需要使用个推推送消息
-//					GtPushUtil.sendNotificationTemplateToList(gtId, OrderSkillConstants.GT_MSG_ORDER_TITLE, OrderSkillConstants.GT_MSG_CONTENT_RECEIVE_ORDER, OrderSkillConstants.GT_MSG_CONTENT_RECEIVE_ORDER_URL);
-//				}
-//			}
-			
-			
-			
-			
-			
-			
-			
 			//下单成功后推送IM消息
 			RongYunUtil.sendOrderMessage(serviceId, OrderSkillConstants.IM_MSG_CONTENT_RECEIVE_ORDER,OrderSkillConstants.MSG_CONTENT_DAV);
-			
-			
-			
-			
 			LOGGER.info("======>>>>>用户编号为：" + request.getCustomerId() + "下单成功");
 		} catch (Exception e) {
 			e.printStackTrace();
 			resultMap.put("retCode",  OrderSkillConstants.RET_CODE_SYSTEM_ERROR);
-			
 		}
-		
 		commonResponse.setData(resultMap);
 		return commonResponse;
 	}
