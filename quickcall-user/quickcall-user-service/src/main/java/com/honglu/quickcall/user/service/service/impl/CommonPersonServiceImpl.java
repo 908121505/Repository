@@ -1,5 +1,6 @@
 package com.honglu.quickcall.user.service.service.impl;
 
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -177,12 +178,16 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 						login.setCustStatus(1);
 						isBlock = false;
 					}
+					SimpleDateFormat df = new SimpleDateFormat("yyyy年MM月dd日 hh时mm分");
+					Date date = customer.getBlockEndTime();
+					throw new BizException(BizCode.ParamError,
+							"因您违反平台规则，您的账号在" + df.format(date) + "前限制登陆，如有疑问，请拨打客服电话：400-156-0606进行咨询。");
 				}
 			}
 		}
 		// 账户被封
 		if (isBlock) {
-			throw new BizException(BizCode.ParamError, "您的账号因违规操作已被封停，如果有疑问请联系客服：400-1150-707");
+			throw new BizException(BizCode.ParamError, "因违反平台规则，您的账号被永久限制登陆，如有疑问，请拨打客服电话：400-156-0606进行咨询");
 		}
 
 		// 更新登录信息

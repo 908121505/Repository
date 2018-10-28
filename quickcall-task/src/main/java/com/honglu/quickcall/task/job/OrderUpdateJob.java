@@ -329,29 +329,29 @@ public class OrderUpdateJob {
     		if(cancelType == CANCEL_ONE){
     			content =  OrderSkillConstants.IM_MSG_CONTENT_CANCEL_CUST_15MINUTE_TIMEOUT ;
     		}else if (cancelType == CANCEL_TWO){
-    			content =  OrderSkillConstants.IM_MSG_CONTENT_CANCEL_CUST_5MINUTE_START_TIMEOUT ;
+//    			content =  OrderSkillConstants.IM_MSG_CONTENT_CANCEL_CUST_5MINUTE_START_TIMEOUT ;
     		}else if (cancelType == CANCEL_THREE){
     			content =  OrderSkillConstants.IM_MSG_CONTENT_CANCEL_CUST_5MINUTE_CONFIRM_TIMEOUT ;
     		}else if(cancelType == CANCEL_FOUR){
-    			content =  OrderSkillConstants.IM_MSG_CONTENT_CANCEL_CUST_FINISH ;
+    			content =  OrderSkillConstants.IM_MSG_CONTENT_CUST_NOT_PING_JIA ;
     		}
     	}else{
     		remarkName = OrderSkillConstants.MSG_CONTENT_C ;
     		if(cancelType == CANCEL_ONE){
     			content =  OrderSkillConstants.IM_MSG_CONTENT_CANCEL_DV_15MINUTE_TIMEOUT ;
     		}else if (cancelType == CANCEL_TWO){
-    			content =  OrderSkillConstants.IM_MSG_CONTENT_CANCEL_DV_5MINUTE_START_TIMEOUT ;
+//    			content =  OrderSkillConstants.IM_MSG_CONTENT_CANCEL_DV_5MINUTE_START_TIMEOUT ;
     		}else if (cancelType == CANCEL_THREE){
     			content =  OrderSkillConstants.IM_MSG_CONTENT_CANCEL_DV_5MINUTE_CONFIRM_TIMEOUT ;
     		}else if(cancelType == CANCEL_FOUR){
-    			content =  OrderSkillConstants.IM_MSG_CONTENT_CANCEL_CUST_FINISH ;
+//    			content =  OrderSkillConstants.IM_MSG_CONTENT_CANCEL_CUST_FINISH ;
     		}
     	}
     	if(StringUtils.isNotBlank(content)){
-    		content = OrderSkillConstants.IM_MSG_CONTENT_DEFAULT ;
+//    		content = OrderSkillConstants.IM_MSG_CONTENT_DEFAULT ;
+    		//下单成功后推送IM消息
+    		RongYunUtil.sendOrderMessage(customerId, content,remarkName);
     	}
-    	//下单成功后推送IM消息
-		RongYunUtil.sendOrderMessage(customerId, content,remarkName);
     }
     
     
