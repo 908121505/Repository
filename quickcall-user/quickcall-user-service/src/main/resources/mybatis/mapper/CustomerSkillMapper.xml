@@ -516,10 +516,8 @@
   <select id="selectSkillOrderNo" resultType="int" >
     select count(1)
      from orders
-     where customer_id = #{customerId,jdbcType=BIGINT}
-     <if test="customerSkillId != null" >
-      and customer_skill_id = #{customerSkillId,jdbcType=BIGINT}
-     </if>
+     where
+      customer_skill_id = #{customerSkillId,jdbcType=BIGINT}
   </select>
 
 </mapper>
