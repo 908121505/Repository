@@ -102,7 +102,8 @@ public class QueryBigvListServiceImpl implements QueryBigvListService {
     }
 
 
-    public CommonResponse queryHomeBigvList() {
+//    @Override
+    public CommonResponse queryHomeBigvList2(FirstPageBigvListRequest request) {
         List<AppHomeBigvListVO> resultList = new LinkedList<>();
 
         Integer weekIndex = DateUtils.getDayOfWeek();
