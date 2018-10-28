@@ -34,14 +34,9 @@
     FROM banner
     WHERE 1 = 1 and banner_status = 1
     and  start_time <![CDATA[ <= ]]>NOW() and end_time  <![CDATA[ >= ]]>  NOW()
-    <if test="bannerType != null">
-      and banner_type = #{bannerType}
-    </if>
-    <if test="deviceType != null">
-      and device_type = #{deviceType}
-    </if>
-    <if test="appVersion != null">
-      and app_version = #{appVersion}
+    and banner_type = #{bannerType}
+    <if test="deviceType != null and deviceType!= 0">
+      and device_type in (0, #{deviceType})
     </if>
     <if test="appVersionRule != null and appVersionRule != 0 and appVersion != null">
       <if test="appVersionRule == 1">
