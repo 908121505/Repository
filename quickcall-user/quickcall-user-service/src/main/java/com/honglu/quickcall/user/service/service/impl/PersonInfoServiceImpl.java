@@ -815,7 +815,7 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 			customerHomeVO.setShareTitle(share.getTitle());
 			customerHomeVO.setShareContent(share.getContent());
 			customerHomeVO.setShareIconUrl(share.getIconUrl());
-			customerHomeVO.setShareLinkUrl(share.getLinkUrl());
+			customerHomeVO.setShareLinkUrl(String.format(share.getLinkUrl(), request.getViewCustomerId(), request.getLoginCustomerId()));
 		}
 
 		// 查询用户技能 -- 条件是大V

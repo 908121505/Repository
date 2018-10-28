@@ -12,11 +12,11 @@ import com.honglu.quickcall.common.api.exchange.AbstractRequest;
 public class BannerRequest extends AbstractRequest {
 
     /** banner类型：1-首页顶部banner；2-首页中部banner；3-分类页banner； **/
-    private Byte bannerType;
+    private Integer bannerType;
     /**
      * 设备类型 0-所有,1-ios,2-andriod
      */
-    private Byte deviceType;
+    private Integer deviceType;
     /**
      * app版本
      */
@@ -26,19 +26,19 @@ public class BannerRequest extends AbstractRequest {
      */
     private Integer appVersionRule;
 
-    public Byte getBannerType() {
+    public Integer getBannerType() {
         return bannerType;
     }
 
-    public void setBannerType(Byte bannerType) {
+    public void setBannerType(Integer bannerType) {
         this.bannerType = bannerType;
     }
 
-    public Byte getDeviceType() {
+    public Integer getDeviceType() {
         return deviceType;
     }
 
-    public void setDeviceType(Byte deviceType) {
+    public void setDeviceType(Integer deviceType) {
         this.deviceType = deviceType;
     }
 
