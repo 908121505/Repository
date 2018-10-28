@@ -451,9 +451,17 @@
   
   <select id="queryCustomerListBySkillItem" resultType ="com.honglu.quickcall.user.facade.vo.DaVinfoVO">
   		select * from(
-	select cus.customer_id as customerId, cs.customer_skill_id as customerSkillId, cus.nick_name as nickName,
-	cus.sex as sex,TIMESTAMPDIFF(YEAR, cus.birthday, CURDATE()) AS age,cs.skill_price as price,
-	cs.service_unit as unitName,si.skill_item_name as skillItemName,si.back_color as backColor,csc.skill_voice_url as voiceUrl,csc.skill_voice_time as voiceTime
+	select cus.customer_id as customerId, 
+	cs.customer_skill_id as customerSkillId, 
+	cus.nick_name as nickName,
+	cus.sex as sex,
+	(YEAR (NOW()) - YEAR (cus.birthday)) AS age,
+	cs.skill_price as price,
+	cs.service_unit as unitName,
+	si.skill_item_name as skillItemName,
+	si.back_color as backColor,
+	csc.skill_voice_url as voiceUrl,
+	csc.skill_voice_time as voiceTime
 	from customer_skill cs 
 	LEFT JOIN customer cus	on cus.customer_id = cs.customer_id
 	LEFT JOIN skill_item si on cs.skill_item_id = si.id 
