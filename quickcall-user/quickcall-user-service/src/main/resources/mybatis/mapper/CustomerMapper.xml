@@ -603,8 +603,10 @@
   <!-- 查询客户的一个订单 -->
   <select id="selectCustomerOrder" resultType="com.honglu.quickcall.account.facade.entity.Order">
     select
+      order_id as orderId,
       service_id as serviceId,
       customer_id as customerId,
+      customer_skill_id as customerSkillId,
       order_status as orderStatus,
       order_amounts as orderAmounts,
       skill_item_id as skillItemId,

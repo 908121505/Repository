@@ -37,7 +37,7 @@
   </select>
 
   <!-- 查询配置位排除的customerId -->
-  <select id="selectExCustomerIds" resultType="java.lang.Long">
+  <select id="selectResourceExCustomerIds" resultType="java.lang.Long">
     SELECT c.customer_id
     FROM resource_config_ex_cust rc
     INNER JOIN customer c ON c.app_id = rc.app_id

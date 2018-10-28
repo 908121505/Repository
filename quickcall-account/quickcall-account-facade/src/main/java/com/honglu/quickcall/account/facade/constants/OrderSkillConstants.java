@@ -65,8 +65,8 @@ public interface OrderSkillConstants {
 	
 	
 	
-	public  static final  String  IM_MSG_CONTENT_CANCEL_CUST_15MINUTE_TIMEOUT = "您因超时未接单，订单已失效";
-	public  static final  String  IM_MSG_CONTENT_CANCEL_DV_15MINUTE_TIMEOUT = "很抱歉，对方超时未接单，订单已失效，音符将会退换至您的账户";
+	public  static final  String  IM_MSG_CONTENT_CANCEL_DV_15MINUTE_TIMEOUT = "您因超时未接单，订单已失效";
+	public  static final  String  IM_MSG_CONTENT_CANCEL_CUST_15MINUTE_TIMEOUT = "很抱歉，对方超时未接单，订单已失效，音符将会退换至您的账户";
 	
 //	/**大V5分钟未发起服务*/
 //	public  static final  String  IM_MSG_CONTENT_CANCEL_CUST_5MINUTE_START_TIMEOUT = "5分钟主播未发起服务，订单取消";
