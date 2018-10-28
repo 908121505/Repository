@@ -214,7 +214,7 @@ public class QueryBigvListServiceImpl implements QueryBigvListService {
                 if (bigv != null) {
                     // 加入排除列表
                     exCustomerIds.add(bigv.getCustomerId());
-                    bigvInfoVo = getBigvByCustomerSkillId(recomedBigv, customerIdMap.get(configNum).getCustomerSkillId());
+                    bigvInfoVo = getBigvByCustomerSkillId(recomedBigv, bigv.getCustomerSkillId());
                 }
             }
             if (bigvInfoVo == null) {
@@ -249,9 +249,7 @@ public class QueryBigvListServiceImpl implements QueryBigvListService {
         List<AppHomeBigvListVO.BigvInfoVO> recomedBigvList = new ArrayList<>();
         // 封装数据
         for (CustomerSkill customerSkill : customerSkills) {
-            AppHomeBigvListVO.BigvInfoVO bigv = recomedBigv.new BigvInfoVO();
-            packetBigvInfo(bigv, customerSkill);
-            recomedBigvList.add(bigv);
+            recomedBigvList.add(packetBigvInfo(recomedBigv, customerSkill));
         }
         return recomedBigvList;
     }
@@ -312,18 +310,16 @@ public class QueryBigvListServiceImpl implements QueryBigvListService {
         if (customerSkill == null) {
             return null;
         }
-        AppHomeBigvListVO.BigvInfoVO bigv = recomedBigv.new BigvInfoVO();
-        packetBigvInfo(bigv, customerSkill);
-        return bigv;
+        return packetBigvInfo(recomedBigv, customerSkill);
     }
 
     /**
      * 打包大V信息
-     *
-     * @param bigv
+     *  @param recomedBigv
      * @param customerSkill
      */
-    private void packetBigvInfo(AppHomeBigvListVO.BigvInfoVO bigv, CustomerSkill customerSkill) {
+    private AppHomeBigvListVO.BigvInfoVO packetBigvInfo(AppHomeBigvListVO recomedBigv, CustomerSkill customerSkill) {
+        AppHomeBigvListVO.BigvInfoVO bigv = recomedBigv.new BigvInfoVO();
         bigv.setCustomerId(customerSkill.getCustomerId());
         bigv.setCustomerSkillId(customerSkill.getCustomerSkillId());
         bigv.setSkillBackColor(customerSkill.getSkillHomeBackColor());
@@ -348,6 +344,7 @@ public class QueryBigvListServiceImpl implements QueryBigvListService {
         } else {
             bigv.setCoverUrl(appearanceList.get(0));
         }
+        return bigv;
     }
 
     private int cacluRandomLimitBeginIndex(Integer configNum, int bigvNum) {
