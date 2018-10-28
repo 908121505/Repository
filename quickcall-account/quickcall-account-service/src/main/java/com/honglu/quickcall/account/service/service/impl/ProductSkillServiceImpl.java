@@ -452,7 +452,10 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 			custSkill.setSkillPrice(skillExtPrice);
 			//计算折扣价格
 			BigDecimal  discountRate = csrv.getDiscountRate();
-			custSkill.setDiscountPrice(skillExtPrice.multiply(discountRate.divide(new BigDecimal(10))));
+			BigDecimal   discountPrice = skillExtPrice.multiply(discountRate.divide(new BigDecimal(10))) ;
+			//对价格进行取整
+			discountPrice = discountPrice.setScale(0, BigDecimal.ROUND_HALF_UP);
+			custSkill.setDiscountPrice(discountPrice);
 			custSkill.setSkillRange(skillItemExt.getSkillExtRange());
 			custSkill.setSkillItemExtId(skillItemExtId);
 			custSkill.setServiceUnit(skillItemExt.getSkillExtUnit());

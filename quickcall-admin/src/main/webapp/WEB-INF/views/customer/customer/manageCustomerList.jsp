@@ -79,7 +79,10 @@
 					<div class="col-sm-10">
 						<select class="form-control" id="custStatus" name="custStatus" onchange="onCustStatusChange()">
 							<option value="4">已封禁-无法接单</option>
-							<option value="6">已封禁-无法接指定技能</option>
+
+							<c:if test="${entity.customerSkills != null && fn:length(entity.customerSkills) > 0}">
+								<option value="6">已封禁-无法接指定技能</option>
+							</c:if>
 							<option value="8">已封禁-账户登录权限</option>
 							<option value="10">已封禁-设备登录权限</option>
 						</select>
@@ -108,13 +111,6 @@
 						</select>
 					</div>
 				</div>
-
-
-
-
-
-
-
 
 		<%--		<div class="form-group"  >
 					<label class="col-sm-4 control-label">描述<font color="red">&nbsp;*</font></label>

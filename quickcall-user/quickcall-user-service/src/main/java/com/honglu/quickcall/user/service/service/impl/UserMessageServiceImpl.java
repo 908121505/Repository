@@ -4,22 +4,19 @@ import com.honglu.quickcall.common.api.exchange.CommonResponse;
 import com.honglu.quickcall.common.api.exchange.ResultUtils;
 import com.honglu.quickcall.common.api.util.JedisUtil;
 import com.honglu.quickcall.common.third.rongyun.util.RongYunUtil;
-import com.honglu.quickcall.user.facade.entity.Customer;
-import com.honglu.quickcall.user.facade.entity.MessageReservation;
+import com.honglu.quickcall.user.facade.entity.*;
 import com.honglu.quickcall.user.facade.exchange.request.BookingMessageQueryRequest;
 import com.honglu.quickcall.user.facade.exchange.request.BookingMessageSaveRequest;
 import com.honglu.quickcall.user.facade.exchange.request.UserUnreadMessageNumRequest;
 import com.honglu.quickcall.user.facade.vo.MessageReservationVO;
-import com.honglu.quickcall.user.service.dao.MessageCustomerMapper;
-import com.honglu.quickcall.user.service.dao.MessageMapper;
-import com.honglu.quickcall.user.service.dao.MessageReservationMapper;
-import com.honglu.quickcall.user.service.service.CustomerService;
+import com.honglu.quickcall.user.service.dao.*;
 import com.honglu.quickcall.user.service.service.UserMessageService;
 import com.honglu.quickcall.user.service.util.DateUtil;
 import com.honglu.quickcall.user.service.util.RadomUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -40,9 +37,12 @@ public class UserMessageServiceImpl implements UserMessageService {
     private MessageReservationMapper messageReservationMapper;
     @Autowired
     private MessageCustomerMapper messageCustomerMapper;
-
     @Autowired
-    private CustomerService customerService;
+    private CustomerMapper customerMapper;
+    @Autowired
+    private CustomerSkillMapper customerSkillMapper;
+    @Autowired
+    private SkillItemMapper skillItemMapper;
 
     static String reidsKey = "bookingMessage:";
 
@@ -53,23 +53,17 @@ public class UserMessageServiceImpl implements UserMessageService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public CommonResponse saveBookingMessage(BookingMessageSaveRequest params) {
         String key = reidsKey+params.getCustomerId()+":"+params.getReceiverId();
         String value = JedisUtil.get(key);
         if (StringUtils.isNotBlank(value)){
-            return ResultUtils.resultSuccess("您已预约了查看了这个大V");
+            return ResultUtils.resultSuccess("0");
         }else {
-            //设置redis且设置超时时间
-            JedisUtil.set(key,params.getCustomerId()+"-"+params.getReceiverId(),60*30);
-
-            //发送IM消息
-            RongYunUtil.sendBespokeMessage(params.getReceiverId(),"您有一条预约消息");
-
-            //保存消息
+            //保存预约消息
             MessageReservation messageReservation = new MessageReservation();
-            String msgId = DateUtil.dateFormat(new Date(), "yyyyMMddHHmmss") + RadomUtil.generateNumber2(4);
             Date curDate = new Date();
-            messageReservation.setId(Long.parseLong(msgId));
+            messageReservation.setId(getRandomId());
             messageReservation.setContent("希望能快一点看到我的消息给我回复");
             messageReservation.setCreateTime(curDate);
             messageReservation.setCustomerId(params.getCustomerId());
@@ -78,16 +72,47 @@ public class UserMessageServiceImpl implements UserMessageService {
             messageReservation.setStatus((byte) 0);
             messageReservation.setTitle(params.getTitle());
             int insert = messageReservationMapper.saveBookingMessage(messageReservation);
-            return ResultUtils.resultSuccess(insert);
+
+            //保存一条用户消息
+            Customer customer = customerMapper.selectByPrimaryKey(params.getCustomerId());
+            MessageCustomer mc = new MessageCustomer();
+            mc.setId(getRandomId());
+            mc.setCreateTime(curDate);
+            mc.setModifyTime(curDate);
+            mc.setMessageId(getRandomId());
+            mc.setMessageStatus((byte)0);
+            mc.setCreateMan("admin");
+            mc.setModifyMan("admin");
+            if (customer!=null){
+                mc.setPhone(Long.parseLong(customer.getPhone()));
+            }
+            mc.setReceiverId(params.getReceiverId());
+            int insertMc = messageCustomerMapper.insertMessage(mc);
+            if (insertMc>0 && insert>0) {
+                //设置redis且设置超时时间
+                JedisUtil.set(key,params.getCustomerId()+"-"+params.getReceiverId(),60*30);
+                //发送IM消息
+                RongYunUtil.sendBespokeMessage(params.getReceiverId(),"您有一条预约消息");
+
+                return ResultUtils.resultSuccess(insert);
+            }else{
+                return ResultUtils.resultSuccess("0");
+            }
         }
+    }
+
+    private Long getRandomId(){
+        String id = DateUtil.dateFormat(new Date(), "yyyyMMddHHmmss") + RadomUtil.generateNumber2(4);
+        return Long.parseLong(id);
     }
 
     @Override
     public CommonResponse queryBookingMessage(BookingMessageQueryRequest params) {
-        List<MessageReservation> messageReservationList = messageReservationMapper.queryBookingMessage(params.getReceiverId());
+        List<MessageReservation> messageReservationList = messageReservationMapper.queryBookingMessage(params.getCustomerId());
         List<MessageReservationVO> mrsList = new ArrayList<>();
         for (MessageReservation mr: messageReservationList){
-            Customer customer = customerService.queryCustomerByCustomerId(mr.getCustomerId());
+            Customer customer = customerMapper.selectByPrimaryKey(mr.getCustomerId());
+            CustomerSkill customerSkill = customerSkillMapper.queryCustomerSkill(mr.getReceiverId());
             MessageReservationVO mrv = new MessageReservationVO();
             mrv.setId(mr.getId());
             mrv.setCustomerId(mr.getCustomerId());
@@ -95,6 +120,13 @@ public class UserMessageServiceImpl implements UserMessageService {
             mrv.setCreateTime(DateUtil.dateFormat(mr.getCreateTime(),"yyyy-MM-dd HH:mm:ss"));
             if (customer!=null){
                 mrv.setCustomerName(customer.getNickName());
+                mrv.setCustomerIconUrl(customer.getHeadPortraitUrl());
+            }
+            if(customerSkill!=null){
+                SkillItem skillItem = skillItemMapper.selectSkillItem(customerSkill.getSkillItemId());
+                if(skillItem!=null){
+                    mrv.setSkillIconUrl(skillItem.getUnlockIcon());
+                }
             }
             String[] pus = mr.getPriceUnit().split("-");
             if (pus.length>1){

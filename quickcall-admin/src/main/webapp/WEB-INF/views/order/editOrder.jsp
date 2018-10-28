@@ -73,23 +73,27 @@
 						<input type="text" id="orderAmount" class="form-control"  name="orderAmount" readonly="readonly" value="${entity.orderAmount}">
 					</div>
 				</div>
-				<div class="form-group">
-					<label class="col-sm-3 control-label">订单状态<font color="red">&nbsp;*</font></label>
-					<div class="col-sm-6">
-						<select id="orderStatus" class="form-control"  name="orderStatus">
-							<c:forEach items="${editSmallStatus}" var ="smallOrderStatusVO" varStatus="status">
-								<option value="${smallOrderStatusVO.value}">${smallOrderStatusVO.desc}</option>
-							</c:forEach>
-						</select>
-					</div>
-				</div>
-				<div class="form-group" id="remarkReasonDev">
-					<label class="col-sm-3 control-label">取消原因<font color="red">&nbsp;*</font></label>
-					<div class="col-sm-6">
-						<input type="text" placeholder="如果状态选取消，请写上取消原因" id="remarkReason" class="form-control"  name="remarkReason" value="${entity.remarkReason}">
-					</div>
-				</div>
-			</form>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">订单状态<font color="red">&nbsp;*</font></label>
+                    <div class="col-sm-6">
+                        <%--<select id="orderStatus" class="form-control"  name="orderStatus">
+                            <c:forEach items="${editSmallStatus}" var ="smallOrderStatusVO" varStatus="status">
+                                <option value="${smallOrderStatusVO.value}">${smallOrderStatusVO.desc}</option>
+                            </c:forEach>
+                        </select>--%>
+                        <select id="orderStatus" class="form-control"  name="orderStatus">
+                            <option value="42">强制取消</option>
+                            <option value="44">强制完成</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group" id="remarkReasonDev">
+                    <label class="col-sm-3 control-label">原因<font color="red">&nbsp;*</font></label>
+                    <div class="col-sm-6">
+                        <input type="text" placeholder="如果状态选取消，请写上取消原因" id="remarkReason" class="form-control"  name="remarkReason" value="${entity.remarkReason}">
+                    </div>
+                </div>
+            </form>
 		</div>
 		<div class="modal-footer">
 			<span id="tip" style="color: red; font-size: 16px; margin-left: 20px;float:left;"></span>
@@ -109,3 +113,23 @@
     }
 
 </script>
+
+
+
+
+<%--<script language='javascript'>
+    $(function(){
+        $(document).ready(function(){
+            $("#orderStatus").change(function(){
+                var hideSelect = $(this).val();
+                if(hideSelect == 4||hideSelect == 6||
+                    hideSelect == 12||hideSelect == 14||
+                    hideSelect == 16||hideSelect == 20){
+                    $("#remarkReasonDev").show().addClass("show");
+                }else{
+                    $("#remarkReasonDev").hide().removeClass("show");
+                }
+            })
+        })
+    });
+</script>--%>

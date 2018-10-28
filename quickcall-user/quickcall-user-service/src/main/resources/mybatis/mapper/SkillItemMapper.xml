@@ -32,6 +32,13 @@
         <include refid="Base_Column_List"/>
         FROM skill_item
     </select>
+    <!-- 查询所有技能项 -->
+    <select id="selectSkillItem" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM skill_item
+        where id=#{skillItemId}
+    </select>
 
     <!-- 查询所有技能项 -->
     <select id="selectAllEnabledSkills" resultMap="BaseResultMap">

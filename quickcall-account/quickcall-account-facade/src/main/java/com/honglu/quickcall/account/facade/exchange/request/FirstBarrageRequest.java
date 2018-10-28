@@ -12,14 +12,14 @@ import com.honglu.quickcall.common.api.exchange.AbstractRequest;
 public class FirstBarrageRequest extends AbstractRequest {
 
     /**客户编号*/
-    private Long customerId;
+    private String deviceId;
 
-    public Long getCustomerId() {
-        return customerId;
+    public String getDeviceId() {
+        return deviceId;
     }
 
-    public void setCustomerId(Long customerId) {
-        this.customerId = customerId;
+    public void setDeviceId(String deviceId) {
+        this.deviceId = deviceId;
     }
 
     @Override

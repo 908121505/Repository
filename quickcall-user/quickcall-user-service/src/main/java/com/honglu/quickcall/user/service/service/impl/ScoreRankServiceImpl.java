@@ -28,23 +28,12 @@ import java.util.Objects;
 public class ScoreRankServiceImpl implements ScoreRankService {
     private final static Logger LOGGER = Logger.getLogger(ScoreRankServiceImpl.class);
 
-    /**
-     * 计算默认评价得分 -- 默认评价3分
-     */
-    private static BigDecimal DEFAULT_EVALUATE_SCORE;
-
-
     @Autowired
     private CustomerMapper customerMapper;
     @Autowired
     private BigvScoreMapper bigvScoreMapper;
     @Autowired
     private BigvSkillScoreMapper bigvSkillScoreMapper;
-
-    static {
-        /** 计算出默认得分的总权重值 **/
-        DEFAULT_EVALUATE_SCORE = calculateEvaluateScore(ScoreRankConstants.DEFAULT_EVALUATION_LEVEL);
-    }
 
     @Override
     public void doOrderCast(DoOrderCastMqRequest request) {
@@ -87,8 +76,12 @@ public class ScoreRankServiceImpl implements ScoreRankService {
         if (order.getValueScore() != null) {
             LOGGER.info("客户评价订单 -- 更新主播评分排名表 -- 订单已计算过评分：" + order.getOrderId());
 
+            // 计算出默认得分的总权重值
+            BigDecimal defaultScore = calculateEvaluateScore(ScoreRankConstants.DEFAULT_EVALUATION_LEVEL);
+
             // 评价得分
-            BigDecimal evaluationScore = order.getValueScore().divide(DEFAULT_EVALUATE_SCORE).multiply(calculateEvaluateScore(order.getEvaluateStart()));
+            BigDecimal evaluationScore = order.getValueScore().divide(defaultScore, 5, BigDecimal.ROUND_HALF_EVEN)
+                    .multiply(calculateEvaluateScore(order.getEvaluateStart()));
 
             // 更新评分到大V技能评分表和总评分排名表
             updateToBigvScore(order.getServiceId(), order.getSkillItemId(), order.getCustomerSkillId(), evaluationScore.subtract(order.getValueScore()));
@@ -171,8 +164,12 @@ public class ScoreRankServiceImpl implements ScoreRankService {
      * @return
      */
     private static BigDecimal calculateEvaluateScore(Integer evaluateStars) {
+        if(evaluateStars == null){
+            evaluateStars = 0;
+        }
         return new BigDecimal(evaluateStars
                 * ScoreRankConstants.EVALUATION_LEVEL_WEIGHT_MAP.get(evaluateStars)
                 * ScoreRankConstants.PLATFORM_ORDER_EVALUATION_WEIGHT);
     }
+
 }
