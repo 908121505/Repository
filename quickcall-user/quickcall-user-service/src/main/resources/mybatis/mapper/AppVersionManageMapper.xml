@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.honglu.quickcall.user.facade.entity.AppVersionManage">
+<mapper namespace="com.honglu.quickcall.user.service.dao.AppVersionManageMapper">
 
 	<resultMap type="com.honglu.quickcall.user.facade.entity.AppVersionManage" id="appVersioninfoMap">
 		<id property="appVersionId" column="app_version_id"></id>
@@ -40,11 +40,11 @@
 	
 	<select id="findAppVersionInfo" resultMap="appVersioninfoMap" parameterType="Map">
 	select 
-	<include refid="Base_Column_List">
+	<include refid="Base_Column_List"/>
 	from app_version_manage
 	where app_type=#{appType} and state=#{state} and tag=#{tag}
 	order by create_time desc
-	</include>
+	
 	
 	</select>
 	

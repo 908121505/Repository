@@ -13,7 +13,7 @@
 		<div class="modal-header">
 			<button type="button" class="close" data-dismiss="modal"
 				aria-hidden="true">X</button>
-			<h3 id="myModalLabel">价格等级详情</h3>
+			<h3 id="myModalLabel">接单详情</h3>
 		</div>
 		<div class="modal-body" style="max-height: 700px; overflow-y: auto;"  id = "editBody">
 			<form class="form-horizontal" method="post" id="editOrderForm" name="editOrderForm" role="form"

@@ -34,6 +34,11 @@ public interface UserFunctionType {
 	// 系统相关 001300 - 001350
 	String MarketOnOff = "001300";
 	String AppConfig = "001301";
+	//保存预约消息
+	String AddBookingMessage = "221101";
+
+	//获取预约消息
+	String QueryBookingMessage = "221102";
 
 	/**
 	 * 推送APP消息
