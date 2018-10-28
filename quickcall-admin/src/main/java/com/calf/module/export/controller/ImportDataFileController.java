@@ -73,14 +73,14 @@ public class ImportDataFileController {
                 Matcher m = PHONE_PATTERN.matcher(phoneNum);
                 if(!m.matches()){
                     //手机号码格式不准确
-                    String tip = "第" + rowNum + "行手机号码格式不准确，手机号：" + phoneNum + "！";
+                    String tip = "第" + (rowNum+1) + "行手机号码格式不准确，手机号：" + phoneNum + "！";
                     errorMessage += tip;
                     LOGGER.warn(tip);
                     continue;
                 }
                 if(checkSet.contains(phoneNum)){
                     //手机号码重复
-                    String tip = "第" + rowNum + "行存在重复手机号，手机号：" + phoneNum + "，不再重复导入！";
+                    String tip = "第" + (rowNum+1) + "行存在重复手机号，手机号：" + phoneNum + "，不再重复导入！";
                     errorMessage += tip;
                     LOGGER.warn(tip);
                     continue;
