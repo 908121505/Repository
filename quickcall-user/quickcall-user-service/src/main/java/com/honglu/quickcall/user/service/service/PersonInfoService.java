@@ -7,6 +7,7 @@ import com.honglu.quickcall.user.facade.exchange.request.CheckEachAttentionReque
 import com.honglu.quickcall.user.facade.exchange.request.CustomerCenterRequest;
 import com.honglu.quickcall.user.facade.exchange.request.CustomerHomeRequest;
 import com.honglu.quickcall.user.facade.exchange.request.CustomerLevelRequest;
+import com.honglu.quickcall.user.facade.exchange.request.IsBigVidentityRequest;
 import com.honglu.quickcall.user.facade.exchange.request.NoReadAttentionCountRequest;
 import com.honglu.quickcall.user.facade.exchange.request.QueryAttentionFansListRequest;
 import com.honglu.quickcall.user.facade.exchange.request.QueryInterestListRequest;
@@ -140,8 +141,18 @@ public interface PersonInfoService {
 
 	/**
 	 * 查询是否互相关注
+	 * 
 	 * @param request
 	 * @return
 	 */
 	CommonResponse checkEachAttention(CheckEachAttentionRequest request);
+
+	/**
+	 * 判断是否是大V
+	 * 
+	 * @param request
+	 * @return
+	 */
+	CommonResponse isBigVidentity(IsBigVidentityRequest request);
+
 }

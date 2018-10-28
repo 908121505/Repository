@@ -10,6 +10,7 @@ import com.honglu.quickcall.common.api.exchange.WebResponseModel;
 import com.honglu.quickcall.user.facade.exchange.request.AddOrCancelFansRequest;
 import com.honglu.quickcall.user.facade.exchange.request.CheckAttentionRequest;
 import com.honglu.quickcall.user.facade.exchange.request.CheckEachAttentionRequest;
+import com.honglu.quickcall.user.facade.exchange.request.IsBigVidentityRequest;
 import com.honglu.quickcall.user.facade.exchange.request.NoReadAttentionCountRequest;
 import com.honglu.quickcall.user.facade.exchange.request.QueryAttentionFansListRequest;
 import com.honglu.quickcall.user.facade.exchange.request.QueryInterestListRequest;
@@ -147,7 +148,7 @@ public class AccountInfoController {
 		WebResponseModel response = userCenterService.execute(params);
 		return response;
 	}
-	
+
 	/**
 	 * 检查是否关注对方
 	 */
@@ -157,7 +158,7 @@ public class AccountInfoController {
 		WebResponseModel response = userCenterService.execute(params);
 		return response;
 	}
-	
+
 	/**
 	 * 检查是否关注对方
 	 */
@@ -194,6 +195,16 @@ public class AccountInfoController {
 	@RequestMapping(value = "/mySkillList", method = RequestMethod.POST)
 	@ResponseBody
 	public WebResponseModel mySkillList(queryMyskillRequest params) {
+		WebResponseModel response = userCenterService.execute(params);
+		return response;
+	}
+
+	/**
+	 * 我的技能
+	 */
+	@RequestMapping(value = "/isBigVidentity", method = RequestMethod.POST)
+	@ResponseBody
+	public WebResponseModel isBigVidentity(IsBigVidentityRequest params) {
 		WebResponseModel response = userCenterService.execute(params);
 		return response;
 	}
