@@ -89,5 +89,5 @@ public interface ResourceConfigMapper {
      * @param skillItemId
      * @return
      */
-    List<CustomerSkill> selectRankBigvListBySkillItemId(Long skillItemId);
+    List<CustomerSkill> selectRankBigvListBySkillItemId(@Param("skillItemId") Long skillItemId);
 }
