@@ -53,7 +53,7 @@
                     	</select>
 					</div>
 				</div>
-				<div class="form-group hid" >
+				<div class="form-group" >
 					<label class="col-sm-3 control-label">排除声优<font color="red">&nbsp;*</font></label>
 					<div class="col-sm-6">
 					<textarea id="exCusList" name="exCusList" rows="6" cols="20"class="form-control" >${entity.exCusList}</textarea>
