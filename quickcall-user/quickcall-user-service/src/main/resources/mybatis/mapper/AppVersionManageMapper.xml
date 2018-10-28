@@ -40,11 +40,11 @@
 	
 	<select id="findAppVersionInfo" resultMap="appVersioninfoMap" parameterType="Map">
 	select 
-	<include refid="Base_Column_List">
+	<include refid="Base_Column_List"/>
 	from app_version_manage
 	where app_type=#{appType} and state=#{state} and tag=#{tag}
 	order by create_time desc
-	</include>
+	
 	
 	</select>
 	
