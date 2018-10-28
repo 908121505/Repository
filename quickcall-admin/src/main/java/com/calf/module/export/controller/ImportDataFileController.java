@@ -41,7 +41,7 @@ public class ImportDataFileController {
     /**
      * 手机格式正则校验
      */
-    private static Pattern PHONE_PATTERN = Pattern.compile("^((17[0-9])|(13[0-9])|(14[5|7])|(15([0-3]|[5-9]))|(18[0,5-9]))\\d{8}$");
+    private static Pattern PHONE_PATTERN = Pattern.compile("^((1[0-9]))\\d{9}$");
 
     /**
      * 导入消息记录
