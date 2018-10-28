@@ -33,19 +33,10 @@ public class AppConfigDataServiceImpl implements AppConfigDataService {
         }
         Banner bannerParms = new Banner();
         bannerParms.setBannerType(request.getBannerType());
-//        bannerParms.setDeviceType(request.getDeviceType());
+        bannerParms.setDeviceType(request.getDeviceType());
         bannerParms.setAppVersionRule(request.getAppVersionRule());
         bannerParms.setAppVersion(request.getAppVersion());
 
-        Integer  deviceType = request.getDeviceType();
-        if(deviceType == null || deviceType == 0){
-        	bannerParms.setDeviceType(null);
-        }else if(deviceType == 1){
-        	bannerParms.setDeviceType(2);
-        }else if (deviceType == 2){
-        	bannerParms.setDeviceType(1);
-        }
-        
         List<Banner> list = bannerMapper.queryBannerInfo(bannerParms);
         return ResultUtils.resultSuccess(list);
     }

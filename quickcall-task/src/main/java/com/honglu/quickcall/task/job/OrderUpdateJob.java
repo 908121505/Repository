@@ -327,22 +327,22 @@ public class OrderUpdateJob {
     	if(dvFlag){
     		remarkName = OrderSkillConstants.MSG_CONTENT_DAV ;
     		if(cancelType == CANCEL_ONE){
-    			content =  OrderSkillConstants.IM_MSG_CONTENT_CANCEL_CUST_15MINUTE_TIMEOUT ;
+    			content =  OrderSkillConstants.IM_MSG_CONTENT_CANCEL_DV_15MINUTE_TIMEOUT ;
     		}else if (cancelType == CANCEL_TWO){
 //    			content =  OrderSkillConstants.IM_MSG_CONTENT_CANCEL_CUST_5MINUTE_START_TIMEOUT ;
     		}else if (cancelType == CANCEL_THREE){
-    			content =  OrderSkillConstants.IM_MSG_CONTENT_CANCEL_CUST_5MINUTE_CONFIRM_TIMEOUT ;
+    			content =  OrderSkillConstants.IM_MSG_CONTENT_CANCEL_DV_5MINUTE_CONFIRM_TIMEOUT ;
     		}else if(cancelType == CANCEL_FOUR){
     			content =  OrderSkillConstants.IM_MSG_CONTENT_CUST_NOT_PING_JIA ;
     		}
     	}else{
     		remarkName = OrderSkillConstants.MSG_CONTENT_C ;
     		if(cancelType == CANCEL_ONE){
-    			content =  OrderSkillConstants.IM_MSG_CONTENT_CANCEL_DV_15MINUTE_TIMEOUT ;
+    			content =  OrderSkillConstants.IM_MSG_CONTENT_CANCEL_CUST_15MINUTE_TIMEOUT ;
     		}else if (cancelType == CANCEL_TWO){
 //    			content =  OrderSkillConstants.IM_MSG_CONTENT_CANCEL_DV_5MINUTE_START_TIMEOUT ;
     		}else if (cancelType == CANCEL_THREE){
-    			content =  OrderSkillConstants.IM_MSG_CONTENT_CANCEL_DV_5MINUTE_CONFIRM_TIMEOUT ;
+    			content =  OrderSkillConstants.IM_MSG_CONTENT_CANCEL_CUST_5MINUTE_CONFIRM_TIMEOUT ;
     		}else if(cancelType == CANCEL_FOUR){
 //    			content =  OrderSkillConstants.IM_MSG_CONTENT_CANCEL_CUST_FINISH ;
     		}

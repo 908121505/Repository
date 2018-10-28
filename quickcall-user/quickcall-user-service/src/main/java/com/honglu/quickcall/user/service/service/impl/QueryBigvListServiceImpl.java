@@ -91,7 +91,7 @@ public class QueryBigvListServiceImpl implements QueryBigvListService {
      * @param customerSkills
      * @return
      */
-    private void packetCustomerSkillList(AppHomeBigvListVO recomedBigv, List<CustomerSkill> customerSkills) {
+    private List<AppHomeBigvListVO.BigvInfoVO> packetCustomerSkillList(AppHomeBigvListVO recomedBigv, List<CustomerSkill> customerSkills) {
         List<AppHomeBigvListVO.BigvInfoVO> recomedBigvList = new ArrayList<>();
         // 封装数据
         for (CustomerSkill customerSkill : customerSkills) {
@@ -99,8 +99,7 @@ public class QueryBigvListServiceImpl implements QueryBigvListService {
             packetBigvInfo(bigv, customerSkill);
             recomedBigvList.add(bigv);
         }
-
-        recomedBigv.setDaVinfoList(recomedBigvList);
+        return recomedBigvList;
     }
 
 
@@ -153,11 +152,7 @@ public class QueryBigvListServiceImpl implements QueryBigvListService {
         if(customerSkillList == null || customerSkillList.size() == 0){
             return null;
         }
-        List<AppHomeBigvListVO.BigvInfoVO> bigvList = new ArrayList<>();
-
-        packetCustomerSkillList(bigvListVO, customerSkillList);
-
-        bigvListVO.setDaVinfoList(bigvList);
+        bigvListVO.setDaVinfoList(packetCustomerSkillList(bigvListVO, customerSkillList));
         return bigvListVO;
     }
 

@@ -912,6 +912,6 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 			return ResultUtils.resultSuccess(1);
 		}
 
-		return ResultUtils.resultSuccess(1);
+		return ResultUtils.resultSuccess(0);
 	}
 }

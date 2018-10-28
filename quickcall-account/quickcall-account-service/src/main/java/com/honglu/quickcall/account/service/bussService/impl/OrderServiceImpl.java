@@ -330,23 +330,6 @@ public class OrderServiceImpl implements IOrderService {
 			barrageMessageService.lpushMessage(orderId);
 			
 			
-//			String  custStr = JedisUtil.get(RedisKeyConstants.USER_CUSTOMER_INFO+serviceId) ;
-//			LOGGER.info("11111111111111111111111111111"+custStr);
-//			if(StringUtils.isNotBlank(custStr)){
-//				try {
-//					Customer customer = JSON.parse(custStr, Customer.class);
-//					if(customer != null){
-//						String  phone =  customer.getPhone();
-//						if(StringUtils.isNotBlank(phone)){
-//							SendSmsUtil.sendSms(UUIDUtils.getUUID(), phone, 2, customerSkill.getSkillName());
-//						}
-//						
-//						//用户下单需要使用个推推送消息
-//						GtPushUtil.sendNotificationTemplateToList(customer.getGtClientId(), OrderSkillConstants.GT_MSG_ORDER_TITLE, OrderSkillConstants.GT_MSG_CONTENT_RECEIVE_ORDER, OrderSkillConstants.GT_MSG_CONTENT_RECEIVE_ORDER_URL);
-//					}
-//				} catch (Exception e) {
-//				}
-//			}
 			
 			//获取大V手机号码
 			Customer  service =  commonService.getPhoneByCustomerId(serviceId);
@@ -880,7 +863,7 @@ public class OrderServiceImpl implements IOrderService {
 				//大V接受订单通知用户
 				RongYunUtil.sendOrderMessage(customerId, OrderSkillConstants.IM_MSG_CONTENT_DAV_REFUSE_TO_CUST,OrderSkillConstants.MSG_CONTENT_C);
 				//大V接受订单通知大V
-				RongYunUtil.sendOrderMessage(serviceId, OrderSkillConstants.IM_MSG_CONTENT_DAV_REFUSE_TO_CUST,OrderSkillConstants.MSG_CONTENT_DAV);
+				RongYunUtil.sendOrderMessage(serviceId, OrderSkillConstants.IM_MSG_CONTENT_DAV_REFUSE_TO_DV,OrderSkillConstants.MSG_CONTENT_DAV);
 				
 				
 			//大V不同意，状态为大V拒绝，退款给购买者
@@ -1010,7 +993,7 @@ public class OrderServiceImpl implements IOrderService {
 				}else{
 					//大V在服务时间内发起完成服务
 					newOrderStatus = OrderSkillConstants.ORDER_STATUS_GOING_DAV_APPAY_FINISH ;
-					RongYunUtil.sendOrderMessage(serviceId, OrderSkillConstants.IM_MSG_CONTENT_CUST_FINISH,OrderSkillConstants.MSG_CONTENT_DAV);
+					RongYunUtil.sendOrderMessage(serviceId, OrderSkillConstants.IM_MSG_CONTENT_CUST_FINISH,OrderSkillConstants.MSG_CONTENT_C);
 				}
 			}else{
 			//用户发起完成服务	
