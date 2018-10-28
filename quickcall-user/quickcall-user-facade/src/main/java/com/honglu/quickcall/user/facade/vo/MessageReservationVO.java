@@ -17,6 +17,11 @@ public class MessageReservationVO {
     private String customerName;
 
     /**
+     * 客户头像
+     */
+    private String customerIconUrl;
+
+    /**
      * 消息接受者（大V用户ID）
      */
     private Long receiverId;
@@ -79,6 +84,14 @@ public class MessageReservationVO {
 
     public void setCustomerName(String customerName) {
         this.customerName = customerName;
+    }
+
+    public String getCustomerIconUrl() {
+        return customerIconUrl;
+    }
+
+    public void setCustomerIconUrl(String customerIconUrl) {
+        this.customerIconUrl = customerIconUrl;
     }
 
     public Long getReceiverId() {

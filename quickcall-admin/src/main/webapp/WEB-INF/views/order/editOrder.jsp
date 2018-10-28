@@ -83,7 +83,7 @@
 						</select>
 					</div>
 				</div>
-				<div class="form-group" id="remarkReasonDev">
+				<div class="form-group" id="remarkReasonDev" hidden="hidden">
 					<label class="col-sm-3 control-label">取消原因<font color="red">&nbsp;*</font></label>
 					<div class="col-sm-6">
 						<input type="text" placeholder="如果状态选取消，请写上取消原因" id="remarkReason" class="form-control"  name="remarkReason" value="${entity.remarkReason}">
@@ -110,13 +110,14 @@
 
 </script>
 
-<%--
 <script language='javascript'>
     $(function(){
         $(document).ready(function(){
             $("#orderStatus").change(function(){
-                var hideselect = $(this).val();
-                if(hideselect == 6||hideselect == 8||hideselect == 10){
+                var hideSelect = $(this).val();
+                if(hideSelect == 4||hideSelect == 6||
+                    hideSelect == 12||hideSelect == 14||
+                    hideSelect == 16||hideSelect == 20){
                     $("#remarkReasonDev").show().addClass("show");
                 }else{
                     $("#remarkReasonDev").hide().removeClass("show");
@@ -124,4 +125,4 @@
             })
         })
     });
-</script>--%>
+</script>

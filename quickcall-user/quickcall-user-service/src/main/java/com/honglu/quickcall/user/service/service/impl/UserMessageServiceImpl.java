@@ -121,6 +121,7 @@ public class UserMessageServiceImpl implements UserMessageService {
             mrv.setCreateTime(DateUtil.dateFormat(mr.getCreateTime(),"yyyy-MM-dd HH:mm:ss"));
             if (customer!=null){
                 mrv.setCustomerName(customer.getNickName());
+                mrv.setCustomerIconUrl(customer.getHeadPortraitUrl());
             }
             String[] pus = mr.getPriceUnit().split("-");
             if (pus.length>1){
