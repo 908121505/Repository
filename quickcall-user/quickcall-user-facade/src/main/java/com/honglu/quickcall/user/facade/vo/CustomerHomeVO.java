@@ -158,6 +158,10 @@ public class CustomerHomeVO implements Serializable {
          * 用户标签 -- 最多的3个标签
          */
         private List<String> customerLabel;
+        /**
+         * 技能订单数
+         */
+        private Integer skillOrderNo;
 
         public Long getCustomerSkillId() {
             return customerSkillId;
@@ -253,6 +257,14 @@ public class CustomerHomeVO implements Serializable {
 
         public void setCustomerLabel(List<String> customerLabel) {
             this.customerLabel = customerLabel;
+        }
+
+        public Integer getSkillOrderNo() {
+            return skillOrderNo;
+        }
+
+        public void setSkillOrderNo(Integer skillOrderNo) {
+            this.skillOrderNo = skillOrderNo;
         }
 
         @Override

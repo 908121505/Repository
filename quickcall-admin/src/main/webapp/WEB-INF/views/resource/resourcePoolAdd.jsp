@@ -33,7 +33,7 @@
 					<label class="col-sm-4 control-label">录入<font color="red">&nbsp;*</font></label>
 					<div class="col-sm-8">
 						<%--<input type="hidden" id="soundTotal" class="form-control" name="soundTotal" value="${entity.soundTotal}" />--%>
-						<textarea id="soundTotalUIDStr" rows="10" cols="48" name="soundTotalUIDStr" placeholder="录入主播的UID，换行录入多个">${entity.soundTotalUIDStr}</textarea>
+						<textarea id="soundTotalUIDStr" rows="10" cols="48" name="soundTotalUIDStr" placeholder="录入主播的APPID，换行录入多个">${entity.soundTotalUIDStr}</textarea>
 					</div>
 				</div>
 				

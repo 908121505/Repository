@@ -284,9 +284,9 @@ public class RongYunUtil {
 		 * null, null, null, null, null, null); System.out.println(code);
 		 */
 		Long toCustomerId = 1810161659557030302L;
-		sendSystemMessage(toCustomerId, "我喜欢亚波1");
-		sendOrderMessage(toCustomerId, "你有一条新的订单哦1");
-		sendActivityMessage(toCustomerId, "红包1");
+		// sendSystemMessage(toCustomerId, "我喜欢亚波1");
+		// sendOrderMessage(toCustomerId, "你有一条新的订单哦1");
+		// sendActivityMessage(toCustomerId, "红包1");
 		sendBespokeMessage(toCustomerId, "预约消息1");
 
 		/*

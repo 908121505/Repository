@@ -1,7 +1,9 @@
 package com.honglu.quickcall.user.test;
 
 import com.honglu.quickcall.user.facade.business.UserCenterSendMqMessageService;
+import com.honglu.quickcall.user.facade.entity.ResourceConfig;
 import com.honglu.quickcall.user.facade.exchange.mqrequest.DoOrderCastMqRequest;
+import com.honglu.quickcall.user.service.dao.ResourceConfigMapper;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.amqp.core.AmqpTemplate;
@@ -9,6 +11,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * MQ测试
@@ -24,6 +27,8 @@ public class TestMq {
     private AmqpTemplate amqpTemplate;
     @Resource
     private UserCenterSendMqMessageService userCenterSendMqMessageService;
+    @Resource
+    private ResourceConfigMapper resourceConfigMapper;
 
     @Test
     public void testSend() {
@@ -36,6 +41,9 @@ public class TestMq {
 
     @Test
     public void testSendMqService(){
-        userCenterSendMqMessageService.sendEvaluationOrderMqMessage(1809282102486183353L);
+
+        List<ResourceConfig> configs = resourceConfigMapper.selectAllResourceConfig();
+        System.out.println(configs);
+//        userCenterSendMqMessageService.sendEvaluationOrderMqMessage(1809282102486183353L);
     }
 }

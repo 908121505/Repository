@@ -27,6 +27,8 @@ public enum SmallOrderStatusEnums {
     fuwwc("36","已完成（大V在服务时间外完成）"),
     sfywc("38","已完成（双方12小时内未发起完成服务）"),
     pjywc("40","已完成（用户评价完成）"),
+    qzqx("42","强制取消"),
+    qzwc("44","强制完成"),
     ;
 
     private final String value;

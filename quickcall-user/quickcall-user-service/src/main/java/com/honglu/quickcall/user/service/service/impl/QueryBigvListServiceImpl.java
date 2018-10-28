@@ -48,6 +48,7 @@ public class QueryBigvListServiceImpl implements QueryBigvListService {
     @Autowired
     private BigvSkillScoreMapper bigvSkillScoreMapper;
 
+/*
 
     @Override
     public CommonResponse queryHomeBigvList(FirstPageBigvListRequest request) {
@@ -82,6 +83,7 @@ public class QueryBigvListServiceImpl implements QueryBigvListService {
 
         return ResultUtils.resultSuccess(resultList);
     }
+*/
 
     /**
      * 查询首页6针资源位大V列表
@@ -102,8 +104,8 @@ public class QueryBigvListServiceImpl implements QueryBigvListService {
     }
 
 
-//    @Override
-    public CommonResponse queryHomeBigvList2(FirstPageBigvListRequest request) {
+    @Override
+    public CommonResponse queryHomeBigvList(FirstPageBigvListRequest request) {
         List<AppHomeBigvListVO> resultList = new LinkedList<>();
 
         Integer weekIndex = DateUtils.getDayOfWeek();
@@ -229,7 +231,7 @@ public class QueryBigvListServiceImpl implements QueryBigvListService {
 
             // 加入排除列表
             if (bigv != null) {
-                exCustomerIds.add(customerIdMap.get(config.getConfigNum()).getCustomerId());
+                exCustomerIds.add(bigv.getCustomerId());
             }
 
             customerIdMap.put(config.getConfigNum(), bigv);
