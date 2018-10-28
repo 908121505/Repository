@@ -52,7 +52,7 @@
           ,(
           SELECT count(o.order_id) FROM orders o
           WHERE o.customer_skill_id = bss.customer_skill_id
-                AND o.skill_type = (select si.skill_type from skill_item si where si.id = bss.customer_skill_id)
+                AND o.skill_type = (select si.skill_type from skill_item si where si.id = bss.skill_item_id)
                 AND o.order_status IN (10, 18, 26, 28)
           ) AS skillOrdered
         </if>
@@ -85,7 +85,7 @@
           <if test="skillOrdered == 0">
             ,(SELECT count(o.order_id) FROM orders o
                 WHERE o.customer_skill_id = bss.customer_skill_id
-                      AND o.skill_type = (select si.skill_type from skill_item si where si.id = bss.customer_skill_id)
+                      AND o.skill_type = (select si.skill_type from skill_item si where si.id = bss.skill_item_id)
                       AND o.order_status IN (10, 18, 26, 28)
             ) AS skillOrdered
           </if>
@@ -125,7 +125,7 @@
           <if test="skillOrdered == 0">
               ,(SELECT count(o.order_id) FROM orders o
                   WHERE o.customer_skill_id = csk.customer_skill_id
-                        AND o.skill_type = (select si.skill_type from skill_item si where si.id = csk.customer_skill_id)
+                        AND o.skill_type = (select si.skill_type from skill_item si where si.id = csk.skill_item_id)
                         AND o.order_status IN (10, 18, 26, 28)
               ) AS skillOrdered
           </if>
@@ -163,7 +163,7 @@
             bss.score_total
             ,(SELECT count(o.order_id) FROM orders o
               WHERE o.customer_skill_id = bss.customer_skill_id
-                    AND o.skill_type = (select si.skill_type from skill_item si where si.id = bss.customer_skill_id)
+                    AND o.skill_type = (select si.skill_type from skill_item si where si.id = bss.skill_item_id)
                     AND o.order_status IN (10, 18, 26, 28)
             ) AS skillOrdered
         FROM bigv_skill_score bss
