@@ -404,4 +404,39 @@ public class UserCommonController {
 		return response;
 
 	}
+
+	/**
+	 * 绑定微信或者QQ
+	 * 
+	 * @param params
+	 * @return
+	 */
+	@RequestMapping(value = "/checkVerifyCode", method = RequestMethod.POST)
+	@ResponseBody
+	public WebResponseModel checkVerifyCode(SetPwdRequest params) {
+
+		logger.info("userWeb.user.checkVerifyCode.request.data : " + JSONObject.toJSONString(params));
+		WebResponseModel response = new WebResponseModel();
+		if (params.getVerifyCode() != null && params.getCodeType() != null && !"".equals(params.getVerifyCode())
+				&& !"".equals(params.getCodeType())) {
+			if (StringUtils.isBlank(
+					JedisUtil.get(RedisKeyConstants.USER_VERIFYCODE + params.getTel() + params.getCodeType()))) {
+				response.setCode(UserBizReturnCode.paramError.code());
+				response.setMsg("验证码失效请重新获取");
+				return response;
+			}
+			if (!params.getVerifyCode().equals(
+					JedisUtil.get(RedisKeyConstants.USER_VERIFYCODE + params.getTel() + params.getCodeType()))) {
+				response.setCode(UserBizReturnCode.paramError.code());
+				response.setMsg("验证码输入不正确");
+				return response;
+			}
+		}
+		response.setCode(UserBizReturnCode.Success.code());
+		response.setMsg("验证成功");
+
+		logger.info("userWeb.user.checkVerifyCode.response.data : " + JSONObject.toJSONString(response));
+		return response;
+
+	}
 }
