@@ -347,6 +347,8 @@ public class OrderUpdateJob {
 //    			content =  OrderSkillConstants.IM_MSG_CONTENT_CANCEL_CUST_FINISH ;
     		}
     	}
+    	
+    	LOGGER.info("----------------给customerId"+customerId+"推送消息："+content);
     	if(StringUtils.isNotBlank(content)){
 //    		content = OrderSkillConstants.IM_MSG_CONTENT_DEFAULT ;
     		LOGGER.info("给customerId"+customerId+"推送消息："+content);
