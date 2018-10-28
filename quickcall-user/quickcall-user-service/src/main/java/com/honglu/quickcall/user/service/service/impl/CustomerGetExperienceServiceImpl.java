@@ -1,19 +1,16 @@
 package com.honglu.quickcall.user.service.service.impl;
 
-import com.honglu.quickcall.account.facade.constants.OrderSkillConstants;
-import com.honglu.quickcall.account.facade.entity.Order;
-import com.honglu.quickcall.account.facade.enums.PayOrderStatusEnum;
-import com.honglu.quickcall.user.facade.entity.Customer;
-import com.honglu.quickcall.user.facade.exchange.mqrequest.DoOrderCastMqRequest;
-import com.honglu.quickcall.user.service.dao.CustomerMapper;
-import com.honglu.quickcall.user.service.mq.pull.UserCenterMqExperienceListener;
-import com.honglu.quickcall.user.service.service.CustomerGetExperienceService;
+import java.math.BigDecimal;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
-import java.util.Objects;
+import com.honglu.quickcall.account.facade.entity.Order;
+import com.honglu.quickcall.user.facade.entity.Customer;
+import com.honglu.quickcall.user.facade.exchange.mqrequest.DoOrderCastMqRequest;
+import com.honglu.quickcall.user.service.dao.CustomerMapper;
+import com.honglu.quickcall.user.service.service.CustomerGetExperienceService;
 
 /**
  * 客户获取经验值接口实现类
