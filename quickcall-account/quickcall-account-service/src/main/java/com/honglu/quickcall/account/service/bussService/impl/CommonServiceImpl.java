@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.alibaba.dubbo.common.json.JSON;
+import com.alibaba.fastjson.JSON;
 import com.honglu.quickcall.account.facade.constants.OrderSkillConstants;
 import com.honglu.quickcall.account.facade.entity.Order;
 import com.honglu.quickcall.account.facade.vo.OrderTempResponseVO;
@@ -332,7 +332,7 @@ public class CommonServiceImpl implements CommonService {
 		String  custStr = JedisUtil.get(RedisKeyConstants.USER_CUSTOMER_INFO+customerId) ;
 		if(StringUtils.isNotBlank(custStr)){
 			try {
-				Customer customer = JSON.parse(custStr, Customer.class);
+				Customer customer = JSON.parseObject(custStr,  Customer.class);
 				return customer;
 				
 			} catch (Exception e) {
