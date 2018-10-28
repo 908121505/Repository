@@ -246,6 +246,34 @@ public class DateUtils {
            return 0;
         }
     }
+
+    /**
+     * 根据出生年份计算年龄
+     * @param birthday
+     * @return
+     */
+    public static int getAgeByBirthYear(Date birthday) {
+        int age = 0;
+        if(birthday == null ){
+            return age ;
+        }
+        try {
+            Calendar now = Calendar.getInstance();
+            now.setTime(new Date());
+
+            Calendar birth = Calendar.getInstance();
+            birth.setTime(birthday);
+
+            if (birth.after(now)) {
+                age = 0;
+            } else {
+                age = now.get(Calendar.YEAR) - birth.get(Calendar.YEAR);
+            }
+            return age;
+        } catch (Exception e) {
+            return 0;
+        }
+    }
     
     /**
      * 获取两个时间之间的秒数
