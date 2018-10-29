@@ -409,6 +409,7 @@
         </dependency>
 
 
+
         <!-- 个推 -->
         <dependency>
             <groupId>com.gexin.platform</groupId>
@@ -437,6 +438,7 @@
             <artifactId>gexin-rp-sdk-http</artifactId>
             <version>4.0.1.17</version>
         </dependency>
+
     </dependencies>
 
     <profiles>
