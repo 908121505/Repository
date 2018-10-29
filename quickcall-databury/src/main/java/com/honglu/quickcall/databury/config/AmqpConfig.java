@@ -87,8 +87,8 @@ public class AmqpConfig {
      */
     private RabbitTemplate getRabbitTemplate(ConnectionFactory connectionFactory) {
         RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
-//        Jackson2JsonMessageConverter messageConverter = new Jackson2JsonMessageConverter();
-//        rabbitTemplate.setMessageConverter(messageConverter);
+        /*Jackson2JsonMessageConverter messageConverter = new Jackson2JsonMessageConverter();
+        rabbitTemplate.setMessageConverter(messageConverter);*/
         return rabbitTemplate;
     }
 }

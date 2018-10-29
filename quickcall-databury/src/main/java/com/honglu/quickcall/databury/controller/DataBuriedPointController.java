@@ -18,10 +18,9 @@ import javax.servlet.http.HttpServletRequest;
 @Controller
 @RequestMapping("/data")
 public class DataBuriedPointController {
-    private static final String encoding = "UTF-8";
-    private static final String queue = "queue-dataBuried";
-    private static final String exchange = "dataBuried-exchange";
-    private static final String routingKey = "dataBuried-routing-key";
+    public static final String queues = "data-dury-point-queue";
+    public static final String EXCHANGE = "data-dury-point-exchange";
+    public static final String ROUTINGKEY = "data-dury-point-routingKey";
 
     @Autowired
     private RabbitSender rabbitSender;
@@ -40,8 +39,8 @@ public class DataBuriedPointController {
         // 发送消息
         XPMessage xnMessage = new XPMessage();
         xnMessage.setMessageId("1234");
-        xnMessage.setExchangeName(exchange);
-        xnMessage.setRoutingKey(routingKey);
+        xnMessage.setExchangeName(EXCHANGE);
+        xnMessage.setRoutingKey(ROUTINGKEY);
         xnMessage.setMessageBody("alsdkfjlasdkjflaksd");
         xnMessage.setBusinessCode("300");
         xnMessage.setTraceId("123456789");
@@ -59,10 +58,12 @@ public class DataBuriedPointController {
     public Object sendBack(HttpServletRequest request) {
         // 发送消息
         XPMessage xnMessage = new XPMessage();
-        xnMessage.setMessageId("1234");
-        xnMessage.setMessageBody("alsdkfjlasdkjflaksd");
-        xnMessage.setBusinessCode("300");
-        xnMessage.setTraceId("123456789");
+        xnMessage.setMessageId("12345654344");
+        xnMessage.setExchangeName(EXCHANGE);
+        xnMessage.setRoutingKey(ROUTINGKEY);
+        xnMessage.setMessageBody("alsdkasdfasdfasdfasdfdkjflaksd");
+        xnMessage.setBusinessCode("40012");
+        xnMessage.setTraceId("43212341");
         sender.sendMessage(xnMessage);
         return "success";
     }

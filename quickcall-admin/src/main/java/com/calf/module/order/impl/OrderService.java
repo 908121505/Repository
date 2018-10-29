@@ -94,11 +94,6 @@ public class OrderService {
 			if (status!=null){
                 vo.setOrderStatusVal(status.getDesc());
             }
-            if (StringUtils.isNotBlank(vo.getOrderAmount())){
-            	double amount = Double.parseDouble(vo.getOrderAmount());
-				double amountSum = Math.ceil(amount);
-            	vo.setOrderAmount(String.valueOf(amountSum));
-			}
 		}
 		String sEcho = (String) parameters.get("sEcho");
 		int total = baseManager.get("Order.selectCount", paramMap);
@@ -208,10 +203,22 @@ public class OrderService {
         order.setOrderNo(Long.parseLong(orderId));
         order.setCustomerSkillId(skill.getCustomerSkillId());
         order.setCustomerId(Long.parseLong(entity.getPlaceOrderId()));
-        order.setOrderAmounts(new BigDecimal(entity.getOrderAmount()));
+
+		if (StringUtils.isNotBlank(entity.getOrderAmount())&&
+				StringUtils.isNotBlank(entity.getOrderNum())&&
+				StringUtils.isNotBlank(entity.getDiscountType())&&
+				(!"-1".equals(entity.getDiscountType()))){
+			double amount = Double.parseDouble(entity.getOrderAmount());
+			double num = Double.parseDouble(entity.getOrderNum());
+			double rate = Integer.parseInt(entity.getDiscountType())*0.1;
+			double amountS = amount * num;
+			double amountSum = amountS * rate;
+			order.setOrderAmounts(new BigDecimal(amountSum));
+		}
         byte status = (byte) Integer.parseInt(entity.getOrderStatus());
         order.setOrderStatus(status);
         order.setServiceId(skill.getCustomerId());
+        order.setServicePrice(new BigDecimal(entity.getOrderAmount()));
         order.setOrderNum(Integer.parseInt(entity.getOrderNum()));
         order.setDiscountRate(new BigDecimal(entity.getDiscountType()));
         order.setStartTime(DateUtil.StrToDate(entity.getStartTime(),"yyyy-MM-dd HH:mm:dd"));

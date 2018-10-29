@@ -67,13 +67,16 @@ public class DataBuriedPointCustomer {
         container.setConcurrentConsumers(1);
         //设置确认模式手工确认
         container.setAcknowledgeMode(AcknowledgeMode.MANUAL);
+        // 根据情况确认消息
+//        container.setAcknowledgeMode(AcknowledgeMode.AUTO);
         container.setMessageListener(new ChannelAwareMessageListener() {
             @Override
             public void onMessage(Message message, Channel channel) throws Exception {
-                byte[] body = message.getBody();
-                System.out.println("receive msg : " + new String(body));
-                //确认消息成功消费
+//                byte[] body = message.getBody();
+//                System.out.println("receive msg : " + new String(body));
+//                //确认消息成功消费
                 channel.basicAck(message.getMessageProperties().getDeliveryTag(), false);
+                System.out.println("----------------------收到消费消息："+message.getBody());
             }
         });
         return container;

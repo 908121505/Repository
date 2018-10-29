@@ -9,7 +9,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @author SteveGuo
  * @date 2018-04-12 8:06 PM
  */
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = {"com.honglu.quickcall.databury"})
 public class Application {
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);

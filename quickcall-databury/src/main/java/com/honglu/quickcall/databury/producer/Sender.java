@@ -3,6 +3,9 @@ package com.honglu.quickcall.databury.producer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.amqp.core.Message;
+import org.springframework.amqp.core.MessagePostProcessor;
+import org.springframework.amqp.core.MessageProperties;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.rabbit.support.CorrelationData;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +24,7 @@ public class Sender implements RabbitTemplate.ConfirmCallback{
     public static final String EXCHANGE = "data-dury-point-exchange";
     public static final String ROUTINGKEY = "data-dury-point-routingKey";
 
+//    @Autowired
     private RabbitTemplate rabbitTemplate;
 
     /**
@@ -33,16 +37,30 @@ public class Sender implements RabbitTemplate.ConfirmCallback{
         rabbitTemplate.setConfirmCallback(this);
     }
 
-    public void sendMessage(XPMessage message) {
-        LOGGER.info("发送MQ消息，流水号：{}，消息体：{}", message.getTraceId(), message.getMessageId());
-        /**
-         * 重写消息参数实现类，添加traceId(全局唯一流水号)字段
-         */
-        CorrelationData correlationData = new CorrelationData(message.getTraceId());
-        // 发送消息
-        rabbitTemplate.convertAndSend(EXCHANGE, ROUTINGKEY, message,correlationData);
+    public void sendMessage(XPMessage xnMessage) {
+        LOGGER.info("发送MQ消息，流水号：{}，消息体：{}", xnMessage.getTraceId(), xnMessage.getMessageId());
 
-        LOGGER.info("发送MQ消息成功，流水号：{}，消息体：{}", message.getTraceId(), message.getMessageId());
+        /**
+         * 1重写消息参数实现类，添加traceId(全局唯一流水号)字段
+         */
+        CorrelationData correlationData = new CorrelationData(xnMessage.getTraceId());
+        MessagePostProcessor messagePostProcessor = (Message message) -> {
+            MessageProperties messageProperties = new MessageProperties();
+            messageProperties.setHeader("traceId", xnMessage.getTraceId());
+            messageProperties.setHeader("businessCode", xnMessage.getBusinessCode());
+            messageProperties.setHeader("messageBody", xnMessage.getMessageBody());
+            messageProperties.setMessageId(xnMessage.getMessageId());
+            messageProperties.setCorrelationId(correlationData.getId().getBytes());
+            messageProperties.setCorrelationIdString(correlationData.getId());
+            messageProperties.setContentEncoding("UTF-8");
+            messageProperties.setContentType("application/json");
+            return new Message(xnMessage.getMessageBody().getBytes(), messageProperties);
+        };
+
+        // 发送消息
+        rabbitTemplate.convertAndSend(xnMessage.getExchangeName(), xnMessage.getRoutingKey(),
+                xnMessage.getMessageBody(),messagePostProcessor);
+        LOGGER.info("发送MQ消息成功，流水号：{}，消息体：{}", xnMessage.getTraceId(), xnMessage.getMessageId());
     }
 
     /**
