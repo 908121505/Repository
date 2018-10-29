@@ -15,7 +15,7 @@ public class SendSmsUtil {
 	public static String codeTemplateCode = "sms_10_code_61";
 
 	// 订单通知模板
-	public static String orderTemplateCode = "sms_10_sys_62";
+	public static String orderTemplateCode = "sms_10_code_62";
 
 	public static String singName = "轻音互动";
 
