@@ -716,6 +716,11 @@ public class OrderServiceImpl implements IOrderService {
 			// ADUAN 订单服务完成推送MQ消息
 			userCenterSendMqMessageService.sendOrderCostMqMessage(orderId);
 			
+			//大V接受订单通知大V
+			RongYunUtil.sendOrderMessage(order.getServiceId(), OrderSkillConstants.IM_MSG_CONTENT_DAV_CUST_CONFIRM_TO_DV,OrderSkillConstants.MSG_CONTENT_DAV);
+			
+			
+			
 		}else{
 			//订单不存在
 			throw new BizException(AccountBizReturnCode.ORDER_NOT_EXIST, "订单不存在，无法对订单操作");

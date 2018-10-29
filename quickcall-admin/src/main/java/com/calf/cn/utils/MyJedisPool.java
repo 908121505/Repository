@@ -1,14 +1,11 @@
 package com.calf.cn.utils;
-import java.util.Iterator;
-import java.util.ResourceBundle;
-import java.util.Set;
-
-import net.sf.json.JSONObject;
-import net.sf.json.JsonConfig;
-
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
+
+import java.util.Iterator;
+import java.util.ResourceBundle;
+import java.util.Set;
 
 public class MyJedisPool {
 

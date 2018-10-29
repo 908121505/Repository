@@ -50,6 +50,19 @@ public class ReceiveOrderService {
 		paramMap.put("iDisplayLength", parameters.get("iDisplayLength"));
 		List<ReceiveOrderVO> skillList = baseManager.query("Customer.queryPageList", paramMap);
 		for(ReceiveOrderVO vo:skillList){
+			if (StringUtils.isNotBlank(vo.getServiceUnit())){
+				String[] split = vo.getServiceUnit().split("/");
+				if (split.length>1){
+					double price = Double.parseDouble(split[0]);
+					double rate = 1.0;
+					if (StringUtils.isNotBlank(vo.getDiscountType())){
+						rate = Double.parseDouble(vo.getDiscountType())*0.1;
+					}
+					double amount = price * rate;
+					double amountSum = Math.ceil(amount);
+					vo.setActualPrice(String.valueOf(amountSum));
+				}
+			}
 			if (StringUtils.isNotBlank(vo.getDiscountType())) {
 				double dis = Double.parseDouble(vo.getDiscountType());
 				dis = dis * 10;
@@ -60,8 +73,6 @@ public class ReceiveOrderService {
 		int total = baseManager.get("Customer.selectCount", paramMap);
 
 		//获取订单状态
-
-
 		return new DataTables<ReceiveOrderVO>(sEcho, skillList, skillList.size(), total);
 	}
 

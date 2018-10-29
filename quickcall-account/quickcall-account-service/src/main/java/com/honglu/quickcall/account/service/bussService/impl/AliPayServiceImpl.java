@@ -60,7 +60,12 @@ public class AliPayServiceImpl implements AliPayService {
 	public CommonResponse recharge(RechargeRequest packet) {
 		String params = "";
 		String orderNo = UUIDUtils.getUUID();// 订单
-		String orderDesc = "支付宝充值";
+		String orderDesc = "";
+		if (packet.getPayType() == 1) {
+			orderDesc = "支付宝充值";
+		} else {
+			orderDesc = "微信充值";
+		}
 		String amount = packet.getAmount() + "";// 交易金额
 		String xnPayType = packet.getPayType() + "";// 支付类型 1:支付宝APP, 2 :微信APP ,3:支付宝H5支付,4：微信H5支付
 		// String extData= "{\"phoneNum\":\"18217583747\"}";
