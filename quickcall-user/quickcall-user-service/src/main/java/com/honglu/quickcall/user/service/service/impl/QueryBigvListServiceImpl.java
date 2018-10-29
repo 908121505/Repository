@@ -378,6 +378,7 @@ public class QueryBigvListServiceImpl implements QueryBigvListService {
         Integer pageIndex = request.getPageIndex();
         Integer pageSize = request.getPageSize();
         Integer start = null;
+        //分页参数
         if (pageIndex != null && pageSize != null) {
             start = pageIndex * pageSize;
         }
