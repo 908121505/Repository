@@ -25,11 +25,12 @@
 
   <select id="selectByMessageType" resultMap="BaseResultMap">
     select 
-      m.title, m.H5_url, m.background_image_url, m.message_describe, m.message_content, m.bespeak_send_time
+      m.title, m.H5_url, m.background_image_url, m.message_describe, m.message_content, m.create_time  bespeakSendTime
     from message_customer mc, message m
     where mc.message_id = m.message_id
     and m.type = #{messageType}
     and mc.receiver_id = #{customerId}
+    order by  m.create_time DESC
   </select>
 
   <update id="updateByMessageType" >
