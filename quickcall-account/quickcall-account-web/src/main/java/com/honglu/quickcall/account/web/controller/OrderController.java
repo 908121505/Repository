@@ -109,17 +109,17 @@ public class OrderController {
     	WebResponseModel response = orderInfoService.execute(params);
     	return response;
     }
-    /**
-     * 发起的订单页--去支付
-     * @param params
-     * @return
-     */
-    @RequestMapping(value = "/payOrder", method = RequestMethod.POST)
-    @ResponseBody
-    public WebResponseModel payOrder( /* @RequestBody */ PayOrderRequest params) {
-    	WebResponseModel response = orderInfoService.execute(params);
-    	return response;
-    }
+//    /**
+//     * 发起的订单页--去支付
+//     * @param params
+//     * @return
+//     */
+//    @RequestMapping(value = "/payOrder", method = RequestMethod.POST)
+//    @ResponseBody
+//    public WebResponseModel payOrder( /* @RequestBody */ PayOrderRequest params) {
+//    	WebResponseModel response = orderInfoService.execute(params);
+//    	return response;
+//    }
     /**
      * 发起的订单页--申请退款/完成
      * @param params
@@ -188,17 +188,17 @@ public class OrderController {
     	WebResponseModel response = orderInfoService.execute(params);
     	return response;
     }
-    /**
-     * 查询是否有进行中订单数量
-     * @param params
-     * @return
-     */
-    @RequestMapping(value = "/queryRefundReason", method = RequestMethod.POST)
-    @ResponseBody
-    public WebResponseModel queryRefundReason( /* @RequestBody */ QueryRefundReasonRequest params) {
-    	WebResponseModel response = orderInfoService.execute(params);
-    	return response;
-    }
+//    /**
+//     * 查询是否有进行中订单数量
+//     * @param params
+//     * @return
+//     */
+//    @RequestMapping(value = "/queryRefundReason", method = RequestMethod.POST)
+//    @ResponseBody
+//    public WebResponseModel queryRefundReason( /* @RequestBody */ QueryRefundReasonRequest params) {
+//    	WebResponseModel response = orderInfoService.execute(params);
+//    	return response;
+//    }
 
     /**
      * 订单评价页面
