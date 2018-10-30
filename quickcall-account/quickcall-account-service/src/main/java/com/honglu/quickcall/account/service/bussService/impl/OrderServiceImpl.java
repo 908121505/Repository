@@ -270,6 +270,9 @@ public class OrderServiceImpl implements IOrderService {
 			record.setOrderTime(currTime);
 			record.setRemark(request.getRemark());
 			orderMapper.insert(record);
+			//TODO   券逻辑新增
+			
+			
 			resultMap.put("retCode",  OrderSkillConstants.RET_CODE_SUCCESS);
 			resultMap.put("orderId", orderId+"");
 
@@ -297,6 +300,9 @@ public class OrderServiceImpl implements IOrderService {
 			}
 			//下单成功后推送IM消息
 			RongYunUtil.sendOrderMessage(serviceId, OrderSkillConstants.IM_MSG_CONTENT_RECEIVE_ORDER,OrderSkillConstants.MSG_CONTENT_DAV);
+			
+			
+			
 			LOGGER.info("======>>>>>用户编号为：" + request.getCustomerId() + "下单成功");
 		} catch (Exception e) {
 			e.printStackTrace();
