@@ -141,7 +141,8 @@ public class BarrageMessageServiceImpl implements BarrageMessageService {
             // 获取到数据后，先存入缓存，再返回
             if (list.size() > 0) {
                 jedis.set(BARRAGE_MESSAGE_LIST_REDIS_KEY.getBytes(), SerializeUtil.serialize(list));
-                jedis.expire(BARRAGE_MESSAGE_LIST_REDIS_KEY, 5 * list.size());
+                // 过期时间设为 29秒过期
+                jedis.expire(BARRAGE_MESSAGE_LIST_REDIS_KEY, 29);
                 return ResultUtils.resultSuccess(list);
             }
 
