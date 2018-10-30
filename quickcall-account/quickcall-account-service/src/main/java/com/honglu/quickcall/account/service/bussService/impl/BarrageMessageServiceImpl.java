@@ -156,9 +156,13 @@ public class BarrageMessageServiceImpl implements BarrageMessageService {
 			}
 		} catch (Exception e) {
 			logger.error("出队弹幕消息异常：", e);
-			db2_pool.returnBrokenResource(jedis);
+			if(db2_pool != null){
+				db2_pool.returnBrokenResource(jedis);
+			}
 		} finally {
-			db2_pool.returnResource(jedis);
+			if(db2_pool != null) {
+				db2_pool.returnResource(jedis);
+			}
 		}
 
 		// 最终获取不到数据后 -- 返回空集合
