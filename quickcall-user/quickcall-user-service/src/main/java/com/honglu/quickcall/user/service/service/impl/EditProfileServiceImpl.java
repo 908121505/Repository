@@ -284,7 +284,7 @@ public class EditProfileServiceImpl implements EditProfileService {
 			CustomerAppearance customerAppearanceNew = new CustomerAppearance();
 			customerAppearanceNew.setId(UUIDUtils.getId());
 			// 修改头像这一版不用审核 陈鹏 2018-10-24
-			customerAppearance.setAppearance(params.getHeadPortraitUrl());
+			customerAppearanceNew.setAppearance(params.getHeadPortraitUrl());
 //			customerAppearanceNew.setAuditAppearance(params.getHeadPortraitUrl());
 			customerAppearanceNew.setCustomerId(params.getCustomerId());
 			customerAppearanceNew.setType(AppearanceTypeEnum.HEAD_PORTRAIT.getCode());

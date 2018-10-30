@@ -120,9 +120,23 @@ id,	customer_id,	audit_appearance,	appearance,	type,	audit_status,	sort,	status,
 
 	<insert id="insertAppearance" parameterType="com.honglu.quickcall.user.facade.entity.CustomerAppearance">
 		INSERT INTO customer_appearance
-		(id,customer_id,audit_appearance,type)
+		(id,customer_id,
+		<if test="auditAppearance != null">
+			audit_appearance,
+		</if>
+		<if test="appearance != null">
+			appearance,
+		</if>
+		type)
 		VALUES
-		(#{id},#{customerId},#{auditAppearance},#{type})
+		(#{id},#{customerId},
+		<if test="auditAppearance != null">
+			#{auditAppearance},
+		</if>
+		<if test="appearance != null">
+			#{appearance},
+		</if>
+		#{type})
 	</insert>
 
 	<update id="updateAppearance" parameterType="com.honglu.quickcall.user.facade.entity.CustomerAppearance">
