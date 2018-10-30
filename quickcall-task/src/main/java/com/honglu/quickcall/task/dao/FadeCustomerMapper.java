@@ -99,10 +99,10 @@ public interface FadeCustomerMapper {
 	int updateByPrimaryKey(FadeCustomer record);
 
 	/**
-	 * 跳过 index 条，查询一条数据
+	 * 随机查询一条数据
 	 * 
-	 * @param index
 	 * @return
 	 */
-	FadeCustomer selectOneSkipNum(@Param("index") int index);
+	FadeCustomer selectOneByRandom();
+
 }
