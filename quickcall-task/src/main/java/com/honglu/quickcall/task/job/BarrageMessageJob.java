@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.Random;
 
+import com.alibaba.dubbo.config.annotation.Reference;
+import com.honglu.quickcall.user.facade.business.UserCenterSendMqMessageService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +39,15 @@ public class BarrageMessageJob {
 	private FadeCustomerMapper fadeCustomerMapper;
 	@Autowired
 	private SkillItemMapper skillItemMapper;
+
+    @Reference(version = "0.0.1", group = "userCenter")
+    private UserCenterSendMqMessageService userCenterSendMqMessageService;
+
+    @Scheduled(cron = "0/30 * * * * ?")
+    public void testDubboService(){
+        LOGGER.info("测试DubboService —————— " + System.currentTimeMillis());
+        userCenterSendMqMessageService.sendEvaluationOrderMqMessage(System.currentTimeMillis());
+    }
 
 	/**
 	 * 弹幕消息队列redis key
