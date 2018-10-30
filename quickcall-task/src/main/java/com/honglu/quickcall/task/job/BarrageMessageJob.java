@@ -40,14 +40,14 @@ public class BarrageMessageJob {
 	@Autowired
 	private SkillItemMapper skillItemMapper;
 
-    @Reference(version = "0.0.1", group = "userCenter")
-    private UserCenterSendMqMessageService userCenterSendMqMessageService;
-
-    @Scheduled(cron = "0/30 * * * * ?")
-    public void testDubboService(){
-        LOGGER.info("测试DubboService —————— " + System.currentTimeMillis());
-        userCenterSendMqMessageService.sendEvaluationOrderMqMessage(System.currentTimeMillis());
-    }
+//    @Reference(version = "0.0.1", group = "userCenter")
+//    private UserCenterSendMqMessageService userCenterSendMqMessageService;
+//
+//    @Scheduled(cron = "0/30 * * * * ?")
+//    public void testDubboService(){
+//        LOGGER.info("测试DubboService —————— " + System.currentTimeMillis());
+//        userCenterSendMqMessageService.sendEvaluationOrderMqMessage(System.currentTimeMillis());
+//    }
 
 	/**
 	 * 弹幕消息队列redis key
