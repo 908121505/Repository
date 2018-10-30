@@ -94,6 +94,7 @@
          <if test="customerId != null">
          	and customer_id != #{customerId}
          </if>
+         	and app_id not in(1,2,3,4)
      </where>
      order by
              (case
