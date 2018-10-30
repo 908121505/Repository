@@ -89,7 +89,9 @@ public class BarrageMessageServiceImpl implements BarrageMessageService {
 			Jedis jedis = null;
 			JedisPool db2_pool = null;
 			try {
-				db2_pool = JedisUtil.getJedisPoolDB2();
+//				db2_pool = JedisUtil.getJedisPoolDB2();
+				// 先切换到0库
+				db2_pool = JedisUtil.getJedisPool();
 				jedis = db2_pool.getResource();
 				Long total = jedis.lpush(BARRAGE_MESSAGE_QUEUE_REDIS_KEY, JSON.toJSONString(barrageMessageVO));
 				if (total > MAX_QUEUE_NUM) {
@@ -112,7 +114,9 @@ public class BarrageMessageServiceImpl implements BarrageMessageService {
 		Jedis jedis = null;
 		JedisPool db2_pool = null;
 		try {
-			db2_pool = JedisUtil.getJedisPoolDB2();
+//			db2_pool = JedisUtil.getJedisPoolDB2();
+			// 先切换到0库
+			db2_pool = JedisUtil.getJedisPool();
 			jedis = db2_pool.getResource();
 
 			// 选从缓存列表中取值
@@ -156,9 +160,13 @@ public class BarrageMessageServiceImpl implements BarrageMessageService {
 			}
 		} catch (Exception e) {
 			logger.error("出队弹幕消息异常：", e);
-			db2_pool.returnBrokenResource(jedis);
+			if(db2_pool != null){
+				db2_pool.returnBrokenResource(jedis);
+			}
 		} finally {
-			db2_pool.returnResource(jedis);
+			if(db2_pool != null) {
+				db2_pool.returnResource(jedis);
+			}
 		}
 
 		// 最终获取不到数据后 -- 返回空集合
