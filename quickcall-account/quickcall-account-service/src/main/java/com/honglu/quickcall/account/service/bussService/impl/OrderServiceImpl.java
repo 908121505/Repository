@@ -652,7 +652,13 @@ public class OrderServiceImpl implements IOrderService {
 		    
 			
 			Calendar cal =  Calendar.getInstance();
-			cal.setTime(currTime);
+			Date   startTime =  order.getStartTime();
+			if(startTime != null){
+				//应该取订单进行中起始时间
+				cal.setTime(startTime);
+			}else{
+				cal.setTime(currTime);
+			}
 			Date  endTime =  null;
 			if(addMinute > 0){
 				cal.add(Calendar.MINUTE, addMinute);
