@@ -103,11 +103,11 @@ public interface IOrderService {
 	
 	
 	
-	/**
-	 * 查询退款理由
-	 * @param request
-	 */
-	public CommonResponse  queryRefundReason(QueryRefundReasonRequest  request);
+//	/**
+//	 * 查询退款理由
+//	 * @param request
+//	 */
+//	public CommonResponse  queryRefundReason(QueryRefundReasonRequest  request);
 
 	/**
 	 * 订单评价页面

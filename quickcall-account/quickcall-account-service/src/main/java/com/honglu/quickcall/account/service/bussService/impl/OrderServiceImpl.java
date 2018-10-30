@@ -38,7 +38,6 @@ import com.honglu.quickcall.account.facade.exchange.request.OrderReceiveOrderLis
 import com.honglu.quickcall.account.facade.exchange.request.OrderSaveRequest;
 import com.honglu.quickcall.account.facade.exchange.request.OrderSendOrderListRequest;
 import com.honglu.quickcall.account.facade.exchange.request.QueryIngOrderCountRequest;
-import com.honglu.quickcall.account.facade.exchange.request.QueryRefundReasonRequest;
 import com.honglu.quickcall.account.facade.vo.CustomerSkillIMVO;
 import com.honglu.quickcall.account.facade.vo.OrderDaVSkillVO;
 import com.honglu.quickcall.account.facade.vo.OrderDetailForIMVO;
@@ -905,17 +904,17 @@ public class OrderServiceImpl implements IOrderService {
 
 
 
-	@Override
-	public CommonResponse queryRefundReason(QueryRefundReasonRequest request) {
-		CommonResponse commonResponse = commonService.getCommonResponse();
-		List<String>  reasonList =  new ArrayList<String>();
-		reasonList.add("态度恶劣");
-		reasonList.add("迟到早退");
-		reasonList.add("消极怠工");
-		reasonList.add("不是本人");
-		commonResponse.setData(reasonList);
-		return commonResponse;
-	}
+//	@Override
+//	public CommonResponse queryRefundReason(QueryRefundReasonRequest request) {
+//		CommonResponse commonResponse = commonService.getCommonResponse();
+//		List<String>  reasonList =  new ArrayList<String>();
+//		reasonList.add("态度恶劣");
+//		reasonList.add("迟到早退");
+//		reasonList.add("消极怠工");
+//		reasonList.add("不是本人");
+//		commonResponse.setData(reasonList);
+//		return commonResponse;
+//	}
 
 
     @Override
