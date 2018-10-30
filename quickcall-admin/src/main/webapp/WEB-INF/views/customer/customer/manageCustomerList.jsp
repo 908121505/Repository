@@ -40,6 +40,14 @@
 				</div>
 
 				<div class="form-group"  >
+					<label class="col-sm-4 control-label">手机号<font color="red">&nbsp;*</font></label>
+					<div class="col-sm-8">
+						<input type="text" id="phone" class="form-control"
+							   name="phone" value="${entity.phone}" readonly="readonly">
+					</div>
+				</div>
+
+				<div class="form-group"  >
 					<label class="col-sm-4 control-label">用户类型<font color="red">&nbsp;*</font></label>
 					<div class="col-sm-8">
 						<input type="text" id="type" class="form-control"
@@ -48,7 +56,7 @@
 				</div>
 				<%-- 4=已封禁-无法接单,6=已封禁-无法接指定技能,8=已封禁-账户登录权限,10=已封禁-设备登录权限--%>
 				<div class="form-group"  >
-					<label class="col-sm-4 control-label">用户类型<font color="red">&nbsp;*</font></label>
+					<label class="col-sm-4 control-label">用户状态<font color="red">&nbsp;*</font></label>
 					<div class="col-sm-8">
 						<input type="text" id="custStatusDispaly" class="form-control"
 							   name="custStatusDispaly" value="${entity.custStatus == 1?'正常': entity.custStatus == 4 ?
