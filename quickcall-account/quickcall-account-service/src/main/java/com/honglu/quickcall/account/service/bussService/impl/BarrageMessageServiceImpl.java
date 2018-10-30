@@ -114,9 +114,9 @@ public class BarrageMessageServiceImpl implements BarrageMessageService {
             jedis = db2_pool.getResource();
 
             // 选从缓存列表中取值
-            byte[] cacheList = jedis.get(BARRAGE_MESSAGE_LIST_REDIS_KEY.getBytes());
-            if (cacheList != null && cacheList.length > 0) {
-                return ResultUtils.resultSuccess(SerializeUtil.unserializeForList(cacheList));
+            String cacheList = jedis.get(BARRAGE_MESSAGE_LIST_REDIS_KEY);
+            if (StringUtils.isNotBlank(cacheList)) {
+                return ResultUtils.resultSuccess(JSON.parseArray(cacheList, BarrageMessageVO.class));
             }
 
             List<BarrageMessageVO> list = new ArrayList<>();
@@ -140,7 +140,7 @@ public class BarrageMessageServiceImpl implements BarrageMessageService {
 
             // 获取到数据后，先存入缓存，再返回
             if (list.size() > 0) {
-                jedis.set(BARRAGE_MESSAGE_LIST_REDIS_KEY.getBytes(), SerializeUtil.serialize(list));
+                jedis.set(BARRAGE_MESSAGE_LIST_REDIS_KEY, JSON.toJSONString(list));
                 // 过期时间设为 29秒过期
                 jedis.expire(BARRAGE_MESSAGE_LIST_REDIS_KEY, 29);
                 return ResultUtils.resultSuccess(list);
@@ -148,9 +148,9 @@ public class BarrageMessageServiceImpl implements BarrageMessageService {
 
             // 若获取不到数据，等待200毫秒再从redis缓存列表中获取
             Thread.sleep(200);
-            cacheList = jedis.get(BARRAGE_MESSAGE_LIST_REDIS_KEY.getBytes());
-            if (cacheList != null && cacheList.length > 0) {
-                return ResultUtils.resultSuccess(SerializeUtil.unserializeForList(cacheList));
+            cacheList = jedis.get(BARRAGE_MESSAGE_LIST_REDIS_KEY);
+            if (StringUtils.isNotBlank(cacheList)) {
+                return ResultUtils.resultSuccess(JSON.parseArray(cacheList, BarrageMessageVO.class));
             }
         } catch (Exception e) {
             logger.error("出队弹幕消息异常：", e);
