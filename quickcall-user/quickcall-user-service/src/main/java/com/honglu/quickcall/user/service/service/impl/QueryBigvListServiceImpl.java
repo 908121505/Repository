@@ -47,43 +47,6 @@ public class QueryBigvListServiceImpl implements QueryBigvListService {
     @Autowired
     private BigvSkillScoreMapper bigvSkillScoreMapper;
 
-/*
-
-    @Override
-    public CommonResponse queryHomeBigvList(FirstPageBigvListRequest request) {
-        List<AppHomeBigvListVO> resultList = new LinkedList<>();
-
-        // 查询首页6帧资源位数据
-        AppHomeBigvListVO recomedBigv = new AppHomeBigvListVO();
-        recomedBigv.setSkillItemName("推荐列表");
-        List<CustomerSkill> customerSkills = customerSkillMapper.selectAuditedSkillByPage(null, 0, 6);
-        packetCustomerSkillList(recomedBigv, customerSkills);
-        resultList.add(recomedBigv);
-
-        // 查询所有分类
-        List<SkillItem> skillList = skillItemMapper.selectAllEnabledSkills();
-        if (skillList == null || skillList.size() == 0) {
-            return ResultUtils.resultSuccess(resultList);
-        }
-        // 循环封装数据
-        for (SkillItem skillItem : skillList) {
-            // 查询数据
-            List<CustomerSkill> customerSkillList = customerSkillMapper.selectAuditedSkillByPage(skillItem.getId(), 0, 4);
-            if (customerSkillList.size() == 0) {
-                continue;
-            }
-            AppHomeBigvListVO bigvListVO = new AppHomeBigvListVO();
-            bigvListVO.setSkillItemName(skillItem.getSkillItemName());
-            bigvListVO.setSkillItemId(skillItem.getId());
-
-            // 封装技能列表
-            packetCustomerSkillList(bigvListVO, customerSkillList);
-        }
-
-        return ResultUtils.resultSuccess(resultList);
-    }
-*/
-
     @Override
     public CommonResponse queryHomeBigvList(FirstPageBigvListRequest request) {
         List<AppHomeBigvListVO> resultList = new LinkedList<>();
@@ -94,7 +57,7 @@ public class QueryBigvListServiceImpl implements QueryBigvListService {
         /****** 查询首页6帧资源位数据*****/
         AppHomeBigvListVO recomedBigv = new AppHomeBigvListVO();
         recomedBigv.setSkillItemName("推荐列表");
-        List<AppHomeBigvListVO.BigvInfoVO> bigvList = queryConfigBigvList(recomedBigv, weekIndex, endTimeStr);
+        List<AppHomeBigvListVO.BigvInfoVO> bigvList = this.queryConfigBigvList(recomedBigv, weekIndex, endTimeStr);
         if (bigvList != null && bigvList.size() > 0) {
             recomedBigv.setDaVinfoList(bigvList);
             resultList.add(recomedBigv);
@@ -108,7 +71,7 @@ public class QueryBigvListServiceImpl implements QueryBigvListService {
             AppHomeBigvListVO bigvListVO = new AppHomeBigvListVO();
             bigvListVO.setSkillItemName(skillItem.getSkillItemName());
             bigvListVO.setSkillItemId(skillItem.getId());
-            bigvListVO = querySkillItemTypeBigvList(bigvListVO, weekIndex, endTimeStr);
+            bigvListVO = this.querySkillItemTypeBigvList(bigvListVO, weekIndex, endTimeStr);
             if (bigvListVO == null) {
                 LOGGER.warn("首页查询数据 - 【{}】技能未查询到有效大V数据", skillItem.getSkillItemName());
                 continue;
@@ -167,7 +130,7 @@ public class QueryBigvListServiceImpl implements QueryBigvListService {
             // 自然推荐
             if (Objects.equals(config.getStrategy(), 1)) {
                 // 得到随机大V -- 排除被下单的大V
-                bigv = getRandomBigv(config.getConfigNum(), configSkills, resourceExCustomerIds, weekIndex, endTimeStr, 0);
+                bigv = this.getRandomBigv(config.getConfigNum(), configSkills, resourceExCustomerIds, weekIndex, endTimeStr, 0);
                 if (bigv == null) {
                     LOGGER.warn("【首页6帧】资源配置位【{} - 自然推荐】-【未被下单大V排名】- 未查询到可用的大V数据", config.getConfigNum());
                 }
@@ -175,15 +138,15 @@ public class QueryBigvListServiceImpl implements QueryBigvListService {
             // 运营推荐
             else {
                 // 从推荐池获取大V -- 排除被下单的大V
-                bigv = getRandomBigvFromPool(config, configSkills, resourceExCustomerIds, weekIndex, endTimeStr, 0);
+                bigv = this.getRandomBigvFromPool(config, configSkills, resourceExCustomerIds, weekIndex, endTimeStr, 0);
                 if (bigv == null) {
                     LOGGER.warn("【首页6帧】资源配置位【{} - 运营推荐】-【未被下单大V排名】-【资源池】- 未查询到可用的大V数据 - 切换到自然推荐", config.getConfigNum());
                     // 推荐池选取不到切换到自然推荐
-                    bigv = getRandomBigv(config.getConfigNum(), configSkills, resourceExCustomerIds, weekIndex, endTimeStr, 0);
+                    bigv = this.getRandomBigv(config.getConfigNum(), configSkills, resourceExCustomerIds, weekIndex, endTimeStr, 0);
                     // 若自然推荐也找不到 -- 再取消下单状态的限制
                     if (bigv == null) {
                         LOGGER.warn("资源位【{} - 运营推荐】-【未被下单】 - 切换到自然推荐后，又未查询到可用的大V数据，取消未被下单的限制再次从资源池中查询", config.getConfigNum());
-                        bigv = getRandomBigvFromPool(config, configSkills, resourceExCustomerIds, weekIndex, endTimeStr, null);
+                        bigv = this.getRandomBigvFromPool(config, configSkills, resourceExCustomerIds, weekIndex, endTimeStr, null);
                     }
                 }
             }
