@@ -136,9 +136,9 @@ public class AccountDubboBusinessImpl implements AccountDubboBusiness {
 				response = orderService.queryIngOrderCount((QueryIngOrderCountRequest) request);
 				break;
 				/**查询退款理由 */
-			case OrderRequestType.QUERY_REFUND_REASON:
-				response = orderService.queryRefundReason((QueryRefundReasonRequest) request);
-				break;
+//			case OrderRequestType.QUERY_REFUND_REASON:
+//				response = orderService.queryRefundReason((QueryRefundReasonRequest) request);
+//				break;
 			/** 订单评价页面 **/
 			case OrderRequestType.ORDER_EVALUATION:
 				response = orderService.orderEvaluation((OrderEvaluationRequest) request);
