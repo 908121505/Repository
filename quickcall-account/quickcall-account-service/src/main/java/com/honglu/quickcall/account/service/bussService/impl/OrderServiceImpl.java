@@ -873,7 +873,7 @@ public class OrderServiceImpl implements IOrderService {
 			
 			
 			//设置请求结束时间
-			commonService.finishUpdateOrder(orderId, newOrderStatus,new  Date());
+			commonService.finishUpdateOrder(orderId, newOrderStatus,new  Date(),sendMsgIndex);
 			if(sendMsgIndex !=null){
 				// ADUAN 订单服务完成推送MQ消息
 				userCenterSendMqMessageService.sendOrderCostMqMessage(orderId);
