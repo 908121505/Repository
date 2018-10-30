@@ -264,7 +264,7 @@ public class EditProfileServiceImpl implements EditProfileService {
 		}
 
 		// 先判断表中是否存在这个用户头像记录 存在则更新，不存在则插入
-		/*int result = 0;
+		int result = 0;
 		CustomerAppearance customerAppearance = customerAppearanceMapper
 				.selectByCustomerIdAndType(params.getCustomerId(), AppearanceTypeEnum.HEAD_PORTRAIT.getCode());
 		if (null != customerAppearance) {
@@ -289,7 +289,7 @@ public class EditProfileServiceImpl implements EditProfileService {
 			result = customerAppearanceMapper.insertAppearance(customerAppearanceNew);
 
 			logger.info("修改头像 updateHeadPortrait,插入数量" + result);
-		}*/
+		}
 
 		//现在头像不用审核，直接保存到custmoer表 ，以后要审核，则需要审核通过之后更新到custmoer表
 		customer.setHeadPortraitUrl(params.getHeadPortraitUrl());
