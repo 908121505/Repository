@@ -42,6 +42,7 @@
     <resultMap id="BaseVOResultMap" type="com.calf.module.customer.entity.CustomerVo">
         <result column="customer_id" property="customerId" jdbcType="BIGINT"/>
         <result column="app_id" property="appId" jdbcType="VARCHAR"/>
+        <result column="phone" property="phone" jdbcType="VARCHAR"/>
         <result column="nick_name" property="nickName" jdbcType="VARCHAR"/>
         <result column="front_portrait_url" property="frontPortraitUrl" jdbcType="VARCHAR"/>
         <result column="block_end_time" property="blockEndTime" jdbcType="TIMESTAMP"/>
@@ -207,7 +208,7 @@
 
 
     <select id="selectCustomVo" parameterType="map" resultMap="BaseVOResultMap">
-      select customer_id,app_id,nick_name,front_portrait_url,block_end_time,block_start_time,cust_status
+      select customer_id,app_id,nick_name,phone,front_portrait_url,block_end_time,block_start_time,cust_status
       from customer
       where (1=1
         <if test="nickName !=null and nickName != ''">and nick_name like concat('%',#{nickName},'%')</if>
@@ -254,7 +255,7 @@
     </select>
     <select id="selectVoByPrimaryKey" resultMap="BaseVOResultMap" parameterType="java.lang.Long">
         select
-          customer_id,app_id,nick_name,front_portrait_url,v_status,block_end_time,block_start_time,cust_status
+          customer_id,app_id,nick_name,phone,front_portrait_url,v_status,block_end_time,block_start_time,cust_status
         from customer
         where customer_id = #{customerId,jdbcType=BIGINT}
     </select>
