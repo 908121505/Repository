@@ -269,10 +269,8 @@ public class EditProfileServiceImpl implements EditProfileService {
 				.selectByCustomerIdAndType(params.getCustomerId(), AppearanceTypeEnum.HEAD_PORTRAIT.getCode());
 		if (null != customerAppearance) {
 
-			/*
-			 * customerAppearance.setAuditAppearance(params.getHeadPortraitUrl());
-			 * customerAppearance.setAuditStatus(0);
-			 */
+//			 customerAppearance.setAuditAppearance(params.getHeadPortraitUrl());
+//			 customerAppearance.setAuditStatus(0);
 
 			// 修改头像这一版不用审核 陈鹏 2018-10-24
 			customerAppearance.setAppearance(params.getHeadPortraitUrl());
@@ -284,7 +282,7 @@ public class EditProfileServiceImpl implements EditProfileService {
 			CustomerAppearance customerAppearanceNew = new CustomerAppearance();
 			customerAppearanceNew.setId(UUIDUtils.getId());
 			// 修改头像这一版不用审核 陈鹏 2018-10-24
-			customerAppearance.setAppearance(params.getHeadPortraitUrl());
+			customerAppearanceNew.setAppearance(params.getHeadPortraitUrl());
 //			customerAppearanceNew.setAuditAppearance(params.getHeadPortraitUrl());
 			customerAppearanceNew.setCustomerId(params.getCustomerId());
 			customerAppearanceNew.setType(AppearanceTypeEnum.HEAD_PORTRAIT.getCode());
@@ -293,6 +291,12 @@ public class EditProfileServiceImpl implements EditProfileService {
 			logger.info("修改头像 updateHeadPortrait,插入数量" + result);
 		}
 
+		//现在头像不用审核，直接保存到custmoer表 ，以后要审核，则需要审核通过之后更新到custmoer表
+//		customer.setHeadPortraitUrl(params.getHeadPortraitUrl());
+//		int updateCustomerResult = customerMapper.updateByPrimaryKeySelective(customer);
+//		logger.info("修改头像 updateHeadPortrait,更新数量" + updateCustomerResult);
+
+		// TODO: 2018/10/30 custmoer表冗余一份 created by chenpeng
 		if (result > 0) {
 
 			// 刷新融云用户信息

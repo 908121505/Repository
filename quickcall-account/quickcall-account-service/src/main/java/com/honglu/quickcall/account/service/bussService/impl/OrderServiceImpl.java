@@ -652,7 +652,13 @@ public class OrderServiceImpl implements IOrderService {
 		    
 			
 			Calendar cal =  Calendar.getInstance();
-			cal.setTime(currTime);
+			Date   startTime =  order.getStartTime();
+			if(startTime != null){
+				//应该取订单进行中起始时间
+				cal.setTime(startTime);
+			}else{
+				cal.setTime(currTime);
+			}
 			Date  endTime =  null;
 			if(addMinute > 0){
 				cal.add(Calendar.MINUTE, addMinute);
@@ -867,7 +873,7 @@ public class OrderServiceImpl implements IOrderService {
 			
 			
 			//设置请求结束时间
-			commonService.finishUpdateOrder(orderId, newOrderStatus,new  Date());
+			commonService.finishUpdateOrder(orderId, newOrderStatus,new  Date(),sendMsgIndex);
 			if(sendMsgIndex !=null){
 				// ADUAN 订单服务完成推送MQ消息
 				userCenterSendMqMessageService.sendOrderCostMqMessage(orderId);
