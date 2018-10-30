@@ -642,7 +642,8 @@ public class OrderServiceImpl implements IOrderService {
 		    Integer  orderNum = order.getOrderNum();
 		    
 		    if(serviceUnit.contains(OrderSkillConstants.SERVICE_UNIT_TIMES)){
-		    	addMinute = 12 * 60 ;
+		    	//叫醒服务时需要添加5分钟过期时间
+		    	addMinute = 12 * 60 + 5;
 		    }else if (serviceUnit.contains(OrderSkillConstants.SERVICE_UNIT_HALF_HOUR)){
 		    	addMinute = orderNum * 30 ;
 		    }else {
