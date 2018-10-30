@@ -49,7 +49,9 @@ public class BarrageMessageJob {
 		Jedis jedis = null;
 		JedisPool db2_pool = null;
 		try {
-			db2_pool = JedisUtil.getJedisPoolDB2();
+//			db2_pool = JedisUtil.getJedisPoolDB2();
+			// 先切换到0库
+			db2_pool = JedisUtil.getJedisPool();
 			jedis = db2_pool.getResource();
 			Long lenth = jedis.llen(BARRAGE_MESSAGE_QUEUE_REDIS_KEY);
 			LOGGER.info("缓存 redis 队列中弹幕消息数量：{}", lenth);

@@ -89,7 +89,9 @@ public class BarrageMessageServiceImpl implements BarrageMessageService {
 			Jedis jedis = null;
 			JedisPool db2_pool = null;
 			try {
-				db2_pool = JedisUtil.getJedisPoolDB2();
+//				db2_pool = JedisUtil.getJedisPoolDB2();
+				// 先切换到0库
+				db2_pool = JedisUtil.getJedisPool();
 				jedis = db2_pool.getResource();
 				Long total = jedis.lpush(BARRAGE_MESSAGE_QUEUE_REDIS_KEY, JSON.toJSONString(barrageMessageVO));
 				if (total > MAX_QUEUE_NUM) {
@@ -112,7 +114,9 @@ public class BarrageMessageServiceImpl implements BarrageMessageService {
 		Jedis jedis = null;
 		JedisPool db2_pool = null;
 		try {
-			db2_pool = JedisUtil.getJedisPoolDB2();
+//			db2_pool = JedisUtil.getJedisPoolDB2();
+			// 先切换到0库
+			db2_pool = JedisUtil.getJedisPool();
 			jedis = db2_pool.getResource();
 
 			// 选从缓存列表中取值
