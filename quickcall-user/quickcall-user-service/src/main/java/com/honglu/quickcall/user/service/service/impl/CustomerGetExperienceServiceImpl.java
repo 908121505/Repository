@@ -1,19 +1,16 @@
 package com.honglu.quickcall.user.service.service.impl;
 
-import com.honglu.quickcall.account.facade.constants.OrderSkillConstants;
-import com.honglu.quickcall.account.facade.entity.Order;
-import com.honglu.quickcall.account.facade.enums.PayOrderStatusEnum;
-import com.honglu.quickcall.user.facade.entity.Customer;
-import com.honglu.quickcall.user.facade.exchange.mqrequest.DoOrderCastMqRequest;
-import com.honglu.quickcall.user.service.dao.CustomerMapper;
-import com.honglu.quickcall.user.service.mq.pull.UserCenterMqExperienceListener;
-import com.honglu.quickcall.user.service.service.CustomerGetExperienceService;
+import java.math.BigDecimal;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
-import java.util.Objects;
+import com.honglu.quickcall.account.facade.entity.Order;
+import com.honglu.quickcall.user.facade.entity.Customer;
+import com.honglu.quickcall.user.facade.exchange.mqrequest.DoOrderCastMqRequest;
+import com.honglu.quickcall.user.service.dao.CustomerMapper;
+import com.honglu.quickcall.user.service.service.CustomerGetExperienceService;
 
 /**
  * 客户获取经验值接口实现类
@@ -44,7 +41,7 @@ public class CustomerGetExperienceServiceImpl implements CustomerGetExperienceSe
             return;
         }
         // 计算客户需要获取的经验值
-        Integer experience = order.getOrderAmounts().multiply(new BigDecimal(100)).intValue();
+        Integer experience = order.getOrderAmounts().intValue();
 
         LOGGER.info("客户下单获取经验值--客户ID：" + customer.getCustomerId() + " ， 增加经验值：" + experience);
         // 更新用户经验值和等级

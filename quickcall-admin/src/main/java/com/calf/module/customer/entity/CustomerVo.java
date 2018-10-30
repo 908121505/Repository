@@ -10,6 +10,8 @@ public class CustomerVo {
 
     private String nickName;   //用户昵称
 
+    private String phone;
+
     private Integer type;      //用户类型（0=普通用户，1=大V）
 
     private String frontPortraitUrl; //证件正面照
@@ -129,6 +131,14 @@ public class CustomerVo {
             return null;
         }
         return blockEndTime;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
     public void setBlockEndTime(Date blockEndTime) {

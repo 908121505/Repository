@@ -102,6 +102,7 @@ public class CustomerSkillCertifyController implements BaseController<CustomerSk
 				customerSkill.put("skillItemExtId",sie.getId());
 				customerSkill.put("serviceUnit",sie.getSkillExtUnit());
 				customerSkill.put("skillPrice",sie.getSkillExtPrice());
+				customerSkill.put("discountPrice",sie.getSkillExtPrice());
 				customerSkill.put("skillItemExtId",sie.getId());
 				customerSkill.put("skillRange",sie.getSkillExtRange());
 				baseManager.insert("CustomerSkill.insertSelective",customerSkill);
@@ -115,7 +116,7 @@ public class CustomerSkillCertifyController implements BaseController<CustomerSk
 		}
 		int n = baseManager.update("CustomerSkillCertify.updateEntity",param);
 		if(entity.getAuditStatus() == 2){
-			RongYunUtil.sendSystemMessage(csc.getCustomerId(), "技能审核通过文案：您的\""+entity.getSkillItemName()+"\"技能已通过审核，可以提供服务啦");
+			RongYunUtil.sendSystemMessage(csc.getCustomerId(), "您的\""+entity.getSkillItemName()+"\"技能已通过审核，可以提供服务啦");
 		}else{
 			RongYunUtil.sendSystemMessage(csc.getCustomerId(), "很遗憾，您申请的\""+entity.getSkillItemName()+"\"技能未通过审核，请重新提交审核材料");
 		}
