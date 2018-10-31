@@ -215,7 +215,6 @@
         <profile>
             <id>vpro</id>
             <properties>
-                <!--<package.environment>profiles/vpro</package.environment>-->
                 <package.environment>config/vpro</package.environment>
             </properties>
         </profile>
@@ -245,11 +244,10 @@
                 </excludes>
             </resource>
             <resource>
-                <!--<directory>src/main/resources/${package.environment}</directory>-->
-                <directory>/data/workspace/${package.environment}</directory>
+                <directory>src/main/resources/${package.environment}</directory>
                 <filtering>true</filtering>
                 <excludes>
-                    <exclude>profiles/**</exclude>
+                    <exclude>${package.environment}/**</exclude>
                 </excludes>
             </resource>
         </resources>
