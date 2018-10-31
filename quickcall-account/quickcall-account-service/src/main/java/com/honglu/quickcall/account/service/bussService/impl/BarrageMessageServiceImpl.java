@@ -135,7 +135,7 @@ public class BarrageMessageServiceImpl implements BarrageMessageService {
             Map<String, String> map = new HashMap<>();
             map.put("headPortraitUrl", message.getHeadPortraitUrl());
             map.put("messageHtml", String.format(BARRAGE_MESSAGE_HTML_TEMPLATE, message.getNickName(),
-                    message.getOrderAmounts(), message.getProductName()));
+                    message.getOrderAmounts().intValue(), message.getProductName()));
             map.put("linkUrl", String.format(BARRAGE_MESSAGE_LINK_URL, message.getSkillId(), message.getProductName()));
             resultList.add(map);
         }
