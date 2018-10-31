@@ -76,26 +76,6 @@
     id, customer_id, order_total, score_total, online_status, cust_status,
     create_time, modify_time, create_man, modify_man, remark
   </sql>
-  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.honglu.quickcall.user.facade.entity.example.BigvScoreExample" >
-    select
-    <if test="distinct" >
-      distinct
-    </if>
-    <include refid="Base_Column_List" />
-    from bigv_score
-    <if test="_parameter != null" >
-      <include refid="Example_Where_Clause" />
-    </if>
-    <if test="orderByClause != null" >
-      order by ${orderByClause}
-    </if>
-  </select>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
-    select
-    <include refid="Base_Column_List" />
-    from bigv_score
-    where id = #{id,jdbcType=BIGINT}
-  </select>
   <insert id="insert" parameterType="com.honglu.quickcall.user.facade.entity.BigvScore" >
     insert into bigv_score (id, customer_id, order_total,
       score_total, create_man, modify_man, remark
@@ -105,13 +85,6 @@
       #{remark,jdbcType=VARCHAR}
       )
   </insert>
-  <select id="countByExample" parameterType="com.honglu.quickcall.user.facade.entity.example.BigvScoreExample" resultType="java.lang.Integer" >
-
-    select count(*) from bigv_score
-    <if test="_parameter != null" >
-      <include refid="Example_Where_Clause" />
-    </if>
-  </select>
 
   <!-- 更新大V评分 -->
   <update id="updateBigvScore">
@@ -119,13 +92,4 @@
       WHERE customer_id = #{customerId}
   </update>
 
-  <!-- 统计大V在线数 -->
-  <select id="countOnlineBigvCount" resultType="int">
-    select count(*) from bigv_score where cust_status = 1 and online_status = 1
-  </select>
-
-  <!-- 统计有效大V数 -->
-  <select id="countValidBigvCount" resultType="int">
-    select count(*) from bigv_score where cust_status = 1
-  </select>
 </mapper>
