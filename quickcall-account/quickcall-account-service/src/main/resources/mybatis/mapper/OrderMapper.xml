@@ -529,7 +529,7 @@
 		orders od
 	LEFT JOIN customer_skill cs ON od.customer_skill_id = cs.customer_skill_id
 	LEFT JOIN skill_item st ON cs.skill_item_id = st.id
-	LEFT JOIN customer ct ON od.customer_id = ct.customer_id
+	INNER JOIN customer ct ON od.customer_id = ct.customer_id
 	WHERE  od.service_id  = #{customerId}  
 		 <if test="statusList != null" >
         AND  od.order_status  IN 
@@ -571,7 +571,7 @@
 			
 		FROM
 			orders od
-		LEFT JOIN customer ct ON ct.customer_id = od.customer_id
+		INNER JOIN customer ct ON ct.customer_id = od.customer_id
 		LEFT JOIN customer_skill cs ON od.customer_skill_id = cs.customer_skill_id
 
 	WHERE
@@ -604,7 +604,7 @@
 		od.discount_rate  as discountRate
 	FROM
 		orders od
-	LEFT JOIN customer ct ON ct.customer_id = od.service_id
+	INNER JOIN customer ct ON ct.customer_id = od.service_id
 	LEFT JOIN customer_skill cs ON od.customer_skill_id = cs.customer_skill_id
 	WHERE
 		od.order_id =  #{orderId}
