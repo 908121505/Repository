@@ -786,13 +786,9 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 		List<String> appearanceList = customerAppearanceMapper
 				.queryCustomerAuditedAppearance(request.getViewCustomerId(), 0);
 		if (appearanceList == null || appearanceList.size() == 0) {
-			if (Objects.equals(customerHomeVO.getSex(), 1)) {
-				customerHomeVO
-						.setAppearanceUrlList(Arrays.asList(PropertiesConstant.DEFAULT_CUSTOMER_APPEARANCE_URL_BOY));
-			} else {
-				customerHomeVO
-						.setAppearanceUrlList(Arrays.asList(PropertiesConstant.DEFAULT_CUSTOMER_APPEARANCE_URL_GIRL));
-			}
+			customerHomeVO.setAppearanceUrlList(Objects.equals(customerHomeVO.getSex(), 1) ?
+					Arrays.asList(PropertiesConstant.DEFAULT_CUSTOMER_APPEARANCE_URL_BOY)
+					: Arrays.asList(PropertiesConstant.DEFAULT_CUSTOMER_APPEARANCE_URL_GIRL));
 		} else {
 			customerHomeVO.setAppearanceUrlList(appearanceList);
 		}
