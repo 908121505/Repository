@@ -1,11 +1,9 @@
 package com.honglu.quickcall.user.service.service.impl;
 
-import com.honglu.quickcall.account.facade.business.IAccountOrderService;
 import com.honglu.quickcall.common.api.exchange.CommonResponse;
 import com.honglu.quickcall.common.api.exchange.ResultUtils;
 import com.honglu.quickcall.common.api.util.DateUtils;
 import com.honglu.quickcall.common.constants.PropertiesConstant;
-import com.honglu.quickcall.user.facade.entity.BigvSkillScore;
 import com.honglu.quickcall.user.facade.entity.CustomerSkill;
 import com.honglu.quickcall.user.facade.entity.ResourceConfig;
 import com.honglu.quickcall.user.facade.entity.SkillItem;
@@ -13,7 +11,10 @@ import com.honglu.quickcall.user.facade.exchange.request.DaVListBySkillItemIdReq
 import com.honglu.quickcall.user.facade.exchange.request.FirstPageBigvListRequest;
 import com.honglu.quickcall.user.facade.vo.AppHomeBigvListVO;
 import com.honglu.quickcall.user.facade.vo.DaVinfoVO;
-import com.honglu.quickcall.user.service.dao.*;
+import com.honglu.quickcall.user.service.dao.CustomerAppearanceMapper;
+import com.honglu.quickcall.user.service.dao.CustomerSkillMapper;
+import com.honglu.quickcall.user.service.dao.ResourceConfigMapper;
+import com.honglu.quickcall.user.service.dao.SkillItemMapper;
 import com.honglu.quickcall.user.service.service.QueryBigvListService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,12 +41,6 @@ public class QueryBigvListServiceImpl implements QueryBigvListService {
     private CustomerAppearanceMapper customerAppearanceMapper;
     @Autowired
     private ResourceConfigMapper resourceConfigMapper;
-    @Autowired
-    private IAccountOrderService accountOrderService;
-    @Autowired
-    private BigvScoreMapper bigvScoreMapper;
-    @Autowired
-    private BigvSkillScoreMapper bigvSkillScoreMapper;
 
     @Override
     public CommonResponse queryHomeBigvList(FirstPageBigvListRequest request) {
