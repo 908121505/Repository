@@ -44,111 +44,125 @@
     WHERE rc.resource_config_id = #{resourceConfigId}
   </select>
 
-  <!-- 查询启用的大V + 技能排名列表条数 -->
-  <select id="countEnabledBigvAndSkillRankData" resultType="int">
-    SELECT count(tt.customer_id) FROM (
-      SELECT bss.customer_id
-        <if test="skillOrdered == 0">
-          ,(
-          SELECT count(o.order_id) FROM orders o
-          WHERE o.customer_skill_id = bss.customer_skill_id
-                AND o.skill_type = (select si.skill_type from skill_item si where si.id = bss.skill_item_id)
-                AND o.order_status IN (10, 18, 26, 28)
-          ) AS skillOrdered
-        </if>
-      FROM `bigv_skill_score` bss
-      INNER JOIN customer_skill csk ON csk.customer_skill_id = bss.customer_skill_id AND csk.skill_status = 1 AND csk.switch_status = 1 AND csk.receive_status = 1
-      <include refid="SKILL_EXIST_CONDITON"/>
-      WHERE  1 = 1
-       AND bss.skill_item_id IN
-      <foreach collection="configSkills"  item="configSkill"  open="("  close=")"  separator=","  >
-        #{configSkill}
-      </foreach>
-      <if test="exCustomerIds != null and exCustomerIds.size > 0">
-        and bss.customer_id NOT IN
-        <foreach collection="exCustomerIds"  item="customerId"  open="("  close=")"  separator=","  >
-          #{customerId}
-        </foreach>
-      </if>
-      GROUP BY bss.customer_id
-    ) tt
-    <if test="skillOrdered == 0">
-      where tt.skillOrdered=0
-    </if>
-  </select>
+    <!-- 根据大V技能排名查询一个可用的大V数据 - 供前端暂时 -->
+    <select id="countEnabledBigvBySkillRank" resultType="int">
+        SELECT  count(*)
+        FROM (
+            SELECT bss.customer_id
+            FROM `bigv_skill_score` bss
+            INNER JOIN customer c ON c.customer_id = bss.customer_id AND c.cust_state = 2 AND c.cust_status = 1 AND c.v_status = 2
+            INNER JOIN skill_item si ON si.id = bss.skill_item_id AND si.skill_status = 1
+            INNER JOIN customer_skill csk ON csk.customer_skill_id = bss.customer_skill_id AND csk.skill_status = 1 AND csk.switch_status = 1 AND csk.receive_status = 1
+                        <include refid="SKILL_EXIST_CONDITON"/>
+            WHERE bss.skill_item_id IN
+                <foreach collection="configSkills"  item="configSkill"  open="("  close=")"  separator=","  >
+                    #{configSkill}
+                </foreach>
+                <if test="exCustomerIds != null and exCustomerIds.size > 0">
+                    and bss.customer_id NOT IN
+                    <foreach collection="exCustomerIds"  item="customerId"  open="("  close=")"  separator=","  >
+                        #{customerId}
+                    </foreach>
+                </if>
+                <!-- 排除下单被占用的客户技能 -->
+                <if test="skillOrdered == 0">
+                    AND (SELECT count(o.order_id) FROM orders o WHERE o.customer_skill_id = bss.customer_skill_id
+                    AND o.skill_type = (select si.skill_type from skill_item si where si.id = bss.skill_item_id)
+                    AND o.order_status IN (10, 18, 26, 28)) = 0
+                </if>
+            GROUP BY bss.customer_id
+        ) tt
+    </select>
 
-  <!-- 查询启用的大V + 技能排名列表 -->
-  <select id="selectEnabledBigvAndSkillRankData" resultType="com.honglu.quickcall.user.facade.entity.BigvSkillScore">
-    SELECT  tt.customer_id as customerId, tt.customer_skill_id as customerSkillId  FROM (
-      SELECT bss.customer_id, bss.customer_skill_id, bss.skill_item_id,
-            sum(bss.score_total) as scoreTotal
-          <if test="skillOrdered == 0">
-            ,(SELECT count(o.order_id) FROM orders o
-                WHERE o.customer_skill_id = bss.customer_skill_id
-                      AND o.skill_type = (select si.skill_type from skill_item si where si.id = bss.skill_item_id)
-                      AND o.order_status IN (10, 18, 26, 28)
-            ) AS skillOrdered
-          </if>
-      FROM `bigv_skill_score` bss
-      INNER JOIN customer_skill csk ON csk.customer_skill_id = bss.customer_skill_id AND csk.skill_status = 1 AND csk.switch_status = 1 AND csk.receive_status = 1
-          <include refid="SKILL_EXIST_CONDITON"/>
-      WHERE
-          bss.skill_item_id IN
-          <foreach collection="configSkills"  item="configSkill"  open="("  close=")"  separator=","  >
-            #{configSkill}
-          </foreach>
-          <if test="exCustomerIds != null and exCustomerIds.size > 0">
-            and bss.customer_id NOT IN
-            <foreach collection="exCustomerIds"  item="customerId"  open="("  close=")"  separator=","  >
-              #{customerId}
-            </foreach>
-          </if>
-      GROUP BY bss.customer_id
-      <if test="skillOrdered == 0">
-        ORDER BY skillOrdered asc, scoreTotal DESC
-      </if>
-      <if test="skillOrdered != 0">
-        ORDER BY scoreTotal DESC
-      </if>
-      LIMIT #{beginIndex},#{endIndex}
-    ) tt
-    <if test="skillOrdered == 0">
-      where tt.skillOrdered=0
-    </if>
-    ORDER BY RAND() LIMIT 1
-  </select>
+    <!-- 根据大V技能排名查询一个可用的大V数据 - 供前端暂时 -->
+    <select id="selectEnabledBigvBySkillRank" resultType="com.honglu.quickcall.user.facade.entity.CustomerSkill">
+        SELECT  tt.*, csc.skill_voice_url AS skillVoiceUrl, csc.skill_voice_time AS skillVoiceTime
+        FROM (
+            SELECT bss.customer_id AS customerId,
+                    bss.customer_skill_id AS customerSkillId,
+                    bss.skill_item_id AS skillItemId,
+                    c.nick_name AS customerNickName,
+                    c.sex AS customerSex,
+                    c.birthday AS customerBirthday,
+                    si.skill_item_name AS skillName,
+                    si.back_color AS skillBackColor,
+                    si.home_black_color AS skillHomeBackColor,
+                    si.font_color AS skillFontColor,
+                    csk.discount_price AS discountPrice,
+                    csk.service_unit AS serviceUnit,
+                    csk.certify_id
+            FROM `bigv_skill_score` bss
+            INNER JOIN customer c ON c.customer_id = bss.customer_id AND c.cust_state = 2 AND c.cust_status = 1 AND c.v_status = 2
+            INNER JOIN skill_item si ON si.id = bss.skill_item_id AND si.skill_status = 1
+            INNER JOIN customer_skill csk ON csk.customer_skill_id = bss.customer_skill_id AND csk.skill_status = 1 AND csk.switch_status = 1 AND csk.receive_status = 1
+                        <include refid="SKILL_EXIST_CONDITON"/>
+            WHERE bss.skill_item_id IN
+                <foreach collection="configSkills"  item="configSkill"  open="("  close=")"  separator=","  >
+                    #{configSkill}
+                </foreach>
+                <if test="exCustomerIds != null and exCustomerIds.size > 0">
+                    and bss.customer_id NOT IN
+                    <foreach collection="exCustomerIds"  item="customerId"  open="("  close=")"  separator=","  >
+                        #{customerId}
+                    </foreach>
+                </if>
+                <!-- 排除下单被占用的客户技能 -->
+                <if test="skillOrdered == 0">
+                    AND (SELECT count(o.order_id) FROM orders o WHERE o.customer_skill_id = bss.customer_skill_id
+                    AND o.skill_type = (select si.skill_type from skill_item si where si.id = bss.skill_item_id)
+                    AND o.order_status IN (10, 18, 26, 28)) = 0
+                </if>
+                GROUP BY bss.customer_id
+                ORDER BY sum(bss.score_total) DESC
+                LIMIT #{beginIndex},#{endIndex}
+        ) tt
+        LEFT JOIN customer_skill_certify csc ON csc.certify_id = tt.certify_id
+        ORDER BY RAND() LIMIT 1
+    </select>
 
-  <!-- 随机从推荐池里面查询一个大V（未被下单的） -->
-  <select id="selectRandomBigvFromResourcePool" resultType="com.honglu.quickcall.user.facade.entity.BigvSkillScore">
-      SELECT t.customer_id as customerId, t.customer_skill_id as customerSkillId FROM(
-      SELECT pc.customer_id, csk.customer_skill_id
+  <!-- 随机从推荐池里面查询一个大V - 返回给前端显示 -->
+  <select id="selectRandomBigvFromResourcePool" resultType="com.honglu.quickcall.user.facade.entity.CustomerSkill">
+      SELECT tt.*, csc.skill_voice_url AS skillVoiceUrl, csc.skill_voice_time AS skillVoiceTime
+      FROM(
+          SELECT pc.customer_id AS customerId,
+                  c.nick_name AS customerNickName,
+                  c.sex AS customerSex,
+                  c.birthday AS customerBirthday,
+                  csk.customer_skill_id AS customerSkillId,
+                  csk.skill_item_id AS skillItemId,
+                  csk.discount_price AS discountPrice,
+                  csk.service_unit AS serviceUnit,
+                  si.skill_item_name AS skillName,
+                  si.back_color AS skillBackColor,
+                  si.home_black_color AS skillHomeBackColor,
+                  si.font_color AS skillFontColor,
+                  csk.certify_id
+          FROM resource_pool_customer pc
+          INNER JOIN customer c ON c.customer_id = pc.customer_id AND c.cust_state = 2 AND c.cust_status = 1 AND c.v_status = 2
+          INNER JOIN customer_skill csk ON csk.customer_id = pc.customer_id AND csk.skill_status = 1
+                      AND csk.skill_item_id IN
+                          <foreach collection="configSkills"  item="configSkill"  open="("  close=")"  separator=","  >
+                            #{configSkill}
+                          </foreach>
+                      AND csk.switch_status = 1 AND csk.receive_status = 1
+                          <include refid="SKILL_EXIST_CONDITON"/>
+          INNER JOIN skill_item si ON si.id = csk.skill_item_id AND si.skill_status = 1
+          WHERE pc.resource_pool_id = #{resourcePoolId}
+              <if test="exCustomerIds != null and exCustomerIds.size > 0">
+                and pc.customer_id NOT IN
+                <foreach collection="exCustomerIds"  item="customerId"  open="("  close=")"  separator=","  >
+                  #{customerId}
+                </foreach>
+              </if>
+          AND pc.`status` = 1
+          <!-- 排除下单被占用的客户技能 -->
           <if test="skillOrdered == 0">
-              ,(SELECT count(o.order_id) FROM orders o
-                  WHERE o.customer_skill_id = csk.customer_skill_id
-                        AND o.skill_type = (select si.skill_type from skill_item si where si.id = csk.skill_item_id)
-                        AND o.order_status IN (10, 18, 26, 28)
-              ) AS skillOrdered
+              AND (SELECT count(o.order_id) FROM orders o WHERE o.customer_skill_id = csk.customer_skill_id
+              AND o.skill_type = (select si.skill_type from skill_item si where si.id = csk.skill_item_id)
+              AND o.order_status IN (10, 18, 26, 28)) = 0
           </if>
-      FROM resource_pool_customer pc
-      INNER JOIN customer_skill csk ON csk.customer_id = pc.customer_id AND csk.skill_status = 1
-      AND csk.skill_item_id IN
-          <foreach collection="configSkills"  item="configSkill"  open="("  close=")"  separator=","  >
-            #{configSkill}
-          </foreach>
-      AND csk.switch_status = 1 AND csk.receive_status = 1
-          <include refid="SKILL_EXIST_CONDITON"/>
-      WHERE pc.resource_pool_id = #{resourcePoolId}
-          <if test="exCustomerIds != null and exCustomerIds.size > 0">
-            and pc.customer_id NOT IN
-            <foreach collection="exCustomerIds"  item="customerId"  open="("  close=")"  separator=","  >
-              #{customerId}
-            </foreach>
-          </if>
-      AND pc.`status` = 1
-      ) t
-      <if test="skillOrdered == 0">
-        where t.skillOrdered = 0
-      </if>
+      ) tt
+      LEFT JOIN customer_skill_certify csc ON csc.certify_id = tt.certify_id
       ORDER BY RAND() LIMIT 1
   </select>
 
