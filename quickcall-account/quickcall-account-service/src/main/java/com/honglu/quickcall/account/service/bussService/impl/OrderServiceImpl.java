@@ -215,6 +215,7 @@ public class OrderServiceImpl implements IOrderService {
 			
 			Integer  orderNum =  request.getOrderNum();
 			BigDecimal  price =  customerSkill.getDiscountPrice();
+			//根据券判断真正的订单金额
 			BigDecimal orderAmounts = new BigDecimal(orderNum).multiply(price);
 			//判断余额是否充足
 			Account account=accountService.queryAccount(customerId);
@@ -256,6 +257,7 @@ public class OrderServiceImpl implements IOrderService {
 			record.setServiceUnit(customerSkill.getServiceUnit());
 			record.setServicePrice(customerSkill.getSkillPrice());
 			record.setDiscountRate(customerSkill.getDiscountRate());
+			//计算
 			record.setSkillItemId(skillItemId);
 			Long  orderId =  UUIDUtils.getId();
 			record.setOrderNo(orderId);
@@ -271,6 +273,7 @@ public class OrderServiceImpl implements IOrderService {
 			record.setRemark(request.getRemark());
 			orderMapper.insert(record);
 			//TODO   券逻辑新增
+			//修改用户券状态
 			
 			
 			resultMap.put("retCode",  OrderSkillConstants.RET_CODE_SUCCESS);
