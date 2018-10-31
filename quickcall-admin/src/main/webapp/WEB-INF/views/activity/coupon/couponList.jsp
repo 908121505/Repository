@@ -22,8 +22,8 @@
             <div class="col-md-2">
                 <div class="form-group">
                     <div class="input-group">
-                        <div class="input-group-addon">广告名称</div>
-                        <input class="form-control" type="text" id="adName">
+                        <div class="input-group-addon">券名称</div>
+                        <input class="form-control" type="text" id="couponName">
                     </div>
                 </div>
             </div>
@@ -74,9 +74,9 @@
             //表格的初始化
             $(document).ready(function () {
                 var table = $('#example').initTable({
-                    sAjaxSource: "ticket/initTable.htm",
+                    sAjaxSource: "coupon/initTable.htm",
                     fnServerParams: function (aoData) {  //查询条件
-                        aoData.push({"name": "name", "value": $("#adName").val().trim()});
+                        aoData.push({"name": "couponName", "value": $("#couponName").val().trim()});
                         aoData.push({"name": "startTime", "value": $("#sTime").val()});
                         aoData.push({"name": "endTime", "value": $("#eTime").val()});
                     },
@@ -91,13 +91,13 @@
                             }
                         },
                         {
-                            "data": "ticketId",
+                            "data": "couponId",
                             "sTitle": "券编号",
                             'sClass': "text-center",
 //                            "bVisible": false //此列不显示
                         },
                         {
-                            "data": "ticketName",
+                            "data": "couponName",
                             "sTitle": "券的名称",
                             'sClass': "text-center",
                         },
@@ -114,7 +114,7 @@
                             }
                         },
                         {
-                            "data": "ticketType",
+                            "data": "couponType",
                             "sTitle": "券类型",
                             'sClass': "text-center",
                             "mRender": function (data, type, full) {
@@ -126,7 +126,7 @@
                             }
                         },
                         {
-                            "data": "ticketCode",
+                            "data": "couponCode",
                             "sTitle": "券码",
                             'sClass': "text-center",
                         },
@@ -149,7 +149,7 @@
                             'sClass': "text-center",
                         },
                         {
-                            "data": "ticketPrice",
+                            "data": "couponPrice",
                             "sTitle": "券的价值",
                             'sClass': "text-center",
                         },

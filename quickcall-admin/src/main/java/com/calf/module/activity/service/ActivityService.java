@@ -4,9 +4,9 @@ import com.calf.cn.entity.DataTables;
 import com.calf.cn.service.BaseManager;
 import com.calf.cn.utils.SearchUtil;
 import com.calf.module.activity.entity.Activity;
-import com.calf.module.appconfig.entity.Advertisement;
 import com.calf.module.appconfig.impl.AdvertisementService;
 import com.calf.module.common.impl.CommonUtilService;
+import com.honglu.quickcall.common.core.util.UUIDUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -43,9 +43,9 @@ public class ActivityService {
         paramMap.put("iDisplayStart", parameters.get("iDisplayStart"));
         paramMap.put("iDisplayLength", parameters.get("iDisplayLength"));
 
-//        paramMap.put("name", parameters.get("name"));
         paramMap.put("startTime", parameters.get("startTime"));
         paramMap.put("endTime", parameters.get("endTime"));
+        paramMap.put("activityName", parameters.get("activityName"));
         List<Activity> activityList = baseManager.query("Activity.selectPageList", paramMap);
         String sEcho = (String) parameters.get("sEcho");
         int total = baseManager.get("Activity.selectCount", paramMap);
@@ -54,37 +54,31 @@ public class ActivityService {
 
     public void getActivityDetail(Model model, String id) {
         Map<String, Object> paramMap = new HashMap<String, Object>();
-        paramMap.put("id", id);
-        Advertisement advertisement = baseManager.get("Activity.selectById",  paramMap);
-        model.addAttribute("entity", advertisement);
+        paramMap.put("activityId", id);
+        Activity activity = baseManager.get("Activity.selectById",  paramMap);
+        model.addAttribute("entity", activity);
     }
 
     public int saveAdd(Activity entity) {
-        Advertisement  advertisement =  new Advertisement();
-        BeanUtils.copyProperties(entity, advertisement);
-        advertisement.setCreateMan(commonUtilService.getCurrUser());
-        advertisement.setType(0);
-        advertisement.setAdStatus(1);
+        Activity  activity =  new Activity();
+        BeanUtils.copyProperties(entity, activity);
+        activity.setCreateMan(commonUtilService.getCurrUser());
 
-        //插入广告表
-        int insertAdCount = baseManager.insert(advertisement);
+        activity.setActivityId(UUIDUtils.getId().toString());
+        int insertAdCount = baseManager.insert(activity);
         if(insertAdCount < 1){
             return -1;
         }
-
 
         return 0;
     }
 
     public int saveUpdate(Activity entity) {
-        Advertisement  advertisement =  new Advertisement();
-        BeanUtils.copyProperties(entity, advertisement);
-        advertisement.setModifyMan(commonUtilService.getCurrUser());
-        advertisement.setType(0);
-        advertisement.setAdStatus(1);
+        Activity  activity =  new Activity();
+        BeanUtils.copyProperties(entity, activity);
+        activity.setModifyMan(commonUtilService.getCurrUser());
 
-        //更新广告表 advertisement
-        int updateAdCount = baseManager.update(advertisement);
+        int updateAdCount = baseManager.update(activity);
         if(updateAdCount < 1){
             return -1;
         }

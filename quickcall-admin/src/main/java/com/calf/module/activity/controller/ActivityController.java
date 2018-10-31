@@ -5,7 +5,6 @@ import com.calf.cn.entity.DataTables;
 import com.calf.cn.service.BaseManager;
 import com.calf.module.activity.entity.Activity;
 import com.calf.module.activity.service.ActivityService;
-import com.calf.module.appconfig.entity.Occupation;
 import com.calf.module.customerservice.controller.AppearanceController;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -49,7 +48,7 @@ public class ActivityController  implements BaseController<Activity> {
         if(StringUtils.isNotBlank(id) && !"0".equals(id)){
             activityService.getActivityDetail(model,id);
         }
-        return  "app_config/advertisement/updateActivity";
+        return  "activity/activity/updateActivity";
     }
 
     @Override
@@ -68,18 +67,8 @@ public class ActivityController  implements BaseController<Activity> {
     }
 
     @Override
-    public int delete(String id){return baseManager.delete(Occupation.class, new Object[]{id});
+    public int delete(String id){return baseManager.delete(Activity.class, new Object[]{id});
     }
 
-    /**
-     * 删除禁用(逻辑删除)
-     * @param id
-     * @return
-     */
-    @ResponseBody
-    @RequestMapping(value = "/disable")
-    public int disable(String id){
-        return activityService.disable(id);
-    }
 
 }

@@ -3,9 +3,8 @@ package com.calf.module.activity.controller;
 import com.calf.cn.controller.BaseController;
 import com.calf.cn.entity.DataTables;
 import com.calf.cn.service.BaseManager;
-import com.calf.module.activity.entity.Ticket;
-import com.calf.module.activity.service.TicketService;
-import com.calf.module.appconfig.entity.Occupation;
+import com.calf.module.activity.entity.Coupon;
+import com.calf.module.activity.service.CouponService;
 import com.calf.module.customerservice.controller.AppearanceController;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -25,36 +24,36 @@ import javax.servlet.http.HttpServletRequest;
  * @date 2018/10/30 14:24
  */
 @Controller
-@RequestMapping(value = "/ticket")
-public class TicketController  implements BaseController<Ticket> {
+@RequestMapping(value = "/coupon")
+public class CouponController implements BaseController<Coupon> {
     private static final Logger logger = LoggerFactory.getLogger(AppearanceController.class);
 
     @Autowired
-    private TicketService ticketService;
+    private CouponService CouponService;
     @Autowired
     private BaseManager baseManager;
 
     @Override
     public String home() {
-        return "activity/ticket/ticketList";
+        return "activity/coupon/couponList";
     }
 
     @Override
-    public DataTables<Ticket> initTable(HttpServletRequest request) {
-        return ticketService.getTicketPageList(request);
+    public DataTables<Coupon> initTable(HttpServletRequest request) {
+        return CouponService.getCouponPageList(request);
     }
 
     @Override
     public String addAndUpdateHome(Model model, String id) {
         if(StringUtils.isNotBlank(id) && !"0".equals(id)){
-            ticketService.getTicketDetail(model,id);
+            CouponService.getCouponDetail(model,id);
         }
-        return  "app_config/advertisement/updateTicket";
+        return  "activity/coupon/updateCoupon";
     }
 
     @Override
-    public int saveAdd(Ticket entity) {
-        return ticketService.saveAdd(entity);
+    public int saveAdd(Coupon entity) {
+        return CouponService.saveAdd(entity);
     }
 
     @Override
@@ -63,23 +62,12 @@ public class TicketController  implements BaseController<Ticket> {
     }
 
     @Override
-    public int saveUpdate(Ticket entity) {
-        return ticketService.saveUpdate(entity);
+    public int saveUpdate(Coupon entity) {
+        return CouponService.saveUpdate(entity);
     }
 
     @Override
-    public int delete(String id){return baseManager.delete(Occupation.class, new Object[]{id});
-    }
-
-    /**
-     * 删除禁用(逻辑删除)
-     * @param id
-     * @return
-     */
-    @ResponseBody
-    @RequestMapping(value = "/disable")
-    public int disable(String id){
-        return ticketService.disable(id);
+    public int delete(String id){return baseManager.delete(Coupon.class, new Object[]{id});
     }
 
 
