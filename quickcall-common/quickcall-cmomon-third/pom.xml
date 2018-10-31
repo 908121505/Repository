@@ -215,7 +215,7 @@
         <profile>
             <id>vpro</id>
             <properties>
-                <package.environment>config/vpro</package.environment>
+                <package.environment>profiles/vpro</package.environment>
             </properties>
         </profile>
         <profile>
