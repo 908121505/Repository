@@ -170,7 +170,7 @@
 		    (IFNULL(fs.attention_state,0))&amp;(IFNULL(fs1.attention_state,0)) AS eachAttentionStatus 
 		FROM
 			fans fs
-		LEFT JOIN customer ct ON fs.anchor_id = ct.customer_id 
+		INNER JOIN customer ct ON fs.anchor_id = ct.customer_id 
 		LEFT JOIN fans fs1 ON fs.anchor_id = fs1.fans_id and fs.fans_id = fs1.anchor_id 
 		WHERE
 			fs.fans_id = #{customerId}  and   fs.attention_state = #{attentionStatus} 
@@ -194,7 +194,7 @@
 		    (IFNULL(fs.attention_state,0))&amp;(IFNULL(fs1.attention_state,0)) AS eachAttentionStatus 
 		FROM
 			fans fs
-		LEFT JOIN customer ct ON fs.fans_id = ct.customer_id 
+		INNER JOIN customer ct ON fs.fans_id = ct.customer_id 
 		LEFT JOIN fans fs1 ON fs.anchor_id = fs1.fans_id and fs.fans_id = fs1.anchor_id 
 		WHERE
 			fs.anchor_id = #{customerId}  and   fs.attention_state = #{attentionStatus} 
