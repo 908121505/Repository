@@ -165,7 +165,7 @@
 		    ct.nick_name  AS  nickName,
 		    (YEAR (NOW()) - YEAR (ct.birthday)) AS age,
 		    ct.sex    AS sex,
-		    fs.attention_state  AS  attentionStatus,
+		    (IFNULL(fs.attention_state,0))  AS  attentionStatus,
 		    ct.type AS type,
 		    (IFNULL(fs.attention_state,0))&amp;(IFNULL(fs1.attention_state,0)) AS eachAttentionStatus 
 		FROM
@@ -189,7 +189,7 @@
 		    ct.nick_name  AS  nickName,
 		    (YEAR (NOW()) - YEAR (ct.birthday)) AS age,
 		    ct.sex    AS sex,
-		    fs1.attention_state  AS  attentionStatus,
+		    (IFNULL(fs1.attention_state,0))  AS  attentionStatus,
 		    ct.type AS type,
 		    (IFNULL(fs.attention_state,0))&amp;(IFNULL(fs1.attention_state,0)) AS eachAttentionStatus 
 		FROM
