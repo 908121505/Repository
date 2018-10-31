@@ -5,8 +5,6 @@ import com.honglu.quickcall.databury.core.service.DataBuriedPointService;
 import com.honglu.quickcall.databury.facade.business.DataBuryBusiness;
 import com.honglu.quickcall.databury.facade.exception.DataBuriedPointException;
 import com.honglu.quickcall.databury.facade.req.databury.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
@@ -15,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 @Service(version = "1.0.0", retries = -1, timeout = 10_000)
 public class DataDuryBusinessImpl implements DataBuryBusiness {
-    private static final Logger logger = LoggerFactory.getLogger(DataDuryBusinessImpl.class);
 
     @Autowired
     private DataBuriedPointService dataBuriedPointService;

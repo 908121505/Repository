@@ -10,6 +10,7 @@ import com.honglu.quickcall.databury.facade.req.databury.*;
 import com.honglu.quickcall.databury.facade.resp.databury.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -26,6 +27,9 @@ public class DataBuriedPointServiceImpl implements DataBuriedPointService {
 
     private static final Logger logger = LoggerFactory.getLogger(DataBuriedPointServiceImpl.class);
 
+    @Autowired
+    private BuryiedPointUtil buryiedPointUtil;
+
     @Override
     public DataBuryPointGetCodeResp saveGetCodeData(DataBuryPointGetCodeReq req) throws DataBuriedPointException {
         logger.info("====【神策埋点】获取验证码数据埋点开始--参数为:{}", req);
@@ -39,7 +43,7 @@ public class DataBuriedPointServiceImpl implements DataBuriedPointService {
         Map<String,Object> event = BuryiedPointDataConvertor.newInstanceEvent(EventEnums.EVENT_getCode.getValue(),(String)params.get("phone"),params);
 
         logger.info("----【神策埋点】获取验证码数据准备埋点--数据={}", JSON.toJSONString(event));
-        BuryiedPointUtil.buryData(event);
+        buryiedPointUtil.buryData(event);
         logger.info("----【神策埋点】获取验证码数据埋点结束");
         return null;
     }
@@ -59,7 +63,7 @@ public class DataBuriedPointServiceImpl implements DataBuriedPointService {
         Map<String,Object> event = BuryiedPointDataConvertor.newInstanceEvent(EventEnums.EVENT_Sign_up_result.getValue(),(String)params.get("vc_user_id"),params);
 
         logger.info("----【神策埋点】注册成功数据准备埋点--数据={}", JSON.toJSONString(event));
-        BuryiedPointUtil.buryData(event);
+        buryiedPointUtil.buryData(event);
         logger.info("----【神策埋点】注册成功数据埋点结束");
 
         return null;
@@ -73,14 +77,14 @@ public class DataBuriedPointServiceImpl implements DataBuriedPointService {
         }
 
         Map<String,Object> params = new HashMap<>();
-        params.put("loginmethod",req.getLoginmethod());
+        params.put("loginMethod",req.getLoginmethod());
         params.put("vc_user_id",req.getUser_id());
         params.put("phoneNumber",req.getPhoneNumber());
 
         Map<String,Object> event = BuryiedPointDataConvertor.newInstanceEvent(EventEnums.EVENT_User_id_login_result.getValue(),(String)params.get("vc_user_id"),params);
 
         logger.info("----【神策埋点】登陆成功数据准备埋点--数据={}", JSON.toJSONString(event));
-        BuryiedPointUtil.buryData(event);
+        buryiedPointUtil.buryData(event);
         logger.info("----【神策埋点】登陆成功数据埋点结束");
         return null;
     }
@@ -100,7 +104,7 @@ public class DataBuriedPointServiceImpl implements DataBuriedPointService {
         Map<String,Object> event = BuryiedPointDataConvertor.newInstanceEvent(EventEnums.EVENT_Order_button.getValue(),(String)params.get("vc_user_id"),params);
 
         logger.info("----【神策埋点】接单按钮状态数据准备埋点--数据={}", JSON.toJSONString(event));
-        BuryiedPointUtil.buryData(event);
+        buryiedPointUtil.buryData(event);
         logger.info("----【神策埋点】接单按钮状态数据埋点结束");
         return null;
     }
@@ -122,7 +126,7 @@ public class DataBuriedPointServiceImpl implements DataBuriedPointService {
         Map<String,Object> event = BuryiedPointDataConvertor.newInstanceEvent(EventEnums.EVENT_submitorder.getValue(),(String)params.get("vc_user_id"),params);
 
         logger.info("----【神策埋点】提交订单数据准备埋点--数据={}", JSON.toJSONString(event));
-        BuryiedPointUtil.buryData(event);
+        buryiedPointUtil.buryData(event);
         logger.info("----【神策埋点】提交订单数据埋点结束");
         return null;
     }

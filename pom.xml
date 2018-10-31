@@ -693,6 +693,7 @@
         <module>quickcall-consumer</module>
         <module>quickcall-databury</module>
         <module>quickcall-web</module>
+        <module>quickcall-gateway</module>
     </modules>
 
 

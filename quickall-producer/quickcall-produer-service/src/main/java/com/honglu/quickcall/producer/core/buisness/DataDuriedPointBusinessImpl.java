@@ -3,8 +3,6 @@ package com.honglu.quickcall.producer.core.buisness;
 import com.honglu.quickcall.producer.core.service.DataDuriedPointService;
 import com.honglu.quickcall.producer.facade.business.DataDuriedPointBusiness;
 import com.honglu.quickcall.producer.facade.req.databury.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.alibaba.dubbo.config.annotation.Service;
 
@@ -14,7 +12,6 @@ import com.alibaba.dubbo.config.annotation.Service;
  */
 @Service(version = "1.0.0", retries = -1, timeout = 10_000)
 public class DataDuriedPointBusinessImpl implements DataDuriedPointBusiness {
-    private static final Logger LOGGER = LoggerFactory.getLogger(DataDuriedPointBusinessImpl.class);
 
     @Autowired
     private DataDuriedPointService dataDuriedPointService;

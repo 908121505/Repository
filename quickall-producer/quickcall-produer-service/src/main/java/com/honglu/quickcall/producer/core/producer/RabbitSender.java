@@ -1,7 +1,7 @@
 package com.honglu.quickcall.producer.core.producer;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.core.MessagePostProcessor;
 import org.springframework.amqp.core.MessageProperties;
@@ -20,7 +20,7 @@ import org.springframework.stereotype.Service;
 @Service("rabbitSender")
 public class RabbitSender{
 
-    private static final Logger LOGGER = LogManager.getLogger("RabbitSender");
+    private static final Logger LOGGER = LoggerFactory.getLogger(RabbitSender.class);
 
     @Autowired
     @Qualifier("buriedRabbitTemplate")

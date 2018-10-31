@@ -5,21 +5,33 @@ import com.sensorsdata.analytics.javasdk.SensorsAnalytics;
 import com.sensorsdata.analytics.javasdk.exceptions.InvalidArgumentException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
 
+@Component
 public class BuryiedPointUtil {
     private static final Logger logger = LoggerFactory.getLogger(BuryiedPointUtil.class);
     private static final String TIME_PATTERN = "yyyy-MM-dd HH:mm:ss";
+
+    @Value("${sc.receive.url}")
+    private String url;
+
+    @Value("${sc.cache.path}")
+    private String path;
+
+    @Value("${isOnlin}")
+    private String isOnlin;
 
     /**
      * 开始埋点
      * @param data
      */
-    public static void buryData(Map<String, Object> data){
+    public void buryData(Map<String, Object> data){
         try {
 
             logger.info("埋点传参为：{}", JSON.toJSONString(data));
@@ -29,7 +41,7 @@ public class BuryiedPointUtil {
             }
 
             SensorsAnalytics sensorsAnalytics = null;
-            String url = PropertiesUtil.get("sc.receive.url");
+            //String url = PropertiesUtil.get("sc.receive.url");
 
             logger.info("神策上传url为:{}",url);
 
@@ -37,13 +49,13 @@ public class BuryiedPointUtil {
                 logger.error("神策埋点异常,数据存储url异常");
                 return;
             }
-            String path = PropertiesUtil.get("sc.cache.path");
+            //String path = PropertiesUtil.get("sc.cache.path");
 
             if(StringUtils.isEmpty(path)){
                 logger.error("神策埋点异常,数据存储path异常");
             }
 
-            if("true".equals(PropertiesUtil.get("isOnlin"))){
+            if("true".equals(isOnlin)){
                 sensorsAnalytics = new SensorsAnalytics(new SensorsAnalytics.ConcurrentLoggingConsumer(path));
                 logger.info("==========ConcurrentLoggingConsumer==========");
             }else{
@@ -108,7 +120,7 @@ public class BuryiedPointUtil {
      * @return
      * @throws InvalidArgumentException
      */
-    private static void  setUserInfo(boolean isReal, String userId, Map<String, Object> user, final SensorsAnalytics sa) throws InvalidArgumentException {
+    private void  setUserInfo(boolean isReal, String userId, Map<String, Object> user, final SensorsAnalytics sa) throws InvalidArgumentException {
         //==========================一次性设置的属性(开始)=========================
         //手机号
         String mobile_num = (String) user.get("phoneNumber");

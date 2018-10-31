@@ -3,7 +3,6 @@ package com.honglu.quickcall.producer.core.controller;
 import com.honglu.quickcall.producer.core.producer.RabbitSender;
 import com.honglu.quickcall.producer.core.producer.Sender;
 import com.honglu.quickcall.producer.core.producer.XPMessage;
-import com.honglu.quickcall.producer.core.service.DataDuriedPointService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,9 +27,6 @@ public class DataBuriedPointController {
 
     @Autowired
     private Sender sender;
-
-    @Autowired
-    private DataDuriedPointService dataDuriedPointService;
 
     /**
      * 发送消息
