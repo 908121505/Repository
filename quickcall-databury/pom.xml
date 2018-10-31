@@ -1,111 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-
-    <groupId>com.honglu</groupId>
+    <groupId>com.honglu.quickcall</groupId>
     <artifactId>quickcall-databury</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
-    <packaging>jar</packaging>
+    <version>1.0.0-SNAPSHOT</version>
+    <modelVersion>4.0.0</modelVersion>
+    <description>quickcall user databury</description>
+    <inceptionYear>2017</inceptionYear>
 
-    <name>quickcall-databury</name>
-    <description>data bury point</description>
+    <packaging>pom</packaging>
 
     <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>1.5.9.RELEASE</version>
-        <relativePath/>
+        <groupId>com.honglu.quickcall</groupId>
+        <artifactId>quickcall-parent</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
     </parent>
 
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <java.version>1.8</java.version>
-    </properties>
+    <modules>
+        <module>quickcall-databury-facade</module>
+        <module>quickcall-databury-services</module>
+    </modules>
 
-    <dependencies>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
-        <!--mq-->
-        <!--<dependency>
-            <groupId>com.rabbitmq</groupId>
-            <artifactId>amqp-client</artifactId>
-            <version>3.5.6</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.amqp</groupId>
-            <artifactId>spring-amqp</artifactId>
-            <version>1.4.3.RELEASE</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.amqp</groupId>
-            <artifactId>spring-rabbit</artifactId>
-            <version>1.4.3.RELEASE</version>
-        </dependency>-->
-        <!--<dependency>
-            <groupId>com.rabbitmq</groupId>
-            <artifactId>amqp-client</artifactId>
-            <version>3.5.6</version>
-        </dependency>-->
-        <!-- rabbit组件相关依赖 -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-amqp</artifactId>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.springframework.boot</groupId>
-                    <artifactId>spring-boot-starter-logging</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
+    <distributionManagement>
+        <snapshotRepository>
+            <id>snapshots</id>
+            <name>my repository</name>
+            <url>http://172.16.0.186:5000/nexus/content/repositories/snapshots/</url>
+        </snapshotRepository>
 
-        <!--json-->
-        <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>fastjson</artifactId>
-            <version>1.2.42</version>
-        </dependency>
-
-        <!--logger-->
-        <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-slf4j-impl</artifactId>
-            <version>2.10.0</version>
-        </dependency>
-
-        <!-- 神策jar包 -->
-        <dependency>
-            <groupId>com.sensorsdata.analytics.javasdk</groupId>
-            <artifactId>SensorsAnalyticsSDK</artifactId>
-            <version>3.1.6</version>
-        </dependency>
-
-    </dependencies>
-
-    <build>
-        <finalName>databury</finalName>
-        <plugins>
-            <plugin>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
-                    <encoding>UTF-8</encoding>
-                </configuration>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <configuration>
-                    <skipTests>true</skipTests>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
-
+        <repository>
+            <id>snapshots</id>
+            <name>my repository</name>
+            <url>http://172.16.0.186:5000/nexus/content/repositories/releases/</url>
+        </repository>
+    </distributionManagement>
 </project>
-

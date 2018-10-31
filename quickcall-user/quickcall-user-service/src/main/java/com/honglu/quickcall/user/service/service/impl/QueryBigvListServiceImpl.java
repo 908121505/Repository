@@ -50,7 +50,7 @@ public class QueryBigvListServiceImpl implements QueryBigvListService {
 /*
 
     @Override
-    public CommonResponse queryHomeBigvList(FirstPageBigvListRequest request) {
+    public CommonResponse queryHomeBigvList(FirstPageBigvListRequest req) {
         List<AppHomeBigvListVO> resultList = new LinkedList<>();
 
         // 查询首页6帧资源位数据

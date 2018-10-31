@@ -36,7 +36,7 @@ public class BarrageMessageController extends BaseController {
     @RequestMapping(value = "/getBarrageMessage", method = RequestMethod.POST)
     @ResponseBody
     public WebResponseModel getBarrageMessage(HttpServletRequest request, BarrageMessageRequest params) {
-        LOGGER.info(this.getRemoteHost(request) + "accountWeb barrage message request data : " + JSONObject.toJSONString(params));
+        LOGGER.info(this.getRemoteHost(request) + "accountWeb barrage message req data : " + JSONObject.toJSONString(params));
         WebResponseModel response = accountCenterService.execute(params);
         LOGGER.info("accountWeb barrage message response data : " + JSONObject.toJSONString(response));
         return response;
@@ -48,7 +48,7 @@ public class BarrageMessageController extends BaseController {
     @RequestMapping(value = "/getPopWindowStatus", method = RequestMethod.POST)
     @ResponseBody
     public WebResponseModel getPopWindowStatus(FirstBarrageRequest request) {
-        LOGGER.info("accountWeb first barrage request data : " + JSONObject.toJSONString(request));
+        LOGGER.info("accountWeb first barrage req data : " + JSONObject.toJSONString(request));
         WebResponseModel response = accountCenterService.execute(request);
         LOGGER.info("accountWeb first barrage response data : " + JSONObject.toJSONString(response));
         return response;

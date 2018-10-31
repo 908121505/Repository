@@ -1,20 +1,7 @@
 package com.honglu.quickcall.account.service.bussService.impl;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import com.honglu.quickcall.common.api.exchange.ResultUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.honglu.quickcall.account.facade.code.AccountBizReturnCode;
-import com.honglu.quickcall.account.facade.exchange.request.DaVListBySkillItemIdRequest;
-import com.honglu.quickcall.account.facade.exchange.request.FirstPageDaVinfoRequest;
-import com.honglu.quickcall.account.facade.exchange.request.FirstPageSkillinfoRequest;
-import com.honglu.quickcall.account.facade.exchange.request.SkillInfoRequest;
-import com.honglu.quickcall.account.facade.exchange.request.SkillUpdateRequest;
+import com.honglu.quickcall.account.facade.exchange.request.*;
 import com.honglu.quickcall.account.facade.vo.CustomerSkillInfoVO;
 import com.honglu.quickcall.account.facade.vo.DaVinfoListVO;
 import com.honglu.quickcall.account.facade.vo.DaVinfoVO;
@@ -25,6 +12,14 @@ import com.honglu.quickcall.account.service.service.IProductSkillService;
 import com.honglu.quickcall.common.api.code.BizCode;
 import com.honglu.quickcall.common.api.exception.BizException;
 import com.honglu.quickcall.common.api.exchange.CommonResponse;
+import com.honglu.quickcall.common.api.exchange.ResultUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 
@@ -32,7 +27,7 @@ import com.honglu.quickcall.common.api.exchange.CommonResponse;
  * 
  * 功能描述：技能管理中心
  * 
- * @Package: com.honglu.quickcall.account.web.service.impl
+ * @Package: com.honglu.quickcall.account.web.core.impl
  * @author: chenliuguang
  * @date: 2018年9月22日 下午3:17:04
  */

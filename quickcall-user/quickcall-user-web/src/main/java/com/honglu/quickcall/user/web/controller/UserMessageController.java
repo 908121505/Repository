@@ -1,6 +1,8 @@
 package com.honglu.quickcall.user.web.controller;
 
 import com.honglu.quickcall.common.api.exchange.WebResponseModel;
+import com.honglu.quickcall.producer.facade.business.DataDuriedPointBusiness;
+import com.honglu.quickcall.producer.facade.req.databury.DataBuriedPointGetCodeReq;
 import com.honglu.quickcall.user.facade.code.UserBizReturnCode;
 import com.honglu.quickcall.user.facade.exchange.request.BookingMessageQueryRequest;
 import com.honglu.quickcall.user.facade.exchange.request.BookingMessageSaveRequest;
@@ -29,6 +31,9 @@ public class UserMessageController {
     @Autowired
     private UserCenterService userCenterService;
 
+    @Autowired
+    private DataDuriedPointBusiness dataDuriedPointBusiness;
+
     /**
      * 查询未读消息数量
      *
@@ -38,13 +43,18 @@ public class UserMessageController {
     @RequestMapping(value = "/unreadMessageNum", method = RequestMethod.POST)
     @ResponseBody
     public WebResponseModel unreadMessageNum(UserUnreadMessageNumRequest params) {
-        if (params.getCustomerId() == null) {
-            WebResponseModel response = new WebResponseModel();
-            response.setCode(UserBizReturnCode.paramError.code());
-            response.setMsg(UserBizReturnCode.paramError.desc());
-            return response;
-        }
-        return userCenterService.execute(params);
+//        if (params.getCustomerId() == null) {
+//            WebResponseModel response = new WebResponseModel();
+//            response.setCode(UserBizReturnCode.paramError.code());
+//            response.setMsg(UserBizReturnCode.paramError.desc());
+//            return response;
+//        }
+//        return userCenterService.execute(params);
+        DataBuriedPointGetCodeReq req = new DataBuriedPointGetCodeReq();
+        req.setPhone("17602140915");
+        req.setSuccess(false);
+        dataDuriedPointBusiness.buryGetCodeData(req);
+        return null;
     }
 
     /**

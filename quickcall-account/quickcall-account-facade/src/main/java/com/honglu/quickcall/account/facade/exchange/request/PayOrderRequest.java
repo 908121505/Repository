@@ -7,7 +7,7 @@ import com.honglu.quickcall.common.api.exchange.AbstractRequest;
  * Copyright © 2018 www.xiaoniu.com All rights reserved.
  * 
  * 功能描述：支付订单
- * @Package: com.honglu.quickcall.account.facade.exchange.request 
+ * @Package: com.honglu.quickcall.account.facade.exchange.req
  * @author: chenliuguang   
  * @date: 2018年9月23日 下午8:22:05 
  */

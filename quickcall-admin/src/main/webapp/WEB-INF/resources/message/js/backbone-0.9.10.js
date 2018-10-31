@@ -464,7 +464,7 @@
         if (success) success(model, resp, options);
       };
 
-      // Finish configuring and sending the Ajax request.
+      // Finish configuring and sending the Ajax req.
       method = this.isNew() ? 'create' : (options.patch ? 'patch' : 'update');
       if (method === 'patch') options.attrs = attrs;
       xhr = this.sync(method, this, options);
@@ -1365,11 +1365,11 @@
   };
 
   // Override this function to change the manner in which Backbone persists
-  // models to the server. You will be passed the type of request, and the
-  // model in question. By default, makes a RESTful Ajax request
+  // models to the server. You will be passed the type of req, and the
+  // model in question. By default, makes a RESTful Ajax req
   // to the model's `url()`. Some possible customizations could be:
   //
-  // * Use `setTimeout` to batch rapid-fire updates into a single request.
+  // * Use `setTimeout` to batch rapid-fire updates into a single req.
   // * Send up the models as XML instead of JSON.
   // * Persist models via WebSockets instead of Ajax.
   //
@@ -1388,7 +1388,7 @@
       emulateJSON: Backbone.emulateJSON
     });
 
-    // Default JSON-request options.
+    // Default JSON-req options.
     var params = {type: type, dataType: 'json'};
 
     // Ensure that we have a URL.
@@ -1396,13 +1396,13 @@
       params.url = _.result(model, 'url') || urlError();
     }
 
-    // Ensure that we have the appropriate request data.
+    // Ensure that we have the appropriate req data.
     if (options.data == null && model && (method === 'create' || method === 'update' || method === 'patch')) {
       params.contentType = 'application/json';
       params.data = JSON.stringify(options.attrs || model.toJSON(options));
     }
 
-    // For older servers, emulate JSON by encoding the request into an HTML-form.
+    // For older servers, emulate JSON by encoding the req into an HTML-form.
     if (options.emulateJSON) {
       params.contentType = 'application/x-www-form-urlencoded';
       params.data = params.data ? {model: params.data} : {};
@@ -1420,7 +1420,7 @@
       };
     }
 
-    // Don't process data on a non-GET request.
+    // Don't process data on a non-GET req.
     if (params.type !== 'GET' && !options.emulateJSON) {
       params.processData = false;
     }
@@ -1437,7 +1437,7 @@
       model.trigger('error', model, xhr, options);
     };
 
-    // Make the request, allowing the user to override any Ajax options.
+    // Make the req, allowing the user to override any Ajax options.
     var xhr = options.xhr = Backbone.ajax(_.extend(params, options));
     model.trigger('request', model, xhr, options);
     return xhr;

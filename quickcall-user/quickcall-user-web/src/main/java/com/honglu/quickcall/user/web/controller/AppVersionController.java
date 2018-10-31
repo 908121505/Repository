@@ -34,7 +34,7 @@ public class AppVersionController {
 	@RequestMapping(value = "/query", method = RequestMethod.POST)
 	@ResponseBody
 	public WebResponseModel query(AppVersionManageRequest params, HttpServletRequest request) {
-		logger.info("userWeb.appVersion.query.request.data : " + JSONObject.toJSONString(params));
+		logger.info("userWeb.appVersion.query.req.data : " + JSONObject.toJSONString(params));
 		WebResponseModel response = new WebResponseModel();
 		if (StringUtils.isNotEmpty(request.getHeader(REQUEST_HEADER_UA))) {
 			params.setHeadVersionUrl(request.getHeader(REQUEST_HEADER_UA));

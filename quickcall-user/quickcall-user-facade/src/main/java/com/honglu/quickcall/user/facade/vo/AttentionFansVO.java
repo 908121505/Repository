@@ -6,7 +6,7 @@ package com.honglu.quickcall.user.facade.vo;
  * Copyright © 2018 www.xiaoniu.com All rights reserved.
  * 
  * 功能描述：关注/粉丝列表
- * @Package: com.honglu.quickcall.user.facade.vo 
+ * @Package: com.honglu.quickcall.user.facade.resp
  * @author: chenliuguang   
  * @date: 2018年10月9日 下午1:05:55
  */

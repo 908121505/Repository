@@ -177,6 +177,8 @@ public class BarrageMessageServiceImpl implements BarrageMessageService {
         if (advertisement!=null){
             vo.setHeadPortraitUrl(advertisement.getImageUrl());
             vo.setSourceUrl(advertisement.getUrl());
+        }else{
+            vo.setShowWindow(false);
         }
         return ResultUtils.resultSuccess(vo);
     }
