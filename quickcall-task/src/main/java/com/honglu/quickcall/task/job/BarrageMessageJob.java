@@ -61,7 +61,7 @@ public class BarrageMessageJob {
 			// 跳过index条查询一条数据
 			FadeCustomer fadeCustomer = fadeCustomerMapper.selectOneByRandom();
 			if(fadeCustomer == null){
-				LOGGER.info("未查询到随机用户的配置数据 ----- 只有不查询假弹幕消息了----");
+				LOGGER.warn("未查询到随机用户的配置数据 ----- 只有不查询假弹幕消息了----");
 				return;
 			}
 			// 封装弹幕消息
@@ -72,12 +72,20 @@ public class BarrageMessageJob {
 			// 随机选取一条技能数据
 			SkillItem skill = skillItemMapper.selectOneByRandom();
 			if(skill == null){
-				LOGGER.info("未查询到可用技能配置数据 ----- 只有不查询假弹幕消息了----");
+				LOGGER.warn("未查询到可用技能配置数据 ----- 只有不查询假弹幕消息了----");
 				return;
 			}
+
+			// 查询技能的价格
+			BigDecimal skillPrice = skillItemMapper.selectOneSkillPrice(skill.getId());
+			if (skillPrice == null) {
+				LOGGER.warn("未查询到技的价格配置 ----- 只有不查询假弹幕消息了----skillId:{}", skill.getId());
+				return;
+			}
+
 			barrageMessageVO.setSkillId(skill.getId());
 			barrageMessageVO.setProductName(skill.getSkillItemName());
-			barrageMessageVO.setOrderAmounts(randomMoney(skill));
+			barrageMessageVO.setOrderAmounts(skillPrice);
 			barrageMessageVO.setOrderTime(new Date());
 
 			String barrageJsonStr = JSON.toJSONString(barrageMessageVO);
@@ -90,20 +98,6 @@ public class BarrageMessageJob {
 		} finally {
 			db2_pool.returnResource(jedis);
 		}
-	}
-
-	/**
-	 * 随机计算金额
-	 *
-	 * @param skill
-	 * @return
-	 */
-	private BigDecimal randomMoney(SkillItem skill) {
-		BigDecimal skillPrice = skillItemMapper.selectOneSkillPrice(skill.getId());
-		if (skillPrice == null) {
-			throw new IllegalArgumentException("未查询到技能的价格" + skill.getId() + " -- " + skill.getSkillItemName());
-		}
-		return skillPrice;
 	}
 
 }

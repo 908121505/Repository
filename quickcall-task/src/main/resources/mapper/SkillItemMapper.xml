@@ -342,7 +342,7 @@
     select
     <include refid="Base_Column_List" />
     from skill_item
-    WHERE `skill_status` = 0
+    WHERE `skill_status` = 1
     order by RAND() limit 1
   </select>
 
