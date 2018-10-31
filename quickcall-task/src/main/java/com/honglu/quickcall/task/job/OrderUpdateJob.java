@@ -206,9 +206,9 @@ public class OrderUpdateJob {
     /**
      * 扫描频率控制在一分钟一次
      */
-    @Scheduled(cron = "25 * * * * ?")
-    public void updateOrderStatusAfter12Hour() {
-    	LOGGER.info(">>>>>>>>>>>>>>>>>>12小时超job开始开始<<<<<<<<<<<<<<<<<<<<<");
+    @Scheduled(cron = "20 * * * * ?")
+    public void updateOrderStatusAfter12HourCust() {
+    	LOGGER.info(">>>>>>>>>>>>>>>>>>客户单方面未响应大V结束服务12小时超时job开始<<<<<<<<<<<<<<<<<<<<<");
     	try {
     		Date  currTime = new Date();
     		Calendar  cal = Calendar.getInstance();
@@ -225,31 +225,41 @@ public class OrderUpdateJob {
     		List<TaskOrder>  orderList = taskOrderMapper.queryOrderStatusAfter12HourCust(currTime, endTime, queryStatus, updateStatus, skillType,queryEndTime);
     		freezeToService(orderList);
     		updateOrderStatusByOrderListForFinish(orderList, updateStatus);
-//    		taskOrderMapper.updateOrderStatusAfter12HourCust(currTime, endTime, queryStatus, updateStatus, skillType);
     		sendMsgByOrderList(orderList, CANCEL_FOUR);
-    		
-    		
-    		
+    	} catch (Exception e) {
+    		LOGGER.error("客户单方面未响应大V结束服务12小时超时job执行发生异常，异常信息：", e);
+    	}
+    	LOGGER.info(">>>>>>>>>>>>>>>>>>客户单方面未响应大V结束服务12小时超时job结束<<<<<<<<<<<<<<<<<<<<<");
+    }
+    
+    /**
+     * 扫描频率控制在一分钟一次
+     */
+    @Scheduled(cron = "25 * * * * ?")
+    public void updateOrderStatusAfter12HourBoth() {
+    	LOGGER.info(">>>>>>>>>>>>>>>>>>客户大V双方未响应大V结束服务12小时超时job开始<<<<<<<<<<<<<<<<<<<<<");
+    	try {
+    		Date  currTime = new Date();
+    		Calendar  cal = Calendar.getInstance();
     		cal = Calendar.getInstance();
     		cal.setTime(currTime);
     		cal.add(Calendar.HOUR_OF_DAY, END_OVER_TIME_HOUR);
-    		endTime =  cal.getTime();
-    		skillType = OrderSkillConstants.SKILL_TYPE_NO; 
+    		Date  endTime =  cal.getTime();
+    		Integer skillType = OrderSkillConstants.SKILL_TYPE_NO; 
     		//获取接单设置超时
-    		queryStatus = OrderSkillConstants.ORDER_STATUS_GOING_USER_ACCEPCT;
-    		updateStatus = OrderSkillConstants.ORDER_STATUS_FINISH_BOTH_NO_OPERATE;
+    		Integer queryStatus = OrderSkillConstants.ORDER_STATUS_GOING_USER_ACCEPCT;
+    		Integer updateStatus = OrderSkillConstants.ORDER_STATUS_FINISH_BOTH_NO_OPERATE;
+    		Date  queryEndTime =  getEndTimeByAddDays(-2);
     		//服务完成，大V金额冻结
-    		orderList = taskOrderMapper.queryOrderStatusAfter12HourBoth(currTime, endTime, queryStatus, updateStatus, skillType,queryEndTime);
+    		List<TaskOrder>  orderList = taskOrderMapper.queryOrderStatusAfter12HourBoth(currTime, endTime, queryStatus, updateStatus, skillType,queryEndTime);
     		freezeToService(orderList);
     		updateOrderStatusByOrderListForFinish(orderList, updateStatus);
-//    		taskOrderMapper.updateOrderStatusAfter12HourBoth(currTime, endTime, queryStatus, updateStatus, skillType,queryEndTime);
-
     		sendMsgByOrderList(orderList, CANCEL_FOUR);
     		
     	} catch (Exception e) {
-    		LOGGER.error("job执行发生异常，异常信息：", e);
+    		LOGGER.error("客户大V双方未响应大V结束服务12小时超时job执行发生异常，异常信息：", e);
     	}
-    	LOGGER.info(">>>>>>>>>>>>>>>>>>12小时超job开始结束<<<<<<<<<<<<<<<<<<<<<");
+    	LOGGER.info(">>>>>>>>>>>>>>>>>>客户大V双方未响应大V结束服务12小时超时job结束<<<<<<<<<<<<<<<<<<<<<");
     }
     
     
