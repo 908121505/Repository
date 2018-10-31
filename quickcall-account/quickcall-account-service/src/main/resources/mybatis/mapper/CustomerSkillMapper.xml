@@ -411,10 +411,15 @@
   
   
   <select id="querySkillInfoPersonal" resultMap="BaseResultMap" parameterType="java.lang.Long" >
-    select 
+<!--     select 
     <include refid="Base_Column_List" />
     from customer_skill
+    where customer_id = #{customerId,jdbcType=BIGINT} -->
+    select 
+    cs.*
+    from customer_skill  cs  LEFT JOIN  skill_item   st  ON  cs.skill_item_id  = st.id
     where customer_id = #{customerId,jdbcType=BIGINT}
+    AND  cs.skill_status = 1
   </select>
 
   
