@@ -55,19 +55,6 @@ public interface IOrderService {
 	
 	
 	
-//	/**
-//	 * 发起的订单页--去支付
-//	 * @param request
-//	 */
-//	public CommonResponse  payOrder(PayOrderRequest  request);
-	
-	
-//	/**
-//	 * 发起的订单页--再来一单
-//	 * @param request
-//	 */
-//	public CommonResponse  copyOrder(CopyOrderRequest  request);
-	
 	
 	/**
 	 * 用户同意大V服务完成
@@ -116,11 +103,11 @@ public interface IOrderService {
 	
 	
 	
-	/**
-	 * 查询退款理由
-	 * @param request
-	 */
-	public CommonResponse  queryRefundReason(QueryRefundReasonRequest  request);
+//	/**
+//	 * 查询退款理由
+//	 * @param request
+//	 */
+//	public CommonResponse  queryRefundReason(QueryRefundReasonRequest  request);
 
 	/**
 	 * 订单评价页面

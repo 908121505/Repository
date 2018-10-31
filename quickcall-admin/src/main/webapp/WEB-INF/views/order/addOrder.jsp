@@ -87,7 +87,7 @@
 					</div>
 				</div>
 				<div class="form-group">
-					<label class="col-sm-3 control-label">订单金额<font color="red">&nbsp;*</font></label>
+					<label class="col-sm-3 control-label">订单单价<font color="red">&nbsp;*</font></label>
 					<div class="col-sm-6">
 						<input type="text" id="orderAmount" class="form-control"  name="orderAmount">
 					</div>

@@ -360,14 +360,14 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 		customer.setPhone(request.getTel());
 		customer.setNickName(
 				StringUtils.isNotBlank(request.getNickName()) ? request.getNickName() : "轻音_" + randomFour());
-
-		if (StringUtils.isNotBlank(request.getHeardUrl())) {
-			defaultImg = request.getHeardUrl();
+		String img = request.getHeardUrl();
+		if (StringUtils.isBlank(img)) {
+			img = defaultImg;
 		}
-		customer.setHeadPortraitUrl(defaultImg);
+		customer.setHeadPortraitUrl(img);
 		if (StringUtils.isNotBlank(customer.getNickName())) {
 			String rongyunToken = RongYunUtil.getToken(String.valueOf(customer.getCustomerId()), customer.getNickName(),
-					defaultImg);
+					img);
 			if (rongyunToken == null || "".equals(rongyunToken)) {
 				logger.error("用户获取融云token失败。用户ID为：" + customer.getCustomerId());
 			}

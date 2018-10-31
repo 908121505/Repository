@@ -163,6 +163,11 @@
                         'sClass': "text-center"
                     },
                     {
+                        "data": "phone",
+                        "sTitle": "手机号",
+                        'sClass': "text-center"
+                    },
+                    {
                         "data": "frontPortraitUrl",
                         "sTitle": "实名认证",
                         'sClass': "text-center",
@@ -299,7 +304,7 @@
                     }
                 },
                 aoColumnDefs: [{
-                    "aTargets": 7,
+                    "aTargets": 8,
                     "mRender": function (data, type, row) {
 
                         var detail = "";

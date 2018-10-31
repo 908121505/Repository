@@ -31,6 +31,9 @@ public class ReceiveOrderVO {
 	//修改时间
 	private String modifyTime;
 
+	//折扣价格(实付价格)
+	private String actualPrice;
+
 	public String getCustomerId() {
 		return customerId;
 	}
@@ -109,5 +112,13 @@ public class ReceiveOrderVO {
 
 	public void setModifyTime(String modifyTime) {
 		this.modifyTime = modifyTime;
+	}
+
+	public String getActualPrice() {
+		return actualPrice;
+	}
+
+	public void setActualPrice(String actualPrice) {
+		this.actualPrice = actualPrice;
 	}
 }
