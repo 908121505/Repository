@@ -14,4 +14,12 @@ public interface ActivityFunctionType {
      * Banner查询接口
      */
     String QUERY_BANNER = "005001";
+    /**
+     * 活动优惠券查询接口
+     */
+    String ACTIVITY_COUPON_QUERY = "005002";
+    /**
+     * 领券查询接口
+     */
+    String ACTIVITY_COUPON_RECEIVE = "005003";
 }
