@@ -69,8 +69,6 @@
 <script type="text/javascript">
     function check_fun() {
 
-        <%--$("#tip").html("");--%>
-
         var activityName = $("#activityName").val();
         if(activityName == null || activityName.trim() == ''){
         $("#tip").html("请输入活动名称");
@@ -81,36 +79,6 @@
             $("#tip").html("请输入活动编码");
             return false;
         }
-        <%--if(title&&title.length>150){--%>
-        <%--$("#tip").html("标题不能超过150个字");--%>
-        <%--return false;--%>
-        <%--}--%>
-
-        <%--var url = $("#banner_url").val();--%>
-        <%--if(url == null || url.trim() == ''){--%>
-        <%--if($("#clickType").val() == 1){--%>
-        <%--$("#tip").html("请输入HTML链接");--%>
-        <%--return false;--%>
-        <%--}--%>
-        <%--if($("#clickType").val() == 2){--%>
-        <%--$("#tip").html("请输入个人主页的主页ID");--%>
-        <%--return false;--%>
-        <%--}--%>
-        <%--if($("#clickType").val() == 3){--%>
-        <%--$("#tip").html("请输入分类页的类别ID");--%>
-        <%--return false;--%>
-        <%--}--%>
-        <%--}--%>
-
-        <%--var sort = $("#banner_sort").val();--%>
-        <%--if(sort == null || sort.trim() == ''){--%>
-        <%--$("#tip").html("请输入序号");--%>
-        <%--return false;--%>
-        <%--}--%>
-        <%--if(sort&&sort.length>9){--%>
-        <%--$("#tip").html("序号不能超过9个字");--%>
-        <%--return false;--%>
-        <%--}--%>
 
         var startTime = $("#banner_startTime").val();
         var endTime = $("#banner_endTime").val();
@@ -126,36 +94,6 @@
             $("#tip").html("开始时间必须大于结束时间");
             return false;
         }
-
-        <%--var versionRule = $("#appVersionRule").val();--%>
-        <%--var version = $("#appVersion").val();--%>
-        <%--if (versionRule != 0) {--%>
-        <%--if(version == null || version.trim() == ''){--%>
-        <%--$("#tip").html("请输入版本号，格式：4.0.0");--%>
-        <%--return false;--%>
-        <%--}--%>
-        <%--}--%>
-
-        <%--if('${entity}' == ''){--%>
-        <%--var filepath = $("#bannerFile_input").val();--%>
-        <%--if( filepath == null || filepath == ''){--%>
-        <%--$("#tip").html("请上传图片");--%>
-        <%--return false;--%>
-        <%--}--%>
-
-        <%--}--%>
-
-        <%--var remark = $('input[name="remark"]').val();--%>
-        <%--if(remark&&remark.length>250){--%>
-        <%--$("#tip").html("备注不能超过250个字");--%>
-        <%--return false;--%>
-        <%--}--%>
-
-        <%--var temp = /^[0-9]*$/;--%>
-        <%--if(!temp.test(sort)){--%>
-        <%--$("#tip").html("序号必须全部是数字");--%>
-        <%--return false;--%>
-        <%--}--%>
 
         return true;
     }

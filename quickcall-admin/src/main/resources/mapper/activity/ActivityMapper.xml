@@ -239,4 +239,8 @@
         WHERE activity_id = #{activityId}
     </select>
 
+    <delete id="delete" parameterType="map">
+        DELETE FROM activity WHERE activity_id = #{arg0}
+    </delete>
+
 </mapper>

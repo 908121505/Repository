@@ -7,6 +7,7 @@ import com.calf.module.activity.entity.Coupon;
 import com.calf.module.appconfig.impl.AdvertisementService;
 import com.calf.module.common.impl.CommonUtilService;
 import com.honglu.quickcall.common.core.util.UUIDUtils;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -54,9 +55,14 @@ public class CouponService {
 
     public void getCouponDetail(Model model, String id) {
         Map<String, Object> paramMap = new HashMap<String, Object>();
-        paramMap.put("id", id);
-        Coupon coupon = baseManager.get("Coupon.selectById",  paramMap);
-        model.addAttribute("entity", coupon);
+
+        if(StringUtils.isNotBlank(id) && !"0".equals(id)){
+            paramMap.put("couponId", id);
+            Coupon coupon = baseManager.get("Coupon.selectById",  paramMap);
+            model.addAttribute("entity", coupon);
+        }
+        List<Map<String, String>> activityList = baseManager.query("Coupon.selectActivityList", paramMap);
+        model.addAttribute("activityList", activityList);
     }
 
     public int saveAdd(Coupon entity) {
@@ -87,15 +93,10 @@ public class CouponService {
 
     }
 
-    public int disable(String id) {
+
+    public List getActivityList() {
         Map<String, Object> paramMap = new HashMap<String, Object>();
-        paramMap.put("id", id);
-        int count = baseManager.update("Coupon.disable", paramMap);
-        if(count > 0){
-            return 0;
-        }
-        return -1;
+        List<Map<String, String>> activityList = baseManager.query("Coupon.selectActivityList", paramMap);
+        return activityList;
     }
-
-
 }

@@ -94,7 +94,7 @@
                             "data": "activityId",
                             "sTitle": "活动编号",
                             'sClass': "text-center",
-//                            "bVisible": false //此列不显示
+                            "bVisible": false //此列不显示
                         },
                         {
                             "data": "activityName",
@@ -205,7 +205,7 @@
 
             //删除禁用
             function deleteRow(id) {
-                $('#myModal').deleteRow('activity/disable?id=' + id);
+                $('#myModal').deleteRow('activity/del.htm?id=' + id);
             }
 
         </script>

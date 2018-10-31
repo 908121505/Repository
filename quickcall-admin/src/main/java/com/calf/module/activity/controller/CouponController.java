@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
  * Description: 优惠券
@@ -45,9 +46,7 @@ public class CouponController implements BaseController<Coupon> {
 
     @Override
     public String addAndUpdateHome(Model model, String id) {
-        if(StringUtils.isNotBlank(id) && !"0".equals(id)){
-            CouponService.getCouponDetail(model,id);
-        }
+        CouponService.getCouponDetail(model,id);
         return  "activity/coupon/updateCoupon";
     }
 
@@ -69,6 +68,14 @@ public class CouponController implements BaseController<Coupon> {
     @Override
     public int delete(String id){return baseManager.delete(Coupon.class, new Object[]{id});
     }
-
+    /**
+     * 获取活动列表
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/getActivityList")
+    public List getActivityList(){
+        return CouponService.getActivityList();
+    }
 
 }
