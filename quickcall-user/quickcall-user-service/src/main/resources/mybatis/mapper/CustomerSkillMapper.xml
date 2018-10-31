@@ -464,8 +464,7 @@
             si.font_color as skillFontColor,
             c.nick_name as nickName, 
             c.sex as sex, 
-            (YEAR (NOW()) - YEAR (c.birthday)) AS age,
-            bss.score_total
+            (YEAR (NOW()) - YEAR (c.birthday)) AS age
         FROM bigv_skill_score bss
         INNER JOIN customer c ON c.customer_id = bss.customer_id AND c.cust_state = 2 AND c.cust_status = 1 AND c.v_status = 2
         INNER JOIN skill_item si ON si.id = bss.skill_item_id AND si.skill_status = 1
