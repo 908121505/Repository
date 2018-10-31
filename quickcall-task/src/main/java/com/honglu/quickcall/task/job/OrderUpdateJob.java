@@ -203,8 +203,10 @@ public class OrderUpdateJob {
     
     
     
-    
-    @Scheduled(cron = "25 0 0/1 * * ?")
+    /**
+     * 扫描频率控制在一分钟一次
+     */
+    @Scheduled(cron = "25 * * * * ?")
     public void updateOrderStatusAfter12Hour() {
     	LOGGER.info(">>>>>>>>>>>>>>>>>>12小时超job开始开始<<<<<<<<<<<<<<<<<<<<<");
     	try {
