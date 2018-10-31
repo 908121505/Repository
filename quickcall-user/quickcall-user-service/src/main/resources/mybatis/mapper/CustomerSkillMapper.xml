@@ -406,21 +406,21 @@
   <!-- 查询客户审核通过的技能 -->
   <select id="selectCustomerAuditedSkill" resultMap="BaseResultMap">
    SELECT
-        t.customer_skill_id,
-        t.skill_item_id,
-        t.skill_name,
-        t.discount_price,
-        t.service_unit,
-        t2.skill_voice_url,
-        t2.skill_voice_time,
-        t3.back_color as skill_back_color,
-        t3.font_color as skill_font_color
-    FROM customer_skill t
-    LEFT JOIN customer_skill_certify t2 ON t2.certify_id = t.certify_id
-    LEFT JOIN skill_item t3 ON t3.id = t.skill_item_id
-    WHERE t.customer_id = #{customerId}
-    AND t.skill_status = 1
-    ORDER BY t.create_time ASC
+        cs.customer_skill_id,
+        cs.skill_item_id,
+        cs.discount_price,
+        cs.service_unit,
+        si.skill_item_name as skill_name,
+        si.back_color as skill_back_color,
+        si.font_color as skill_font_color,
+        csc.skill_voice_url,
+        csc.skill_voice_time
+    FROM customer_skill cs
+    INNER JOIN skill_item si ON si.id = cs.skill_item_id AND si.skill_status = 1
+    LEFT JOIN customer_skill_certify csc ON csc.certify_id = cs.certify_id
+    WHERE cs.customer_id = #{customerId}
+    AND cs.skill_status = 1
+    ORDER BY cs.create_time ASC
   </select>
 
   <!-- 查询客户技能评价热度的评价标签 -->
