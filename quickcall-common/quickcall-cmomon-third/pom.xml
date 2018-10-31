@@ -247,7 +247,7 @@
                 <directory>src/main/resources/${package.environment}</directory>
                 <filtering>true</filtering>
                 <excludes>
-                    <exclude>${package.environment}/**</exclude>
+                    <exclude>profile/**</exclude>
                 </excludes>
             </resource>
         </resources>
