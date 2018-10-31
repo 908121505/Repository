@@ -180,7 +180,9 @@
             si.home_black_color AS skillHomeBackColor,
             si.font_color AS skillFontColor,
             csk.discount_price AS discountPrice,
-            csk.service_unit AS serviceUnit
+            csk.service_unit AS serviceUnit,
+            csc.skill_voice_url AS skillVoiceUrl,
+            csc.skill_voice_time AS skillVoiceTime
         FROM bigv_skill_score bss
         INNER JOIN customer c ON c.customer_id = bss.customer_id AND c.cust_state = 2 AND c.cust_status = 1 AND c.v_status = 2
         INNER JOIN skill_item si ON si.id = bss.skill_item_id AND si.skill_status = 1
