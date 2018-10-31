@@ -1,5 +1,7 @@
 package com.honglu.quickcall.account.facade.exchange.request;
 
+import java.math.BigDecimal;
+
 import com.honglu.quickcall.account.facade.code.OrderRequestType;
 import com.honglu.quickcall.common.api.exchange.AbstractRequest;
 
@@ -13,8 +15,7 @@ import com.honglu.quickcall.common.api.exchange.AbstractRequest;
  * @date: 2018年9月22日 下午3:39:53
  */
 public class OrderSaveRequest extends AbstractRequest {
-    
-	private static final long serialVersionUID = 597617894361707509L;
+	private static final long serialVersionUID = -6286505817019573104L;
 	/**客户编号*/
 	private Long  customerId;
 	/**大V编号*/
@@ -27,6 +28,10 @@ public class OrderSaveRequest extends AbstractRequest {
 	private String  remark;
 	/**预约时间*/
 	private String  appointTimeStr;
+	/**用户优惠券Id*/
+	private Long   customerCouponId;
+	/**券面值*/
+	private BigDecimal  couponPrice;
 
 	public Long getCustomerId() {
 		return customerId;
@@ -85,12 +90,38 @@ public class OrderSaveRequest extends AbstractRequest {
 	public void setAppointTimeStr(String appointTimeStr) {
 		this.appointTimeStr = appointTimeStr;
 	}
+	
+
+
+	public Long getCustomerCouponId() {
+		return customerCouponId;
+	}
+
+
+	public void setCustomerCouponId(Long customerCouponId) {
+		this.customerCouponId = customerCouponId;
+	}
+
+
+	public BigDecimal getCouponPrice() {
+		return couponPrice;
+	}
+
+
+	public void setCouponPrice(BigDecimal couponPrice) {
+		this.couponPrice = couponPrice;
+	}
+
 
 	@Override
 	public String getBizCode() {
 		return OrderRequestType.ORDER_SAVE;
 	}
 
+
+
+	
+	
 	
 	
 
