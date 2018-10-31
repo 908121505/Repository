@@ -1,12 +1,55 @@
 package com.honglu.quickcall.account.service.bussService.impl;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
+
+import com.alibaba.dubbo.config.annotation.Reference;
 import com.honglu.quickcall.account.facade.code.AccountBizReturnCode;
 import com.honglu.quickcall.account.facade.constants.OrderSkillConstants;
-import com.honglu.quickcall.account.facade.entity.*;
+import com.honglu.quickcall.account.facade.entity.Account;
+import com.honglu.quickcall.account.facade.entity.CustomerSkill;
+import com.honglu.quickcall.account.facade.entity.EvaluationLabel;
+import com.honglu.quickcall.account.facade.entity.Order;
+import com.honglu.quickcall.account.facade.entity.SkillItem;
 import com.honglu.quickcall.account.facade.enums.AccountBusinessTypeEnum;
 import com.honglu.quickcall.account.facade.enums.TransferTypeEnum;
-import com.honglu.quickcall.account.facade.exchange.request.*;
-import com.honglu.quickcall.account.facade.vo.*;
+import com.honglu.quickcall.account.facade.exchange.request.CancelOrderRequest;
+import com.honglu.quickcall.account.facade.exchange.request.ConfirmOrderRequest;
+import com.honglu.quickcall.account.facade.exchange.request.CustConfirmFinishRequest;
+import com.honglu.quickcall.account.facade.exchange.request.DetailOrderForIMRequest;
+import com.honglu.quickcall.account.facade.exchange.request.DetailOrderRequest;
+import com.honglu.quickcall.account.facade.exchange.request.DvReceiveOrderRequest;
+import com.honglu.quickcall.account.facade.exchange.request.DvStartServiceRequest;
+import com.honglu.quickcall.account.facade.exchange.request.FinishOrderRequest;
+import com.honglu.quickcall.account.facade.exchange.request.OrderDaVSkillRequest;
+import com.honglu.quickcall.account.facade.exchange.request.OrderEvaluationRequest;
+import com.honglu.quickcall.account.facade.exchange.request.OrderEvaluationSubmitRequest;
+import com.honglu.quickcall.account.facade.exchange.request.OrderReceiveOrderListRequest;
+import com.honglu.quickcall.account.facade.exchange.request.OrderSaveRequest;
+import com.honglu.quickcall.account.facade.exchange.request.OrderSendOrderListRequest;
+import com.honglu.quickcall.account.facade.exchange.request.QueryIngOrderCountRequest;
+import com.honglu.quickcall.account.facade.exchange.request.QueryRefundReasonRequest;
+import com.honglu.quickcall.account.facade.vo.CustomerSkillIMVO;
+import com.honglu.quickcall.account.facade.vo.OrderDaVSkillVO;
+import com.honglu.quickcall.account.facade.vo.OrderDetailForIMVO;
+import com.honglu.quickcall.account.facade.vo.OrderDetailVO;
+import com.honglu.quickcall.account.facade.vo.OrderEvaluationVo;
+import com.honglu.quickcall.account.facade.vo.OrderIMVO;
+import com.honglu.quickcall.account.facade.vo.OrderReceiveOrderListVO;
+import com.honglu.quickcall.account.facade.vo.OrderSendOrderListVO;
+import com.honglu.quickcall.account.facade.vo.OrderSkillItemVO;
+import com.honglu.quickcall.account.facade.vo.OrderTempResponseVO;
 import com.honglu.quickcall.account.service.bussService.AccountService;
 import com.honglu.quickcall.account.service.bussService.BarrageMessageService;
 import com.honglu.quickcall.account.service.bussService.CommonService;
@@ -22,17 +65,10 @@ import com.honglu.quickcall.common.core.util.UUIDUtils;
 import com.honglu.quickcall.common.third.AliyunSms.utils.SendSmsUtil;
 import com.honglu.quickcall.common.third.push.GtPushUtil;
 import com.honglu.quickcall.common.third.rongyun.util.RongYunUtil;
+import com.honglu.quickcall.producer.facade.business.DataDuriedPointBusiness;
+import com.honglu.quickcall.producer.facade.req.databury.DataBuriedPointSubmitOrderReq;
 import com.honglu.quickcall.user.facade.business.UserCenterSendMqMessageService;
 import com.honglu.quickcall.user.facade.entity.Customer;
-import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
-
-import java.math.BigDecimal;
-import java.util.*;
 
 /**
  * 
@@ -62,8 +98,8 @@ public class OrderServiceImpl implements IOrderService {
 	private SkillItemMapper skillItemMapper;
 	@Autowired
 	private UserCenterSendMqMessageService userCenterSendMqMessageService;
-	
-	
+	@Reference(version = "1.0.0", timeout = 10000, retries = 0)
+    private DataDuriedPointBusiness dataDuriedPointBusiness;
 	
 
 	
@@ -212,7 +248,7 @@ public class OrderServiceImpl implements IOrderService {
 				}
 				
 			}
-			
+			DataBuriedPointSubmitOrderReq req = new DataBuriedPointSubmitOrderReq();
 			
 			
 			Long  customerSkillId =  request.getCustomerSkillId();
@@ -317,6 +353,22 @@ public class OrderServiceImpl implements IOrderService {
 			//下单成功后推送IM消息
 			RongYunUtil.sendOrderMessage(serviceId, OrderSkillConstants.IM_MSG_CONTENT_RECEIVE_ORDER,OrderSkillConstants.MSG_CONTENT_DAV);
 			LOGGER.info("======>>>>>用户编号为：" + request.getCustomerId() + "下单成功");
+		
+		
+			//下单触发埋点
+			req.setActual_payment_amount(orderAmounts.doubleValue());
+			req.setOrder_amount(orderAmounts.multiply(price).doubleValue());
+			req.setOrder_id(orderId +"");
+			req.setOrder_quantity(Double.valueOf(orderNum +""));
+			req.setOrder_type(skillItem.getSkillItemName());
+			req.setUser_id(customerId +"");
+			try {
+				dataDuriedPointBusiness.burySubmitOrderData(req );
+			} catch (Exception e) {
+				LOGGER.error("下单埋点发生异常，异常信息：",e);
+			}
+		
+		
 		} catch (Exception e) {
 			e.printStackTrace();
 			resultMap.put("retCode",  OrderSkillConstants.RET_CODE_SYSTEM_ERROR);
