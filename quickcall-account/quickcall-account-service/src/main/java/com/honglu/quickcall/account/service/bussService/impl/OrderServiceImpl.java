@@ -232,6 +232,9 @@ public class OrderServiceImpl implements IOrderService {
 			//根据券判断真正的订单金额
 			BigDecimal orderAmounts = BigDecimal.ZERO;
 			
+			
+			//用券状态
+			Integer  couponFlag =  OrderSkillConstants.ORDER_COUPON_FLAG_DEFAULT;
 			//获取券金额
 			BigDecimal   couponPrice = request.getCouponPrice();
 			Long  customerCouponId =  request.getCustomerCouponId();
@@ -241,6 +244,7 @@ public class OrderServiceImpl implements IOrderService {
 				if(discountPrice.compareTo(BigDecimal.ZERO) > 0){
 					orderAmounts = orderAmounts.add(discountPrice);
 				}
+				couponFlag =  OrderSkillConstants.ORDER_COUPON_FLAG_USE;
 			}else{
 				//根据券判断真正的订单金额
 				orderAmounts = new BigDecimal(orderNum).multiply(price);
@@ -299,10 +303,12 @@ public class OrderServiceImpl implements IOrderService {
 			record.setOrderAmounts(orderAmounts);
 			record.setOrderNum(orderNum);
 			record.setOrderStatus(OrderSkillConstants.ORDER_STATUS_WAITING_RECEIVE);
+			//设置用券标识
+			record.setCouponFlag(couponFlag);
 			record.setOrderTime(currTime);
 			record.setRemark(request.getRemark());
+			
 			orderMapper.insert(record);
-			//TODO   券逻辑新增
 			//修改用户券状态
 			
 			
