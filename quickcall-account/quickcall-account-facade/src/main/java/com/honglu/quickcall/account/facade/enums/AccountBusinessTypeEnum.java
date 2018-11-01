@@ -5,7 +5,7 @@ package com.honglu.quickcall.account.facade.enums;
  */
 public enum AccountBusinessTypeEnum {
 	Recharge(1, "充值"), Withdraw(2, "提现"), PlaceOrder(3, "下单"), CompleteOrder(4, "完成订单"), OrderRefund(5,
-			"订单退款"), PlatformReward(6, "平台奖励"), FroZen(7, "冻结金额"), FroZenAccount(8, "冻结回账");
+			"订单退款"), PlatformReward(6, "平台奖励"), FroZen(7, "冻结金额"), FroZenAccount(8, "冻结回账"), AppRecharge(9, "内购充值");
 
 	private Integer type;
 	private String desc;
