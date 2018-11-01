@@ -121,11 +121,11 @@ public class EditProfileServiceImpl implements EditProfileService {
 			// 刷新融云用户信息
 			CodeSuccessReslut reslut = RongYunUtil.refreshUser(String.valueOf(customer.getCustomerId()),
 					customer.getNickName(), null);
-			if (reslut.getCode() != 200) {
-				logger.error("刷新融云用户信息失败，用户id为：" + String.valueOf(customer.getCustomerId()));
-			} else {
-				logger.info("刷新融云用户信息成功！");
-			}
+			/*
+			 * if (reslut.getCode() != 200) { logger.error("刷新融云用户信息失败，用户id为：" +
+			 * String.valueOf(customer.getCustomerId())); } else {
+			 * logger.info("刷新融云用户信息成功！"); }
+			 */
 
 			JedisUtil.set(RedisKeyConstants.USER_CUSTOMER_INFO + params.getCustomerId(),
 					JsonParseUtil.castToJson(customer));
@@ -301,11 +301,11 @@ public class EditProfileServiceImpl implements EditProfileService {
 			// 刷新融云用户信息
 			CodeSuccessReslut reslut = RongYunUtil.refreshUser(String.valueOf(params.getCustomerId()), null,
 					params.getHeadPortraitUrl());
-			if (reslut.getCode() != 200) {
-				logger.error("刷新融云用户信息失败，用户id为：" + String.valueOf(params.getCustomerId()));
-			} else {
-				logger.info("刷新融云用户信息成功！");
-			}
+			// if (reslut.getCode() != 200) {
+			// logger.error("刷新融云用户信息失败，用户id为：" + String.valueOf(params.getCustomerId()));
+			// } else {
+			// logger.info("刷新融云用户信息成功！");
+			// }
 
 			commonResponse.setCode(UserBizReturnCode.Success);
 			commonResponse.setMessage(UserBizReturnCode.Success.desc());

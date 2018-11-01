@@ -259,11 +259,11 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 			CodeSuccessReslut reslut = RongYunUtil.refreshUser(String.valueOf(params.getCustomerId()),
 					params.getNickName(), img);
 			// 刷新失败
-			if (reslut.getCode() != 200) {
-				logger.error("刷新融云用户信息失败，用户id为：" + String.valueOf(params.getCustomerId()));
-			} else {
-				logger.info("刷新融云用户信息成功！");
-			}
+			// if (reslut.getCode() != 200) {
+			// logger.error("刷新融云用户信息失败，用户id为：" + String.valueOf(params.getCustomerId()));
+			// } else {
+			// logger.info("刷新融云用户信息成功！");
+			// }
 
 		}
 

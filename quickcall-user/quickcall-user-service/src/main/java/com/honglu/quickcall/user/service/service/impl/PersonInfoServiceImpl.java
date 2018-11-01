@@ -210,11 +210,11 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 			CodeSuccessReslut reslut = RongYunUtil.refreshUser(String.valueOf(customer.getCustomerId()),
 					customer.getNickName(), customer.getHeadPortraitUrl());
 			// 刷新失败
-			if (reslut.getCode() != 200) {
-				logger.error("刷新融云用户信息失败，用户id为：" + String.valueOf(customer.getCustomerId()));
-			} else {
-				logger.info("刷新融云用户信息成功！");
-			}
+			// if (reslut.getCode() != 200) {
+			// logger.error("刷新融云用户信息失败，用户id为：" + String.valueOf(customer.getCustomerId()));
+			// } else {
+			// logger.info("刷新融云用户信息成功！");
+			// }
 
 			JedisUtil.set(RedisKeyConstants.USER_CUSTOMER_INFO + params.getCustomerId(),
 					JsonParseUtil.castToJson(customer));
