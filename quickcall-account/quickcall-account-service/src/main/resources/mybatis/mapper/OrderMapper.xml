@@ -535,7 +535,8 @@
 		od.order_time AS orderTime,
 		od.receive_order_time AS receiveOrderTime,
 		od.customer_skill_id AS customerSkillId,
-		cs.switch_status AS switchStatus
+		cs.switch_status AS switchStatus,
+		od.coupon_flag  AS  couponFlag
 	FROM
 		orders od
 	LEFT JOIN customer_skill cs ON od.customer_skill_id = cs.customer_skill_id
