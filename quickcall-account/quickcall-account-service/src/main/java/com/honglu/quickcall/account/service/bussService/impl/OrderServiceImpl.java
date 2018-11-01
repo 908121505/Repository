@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+import com.honglu.quickcall.account.facade.entity.*;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,11 +17,6 @@ import org.springframework.util.CollectionUtils;
 
 import com.honglu.quickcall.account.facade.code.AccountBizReturnCode;
 import com.honglu.quickcall.account.facade.constants.OrderSkillConstants;
-import com.honglu.quickcall.account.facade.entity.Account;
-import com.honglu.quickcall.account.facade.entity.CustomerSkill;
-import com.honglu.quickcall.account.facade.entity.EvaluationLabel;
-import com.honglu.quickcall.account.facade.entity.Order;
-import com.honglu.quickcall.account.facade.entity.SkillItem;
 import com.honglu.quickcall.account.facade.enums.AccountBusinessTypeEnum;
 import com.honglu.quickcall.account.facade.enums.TransferTypeEnum;
 import com.honglu.quickcall.account.facade.exchange.request.CancelOrderRequest;
@@ -94,6 +90,8 @@ public class OrderServiceImpl implements IOrderService {
 	private SkillItemMapper skillItemMapper;
 	@Autowired
 	private UserCenterSendMqMessageService userCenterSendMqMessageService;
+//	@Autowired
+//	private CouponDubboBusiness couponDubboBusiness;
 	
 	
 	
@@ -400,7 +398,7 @@ public class OrderServiceImpl implements IOrderService {
 	//==================================发起的订单页相关开始==================================
 	@Override
 	public CommonResponse cancelOrder(CancelOrderRequest request) {
-		if (request == null || request.getOrderId() == null ) {
+		/*if (request == null || request.getOrderId() == null ) {
 			throw new BizException(AccountBizReturnCode.paramError, "取消订单参数异常");
 		}
 		LOGGER.info("======>>>>>cancelOrder()入参："+request.toString());
@@ -435,17 +433,29 @@ public class OrderServiceImpl implements IOrderService {
 			//金额不为空，说明需要退款给用户
 			if(payAmount != null){
 				accountService.inAccount(customerId, payAmount,TransferTypeEnum.RECHARGE,AccountBusinessTypeEnum.OrderRefund);
+			}*/
+
+			//----start---chenpeng 2018.11.1 取消订单时，查询是否使用优惠券，如果有则退回优惠券
+			long customerId = 123;
+			long orderId = 1809221622495477555L;
+			//查询用户此订单是否使用优惠券
+			CustomerCoupon customerCoupon = orderMapper.queryCustomerCouponByCustomerIdAndOrderId(customerId,orderId);
+			if(customerCoupon != null){
+				int cancelUpdateCustomerCouponCount = orderMapper.cancelUpdateCustomerCoupon(customerCoupon.getId());
+				LOGGER.info("取消订单 退回优惠券 id："+ customerCoupon.getId() + "更新数量：" + cancelUpdateCustomerCouponCount);
 			}
-		}
+			//-----end---chenpeng 2018.11.1
+
+//		}
 		
-		Long  serviceId =  order.getServiceId();
+		/*Long  serviceId =  order.getServiceId();
 		//用户取消订单通知大V查看详情
 		RongYunUtil.sendOrderMessage(serviceId, OrderSkillConstants.IM_MSG_CONTENT_CANCEL_ORDER_TO_DV,OrderSkillConstants.MSG_CONTENT_DAV);
-		RongYunUtil.sendOrderMessage(customerId, OrderSkillConstants.IM_MSG_CONTENT_CANCEL_ORDER_TO_CUST,OrderSkillConstants.MSG_CONTENT_C);
+		RongYunUtil.sendOrderMessage(customerId, OrderSkillConstants.IM_MSG_CONTENT_CANCEL_ORDER_TO_CUST,OrderSkillConstants.MSG_CONTENT_C);*/
 		
 		
 		CommonResponse commonResponse = commonService.getCommonResponse();
-		commonResponse.setData(orderStatus);
+//		commonResponse.setData(orderStatus);
 		LOGGER.info("======>>>>>订单编号：" + orderId + "，取消订单完成");
 		return commonResponse;
 	}
