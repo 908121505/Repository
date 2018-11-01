@@ -264,7 +264,7 @@ public class EditProfileServiceImpl implements EditProfileService {
 		}
 
 		// 先判断表中是否存在这个用户头像记录 存在则更新，不存在则插入
-		int result = 0;
+		/*int result = 0;
 		CustomerAppearance customerAppearance = customerAppearanceMapper
 				.selectByCustomerIdAndType(params.getCustomerId(), AppearanceTypeEnum.HEAD_PORTRAIT.getCode());
 		if (null != customerAppearance) {
@@ -289,20 +289,19 @@ public class EditProfileServiceImpl implements EditProfileService {
 			result = customerAppearanceMapper.insertAppearance(customerAppearanceNew);
 
 			logger.info("修改头像 updateHeadPortrait,插入数量" + result);
-		}
+		}*/
 
 		//现在头像不用审核，直接保存到custmoer表 ，以后要审核，则需要审核通过之后更新到custmoer表
-//		customer.setHeadPortraitUrl(params.getHeadPortraitUrl());
-//		int updateCustomerResult = customerMapper.updateByPrimaryKeySelective(customer);
-//		logger.info("修改头像 updateHeadPortrait,更新数量" + updateCustomerResult);
+		customer.setHeadPortraitUrl(params.getHeadPortraitUrl());
+		int updateCustomerResult = customerMapper.updateByPrimaryKeySelective(customer);
+		logger.info("修改头像 updateHeadPortrait,更新数量" + updateCustomerResult);
 
-		// TODO: 2018/10/30 custmoer表冗余一份 created by chenpeng
-		if (result > 0) {
+		if (updateCustomerResult > 0) {
 
 			// 刷新融云用户信息
 			CodeSuccessReslut reslut = RongYunUtil.refreshUser(String.valueOf(params.getCustomerId()), null, params.getHeadPortraitUrl());
 			if (reslut.getCode() != 200) {
-				logger.error("刷新融云用户信息失败，用户id为：" + String.valueOf(customerAppearance.getCustomerId()) + "失败原因为：" + reslut.getErrorMessage());
+				logger.error("刷新融云用户信息失败，用户id为：" + String.valueOf(params.getCustomerId()) + "失败原因为：" + reslut.getErrorMessage());
 			} else {
 				logger.info("刷新融云用户信息成功！");
 			}
