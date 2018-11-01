@@ -1,6 +1,5 @@
 package com.honglu.quickcall.activity.service.service.impl;
 
-import com.honglu.quickcall.activity.facade.entity.Activity;
 import com.honglu.quickcall.activity.facade.entity.CustomerCoupon;
 import com.honglu.quickcall.activity.facade.exchange.request.ActivityCouponQueryRequest;
 import com.honglu.quickcall.activity.facade.exchange.request.ActivityCouponReceiveRequest;
@@ -13,6 +12,7 @@ import com.honglu.quickcall.activity.service.dao.CustomerCouponMapper;
 import com.honglu.quickcall.activity.service.service.ActivityCouponService;
 import com.honglu.quickcall.common.api.exchange.CommonResponse;
 import com.honglu.quickcall.common.api.exchange.ResultUtils;
+import com.honglu.quickcall.common.third.rongyun.util.RongYunUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -83,6 +83,17 @@ public class ActivityCouponServiceImpl implements ActivityCouponService {
             customerCouponMapper.insertSelective(customerCoupon);
             remap.put("code","0");
             remap.put("msg","领取成功");
+
+            Map<String,String> mapA = customerCouponMapper.selectActivityNameAndCouponName(Long.parseLong(request.getCouponId()));
+            //发送消息
+            StringBuilder builder = new StringBuilder();
+            builder.append("您有新的抵扣券可用----恭喜您在【");
+            builder.append(mapA.get("activityName"));
+            builder.append("】活动中获得了“");
+            builder.append(mapA.get("couponName"));
+            builder.append("”，可在下单时直接抵扣。");
+            //"您有新的抵扣券可用----恭喜您在【XXX】活动中获得了“情感咨询1588抵用券”，可在下单时直接抵扣。";
+            RongYunUtil.sendSystemMessage(Long.valueOf(request.getCustomerId()),builder.toString());
         }else{
             remap.put("code","1");
             remap.put("msg","领取失败，已经领取过了");
@@ -90,22 +101,4 @@ public class ActivityCouponServiceImpl implements ActivityCouponService {
         return ResultUtils.resultSuccess(remap);
     }
 
-   /*
-    @Override
-    public CommonResponse queryBannerInfo(BannerRequest request) {
-        if (request == null) {
-            return ResultUtils.resultParamEmpty();
-        }
-        if (request.getBannerType() == null) {
-            return ResultUtils.resultParamEmpty("Banner类型必传");
-        }
-        Banner bannerParms = new Banner();
-        bannerParms.setBannerType(request.getBannerType());
-        bannerParms.setDeviceType(request.getDeviceType());
-        bannerParms.setAppVersionRule(request.getAppVersionRule());
-        bannerParms.setAppVersion(request.getAppVersion());
-
-        List<Banner> list = bannerMapper.queryBannerInfo(bannerParms);
-        return ResultUtils.resultSuccess(list);
-    }*/
 }
