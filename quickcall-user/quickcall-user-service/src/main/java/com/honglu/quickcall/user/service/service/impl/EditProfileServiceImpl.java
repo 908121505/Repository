@@ -298,8 +298,27 @@ public class EditProfileServiceImpl implements EditProfileService {
 
 		if (updateCustomerResult > 0) {
 
-			// 刷新融云用户信息
-			CodeSuccessReslut reslut = RongYunUtil.refreshUser(String.valueOf(params.getCustomerId()), null, params.getHeadPortraitUrl());
+			// 刷新融云用户信息  如果失败重试俩次
+			CodeSuccessReslut reslut = null;
+			reslut = RongYunUtil.refreshUser(String.valueOf(params.getCustomerId()), null, params.getHeadPortraitUrl());
+			if(reslut == null){
+				reslut = RongYunUtil.refreshUser(String.valueOf(params.getCustomerId()), null, params.getHeadPortraitUrl());
+			}
+			if(reslut == null){
+				reslut = RongYunUtil.refreshUser(String.valueOf(params.getCustomerId()), null, params.getHeadPortraitUrl());
+			}
+			if (reslut.getCode() != 200) {
+				logger.error("刷新融云用户信息失败，用户id为：" + String.valueOf(params.getCustomerId()) + "失败原因为：" + reslut.getErrorMessage());
+				reslut = RongYunUtil.refreshUser(String.valueOf(params.getCustomerId()), null, params.getHeadPortraitUrl());
+			} else {
+				logger.info("刷新融云用户信息成功！");
+			}
+			if (reslut.getCode() != 200) {
+				logger.error("刷新融云用户信息失败，用户id为：" + String.valueOf(params.getCustomerId()) + "失败原因为：" + reslut.getErrorMessage());
+				reslut = RongYunUtil.refreshUser(String.valueOf(params.getCustomerId()), null, params.getHeadPortraitUrl());
+			} else {
+				logger.info("刷新融云用户信息成功！");
+			}
 			if (reslut.getCode() != 200) {
 				logger.error("刷新融云用户信息失败，用户id为：" + String.valueOf(params.getCustomerId()) + "失败原因为：" + reslut.getErrorMessage());
 			} else {
