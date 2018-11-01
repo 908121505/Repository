@@ -70,8 +70,8 @@ public class OrderDetailVO implements  Serializable{
 	private Date  receiveOrderTime ;
 	
     private BigDecimal discountRate;
-    
-    
+
+	private CustomerCouponVO customerCouponVO;//客户订单优惠券信息
 	
 	
 	
@@ -229,5 +229,13 @@ public class OrderDetailVO implements  Serializable{
 
 	public void setCustomerIsEvaluate(Long customerIsEvaluate) {
 		this.customerIsEvaluate = customerIsEvaluate;
+	}
+
+	public CustomerCouponVO getCustomerCouponVO() {
+		return customerCouponVO;
+	}
+
+	public void setCustomerCouponVO(CustomerCouponVO customerCouponVO) {
+		this.customerCouponVO = customerCouponVO;
 	}
 }

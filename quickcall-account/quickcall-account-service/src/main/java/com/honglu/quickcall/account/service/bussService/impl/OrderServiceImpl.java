@@ -7,7 +7,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-import com.honglu.quickcall.account.facade.entity.*;
+import com.honglu.quickcall.account.facade.vo.*;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,6 +17,11 @@ import org.springframework.util.CollectionUtils;
 
 import com.honglu.quickcall.account.facade.code.AccountBizReturnCode;
 import com.honglu.quickcall.account.facade.constants.OrderSkillConstants;
+import com.honglu.quickcall.account.facade.entity.Account;
+import com.honglu.quickcall.account.facade.entity.CustomerSkill;
+import com.honglu.quickcall.account.facade.entity.EvaluationLabel;
+import com.honglu.quickcall.account.facade.entity.Order;
+import com.honglu.quickcall.account.facade.entity.SkillItem;
 import com.honglu.quickcall.account.facade.enums.AccountBusinessTypeEnum;
 import com.honglu.quickcall.account.facade.enums.TransferTypeEnum;
 import com.honglu.quickcall.account.facade.exchange.request.CancelOrderRequest;
@@ -90,8 +95,6 @@ public class OrderServiceImpl implements IOrderService {
 	private SkillItemMapper skillItemMapper;
 	@Autowired
 	private UserCenterSendMqMessageService userCenterSendMqMessageService;
-//	@Autowired
-//	private CouponDubboBusiness couponDubboBusiness;
 	
 	
 	
@@ -114,7 +117,7 @@ public class OrderServiceImpl implements IOrderService {
 		OrderDaVSkillVO  resultVO = orderMapper.getCustomerByCustomerId(customerId);
 		
 		List<OrderSkillItemVO> custSkillList = new  ArrayList<>();
-		
+		List<String> skillItemIdList = new  ArrayList<String>();
 		List<CustomerSkill> skillList  = customerSkillMapper.querySkillInfoPersonal(customerId);
 		if(!CollectionUtils.isEmpty(skillList)){
 			for (CustomerSkill skill : skillList) {
@@ -129,10 +132,22 @@ public class OrderServiceImpl implements IOrderService {
 				vo.setServiceUnit(skill.getServiceUnit());
 				vo.setSkillItemName(skillItem.getSkillItemName());
 				custSkillList.add(vo);
+				skillItemIdList.add(skillItemId+"");
 			}
 		}
 		
 		resultVO.setCustSkillList(custSkillList );
+		int showTip = 0;//0=不展示，1=展示
+		if(skillItemIdList!=null && skillItemIdList.size()>0){
+			String couponId = orderMapper.getCouponIdBySkillItemId(skillItemIdList);
+			if(StringUtils.isNotBlank(couponId)){
+				int num = orderMapper.getShowTip(couponId,customerId+"");
+				if(num == 0){
+					showTip = 1;
+				}
+			}
+		}
+		resultVO.setShowTip(showTip);
 		CommonResponse commonResponse = commonService.getCommonResponse();
 		commonResponse.setData(resultVO);
 		LOGGER.info("======>>>>>用户编号为：" + request.getCustomerId() + "查询成功");
@@ -217,6 +232,9 @@ public class OrderServiceImpl implements IOrderService {
 			//根据券判断真正的订单金额
 			BigDecimal orderAmounts = BigDecimal.ZERO;
 			
+			
+			//用券状态
+			Integer  couponFlag =  OrderSkillConstants.ORDER_COUPON_FLAG_DEFAULT;
 			//获取券金额
 			BigDecimal   couponPrice = request.getCouponPrice();
 			Long  customerCouponId =  request.getCustomerCouponId();
@@ -226,6 +244,7 @@ public class OrderServiceImpl implements IOrderService {
 				if(discountPrice.compareTo(BigDecimal.ZERO) > 0){
 					orderAmounts = orderAmounts.add(discountPrice);
 				}
+				couponFlag =  OrderSkillConstants.ORDER_COUPON_FLAG_USE;
 			}else{
 				//根据券判断真正的订单金额
 				orderAmounts = new BigDecimal(orderNum).multiply(price);
@@ -284,10 +303,12 @@ public class OrderServiceImpl implements IOrderService {
 			record.setOrderAmounts(orderAmounts);
 			record.setOrderNum(orderNum);
 			record.setOrderStatus(OrderSkillConstants.ORDER_STATUS_WAITING_RECEIVE);
+			//设置用券标识
+			record.setCouponFlag(couponFlag);
 			record.setOrderTime(currTime);
 			record.setRemark(request.getRemark());
+			
 			orderMapper.insert(record);
-			//TODO   券逻辑新增
 			//修改用户券状态
 			
 			
@@ -398,7 +419,7 @@ public class OrderServiceImpl implements IOrderService {
 	//==================================发起的订单页相关开始==================================
 	@Override
 	public CommonResponse cancelOrder(CancelOrderRequest request) {
-		/*if (request == null || request.getOrderId() == null ) {
+		if (request == null || request.getOrderId() == null ) {
 			throw new BizException(AccountBizReturnCode.paramError, "取消订单参数异常");
 		}
 		LOGGER.info("======>>>>>cancelOrder()入参："+request.toString());
@@ -408,6 +429,7 @@ public class OrderServiceImpl implements IOrderService {
 		Integer   orderStatus =  null ;
 		Long  customerId =  order.getCustomerId();
 		if(order != null ){
+			Integer couponFlag = order.getCouponFlag();  
 			Integer   oldOrderStatus =  order.getOrderStatus();
 			//根据不同状态进行取消
 			//待接单取消
@@ -428,34 +450,26 @@ public class OrderServiceImpl implements IOrderService {
 			}else{
 				throw new BizException(AccountBizReturnCode.ORDER_STATUS_ERROR, "订单状态异常");
 			}
+			
+			if(OrderSkillConstants.ORDER_COUPON_FLAG_USE == couponFlag){
+				couponFlag = OrderSkillConstants.ORDER_COUPON_FLAG_CANCEL;
+			}
 			BigDecimal   payAmount =  order.getOrderAmounts();
-			commonService.cancelUpdateOrder(orderId, orderStatus,new Date(),request.getSelectReason(),request.getRemarkReason());
+			commonService.cancelUpdateOrder(orderId, orderStatus,new Date(),request.getSelectReason(),request.getRemarkReason(),couponFlag);
 			//金额不为空，说明需要退款给用户
 			if(payAmount != null){
 				accountService.inAccount(customerId, payAmount,TransferTypeEnum.RECHARGE,AccountBusinessTypeEnum.OrderRefund);
-			}*/
-
-			//----start---chenpeng 2018.11.1 取消订单时，查询是否使用优惠券，如果有则退回优惠券
-			long customerId = 123;
-			long orderId = 1809221622495477555L;
-			//查询用户此订单是否使用优惠券
-			CustomerCoupon customerCoupon = orderMapper.queryCustomerCouponByCustomerIdAndOrderId(customerId,orderId);
-			if(customerCoupon != null){
-				int cancelUpdateCustomerCouponCount = orderMapper.cancelUpdateCustomerCoupon(customerCoupon.getId());
-				LOGGER.info("取消订单 退回优惠券 id："+ customerCoupon.getId() + "更新数量：" + cancelUpdateCustomerCouponCount);
 			}
-			//-----end---chenpeng 2018.11.1
-
-//		}
+		}
 		
-		/*Long  serviceId =  order.getServiceId();
+		Long  serviceId =  order.getServiceId();
 		//用户取消订单通知大V查看详情
 		RongYunUtil.sendOrderMessage(serviceId, OrderSkillConstants.IM_MSG_CONTENT_CANCEL_ORDER_TO_DV,OrderSkillConstants.MSG_CONTENT_DAV);
-		RongYunUtil.sendOrderMessage(customerId, OrderSkillConstants.IM_MSG_CONTENT_CANCEL_ORDER_TO_CUST,OrderSkillConstants.MSG_CONTENT_C);*/
+		RongYunUtil.sendOrderMessage(customerId, OrderSkillConstants.IM_MSG_CONTENT_CANCEL_ORDER_TO_CUST,OrderSkillConstants.MSG_CONTENT_C);
 		
 		
 		CommonResponse commonResponse = commonService.getCommonResponse();
-//		commonResponse.setData(orderStatus);
+		commonResponse.setData(orderStatus);
 		LOGGER.info("======>>>>>订单编号：" + orderId + "，取消订单完成");
 		return commonResponse;
 	}
@@ -489,8 +503,11 @@ public class OrderServiceImpl implements IOrderService {
 			OrderTempResponseVO  responseVO = commonService.getCountDownSeconds(orderDetail.getOrderStatus(), orderDetail.getOrderTime(), orderDetail.getReceiveOrderTime());
 			orderDetail.setCountDownSeconds(responseVO.getCountDownSeconds());
 			orderDetail.setOrderStatus(responseVO.getOrderStatus());
+
+			//根据订单ID查询客户优惠券
+			CustomerCouponVO customerCouponVO = orderMapper.getCustomerCouponByOrderId(orderId);
+			orderDetail.setCustomerCouponVO(customerCouponVO);
 		}
-		
 		CommonResponse commonResponse = commonService.getCommonResponse();
 		commonResponse.setData(orderDetail);
 		LOGGER.info("======>>>>>查询发送的订单，用户编号为：" + orderId + "查询成功");
