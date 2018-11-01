@@ -8,13 +8,18 @@ import com.honglu.quickcall.activity.facade.business.CouponDubboBusiness;
 import com.honglu.quickcall.activity.facade.entity.Coupon;
 import com.honglu.quickcall.activity.facade.entity.CustomerCoupon;
 import com.honglu.quickcall.activity.service.service.CouponDubboService;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.List;
+import java.util.Map;
 
 @Service("Activity.CouponDubboBusiness")
 public class CouponDubboBusinessImpl implements CouponDubboBusiness{
 	
 	@Autowired
 	private CouponDubboService couponDubboService;
-	
+
 	@Override
 	public Coupon getCouponByCustomerCouponId(int id) {
 		return couponDubboService.getCouponByCustomerCouponId(id);
@@ -45,5 +50,30 @@ public class CouponDubboBusinessImpl implements CouponDubboBusiness{
 	public int cancelUpdateCustomerCoupon(Integer id){
 		return couponDubboService.cancelUpdateCustomerCoupon(id);
 	}
-	
+
+	/**
+	 * 根据订单ID查询客户优惠券
+	 * @return
+	 */
+	@Override
+	public Map<String,String> getCustomerCouponByOrderId(Long orderId){
+		return couponDubboService.getCustomerCouponByOrderId(orderId);
+	}
+
+    @Override
+    public int getShowTipForActivity(List<String> skillItemIdList, String customerId){
+        int showTip = 0;//0=不展示，1=展示
+        if(skillItemIdList!=null && skillItemIdList.size()>0){
+            String couponId = couponDubboService.getCouponIdBySkillItemId(skillItemIdList);
+            if(StringUtils.isNotBlank(couponId)){
+                int num = couponDubboService.getShowTip(couponId,customerId);
+                if(num == 0){
+                    showTip = 1;
+                }
+            }
+        }
+        return showTip;
+    }
+
+
 }

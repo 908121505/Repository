@@ -1,14 +1,15 @@
 package com.honglu.quickcall.account.service.dao;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import com.honglu.quickcall.account.facade.vo.*;
 import org.apache.ibatis.annotations.Param;
 
 import com.honglu.quickcall.account.facade.entity.EvaluationLabel;
 import com.honglu.quickcall.account.facade.entity.Order;
+import com.honglu.quickcall.account.facade.vo.OrderDaVSkillVO;
+import com.honglu.quickcall.account.facade.vo.OrderDetailVO;
+import com.honglu.quickcall.account.facade.vo.OrderReceiveOrderListVO;
+import com.honglu.quickcall.account.facade.vo.OrderSendOrderListVO;
 
 public interface OrderMapper {
    
@@ -139,22 +140,8 @@ public interface OrderMapper {
 	 */
 	List<Order> selectOrderReceiveOrder(@Param("serviceId")Long  serviceId ,@Param("orderId")Long orderId, @Param("orderStatus")Integer orderStatus, @Param("skillType")Integer skillType);
 
-	/**
-	 * 查询券
-	 * @return
-	 */
-	String getCouponIdBySkillItemId(@Param("list")List<String> statusList);
 
-	/**
-	 * 查询是否展示提示
-	 * @return
-	 */
-	int getShowTip(@Param("couponId")String couponId ,@Param("customerId")String customerId);
 
-	/**
-	 * 根据订单ID查询客户优惠券
-	 * @return
-	 */
-	CustomerCouponVO getCustomerCouponByOrderId(@Param("orderId")Long orderId);
+
 
 }

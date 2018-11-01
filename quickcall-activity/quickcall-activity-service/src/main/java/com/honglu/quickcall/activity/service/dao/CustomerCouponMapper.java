@@ -3,6 +3,7 @@ package com.honglu.quickcall.activity.service.dao;
 import com.honglu.quickcall.activity.facade.entity.CustomerCoupon;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
 import java.util.Map;
 
 public interface CustomerCouponMapper {
@@ -55,6 +56,25 @@ public interface CustomerCouponMapper {
     int updateByPrimaryKey(CustomerCoupon record);
 
     int selectByCustomerIdAndCouponId(Map<String,String> map);
+
+    /**
+     * 根据订单ID查询客户优惠券
+     * @return
+     */
+    Map<String,String> getCustomerCouponByOrderId(@Param("orderId")Long orderId);
+
+    /**
+     * 查询券
+     * @return
+     */
+    String getCouponIdBySkillItemId(@Param("list") List<String> statusList);
+
+    /**
+     * 查询是否展示提示
+     * @return
+     */
+    int getShowTip(@Param("couponId")String couponId ,@Param("customerId")String customerId);
+
 
     CustomerCoupon queryCustomerCouponByCustomerIdAndOrderId(@Param("customerId") Long customerId, @Param("orderId") Long orderId);
 

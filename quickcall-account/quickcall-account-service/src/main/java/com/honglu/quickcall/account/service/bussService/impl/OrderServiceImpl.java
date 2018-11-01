@@ -19,38 +19,11 @@ import org.springframework.util.CollectionUtils;
 
 import com.honglu.quickcall.account.facade.code.AccountBizReturnCode;
 import com.honglu.quickcall.account.facade.constants.OrderSkillConstants;
-import com.honglu.quickcall.account.facade.entity.Account;
-import com.honglu.quickcall.account.facade.entity.CustomerSkill;
-import com.honglu.quickcall.account.facade.entity.EvaluationLabel;
-import com.honglu.quickcall.account.facade.entity.Order;
-import com.honglu.quickcall.account.facade.entity.SkillItem;
+import com.honglu.quickcall.account.facade.entity.*;
 import com.honglu.quickcall.account.facade.enums.AccountBusinessTypeEnum;
 import com.honglu.quickcall.account.facade.enums.TransferTypeEnum;
-import com.honglu.quickcall.account.facade.exchange.request.CancelOrderRequest;
-import com.honglu.quickcall.account.facade.exchange.request.ConfirmOrderRequest;
-import com.honglu.quickcall.account.facade.exchange.request.CustConfirmFinishRequest;
-import com.honglu.quickcall.account.facade.exchange.request.DetailOrderForIMRequest;
-import com.honglu.quickcall.account.facade.exchange.request.DetailOrderRequest;
-import com.honglu.quickcall.account.facade.exchange.request.DvReceiveOrderRequest;
-import com.honglu.quickcall.account.facade.exchange.request.DvStartServiceRequest;
-import com.honglu.quickcall.account.facade.exchange.request.FinishOrderRequest;
-import com.honglu.quickcall.account.facade.exchange.request.OrderDaVSkillRequest;
-import com.honglu.quickcall.account.facade.exchange.request.OrderEvaluationRequest;
-import com.honglu.quickcall.account.facade.exchange.request.OrderEvaluationSubmitRequest;
-import com.honglu.quickcall.account.facade.exchange.request.OrderReceiveOrderListRequest;
-import com.honglu.quickcall.account.facade.exchange.request.OrderSaveRequest;
-import com.honglu.quickcall.account.facade.exchange.request.OrderSendOrderListRequest;
-import com.honglu.quickcall.account.facade.exchange.request.QueryIngOrderCountRequest;
-import com.honglu.quickcall.account.facade.vo.CustomerSkillIMVO;
-import com.honglu.quickcall.account.facade.vo.OrderDaVSkillVO;
-import com.honglu.quickcall.account.facade.vo.OrderDetailForIMVO;
-import com.honglu.quickcall.account.facade.vo.OrderDetailVO;
-import com.honglu.quickcall.account.facade.vo.OrderEvaluationVo;
-import com.honglu.quickcall.account.facade.vo.OrderIMVO;
-import com.honglu.quickcall.account.facade.vo.OrderReceiveOrderListVO;
-import com.honglu.quickcall.account.facade.vo.OrderSendOrderListVO;
-import com.honglu.quickcall.account.facade.vo.OrderSkillItemVO;
-import com.honglu.quickcall.account.facade.vo.OrderTempResponseVO;
+import com.honglu.quickcall.account.facade.exchange.request.*;
+import com.honglu.quickcall.account.facade.vo.*;
 import com.honglu.quickcall.account.service.bussService.AccountService;
 import com.honglu.quickcall.account.service.bussService.BarrageMessageService;
 import com.honglu.quickcall.account.service.bussService.CommonService;
@@ -58,6 +31,7 @@ import com.honglu.quickcall.account.service.bussService.IOrderService;
 import com.honglu.quickcall.account.service.dao.CustomerSkillMapper;
 import com.honglu.quickcall.account.service.dao.OrderMapper;
 import com.honglu.quickcall.account.service.dao.SkillItemMapper;
+import com.honglu.quickcall.activity.facade.business.CouponDubboBusiness;
 import com.honglu.quickcall.common.api.exception.BizException;
 import com.honglu.quickcall.common.api.exchange.CommonResponse;
 import com.honglu.quickcall.common.api.exchange.ResultUtils;
@@ -68,6 +42,15 @@ import com.honglu.quickcall.common.third.push.GtPushUtil;
 import com.honglu.quickcall.common.third.rongyun.util.RongYunUtil;
 import com.honglu.quickcall.user.facade.business.UserCenterSendMqMessageService;
 import com.honglu.quickcall.user.facade.entity.Customer;
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
+
+import java.math.BigDecimal;
+import java.util.*;
 
 /**
  * 
@@ -99,7 +82,7 @@ public class OrderServiceImpl implements IOrderService {
 	private UserCenterSendMqMessageService userCenterSendMqMessageService;
 	@Autowired
 	private CouponDubboBusiness couponDubboBusiness;
-	
+
 	
 	
 
@@ -141,16 +124,9 @@ public class OrderServiceImpl implements IOrderService {
 		}
 		
 		resultVO.setCustSkillList(custSkillList );
+
 		int showTip = 0;//0=不展示，1=展示
-		if(skillItemIdList!=null && skillItemIdList.size()>0){
-			String couponId = orderMapper.getCouponIdBySkillItemId(skillItemIdList);
-			if(StringUtils.isNotBlank(couponId)){
-				int num = orderMapper.getShowTip(couponId,customerId+"");
-				if(num == 0){
-					showTip = 1;
-				}
-			}
-		}
+		showTip = couponDubboBusiness.getShowTipForActivity(skillItemIdList,customerId+"");
 		resultVO.setShowTip(showTip);
 		CommonResponse commonResponse = commonService.getCommonResponse();
 		commonResponse.setData(resultVO);
@@ -518,8 +494,11 @@ public class OrderServiceImpl implements IOrderService {
 			orderDetail.setOrderStatus(responseVO.getOrderStatus());
 
 			//根据订单ID查询客户优惠券
-			CustomerCouponVO customerCouponVO = orderMapper.getCustomerCouponByOrderId(orderId);
-			orderDetail.setCustomerCouponVO(customerCouponVO);
+			Map<String,String> map = couponDubboBusiness.getCustomerCouponByOrderId(orderId);
+			orderDetail.setCouponName(map.get("couponName")==null ? "" :map.get("couponName"));
+			orderDetail.setCouponPrice(map.get("couponPrice")==null ? "" :String.valueOf(map.get("couponPrice")));
+
+
 		}
 		CommonResponse commonResponse = commonService.getCommonResponse();
 		commonResponse.setData(orderDetail);

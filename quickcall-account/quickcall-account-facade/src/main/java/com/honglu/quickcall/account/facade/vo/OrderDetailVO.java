@@ -71,7 +71,10 @@ public class OrderDetailVO implements  Serializable{
 	
     private BigDecimal discountRate;
 
-	private CustomerCouponVO customerCouponVO;//客户订单优惠券信息
+	//private CustomerCouponVO customerCouponVO;//客户订单优惠券信息
+	private String couponName;//客户订单优惠券的名称'
+
+	private String couponPrice;//客户订单优惠券的价值
 	
 	
 	
@@ -231,11 +234,19 @@ public class OrderDetailVO implements  Serializable{
 		this.customerIsEvaluate = customerIsEvaluate;
 	}
 
-	public CustomerCouponVO getCustomerCouponVO() {
-		return customerCouponVO;
+	public String getCouponName() {
+		return couponName;
 	}
 
-	public void setCustomerCouponVO(CustomerCouponVO customerCouponVO) {
-		this.customerCouponVO = customerCouponVO;
+	public void setCouponName(String couponName) {
+		this.couponName = couponName;
+	}
+
+	public String getCouponPrice() {
+		return couponPrice;
+	}
+
+	public void setCouponPrice(String couponPrice) {
+		this.couponPrice = couponPrice;
 	}
 }

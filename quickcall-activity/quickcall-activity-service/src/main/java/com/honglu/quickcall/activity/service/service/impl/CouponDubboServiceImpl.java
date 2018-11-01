@@ -9,6 +9,9 @@ import com.honglu.quickcall.activity.service.dao.CouponMapper;
 import com.honglu.quickcall.activity.service.dao.CustomerCouponMapper;
 import com.honglu.quickcall.activity.service.service.CouponDubboService;
 
+import java.util.List;
+import java.util.Map;
+
 @Service
 public class CouponDubboServiceImpl implements CouponDubboService{
 	
@@ -38,4 +41,20 @@ public class CouponDubboServiceImpl implements CouponDubboService{
 	public int cancelUpdateCustomerCoupon(Integer id) {
 		return customerCouponMapper.cancelUpdateCustomerCoupon(id);
 	}
+
+	@Override
+	public Map<String,String> getCustomerCouponByOrderId(Long orderId){
+		return customerCouponMapper.getCustomerCouponByOrderId(orderId);
+	}
+
+	@Override
+	public String getCouponIdBySkillItemId(List<String> statusList){
+		return customerCouponMapper.getCouponIdBySkillItemId(statusList);
+	}
+
+	@Override
+	public int getShowTip(String couponId ,String customerId){
+		return customerCouponMapper.getShowTip(couponId,customerId);
+	}
+
 }

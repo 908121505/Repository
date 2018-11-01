@@ -775,28 +775,6 @@
       #{orderId}
     </foreach>
   </update>
-  
-      <select id="getCouponIdBySkillItemId" parameterType="map" resultType="string">
-        select cs.coupon_id
-          from coupon_skill cs
-          LEFT JOIN coupon c ON c.coupon_id = cs.coupon_id
-          LEFT JOIN activity a ON a.activity_id = c.activity_id
-          where cs.skill_item_id in
-          <foreach collection="list" index="index" item="skillItemId" open="(" separator="," close=")">
-            #{skillItemId}
-          </foreach>
-          and( NOW() BETWEEN a.start_time AND a.end_time)
-        LIMIT 1
-      </select>
-
-      <select id="getShowTip" parameterType="map" resultType="int">
-        select count(1)
-        from customer_coupon
-        where
-        coupon_id = #{couponId}
-        and customer_id = #{customerId}
-      </select>
-
 
 
 </mapper>
