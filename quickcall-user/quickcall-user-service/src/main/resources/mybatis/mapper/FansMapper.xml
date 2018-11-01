@@ -165,12 +165,12 @@
 		    ct.nick_name  AS  nickName,
 		    (YEAR (NOW()) - YEAR (ct.birthday)) AS age,
 		    ct.sex    AS sex,
-		    fs.attention_state  AS  attentionStatus,
+		    (IFNULL(fs.attention_state,0))  AS  attentionStatus,
 		    ct.type AS type,
 		    (IFNULL(fs.attention_state,0))&amp;(IFNULL(fs1.attention_state,0)) AS eachAttentionStatus 
 		FROM
 			fans fs
-		LEFT JOIN customer ct ON fs.anchor_id = ct.customer_id 
+		INNER JOIN customer ct ON fs.anchor_id = ct.customer_id 
 		LEFT JOIN fans fs1 ON fs.anchor_id = fs1.fans_id and fs.fans_id = fs1.anchor_id 
 		WHERE
 			fs.fans_id = #{customerId}  and   fs.attention_state = #{attentionStatus} 
@@ -189,12 +189,12 @@
 		    ct.nick_name  AS  nickName,
 		    (YEAR (NOW()) - YEAR (ct.birthday)) AS age,
 		    ct.sex    AS sex,
-		    fs1.attention_state  AS  attentionStatus,
+		    (IFNULL(fs1.attention_state,0))  AS  attentionStatus,
 		    ct.type AS type,
 		    (IFNULL(fs.attention_state,0))&amp;(IFNULL(fs1.attention_state,0)) AS eachAttentionStatus 
 		FROM
 			fans fs
-		LEFT JOIN customer ct ON fs.fans_id = ct.customer_id 
+		INNER JOIN customer ct ON fs.fans_id = ct.customer_id 
 		LEFT JOIN fans fs1 ON fs.anchor_id = fs1.fans_id and fs.fans_id = fs1.anchor_id 
 		WHERE
 			fs.anchor_id = #{customerId}  and   fs.attention_state = #{attentionStatus} 

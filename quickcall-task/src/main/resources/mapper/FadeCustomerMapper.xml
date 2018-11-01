@@ -349,12 +349,13 @@
     where id = #{id,jdbcType=INTEGER}
   </update>
 
-  <select id="selectOneSkipNum" resultMap="BaseResultMap" >
+  <!-- 随机选择一条数据 -->
+  <select id="selectOneByRandom" resultMap="BaseResultMap" >
     select
     <include refid="Base_Column_List" />
     from fade_customer
-    order by id asc
-    limit #{index},1
+    WHERE `status` = 1
+    order by RAND() limit 1
   </select>
 
 </mapper>

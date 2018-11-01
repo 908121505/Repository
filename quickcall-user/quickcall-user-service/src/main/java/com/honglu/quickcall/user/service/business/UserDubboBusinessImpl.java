@@ -33,6 +33,7 @@ import com.honglu.quickcall.user.facade.exchange.request.GetSmsCodeRequest;
 import com.honglu.quickcall.user.facade.exchange.request.InternalMessageRequest;
 import com.honglu.quickcall.user.facade.exchange.request.IsBigVidentityRequest;
 import com.honglu.quickcall.user.facade.exchange.request.IsPhoneExistsRequest;
+import com.honglu.quickcall.user.facade.exchange.request.LoginOutRequest;
 import com.honglu.quickcall.user.facade.exchange.request.NoReadAttentionCountRequest;
 import com.honglu.quickcall.user.facade.exchange.request.QueryAttentionFansListRequest;
 import com.honglu.quickcall.user.facade.exchange.request.QueryInterestListRequest;
@@ -298,6 +299,9 @@ public class UserDubboBusinessImpl implements UserDubboBusiness {
 				break;
 			case UserFunctionType.IsBigVidentity:
 				response = personInfoService.isBigVidentity((IsBigVidentityRequest) request);
+				break;
+			case UserFunctionType.loginOut:
+				response = commonPersonService.loginOut((LoginOutRequest) request);
 				break;
 			default:
 				throw new BizException(UserBizReturnCode.BizFunctionTypeNotMatch,

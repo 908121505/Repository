@@ -278,12 +278,12 @@ public class OrderServiceImpl implements IOrderService {
 			record.setSkillType(skillType);
 			if(OrderSkillConstants.SKILL_TYPE_NO == skillType){
 				Date  appointTime = DateUtils.formatDate(request.getAppointTimeStr());
-				Calendar  cal =  Calendar.getInstance();
-				cal.setTime(appointTime);
-				cal.add(Calendar.MINUTE, 5);
-				Date  expectEndTime =  cal.getTime();
+//				Calendar  cal =  Calendar.getInstance();
+//				cal.setTime(appointTime);
+//				cal.add(Calendar.MINUTE, 5);
+//				Date  expectEndTime =  cal.getTime();
 				record.setAppointTime(appointTime);
-				record.setExpectEndTime(expectEndTime);
+//				record.setExpectEndTime(expectEndTime);
 			}
 			
 			
@@ -695,7 +695,8 @@ public class OrderServiceImpl implements IOrderService {
 		    Integer  orderNum = order.getOrderNum();
 		    
 		    if(serviceUnit.contains(OrderSkillConstants.SERVICE_UNIT_TIMES)){
-		    	addMinute = 12 * 60 ;
+		    	//叫醒服务时需要添加5分钟过期时间
+		    	addMinute = 12 * 60 + 5;
 		    }else if (serviceUnit.contains(OrderSkillConstants.SERVICE_UNIT_HALF_HOUR)){
 		    	addMinute = orderNum * 30 ;
 		    }else {
@@ -704,7 +705,13 @@ public class OrderServiceImpl implements IOrderService {
 		    
 			
 			Calendar cal =  Calendar.getInstance();
-			cal.setTime(currTime);
+			Date   startTime =  order.getStartTime();
+			if(startTime != null){
+				//应该取订单进行中起始时间
+				cal.setTime(startTime);
+			}else{
+				cal.setTime(currTime);
+			}
 			Date  endTime =  null;
 			if(addMinute > 0){
 				cal.add(Calendar.MINUTE, addMinute);
@@ -919,7 +926,7 @@ public class OrderServiceImpl implements IOrderService {
 			
 			
 			//设置请求结束时间
-			commonService.finishUpdateOrder(orderId, newOrderStatus,new  Date());
+			commonService.finishUpdateOrder(orderId, newOrderStatus,new  Date(),sendMsgIndex);
 			if(sendMsgIndex !=null){
 				// ADUAN 订单服务完成推送MQ消息
 				userCenterSendMqMessageService.sendOrderCostMqMessage(orderId);

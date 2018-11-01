@@ -137,7 +137,7 @@ public interface CommonService {
 
 
 
-	public void finishUpdateOrder(Long orderId, Integer orderStatus, Date cancelTime);
+	public void finishUpdateOrder(Long orderId, Integer orderStatus, Date cancelTime,Integer  sendMsgIndex);
 	
 	
    
