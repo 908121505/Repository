@@ -195,7 +195,7 @@ public class CommonServiceImpl implements CommonService {
 
 
 	@Override
-	public void cancelUpdateOrder(Long orderId, Integer orderStatus,Date cancelTime,String  selectReason,String   remarkReason) {
+	public void cancelUpdateOrder(Long orderId, Integer orderStatus,Date cancelTime,String  selectReason,String   remarkReason,Integer  couponFlag) {
 		Order record = new Order();
 		record.setOrderStatus(orderStatus);
 		record.setOrderId(orderId);
@@ -203,6 +203,8 @@ public class CommonServiceImpl implements CommonService {
 		record.setCustCancelTime(cancelTime);
 		record.setSelectReason(selectReason);
 		record.setRemarkReason(remarkReason);
+		//设置券状态
+		record.setCouponFlag(couponFlag);
 		//修改订单状态为：已支付
 		orderMapper.updateByPrimaryKeySelective(record);
 		
