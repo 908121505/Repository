@@ -114,10 +114,9 @@ public class BarrageMessageServiceImpl implements BarrageMessageService {
     /**
      * 弹幕消息HTML模板 == 【昵称】使用了【50】音符在【技能名称】下单成功
      */
-    private static final String BARRAGE_MESSAGE_HTML_TEMPLATE = "<p style=\"color:#f9f2f2;\">" +
-            "<span style=\"color: #FFF;\">%s</span>" +
-            "使用了<span style=\"color: #F8E71C;\">%s音符</span>" +
-            "在<span style=\"color: #F8E71C;\">%s</span>下单成功<p>";
+    private static final String BARRAGE_MESSAGE_HTML_TEMPLATE = "<font color=\"#f9f2f2\">" +
+            "<font color=\"#FFF\">%s</font>使用了<font color=\"#F8E71C\">%s音符</font>" +
+            "在<font color=\"#F8E71C\">%s</font>下单成功<font>";
 
     /**
      * 弹幕消息跳转的url
