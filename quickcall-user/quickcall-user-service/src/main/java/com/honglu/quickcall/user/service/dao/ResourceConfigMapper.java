@@ -47,7 +47,7 @@ public interface ResourceConfigMapper {
      * @param endTimeStr
      * @return
      */
-    int countEnabledBigvAndSkillRankData(@Param("configSkills") List<Long> configSkills,
+    int countEnabledBigvBySkillRank(@Param("configSkills") List<Long> configSkills,
                                          @Param("exCustomerIds") List<Long> exCustomerIds,
                                          @Param("weekIndex") Integer weekIndex,
                                          @Param("endTimeStr") String endTimeStr,
@@ -58,7 +58,7 @@ public interface ResourceConfigMapper {
      *
      * @return
      */
-    BigvSkillScore selectEnabledBigvAndSkillRankData(@Param("configSkills") List<Long> configSkills,
+    CustomerSkill selectEnabledBigvBySkillRank(@Param("configSkills") List<Long> configSkills,
                                                      @Param("exCustomerIds") List<Long> exCustomerIds,
                                                      @Param("weekIndex") Integer weekIndex,
                                                      @Param("endTimeStr") String endTimeStr,
@@ -76,7 +76,7 @@ public interface ResourceConfigMapper {
      * @param endTimeStr
      * @return
      */
-    BigvSkillScore selectRandomBigvFromResourcePool(@Param("resourcePoolId") Long resourcePoolId,
+    CustomerSkill selectRandomBigvFromResourcePool(@Param("resourcePoolId") Long resourcePoolId,
                                                     @Param("configSkills") List<Long> configSkills,
                                                     @Param("exCustomerIds") List<Long> exCustomerIds,
                                                     @Param("weekIndex") Integer weekIndex,

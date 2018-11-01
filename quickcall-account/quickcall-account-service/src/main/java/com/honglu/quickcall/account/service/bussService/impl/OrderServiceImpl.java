@@ -243,12 +243,12 @@ public class OrderServiceImpl implements IOrderService {
 			record.setSkillType(skillType);
 			if(OrderSkillConstants.SKILL_TYPE_NO == skillType){
 				Date  appointTime = DateUtils.formatDate(request.getAppointTimeStr());
-				Calendar  cal =  Calendar.getInstance();
-				cal.setTime(appointTime);
-				cal.add(Calendar.MINUTE, 5);
-				Date  expectEndTime =  cal.getTime();
+//				Calendar  cal =  Calendar.getInstance();
+//				cal.setTime(appointTime);
+//				cal.add(Calendar.MINUTE, 5);
+//				Date  expectEndTime =  cal.getTime();
 				record.setAppointTime(appointTime);
-				record.setExpectEndTime(expectEndTime);
+//				record.setExpectEndTime(expectEndTime);
 			}
 			
 			

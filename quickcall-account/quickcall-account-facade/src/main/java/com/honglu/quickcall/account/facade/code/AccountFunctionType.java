@@ -48,4 +48,6 @@ public interface AccountFunctionType {
 
     // 获取弹幕消息
     String GET_BARRAGE_MESSAGE = "002305";
+    // 获取弹幕消息 -- 第二版
+    String GET_BARRAGE_MESSAGE_V2 = "002306";
 }

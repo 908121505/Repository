@@ -57,38 +57,35 @@ public class BarrageMessageJob {
 				return;
 			}
 			LOGGER.info("弹幕消息队列为空，自动生成一条弹幕数据--------------");
-			// 查询总数
-			FadeCustomerExample example = new FadeCustomerExample();
-			example.createCriteria().andStatusEqualTo(new Byte("1"));
-			int total = fadeCustomerMapper.countByExample(example);
-			if (total == 0) {
-				return;
-			}
-			// 从1 到 total随机一个数字
-			Random random = new Random();
-			int index = random.nextInt(total);
 
 			// 跳过index条查询一条数据
-			FadeCustomer fadeCustomer = fadeCustomerMapper.selectOneSkipNum(index);
+			FadeCustomer fadeCustomer = fadeCustomerMapper.selectOneByRandom();
+			if(fadeCustomer == null){
+				LOGGER.warn("未查询到随机用户的配置数据 ----- 只有不查询假弹幕消息了----");
+				return;
+			}
 			// 封装弹幕消息
 			BarrageMessageVO barrageMessageVO = new BarrageMessageVO();
 			barrageMessageVO.setNickName("*" + fadeCustomer.getNickName().substring(1));
 			barrageMessageVO.setHeadPortraitUrl(fadeCustomer.getHeadPortraitUrl());
 
 			// 随机选取一条技能数据
-			SkillItemExample example2 = new SkillItemExample();
-			example2.createCriteria().andSkillStatusEqualTo(new Byte("0"));
-			total = skillItemMapper.countByExample(example2);
-			if (total == 0) {
-				LOGGER.warn("未查询到技能数据-----------------");
+			SkillItem skill = skillItemMapper.selectOneByRandom();
+			if(skill == null){
+				LOGGER.warn("未查询到可用技能配置数据 ----- 只有不查询假弹幕消息了----");
 				return;
 			}
-			index = random.nextInt(total);
-			SkillItem skill = skillItemMapper.selectOneSkipNum(index);
+
+			// 查询技能的价格
+			BigDecimal skillPrice = skillItemMapper.selectOneSkillPrice(skill.getId());
+			if (skillPrice == null) {
+				LOGGER.warn("未查询到技的价格配置 ----- 只有不查询假弹幕消息了----skillId:{}", skill.getId());
+				return;
+			}
 
 			barrageMessageVO.setSkillId(skill.getId());
 			barrageMessageVO.setProductName(skill.getSkillItemName());
-			barrageMessageVO.setOrderAmounts(randomMoney(skill));
+			barrageMessageVO.setOrderAmounts(skillPrice);
 			barrageMessageVO.setOrderTime(new Date());
 
 			String barrageJsonStr = JSON.toJSONString(barrageMessageVO);
@@ -101,20 +98,6 @@ public class BarrageMessageJob {
 		} finally {
 			db2_pool.returnResource(jedis);
 		}
-	}
-
-	/**
-	 * 随机计算金额
-	 *
-	 * @param skill
-	 * @return
-	 */
-	private BigDecimal randomMoney(SkillItem skill) {
-		BigDecimal skillPrice = skillItemMapper.selectOneSkillPrice(skill.getId());
-		if (skillPrice == null) {
-			throw new IllegalArgumentException("未查询到技能的价格" + skill.getId() + " -- " + skill.getSkillItemName());
-		}
-		return skillPrice;
 	}
 
 }
