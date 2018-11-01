@@ -232,6 +232,9 @@ public class OrderServiceImpl implements IOrderService {
 			//根据券判断真正的订单金额
 			BigDecimal orderAmounts = BigDecimal.ZERO;
 			
+			
+			//用券状态
+			Integer  couponFlag =  OrderSkillConstants.ORDER_COUPON_FLAG_DEFAULT;
 			//获取券金额
 			BigDecimal   couponPrice = request.getCouponPrice();
 			Long  customerCouponId =  request.getCustomerCouponId();
@@ -241,6 +244,7 @@ public class OrderServiceImpl implements IOrderService {
 				if(discountPrice.compareTo(BigDecimal.ZERO) > 0){
 					orderAmounts = orderAmounts.add(discountPrice);
 				}
+				couponFlag =  OrderSkillConstants.ORDER_COUPON_FLAG_USE;
 			}else{
 				//根据券判断真正的订单金额
 				orderAmounts = new BigDecimal(orderNum).multiply(price);
@@ -299,10 +303,12 @@ public class OrderServiceImpl implements IOrderService {
 			record.setOrderAmounts(orderAmounts);
 			record.setOrderNum(orderNum);
 			record.setOrderStatus(OrderSkillConstants.ORDER_STATUS_WAITING_RECEIVE);
+			//设置用券标识
+			record.setCouponFlag(couponFlag);
 			record.setOrderTime(currTime);
 			record.setRemark(request.getRemark());
+			
 			orderMapper.insert(record);
-			//TODO   券逻辑新增
 			//修改用户券状态
 			
 			
@@ -423,6 +429,7 @@ public class OrderServiceImpl implements IOrderService {
 		Integer   orderStatus =  null ;
 		Long  customerId =  order.getCustomerId();
 		if(order != null ){
+			Integer couponFlag = order.getCouponFlag();  
 			Integer   oldOrderStatus =  order.getOrderStatus();
 			//根据不同状态进行取消
 			//待接单取消
@@ -443,8 +450,12 @@ public class OrderServiceImpl implements IOrderService {
 			}else{
 				throw new BizException(AccountBizReturnCode.ORDER_STATUS_ERROR, "订单状态异常");
 			}
+			
+			if(OrderSkillConstants.ORDER_COUPON_FLAG_USE == couponFlag){
+				couponFlag = OrderSkillConstants.ORDER_COUPON_FLAG_CANCEL;
+			}
 			BigDecimal   payAmount =  order.getOrderAmounts();
-			commonService.cancelUpdateOrder(orderId, orderStatus,new Date(),request.getSelectReason(),request.getRemarkReason());
+			commonService.cancelUpdateOrder(orderId, orderStatus,new Date(),request.getSelectReason(),request.getRemarkReason(),couponFlag);
 			//金额不为空，说明需要退款给用户
 			if(payAmount != null){
 				accountService.inAccount(customerId, payAmount,TransferTypeEnum.RECHARGE,AccountBusinessTypeEnum.OrderRefund);
