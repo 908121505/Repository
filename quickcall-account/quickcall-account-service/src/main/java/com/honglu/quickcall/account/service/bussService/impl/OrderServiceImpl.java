@@ -581,7 +581,8 @@ public class OrderServiceImpl implements IOrderService {
 			}
 			newOrderStatus = OrderSkillConstants.ORDER_STATUS_FINISHED_USER_ACCEPCT;
 			//修改订单状态为：已完成
-			commonService.updateOrder(orderId, newOrderStatus);
+//			commonService.updateOrder(orderId, newOrderStatus);
+			commonService.custConfirmFinishUpdateOrder(orderId, newOrderStatus);
 			//大V冻结
 			accountService.inAccount(order.getServiceId(), order.getOrderAmounts(), TransferTypeEnum.FROZEN, AccountBusinessTypeEnum.FroZen);
 			// ADUAN 订单服务完成推送MQ消息
