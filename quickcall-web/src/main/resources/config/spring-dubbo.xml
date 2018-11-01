@@ -8,6 +8,8 @@
        http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
 
     <dubbo:application name="web"/>
-    <dubbo:registry address="zookeeper://127.0.0.1:2181"/>
+    <!--<dubbo:registry address="zookeeper://172.16.11.195:2181"/>-->
+    <!--<dubbo:registry address="zookeeper://172.16.11.201:2181"/>-->
+    <dubbo:registry address="zookeeper://10.18.2.98:2181"/>
     <dubbo:annotation package="com.quickcall.web.controller"/>
 </beans>

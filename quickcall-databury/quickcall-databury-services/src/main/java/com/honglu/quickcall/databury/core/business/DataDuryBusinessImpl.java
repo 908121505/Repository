@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @author xiangping
  * @date 2018-10-30 18:27
  */
-@Service(version = "1.0.0", retries = -1, timeout = 10_000)
+@Service(group = "buryDataCenter",version = "1.0.0", retries = -1, timeout = 10_000)
 public class DataDuryBusinessImpl implements DataBuryBusiness {
 
     @Autowired

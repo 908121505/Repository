@@ -21,7 +21,7 @@ import java.util.Map;
 public class DataBuriedPointServiceImpl implements DataBuriedPointService{
     private static final Logger logger = LoggerFactory.getLogger(DataBuriedPointService.class);
 
-    @Reference(version = "1.0.0", timeout = 10000, retries = 0)
+    @Reference(group = "buryDataCenter",version = "1.0.0", timeout = 10000, retries = 0)
     private DataBuryBusiness dataDuryBusiness;
 
     @Override

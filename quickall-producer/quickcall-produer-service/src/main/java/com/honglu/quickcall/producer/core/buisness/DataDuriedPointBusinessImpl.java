@@ -10,7 +10,7 @@ import com.alibaba.dubbo.config.annotation.Service;
  * @author xiangping
  * @date 2018-10-30 16:14
  */
-@Service(version = "1.0.0", retries = -1, timeout = 10_000)
+@Service(group = "buryDataCenter",version = "1.0.0", retries = -1, timeout = 10_000)
 public class DataDuriedPointBusinessImpl implements DataDuriedPointBusiness {
 
     @Autowired
