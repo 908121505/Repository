@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.alibaba.dubbo.config.annotation.Reference;
 import com.alibaba.fastjson.JSON;
 import com.honglu.quickcall.common.api.code.BizCode;
 import com.honglu.quickcall.common.api.exception.BizException;
@@ -32,6 +33,10 @@ import com.honglu.quickcall.common.core.util.UUIDUtils;
 import com.honglu.quickcall.common.third.AliyunSms.utils.SendSmsUtil;
 import com.honglu.quickcall.common.third.rongyun.models.CodeSuccessReslut;
 import com.honglu.quickcall.common.third.rongyun.util.RongYunUtil;
+import com.honglu.quickcall.producer.facade.business.DataDuriedPointBusiness;
+import com.honglu.quickcall.producer.facade.req.databury.DataBuriedPointGetCodeReq;
+import com.honglu.quickcall.producer.facade.req.databury.DataBuriedPointLoginReq;
+import com.honglu.quickcall.producer.facade.req.databury.DataBuriedPointRegistReq;
 import com.honglu.quickcall.user.facade.code.UserBizReturnCode;
 import com.honglu.quickcall.user.facade.constants.UserBizConstants;
 import com.honglu.quickcall.user.facade.entity.Customer;
@@ -72,6 +77,9 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 	private AccountDubboIntegrationService accountDubboIntegrationService;
 	@Autowired
 	private SensitivityWordMapper sensitivityWordMapper;
+
+	@Reference(version = "1.0.0", timeout = 10000, retries = 0)
+	private DataDuriedPointBusiness dataDuriedPointBusiness;
 
 	private static String resendexpire = ResourceBundle.getBundle("thirdconfig").getString("resend.expire");
 	private static String resendexpirehour = ResourceBundle.getBundle("thirdconfig").getString("resend.expire.hour");
@@ -118,6 +126,11 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 
 	@Override
 	public CommonResponse login(UserLoginRequest params) {
+		/**
+		 * 神策埋点
+		 */
+		DataBuriedPointLoginReq req = new DataBuriedPointLoginReq();
+
 		CommonResponse response = new CommonResponse();
 		Customer customer = null;
 		Customer param = new Customer();
@@ -129,6 +142,7 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 				throw new BizException(BizCode.ParamError, "手机号格式不正确");
 			}
 			param.setPhone(params.getTel());
+			req.setLoginmethod("手机号");
 		} // 手机号 密码登录
 		/*
 		 * if (StringUtils.isNotBlank(params.getPassWord())) {
@@ -139,10 +153,12 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 		} // QQ登录
 		else if (StringUtils.isNotBlank(params.getQqOpenId())) {
 			param.setQqOpenId(params.getQqOpenId());
+			req.setLoginmethod("QQ");
 
 		} // 微信登录
 		else if (StringUtils.isNotBlank(params.getWechatOpenId())) {
 			param.setWechatOpenId(params.getWechatOpenId());
+			req.setLoginmethod("微信");
 		}
 		customer = customerMapper.login(param);
 		if (customer == null) {
@@ -200,6 +216,11 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 		customer = customerMapper.selectByPrimaryKey(customer.getCustomerId());
 		JedisUtil.set(RedisKeyConstants.USER_CUSTOMER_INFO + customer.getCustomerId(),
 				customer == null ? "" : JSON.toJSONString(customer));
+
+		req.setPhoneNumber(customer.getPhone());
+		req.setUser_id(customer.getCustomerId() + "");
+		dataDuriedPointBusiness.buryUserIdLoginResultData(req);
+
 		return ResultUtils.resultSuccess(customer);
 	}
 
@@ -350,6 +371,8 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 			throw new BizException(BizCode.ParamError, "用户已存在");
 		}
 		customer = new Customer();
+		customer.setAppChannelName(request.getAppChannelName());
+		customer.setDeviceId(request.getDeviceNo());
 		customer.setCustomerId(UUIDUtils.getId());
 		customer.setAppId(randomAppId());
 		customer.setCreateTime(new Date());
@@ -377,6 +400,13 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 		if (row <= 0) {
 			throw new BizException(UserBizReturnCode.exceedError, "用户未注冊");
 		}
+
+		DataBuriedPointRegistReq req = new DataBuriedPointRegistReq();
+		req.setPhoneNumber(request.getTel());
+		req.setRegistDate(new Date());
+		req.setRegistSource(request.getAppChannelName());
+		req.setUser_id("17356985474");
+		dataDuriedPointBusiness.burySignUpResultData(req);
 		// 创建账户
 		accountDubboIntegrationService.createAccount(customer.getCustomerId());
 		customer = customerMapper.selectByPrimaryKey(customer.getCustomerId());
@@ -443,7 +473,7 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 		return sendSms(params.getTel(), randomCode, params.getCodeType());
 	}
 
-	public static CommonResponse sendSms(String phoneNum, String code, String codeType) {
+	public CommonResponse sendSms(String phoneNum, String code, String codeType) {
 		CommonResponse response = new CommonResponse();
 		// 查一分钟
 		if (JedisUtil.get(RedisKeyConstants.USER_VERIFYCODE_M + phoneNum) == null) {
@@ -477,7 +507,9 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 			JedisUtil.set(RedisKeyConstants.USER_VERIFYCODE_D + phoneNum, total,
 					JedisUtil.ddlTimes(RedisKeyConstants.USER_VERIFYCODE_D + phoneNum));
 		}
-
+		// 埋点
+		DataBuriedPointGetCodeReq req = new DataBuriedPointGetCodeReq();
+		req.setPhone(phoneNum);
 		String smsStr = SendSmsUtil.sendSms(UUIDUtils.getUUID(), phoneNum, 1, code);
 		if ("发送成功".equals(smsStr)) {
 			JedisUtil.set(RedisKeyConstants.USER_VERIFYCODE + phoneNum + codeType, code,
@@ -485,7 +517,13 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 			logger.info("手机号:" + phoneNum + " 手机验证码:" + code);
 			logger.info("将验证码存入redis中的key值为:{},失效时间为:{}", (RedisKeyConstants.USER_VERIFYCODE + phoneNum + codeType),
 					Integer.parseInt(smscodeexpire));
+			req.setSuccess(true);
+		} else {
+			req.setSuccess(false);
+
 		}
+		// 埋点
+		dataDuriedPointBusiness.buryGetCodeData(req);
 		logger.info("手机号:" + phoneNum + "发送状态:" + smsStr);
 		return ResultUtils.resultSuccess(smsStr);
 
