@@ -786,16 +786,6 @@
         and customer_id = #{customerId}
       </select>
 
-    <select id="getCustomerCouponByOrderId" resultType="com.honglu.quickcall.account.facade.vo.CustomerCouponVO" >
-      select cc.order_id as orderId,cc.coupon_id as couponId,c.coupon_name as couponName,
-        c.is_permanent as isPermanent, c.coupon_type as couponType,c.coupon_code as couponCode,
-        DATE_FORMAT(c.start_time,"%Y-%m-%d %H:%i:%s") as startTime,
-        DATE_FORMAT(c.end_time,"%Y-%m-%d %H:%i:%s") as endTime,
-        c.activity_id as activityId,c.coupon_price as couponPrice
-         from customer_coupon cc
-        LEFT JOIN coupon c ON c.coupon_id = cc.coupon_id
-        where
-        cc.order_id = #{orderId}
-    </select>
+
 
 </mapper>
