@@ -14,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import com.alibaba.dubbo.config.annotation.Reference;
 import com.honglu.quickcall.account.facade.code.AccountBizReturnCode;
 import com.honglu.quickcall.account.facade.constants.OrderSkillConstants;
 import com.honglu.quickcall.account.facade.entity.Account;
@@ -98,7 +97,7 @@ public class OrderServiceImpl implements IOrderService {
 	private SkillItemMapper skillItemMapper;
 	@Autowired
 	private UserCenterSendMqMessageService userCenterSendMqMessageService;
-	@Reference(version = "1.0.0", timeout = 10000, retries = 0)
+	@Autowired
     private DataDuriedPointBusiness dataDuriedPointBusiness;
 	
 
