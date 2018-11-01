@@ -1,6 +1,5 @@
 package com.honglu.quickcall.activity.service.business;
 
-import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -9,7 +8,6 @@ import com.honglu.quickcall.activity.facade.entity.Coupon;
 import com.honglu.quickcall.activity.facade.entity.CustomerCoupon;
 import com.honglu.quickcall.activity.service.service.CouponDubboService;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 import java.util.Map;
@@ -60,6 +58,12 @@ public class CouponDubboBusinessImpl implements CouponDubboBusiness{
 		return couponDubboService.getCustomerCouponByOrderId(orderId);
 	}
 
+    /**
+     * 查询是否显示活动优惠券提示
+     * @param skillItemIdList
+     * @param customerId
+     * @return
+     */
     @Override
     public int getShowTipForActivity(List<String> skillItemIdList, String customerId){
         int showTip = 0;//0=不展示，1=展示
