@@ -35,13 +35,4 @@ public class TestDubboService {
         //accountOrderService.checkReceiveOrderByCustomerSkillId(11111L, 2222L);
     }
 
-    @Test
-    public void testMapper(){
-        List<Long> configSkills = Arrays.asList(1809221430063474300L);
-
-        List<Long> exCustomerIds = new ArrayList<>();
-
-        int num = resourceConfigMapper.countEnabledBigvAndSkillRankData(configSkills, exCustomerIds, 7, "1558", 0);
-        System.out.println(num);
-    }
 }
