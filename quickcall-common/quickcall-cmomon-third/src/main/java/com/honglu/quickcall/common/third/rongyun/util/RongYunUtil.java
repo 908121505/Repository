@@ -101,10 +101,11 @@ public class RongYunUtil {
 		try {
 			messageBroadcastResult = rongCloud.message.publishPrivate(fromUserId, toUserId, message, pushContent,
 					pushData, count, verifyBlacklist, isPersisted, isCounted);
+			return messageBroadcastResult.getCode();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return messageBroadcastResult.getCode();
+		return 0;
 		// System.out.println("broadcast: " + messageBroadcastResult.toString());
 	}
 
