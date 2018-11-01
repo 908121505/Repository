@@ -8,7 +8,6 @@
     http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
 
     <!-- 消费者 -->
-    
     <dubbo:reference group="accountCenter" id="accountDubboBusiness" interface="com.honglu.quickcall.account.facade.business.AccountDubboBusiness" check="false" version="0.0.1"/>
 
     <!-- account中 - 订单服务 -->

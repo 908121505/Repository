@@ -1,22 +1,5 @@
 package com.honglu.quickcall.user.service.service.impl;
 
-import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
-import java.util.Random;
-import java.util.ResourceBundle;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import com.alibaba.dubbo.config.annotation.Reference;
 import com.alibaba.fastjson.JSON;
 import com.honglu.quickcall.common.api.code.BizCode;
 import com.honglu.quickcall.common.api.exception.BizException;
@@ -42,22 +25,21 @@ import com.honglu.quickcall.user.facade.constants.UserBizConstants;
 import com.honglu.quickcall.user.facade.entity.Customer;
 import com.honglu.quickcall.user.facade.entity.SensitivityWord;
 import com.honglu.quickcall.user.facade.enums.CustomerCusStateEnum;
-import com.honglu.quickcall.user.facade.exchange.request.AddSystemUserRequest;
-import com.honglu.quickcall.user.facade.exchange.request.BindVXorQQRequest;
-import com.honglu.quickcall.user.facade.exchange.request.GetSmsCodeRequest;
-import com.honglu.quickcall.user.facade.exchange.request.IsPhoneExistsRequest;
-import com.honglu.quickcall.user.facade.exchange.request.LoginOutRequest;
-import com.honglu.quickcall.user.facade.exchange.request.SaveCertificationRequest;
-import com.honglu.quickcall.user.facade.exchange.request.SaveDvVoiceRequest;
-import com.honglu.quickcall.user.facade.exchange.request.SetHeardUrlRequest;
-import com.honglu.quickcall.user.facade.exchange.request.SetPwdRequest;
-import com.honglu.quickcall.user.facade.exchange.request.UserIdCardInfoRequest;
-import com.honglu.quickcall.user.facade.exchange.request.UserLoginRequest;
-import com.honglu.quickcall.user.facade.exchange.request.UserRegisterRequest;
+import com.honglu.quickcall.user.facade.exchange.request.*;
 import com.honglu.quickcall.user.service.dao.CustomerMapper;
 import com.honglu.quickcall.user.service.dao.SensitivityWordMapper;
 import com.honglu.quickcall.user.service.integration.AccountDubboIntegrationService;
 import com.honglu.quickcall.user.service.service.CommonPersonService;
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.text.SimpleDateFormat;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by len.song on 2017-12-07.
@@ -78,7 +60,7 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 	@Autowired
 	private SensitivityWordMapper sensitivityWordMapper;
 
-	@Reference(version = "1.0.0", timeout = 10000, retries = 0, group = "buryDataCenter")
+	@Autowired
 	private DataDuriedPointBusiness dataDuriedPointBusiness;
 
 	private static String resendexpire = ResourceBundle.getBundle("thirdconfig").getString("resend.expire");
