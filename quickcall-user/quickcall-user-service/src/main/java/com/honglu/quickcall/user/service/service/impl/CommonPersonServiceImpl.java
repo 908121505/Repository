@@ -201,10 +201,9 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 
 		req.setPhoneNumber(customer.getPhone());
 		req.setUser_id(customer.getCustomerId() + "");
-		dataDuriedPointBusiness.buryUserIdLoginResultData(req);
-
 		return ResultUtils.resultSuccess(customer);
 	}
+
 
 	@Override
 	public CommonResponse setpwd(SetPwdRequest params) {

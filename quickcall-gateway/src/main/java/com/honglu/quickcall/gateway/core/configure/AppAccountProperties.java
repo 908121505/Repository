@@ -16,6 +16,10 @@ public class AppAccountProperties {
     public AppAccountProperties() {
     }
 
+    public void initAccountList(){
+
+    }
+
     public Map<String, AppAccount> getAccountConfig() {
         return this.accountConfig;
     }

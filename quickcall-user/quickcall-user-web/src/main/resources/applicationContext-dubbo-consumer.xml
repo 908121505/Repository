@@ -20,5 +20,4 @@
     <!-- 神策埋点服务 -->
     <dubbo:reference group="buryDataCenter" id="dataDuriedPointBusiness" interface="com.honglu.quickcall.producer.facade.business.DataDuriedPointBusiness" check="false" version="1.0.0"/>
 
-
 </beans>

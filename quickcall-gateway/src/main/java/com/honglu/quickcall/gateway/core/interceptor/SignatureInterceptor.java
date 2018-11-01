@@ -1,8 +1,13 @@
 package com.honglu.quickcall.gateway.core.interceptor;
 
+import com.honglu.quickcall.gateway.core.configure.AppAccount;
 import com.honglu.quickcall.gateway.core.configure.AppAccountProperties;
 import com.xping.framework.api.Header;
+import com.xping.framework.api.PlatformException;
+import com.xping.framework.api.ResultCodeEnum;
+import com.xping.framework.core.signature.SignatureUtils;
 import com.xping.framework.core.util.StringUtils;
+import com.xping.framework.web.http.HeaderHelper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,30 +43,30 @@ public class SignatureInterceptor extends HandlerInterceptorAdapter {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-//        HeaderHelper.checkHeader();
-//        Integer requestAgent = HeaderHelper.getRequestAgent();
-//        Header.RequestAgentEnum requestAgentEnum = Header.RequestAgentEnum.resolve(requestAgent);
-//        if (null == requestAgentEnum) {
-//            LOGGER.error("APP传进来的requestAgent:{}不在允许服务端允许范围内", HeaderHelper.getRequestAgent());
-//            throw new PlatformException(ResultCodeEnum.ILLEGAL_REQUEST_AGENT);
-//        }
-//        String key = requestAgentEnum.name().toLowerCase() + "-" + HeaderHelper.getAppName() + "-" + HeaderHelper.getAppVersion();
-//        AppAccount appAccount = appAccountProperties.getAppAcount(key);
-//        if (null == appAccount || StringUtils.isBlank(appAccount.getAppId())
-//                || StringUtils.isBlank(appAccount.getAppSecret())) {
-//            throw new PlatformException(ResultCodeEnum.NONE_APP_ACCOUNT_DATA);
-//        }
-//        if (!appAccount.getAppId().equals(HeaderHelper.getAppId())) {
-//            LOGGER.error("APP传进来的appId：{}与服务端appId：{}不一致", HeaderHelper.getAppId(), appAccount.getAppId());
-//            throw new PlatformException(ResultCodeEnum.ILLEGAL_APP_ID);
-//        }
-//        String stringToSign = HeaderHelper.getAppId() + HeaderHelper.getTimestamp();
-//        String targetSign = SignatureUtils.hashByHmacSHA256(stringToSign, appAccount.getAppSecret());
-//        if (!targetSign.equals(HeaderHelper.getSign())) {
-//            LOGGER.error("校验AppId：{}，时间戳：{}的签名：{}失败，服务器生成的签名是：{}", HeaderHelper.getAppId(),
-//                    HeaderHelper.getTimestamp(), HeaderHelper.getSign(), targetSign);
-//            throw new PlatformException(ResultCodeEnum.ILLEGAL_SIGNATURE);
-//        }
+        HeaderHelper.checkHeader();
+        Integer requestAgent = HeaderHelper.getRequestAgent();
+        Header.RequestAgentEnum requestAgentEnum = Header.RequestAgentEnum.resolve(requestAgent);
+        if (null == requestAgentEnum) {
+            LOGGER.error("APP传进来的requestAgent:{}不在允许服务端允许范围内", HeaderHelper.getRequestAgent());
+            throw new PlatformException(ResultCodeEnum.ILLEGAL_REQUEST_AGENT);
+        }
+        String key = requestAgentEnum.name().toLowerCase() + "-" + HeaderHelper.getAppName() + "-" + HeaderHelper.getAppVersion();
+        AppAccount appAccount = appAccountProperties.getAppAcount(key);
+        if (null == appAccount || StringUtils.isBlank(appAccount.getAppId())
+                || StringUtils.isBlank(appAccount.getAppSecret())) {
+            throw new PlatformException(ResultCodeEnum.NONE_APP_ACCOUNT_DATA);
+        }
+        if (!appAccount.getAppId().equals(HeaderHelper.getAppId())) {
+            LOGGER.error("APP传进来的appId：{}与服务端appId：{}不一致", HeaderHelper.getAppId(), appAccount.getAppId());
+            throw new PlatformException(ResultCodeEnum.ILLEGAL_APP_ID);
+        }
+        String stringToSign = HeaderHelper.getAppId() + HeaderHelper.getTimestamp();
+        String targetSign = SignatureUtils.hashByHmacSHA256(stringToSign, appAccount.getAppSecret());
+        if (!targetSign.equals(HeaderHelper.getSign())) {
+            LOGGER.error("校验AppId：{}，时间戳：{}的签名：{}失败，服务器生成的签名是：{}", HeaderHelper.getAppId(),
+                    HeaderHelper.getTimestamp(), HeaderHelper.getSign(), targetSign);
+            throw new PlatformException(ResultCodeEnum.ILLEGAL_SIGNATURE);
+        }
         return true;
     }
 }

@@ -23,6 +23,7 @@ public class AppAccount {
         this.appSecret = appSecret;
     }
 
+    @Override
     public String toString() {
         return "AppAccount{appId='" + this.appId + '\'' + ", appSecret='" + this.appSecret + '\'' + '}';
     }

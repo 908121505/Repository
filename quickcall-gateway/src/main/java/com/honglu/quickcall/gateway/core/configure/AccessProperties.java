@@ -2,6 +2,7 @@ package com.honglu.quickcall.gateway.core.configure;
 
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 
 //@Configuration
@@ -11,7 +12,7 @@ import java.util.List;
 @Component
 public class AccessProperties {
     public static final String API_SECURITY_ACCESS_PREFIX = "api.security.access";
-    private List<String> ignoreTokenUriList;
+    private List<String> ignoreTokenUriList = new ArrayList<>();
     private List<String> noneWrapUriList;
     private List<String> noneCheckHeaderList;
 
