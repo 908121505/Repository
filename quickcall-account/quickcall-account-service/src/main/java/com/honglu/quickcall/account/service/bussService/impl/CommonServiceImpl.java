@@ -346,4 +346,19 @@ public class CommonServiceImpl implements CommonService {
 		
 	}
 
+
+
+	@Override
+	public void custConfirmFinishUpdateOrder(Long orderId, Integer orderStatus) {
+		Order record = new Order();
+		record.setOrderStatus(orderStatus);
+		record.setOrderId(orderId);
+		record.setModifyTime(new Date());
+		//用户同意大V服务完成，设置订单结束时间
+		record.setEndTime(new Date());
+		//修改订单状态为：已支付
+		orderMapper.updateByPrimaryKeySelective(record);
+		
+	}
+
 }
