@@ -109,10 +109,11 @@ public class RongYunUtil {
 	 */
 	public static Integer publishPrivate(String fromUserId, String[] toUserId, BaseMessage message, String pushContent,
 			String pushData, String count, Integer verifyBlacklist, Integer isPersisted, Integer isCounted) {
-		// 实例化
-		RongCloud rongCloud = RongCloud.getInstance(APPKEY, APPSECRET);
+
 		CodeSuccessReslut messageBroadcastResult = null;
 		try {
+			// 实例化
+			RongCloud rongCloud = RongCloud.getInstance(APPKEY, APPSECRET);
 			messageBroadcastResult = rongCloud.message.publishPrivate(fromUserId, toUserId, message, pushContent,
 					pushData, count, verifyBlacklist, isPersisted, isCounted);
 			if (messageBroadcastResult == null) {
