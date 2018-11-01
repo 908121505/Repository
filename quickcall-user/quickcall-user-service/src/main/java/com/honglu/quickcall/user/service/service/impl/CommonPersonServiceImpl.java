@@ -78,7 +78,7 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 	@Autowired
 	private SensitivityWordMapper sensitivityWordMapper;
 
-	@Reference(version = "1.0.0", timeout = 10000, retries = 0)
+	@Reference(version = "1.0.0", timeout = 10000, retries = 0, group = "buryDataCenter")
 	private DataDuriedPointBusiness dataDuriedPointBusiness;
 
 	private static String resendexpire = ResourceBundle.getBundle("thirdconfig").getString("resend.expire");
