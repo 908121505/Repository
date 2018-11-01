@@ -242,7 +242,7 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 			if (!m.matches()) {
 				return 2;
 			}
-			// 昵称敏感词校验
+			// 昵称敏感词校验R
 			List<SensitivityWord> sensitivityList = sensitivityWordMapper.querySensitiveName();
 			if (Detect.notEmpty(sensitivityList)) {
 				for (SensitivityWord obj : sensitivityList) {
