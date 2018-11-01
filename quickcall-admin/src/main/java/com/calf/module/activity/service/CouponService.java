@@ -3,11 +3,11 @@ package com.calf.module.activity.service;
 import com.calf.cn.entity.DataTables;
 import com.calf.cn.service.BaseManager;
 import com.calf.cn.utils.SearchUtil;
-import com.calf.module.activity.entity.Ticket;
-import com.calf.module.appconfig.entity.Advertisement;
+import com.calf.module.activity.entity.Coupon;
 import com.calf.module.appconfig.impl.AdvertisementService;
 import com.calf.module.common.impl.CommonUtilService;
-import com.honglu.quickcall.common.core.util.StringUtil;
+import com.honglu.quickcall.common.core.util.UUIDUtils;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -29,7 +29,7 @@ import java.util.Map;
  */
 @Service
 @Transactional
-public class TicketService {
+public class CouponService {
 
     private static final Logger logger = LoggerFactory.getLogger(AdvertisementService.class);
 
@@ -38,37 +38,40 @@ public class TicketService {
     @Autowired
     private CommonUtilService commonUtilService ;
 
-    public DataTables<Ticket> getTicketPageList(HttpServletRequest request) {
+    public DataTables<Coupon> getCouponPageList(HttpServletRequest request) {
         HashMap<String,Object> parameters = (HashMap<String, Object>) SearchUtil.convertorEntitysToMap(request.getParameterMap());
         Map<String, Object> paramMap = new HashMap<String, Object>();
         paramMap.put("iDisplayStart", parameters.get("iDisplayStart"));
         paramMap.put("iDisplayLength", parameters.get("iDisplayLength"));
 
-//        paramMap.put("name", parameters.get("name"));
+        paramMap.put("couponName", parameters.get("couponName"));
         paramMap.put("startTime", parameters.get("startTime"));
         paramMap.put("endTime", parameters.get("endTime"));
-        List<Ticket> ticketList = baseManager.query("Ticket.selectPageList", paramMap);
+        List<Coupon> CouponList = baseManager.query("Coupon.selectPageList", paramMap);
         String sEcho = (String) parameters.get("sEcho");
-        int total = baseManager.get("Ticket.selectCount", paramMap);
-        return new DataTables<Ticket>(sEcho, ticketList, ticketList.size(), total);
+        int total = baseManager.get("Coupon.selectCount", paramMap);
+        return new DataTables<Coupon>(sEcho, CouponList, CouponList.size(), total);
     }
 
-    public void getTicketDetail(Model model, String id) {
+    public void getCouponDetail(Model model, String id) {
         Map<String, Object> paramMap = new HashMap<String, Object>();
-        paramMap.put("id", id);
-        Advertisement advertisement = baseManager.get("Ticket.selectById",  paramMap);
-        model.addAttribute("entity", advertisement);
+
+        if(StringUtils.isNotBlank(id) && !"0".equals(id)){
+            paramMap.put("couponId", id);
+            Coupon coupon = baseManager.get("Coupon.selectById",  paramMap);
+            model.addAttribute("entity", coupon);
+        }
+        List<Map<String, String>> activityList = baseManager.query("Coupon.selectActivityList", paramMap);
+        model.addAttribute("activityList", activityList);
     }
 
-    public int saveAdd(Ticket entity) {
-        Advertisement  advertisement =  new Advertisement();
-        BeanUtils.copyProperties(entity, advertisement);
-        advertisement.setCreateMan(commonUtilService.getCurrUser());
-        advertisement.setType(0);
-        advertisement.setAdStatus(1);
+    public int saveAdd(Coupon entity) {
+        Coupon  coupon =  new Coupon();
+        BeanUtils.copyProperties(entity, coupon);
+        coupon.setCreateMan(commonUtilService.getCurrUser());
 
-        //插入广告表
-        int insertAdCount = baseManager.insert(advertisement);
+        coupon.setCouponId(UUIDUtils.getId().toString());
+        int insertAdCount = baseManager.insert(coupon);
         if(insertAdCount < 1){
             return -1;
         }
@@ -76,15 +79,12 @@ public class TicketService {
         return 0;
     }
 
-    public int saveUpdate(Ticket entity) {
-        Advertisement  advertisement =  new Advertisement();
-        BeanUtils.copyProperties(entity, advertisement);
-        advertisement.setModifyMan(commonUtilService.getCurrUser());
-        advertisement.setType(0);
-        advertisement.setAdStatus(1);
+    public int saveUpdate(Coupon entity) {
+        Coupon  coupon =  new Coupon();
+        BeanUtils.copyProperties(entity, coupon);
+        coupon.setModifyMan(commonUtilService.getCurrUser());
 
-        //更新广告表 advertisement
-        int updateAdCount = baseManager.update(advertisement);
+        int updateAdCount = baseManager.update(coupon);
         if(updateAdCount < 1){
             return -1;
         }
@@ -93,15 +93,10 @@ public class TicketService {
 
     }
 
-    public int disable(String id) {
+
+    public List getActivityList() {
         Map<String, Object> paramMap = new HashMap<String, Object>();
-        paramMap.put("id", id);
-        int count = baseManager.update("Ticket.disable", paramMap);
-        if(count > 0){
-            return 0;
-        }
-        return -1;
+        List<Map<String, String>> activityList = baseManager.query("Coupon.selectActivityList", paramMap);
+        return activityList;
     }
-
-
 }

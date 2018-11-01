@@ -22,8 +22,8 @@
             <div class="col-md-2">
                 <div class="form-group">
                     <div class="input-group">
-                        <div class="input-group-addon">广告名称</div>
-                        <input class="form-control" type="text" id="adName">
+                        <div class="input-group-addon">活动名称</div>
+                        <input class="form-control" type="text" id="activityNameQuery">
                     </div>
                 </div>
             </div>
@@ -76,7 +76,7 @@
                 var table = $('#example').initTable({
                     sAjaxSource: "activity/initTable.htm",
                     fnServerParams: function (aoData) {  //查询条件
-                        aoData.push({"name": "name", "value": $("#adName").val().trim()});
+                        aoData.push({"name": "activityName", "value": $("#activityNameQuery").val().trim()});
                         aoData.push({"name": "startTime", "value": $("#sTime").val()});
                         aoData.push({"name": "endTime", "value": $("#eTime").val()});
                     },
@@ -94,11 +94,11 @@
                             "data": "activityId",
                             "sTitle": "活动编号",
                             'sClass': "text-center",
-//                            "bVisible": false //此列不显示
+                            "bVisible": false //此列不显示
                         },
                         {
                             "data": "activityName",
-                            "sTitle": "活动名",
+                            "sTitle": "活动名称",
                             'sClass': "text-center",
                         },
                         {
@@ -119,11 +119,11 @@
 
                         },
 
-                        {
+                        /*{
                             "data": "url",
                             "sTitle": "跳转地址",
                             'sClass': "text-center",
-                        },
+                        },*/
                         /*{
                             "data": "auditStatus",
                             "sTitle": "审核状态",
@@ -183,8 +183,8 @@
                             'sClass': "text-center",
                             "mRender": function (data, type, row) {
                                 var edit = "", del = "";
-                                edit = "<a href='#' onclick='addAndUpdateRow(\"" + row.id + "\")' data-toggle='modal' class='padding-right-small label label-success'><i class='glyphicon glyphicon-edit'></i>编辑</a>";
-                                del = "<a href='#' onclick='deleteRow(\"" + row.id + "\")' data-toggle='modal' class='label label label-danger'><i class='glyphicon glyphicon-trash'></i> 删除 </a>";
+                                edit = "<a href='#' onclick='addAndUpdateRow(\"" + row.activityId + "\")' data-toggle='modal' class='padding-right-small label label-success'><i class='glyphicon glyphicon-edit'></i>编辑</a>";
+                                del = "<a href='#' onclick='deleteRow(\"" + row.activityId + "\")' data-toggle='modal' class='label label label-danger'><i class='glyphicon glyphicon-trash'></i> 删除 </a>";
                                 return edit + "&nbsp;" + del;
                             }
                         }
@@ -200,12 +200,12 @@
 
             //增加或者修改受影响的行数
             function addAndUpdateRow(id){
-                $('#insertAndUpdate').addAndUpdateRow("advertisement/addAndUpdateHome.htm?id="+id);
+                $('#insertAndUpdate').addAndUpdateRow("activity/addAndUpdateHome.htm?id="+id);
             }
 
             //删除禁用
             function deleteRow(id) {
-                $('#myModal').deleteRow('advertisement/disable?id=' + id);
+                $('#myModal').deleteRow('activity/del.htm?id=' + id);
             }
 
         </script>

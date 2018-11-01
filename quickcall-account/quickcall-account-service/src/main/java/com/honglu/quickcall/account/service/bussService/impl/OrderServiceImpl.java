@@ -228,8 +228,25 @@ public class OrderServiceImpl implements IOrderService {
 			
 			Integer  orderNum =  request.getOrderNum();
 			BigDecimal  price =  customerSkill.getDiscountPrice();
+			
 			//根据券判断真正的订单金额
-			BigDecimal orderAmounts = new BigDecimal(orderNum).multiply(price);
+			BigDecimal orderAmounts = BigDecimal.ZERO;
+			
+			//获取券金额
+			BigDecimal   couponPrice = request.getCouponPrice();
+			Long  customerCouponId =  request.getCustomerCouponId();
+			if(customerCouponId != null &&  couponPrice != null){
+				BigDecimal  discountPrice =  price.subtract(couponPrice);
+				orderAmounts = new BigDecimal(orderNum-1).multiply(price);
+				if(discountPrice.compareTo(BigDecimal.ZERO) > 0){
+					orderAmounts = orderAmounts.add(discountPrice);
+				}
+			}else{
+				//根据券判断真正的订单金额
+				orderAmounts = new BigDecimal(orderNum).multiply(price);
+			}
+			
+			
 			//判断余额是否充足
 			Account account=accountService.queryAccount(customerId);
 			if(account != null){

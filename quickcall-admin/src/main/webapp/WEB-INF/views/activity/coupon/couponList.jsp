@@ -22,8 +22,8 @@
             <div class="col-md-2">
                 <div class="form-group">
                     <div class="input-group">
-                        <div class="input-group-addon">广告名称</div>
-                        <input class="form-control" type="text" id="adName">
+                        <div class="input-group-addon">券名称</div>
+                        <input class="form-control" type="text" id="couponNameQuery">
                     </div>
                 </div>
             </div>
@@ -74,9 +74,9 @@
             //表格的初始化
             $(document).ready(function () {
                 var table = $('#example').initTable({
-                    sAjaxSource: "ticket/initTable.htm",
+                    sAjaxSource: "coupon/initTable.htm",
                     fnServerParams: function (aoData) {  //查询条件
-                        aoData.push({"name": "name", "value": $("#adName").val().trim()});
+                        aoData.push({"name": "couponName", "value": $("#couponNameQuery").val().trim()});
                         aoData.push({"name": "startTime", "value": $("#sTime").val()});
                         aoData.push({"name": "endTime", "value": $("#eTime").val()});
                     },
@@ -91,13 +91,13 @@
                             }
                         },
                         {
-                            "data": "ticketId",
+                            "data": "couponId",
                             "sTitle": "券编号",
                             'sClass': "text-center",
-//                            "bVisible": false //此列不显示
+                            "bVisible": false //此列不显示
                         },
                         {
-                            "data": "ticketName",
+                            "data": "couponName",
                             "sTitle": "券的名称",
                             'sClass': "text-center",
                         },
@@ -114,7 +114,7 @@
                             }
                         },
                         {
-                            "data": "ticketType",
+                            "data": "couponType",
                             "sTitle": "券类型",
                             'sClass': "text-center",
                             "mRender": function (data, type, full) {
@@ -125,11 +125,11 @@
                                 }
                             }
                         },
-                        {
-                            "data": "ticketCode",
+                       /* {
+                            "data": "couponCode",
                             "sTitle": "券码",
                             'sClass': "text-center",
-                        },
+                        },*/
                         {
                             "data": "startTime",
                             "sTitle": "生效时间",
@@ -142,15 +142,19 @@
                             'sClass': "text-center",
 
                         },
-
                         {
-                            "data": "acitivityId",
-                            "sTitle": "活动编号",
+                            "data": "couponPrice",
+                            "sTitle": "券的价值",
                             'sClass': "text-center",
                         },
                         {
-                            "data": "ticketPrice",
-                            "sTitle": "券的价值",
+                            "data": "activityName",
+                            "sTitle": "活动名称",
+                            'sClass': "text-center",
+                        },
+                        {
+                            "data": "activityCode",
+                            "sTitle": "活动编码",
                             'sClass': "text-center",
                         },
                         /*{
@@ -212,8 +216,8 @@
                             'sClass': "text-center",
                             "mRender": function (data, type, row) {
                                 var edit = "", del = "";
-                                edit = "<a href='#' onclick='addAndUpdateRow(\"" + row.id + "\")' data-toggle='modal' class='padding-right-small label label-success'><i class='glyphicon glyphicon-edit'></i>编辑</a>";
-                                del = "<a href='#' onclick='deleteRow(\"" + row.id + "\")' data-toggle='modal' class='label label label-danger'><i class='glyphicon glyphicon-trash'></i> 删除 </a>";
+                                edit = "<a href='#' onclick='addAndUpdateRow(\"" + row.couponId + "\")' data-toggle='modal' class='padding-right-small label label-success'><i class='glyphicon glyphicon-edit'></i>编辑</a>";
+                                del = "<a href='#' onclick='deleteRow(\"" + row.couponId + "\")' data-toggle='modal' class='label label label-danger'><i class='glyphicon glyphicon-trash'></i> 删除 </a>";
                                 return edit + "&nbsp;" + del;
                             }
                         }
@@ -229,12 +233,12 @@
 
             //增加或者修改受影响的行数
             function addAndUpdateRow(id){
-                $('#insertAndUpdate').addAndUpdateRow("advertisement/addAndUpdateHome.htm?id="+id);
+                $('#insertAndUpdate').addAndUpdateRow("coupon/addAndUpdateHome.htm?id="+id);
             }
 
             //删除禁用
             function deleteRow(id) {
-                $('#myModal').deleteRow('advertisement/disable?id=' + id);
+                $('#myModal').deleteRow('coupon/del.htm?id=' + id);
             }
 
 
