@@ -277,7 +277,7 @@ public class OrderUpdateJob {
     		for (TaskOrder order : orderList) {
     			orderIdList.add(order.getOrderId());
     		}
-    		taskOrderMapper.updateOrderStatus(updateOrderStatus, orderIdList,new Date());
+    		taskOrderMapper.updateOrderStatus(updateOrderStatus, orderIdList,new Date(),OrderSkillConstants.ORDER_COUPON_FLAG_CANCEL);
     	}
     }
     /**

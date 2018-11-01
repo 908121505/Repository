@@ -213,7 +213,8 @@
 			orders
 		SET 
 			system_cancel_time = #{cancelTime},
-		 	order_status = #{updateStatus}
+		 	order_status = #{updateStatus},
+		 	coupon_flag = #{couponFlag}
 		WHERE
 			order_id  IN 
 			<foreach collection="list" item="orderId"    open="("  close=")"  separator=",">
