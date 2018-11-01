@@ -47,24 +47,26 @@ public class RongYunUtil {
 		TokenReslut userGetTokenResult = null;
 		try {
 			userGetTokenResult = rongCloud.user.getToken(id, username, imageUrl);
+			return userGetTokenResult.getToken();
 		} catch (Exception e) {
 			e.printStackTrace();
+			return null;
 		}
-		return userGetTokenResult.getToken();
 	}
 
 	/**
 	 * 刷新用户信息
 	 */
 	public static CodeSuccessReslut refreshUser(String id, String username, String imageUrl) {
-		// 实例化
-		RongCloud rongCloud = RongCloud.getInstance(APPKEY, APPSECRET);
-		//
+
 		CodeSuccessReslut userRefreshResult = null;
-		// 刷新用户信息方法
 		try {
+			// 实例化
+			RongCloud rongCloud = RongCloud.getInstance(APPKEY, APPSECRET);
+			// 刷新用户信息方法
 			userRefreshResult = rongCloud.user.refresh(id, username, imageUrl);
 		} catch (Exception e) {
+
 			e.printStackTrace();
 		}
 		return userRefreshResult;

@@ -260,8 +260,7 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 					params.getNickName(), img);
 			// 刷新失败
 			if (reslut.getCode() != 200) {
-				logger.error("刷新融云用户信息失败，用户id为：" + String.valueOf(params.getCustomerId()) + "失败原因为："
-						+ reslut.getErrorMessage());
+				logger.error("刷新融云用户信息失败，用户id为：" + String.valueOf(params.getCustomerId()));
 			} else {
 				logger.info("刷新融云用户信息成功！");
 			}

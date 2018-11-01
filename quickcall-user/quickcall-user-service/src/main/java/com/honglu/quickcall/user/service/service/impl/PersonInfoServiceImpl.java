@@ -11,7 +11,6 @@ import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.honglu.quickcall.common.api.util.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +24,7 @@ import com.honglu.quickcall.common.api.exception.BizException;
 import com.honglu.quickcall.common.api.exception.RemoteException;
 import com.honglu.quickcall.common.api.exchange.CommonResponse;
 import com.honglu.quickcall.common.api.exchange.ResultUtils;
+import com.honglu.quickcall.common.api.util.DateUtils;
 import com.honglu.quickcall.common.api.util.JedisUtil;
 import com.honglu.quickcall.common.api.util.RedisKeyConstants;
 import com.honglu.quickcall.common.constants.PropertiesConstant;
@@ -211,8 +211,7 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 					customer.getNickName(), customer.getHeadPortraitUrl());
 			// 刷新失败
 			if (reslut.getCode() != 200) {
-				logger.error("刷新融云用户信息失败，用户id为：" + String.valueOf(customer.getCustomerId()) + "失败原因为："
-						+ reslut.getErrorMessage());
+				logger.error("刷新融云用户信息失败，用户id为：" + String.valueOf(customer.getCustomerId()));
 			} else {
 				logger.info("刷新融云用户信息成功！");
 			}
@@ -786,8 +785,8 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 		List<String> appearanceList = customerAppearanceMapper
 				.queryCustomerAuditedAppearance(request.getViewCustomerId(), 0);
 		if (appearanceList == null || appearanceList.size() == 0) {
-			customerHomeVO.setAppearanceUrlList(Objects.equals(customerHomeVO.getSex(), 1) ?
-					Arrays.asList(PropertiesConstant.DEFAULT_CUSTOMER_APPEARANCE_URL_BOY)
+			customerHomeVO.setAppearanceUrlList(Objects.equals(customerHomeVO.getSex(), 1)
+					? Arrays.asList(PropertiesConstant.DEFAULT_CUSTOMER_APPEARANCE_URL_BOY)
 					: Arrays.asList(PropertiesConstant.DEFAULT_CUSTOMER_APPEARANCE_URL_GIRL));
 		} else {
 			customerHomeVO.setAppearanceUrlList(appearanceList);
@@ -811,7 +810,8 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 			customerHomeVO.setShareTitle(share.getTitle());
 			customerHomeVO.setShareContent(share.getContent());
 			customerHomeVO.setShareIconUrl(share.getIconUrl());
-			customerHomeVO.setShareLinkUrl(String.format(share.getLinkUrl(), request.getViewCustomerId(), request.getLoginCustomerId()));
+			customerHomeVO.setShareLinkUrl(
+					String.format(share.getLinkUrl(), request.getViewCustomerId(), request.getLoginCustomerId()));
 		}
 
 		// 查询用户技能 -- 条件是大V
@@ -847,8 +847,7 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 							accountOrderService.checkReceiveOrderByCustomerSkillId(bean.getCustomerSkillId()));
 				}
 				// 查询技能订单数-wq
-				customerSkill.setSkillOrderNo(
-						customerSkillMapper.selectSkillOrderNo(bean.getCustomerSkillId()));
+				customerSkill.setSkillOrderNo(customerSkillMapper.selectSkillOrderNo(bean.getCustomerSkillId()));
 				skillList.add(customerSkill);
 			}
 		}
