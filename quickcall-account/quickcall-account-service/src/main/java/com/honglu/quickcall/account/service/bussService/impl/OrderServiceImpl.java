@@ -8,6 +8,8 @@ import java.util.HashMap;
 import java.util.List;
 
 import com.honglu.quickcall.account.facade.vo.*;
+import com.honglu.quickcall.activity.facade.business.CouponDubboBusiness;
+import com.honglu.quickcall.activity.facade.entity.CustomerCoupon;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -95,6 +97,8 @@ public class OrderServiceImpl implements IOrderService {
 	private SkillItemMapper skillItemMapper;
 	@Autowired
 	private UserCenterSendMqMessageService userCenterSendMqMessageService;
+	@Autowired
+	private CouponDubboBusiness couponDubboBusiness;
 	
 	
 	
@@ -460,6 +464,15 @@ public class OrderServiceImpl implements IOrderService {
 			if(payAmount != null){
 				accountService.inAccount(customerId, payAmount,TransferTypeEnum.RECHARGE,AccountBusinessTypeEnum.OrderRefund);
 			}
+
+			//----start---chenpeng 2018.11.1 取消订单时，查询是否使用优惠券，如果有则退回优惠券
+			//查询用户此订单是否使用优惠券
+			CustomerCoupon customerCoupon = couponDubboBusiness.queryCustomerCouponByCustomerIdAndOrderId(customerId,orderId);
+			if(customerCoupon != null){
+				int cancelUpdateCustomerCouponCount = couponDubboBusiness.cancelUpdateCustomerCoupon(customerCoupon.getId());
+				LOGGER.info("取消订单 退回优惠券 id："+ customerCoupon.getId() + "更新数量：" + cancelUpdateCustomerCouponCount);
+			}
+			//-----end---chenpeng 2018.11.1
 		}
 		
 		Long  serviceId =  order.getServiceId();
