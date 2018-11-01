@@ -42,7 +42,7 @@
 					</label>
 					<div class="col-sm-10">
 						<div class="input-group">
-							<input type="hidden" class="form-control" name="headPortraitUrl" id="headPortraitUrl_input" value="${entity.headPortraitUrl }">
+							<input type="hidden" class="form-control" name="headPortraitUrl" id="fadeUser_headProtraitUrl_input" value="${entity.headPortraitUrl }">
 							<input type="file" class="form-control" id="appversionFile" name="appversionFile">
 							<span class="input-group-btn">
 								<button class="btn btn-success" type="button" id="uploadBanner">上传图片</button>
@@ -51,10 +51,10 @@
 					</div>
 				</div>
 				<div class="form-group">
-					<label for="bannerFile_img" class="col-sm-2 control-label">图片</label>
+					<label for="fadeUser_head_img" class="col-sm-2 control-label">图片</label>
 					<div class="col-sm-10">
 						<div class="col-sm-6">
-							<img src="${empty entity.headPortraitUrl ? DEFAULT_IMG : entity.headPortraitUrl }" alt="暂无图片，点击上传！" class="img-rounded" style="max-width: 100%; max-height: 300px;" id="bannerFile_img">
+							<img src="${empty entity.headPortraitUrl ? DEFAULT_IMG : entity.headPortraitUrl }" alt="暂无图片，点击上传！" class="img-rounded" style="max-width: 100%; max-height: 300px;" id="fadeUser_head_img">
 						</div>
 					</div>
 				</div>
@@ -67,8 +67,7 @@
 				aria-hidden="true">取消</button>
 			<button class="btn btn-primary" data-dismiss="modal">保存</button>
 		</div>
-		
-		
+
 	</div>
 </div>
 <script type="text/javascript">
@@ -103,8 +102,8 @@
                     if (data.result = 'success') {
                         console.info(data);
                         alert("上传图片成功！");
-                        $('#headPortraitUrl_input').val(data.imgUrl);
-                        $('#bannerFile_img').attr("src", data.imgUrl);
+                        $('#fadeUser_headProtraitUrl_input').val(data.imgUrl);
+                        $('#fadeUser_head_img').attr("src", data.imgUrl);
                         $("#tip").html("");
                     } else {
                         alert(data.msg);

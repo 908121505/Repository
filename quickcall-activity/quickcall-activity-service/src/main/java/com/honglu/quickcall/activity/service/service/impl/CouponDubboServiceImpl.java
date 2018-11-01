@@ -28,5 +28,14 @@ public class CouponDubboServiceImpl implements CouponDubboService{
 	public int updateCustomerCouponById(CustomerCoupon customerCoupon) {
 		return customerCouponMapper.updateByPrimaryKeySelective(customerCoupon);
 	}
-	
+
+	@Override
+	public CustomerCoupon queryCustomerCouponByCustomerIdAndOrderId(Long customerId, Long orderId) {
+		return customerCouponMapper.queryCustomerCouponByCustomerIdAndOrderId(customerId,orderId);
+	}
+
+	@Override
+	public int cancelUpdateCustomerCoupon(Integer id) {
+		return customerCouponMapper.cancelUpdateCustomerCoupon(id);
+	}
 }

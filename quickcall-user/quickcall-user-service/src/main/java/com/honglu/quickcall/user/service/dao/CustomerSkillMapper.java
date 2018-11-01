@@ -75,13 +75,6 @@ public interface CustomerSkillMapper {
 									    		@Param("size") Integer size);
 
     /**
-     * 根据客户技能ID查询返回给前端的大V数据
-     * @param customerSkillId
-     * @return
-     */
-    CustomerSkill selectBigvInfoVoByCustomerSkillId(Long customerSkillId);
-
-    /**
      * 技能订单数
      * @param customerId
      * @param customerSkillId

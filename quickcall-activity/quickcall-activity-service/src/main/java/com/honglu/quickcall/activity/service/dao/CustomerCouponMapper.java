@@ -1,6 +1,7 @@
 package com.honglu.quickcall.activity.service.dao;
 
 import com.honglu.quickcall.activity.facade.entity.CustomerCoupon;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.Map;
 
@@ -54,4 +55,8 @@ public interface CustomerCouponMapper {
     int updateByPrimaryKey(CustomerCoupon record);
 
     int selectByCustomerIdAndCouponId(Map<String,String> map);
+
+    CustomerCoupon queryCustomerCouponByCustomerIdAndOrderId(@Param("customerId") Long customerId, @Param("orderId") Long orderId);
+
+    int cancelUpdateCustomerCoupon(@Param("id") Integer id);
 }

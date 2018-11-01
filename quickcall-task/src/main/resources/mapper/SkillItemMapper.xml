@@ -337,13 +337,13 @@
     where id = #{id,jdbcType=BIGINT}
   </update>
 
-  <!-- 跳过index行，查询一条技能数据 -->
-  <select id="selectOneSkipNum" resultMap="BaseResultMap" >
+  <!-- 随机查询一条技能数据 -->
+  <select id="selectOneByRandom" resultMap="BaseResultMap" >
     select
     <include refid="Base_Column_List" />
     from skill_item
-    order by create_time asc
-    limit #{index},1
+    WHERE `skill_status` = 1
+    order by RAND() limit 1
   </select>
 
   <select id="selectOneSkillPrice" resultType="java.math.BigDecimal" >

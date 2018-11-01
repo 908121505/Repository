@@ -8,6 +8,8 @@ import java.util.HashMap;
 import java.util.List;
 
 import com.honglu.quickcall.account.facade.vo.*;
+import com.honglu.quickcall.activity.facade.business.CouponDubboBusiness;
+import com.honglu.quickcall.activity.facade.entity.CustomerCoupon;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -95,6 +97,8 @@ public class OrderServiceImpl implements IOrderService {
 	private SkillItemMapper skillItemMapper;
 	@Autowired
 	private UserCenterSendMqMessageService userCenterSendMqMessageService;
+	@Autowired
+	private CouponDubboBusiness couponDubboBusiness;
 	
 	
 	
@@ -278,12 +282,12 @@ public class OrderServiceImpl implements IOrderService {
 			record.setSkillType(skillType);
 			if(OrderSkillConstants.SKILL_TYPE_NO == skillType){
 				Date  appointTime = DateUtils.formatDate(request.getAppointTimeStr());
-				Calendar  cal =  Calendar.getInstance();
-				cal.setTime(appointTime);
-				cal.add(Calendar.MINUTE, 5);
-				Date  expectEndTime =  cal.getTime();
+//				Calendar  cal =  Calendar.getInstance();
+//				cal.setTime(appointTime);
+//				cal.add(Calendar.MINUTE, 5);
+//				Date  expectEndTime =  cal.getTime();
 				record.setAppointTime(appointTime);
-				record.setExpectEndTime(expectEndTime);
+//				record.setExpectEndTime(expectEndTime);
 			}
 			
 			
@@ -451,7 +455,7 @@ public class OrderServiceImpl implements IOrderService {
 				throw new BizException(AccountBizReturnCode.ORDER_STATUS_ERROR, "订单状态异常");
 			}
 			
-			if(OrderSkillConstants.ORDER_COUPON_FLAG_USE == couponFlag){
+			if(couponFlag != null && OrderSkillConstants.ORDER_COUPON_FLAG_USE == couponFlag){
 				couponFlag = OrderSkillConstants.ORDER_COUPON_FLAG_CANCEL;
 			}
 			BigDecimal   payAmount =  order.getOrderAmounts();
@@ -460,6 +464,15 @@ public class OrderServiceImpl implements IOrderService {
 			if(payAmount != null){
 				accountService.inAccount(customerId, payAmount,TransferTypeEnum.RECHARGE,AccountBusinessTypeEnum.OrderRefund);
 			}
+
+			//----start---chenpeng 2018.11.1 取消订单时，查询是否使用优惠券，如果有则退回优惠券
+			//查询用户此订单是否使用优惠券
+			CustomerCoupon customerCoupon = couponDubboBusiness.queryCustomerCouponByCustomerIdAndOrderId(customerId,orderId);
+			if(customerCoupon != null){
+				int cancelUpdateCustomerCouponCount = couponDubboBusiness.cancelUpdateCustomerCoupon(customerCoupon.getId());
+				LOGGER.info("取消订单 退回优惠券 id："+ customerCoupon.getId() + "更新数量：" + cancelUpdateCustomerCouponCount);
+			}
+			//-----end---chenpeng 2018.11.1
 		}
 		
 		Long  serviceId =  order.getServiceId();
@@ -695,7 +708,8 @@ public class OrderServiceImpl implements IOrderService {
 		    Integer  orderNum = order.getOrderNum();
 		    
 		    if(serviceUnit.contains(OrderSkillConstants.SERVICE_UNIT_TIMES)){
-		    	addMinute = 12 * 60 ;
+		    	//叫醒服务时需要添加5分钟过期时间
+		    	addMinute = 12 * 60 + 5;
 		    }else if (serviceUnit.contains(OrderSkillConstants.SERVICE_UNIT_HALF_HOUR)){
 		    	addMinute = orderNum * 30 ;
 		    }else {
@@ -704,7 +718,13 @@ public class OrderServiceImpl implements IOrderService {
 		    
 			
 			Calendar cal =  Calendar.getInstance();
-			cal.setTime(currTime);
+			Date   startTime =  order.getStartTime();
+			if(startTime != null){
+				//应该取订单进行中起始时间
+				cal.setTime(startTime);
+			}else{
+				cal.setTime(currTime);
+			}
 			Date  endTime =  null;
 			if(addMinute > 0){
 				cal.add(Calendar.MINUTE, addMinute);
@@ -919,7 +939,7 @@ public class OrderServiceImpl implements IOrderService {
 			
 			
 			//设置请求结束时间
-			commonService.finishUpdateOrder(orderId, newOrderStatus,new  Date());
+			commonService.finishUpdateOrder(orderId, newOrderStatus,new  Date(),sendMsgIndex);
 			if(sendMsgIndex !=null){
 				// ADUAN 订单服务完成推送MQ消息
 				userCenterSendMqMessageService.sendOrderCostMqMessage(orderId);
