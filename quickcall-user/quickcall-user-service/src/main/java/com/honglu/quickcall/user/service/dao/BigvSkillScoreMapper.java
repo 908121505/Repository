@@ -1,11 +1,9 @@
 package com.honglu.quickcall.user.service.dao;
 
 import com.honglu.quickcall.user.facade.entity.BigvSkillScore;
-import com.honglu.quickcall.user.facade.entity.example.BigvSkillScoreExample;
 import org.apache.ibatis.annotations.Param;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 public interface BigvSkillScoreMapper {
 
@@ -20,11 +18,10 @@ public interface BigvSkillScoreMapper {
     /**
      * 查询大V技能的订单笔数
      *
-     * @param customerId
-     * @param skillItemId
+     * @param customerSkillId
      * @return
      */
-    Integer selectBigvSkillOrderTotal(@Param("customerId") Long customerId, @Param("skillItemId") Long skillItemId);
+    Integer selectBigvSkillOrderTotal(@Param("customerSkillId") Long customerSkillId);
 
     /**
      * 根据默认评价得到到订单表
