@@ -118,10 +118,31 @@ public class EditProfileServiceImpl implements EditProfileService {
 		logger.info("修改昵称 updateNickName,更新数量：" + result);
 		if (result > 0) {
 
-			// 刷新融云用户信息
-			CodeSuccessReslut reslut = RongYunUtil.refreshUser(String.valueOf(customer.getCustomerId()), customer.getNickName(), null);
+			// 刷新融云用户信息  如果失败重试俩次
+			CodeSuccessReslut reslut = null;
+			reslut = RongYunUtil.refreshUser(String.valueOf(customer.getCustomerId()), customer.getNickName(), null);
+			if(reslut == null){
+				logger.error("刷新融云用户信息失败，用户id为：" + String.valueOf(params.getCustomerId()) + "失败原因为：返回的 CodeSuccessReslut 为null");
+				reslut = RongYunUtil.refreshUser(String.valueOf(customer.getCustomerId()), customer.getNickName(), null);
+			}
+			if(reslut == null){
+				logger.error("刷新融云用户信息失败，用户id为：" + String.valueOf(params.getCustomerId()) + "失败原因为：返回的 CodeSuccessReslut 为null");
+				reslut = RongYunUtil.refreshUser(String.valueOf(customer.getCustomerId()), customer.getNickName(), null);
+			}
+			if(reslut == null){
+				logger.error("刷新融云用户信息失败，用户id为：" + String.valueOf(params.getCustomerId()) + "失败原因为：返回的 CodeSuccessReslut 为null");
+			}
+
 			if (reslut.getCode() != 200) {
-				logger.error("刷新融云用户信息失败，用户id为：" + String.valueOf(customer.getCustomerId()) + "失败原因为：" + reslut.getErrorMessage());
+				logger.error("刷新融云用户信息失败，用户id为：" + String.valueOf(params.getCustomerId()) + "失败原因为：" + reslut.getErrorMessage());
+				reslut = RongYunUtil.refreshUser(String.valueOf(customer.getCustomerId()), customer.getNickName(), null);
+			}
+			if (reslut.getCode() != 200) {
+				logger.error("刷新融云用户信息失败，用户id为：" + String.valueOf(params.getCustomerId()) + "失败原因为：" + reslut.getErrorMessage());
+				reslut = RongYunUtil.refreshUser(String.valueOf(customer.getCustomerId()), customer.getNickName(), null);
+			}
+			if (reslut.getCode() != 200) {
+				logger.error("刷新融云用户信息失败，用户id为：" + String.valueOf(params.getCustomerId()) + "失败原因为：" + reslut.getErrorMessage());
 			} else {
 				logger.info("刷新融云用户信息成功！");
 			}
@@ -298,13 +319,37 @@ public class EditProfileServiceImpl implements EditProfileService {
 
 		if (updateCustomerResult > 0) {
 
-			// 刷新融云用户信息
-			CodeSuccessReslut reslut = RongYunUtil.refreshUser(String.valueOf(params.getCustomerId()), null, params.getHeadPortraitUrl());
+			// 刷新融云用户信息  如果失败重试俩次
+			CodeSuccessReslut reslut = null;
+			reslut = RongYunUtil.refreshUser(String.valueOf(params.getCustomerId()), null, params.getHeadPortraitUrl());
+			if(reslut == null){
+				logger.error("刷新融云用户信息失败，用户id为：" + String.valueOf(params.getCustomerId()) + "失败原因为：返回的 CodeSuccessReslut 为null");
+				reslut = RongYunUtil.refreshUser(String.valueOf(params.getCustomerId()), null, params.getHeadPortraitUrl());
+			}
+			if(reslut == null){
+				logger.error("刷新融云用户信息失败，用户id为：" + String.valueOf(params.getCustomerId()) + "失败原因为：返回的 CodeSuccessReslut 为null");
+				reslut = RongYunUtil.refreshUser(String.valueOf(params.getCustomerId()), null, params.getHeadPortraitUrl());
+			}
+			if(reslut == null){
+				logger.error("刷新融云用户信息失败，用户id为：" + String.valueOf(params.getCustomerId()) + "失败原因为：返回的 CodeSuccessReslut 为null");
+			}
+
+			if (reslut.getCode() != 200) {
+				logger.error("刷新融云用户信息失败，用户id为：" + String.valueOf(params.getCustomerId()) + "失败原因为：" + reslut.getErrorMessage());
+				reslut = RongYunUtil.refreshUser(String.valueOf(params.getCustomerId()), null, params.getHeadPortraitUrl());
+			}
+			if (reslut.getCode() != 200) {
+				logger.error("刷新融云用户信息失败，用户id为：" + String.valueOf(params.getCustomerId()) + "失败原因为：" + reslut.getErrorMessage());
+				reslut = RongYunUtil.refreshUser(String.valueOf(params.getCustomerId()), null, params.getHeadPortraitUrl());
+			}
 			if (reslut.getCode() != 200) {
 				logger.error("刷新融云用户信息失败，用户id为：" + String.valueOf(params.getCustomerId()) + "失败原因为：" + reslut.getErrorMessage());
 			} else {
 				logger.info("刷新融云用户信息成功！");
 			}
+
+			JedisUtil.set(RedisKeyConstants.USER_CUSTOMER_INFO + params.getCustomerId(),
+					JsonParseUtil.castToJson(customer));
 
 			commonResponse.setCode(UserBizReturnCode.Success);
 			commonResponse.setMessage(UserBizReturnCode.Success.desc());
