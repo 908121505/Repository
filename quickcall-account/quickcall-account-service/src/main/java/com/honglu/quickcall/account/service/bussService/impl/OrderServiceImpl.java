@@ -429,6 +429,7 @@ public class OrderServiceImpl implements IOrderService {
 		Integer   orderStatus =  null ;
 		Long  customerId =  order.getCustomerId();
 		if(order != null ){
+			Integer couponFlag = order.getCouponFlag();  
 			Integer   oldOrderStatus =  order.getOrderStatus();
 			//根据不同状态进行取消
 			//待接单取消
@@ -449,8 +450,12 @@ public class OrderServiceImpl implements IOrderService {
 			}else{
 				throw new BizException(AccountBizReturnCode.ORDER_STATUS_ERROR, "订单状态异常");
 			}
+			
+			if(OrderSkillConstants.ORDER_COUPON_FLAG_USE == couponFlag){
+				couponFlag = OrderSkillConstants.ORDER_COUPON_FLAG_CANCEL;
+			}
 			BigDecimal   payAmount =  order.getOrderAmounts();
-			commonService.cancelUpdateOrder(orderId, orderStatus,new Date(),request.getSelectReason(),request.getRemarkReason());
+			commonService.cancelUpdateOrder(orderId, orderStatus,new Date(),request.getSelectReason(),request.getRemarkReason(),couponFlag);
 			//金额不为空，说明需要退款给用户
 			if(payAmount != null){
 				accountService.inAccount(customerId, payAmount,TransferTypeEnum.RECHARGE,AccountBusinessTypeEnum.OrderRefund);
