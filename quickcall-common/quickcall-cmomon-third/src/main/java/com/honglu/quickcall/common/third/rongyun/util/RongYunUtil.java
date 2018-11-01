@@ -2,9 +2,6 @@ package com.honglu.quickcall.common.third.rongyun.util;
 
 import java.util.ResourceBundle;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.alibaba.fastjson.JSON;
 import com.honglu.quickcall.common.third.rongyun.RongCloud;
 import com.honglu.quickcall.common.third.rongyun.RongYunPushBean;
@@ -19,11 +16,9 @@ import com.honglu.quickcall.common.third.rongyun.models.TokenReslut;
  *
  */
 public class RongYunUtil {
-	private static final Logger logger = LoggerFactory.getLogger(RongYunUtil.class);
 	// 读取融云的配置参数
 	public static String APPKEY = ResourceBundle.getBundle("thirdconfig").getString("appkey");
 	public static String APPSECRET = ResourceBundle.getBundle("thirdconfig").getString("appsecret");
-	
 
 	// 系统用户Id
 	public static String SYSTEM_COSTOMER_ID = "1810201521499459795";
@@ -62,28 +57,16 @@ public class RongYunUtil {
 	 * 刷新用户信息
 	 */
 	public static CodeSuccessReslut refreshUser(String id, String username, String imageUrl) {
-			RongCloud rongCloud = null;
-			try{
-				// 实例化
-				rongCloud = RongCloud.getInstance(APPKEY, APPSECRET);
-			}catch(Exception e){
-				rongCloud = RongCloud.getInstance(APPKEY, APPSECRET);
-				logger.error("融云异常");
-			}
-			//
-			CodeSuccessReslut userRefreshResult = null;
-			// 刷新用户信息方法
-			try {
-				userRefreshResult = rongCloud.user.refresh(id, username, imageUrl);
-			} catch (Exception e) {
-				try {
-					userRefreshResult = rongCloud.user.refresh(id, username, imageUrl);
-				} catch (Exception e1) {
-					e1.printStackTrace();
-				}
-				e.printStackTrace();
-			}
-		
+		// 实例化
+		RongCloud rongCloud = RongCloud.getInstance(APPKEY, APPSECRET);
+		//
+		CodeSuccessReslut userRefreshResult = null;
+		// 刷新用户信息方法
+		try {
+			userRefreshResult = rongCloud.user.refresh(id, username, imageUrl);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return userRefreshResult;
 	}
 
@@ -118,10 +101,11 @@ public class RongYunUtil {
 		try {
 			messageBroadcastResult = rongCloud.message.publishPrivate(fromUserId, toUserId, message, pushContent,
 					pushData, count, verifyBlacklist, isPersisted, isCounted);
+			return messageBroadcastResult.getCode();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return messageBroadcastResult.getCode();
+		return 0;
 		// System.out.println("broadcast: " + messageBroadcastResult.toString());
 	}
 

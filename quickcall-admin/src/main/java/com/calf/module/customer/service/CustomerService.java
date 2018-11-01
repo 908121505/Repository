@@ -27,7 +27,7 @@ public class CustomerService {
 
     private static final String OPERATE_UNLOCK = "0";
 
-    private static final String OPERATE_LOCK = "1";
+    private static final String OPERATE_LOCK = "1";   //锁住
 
     private static final String UNLOCK_SYSMSG = "您好,您已经被解封";
 
