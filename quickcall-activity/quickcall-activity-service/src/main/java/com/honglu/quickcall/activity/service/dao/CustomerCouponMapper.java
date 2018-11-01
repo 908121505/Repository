@@ -79,4 +79,12 @@ public interface CustomerCouponMapper {
     CustomerCoupon queryCustomerCouponByCustomerIdAndOrderId(@Param("customerId") Long customerId, @Param("orderId") Long orderId);
 
     int cancelUpdateCustomerCoupon(@Param("id") Integer id);
+
+    /**
+     * 根据券ID查活动名字和券名字
+     * @param couponId
+     * @return
+     */
+    Map<String,String> selectActivityNameAndCouponName(@Param("couponId")Long couponId);
+
 }

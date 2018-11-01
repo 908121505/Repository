@@ -58,6 +58,12 @@ public class CouponDubboBusinessImpl implements CouponDubboBusiness{
 		return couponDubboService.getCustomerCouponByOrderId(orderId);
 	}
 
+    /**
+     * 查询是否显示活动优惠券提示
+     * @param skillItemIdList
+     * @param customerId
+     * @return
+     */
     @Override
     public int getShowTipForActivity(List<String> skillItemIdList, String customerId){
         int showTip = 0;//0=不展示，1=展示
