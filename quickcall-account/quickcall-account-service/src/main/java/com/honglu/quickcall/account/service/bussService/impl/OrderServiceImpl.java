@@ -451,7 +451,7 @@ public class OrderServiceImpl implements IOrderService {
 				throw new BizException(AccountBizReturnCode.ORDER_STATUS_ERROR, "订单状态异常");
 			}
 			
-			if(OrderSkillConstants.ORDER_COUPON_FLAG_USE == couponFlag){
+			if(couponFlag != null && OrderSkillConstants.ORDER_COUPON_FLAG_USE == couponFlag){
 				couponFlag = OrderSkillConstants.ORDER_COUPON_FLAG_CANCEL;
 			}
 			BigDecimal   payAmount =  order.getOrderAmounts();
