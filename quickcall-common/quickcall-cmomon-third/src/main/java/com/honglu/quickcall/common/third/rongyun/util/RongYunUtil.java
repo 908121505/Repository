@@ -65,11 +65,6 @@ public class RongYunUtil {
 		try {
 			userRefreshResult = rongCloud.user.refresh(id, username, imageUrl);
 		} catch (Exception e) {
-			try {
-				userRefreshResult = rongCloud.user.refresh(id, username, imageUrl);
-			} catch (Exception e1) {
-				e1.printStackTrace();
-			}
 			e.printStackTrace();
 		}
 		return userRefreshResult;
