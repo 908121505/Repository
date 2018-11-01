@@ -186,4 +186,29 @@
       and coupon_id = #{couponId,jdbcType=BIGINT}
   </select>
 
+  <!--查询用户此订单是否使用优惠券-->
+  <select id="queryCustomerCouponByCustomerIdAndOrderId" resultType="com.honglu.quickcall.activity.facade.entity.CustomerCoupon" parameterType="java.lang.Long" >
+    SELECT
+    id,
+    customer_id AS customerId,
+    coupon_id AS couponId,
+    is_used AS isUsed,
+    order_id AS orderId,
+    create_time AS createTime,
+    modify_time AS modifyTime,
+    create_man AS createMan,
+    modify_man AS modifyMan,
+    remark
+    FROM
+    customer_coupon
+    WHERE customer_id = #{customerId}
+    AND order_id = #{orderId}
+    AND is_used = 1
+  </select>
+
+  <!--退回优惠券-->
+  <update id="cancelUpdateCustomerCoupon"  parameterType="java.lang.Integer">
+    update customer_coupon set is_used = 0, modify_time = now()  where id = #{id}
+  </update>
+
 </mapper>

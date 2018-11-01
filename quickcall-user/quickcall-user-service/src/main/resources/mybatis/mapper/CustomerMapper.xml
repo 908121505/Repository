@@ -614,7 +614,8 @@
       service_price as servicePrice,
       order_num as orderNum,
       evaluate_start as evaluateStart,
-      value_score as valueScore
+      value_score as valueScore,
+      coupon_flag as couponFlag
     from orders where order_id = #{orderId}
   </select>
 
