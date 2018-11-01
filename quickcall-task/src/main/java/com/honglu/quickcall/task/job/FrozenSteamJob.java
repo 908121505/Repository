@@ -41,7 +41,7 @@ public class FrozenSteamJob {
 	@Autowired
 	private TradeDetailMapper tradeDetailMapper;
 
-	@Scheduled(cron = "* 0/1 * * * ?")
+	@Scheduled(cron = "* 0/2 * * * ?")
 	public void execute() {
 
 		logger.info("冻结金额12小时后   到账户越操作 job 开启------------------------");
@@ -57,7 +57,7 @@ public class FrozenSteamJob {
 					List<String> strList = new ArrayList<String>();
 					String[] arys = userFrozenValue.split(",");
 					for (int i = 0; i < arys.length; i++) {
-						String steamFrozenKey = RedisKeyConstants.ACCOUNT_USERFROZEN_USER + arys[i];
+						String steamFrozenKey = RedisKeyConstants.ACCOUNT_USERFROZEN_STREAM + arys[i];
 						String frozenTimeKey = RedisKeyConstants.ACCOUNT_USERFROZEN_Time + arys[i];
 						String stramValue = JedisUtil.get(steamFrozenKey);
 						String frozenTimeValue = JedisUtil.get(frozenTimeKey);
