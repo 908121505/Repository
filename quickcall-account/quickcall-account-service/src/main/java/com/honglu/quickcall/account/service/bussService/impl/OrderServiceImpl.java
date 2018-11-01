@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+import com.honglu.quickcall.account.facade.vo.*;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -116,7 +117,7 @@ public class OrderServiceImpl implements IOrderService {
 		OrderDaVSkillVO  resultVO = orderMapper.getCustomerByCustomerId(customerId);
 		
 		List<OrderSkillItemVO> custSkillList = new  ArrayList<>();
-		
+		List<String> skillItemIdList = new  ArrayList<String>();
 		List<CustomerSkill> skillList  = customerSkillMapper.querySkillInfoPersonal(customerId);
 		if(!CollectionUtils.isEmpty(skillList)){
 			for (CustomerSkill skill : skillList) {
@@ -131,10 +132,22 @@ public class OrderServiceImpl implements IOrderService {
 				vo.setServiceUnit(skill.getServiceUnit());
 				vo.setSkillItemName(skillItem.getSkillItemName());
 				custSkillList.add(vo);
+				skillItemIdList.add(skillItemId+"");
 			}
 		}
 		
 		resultVO.setCustSkillList(custSkillList );
+		int showTip = 0;//0=不展示，1=展示
+		if(skillItemIdList!=null && skillItemIdList.size()>0){
+			String couponId = orderMapper.getCouponIdBySkillItemId(skillItemIdList);
+			if(StringUtils.isNotBlank(couponId)){
+				int num = orderMapper.getShowTip(couponId,customerId+"");
+				if(num == 0){
+					showTip = 1;
+				}
+			}
+		}
+		resultVO.setShowTip(showTip);
 		CommonResponse commonResponse = commonService.getCommonResponse();
 		commonResponse.setData(resultVO);
 		LOGGER.info("======>>>>>用户编号为：" + request.getCustomerId() + "查询成功");
@@ -462,8 +475,11 @@ public class OrderServiceImpl implements IOrderService {
 			OrderTempResponseVO  responseVO = commonService.getCountDownSeconds(orderDetail.getOrderStatus(), orderDetail.getOrderTime(), orderDetail.getReceiveOrderTime());
 			orderDetail.setCountDownSeconds(responseVO.getCountDownSeconds());
 			orderDetail.setOrderStatus(responseVO.getOrderStatus());
+
+			//根据订单ID查询客户优惠券
+			CustomerCouponVO customerCouponVO = orderMapper.getCustomerCouponByOrderId(orderId);
+			orderDetail.setCustomerCouponVO(customerCouponVO);
 		}
-		
 		CommonResponse commonResponse = commonService.getCommonResponse();
 		commonResponse.setData(orderDetail);
 		LOGGER.info("======>>>>>查询发送的订单，用户编号为：" + orderId + "查询成功");
