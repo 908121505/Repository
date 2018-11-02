@@ -99,11 +99,19 @@ public class OrderServiceImpl implements IOrderService {
 	@Autowired
     private DataDuriedPointBusiness dataDuriedPointBusiness;
 
+<<<<<<< Updated upstream
 	
 	
 	
 	
 	
+=======
+
+
+
+
+
+>>>>>>> Stashed changes
 	
 	@Override
 	public CommonResponse queryDaVSkill(OrderDaVSkillRequest request) {
@@ -575,7 +583,11 @@ public class OrderServiceImpl implements IOrderService {
 		return commonResponse;
 	}
 	
+<<<<<<< Updated upstream
 	
+=======
+
+>>>>>>> Stashed changes
 
 	@Override
 	public CommonResponse custConfirmFinish(CustConfirmFinishRequest request) {
@@ -614,7 +626,11 @@ public class OrderServiceImpl implements IOrderService {
 			//订单不存在
 			throw new BizException(AccountBizReturnCode.ORDER_NOT_EXIST, "订单不存在，无法对订单操作");
 		}
+<<<<<<< Updated upstream
 		
+=======
+
+>>>>>>> Stashed changes
 		
 		
 		CommonResponse commonResponse = commonService.getCommonResponse();
@@ -667,7 +683,11 @@ public class OrderServiceImpl implements IOrderService {
 		    }else {
 		    	addMinute = orderNum * 60 ;
 		    }
+<<<<<<< Updated upstream
 		    
+=======
+
+>>>>>>> Stashed changes
 			
 			Calendar cal =  Calendar.getInstance();
 			Date   startTime =  order.getStartTime();
@@ -687,7 +707,17 @@ public class OrderServiceImpl implements IOrderService {
 			//订单不存在
 			throw new BizException(AccountBizReturnCode.ORDER_NOT_EXIST, "订单不存在，无法对订单操作");
 		}
+<<<<<<< Updated upstream
 		
+=======
+
+
+		//用户同意大V服务完成，通知大V查单订单状态
+		Long  serviceId = order.getServiceId();
+		RongYunUtil.sendOrderMessage(serviceId, OrderSkillConstants.IM_MSG_CONTENT_USER_CONFIRM_START_SERVICE_TO_DAV,OrderSkillConstants.MSG_CONTENT_DAV);
+
+
+>>>>>>> Stashed changes
 		CommonResponse commonResponse = commonService.getCommonResponse();
 		commonResponse.setData(newOrderStatus);
 		LOGGER.info("======>>>>>订单支付，订单编号：" + orderId + "，同意/拒绝订单完成");
@@ -820,7 +850,11 @@ public class OrderServiceImpl implements IOrderService {
 					GtPushUtil.sendNotificationTemplateToList(gtId, OrderSkillConstants.GT_MSG_ORDER_TITLE, OrderSkillConstants.GT_MSG_CONTENT_START_SERVICE_TO_CUST, OrderSkillConstants.GT_MSG_CONTENT_START_SERVICE_TO_CUST_URL);
 				}
 			}
+<<<<<<< Updated upstream
 			
+=======
+
+>>>>>>> Stashed changes
 			RongYunUtil.sendOrderMessage(customerId, OrderSkillConstants.IM_MSG_CONTENT_DAV_START_SERVICE_TO_CUST,OrderSkillConstants.MSG_CONTENT_C);
 			RongYunUtil.sendOrderMessage(serviceId, OrderSkillConstants.IM_MSG_CONTENT_DAV_START_SERVICE_TO_DAV,OrderSkillConstants.MSG_CONTENT_DAV);
 		}else{
