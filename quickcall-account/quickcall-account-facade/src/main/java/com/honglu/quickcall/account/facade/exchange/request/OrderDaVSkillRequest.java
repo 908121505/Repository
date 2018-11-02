@@ -8,7 +8,7 @@ import com.honglu.quickcall.common.api.exchange.AbstractRequest;
  * Copyright © 2018 www.xiaoniu.com All rights reserved.
  * 
  * 功能描述：查询大V产品数据
- * @Package: com.honglu.quickcall.account.facade.exchange.request 
+ * @Package: com.honglu.quickcall.account.facade.exchange.req
  * @author: chenliuguang   
  * @date: 2018年9月22日 下午3:39:53
  */

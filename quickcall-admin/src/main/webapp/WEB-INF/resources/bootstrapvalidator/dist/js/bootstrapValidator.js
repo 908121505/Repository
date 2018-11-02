@@ -4682,7 +4682,7 @@
          *  {
          *      <fieldName>: <fieldValue>
          *  }
-         * - name {String} [optional]: Override the field name for the request.
+         * - name {String} [optional]: Override the field name for the req.
          * - message: The invalid message
          * @returns {Boolean|Deferred}
          */

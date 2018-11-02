@@ -38,7 +38,7 @@ public class AliPayController extends BaseController {
 	@RequestMapping(value = "/recharge", method = RequestMethod.POST)
 	@ResponseBody
 	public WebResponseModel recharge(HttpServletRequest request, RechargeRequest params) {
-		logger.info("accountWeb.pay.recharge.request.data : " + JSONObject.toJSONString(params));
+		logger.info("accountWeb.pay.recharge.req.data : " + JSONObject.toJSONString(params));
 		WebResponseModel response = new WebResponseModel();
 		if (params.getAmount() == null || params.getCustomerId() == null) {
 			response.setCode(AccountBizReturnCode.paramError.code());
@@ -58,7 +58,7 @@ public class AliPayController extends BaseController {
 	@RequestMapping(value = "/whthdraw", method = RequestMethod.POST)
 	@ResponseBody
 	public WebResponseModel whthdraw(WhthdrawRequest params) {
-		logger.info("accountWeb.pay.whthdraw.request.data : " + JSONObject.toJSONString(params));
+		logger.info("accountWeb.pay.whthdraw.req.data : " + JSONObject.toJSONString(params));
 		WebResponseModel response = new WebResponseModel();
 		if (params.getAmount() == null || params.getCustomerId() == null) {
 			response.setCode(AccountBizReturnCode.paramError.code());
@@ -76,7 +76,7 @@ public class AliPayController extends BaseController {
 	@RequestMapping(value = "/queryAccount", method = RequestMethod.POST)
 	@ResponseBody
 	public WebResponseModel queryAccount(QueryAccountRequest params) {
-		logger.info("accountWeb.pay.queryAccount.request.data : " + JSONObject.toJSONString(params));
+		logger.info("accountWeb.pay.queryAccount.req.data : " + JSONObject.toJSONString(params));
 		WebResponseModel response = new WebResponseModel();
 		if (params.getCustomerId() == null) {
 			response.setCode(AccountBizReturnCode.paramError.code());
@@ -94,7 +94,7 @@ public class AliPayController extends BaseController {
 	@RequestMapping(value = "/bindAliaccount", method = RequestMethod.POST)
 	@ResponseBody
 	public WebResponseModel bindAliaccount(BindAliaccountRequest params) {
-		logger.info("accountWeb.pay.bindAliaccount.request.data : " + JSONObject.toJSONString(params));
+		logger.info("accountWeb.pay.bindAliaccount.req.data : " + JSONObject.toJSONString(params));
 		WebResponseModel response = new WebResponseModel();
 		if (params.getCustomerId() == null) {
 			response.setCode(AccountBizReturnCode.paramError.code());
@@ -112,7 +112,7 @@ public class AliPayController extends BaseController {
 	@RequestMapping(value = "/alipayNotify", produces = "application/json;charset=UTF-8", method = RequestMethod.POST)
 	@ResponseBody
 	public WebResponseModel alipayNotify(@RequestBody AlipayNotifyRequest params) {
-		logger.info("accountWeb.pay.alipayNotify.request.data : " + JSONObject.toJSONString(params));
+		logger.info("accountWeb.pay.alipayNotify.req.data : " + JSONObject.toJSONString(params));
 		WebResponseModel response = new WebResponseModel();
 		if (params.getAccountId() == null || StringUtils.isBlank(params.getOrderNo()) || params.getAmount() == null
 				|| params.getPayState() == null) {

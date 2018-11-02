@@ -9,7 +9,7 @@ if(!window.CKEDITOR)window.CKEDITOR=(function(){var a={timestamp:'',version:'3.6
 /*jsl:end*/
 
 // Uncomment the following line to have a new timestamp generated for each
-// request, having clear cache load of the editor code.
+// req, having clear cache load of the editor code.
 // CKEDITOR.timestamp = ( new Date() ).valueOf();
 
 if ( CKEDITOR.loader )

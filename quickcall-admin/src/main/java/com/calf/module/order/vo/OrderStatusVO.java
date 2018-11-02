@@ -5,7 +5,7 @@ package com.calf.module.order.vo;
  * Copyright © 2018 www.xiaoniu.com All rights reserved.
  * 
  * 功能描述：订单信息展示使用
- * @Package: com.calf.module.order.vo 
+ * @Package: com.calf.module.order.resp
  * @author: chenliuguang   
  * @date: 2018年9月22日 下午4:36:37
  */

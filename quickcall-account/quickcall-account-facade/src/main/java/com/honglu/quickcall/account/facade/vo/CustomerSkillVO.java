@@ -8,7 +8,7 @@ import java.util.List;
  * Copyright © 2018 www.xiaoniu.com All rights reserved.
  * 
  * 功能描述：客户技能信息
- * @Package: com.honglu.quickcall.account.facade.vo 
+ * @Package: com.honglu.quickcall.account.facade.resp
  * @author: chenliuguang   
  * @date: 2018年10月19日 下午3:44:13
  */

@@ -7,7 +7,7 @@ import com.honglu.quickcall.common.api.exchange.AbstractRequest;
  * Copyright © 2018 www.xiaoniu.com All rights reserved.
  * 
  * 功能描述：查询进行中订单数量
- * @Package: com.honglu.quickcall.account.facade.exchange.request 
+ * @Package: com.honglu.quickcall.account.facade.exchange.req
  * @author: chenliuguang   
  * @date: 2018年9月27日 下午5:25:19 
  */

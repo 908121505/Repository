@@ -8,7 +8,7 @@ import java.util.List;
  * Copyright © 2018 www.xiaoniu.com All rights reserved.
  * 
  * 功能描述：首页大V列表技能展示
- * @Package: com.honglu.quickcall.account.facade.vo 
+ * @Package: com.honglu.quickcall.account.facade.resp
  * @author: chenliuguang   
  * @date: 2018年10月18日 上午9:56:01 
  */

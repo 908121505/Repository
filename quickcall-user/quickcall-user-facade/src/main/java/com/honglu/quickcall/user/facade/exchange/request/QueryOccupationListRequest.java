@@ -7,7 +7,7 @@ import com.honglu.quickcall.user.facade.exchange.UserCenterRequest;
  * Copyright © 2018 www.xiaoniu.com All rights reserved.
  * 
  * 功能描述：查询职业列表入参
- * @Package: com.honglu.quickcall.user.facade.exchange.request 
+ * @Package: com.honglu.quickcall.user.facade.exchange.req
  * @author: chenliuguang   
  * @date: 2018年10月9日 下午12:55:20 
  */

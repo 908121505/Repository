@@ -1,4 +1,4 @@
-//package com.honglu.quickcall.user.service.constants;
+//package com.honglu.quickcall.user.core.constants;
 //
 //import java.util.HashMap;
 //import java.util.LinkedHashMap;
