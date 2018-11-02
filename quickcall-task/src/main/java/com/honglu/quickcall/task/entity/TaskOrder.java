@@ -20,6 +20,16 @@ public class TaskOrder {
     private Long  serviceId;
 
     private BigDecimal orderAmounts;
+    /**用券状态*/
+    private Integer  couponFlag;
+    
+	public Integer getCouponFlag() {
+		return couponFlag;
+	}
+
+	public void setCouponFlag(Integer couponFlag) {
+		this.couponFlag = couponFlag;
+	}
 
 	public Long getCustomerId() {
 		return customerId;
