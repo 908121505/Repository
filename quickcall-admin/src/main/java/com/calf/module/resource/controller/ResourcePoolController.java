@@ -2,7 +2,7 @@ package com.calf.module.resource.controller;
 
 import com.calf.cn.controller.BaseController;
 import com.calf.cn.entity.DataTables;
-//import com.calf.cn.core.BaseManager;
+//import com.calf.cn.service.BaseManager;
 import com.calf.module.resource.impl.ResourcePoolService;
 import com.calf.module.resource.vo.ResourcePoolVo;
 import org.springframework.beans.factory.annotation.Autowired;

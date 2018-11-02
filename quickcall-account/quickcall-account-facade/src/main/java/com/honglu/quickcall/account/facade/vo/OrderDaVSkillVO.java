@@ -7,7 +7,7 @@ import java.util.List;
  * Copyright © 2018 www.xiaoniu.com All rights reserved.
  * 
  * 功能描述：主播技能信息
- * @Package: com.honglu.quickcall.account.facade.resp
+ * @Package: com.honglu.quickcall.account.facade.vo 
  * @author: chenliuguang   
  * @date: 2018年10月22日 上午10:56:48 
  */

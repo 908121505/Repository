@@ -7,7 +7,7 @@ import com.honglu.quickcall.user.facade.exchange.UserCenterRequest;
  * Copyright © 2018 www.xiaoniu.com All rights reserved.
  * 
  * 功能描述：添加/取消关注
- * @Package: com.honglu.quickcall.user.facade.exchange.req
+ * @Package: com.honglu.quickcall.user.facade.exchange.request 
  * @author: chenliuguang   
  * @date: 2018年10月9日 下午12:51:39 
  */

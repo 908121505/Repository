@@ -7,7 +7,7 @@ import java.math.BigDecimal;
  * Copyright © 2018 www.xiaoniu.com All rights reserved.
  * 
  * 功能描述：首页大V展示信息
- * @Package: com.honglu.quickcall.account.facade.resp
+ * @Package: com.honglu.quickcall.account.facade.vo 
  * @author: chenliuguang   
  * @date: 2018年10月18日 上午9:53:55 
  */

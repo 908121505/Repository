@@ -691,6 +691,7 @@
         <module>quickcall-task</module>
         <module>quickcall-consumer</module>
         <module>quickcall-databury</module>
+        <module>quickcall-producer</module>
         <module>quickcall-web</module>
     </modules>
 

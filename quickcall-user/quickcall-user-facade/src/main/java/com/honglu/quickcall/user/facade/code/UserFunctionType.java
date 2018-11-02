@@ -63,7 +63,11 @@ public interface UserFunctionType {
 	 * 保存用户认证信息
 	 */
 	String SAVE_USER_CERTIFY_INFO = "001022";
-
+	/**
+	 * 用户聊天私信权限设置
+	 */
+	String CUSYOMER_MESSAGE_SETTING = "001023";
+	String ADD_CUSYOMER_MESSAGE_SETTING = "001024";
 	// 保存昵称和头像
 	String SaveNicknameImage = "0011120";
 	// 保存性别
@@ -102,12 +106,6 @@ public interface UserFunctionType {
 
 	/** 判断是否关注对方 */
 	public static final String CHECK_EACH_ATTENTION = "0011137";
-
-
-	/** 关注帖子 */
-	public static final String ADD_ATTENTION = "001323";
-	/** 取消关注帖子 */
-	public static final String CANCEL_ATTENTION = "001324";
 
 	/**
 	 * 修改昵称
@@ -223,5 +221,16 @@ public interface UserFunctionType {
 	 * 添加设备白名单
 	 */
 	String saveDeviceWhitelist = "0011202";
+
+
+	/**
+	 * 查询我的站内信消息
+	 */
+	String ADD_ATTENTION = "003231";
+
+	/**
+	 * 技能项分类点击列表
+	 */
+	String CANCEL_ATTENTION = "003232";
 
 }

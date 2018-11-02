@@ -100,11 +100,6 @@ public class OrderServiceImpl implements IOrderService {
     private DataDuriedPointBusiness dataDuriedPointBusiness;
 
 	
-	
-	
-	
-	
-	
 	@Override
 	public CommonResponse queryDaVSkill(OrderDaVSkillRequest request) {
 		if (request == null || request.getCustomerId() == null) {
@@ -181,15 +176,16 @@ public class OrderServiceImpl implements IOrderService {
 				if(expectEndTime != null){
 					//当前时间和截止时间的间隔秒数
 					Long  remainStr = DateUtils.getDiffSeconds(currTime, expectEndTime);
+					String  downLoadStr = null ;
 					if(remainStr != null &&  remainStr > 0){
-						String  downLoadStr = DateUtils.getDiffSeconds(remainStr);
+						downLoadStr = DateUtils.getDiffSeconds(remainStr);
 						
-						resultMap.put("retCode", OrderSkillConstants.RET_CODE_DV_BUSY);
-						resultMap.put("downLoadStr", downLoadStr);
-						commonResponse.setData(resultMap);
-						//返回大V正忙，以及结束时间
-						return   commonResponse ;
 					}
+					resultMap.put("retCode", OrderSkillConstants.RET_CODE_DV_BUSY);
+					resultMap.put("downLoadStr", downLoadStr);
+					commonResponse.setData(resultMap);
+					//返回大V正忙，以及结束时间
+					return   commonResponse ;
 					
 					
 				}
@@ -575,7 +571,6 @@ public class OrderServiceImpl implements IOrderService {
 		return commonResponse;
 	}
 	
-	
 
 	@Override
 	public CommonResponse custConfirmFinish(CustConfirmFinishRequest request) {
@@ -614,7 +609,6 @@ public class OrderServiceImpl implements IOrderService {
 			//订单不存在
 			throw new BizException(AccountBizReturnCode.ORDER_NOT_EXIST, "订单不存在，无法对订单操作");
 		}
-		
 		
 		
 		CommonResponse commonResponse = commonService.getCommonResponse();
@@ -667,7 +661,6 @@ public class OrderServiceImpl implements IOrderService {
 		    }else {
 		    	addMinute = orderNum * 60 ;
 		    }
-		    
 			
 			Calendar cal =  Calendar.getInstance();
 			Date   startTime =  order.getStartTime();
@@ -687,7 +680,12 @@ public class OrderServiceImpl implements IOrderService {
 			//订单不存在
 			throw new BizException(AccountBizReturnCode.ORDER_NOT_EXIST, "订单不存在，无法对订单操作");
 		}
-		
+
+
+		//用户同意大V服务完成，通知大V查单订单状态
+		Long  serviceId = order.getServiceId();
+		RongYunUtil.sendOrderMessage(serviceId, OrderSkillConstants.IM_MSG_CONTENT_USER_CONFIRM_START_SERVICE_TO_DAV,OrderSkillConstants.MSG_CONTENT_DAV);
+
 		CommonResponse commonResponse = commonService.getCommonResponse();
 		commonResponse.setData(newOrderStatus);
 		LOGGER.info("======>>>>>订单支付，订单编号：" + orderId + "，同意/拒绝订单完成");
@@ -820,7 +818,7 @@ public class OrderServiceImpl implements IOrderService {
 					GtPushUtil.sendNotificationTemplateToList(gtId, OrderSkillConstants.GT_MSG_ORDER_TITLE, OrderSkillConstants.GT_MSG_CONTENT_START_SERVICE_TO_CUST, OrderSkillConstants.GT_MSG_CONTENT_START_SERVICE_TO_CUST_URL);
 				}
 			}
-			
+
 			RongYunUtil.sendOrderMessage(customerId, OrderSkillConstants.IM_MSG_CONTENT_DAV_START_SERVICE_TO_CUST,OrderSkillConstants.MSG_CONTENT_C);
 			RongYunUtil.sendOrderMessage(serviceId, OrderSkillConstants.IM_MSG_CONTENT_DAV_START_SERVICE_TO_DAV,OrderSkillConstants.MSG_CONTENT_DAV);
 		}else{

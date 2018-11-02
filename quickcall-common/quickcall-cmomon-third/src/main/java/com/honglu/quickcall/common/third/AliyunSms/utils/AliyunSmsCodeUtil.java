@@ -66,7 +66,7 @@ public class AliyunSmsCodeUtil {
 		request.setTemplateParam("{\"code\":\"" + code + "\"}");
 
 		// 选填-上行短信扩展码(无特殊需求用户请忽略此字段)
-		// req.setSmsUpExtendCode("90997");
+		// request.setSmsUpExtendCode("90997");
 
 		// 可选:outId为提供给业务方扩展字段,最终在短信回执消息中将此值带回给调用者
 		request.setOutId("yourOutId");
@@ -108,7 +108,7 @@ public class AliyunSmsCodeUtil {
 		request.setTemplateParam("{\"name\":\"" + content + "\"}");
 
 		// 选填-上行短信扩展码(无特殊需求用户请忽略此字段)
-		// req.setSmsUpExtendCode("90997");
+		// request.setSmsUpExtendCode("90997");
 
 		// 可选:outId为提供给业务方扩展字段,最终在短信回执消息中将此值带回给调用者
 		request.setOutId("yourOutId");

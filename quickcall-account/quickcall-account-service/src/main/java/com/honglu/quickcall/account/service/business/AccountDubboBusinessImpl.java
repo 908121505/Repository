@@ -107,7 +107,7 @@ public class AccountDubboBusinessImpl implements AccountDubboBusiness {
 				break;
 			/** 发起的订单页--去支付 */
 //			case OrderRequestType.CUST_PAY_ORDER:
-//				response = orderService.payOrder((PayOrderRequest) req);
+//				response = orderService.payOrder((PayOrderRequest) request);
 //				break;
 			/** 发起的订单页--申请退款/完成 */
 			case OrderRequestType.CUST_CONFIRM_FINISH_REFUND:

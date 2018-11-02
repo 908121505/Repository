@@ -11,7 +11,7 @@ import com.honglu.quickcall.common.api.exchange.AbstractRequest;
  * 
  * 功能描述：客户技能更新入参
  * 
- * @Package: com.honglu.quickcall.account.facade.exchange.req
+ * @Package: com.honglu.quickcall.account.facade.exchange.request
  * @author: chenliuguang
  * @date: 2018年9月23日 下午2:22:07
  */

@@ -9,7 +9,7 @@
 
     <dubbo:application name="quickcall-activity-service" owner="len.song" organization="xiaoniu"/>
 
-    <!-- registry address, used for core to register itself-->
+    <!-- registry address, used for service to register itself-->
     <dubbo:protocol name="dubbo" port="21351" serialization="kryo"/>
 
     <!-- 注册服务端 -->

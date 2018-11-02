@@ -7,17 +7,22 @@ import com.honglu.quickcall.common.third.rongyun.util.RongYunUtil;
 import com.honglu.quickcall.user.facade.entity.*;
 import com.honglu.quickcall.user.facade.exchange.request.BookingMessageQueryRequest;
 import com.honglu.quickcall.user.facade.exchange.request.BookingMessageSaveRequest;
+import com.honglu.quickcall.user.facade.exchange.request.CustomerMessageSettingQueryRequest;
+import com.honglu.quickcall.user.facade.exchange.request.CustomerMsgSettingRequest;
 import com.honglu.quickcall.user.facade.exchange.request.UserUnreadMessageNumRequest;
 import com.honglu.quickcall.user.facade.vo.MessageReservationVO;
 import com.honglu.quickcall.user.service.dao.*;
 import com.honglu.quickcall.user.service.service.UserMessageService;
 import com.honglu.quickcall.user.service.util.DateUtil;
 import com.honglu.quickcall.user.service.util.RadomUtil;
+
+import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -43,6 +48,8 @@ public class UserMessageServiceImpl implements UserMessageService {
     private CustomerSkillMapper customerSkillMapper;
     @Autowired
     private SkillItemMapper skillItemMapper;
+    @Autowired
+    private CustomerMsgSettingMapper customerMsgSettingMapper;
 
     static String reidsKey = "bookingMessage:";
 
@@ -141,4 +148,35 @@ public class UserMessageServiceImpl implements UserMessageService {
         }
         return ResultUtils.resultSuccess(mrsList);
     }
+
+	@Override
+	public CommonResponse queryCustomerMessageSetting(CustomerMessageSettingQueryRequest params) {
+		List<CustomerMsgSetting> customerMsgSettingList = customerMsgSettingMapper.selectByPrimaryKey(params.getCustomerId());
+		CustomerMsgSetting customerMsgSetting = new CustomerMsgSetting();
+		if(customerMsgSettingList.size() < 1){
+			customerMsgSetting.setCustomerId(params.getCustomerId());
+			customerMsgSetting.setReceiveType(0);
+			customerMsgSetting.setReceiveStatus(0);
+			customerMsgSetting.setRangeMinLimit(1000);
+		}else{
+			customerMsgSetting = customerMsgSettingList.get(0);
+		}
+		
+		return ResultUtils.resultSuccess(customerMsgSetting);
+	}
+
+	@Override
+	@Transactional(rollbackFor = Exception.class)
+	public CommonResponse saveCustomerMessageSetting(CustomerMsgSettingRequest params) {
+		CustomerMsgSetting customerMsgSetting = new CustomerMsgSetting();
+		customerMsgSetting.setModifyTime(new Date());
+		int num = 0;
+		if(params.getId() == null){
+			customerMsgSetting.setCreateTime(new Date());
+			num = customerMsgSettingMapper.insertSelective(customerMsgSetting);
+		}else{
+			num = customerMsgSettingMapper.updateByPrimaryKey(customerMsgSetting);
+		}
+		return ResultUtils.resultSuccess(num);
+	}
 }

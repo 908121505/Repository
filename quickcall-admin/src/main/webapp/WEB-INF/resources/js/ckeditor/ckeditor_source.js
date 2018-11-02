@@ -1,4 +1,4 @@
-﻿/*
+﻿﻿/*
 Copyright (c) 2003-2012, CKSource - Frederico Knabben. All rights reserved.
 For licensing, see LICENSE.html or http://ckeditor.com/license
 */
@@ -9,7 +9,7 @@ if(!window.CKEDITOR)window.CKEDITOR=(function(){var a={timestamp:'',version:'3.6
 /*jsl:end*/
 
 // Uncomment the following line to have a new timestamp generated for each
-// req, having clear cache load of the editor code.
+// request, having clear cache load of the editor code.
 // CKEDITOR.timestamp = ( new Date() ).valueOf();
 
 if ( CKEDITOR.loader )

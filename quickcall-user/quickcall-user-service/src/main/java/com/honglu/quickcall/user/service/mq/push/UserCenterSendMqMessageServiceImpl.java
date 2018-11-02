@@ -32,7 +32,7 @@ public class UserCenterSendMqMessageServiceImpl implements UserCenterSendMqMessa
             DoOrderCastMqRequest request = new DoOrderCastMqRequest();
             request.setOrderId(orderId);
             LOGGER.info("发送MQ消息 --  客户【下单话费】获取经验值: {}", JSON.toJSONString(request));
-            amqpTemplate.convertAndSend("userCenter-core-exchange", "queue_userCenter_for_experience_key", request);
+            amqpTemplate.convertAndSend("userCenter-mq-exchange", "queue_userCenter_for_experience_key", request);
         }catch (Exception e){
             LOGGER.error("发送MQ消息 -- 客户【下单话费】获取经验值异常，orderId : " + orderId + " ， 异常信息：", e);
         }
@@ -42,7 +42,7 @@ public class UserCenterSendMqMessageServiceImpl implements UserCenterSendMqMessa
             DoOrderCastMqRequest request = new DoOrderCastMqRequest();
             request.setOrderId(orderId);
             LOGGER.info("发送MQ消息 -- 客户【下单花费】 -- 更新主播排名: {}", JSON.toJSONString(request));
-            amqpTemplate.convertAndSend("userCenter-core-exchange", "queue_userCenter_for_scoreRank_key", request);
+            amqpTemplate.convertAndSend("userCenter-mq-exchange", "queue_userCenter_for_scoreRank_key", request);
         }catch (Exception e){
             LOGGER.error("发送MQ消息 -- 客户【下单花费】 -- 更新主播排名异常，orderId : " + orderId + " ， 异常信息：", e);
         }
@@ -55,7 +55,7 @@ public class UserCenterSendMqMessageServiceImpl implements UserCenterSendMqMessa
             EvaluationOrderMqRequest request = new EvaluationOrderMqRequest();
             request.setOrderId(orderId);
             LOGGER.info("发送MQ消息 -- 客户【评价订单】 -- 更新主播排名: {}", JSON.toJSONString(request));
-            amqpTemplate.convertAndSend("userCenter-core-exchange", "queue_userCenter_for_scoreRank_key", request);
+            amqpTemplate.convertAndSend("userCenter-mq-exchange", "queue_userCenter_for_scoreRank_key", request);
         }catch (Exception e){
             LOGGER.error("发送MQ消息 -- 客户【评价订单】 -- 更新主播排名异常，orderId : " + orderId + " ， 异常信息：", e);
         }

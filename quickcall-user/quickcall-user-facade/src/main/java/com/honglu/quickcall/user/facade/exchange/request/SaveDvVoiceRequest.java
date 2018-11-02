@@ -9,7 +9,7 @@ import com.honglu.quickcall.user.facade.exchange.UserCenterRequest;
  * Copyright © 2018 www.xiaoniu.com All rights reserved.
  * 
  * 功能描述：大V声音设置
- * @Package: com.honglu.quickcall.user.facade.exchange.req
+ * @Package: com.honglu.quickcall.user.facade.exchange.request 
  * @author: chenliuguang   
  * @date: 2018年10月12日 下午4:20:33 
  */

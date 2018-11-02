@@ -208,7 +208,7 @@ public class OrderController {
     @RequestMapping(value = "/orderEvaluation", method = RequestMethod.POST)
     @ResponseBody
     public WebResponseModel orderEvaluation(OrderEvaluationRequest params) {
-        LOGGER.info("orderWeb order orderEvaluation req data : " + JSONObject.toJSONString(params));
+        LOGGER.info("orderWeb order orderEvaluation request data : " + JSONObject.toJSONString(params));
         WebResponseModel response = new WebResponseModel();
         if (params.getOrderId() == null) {
             response.setCode(UserBizReturnCode.paramError.code());
@@ -228,7 +228,7 @@ public class OrderController {
     @RequestMapping(value = "/orderEvaluationSubmit", method = RequestMethod.POST)
     @ResponseBody
     public WebResponseModel orderEvaluationSubmit(OrderEvaluationSubmitRequest params) {
-        LOGGER.info("orderWeb order orderEvaluationSubmit req data : " + JSONObject.toJSONString(params));
+        LOGGER.info("orderWeb order orderEvaluationSubmit request data : " + JSONObject.toJSONString(params));
         WebResponseModel response = new WebResponseModel();
         response.setCode(UserBizReturnCode.paramError.code());
         if (params.getOrderId() == null || params.getCustomerId() == null) {

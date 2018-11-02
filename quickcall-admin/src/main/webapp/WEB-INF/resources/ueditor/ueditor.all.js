@@ -7835,7 +7835,7 @@ UE.ajax = function() {
         /**
          * 根据给定的参数项，向指定的url发起一个ajax请求。 ajax请求完成后，会根据请求结果调用相应回调： 如果请求
          * 成功， 则调用onsuccess回调， 失败则调用 onerror 回调
-         * @method req
+         * @method request
          * @param { URLString } url ajax请求的url地址
          * @param { Object } ajaxOptions ajax请求选项的键值对，支持的选项如下：
          * @example
@@ -7874,7 +7874,7 @@ UE.ajax = function() {
         /**
          * 根据给定的参数项发起一个ajax请求， 参数项里必须包含一个url地址。 ajax请求完成后，会根据请求结果调用相应回调： 如果请求
          * 成功， 则调用onsuccess回调， 失败则调用 onerror 回调。
-         * @method req
+         * @method request
          * @warning 如果在参数项里未提供一个key为“url”的地址值，则该请求将直接退出。
          * @param { Object } ajaxOptions ajax请求选项的键值对，支持的选项如下：
          * @example

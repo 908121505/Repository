@@ -7,7 +7,7 @@ import java.util.Date;
  * Copyright © 2018 www.xiaoniu.com All rights reserved.
  * 
  * 功能描述：主播技能信息
- * @Package: com.calf.module.order.resp
+ * @Package: com.calf.module.order.vo 
  * @author: chenliuguang   
  * @date: 2018年9月22日 下午7:18:15
  */
