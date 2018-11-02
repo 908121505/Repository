@@ -45,9 +45,9 @@
         
         <!-- 神策埋点 -->
         <dependency>
-        	<groupId>com.honglu.quickcall</groupId>
-    		<artifactId>quickcall-producer-facade</artifactId>
-    		<version>1.0.0-SNAPSHOT</version>
+        	    <groupId>com.honglu.quickcall</groupId>
+    <artifactId>quickcall-producer-facade</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
         </dependency>
         
 

@@ -685,7 +685,6 @@ public class OrderServiceImpl implements IOrderService {
 		Long  serviceId = order.getServiceId();
 		RongYunUtil.sendOrderMessage(serviceId, OrderSkillConstants.IM_MSG_CONTENT_USER_CONFIRM_START_SERVICE_TO_DAV,OrderSkillConstants.MSG_CONTENT_DAV);
 
-
 		CommonResponse commonResponse = commonService.getCommonResponse();
 		commonResponse.setData(newOrderStatus);
 		LOGGER.info("======>>>>>订单支付，订单编号：" + orderId + "，同意/拒绝订单完成");
