@@ -26,7 +26,6 @@ import java.util.List;
  * @date 2018/10/21 19:19
  */
 @Service
-@Transactional
 public class BlacklistServiceimpl implements BlacklistService {
 
     private static final Logger logger = LoggerFactory.getLogger(PersonInfoServiceImpl.class);

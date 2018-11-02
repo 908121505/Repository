@@ -4,7 +4,6 @@ import com.honglu.quickcall.common.api.exception.BizException;
 import com.honglu.quickcall.common.api.exchange.CommonResponse;
 import com.honglu.quickcall.common.core.util.UUIDUtils;
 import com.honglu.quickcall.user.facade.code.UserBizReturnCode;
-import com.honglu.quickcall.user.facade.entity.Blacklist;
 import com.honglu.quickcall.user.facade.entity.CustomerDeviceWhitelist;
 import com.honglu.quickcall.user.facade.exchange.request.editprofile.QueryDeviceWhitelistReq;
 import com.honglu.quickcall.user.facade.exchange.request.editprofile.SaveDeviceWhitelistReq;
@@ -14,7 +13,9 @@ import com.honglu.quickcall.user.service.service.DeviceWhitelistService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -23,6 +24,7 @@ import java.util.List;
  * @author chenpeng
  * @date 2018/11/2 15:26
  */
+@Service
 public class DeviceWhitelistServiceImpl implements DeviceWhitelistService{
     private static final Logger logger = LoggerFactory.getLogger(DeviceWhitelistServiceImpl.class);
 
@@ -36,9 +38,9 @@ public class DeviceWhitelistServiceImpl implements DeviceWhitelistService{
             throw new BizException(UserBizReturnCode.paramError, "customerId不能为空");
         }
 
-        List<CustomerDeviceWhitelistVO> customerList = customerDeviceWhitelistMapper.selectListByCustomerId(params.getCustomerId());
+        List<CustomerDeviceWhitelistVO> customerDeviceWhitelist = customerDeviceWhitelistMapper.selectListByCustomerId(params.getCustomerId());
 
-        commonResponse.setData(customerList);
+        commonResponse.setData(customerDeviceWhitelist);
         commonResponse.setCode(UserBizReturnCode.Success);
         commonResponse.setMessage(UserBizReturnCode.Success.desc());
         return commonResponse;
@@ -54,7 +56,7 @@ public class DeviceWhitelistServiceImpl implements DeviceWhitelistService{
             throw new BizException(UserBizReturnCode.paramError, "deviceId不能为空");
         }
         //先查询数据库中是否已存在
-        int count = customerDeviceWhitelistMapper.selectCountByCusIdAndBlackCusId(params.getCustomerId(), params.getDeviceId());
+        int count = customerDeviceWhitelistMapper.selectCountByCusIdAndDeviceId(params.getCustomerId(), params.getDeviceId());
         if(count > 0){
             throw new BizException(UserBizReturnCode.paramError, "设备白名单已存在");
         }
@@ -64,10 +66,11 @@ public class DeviceWhitelistServiceImpl implements DeviceWhitelistService{
         customerDeviceWhitelist.setId(id);
         customerDeviceWhitelist.setCustomerId(params.getCustomerId());
         customerDeviceWhitelist.setDeviceId(params.getDeviceId());
-        customerDeviceWhitelist.setCreateTime();
+        customerDeviceWhitelist.setStatus(1);
+        customerDeviceWhitelist.setCreateTime(new Date());
 
         int result = customerDeviceWhitelistMapper.insertSelective(customerDeviceWhitelist);
-        logger.info("添加设备白名单 saveDeviceWhitelist,更新数量" + result + customerDeviceWhitelist.toString());
+        logger.info("添加设备白名单 saveDeviceWhitelist,更新数量：" + result + customerDeviceWhitelist.toString());
         if (result > 0) {
             commonResponse.setCode(UserBizReturnCode.Success);
             commonResponse.setMessage(UserBizReturnCode.Success.desc());
