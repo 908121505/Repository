@@ -9,6 +9,7 @@ import com.honglu.quickcall.activity.facade.entity.CustomerCoupon;
 import com.honglu.quickcall.activity.service.service.CouponDubboService;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -60,22 +61,28 @@ public class CouponDubboBusinessImpl implements CouponDubboBusiness{
 
     /**
      * 查询是否显示活动优惠券提示
-     * @param skillItemIdList
+     * @param skillItemId
      * @param customerId
      * @return
      */
     @Override
-    public int getShowTipForActivity(List<String> skillItemIdList, String customerId){
-        int showTip = 0;//0=不展示，1=展示
-        if(skillItemIdList!=null && skillItemIdList.size()>0){
-            String couponId = couponDubboService.getCouponIdBySkillItemId(skillItemIdList);
-            if(StringUtils.isNotBlank(couponId)){
-                int num = couponDubboService.getShowTip(couponId,customerId);
-                if(num == 0){
-                    showTip = 1;
-                }
-            }
-        }
+    public int getShowTipForActivity(String skillItemId, String customerId){
+		int showTip = 0;//0=不展示，1=展示
+		int activityNum = couponDubboService.getActivityNum();
+		if(activityNum > 0){//现在存在活动
+			String couponId = couponDubboService.getCouponIdBySkillItemId(skillItemId);
+			if(StringUtils.isBlank(couponId)){//没查到，显示
+				showTip = 1;
+			}else{
+				Map<String,String> map = new HashMap<String,String>();
+				map.put("couponId",couponId);
+				map.put("customerId",customerId);
+				int num = couponDubboService.getCountByCustomerIdAndCouponId(map);
+				if(num == 0){//customer_coupon没查到,显示
+					showTip = 1;
+				}
+			}
+		}
         return showTip;
     }
 

@@ -42,12 +42,16 @@ public class CouponDubboServiceImpl implements CouponDubboService{
 		return customerCouponMapper.cancelUpdateCustomerCoupon(id);
 	}
 
+    /**
+     * 根据订单ID查询客户优惠券
+     * @return
+     */
 	@Override
 	public Map<String,String> getCustomerCouponByOrderId(Long orderId){
 		return customerCouponMapper.getCustomerCouponByOrderId(orderId);
 	}
 
-	@Override
+/*	@Override
 	public String getCouponIdBySkillItemId(List<String> statusList){
 		return customerCouponMapper.getCouponIdBySkillItemId(statusList);
 	}
@@ -55,6 +59,29 @@ public class CouponDubboServiceImpl implements CouponDubboService{
 	@Override
 	public int getShowTip(String couponId ,String customerId){
 		return customerCouponMapper.getShowTip(couponId,customerId);
-	}
+	}*/
+    /**
+     * 判断现在时间是否有活动
+     * @return
+     */
+    public int getActivityNum(){
+        return customerCouponMapper.getActivityNum();
+    }
+
+    /**
+     * 根据技能ID查询券ID
+     * @return
+     */
+    public String getCouponIdBySkillItemId(String skillItemId){
+        return customerCouponMapper.getCouponIdBySkillItemId(skillItemId);
+    }
+
+    /**
+     * 根据客户ID和券ID查询用户券关系数量
+     * @return
+     */
+    public int getCountByCustomerIdAndCouponId(Map<String,String> map){
+        return customerCouponMapper.getCountByCustomerIdAndCouponId(map);
+    }
 
 }

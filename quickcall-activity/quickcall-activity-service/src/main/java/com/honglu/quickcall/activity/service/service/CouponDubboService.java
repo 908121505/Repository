@@ -21,8 +21,22 @@ public interface CouponDubboService {
 	 */
 	Map<String,String> getCustomerCouponByOrderId(Long orderId);
 
-	String getCouponIdBySkillItemId(List<String> skillItemIdList);
+    /**
+     * 判断现在时间是否有活动
+     * @return
+     */
+    int getActivityNum();
 
-	int getShowTip(String couponId,String customerId);
+    /**
+     * 根据技能ID查询券ID
+     * @return
+     */
+	String getCouponIdBySkillItemId(String skillItemId);
+
+    /**
+     * 根据客户ID和券ID查询用户券关系数量
+     * @return
+     */
+	int getCountByCustomerIdAndCouponId(Map<String,String> map);
 
 }

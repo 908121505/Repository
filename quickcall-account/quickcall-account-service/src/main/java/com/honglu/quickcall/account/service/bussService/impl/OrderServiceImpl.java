@@ -104,7 +104,7 @@ public class OrderServiceImpl implements IOrderService {
 		OrderDaVSkillVO  resultVO = orderMapper.getCustomerByCustomerId(customerId);
 		
 		List<OrderSkillItemVO> custSkillList = new  ArrayList<>();
-		List<String> skillItemIdList = new  ArrayList<String>();
+		//List<String> skillItemIdList = new  ArrayList<String>();
 		List<CustomerSkill> skillList  = customerSkillMapper.querySkillInfoPersonal(customerId);
 		if(!CollectionUtils.isEmpty(skillList)){
 			for (CustomerSkill skill : skillList) {
@@ -118,16 +118,21 @@ public class OrderServiceImpl implements IOrderService {
 				vo.setSkillIcon(skillItem.getUnlockIcon());
 				vo.setServiceUnit(skill.getServiceUnit());
 				vo.setSkillItemName(skillItem.getSkillItemName());
+
+                int showTip = 0;//0=不展示，1=展示
+                showTip = couponDubboBusiness.getShowTipForActivity(skillItemId+"",customerId+"");
+                vo.setShowTip(showTip);
+
 				custSkillList.add(vo);
-				skillItemIdList.add(skillItemId+"");
+				//skillItemIdList.add(skillItemId+"");
 			}
 		}
 		
 		resultVO.setCustSkillList(custSkillList );
 
-		int showTip = 0;//0=不展示，1=展示
-		showTip = couponDubboBusiness.getShowTipForActivity(skillItemIdList,customerId+"");
-		resultVO.setShowTip(showTip);
+		//int showTip = 0;//0=不展示，1=展示
+		//showTip = couponDubboBusiness.getShowTipForActivity(skillItemIdList,customerId+"");
+		//resultVO.setShowTip(showTip);
 		CommonResponse commonResponse = commonService.getCommonResponse();
 		commonResponse.setData(resultVO);
 		LOGGER.info("======>>>>>用户编号为：" + request.getCustomerId() + "查询成功");
