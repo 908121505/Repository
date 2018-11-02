@@ -194,7 +194,7 @@ public class AlipaySubmit {
             DocumentException, IOException {
 
         //构造访问query_timestamp接口的URL串
-        String strUrl = ALIPAY_GATEWAY_NEW + "core=query_timestamp&partner=" + AlipayConfig.partner + "&_input_charset" +AlipayConfig.input_charset;
+        String strUrl = ALIPAY_GATEWAY_NEW + "service=query_timestamp&partner=" + AlipayConfig.partner + "&_input_charset" +AlipayConfig.input_charset;
         StringBuffer result = new StringBuffer();
 
         SAXReader reader = new SAXReader();
