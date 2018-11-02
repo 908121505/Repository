@@ -120,7 +120,7 @@
     </dependencies>
 
     <build>
-        <finalName>consumer</finalName>
+        <finalName>voice-consumer</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>

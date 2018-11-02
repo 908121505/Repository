@@ -103,7 +103,7 @@
     </dependencies>
 
     <build>
-        <finalName>producer</finalName>
+        <finalName>voice-producer</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
