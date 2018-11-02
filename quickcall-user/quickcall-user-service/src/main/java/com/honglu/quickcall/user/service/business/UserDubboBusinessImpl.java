@@ -1,5 +1,7 @@
 package com.honglu.quickcall.user.service.business;
 
+import com.honglu.quickcall.user.facade.exchange.request.editprofile.*;
+import com.honglu.quickcall.user.service.service.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,32 +58,6 @@ import com.honglu.quickcall.user.facade.exchange.request.UserLoginRequest;
 import com.honglu.quickcall.user.facade.exchange.request.UserRegisterRequest;
 import com.honglu.quickcall.user.facade.exchange.request.UserUnreadMessageNumRequest;
 import com.honglu.quickcall.user.facade.exchange.request.queryMyskillRequest;
-import com.honglu.quickcall.user.facade.exchange.request.editprofile.QueryBlacklistReq;
-import com.honglu.quickcall.user.facade.exchange.request.editprofile.QueryInterestListReq;
-import com.honglu.quickcall.user.facade.exchange.request.editprofile.QueryUserEditInfoReq;
-import com.honglu.quickcall.user.facade.exchange.request.editprofile.RemoveAppearanceReq;
-import com.honglu.quickcall.user.facade.exchange.request.editprofile.RemoveBlacklistReq;
-import com.honglu.quickcall.user.facade.exchange.request.editprofile.RemoveVoiceIdentificationCardReq;
-import com.honglu.quickcall.user.facade.exchange.request.editprofile.SaveBlacklistReq;
-import com.honglu.quickcall.user.facade.exchange.request.editprofile.UpdateAppearanceReq;
-import com.honglu.quickcall.user.facade.exchange.request.editprofile.UpdateBirthdayReq;
-import com.honglu.quickcall.user.facade.exchange.request.editprofile.UpdateGenderReq;
-import com.honglu.quickcall.user.facade.exchange.request.editprofile.UpdateHeadPortraitReq;
-import com.honglu.quickcall.user.facade.exchange.request.editprofile.UpdateInterestReq;
-import com.honglu.quickcall.user.facade.exchange.request.editprofile.UpdateNickNameReq;
-import com.honglu.quickcall.user.facade.exchange.request.editprofile.UpdateSignNameReq;
-import com.honglu.quickcall.user.facade.exchange.request.editprofile.UpdateStarSignReq;
-import com.honglu.quickcall.user.facade.exchange.request.editprofile.UpdateVoiceIdentificationCardReq;
-import com.honglu.quickcall.user.service.service.AppVersionManageService;
-import com.honglu.quickcall.user.service.service.BlacklistService;
-import com.honglu.quickcall.user.service.service.CommonPersonService;
-import com.honglu.quickcall.user.service.service.DelateService;
-import com.honglu.quickcall.user.service.service.EditProfileService;
-import com.honglu.quickcall.user.service.service.FeedBackService;
-import com.honglu.quickcall.user.service.service.InternalMessageService;
-import com.honglu.quickcall.user.service.service.PersonInfoService;
-import com.honglu.quickcall.user.service.service.QueryBigvListService;
-import com.honglu.quickcall.user.service.service.UserMessageService;
 
 @Component
 @Service("User.UserDubboBusiness")
@@ -110,6 +86,8 @@ public class UserDubboBusinessImpl implements UserDubboBusiness {
 
 	@Autowired
 	private AppVersionManageService appVersionManageService;
+	@Autowired
+	private DeviceWhitelistService deviceWhitelistService;
 
 	@Override
 	public CommonResponse excute(AbstractRequest request) {
@@ -302,6 +280,12 @@ public class UserDubboBusinessImpl implements UserDubboBusiness {
 				break;
 			case UserFunctionType.loginOut:
 				response = commonPersonService.loginOut((LoginOutRequest) request);
+				break;
+			case UserFunctionType.queryDeviceWhitelist:
+				response = deviceWhitelistService.queryDeviceWhitelist((QueryDeviceWhitelistReq) request);
+				break;
+			case UserFunctionType.saveDeviceWhitelist:
+				response = deviceWhitelistService.saveDeviceWhitelist((SaveDeviceWhitelistReq) request);
 				break;
 			default:
 				throw new BizException(UserBizReturnCode.BizFunctionTypeNotMatch,

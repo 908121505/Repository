@@ -209,4 +209,13 @@ public interface UserFunctionType {
 	 */
 	String QUERY_DV_LIST_BY_TYPE = "0011190";
 
+	/**
+	 * 查询设备白名单
+	 */
+	String queryDeviceWhitelist = "0011201";
+	/**
+	 * 添加设备白名单
+	 */
+	String saveDeviceWhitelist = "0011202";
+
 }
