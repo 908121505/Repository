@@ -117,6 +117,8 @@ public class UserDubboBusinessImpl implements UserDubboBusiness {
 	private AppVersionManageService appVersionManageService;
 	@Autowired
 	private DeviceWhitelistService deviceWhitelistService;
+	@Autowired
+	private AttentionService attentionService;
 
 	@Override
 	public CommonResponse excute(AbstractRequest request) {
