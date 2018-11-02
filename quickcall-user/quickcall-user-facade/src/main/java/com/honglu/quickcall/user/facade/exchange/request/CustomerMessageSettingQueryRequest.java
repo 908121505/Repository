@@ -6,7 +6,7 @@ public class CustomerMessageSettingQueryRequest extends UserCenterRequest{
 
 	/**
 	 * 
-	 */
+	 */ 
 	private static final long serialVersionUID = -2921184139238424574L;
 	
 	/**
