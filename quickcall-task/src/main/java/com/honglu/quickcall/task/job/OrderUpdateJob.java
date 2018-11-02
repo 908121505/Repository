@@ -283,7 +283,7 @@ public class OrderUpdateJob {
     		for (TaskOrder order : orderList) {
     			orderIdList.add(order.getOrderId());
     			Integer  couponFlag = order.getCouponFlag();
-    			if(OrderSkillConstants.ORDER_COUPON_FLAG_USE == couponFlag){
+    			if(couponFlag != null  && OrderSkillConstants.ORDER_COUPON_FLAG_USE == couponFlag){
     				orderIdCouponList.add(order.getOrderId());
     			}
     		}
