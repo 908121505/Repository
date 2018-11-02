@@ -35,7 +35,7 @@ public class TestMq {
 //        for (int i = 1; i <= 10; i++) {
             DoOrderCastMqRequest experienceSendMq = new DoOrderCastMqRequest();
             experienceSendMq.setOrderId(1809282102486183353L);
-            amqpTemplate.convertAndSend("userCenter-core-exchange", "queue_userCenter_for_experience_key", experienceSendMq);
+            amqpTemplate.convertAndSend("userCenter-mq-exchange", "queue_userCenter_for_experience_key", experienceSendMq);
 //        }
     }
 

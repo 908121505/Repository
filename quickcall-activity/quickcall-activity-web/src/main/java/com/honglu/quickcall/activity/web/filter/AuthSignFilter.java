@@ -37,13 +37,13 @@ public class AuthSignFilter implements Filter {
 		 
 		 
         /*//传文件的时候不加密
-        String enctype = req.getContentType();  //multipart/form-data
+        String enctype = request.getContentType();  //multipart/form-data
         String requestURI = httpServletRequest.getRequestURI();
         logger.info("===========requestURI="+requestURI);
         
         if (StringUtils.isNotBlank(enctype) && enctype.contains("multipart/form-data")) {
             logger.info(" =============================== communitycenterweb.AuthSignFilter.doFilter.multipart/form-data ===============================");
-            chain.doFilter(req, response);
+            chain.doFilter(request, response);
         }else if ("/communityCenter/articleloan/articleTypeDetail".equals(requestURI)|| "/communityCenter/articleCommentPraiseloan/articleCommentPraiseTypeCancelH5".equals(requestURI)
                 || "/communityCenter/articleloan/articlePublishType".equals(requestURI) || "/communityCenter/articleloan/articleDetailsTypeList".equals(requestURI)
                 || "/communityCenter/articlePraiseloan/articlePraiseTypeCancel".equals(requestURI) ||
@@ -51,7 +51,7 @@ public class AuthSignFilter implements Filter {
                 "/communityCenter/alignment/connection".equals(requestURI)||
                 "/communityCenter/userCommunity/opinionFeedback".equals(requestURI)
         		) {
-            chain.doFilter(req, response);
+            chain.doFilter(request, response);
         } else {
             // 防止流读取一次后就没有了, 所以需要将流继续写出去
             ServletRequest requestWrapper = new BodyReaderHttpServletRequestWrapper(httpServletRequest, httpServletResponse);

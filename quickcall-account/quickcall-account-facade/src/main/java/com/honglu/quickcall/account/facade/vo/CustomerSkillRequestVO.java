@@ -8,7 +8,7 @@ import java.math.BigDecimal;
  * 
  * 功能描述：客户技能扩展信息
  * 
- * @Package: com.honglu.quickcall.account.facade.resp
+ * @Package: com.honglu.quickcall.account.facade.vo
  * @author: chenliuguang
  * @date: 2018年10月19日 下午3:44:13
  */

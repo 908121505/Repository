@@ -7,7 +7,7 @@ import java.math.BigDecimal;
  * Copyright © 2018 www.xiaoniu.com All rights reserved.
  * 
  * 功能描述：技能参数
- * @Package: com.calf.module.order.resp
+ * @Package: com.calf.module.order.vo 
  * @author: chenliuguang   
  * @date: 2018年9月21日 下午3:55:12
  */

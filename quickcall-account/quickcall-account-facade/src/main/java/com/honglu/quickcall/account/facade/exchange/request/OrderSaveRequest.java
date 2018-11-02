@@ -8,7 +8,7 @@ import com.honglu.quickcall.common.api.exchange.AbstractRequest;
  * Copyright © 2018 www.xiaoniu.com All rights reserved.
  * 
  * 功能描述：下单入参
- * @Package: com.honglu.quickcall.account.facade.exchange.req
+ * @Package: com.honglu.quickcall.account.facade.exchange.request 
  * @author: chenliuguang   
  * @date: 2018年9月22日 下午3:39:53
  */

@@ -6,7 +6,7 @@ import java.io.Serializable;
  * Copyright © 2018 www.xiaoniu.com All rights reserved.
  * 
  * 功能描述：技能分类列表展示
- * @Package: com.honglu.quickcall.account.facade.resp
+ * @Package: com.honglu.quickcall.account.facade.vo 
  * @author: chenliuguang   
  * @date: 2018年9月23日 下午3:39:33 
  */

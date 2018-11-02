@@ -22,7 +22,7 @@
          *  {
          *      <fieldName>: <fieldValue>
          *  }
-         * - name {String} [optional]: Override the field name for the req.
+         * - name {String} [optional]: Override the field name for the request.
          * - message: The invalid message
          * @returns {Boolean|Deferred}
          */

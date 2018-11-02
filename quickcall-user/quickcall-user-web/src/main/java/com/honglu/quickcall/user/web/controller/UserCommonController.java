@@ -1,16 +1,7 @@
 package com.honglu.quickcall.user.web.controller;
 
-import com.alibaba.fastjson.JSONObject;
-import com.aliyun.oss.OSSClient;
-import com.honglu.quickcall.common.api.code.AliYunFilePaths;
-import com.honglu.quickcall.common.api.exchange.WebResponseModel;
-import com.honglu.quickcall.common.api.util.JedisUtil;
-import com.honglu.quickcall.common.api.util.RedisKeyConstants;
-import com.honglu.quickcall.common.core.util.UUIDUtils;
-import com.honglu.quickcall.common.third.OSS.OSSUtil;
-import com.honglu.quickcall.user.facade.code.UserBizReturnCode;
-import com.honglu.quickcall.user.facade.exchange.request.*;
-import com.honglu.quickcall.user.web.service.UserCenterService;
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,7 +13,28 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
-import javax.servlet.http.HttpServletRequest;
+import com.alibaba.fastjson.JSONObject;
+import com.aliyun.oss.OSSClient;
+import com.honglu.quickcall.common.api.code.AliYunFilePaths;
+import com.honglu.quickcall.common.api.exchange.WebResponseModel;
+import com.honglu.quickcall.common.api.util.JedisUtil;
+import com.honglu.quickcall.common.api.util.RedisKeyConstants;
+import com.honglu.quickcall.common.core.util.UUIDUtils;
+import com.honglu.quickcall.common.third.OSS.OSSUtil;
+import com.honglu.quickcall.user.facade.code.UserBizReturnCode;
+import com.honglu.quickcall.user.facade.exchange.request.AddSystemUserRequest;
+import com.honglu.quickcall.user.facade.exchange.request.BindVXorQQRequest;
+import com.honglu.quickcall.user.facade.exchange.request.CustomerCenterRequest;
+import com.honglu.quickcall.user.facade.exchange.request.CustomerHomeRequest;
+import com.honglu.quickcall.user.facade.exchange.request.CustomerLevelRequest;
+import com.honglu.quickcall.user.facade.exchange.request.GetSmsCodeRequest;
+import com.honglu.quickcall.user.facade.exchange.request.IsPhoneExistsRequest;
+import com.honglu.quickcall.user.facade.exchange.request.LoginOutRequest;
+import com.honglu.quickcall.user.facade.exchange.request.SetHeardUrlRequest;
+import com.honglu.quickcall.user.facade.exchange.request.SetPwdRequest;
+import com.honglu.quickcall.user.facade.exchange.request.UserLoginRequest;
+import com.honglu.quickcall.user.facade.exchange.request.UserRegisterRequest;
+import com.honglu.quickcall.user.web.service.UserCenterService;
 
 /**
  * Created by len.song on 2017-12-08.
@@ -44,7 +56,7 @@ public class UserCommonController {
 	@RequestMapping(value = "/regUserExist", method = RequestMethod.POST)
 	@ResponseBody
 	public WebResponseModel regUserExist(IsPhoneExistsRequest params) {
-		logger.info("userWeb.user.regUserExist.req.data : " + JSONObject.toJSONString(params));
+		logger.info("userWeb.user.regUserExist.request.data : " + JSONObject.toJSONString(params));
 		WebResponseModel response = new WebResponseModel();
 		if (params.getTel() == null && StringUtils.isBlank(params.getQqOpenId())
 				&& StringUtils.isBlank(params.getWechatOpenId()) && StringUtils.isBlank(params.getMicroblogOpenId())
@@ -67,7 +79,7 @@ public class UserCommonController {
 	@RequestMapping(value = "/register", method = RequestMethod.POST)
 	@ResponseBody
 	public WebResponseModel register(UserRegisterRequest params) {
-		logger.info("userWeb.user.register.req.data : " + JSONObject.toJSONString(params));
+		logger.info("userWeb.user.register.request.data : " + JSONObject.toJSONString(params));
 		WebResponseModel response = new WebResponseModel();
 		if (StringUtils.isBlank(params.getTel()) && StringUtils.isBlank(params.getQqOpenId())
 				&& StringUtils.isBlank(params.getWechatOpenId()) && StringUtils.isBlank(params.getMicroblogOpenId())) {
@@ -105,7 +117,7 @@ public class UserCommonController {
 	@ResponseBody
 	public WebResponseModel login(UserLoginRequest params) {
 
-		logger.info("userWeb.user.login.req.data : " + JSONObject.toJSONString(params));
+		logger.info("userWeb.user.login.request.data : " + JSONObject.toJSONString(params));
 		WebResponseModel response = new WebResponseModel();
 		if (StringUtils.isBlank(params.getTel()) && StringUtils.isBlank(params.getQqOpenId())
 				&& StringUtils.isBlank(params.getWechatOpenId()) && StringUtils.isBlank(params.getMicroblogOpenId())) {
@@ -143,7 +155,7 @@ public class UserCommonController {
 	@ResponseBody
 	public WebResponseModel setpwd(SetPwdRequest params) {
 
-		logger.info("userWeb.user.setpwd.req.data : " + JSONObject.toJSONString(params));
+		logger.info("userWeb.user.setpwd.request.data : " + JSONObject.toJSONString(params));
 		WebResponseModel response = new WebResponseModel();
 		if (StringUtils.isBlank(params.getTel()) || StringUtils.isBlank(params.getPassWord())) {
 			response.setCode(UserBizReturnCode.paramError.code());
@@ -179,7 +191,7 @@ public class UserCommonController {
 	@RequestMapping(value = "/setHeardUrl", method = RequestMethod.POST)
 	@ResponseBody
 	public WebResponseModel setHeardUrl(SetHeardUrlRequest params) {
-		logger.info("userWeb.user.setHeardUrl.req.data : " + JSONObject.toJSONString(params));
+		logger.info("userWeb.user.setHeardUrl.request.data : " + JSONObject.toJSONString(params));
 		WebResponseModel response = new WebResponseModel();
 		if (StringUtils.isBlank(params.getTel())) {
 			response.setCode(UserBizReturnCode.paramError.code());
@@ -220,7 +232,7 @@ public class UserCommonController {
 	@RequestMapping(value = "/uploadHeadImage", produces = "application/json;charset=UTF-8", method = RequestMethod.POST)
 	@ResponseBody
 	public WebResponseModel imageUpload(HttpServletRequest request) {
-		logger.info("userweb.user.image.req.data : " + request);
+		logger.info("userweb.user.image.request.data : " + request);
 
 		WebResponseModel response = new WebResponseModel();
 
@@ -268,7 +280,7 @@ public class UserCommonController {
 	@ResponseBody
 	public WebResponseModel getSmsCode(GetSmsCodeRequest params) {
 
-		logger.info("userWeb.user.getSmsCode.req.data : " + JSONObject.toJSONString(params));
+		logger.info("userWeb.user.getSmsCode.request.data : " + JSONObject.toJSONString(params));
 		WebResponseModel response = new WebResponseModel();
 		if (StringUtils.isBlank(params.getTel()) || StringUtils.isBlank(params.getCodeType())) {
 			response.setCode(UserBizReturnCode.paramError.code());
@@ -290,7 +302,7 @@ public class UserCommonController {
 	@RequestMapping(value = "/customerCenter", method = RequestMethod.POST)
 	@ResponseBody
 	public WebResponseModel customerCenter(CustomerCenterRequest params) {
-		logger.info("userWeb.user.customerCenter.req.data : " + JSONObject.toJSONString(params));
+		logger.info("userWeb.user.customerCenter.request.data : " + JSONObject.toJSONString(params));
 		WebResponseModel response = new WebResponseModel();
 		if (params.getCustomerId() == null) {
 			response.setCode(UserBizReturnCode.paramError.code());
@@ -312,7 +324,7 @@ public class UserCommonController {
 	@RequestMapping(value = "/customerHome", method = RequestMethod.POST)
 	@ResponseBody
 	public WebResponseModel customerHome(CustomerHomeRequest params) {
-		logger.info("userWeb.user.customerHome.req.data : " + JSONObject.toJSONString(params));
+		logger.info("userWeb.user.customerHome.request.data : " + JSONObject.toJSONString(params));
 		WebResponseModel response = new WebResponseModel();
 		if (params.getViewCustomerId() == null) {
 			response.setCode(UserBizReturnCode.paramError.code());
@@ -334,7 +346,7 @@ public class UserCommonController {
 	@RequestMapping(value = "/customerLevel", method = RequestMethod.POST)
 	@ResponseBody
 	public WebResponseModel customerLevel(CustomerLevelRequest params) {
-		logger.info("userWeb.user.customerLevel.req.data : " + JSONObject.toJSONString(params));
+		logger.info("userWeb.user.customerLevel.request.data : " + JSONObject.toJSONString(params));
 		WebResponseModel response = new WebResponseModel();
 		if (params.getCustomerId() == null) {
 			response.setCode(UserBizReturnCode.paramError.code());
@@ -357,7 +369,7 @@ public class UserCommonController {
 	@ResponseBody
 	public WebResponseModel bindVXorQQ(BindVXorQQRequest params) {
 
-		logger.info("userWeb.user.bindVXorQQ.req.data : " + JSONObject.toJSONString(params));
+		logger.info("userWeb.user.bindVXorQQ.request.data : " + JSONObject.toJSONString(params));
 		WebResponseModel response = new WebResponseModel();
 		if (params.getCustomerId() == null) {
 			response.setCode(UserBizReturnCode.paramError.code());
@@ -380,7 +392,7 @@ public class UserCommonController {
 	@ResponseBody
 	public WebResponseModel addSystemUser(AddSystemUserRequest params) {
 
-		logger.info("userWeb.user.addSystemUser.req.data : " + JSONObject.toJSONString(params));
+		logger.info("userWeb.user.addSystemUser.request.data : " + JSONObject.toJSONString(params));
 		WebResponseModel response = new WebResponseModel();
 		if (params.getCustomerId() == null) {
 			response.setCode(UserBizReturnCode.paramError.code());
@@ -403,7 +415,7 @@ public class UserCommonController {
 	@ResponseBody
 	public WebResponseModel checkVerifyCode(SetPwdRequest params) {
 
-		logger.info("userWeb.user.checkVerifyCode.req.data : " + JSONObject.toJSONString(params));
+		logger.info("userWeb.user.checkVerifyCode.request.data : " + JSONObject.toJSONString(params));
 		WebResponseModel response = new WebResponseModel();
 		if (params.getVerifyCode() != null && params.getCodeType() != null && !"".equals(params.getVerifyCode())
 				&& !"".equals(params.getCodeType())) {

@@ -15,7 +15,7 @@
 //import org.springframework.stereotype.Component;
 //import org.springframework.util.CollectionUtils;
 //
-//import com.calf.cn.core.BaseManager;
+//import com.calf.cn.service.BaseManager;
 //import com.calf.module.order.entity.Order;
 //
 ///**

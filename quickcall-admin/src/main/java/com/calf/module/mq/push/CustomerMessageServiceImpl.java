@@ -37,7 +37,7 @@ public class CustomerMessageServiceImpl implements CustomerMessageService {
             customerMessageRequest.setMessageId(messageId);
             String jsonStr = JSON.toJSONString(customerMessageRequest);
             LOGGER.info("发送MQ消息 --  发送站内信消息: {}", jsonStr);
-            amqpTemplate.convertAndSend("admin-core-exchange", "queue_admin_customer_message_key", customerMessageRequest);
+            amqpTemplate.convertAndSend("admin-mq-exchange", "queue_admin_customer_message_key", customerMessageRequest);
         }catch (Exception e){
             LOGGER.error("发送MQ消息 -- 给所有用户发送站内消息异常，messageId : {}， 异常信息：", messageId, e);
             throw new AmqpRejectAndDontRequeueException("");

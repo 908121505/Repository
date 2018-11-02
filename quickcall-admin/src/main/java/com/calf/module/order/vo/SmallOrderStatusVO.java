@@ -3,7 +3,7 @@ package com.calf.module.order.vo;
 /**
  * 
  * 功能描述：小类订单状态
- * @Package: com.calf.module.order.resp
+ * @Package: com.calf.module.order.vo 
  * @author: xiangping
  * @date: 2018年10月26日 下午4:36:37
  */

@@ -1,5 +1,8 @@
 package com.honglu.quickcall.user.service.business;
 
+import com.honglu.quickcall.user.facade.exchange.request.*;
+import com.honglu.quickcall.user.facade.exchange.request.editprofile.*;
+import com.honglu.quickcall.user.service.service.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +28,8 @@ import com.honglu.quickcall.user.facade.exchange.request.CheckEachAttentionReque
 import com.honglu.quickcall.user.facade.exchange.request.CustomerCenterRequest;
 import com.honglu.quickcall.user.facade.exchange.request.CustomerHomeRequest;
 import com.honglu.quickcall.user.facade.exchange.request.CustomerLevelRequest;
+import com.honglu.quickcall.user.facade.exchange.request.CustomerMessageSettingQueryRequest;
+import com.honglu.quickcall.user.facade.exchange.request.CustomerMsgSettingRequest;
 import com.honglu.quickcall.user.facade.exchange.request.DaVListBySkillItemIdRequest;
 import com.honglu.quickcall.user.facade.exchange.request.DelateInsertRequest;
 import com.honglu.quickcall.user.facade.exchange.request.FeedBackInsertRequest;
@@ -110,6 +115,10 @@ public class UserDubboBusinessImpl implements UserDubboBusiness {
 
 	@Autowired
 	private AppVersionManageService appVersionManageService;
+	@Autowired
+	private DeviceWhitelistService deviceWhitelistService;
+	@Autowired
+	private AttentionService attentionService;
 
 	@Override
 	public CommonResponse excute(AbstractRequest request) {
@@ -302,6 +311,20 @@ public class UserDubboBusinessImpl implements UserDubboBusiness {
 				break;
 			case UserFunctionType.loginOut:
 				response = commonPersonService.loginOut((LoginOutRequest) request);
+				break;
+			case UserFunctionType.CUSYOMER_MESSAGE_SETTING:
+				response = userMessageService.queryCustomerMessageSetting((CustomerMessageSettingQueryRequest) request);
+				break;
+			case UserFunctionType.ADD_CUSYOMER_MESSAGE_SETTING:
+				response = userMessageService.saveCustomerMessageSetting((CustomerMsgSettingRequest) request);
+			case UserFunctionType.CANCEL_ATTENTION:
+				response = attentionService.cancelAttention((AttentionCancelRequest) request);
+				break;
+			case UserFunctionType.queryDeviceWhitelist:
+				response = deviceWhitelistService.queryDeviceWhitelist((QueryDeviceWhitelistReq) request);
+				break;
+			case UserFunctionType.saveDeviceWhitelist:
+				response = deviceWhitelistService.saveDeviceWhitelist((SaveDeviceWhitelistReq) request);
 				break;
 			default:
 				throw new BizException(UserBizReturnCode.BizFunctionTypeNotMatch,
