@@ -109,7 +109,7 @@
                     <include>*</include>
                     <include>**/*</include>
                 </includes>
-                <filtering>true</filtering>
+                <filtering>false</filtering>
             </resource>
         </resources>
         <plugins>
