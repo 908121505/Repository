@@ -784,8 +784,8 @@ public class OrderServiceImpl implements IOrderService {
 		
 		
 		//用户同意大V服务完成，通知大V查单订单状态
-//		Long  serviceId = order.getServiceId();
-//		RongYunUtil.sendOrderMessage(serviceId, OrderSkillConstants.IM_MSG_CONTENT_USER_CONFIRM_START_SERVICE,OrderSkillConstants.MSG_CONTENT_DAV);
+		Long  serviceId = order.getServiceId();
+		RongYunUtil.sendOrderMessage(serviceId, OrderSkillConstants.IM_MSG_CONTENT_USER_CONFIRM_START_SERVICE_TO_DAV,OrderSkillConstants.MSG_CONTENT_DAV);
 		
 		
 		CommonResponse commonResponse = commonService.getCommonResponse();
