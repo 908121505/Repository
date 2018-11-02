@@ -3,6 +3,8 @@ package com.honglu.quickcall.user.service.service;
 import com.honglu.quickcall.common.api.exchange.CommonResponse;
 import com.honglu.quickcall.user.facade.exchange.request.BookingMessageQueryRequest;
 import com.honglu.quickcall.user.facade.exchange.request.BookingMessageSaveRequest;
+import com.honglu.quickcall.user.facade.exchange.request.CustomerMessageSettingQueryRequest;
+import com.honglu.quickcall.user.facade.exchange.request.CustomerMsgSettingRequest;
 import com.honglu.quickcall.user.facade.exchange.request.UserUnreadMessageNumRequest;
 
 /**
@@ -36,5 +38,19 @@ public interface UserMessageService {
      * @return
      */
     CommonResponse queryBookingMessage(BookingMessageQueryRequest params);
+    
+    /**
+     * 获取用户聊天消息权限设置
+     * @param params 请求参数
+     * @return
+     */
+    CommonResponse queryCustomerMessageSetting(CustomerMessageSettingQueryRequest params);
+    
+    /**
+     * 用户聊天消息权限设置信息保存
+     * @param params
+     * @return
+     */
+	CommonResponse saveCustomerMessageSetting(CustomerMsgSettingRequest params);
 
 }
