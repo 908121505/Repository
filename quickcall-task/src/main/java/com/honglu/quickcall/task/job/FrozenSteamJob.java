@@ -41,7 +41,7 @@ public class FrozenSteamJob {
 	@Autowired
 	private TradeDetailMapper tradeDetailMapper;
 
-	@Scheduled(cron = "* 0/2 * * * ?")
+	@Scheduled(cron = "* 0/10 * * * ?")
 	public void execute() {
 
 		logger.info("冻结金额12小时后   到账户越操作 job 开启------------------------");
@@ -80,12 +80,12 @@ public class FrozenSteamJob {
 								tradeDetail.setType(AccountBusinessTypeEnum.FroZenAccount.getType());
 								tradeDetail.setOutPrice(new BigDecimal(stramValue));
 								tradeDetailMapper.insertSelective(tradeDetail);
-								// 记录操过24小时的冻结流水Id
-								strList.add(stramValue);
+								// 记录操过12小时的冻结流水Id
+								strList.add(arys[i]);
 							}
 						}
 					}
-					// 数组移除操过24小时的冻结流水Id
+					// 数组移除操过12小时的冻结流水Id
 					for (int i = 0; i < strList.size(); i++) {
 						arys = remove(arys, strList.get(i));
 					}

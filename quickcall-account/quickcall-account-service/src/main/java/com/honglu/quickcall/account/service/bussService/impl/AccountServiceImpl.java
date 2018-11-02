@@ -61,6 +61,7 @@ public class AccountServiceImpl implements AccountService {
 			String userFrozenValue = JedisUtil.get(userFrozenkey);
 			if (StringUtils.isNotBlank(userFrozenValue)) {
 				userFrozenValue = userFrozenValue + "," + tradeDetail.getTradeId();
+				JedisUtil.set(userFrozenkey, userFrozenValue);
 			} else {
 				JedisUtil.set(userFrozenkey, tradeDetail.getTradeId() + "");
 
