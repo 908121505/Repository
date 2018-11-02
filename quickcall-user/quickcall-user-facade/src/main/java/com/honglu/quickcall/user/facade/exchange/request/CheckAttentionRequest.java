@@ -7,7 +7,7 @@ import com.honglu.quickcall.user.facade.exchange.UserCenterRequest;
  * Copyright © 2018 www.xiaoniu.com All rights reserved.
  * 
  * 功能描述：检查是否关注对方入参
- * @Package: com.honglu.quickcall.user.facade.exchange.request 
+ * @Package: com.honglu.quickcall.user.facade.exchange.req
  * @author: chenliuguang   
  * @date: 2018年10月9日 下午12:51:39 
  */

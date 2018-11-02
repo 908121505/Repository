@@ -42,7 +42,7 @@ public class ActivityDubboBusinessImpl implements ActivityDubboBusiness {
         try {
             switch (request.getBizCode()) {
                /* case ActivityFunctionType.welcomeGodOfWealth:
-                	response=activityService.welcomeGodOfWealth((WelcomeGodOfWealthRequest)request);
+                	response=activityService.welcomeGodOfWealth((WelcomeGodOfWealthRequest)req);
                 	break;*/
 
                 /** 接口说明：查询Banner信息 **/

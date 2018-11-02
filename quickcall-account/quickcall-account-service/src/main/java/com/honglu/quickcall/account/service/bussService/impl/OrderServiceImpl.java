@@ -194,7 +194,7 @@ public class OrderServiceImpl implements IOrderService {
 				}
 				
 			}
-			
+			DataBuriedPointSubmitOrderReq req = new DataBuriedPointSubmitOrderReq();
 			
 			
 			Long  customerSkillId =  request.getCustomerSkillId();
@@ -298,6 +298,22 @@ public class OrderServiceImpl implements IOrderService {
 			//下单成功后推送IM消息
 			RongYunUtil.sendOrderMessage(serviceId, OrderSkillConstants.IM_MSG_CONTENT_RECEIVE_ORDER,OrderSkillConstants.MSG_CONTENT_DAV);
 			LOGGER.info("======>>>>>用户编号为：" + request.getCustomerId() + "下单成功");
+		
+		
+			//下单触发埋点
+			req.setActual_payment_amount(orderAmounts.doubleValue());
+			req.setOrder_amount(orderAmounts.multiply(price).doubleValue());
+			req.setOrder_id(orderId +"");
+			req.setOrder_quantity(Double.valueOf(orderNum +""));
+			req.setOrder_type(skillItem.getSkillItemName());
+			req.setUser_id(customerId +"");
+			try {
+				dataDuriedPointBusiness.burySubmitOrderData(req );
+			} catch (Exception e) {
+				LOGGER.error("下单埋点发生异常，异常信息：",e);
+			}
+		
+		
 		} catch (Exception e) {
 			e.printStackTrace();
 			resultMap.put("retCode",  OrderSkillConstants.RET_CODE_SYSTEM_ERROR);

@@ -8,7 +8,7 @@ import com.honglu.quickcall.user.facade.code.UserFunctionType;
  * <p>
  * 功能描述：首页大V列表展示
  *
- * @Package: com.honglu.quickcall.account.facade.exchange.request
+ * @Package: com.honglu.quickcall.account.facade.exchange.req
  * @author: chenliuguang
  * @date: 2018年9月22日 下午3:39:53
  */

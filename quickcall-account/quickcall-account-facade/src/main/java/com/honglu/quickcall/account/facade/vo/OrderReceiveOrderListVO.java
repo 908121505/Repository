@@ -8,7 +8,7 @@ import java.util.Date;
  * Copyright © 2018 www.xiaoniu.com All rights reserved.
  * 
  * 功能描述：用户接收到的订单详情
- * @Package: com.honglu.quickcall.account.facade.vo 
+ * @Package: com.honglu.quickcall.account.facade.resp
  * @author: chenliuguang   
  * @date: 2018年9月24日 下午1:18:42 
  */

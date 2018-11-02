@@ -21,7 +21,7 @@ import com.honglu.quickcall.common.api.exchange.WebResponseModel;
  * Copyright © 2018 www.xiaoniu.com All rights reserved.
  * 
  * 功能描述：技能管理中心
- * @Package: com.honglu.quickcall.account.web.service.impl 
+ * @Package: com.honglu.quickcall.account.web.core.impl
  * @author: chenliuguang   
  * @date: 2018年9月22日 下午3:17:04
  */

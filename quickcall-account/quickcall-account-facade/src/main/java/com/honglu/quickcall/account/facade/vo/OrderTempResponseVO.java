@@ -6,7 +6,7 @@ import java.io.Serializable;
  * Copyright © 2018 www.xiaoniu.com All rights reserved.
  * 
  * 功能描述：请求参数
- * @Package: com.honglu.quickcall.account.facade.vo 
+ * @Package: com.honglu.quickcall.account.facade.resp
  * @author: chenliuguang   
  * @date: 2018年10月23日 下午2:46:34 
  */

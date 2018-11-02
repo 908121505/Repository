@@ -83,7 +83,7 @@ jQuery.extend({
    jQuery.event.trigger( "ajaxStart" );
   }            
         var requestDone = false;
-        // Create the request object
+        // Create the req object
         var xml = {};   
         if( s.global )
         {
@@ -116,7 +116,7 @@ jQuery.extend({
                 var status;
                 try {
                     status = isTimeout != "timeout" ? "success" : "error";
-                    // Make sure that the request was successful or notmodified
+                    // Make sure that the req was successful or notmodified
                     if( status != "error" )
      {
                         // process the data (runs the xml through httpData regardless of callback)
@@ -143,7 +143,7 @@ jQuery.extend({
                 };                
                 if( s.global )
                 {
-     // The request was completed
+     // The req was completed
                  jQuery.event.trigger( "ajaxComplete", [xml, s] );
                 };
                     
@@ -184,7 +184,7 @@ jQuery.extend({
                 
                 if( !requestDone )
                 {
-     // Check to see ifthe request is still happening
+     // Check to see ifthe req is still happening
                  uploadCallback( "timeout" );
                 }
                 
