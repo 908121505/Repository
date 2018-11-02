@@ -213,4 +213,15 @@ public interface UserFunctionType {
 	 */
 	String QUERY_DV_LIST_BY_TYPE = "0011190";
 
+
+	/**
+	 * 查询我的站内信消息
+	 */
+	String ADD_ATTENTION = "003231";
+
+	/**
+	 * 技能项分类点击列表
+	 */
+	String CANCEL_ATTENTION = "003232";
+
 }
