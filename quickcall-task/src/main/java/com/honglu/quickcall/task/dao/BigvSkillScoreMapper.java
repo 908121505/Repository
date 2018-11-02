@@ -76,15 +76,6 @@ public interface BigvSkillScoreMapper {
     int updateByPrimaryKey(BigvSkillScore record);
 
     /**
-     * 查询大V技能评分数据
-     *
-     * @param customerId
-     * @param skillItemId
-     * @return
-     */
-    BigvSkillScore selectBigvSkillScore(@Param("customerId") Long customerId, @Param("skillItemId") Long skillItemId);
-
-    /**
      * 查询大V技能的订单笔数
      *
      * @param customerSkillId

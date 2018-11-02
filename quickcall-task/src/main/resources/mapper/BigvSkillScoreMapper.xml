@@ -249,14 +249,6 @@
         where id = #{id,jdbcType=INTEGER}
     </update>
 
-    <!-- 查询大V技能评分数据 -->
-    <select id="selectBigvSkillScore" resultMap="BaseResultMap">
-        SELECT
-        <include refid="Base_Column_List"/>
-        FROM bigv_skill_score
-        WHERE customer_id = #{customerId} AND skill_item_id = #{skillItemId}
-    </select>
-
     <!-- 查询大V技能的订单笔数 -->
     <select id="selectBigvSkillOrderTotal" resultType="java.lang.Integer">
         SELECT order_total FROM `bigv_skill_score`
