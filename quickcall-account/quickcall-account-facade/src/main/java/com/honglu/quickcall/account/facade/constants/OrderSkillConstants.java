@@ -50,7 +50,7 @@ public interface OrderSkillConstants {
 	public  static final  String  IM_MSG_CONTENT_CANCEL_ORDER_TO_DV = "用户取消订单，赶快去了解原因吧~";
 	public  static final  String  IM_MSG_CONTENT_CANCEL_ORDER_TO_CUST = "您已取消订单，音符已退还至您的账户";
 //	public  static final  String  IM_MSG_CONTENT_USER_CONFIRM_FINISH= "订单完成啦";
-//	public  static final  String  IM_MSG_CONTENT_USER_CONFIRM_START_SERVICE = "用户同意开始服务啦";
+	public  static final  String  IM_MSG_CONTENT_USER_CONFIRM_START_SERVICE_TO_DAV = "用户已同意立即服务，请联系用户开始服务吧~";
 	
 	public  static final  String  IM_MSG_CONTENT_DAV_REFUSE_TO_CUST = "对方已接单，快去找ta沟通开始时间吧~";
 	public  static final  String  IM_MSG_CONTENT_DAV_REFUSE_TO_DV = "您已接单，快去联系用户协商开始时间吧~";
