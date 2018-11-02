@@ -103,6 +103,12 @@ public interface UserFunctionType {
 	/** 判断是否关注对方 */
 	public static final String CHECK_EACH_ATTENTION = "0011137";
 
+
+	/** 关注帖子 */
+	public static final String ADD_ATTENTION = "001323";
+	/** 取消关注帖子 */
+	public static final String CANCEL_ATTENTION = "001324";
+
 	/**
 	 * 修改昵称
 	 */

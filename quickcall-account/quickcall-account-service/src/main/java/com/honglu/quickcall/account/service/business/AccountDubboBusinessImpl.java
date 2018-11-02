@@ -136,9 +136,9 @@ public class AccountDubboBusinessImpl implements AccountDubboBusiness {
 				response = orderService.queryIngOrderCount((QueryIngOrderCountRequest) request);
 				break;
 				/**查询退款理由 */
-			case OrderRequestType.QUERY_REFUND_REASON:
-				response = orderService.queryRefundReason((QueryRefundReasonRequest) request);
-				break;
+//			case OrderRequestType.QUERY_REFUND_REASON:
+//				response = orderService.queryRefundReason((QueryRefundReasonRequest) request);
+//				break;
 			/** 订单评价页面 **/
 			case OrderRequestType.ORDER_EVALUATION:
 				response = orderService.orderEvaluation((OrderEvaluationRequest) request);
@@ -187,7 +187,10 @@ public class AccountDubboBusinessImpl implements AccountDubboBusiness {
 			case AccountFunctionType.GET_BARRAGE_MESSAGE:
 				response = barrageMessageService.rpopMessage((BarrageMessageRequest) request);
 				break;
-			/** 获取弹幕消息 **/
+			/** 获取弹幕消息 V2 **/
+			case AccountFunctionType.GET_BARRAGE_MESSAGE_V2:
+				response = barrageMessageService.rpopMessage((BarrageMessageV2Request) request);
+				break;
 			case AccountFunctionType.FirstOnceWindowEverthDay:
 				response = barrageMessageService.popWindowOnce((FirstBarrageRequest) request);
 					break;

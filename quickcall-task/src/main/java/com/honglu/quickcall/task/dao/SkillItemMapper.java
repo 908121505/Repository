@@ -84,12 +84,11 @@ public interface SkillItemMapper {
 	int updateByPrimaryKeySelective(SkillItem record);
 
 	/**
-	 * 跳过 index条数据，查询一条数据
+	 * 随机查询一条数据
 	 * 
-	 * @param index
 	 * @return
 	 */
-	SkillItem selectOneSkipNum(@Param("index") int index);
+	SkillItem selectOneByRandom();
 
 	/**
 	 * 根据技能Id查询一项技能的价格

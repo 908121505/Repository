@@ -1,7 +1,6 @@
 package com.honglu.quickcall.user.facade.vo;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 
 /**
  * 我的等级 -- 页面对象

@@ -260,7 +260,7 @@
     <!-- 查询大V技能的订单笔数 -->
     <select id="selectBigvSkillOrderTotal" resultType="java.lang.Integer">
         SELECT order_total FROM `bigv_skill_score`
-        WHERE customer_id = #{customerId} AND skill_item_id = #{skillItemId}
+        WHERE customer_skill_id = #{customerSkillId}
     </select>
 
     <!-- 更新默认评价得到到订单表 -->

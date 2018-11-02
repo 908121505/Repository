@@ -2,6 +2,7 @@ package com.honglu.quickcall.account.web.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.honglu.quickcall.account.facade.exchange.request.BarrageMessageRequest;
+import com.honglu.quickcall.account.facade.exchange.request.BarrageMessageV2Request;
 import com.honglu.quickcall.account.facade.exchange.request.FirstBarrageRequest;
 import com.honglu.quickcall.account.web.service.AccountCenterService;
 import com.honglu.quickcall.common.api.exchange.BaseController;
@@ -39,6 +40,21 @@ public class BarrageMessageController extends BaseController {
         LOGGER.info(this.getRemoteHost(request) + "accountWeb barrage message req data : " + JSONObject.toJSONString(params));
         WebResponseModel response = accountCenterService.execute(params);
         LOGGER.info("accountWeb barrage message response data : " + JSONObject.toJSONString(response));
+        return response;
+    }
+
+
+    /**
+     * 查询弹幕消息 -- 第二版本
+     * @desc 优化弹幕消息显示内容给客户端（文案客户端拼装）
+     * @date 2018-10-31 17:30:00
+     */
+    @RequestMapping(value = "/getBarrageMessageV2", method = RequestMethod.POST)
+    @ResponseBody
+    public WebResponseModel getBarrageMessageV2(HttpServletRequest request, BarrageMessageV2Request params) {
+        LOGGER.info(this.getRemoteHost(request) + "accountWeb barrage message V2 request data : " + JSONObject.toJSONString(params));
+        WebResponseModel response = accountCenterService.execute(params);
+        LOGGER.info("accountWeb barrage message V2 response data : " + JSONObject.toJSONString(response));
         return response;
     }
 

@@ -56,11 +56,12 @@ public class AccountServiceImpl implements AccountService {
 
 		if (transferType == TransferTypeEnum.FROZEN) {
 			String userFrozenkey = RedisKeyConstants.ACCOUNT_USERFROZEN_USER + customerId;
-			String steamFrozenKey = RedisKeyConstants.ACCOUNT_USERFROZEN_USER + tradeDetail.getTradeId();
+			String steamFrozenKey = RedisKeyConstants.ACCOUNT_USERFROZEN_STREAM + tradeDetail.getTradeId();
 			String frozenTimeKey = RedisKeyConstants.ACCOUNT_USERFROZEN_Time + tradeDetail.getTradeId();
 			String userFrozenValue = JedisUtil.get(userFrozenkey);
 			if (StringUtils.isNotBlank(userFrozenValue)) {
 				userFrozenValue = userFrozenValue + "," + tradeDetail.getTradeId();
+				JedisUtil.set(userFrozenkey, userFrozenValue);
 			} else {
 				JedisUtil.set(userFrozenkey, tradeDetail.getTradeId() + "");
 

@@ -47,24 +47,38 @@ public class RongYunUtil {
 		TokenReslut userGetTokenResult = null;
 		try {
 			userGetTokenResult = rongCloud.user.getToken(id, username, imageUrl);
+			if (userGetTokenResult == null) {
+				userGetTokenResult = rongCloud.user.getToken(id, username, imageUrl);
+			}
+			if (userGetTokenResult == null) {
+				userGetTokenResult = rongCloud.user.getToken(id, username, imageUrl);
+			}
+			return userGetTokenResult.getToken();
 		} catch (Exception e) {
 			e.printStackTrace();
+			return null;
 		}
-		return userGetTokenResult.getToken();
 	}
 
 	/**
 	 * 刷新用户信息
 	 */
 	public static CodeSuccessReslut refreshUser(String id, String username, String imageUrl) {
-		// 实例化
-		RongCloud rongCloud = RongCloud.getInstance(APPKEY, APPSECRET);
-		//
+
 		CodeSuccessReslut userRefreshResult = null;
-		// 刷新用户信息方法
 		try {
+			// 实例化
+			RongCloud rongCloud = RongCloud.getInstance(APPKEY, APPSECRET);
+			// 刷新用户信息方法
 			userRefreshResult = rongCloud.user.refresh(id, username, imageUrl);
+			if (userRefreshResult == null) {
+				userRefreshResult = rongCloud.user.refresh(id, username, imageUrl);
+			}
+			if (userRefreshResult == null) {
+				userRefreshResult = rongCloud.user.refresh(id, username, imageUrl);
+			}
 		} catch (Exception e) {
+
 			e.printStackTrace();
 		}
 		return userRefreshResult;
@@ -95,16 +109,26 @@ public class RongYunUtil {
 	 */
 	public static Integer publishPrivate(String fromUserId, String[] toUserId, BaseMessage message, String pushContent,
 			String pushData, String count, Integer verifyBlacklist, Integer isPersisted, Integer isCounted) {
-		// 实例化
-		RongCloud rongCloud = RongCloud.getInstance(APPKEY, APPSECRET);
+
 		CodeSuccessReslut messageBroadcastResult = null;
 		try {
+			// 实例化
+			RongCloud rongCloud = RongCloud.getInstance(APPKEY, APPSECRET);
 			messageBroadcastResult = rongCloud.message.publishPrivate(fromUserId, toUserId, message, pushContent,
 					pushData, count, verifyBlacklist, isPersisted, isCounted);
+			if (messageBroadcastResult == null) {
+				messageBroadcastResult = rongCloud.message.publishPrivate(fromUserId, toUserId, message, pushContent,
+						pushData, count, verifyBlacklist, isPersisted, isCounted);
+			}
+			if (messageBroadcastResult == null) {
+				messageBroadcastResult = rongCloud.message.publishPrivate(fromUserId, toUserId, message, pushContent,
+						pushData, count, verifyBlacklist, isPersisted, isCounted);
+			}
+			return messageBroadcastResult.getCode();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return messageBroadcastResult.getCode();
+		return 0;
 		// System.out.println("broadcast: " + messageBroadcastResult.toString());
 	}
 
@@ -287,7 +311,9 @@ public class RongYunUtil {
 		// sendSystemMessage(toCustomerId, "我喜欢亚波1");
 		// sendOrderMessage(toCustomerId, "你有一条新的订单哦1");
 		// sendActivityMessage(toCustomerId, "红包1");
-		sendBespokeMessage(toCustomerId, "预约消息1");
+		for (int i = 0; i < 99; i++) {
+			System.out.println(getToken("1", "1", "1"));
+		}
 
 		/*
 		 * sendFansMessage(1810241141388482637L, "轻音_3575",

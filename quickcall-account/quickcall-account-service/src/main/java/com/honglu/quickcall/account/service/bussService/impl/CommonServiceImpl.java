@@ -153,7 +153,7 @@ public class CommonServiceImpl implements CommonService {
 		record.setModifyTime(new Date());
 		Calendar  cal = Calendar.getInstance();
 		cal.setTime(startTime);
-		cal.add(Calendar.MINUTE, 5);
+//		cal.add(Calendar.MINUTE, 5);
 		record.setStartTime(cal.getTime());
 		if(endTime != null){
 			record.setExpectEndTime(endTime);
@@ -313,12 +313,15 @@ public class CommonServiceImpl implements CommonService {
 
 
 	@Override
-	public void finishUpdateOrder(Long orderId, Integer orderStatus, Date cancelTime) {
+	public void finishUpdateOrder(Long orderId, Integer orderStatus, Date cancelTime,Integer  sendMsgIndex) {
 		Order record = new Order();
 		record.setOrderStatus(orderStatus);
 		record.setOrderId(orderId);
 		record.setModifyTime(new Date());
 		record.setAppayEndTime(cancelTime);
+		if(sendMsgIndex != null){
+			record.setEndTime(cancelTime);
+		}
 		//修改订单状态为：已支付
 		orderMapper.updateByPrimaryKeySelective(record);
 		
@@ -340,6 +343,21 @@ public class CommonServiceImpl implements CommonService {
 			}
 		}
 		return null;
+		
+	}
+
+
+
+	@Override
+	public void custConfirmFinishUpdateOrder(Long orderId, Integer orderStatus) {
+		Order record = new Order();
+		record.setOrderStatus(orderStatus);
+		record.setOrderId(orderId);
+		record.setModifyTime(new Date());
+		//用户同意大V服务完成，设置订单结束时间
+		record.setEndTime(new Date());
+		//修改订单状态为：已支付
+		orderMapper.updateByPrimaryKeySelective(record);
 		
 	}
 

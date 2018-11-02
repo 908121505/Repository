@@ -1,12 +1,53 @@
 package com.honglu.quickcall.account.service.bussService.impl;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
+
 import com.honglu.quickcall.account.facade.code.AccountBizReturnCode;
 import com.honglu.quickcall.account.facade.constants.OrderSkillConstants;
-import com.honglu.quickcall.account.facade.entity.*;
+import com.honglu.quickcall.account.facade.entity.Account;
+import com.honglu.quickcall.account.facade.entity.CustomerSkill;
+import com.honglu.quickcall.account.facade.entity.EvaluationLabel;
+import com.honglu.quickcall.account.facade.entity.Order;
+import com.honglu.quickcall.account.facade.entity.SkillItem;
 import com.honglu.quickcall.account.facade.enums.AccountBusinessTypeEnum;
 import com.honglu.quickcall.account.facade.enums.TransferTypeEnum;
-import com.honglu.quickcall.account.facade.exchange.request.*;
-import com.honglu.quickcall.account.facade.vo.*;
+import com.honglu.quickcall.account.facade.exchange.request.CancelOrderRequest;
+import com.honglu.quickcall.account.facade.exchange.request.ConfirmOrderRequest;
+import com.honglu.quickcall.account.facade.exchange.request.CustConfirmFinishRequest;
+import com.honglu.quickcall.account.facade.exchange.request.DetailOrderForIMRequest;
+import com.honglu.quickcall.account.facade.exchange.request.DetailOrderRequest;
+import com.honglu.quickcall.account.facade.exchange.request.DvReceiveOrderRequest;
+import com.honglu.quickcall.account.facade.exchange.request.DvStartServiceRequest;
+import com.honglu.quickcall.account.facade.exchange.request.FinishOrderRequest;
+import com.honglu.quickcall.account.facade.exchange.request.OrderDaVSkillRequest;
+import com.honglu.quickcall.account.facade.exchange.request.OrderEvaluationRequest;
+import com.honglu.quickcall.account.facade.exchange.request.OrderEvaluationSubmitRequest;
+import com.honglu.quickcall.account.facade.exchange.request.OrderReceiveOrderListRequest;
+import com.honglu.quickcall.account.facade.exchange.request.OrderSaveRequest;
+import com.honglu.quickcall.account.facade.exchange.request.OrderSendOrderListRequest;
+import com.honglu.quickcall.account.facade.exchange.request.QueryIngOrderCountRequest;
+import com.honglu.quickcall.account.facade.vo.CustomerSkillIMVO;
+import com.honglu.quickcall.account.facade.vo.OrderDaVSkillVO;
+import com.honglu.quickcall.account.facade.vo.OrderDetailForIMVO;
+import com.honglu.quickcall.account.facade.vo.OrderDetailVO;
+import com.honglu.quickcall.account.facade.vo.OrderEvaluationVo;
+import com.honglu.quickcall.account.facade.vo.OrderIMVO;
+import com.honglu.quickcall.account.facade.vo.OrderReceiveOrderListVO;
+import com.honglu.quickcall.account.facade.vo.OrderSendOrderListVO;
+import com.honglu.quickcall.account.facade.vo.OrderSkillItemVO;
+import com.honglu.quickcall.account.facade.vo.OrderTempResponseVO;
 import com.honglu.quickcall.account.service.bussService.AccountService;
 import com.honglu.quickcall.account.service.bussService.BarrageMessageService;
 import com.honglu.quickcall.account.service.bussService.CommonService;
@@ -22,19 +63,8 @@ import com.honglu.quickcall.common.core.util.UUIDUtils;
 import com.honglu.quickcall.common.third.AliyunSms.utils.SendSmsUtil;
 import com.honglu.quickcall.common.third.push.GtPushUtil;
 import com.honglu.quickcall.common.third.rongyun.util.RongYunUtil;
-import com.honglu.quickcall.producer.facade.business.DataDuriedPointBusiness;
-import com.honglu.quickcall.producer.facade.req.databury.DataBuriedPointSubmitOrderReq;
 import com.honglu.quickcall.user.facade.business.UserCenterSendMqMessageService;
 import com.honglu.quickcall.user.facade.entity.Customer;
-import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
-
-import java.math.BigDecimal;
-import java.util.*;
 
 /**
  * 
@@ -42,7 +72,7 @@ import java.util.*;
  * 
  * 功能描述：订单相关逻辑
  * 
- * @Package: com.honglu.quickcall.account.web.core.impl
+ * @Package: com.honglu.quickcall.account.web.service.impl
  * @author: chenliuguang
  * @date: 2018年9月22日 下午3:17:04
  */
@@ -67,56 +97,11 @@ public class OrderServiceImpl implements IOrderService {
 	@Autowired
     private DataDuriedPointBusiness dataDuriedPointBusiness;
 
-//	@Override
-//	public CommonResponse queryDaVSkillExt(OrderDaVSkillRequest req) {
-//		if (req == null || req.getCustomerId() == null) {
-//			throw new BizException(AccountBizReturnCode.paramError, "查询技能信息参数异常");
-//		}
-//		LOGGER.info("======>>>>>queryDaVSkill()入参："+req.toString());
-//		OrderDaVSkillVO  skill =  new OrderDaVSkillVO();
-//		skill.setHeadPortraitUrl("http://test-guanjia.oss-cn-shanghai.aliyuncs.com/voice/user/headimg/c2bb9b11facd4ef98126d3a0ab495cd4.jpg");
-//		skill.setNickName("测试");
-//		skill.setServiceId(1000L);
-//		List<OrderSkillItemVO> custSkillList = new  ArrayList<>();
-//	
-//		for (int i = 0; i < 3; i++) {
-//			OrderSkillItemVO  resp =  new OrderSkillItemVO();
-//			resp.setPrice(new BigDecimal(10 *(i +1)));
-//			resp.setDiscontPrice(new BigDecimal(10 *(i +1)));
-//			resp.setUserSkillItemId(1000L);
-//			String  serviceUnit  = null ;
-//			String  skillIcon = null ;
-//			Integer  skillType = 1 ; 
-//			String  skillItemName  = "哄睡" ;
-//			if(i == 0){
-//				skillType = 1 ; 
-//				skillIcon  = "http://test-guanjia.oss-cn-shanghai.aliyuncs.com/voice/skill/1540189000614.png" ;
-//				skillItemName  = "哄睡" ;
-//				serviceUnit = "半小时";
-//			}else if (i == 1){
-//				skillType = 2 ;
-//				skillIcon  = "http://test-guanjia.oss-cn-shanghai.aliyuncs.com/voice/skill/1540189035478.png" ;
-//				skillItemName  = "情感咨询" ;
-//				serviceUnit = "小时";
-//			}else{
-//				skillType = 1 ;
-//				skillIcon  = "http://test-guanjia.oss-cn-shanghai.aliyuncs.com/voice/skill/1540189035478.png" ;
-//				skillItemName  = "叫醒" ;
-//				serviceUnit = "次";
-//				
-//			}
-//			resp.setSkillType(skillType);
-//			resp.setSkillIcon(skillIcon);
-//			resp.setServiceUnit(serviceUnit);
-//			resp.setSkillItemName(skillItemName);
-//			custSkillList.add(resp);
-//		}
-//		skill.setCustSkillList(custSkillList );
-//		CommonResponse commonResponse = commonService.getCommonResponse();
-//		commonResponse.setData(skill);
-//		LOGGER.info("======>>>>>用户编号为：" + req.getCustomerId() + "查询成功");
-//		return commonResponse;
-//	}
+	
+	
+	
+	
+	
 	
 	@Override
 	public CommonResponse queryDaVSkill(OrderDaVSkillRequest request) {
@@ -221,7 +206,6 @@ public class OrderServiceImpl implements IOrderService {
 			CustomerSkill   customerSkill = customerSkillMapper.selectByPrimaryKeyExt(customerSkillId, weekIndex, skillSwitch, endTimeStr);
 			
 			if(customerSkill == null ){
-				//TODO  大V技能不存在，无法下单
 				resultMap.put("retCode",  OrderSkillConstants.RET_CODE_DV_NOT_ACCEPTE_ORDER);
 				commonResponse.setData(resultMap);
 				//返回大V正忙，以及结束时间
@@ -258,12 +242,12 @@ public class OrderServiceImpl implements IOrderService {
 			record.setSkillType(skillType);
 			if(OrderSkillConstants.SKILL_TYPE_NO == skillType){
 				Date  appointTime = DateUtils.formatDate(request.getAppointTimeStr());
-				Calendar  cal =  Calendar.getInstance();
-				cal.setTime(appointTime);
-				cal.add(Calendar.MINUTE, 5);
-				Date  expectEndTime =  cal.getTime();
+//				Calendar  cal =  Calendar.getInstance();
+//				cal.setTime(appointTime);
+//				cal.add(Calendar.MINUTE, 5);
+//				Date  expectEndTime =  cal.getTime();
 				record.setAppointTime(appointTime);
-				record.setExpectEndTime(expectEndTime);
+//				record.setExpectEndTime(expectEndTime);
 			}
 			
 			
@@ -564,10 +548,6 @@ public class OrderServiceImpl implements IOrderService {
 		
 		
 		//用户技能存在，则返回技能相关信息
-		
-
-		
-		
 		//双方不存在订单关系，判断大V是否在忙
 		statusList = new ArrayList<Integer>();
 		statusList.add(OrderSkillConstants.ORDER_STATUS_WAITING_START);//待开始
@@ -594,79 +574,6 @@ public class OrderServiceImpl implements IOrderService {
 	}
 	
 	
-	
-//	@Override
-//	public CommonResponse payOrder(PayOrderRequest req) {
-//		if (req == null || req.getOrderId() == null) {
-//			throw new BizException(AccountBizReturnCode.paramError, "查询发起订单参数异常");
-//		}
-//		
-//		LOGGER.info("======>>>>>payOrder()入参："+req.toString());
-//		Long  orderId =  req.getOrderId();
-//		//查询订单详情
-//		Order  order = orderMapper.selectByPrimaryKey(orderId);
-//		if(order != null){
-//			BigDecimal  payAmount =  order.getOrderAmounts();
-//			Long  userId =  order.getOrderId();
-//			Long  sellerId =  order.getOrderId();
-//			//判断余额是否充足
-//			Account account=accountService.queryAccount(userId);
-//			//消费用户的充值金额
-//			BigDecimal  rechargeAmounts =  account.getRechargeAmounts();
-//			if(rechargeAmounts != null){
-//				if(payAmount.compareTo(rechargeAmounts) <=  0){
-//					commonService.updateOrderForPay(orderId, OrderSkillConstants.ORDER_STATUS_PAYED,new Date());
-//					//修改账户余额
-//					accountService.outAccount(userId, payAmount,TransferTypeEnum.RECHARGE,AccountBusinessTypeEnum.PlaceOrder);
-//					//发送消息 
-//					commonService.pushMessage(PushAppMsgTypeEnum.NEW_ORDER, sellerId, userId);
-//
-//					// ADUAN 下单支付成功后 -- 发送弹幕消息
-//					barrageMessageService.lpushMessage(orderId);
-//				}else{
-//					//返回余额不足状态  
-//					throw new BizException(AccountBizReturnCode.ORDER_PAY_BALANCE_NOT_ENOUGH, "余额不足，无法支付");
-//				}
-//			}else{
-//				//余额不足提醒
-//				throw new BizException(AccountBizReturnCode.ORDER_PAY_ACCOUNT_NOT_EXIST, "账户不存在，无法支付");
-//			}
-//		}else{
-//			//订单不存在
-//			throw new BizException(AccountBizReturnCode.ORDER_NOT_EXIST, "订单不存在，无法对订单操作");
-//		}
-//		CommonResponse commonResponse = commonService.getCommonResponse();
-//		LOGGER.info("======>>>>>订单支付，订单编号：" + orderId + "，支付完成");
-//		return commonResponse;
-//	}
-
-
-
-
-//	@Override
-//	public CommonResponse copyOrder(CopyOrderRequest req) {
-//		if (req == null || req.getOrderId() == null) {
-//			throw new BizException(AccountBizReturnCode.paramError, "查询发起订单参数异常");
-//		}
-//		Long  orderId =  req.getOrderId();
-//		//查询订单详情
-//		Order  order = orderMapper.selectByPrimaryKey(orderId);
-//		
-//		
-//		Date  currTime =  new Date();
-//		Order  orderInsert =  new Order();
-//		BeanUtils.copyProperties(order, orderInsert);
-//		orderInsert.setCreateTime(currTime);
-//		
-//		
-//		
-//		CommonResponse commonResponse = commonService.getCommonResponse();
-//		LOGGER.info("======>>>>>订单支付，订单编号：" + orderId + "，支付完成");
-//		return commonResponse;
-//	}
-
-
-
 
 	@Override
 	public CommonResponse custConfirmFinish(CustConfirmFinishRequest request) {
@@ -689,7 +596,8 @@ public class OrderServiceImpl implements IOrderService {
 			}
 			newOrderStatus = OrderSkillConstants.ORDER_STATUS_FINISHED_USER_ACCEPCT;
 			//修改订单状态为：已完成
-			commonService.updateOrder(orderId, newOrderStatus);
+//			commonService.updateOrder(orderId, newOrderStatus);
+			commonService.custConfirmFinishUpdateOrder(orderId, newOrderStatus);
 			//大V冻结
 			accountService.inAccount(order.getServiceId(), order.getOrderAmounts(), TransferTypeEnum.FROZEN, AccountBusinessTypeEnum.FroZen);
 			// ADUAN 订单服务完成推送MQ消息
@@ -705,9 +613,6 @@ public class OrderServiceImpl implements IOrderService {
 			throw new BizException(AccountBizReturnCode.ORDER_NOT_EXIST, "订单不存在，无法对订单操作");
 		}
 		
-		//用户同意大V服务完成，通知大V查单订单状态
-//		Long  serviceId = order.getServiceId();
-//		RongYunUtil.sendOrderMessage(serviceId, OrderSkillConstants.IM_MSG_CONTENT_USER_CONFIRM_FINISH,OrderSkillConstants.MSG_CONTENT_DAV);
 		
 		
 		CommonResponse commonResponse = commonService.getCommonResponse();
@@ -745,7 +650,6 @@ public class OrderServiceImpl implements IOrderService {
 				//用户同意，修改状态:叫醒类型服务专享
 				newOrderStatus = OrderSkillConstants.ORDER_STATUS_GOING_WAITING_START;
 			}
-			//TODO 需要考虑叫醒服务情况
 			
 			Date  currTime =  new Date();
 			
@@ -754,23 +658,23 @@ public class OrderServiceImpl implements IOrderService {
 		    Integer  orderNum = order.getOrderNum();
 		    
 		    if(serviceUnit.contains(OrderSkillConstants.SERVICE_UNIT_TIMES)){
-		    	addMinute = 12 * 60 ;
+		    	//叫醒服务时需要添加5分钟过期时间
+		    	addMinute = 12 * 60 + 5;
 		    }else if (serviceUnit.contains(OrderSkillConstants.SERVICE_UNIT_HALF_HOUR)){
 		    	addMinute = orderNum * 30 ;
 		    }else {
-		    	addMinute = orderNum * 30 ;
+		    	addMinute = orderNum * 60 ;
 		    }
 		    
-//			if(OrderSkillConstants.SERVICE_UNIT_HALF_HOUR.equals(serviceUnit)){
-//				addMinute = orderNum * 30 ;
-//			}else if(OrderSkillConstants.SERVICE_UNIT_HOUR.equals(serviceUnit)){
-//				addMinute = orderNum * 60 ;
-//			}else{
-//				addMinute = 12 * 60 ;
-//			}
 			
 			Calendar cal =  Calendar.getInstance();
-			cal.setTime(currTime);
+			Date   startTime =  order.getStartTime();
+			if(startTime != null){
+				//应该取订单进行中起始时间
+				cal.setTime(startTime);
+			}else{
+				cal.setTime(currTime);
+			}
 			Date  endTime =  null;
 			if(addMinute > 0){
 				cal.add(Calendar.MINUTE, addMinute);
@@ -921,9 +825,6 @@ public class OrderServiceImpl implements IOrderService {
 				}
 			}
 			
-			
-			
-			
 			RongYunUtil.sendOrderMessage(customerId, OrderSkillConstants.IM_MSG_CONTENT_DAV_START_SERVICE_TO_CUST,OrderSkillConstants.MSG_CONTENT_C);
 			RongYunUtil.sendOrderMessage(serviceId, OrderSkillConstants.IM_MSG_CONTENT_DAV_START_SERVICE_TO_DAV,OrderSkillConstants.MSG_CONTENT_DAV);
 		}else{
@@ -975,8 +876,6 @@ public class OrderServiceImpl implements IOrderService {
 				if(expectEndTime.before(new Date())){
 					//已经在服务时间之外了，可以立即结束
 					newOrderStatus = OrderSkillConstants.ORDER_STATUS_FINISH_DAV_FINISH_AFTER_SERVICE_TIME ;
-//					// ADUAN 订单服务完成推送MQ消息
-//					userCenterSendMqMessageService.sendOrderCostMqMessage(orderId);
 					//用户未评价
 					RongYunUtil.sendOrderMessage(serviceId, OrderSkillConstants.IM_MSG_CONTENT_CUST_NOT_PING_JIA,OrderSkillConstants.MSG_CONTENT_DAV);
 					sendMsgIndex = 1 ;
@@ -996,7 +895,7 @@ public class OrderServiceImpl implements IOrderService {
 			
 			
 			//设置请求结束时间
-			commonService.finishUpdateOrder(orderId, newOrderStatus,new  Date());
+			commonService.finishUpdateOrder(orderId, newOrderStatus,new  Date(),sendMsgIndex);
 			if(sendMsgIndex !=null){
 				// ADUAN 订单服务完成推送MQ消息
 				userCenterSendMqMessageService.sendOrderCostMqMessage(orderId);
@@ -1026,19 +925,7 @@ public class OrderServiceImpl implements IOrderService {
 		LOGGER.info("======>>>>>queryIngOrderCount()入参："+request.toString());
 		Long  buyerId =  request.getBuyerId();
 		Long  sellerId =  request.getSellerId();
-//		Integer   count  =  orderMapper.queryIngOrderCount(buyerId,sellerId,OrderSkillConstants.ORDER_STATUS_GOING_ING,OrderSkillConstants.ORDER_STATUS_CUST_AGREE_DV_START_SERVICE);
-//		if(count == null){
-//			count = 0;
-//		}
-//		if(count == 0){
-//			count  =  orderMapper.queryIngOrderCount(sellerId,buyerId,OrderSkillConstants.ORDER_STATUS_GOING_ING,OrderSkillConstants.ORDER_STATUS_CUST_AGREE_DV_START_SERVICE);
-//		}
-		
-//		if(count == null){
-//			count = 0;
-//		}
 		CommonResponse commonResponse = commonService.getCommonResponse();
-//		commonResponse.setData(count);
 		LOGGER.info("======>>>>>查询进行中订单数量，客户编号为：" + buyerId + ",大V客户编号："+sellerId+"查询成功");
 		return commonResponse;
 	}
@@ -1046,17 +933,17 @@ public class OrderServiceImpl implements IOrderService {
 
 
 
-	@Override
-	public CommonResponse queryRefundReason(QueryRefundReasonRequest request) {
-		CommonResponse commonResponse = commonService.getCommonResponse();
-		List<String>  reasonList =  new ArrayList<String>();
-		reasonList.add("态度恶劣");
-		reasonList.add("迟到早退");
-		reasonList.add("消极怠工");
-		reasonList.add("不是本人");
-		commonResponse.setData(reasonList);
-		return commonResponse;
-	}
+//	@Override
+//	public CommonResponse queryRefundReason(QueryRefundReasonRequest request) {
+//		CommonResponse commonResponse = commonService.getCommonResponse();
+//		List<String>  reasonList =  new ArrayList<String>();
+//		reasonList.add("态度恶劣");
+//		reasonList.add("迟到早退");
+//		reasonList.add("消极怠工");
+//		reasonList.add("不是本人");
+//		commonResponse.setData(reasonList);
+//		return commonResponse;
+//	}
 
 
     @Override

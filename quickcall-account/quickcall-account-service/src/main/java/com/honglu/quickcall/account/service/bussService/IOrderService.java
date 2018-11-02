@@ -8,7 +8,7 @@ import com.honglu.quickcall.common.api.exchange.CommonResponse;
  * Copyright © 2018 www.xiaoniu.com All rights reserved.
  * 
  * 功能描述：订单相关
- * @Package: com.honglu.quickcall.account.web.core
+ * @Package: com.honglu.quickcall.account.web.service 
  * @author: chenliuguang   
  * @date: 2018年9月22日 下午3:16:34
  */
@@ -54,19 +54,6 @@ public interface IOrderService {
 	public CommonResponse  detailOrder(DetailOrderRequest  request);
 	
 	
-	
-//	/**
-//	 * 发起的订单页--去支付
-//	 * @param req
-//	 */
-//	public CommonResponse  payOrder(PayOrderRequest  req);
-	
-	
-//	/**
-//	 * 发起的订单页--再来一单
-//	 * @param req
-//	 */
-//	public CommonResponse  copyOrder(CopyOrderRequest  req);
 	
 	
 	/**
@@ -116,11 +103,11 @@ public interface IOrderService {
 	
 	
 	
-	/**
-	 * 查询退款理由
-	 * @param request
-	 */
-	public CommonResponse  queryRefundReason(QueryRefundReasonRequest  request);
+//	/**
+//	 * 查询退款理由
+//	 * @param request
+//	 */
+//	public CommonResponse  queryRefundReason(QueryRefundReasonRequest  request);
 
 	/**
 	 * 订单评价页面

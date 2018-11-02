@@ -9,13 +9,7 @@ import java.util.List;
 
 public interface BigvScoreMapper {
 
-    int countByExample(BigvScoreExample example);
-
     int insert(BigvScore record);
-
-    List<BigvScore> selectByExample(BigvScoreExample example);
-
-    BigvScore selectByPrimaryKey(Integer id);
 
     /**
      * 更新大V评分到大V排名表
@@ -25,15 +19,4 @@ public interface BigvScoreMapper {
      */
     int updateBigvScore(@Param("customerId") Long customerId, @Param("valueScore") BigDecimal valueScore);
 
-    /**
-     * 查询在线大V数量
-     * @return
-     */
-    int countOnlineBigvCount();
-
-    /**
-     * 查询有效大V数
-     * @return
-     */
-    int countValidBigvCount();
 }
