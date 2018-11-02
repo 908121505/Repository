@@ -20,7 +20,7 @@ import com.honglu.quickcall.account.service.dao.OrderMapper;
  * 
  * 功能描述：对外订单查询接口
  * 
- * @Package: com.honglu.quickcall.account.core.business
+ * @Package: com.honglu.quickcall.account.service.business
  * @author: chenliuguang
  * @date: 2018年10月24日 下午1:54:25
  */

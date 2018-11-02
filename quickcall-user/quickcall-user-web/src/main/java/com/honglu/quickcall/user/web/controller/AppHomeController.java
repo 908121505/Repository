@@ -35,7 +35,7 @@ public class AppHomeController {
     @RequestMapping(value = "/getFirstPageDaVinfo", method = RequestMethod.POST)
     @ResponseBody
     public WebResponseModel getFirstPageDaVinfo(FirstPageBigvListRequest params) {
-        LOGGER.info("userWeb.AppHomeController getFirstPageDaVinfo req data : " + params);
+        LOGGER.info("userWeb.AppHomeController getFirstPageDaVinfo request data : " + params);
         WebResponseModel response = userCenterService.execute(params);
         LOGGER.info("userWeb.AppHomeController getFirstPageDaVinfo response data : " + response);
         return response;

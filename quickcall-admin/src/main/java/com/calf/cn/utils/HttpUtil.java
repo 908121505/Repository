@@ -28,7 +28,7 @@ import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.params.HttpMethodParams;
 /**
  * HTTP相关的操作
- * @author req.li
+ * @author bo.li
  * @Date 2011-10-9
  */
 public class HttpUtil {

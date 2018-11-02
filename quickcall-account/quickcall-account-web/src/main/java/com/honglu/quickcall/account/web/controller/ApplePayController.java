@@ -38,7 +38,7 @@ public class ApplePayController extends BaseController {
 	@RequestMapping(value = "/recharge", method = RequestMethod.POST)
 	@ResponseBody
 	public WebResponseModel recharge(HttpServletRequest request, ApplePayRequest params) {
-		LOGGER.info("accountWeb.apply-pay.recharge.req.data : {}", JSONObject.toJSONString(params));
+		LOGGER.info("accountWeb.apply-pay.recharge.request.data : {}", JSONObject.toJSONString(params));
 		WebResponseModel response = new WebResponseModel();
 		if (params.getAmount() == null || params.getCustomerId() == null) {
 			response.setCode(AccountBizReturnCode.paramError.code());
@@ -58,7 +58,7 @@ public class ApplePayController extends BaseController {
 	@RequestMapping(value = "/notify", method = RequestMethod.POST)
 	@ResponseBody
 	public WebResponseModel notify(HttpServletRequest request, ApplePurchaseRequest params) {
-		LOGGER.info("accountWeb.apply-pay.notify.req.data : {}", JSONObject.toJSONString(params));
+		LOGGER.info("accountWeb.apply-pay.notify.request.data : {}", JSONObject.toJSONString(params));
 		WebResponseModel response = new WebResponseModel();
 		if (StringUtils.isBlank(params.getOrderId())
 				|| StringUtils.isBlank(params.getTradeNo())

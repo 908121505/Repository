@@ -37,7 +37,7 @@ public class PushAppMsgServiceImpl implements PushAppMsgService {
         // ADUAN 砍需求 -- 先注释掉消息推送，后面记得打开
         /*
         // 查询要推送的用户信息
-        Customer receiveCustomer = customerMapper.selectByPrimaryKey(req.getReceiverId());
+        Customer receiveCustomer = customerMapper.selectByPrimaryKey(request.getReceiverId());
         if (receiveCustomer == null) {
             return ResultUtils.resultDataNotExist("用户不存在");
         }
@@ -49,17 +49,17 @@ public class PushAppMsgServiceImpl implements PushAppMsgService {
         // 先把消息插入数据库
         Message message = new Message();
         message.setMessageId(UUIDUtils.getId());
-        message.setType(req.getMsgType().getType().byteValue());
-        message.setMessageContent(req.getMsgType().getMsgContent());
-        message.setSenderId(req.getSenderId());
-        message.setReceiverId(req.getReceiverId());
+        message.setType(request.getMsgType().getType().byteValue());
+        message.setMessageContent(request.getMsgType().getMsgContent());
+        message.setSenderId(request.getSenderId());
+        message.setReceiverId(request.getReceiverId());
         message.setMessageStatus(Byte.valueOf("1"));
         // 插入成功
         if (messageMapper.insert(message) <= 0) {
             return ResultUtils.result(BizCode.DBError, "数据库插入失败");
         }
 
-        GtPushUtil.pushMessage(Arrays.asList(receiveCustomer.getDeviceId()), req.getMsgType().getMsgContent(), "");
+        GtPushUtil.pushMessage(Arrays.asList(receiveCustomer.getDeviceId()), request.getMsgType().getMsgContent(), "");
 */
         return ResultUtils.resultSuccess();
     }

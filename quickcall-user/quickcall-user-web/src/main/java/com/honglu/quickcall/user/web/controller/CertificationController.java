@@ -51,7 +51,7 @@ public class CertificationController {
     @RequestMapping(value = "/idCardInfo", method = RequestMethod.POST)
     @ResponseBody
     public WebResponseModel idCardInfo(UserIdCardInfoRequest params) {
-        logger.info("userWeb.certification idCardInfo req data : " + params);
+        logger.info("userWeb.certification idCardInfo request data : " + params);
         WebResponseModel response = new WebResponseModel();
         if (params.getCustomerId() == null) {
             response.setCode(UserBizReturnCode.paramError.code());
@@ -72,7 +72,7 @@ public class CertificationController {
     @RequestMapping(value = "/identityCertification", produces = "application/json;charset=UTF-8", method = RequestMethod.POST)
     @ResponseBody
     public WebResponseModel identityCertification(HttpServletRequest request) {
-        logger.info("userWeb.certification idCardImageUpload req data : " + request);
+        logger.info("userWeb.certification idCardImageUpload request data : " + request);
         WebResponseModel response = new WebResponseModel();
         response.setCode(UserBizReturnCode.paramError.code());
         SaveCertificationRequest params = new SaveCertificationRequest();
@@ -115,7 +115,7 @@ public class CertificationController {
     @RequestMapping(value = "/idCardImageUpload", produces = "application/json;charset=UTF-8", method = RequestMethod.POST)
     @ResponseBody
     public WebResponseModel idCardImageUpload(HttpServletRequest request) {
-        logger.info("userWeb.certification idCardImageUpload req data : " + request);
+        logger.info("userWeb.certification idCardImageUpload request data : " + request);
         // 身份证类型：1证明；2反面
         String idCardType = request.getParameter("idCardType");
         String customerId = request.getParameter("customerId");
@@ -153,7 +153,7 @@ public class CertificationController {
     @RequestMapping(value = "/introduceAudioUpload", produces = "application/json;charset=UTF-8", method = RequestMethod.POST)
     @ResponseBody
     public WebResponseModel introduceAudioUpload(HttpServletRequest request) {
-        logger.info("userWeb.certification introduceAudioUpload req data : " + request);
+        logger.info("userWeb.certification introduceAudioUpload request data : " + request);
         String customerId = request.getParameter("customerId");
         if(StringUtils.isBlank(customerId)){
             WebResponseModel response = new WebResponseModel();
@@ -203,7 +203,7 @@ public class CertificationController {
     @RequestMapping(value = "/skillAuditUpload", produces = "application/json;charset=UTF-8", method = RequestMethod.POST)
     @ResponseBody
     public WebResponseModel skillAuditUpload(HttpServletRequest request) {
-        logger.info("userWeb.certification skillAuditUpload req data : " + request);
+        logger.info("userWeb.certification skillAuditUpload request data : " + request);
         String customerId = request.getParameter("customerId");
         String  skillItemId = request.getParameter("skillItemId");
         String  skillVoiceTime = request.getParameter("skillVoiceTime");
