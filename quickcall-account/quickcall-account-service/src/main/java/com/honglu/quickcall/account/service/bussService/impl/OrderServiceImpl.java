@@ -176,15 +176,16 @@ public class OrderServiceImpl implements IOrderService {
 				if(expectEndTime != null){
 					//当前时间和截止时间的间隔秒数
 					Long  remainStr = DateUtils.getDiffSeconds(currTime, expectEndTime);
+					String  downLoadStr = null ;
 					if(remainStr != null &&  remainStr > 0){
-						String  downLoadStr = DateUtils.getDiffSeconds(remainStr);
+						downLoadStr = DateUtils.getDiffSeconds(remainStr);
 						
-						resultMap.put("retCode", OrderSkillConstants.RET_CODE_DV_BUSY);
-						resultMap.put("downLoadStr", downLoadStr);
-						commonResponse.setData(resultMap);
-						//返回大V正忙，以及结束时间
-						return   commonResponse ;
 					}
+					resultMap.put("retCode", OrderSkillConstants.RET_CODE_DV_BUSY);
+					resultMap.put("downLoadStr", downLoadStr);
+					commonResponse.setData(resultMap);
+					//返回大V正忙，以及结束时间
+					return   commonResponse ;
 					
 					
 				}
