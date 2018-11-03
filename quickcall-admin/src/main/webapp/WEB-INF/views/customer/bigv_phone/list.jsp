@@ -16,7 +16,7 @@
                     <div class="form-group">
                         <div class="input-group">
                             <div class="input-group-addon">手机号</div>
-                            <input class="form-control" type="text" id="phone">
+                            <input class="form-control" type="text" id="phone" maxlength="11">
                         </div>
                     </div>
                 </div>
