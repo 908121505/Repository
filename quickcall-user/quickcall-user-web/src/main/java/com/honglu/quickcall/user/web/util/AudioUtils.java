@@ -42,7 +42,7 @@ public class AudioUtils {
 	 * @return 转换之后文件
 	 */
 	public static File execute(File source, String desFileName) throws Exception {
-		File target = new File(desFileName);
+		File target = new File("voice");
 		AudioAttributes audio = new AudioAttributes();
 		audio.setCodec("libmp3lame");
 		audio.setBitRate(new Integer(36000));
