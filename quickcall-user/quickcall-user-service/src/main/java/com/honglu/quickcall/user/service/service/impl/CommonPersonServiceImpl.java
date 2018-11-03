@@ -1,5 +1,21 @@
 package com.honglu.quickcall.user.service.service.impl;
 
+import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+import java.util.Objects;
+import java.util.Random;
+import java.util.ResourceBundle;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.alibaba.fastjson.JSON;
 import com.honglu.quickcall.common.api.code.BizCode;
 import com.honglu.quickcall.common.api.exception.BizException;
@@ -16,30 +32,28 @@ import com.honglu.quickcall.common.core.util.UUIDUtils;
 import com.honglu.quickcall.common.third.AliyunSms.utils.SendSmsUtil;
 import com.honglu.quickcall.common.third.rongyun.models.CodeSuccessReslut;
 import com.honglu.quickcall.common.third.rongyun.util.RongYunUtil;
-import com.honglu.quickcall.producer.facade.business.DataDuriedPointBusiness;
-import com.honglu.quickcall.producer.facade.req.databury.DataBuriedPointGetCodeReq;
-import com.honglu.quickcall.producer.facade.req.databury.DataBuriedPointLoginReq;
-import com.honglu.quickcall.producer.facade.req.databury.DataBuriedPointRegistReq;
 import com.honglu.quickcall.user.facade.code.UserBizReturnCode;
 import com.honglu.quickcall.user.facade.constants.UserBizConstants;
 import com.honglu.quickcall.user.facade.entity.Customer;
 import com.honglu.quickcall.user.facade.entity.SensitivityWord;
 import com.honglu.quickcall.user.facade.enums.CustomerCusStateEnum;
-import com.honglu.quickcall.user.facade.exchange.request.*;
+import com.honglu.quickcall.user.facade.exchange.request.AddSystemUserRequest;
+import com.honglu.quickcall.user.facade.exchange.request.BindVXorQQRequest;
+import com.honglu.quickcall.user.facade.exchange.request.GetSmsCodeRequest;
+import com.honglu.quickcall.user.facade.exchange.request.IsPhoneExistsRequest;
+import com.honglu.quickcall.user.facade.exchange.request.LoginOutRequest;
+import com.honglu.quickcall.user.facade.exchange.request.SaveCertificationRequest;
+import com.honglu.quickcall.user.facade.exchange.request.SaveDvVoiceRequest;
+import com.honglu.quickcall.user.facade.exchange.request.SetHeardUrlRequest;
+import com.honglu.quickcall.user.facade.exchange.request.SetPwdRequest;
+import com.honglu.quickcall.user.facade.exchange.request.UserIdCardInfoRequest;
+import com.honglu.quickcall.user.facade.exchange.request.UserLoginRequest;
+import com.honglu.quickcall.user.facade.exchange.request.UserRegisterRequest;
+import com.honglu.quickcall.user.service.dao.BigvPhoneMapper;
 import com.honglu.quickcall.user.service.dao.CustomerMapper;
 import com.honglu.quickcall.user.service.dao.SensitivityWordMapper;
 import com.honglu.quickcall.user.service.integration.AccountDubboIntegrationService;
 import com.honglu.quickcall.user.service.service.CommonPersonService;
-import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import java.text.SimpleDateFormat;
-import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Created by len.song on 2017-12-07.
@@ -60,8 +74,13 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 	@Autowired
 	private SensitivityWordMapper sensitivityWordMapper;
 
-	@Autowired
-	private DataDuriedPointBusiness dataDuriedPointBusiness;
+	/*
+	 * @Autowired
+	 * 
+	 * private DataDuriedPointBusiness dataDuriedPointBusiness;
+	 */
+
+	private BigvPhoneMapper bigvPhoneMapper;
 
 	private static String resendexpire = ResourceBundle.getBundle("thirdconfig").getString("resend.expire");
 	private static String resendexpirehour = ResourceBundle.getBundle("thirdconfig").getString("resend.expire.hour");
@@ -110,8 +129,9 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 	public CommonResponse login(UserLoginRequest params) {
 		/**
 		 * 神策埋点
-		 */
-		DataBuriedPointLoginReq req = new DataBuriedPointLoginReq();
+		 *//*
+			 * DataBuriedPointLoginReq req = new DataBuriedPointLoginReq();
+			 */
 
 		CommonResponse response = new CommonResponse();
 		Customer customer = null;
@@ -124,7 +144,7 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 				throw new BizException(BizCode.ParamError, "手机号格式不正确");
 			}
 			param.setPhone(params.getTel());
-			req.setLoginmethod("手机号");
+			/* req.setLoginmethod("手机号"); */
 		} // 手机号 密码登录
 		/*
 		 * if (StringUtils.isNotBlank(params.getPassWord())) {
@@ -135,12 +155,12 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 		} // QQ登录
 		else if (StringUtils.isNotBlank(params.getQqOpenId())) {
 			param.setQqOpenId(params.getQqOpenId());
-			req.setLoginmethod("QQ");
+			// req.setLoginmethod("QQ");
 
 		} // 微信登录
 		else if (StringUtils.isNotBlank(params.getWechatOpenId())) {
 			param.setWechatOpenId(params.getWechatOpenId());
-			req.setLoginmethod("微信");
+			// req.setLoginmethod("微信");
 		}
 		customer = customerMapper.login(param);
 		if (customer == null) {
@@ -199,11 +219,12 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 		JedisUtil.set(RedisKeyConstants.USER_CUSTOMER_INFO + customer.getCustomerId(),
 				customer == null ? "" : JSON.toJSONString(customer));
 
-		req.setPhoneNumber(customer.getPhone());
-		req.setUser_id(customer.getCustomerId() + "");
+		/*
+		 * req.setPhoneNumber(customer.getPhone());
+		 * req.setUser_id(customer.getCustomerId() + "");
+		 */
 		return ResultUtils.resultSuccess(customer);
 	}
-
 
 	@Override
 	public CommonResponse setpwd(SetPwdRequest params) {
@@ -361,6 +382,9 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 		customer.setQqOpenId(request.getQqOpenId());
 		customer.setWechatOpenId(request.getWechatOpenId());
 		customer.setPhone(request.getTel());
+		customer.setAppChannelName(request.getAppChannelName());
+		customer.setDeviceId(request.getDeviceNo());
+		customer.setSource(request.getScource());
 		customer.setNickName(
 				StringUtils.isNotBlank(request.getNickName()) ? request.getNickName() : "轻音_" + randomFour());
 		String img = request.getHeardUrl();
@@ -376,17 +400,27 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 			}
 			customer.setTokenCode(rongyunToken);
 		}
+
+		/**
+		 * 声优白名单
+		 */
+		if (bigvPhoneMapper.queryOneByPhone(request.getTel()) != null) {
+			customer.setIdentityStatus(2);
+			customer.setvStatus(2);
+		}
+
 		int row = customerMapper.insertSelective(customer);
 		if (row <= 0) {
 			throw new BizException(UserBizReturnCode.exceedError, "用户未注冊");
 		}
 
-		DataBuriedPointRegistReq req = new DataBuriedPointRegistReq();
-		req.setPhoneNumber(request.getTel());
-		req.setRegistDate(new Date());
-		req.setRegistSource(request.getAppChannelName());
-		req.setUser_id("17356985474");
-		dataDuriedPointBusiness.burySignUpResultData(req);
+		/*
+		 * DataBuriedPointRegistReq req = new DataBuriedPointRegistReq();
+		 * req.setPhoneNumber(request.getTel()); req.setRegistDate(new Date());
+		 * req.setRegistSource(request.getAppChannelName());
+		 * req.setUser_id("17356985474");
+		 * dataDuriedPointBusiness.burySignUpResultData(req);
+		 */
 		// 创建账户
 		accountDubboIntegrationService.createAccount(customer.getCustomerId());
 		customer = customerMapper.selectByPrimaryKey(customer.getCustomerId());
@@ -488,8 +522,10 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 					JedisUtil.ddlTimes(RedisKeyConstants.USER_VERIFYCODE_D + phoneNum));
 		}
 		// 埋点
-		DataBuriedPointGetCodeReq req = new DataBuriedPointGetCodeReq();
-		req.setPhone(phoneNum);
+		/*
+		 * DataBuriedPointGetCodeReq req = new DataBuriedPointGetCodeReq();
+		 * req.setPhone(phoneNum);
+		 */
 		String smsStr = SendSmsUtil.sendSms(UUIDUtils.getUUID(), phoneNum, 1, code);
 		if ("发送成功".equals(smsStr)) {
 			JedisUtil.set(RedisKeyConstants.USER_VERIFYCODE + phoneNum + codeType, code,
@@ -497,13 +533,13 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 			logger.info("手机号:" + phoneNum + " 手机验证码:" + code);
 			logger.info("将验证码存入redis中的key值为:{},失效时间为:{}", (RedisKeyConstants.USER_VERIFYCODE + phoneNum + codeType),
 					Integer.parseInt(smscodeexpire));
-			req.setSuccess(true);
+			/* req.setSuccess(true); */
 		} else {
-			req.setSuccess(false);
+			/* req.setSuccess(false); */
 
 		}
 		// 埋点
-		dataDuriedPointBusiness.buryGetCodeData(req);
+		// dataDuriedPointBusiness.buryGetCodeData(req);
 		logger.info("手机号:" + phoneNum + "发送状态:" + smsStr);
 		return ResultUtils.resultSuccess(smsStr);
 

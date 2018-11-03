@@ -247,7 +247,7 @@ public class UserCommonController {
 				return response;
 			}
 
-			String imageName = UUIDUtils.getUUID() + "." + "jpg";
+			String imageName = UUIDUtils.getUUID() + "." + "mp3";
 			String imgFolder = AliYunFilePaths.USER_UPLOAD_HEAD_IMG;
 			// 阿里云客户端
 			OSSClient ossClient = OSSUtil.getOSSClient();
