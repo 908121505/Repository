@@ -232,8 +232,8 @@ public class QueryBigvListServiceImpl implements QueryBigvListService {
         }
 
         // 计算百分比
-        int beginIndex = cacluRandomLimitBeginIndex(bigvNum, configNum);
-        int endIndex = cacluRandomLimitEndIndex(bigvNum, configNum) - beginIndex;
+        int beginIndex = cacluRandomLimitBeginIndex(configNum, bigvNum);
+        int endIndex = cacluRandomLimitEndIndex(configNum, bigvNum) - beginIndex;
 
         // 随机根据大V排名查询一条数据
         return resourceConfigMapper.selectEnabledBigvBySkillRank(configSkills, exCustomerIds, weekIndex, endTimeStr, beginIndex, endIndex, skillOrdered);
