@@ -486,7 +486,7 @@
       AND  order_id =   #{orderId}
     </if>
     <if test="placeOrderId != null" >
-      AND  place.customer_id = #{placeOrderId}
+      AND  place.app_id = #{placeOrderId}
     </if>
     <if test="placeOrderUserNickName != null" >
       AND  place.nick_name LIKE  concat('%',#{placeOrderUserNickName},'%')
@@ -495,7 +495,7 @@
        AND  place.phone = #{customerPhone}
      </if>
     <if test="receivedOrderId != null" >
-      AND  revice.customer_id = #{receivedOrderId}
+      AND  revice.app_id = #{receivedOrderId}
     </if>
     <if test="receiveOrderUserNickName != null" >
       AND  revice.nick_name LIKE  concat('%',#{receiveOrderUserNickName},'%')
