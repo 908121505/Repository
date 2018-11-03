@@ -112,7 +112,7 @@ public class ScoreRankServiceImpl implements ScoreRankService {
      */
     private BigDecimal calculateOrderSkillScore(Order order, Integer evaluateStars) {
         // 查询该用户该技能的订单笔数
-        Integer orderTotal = bigvSkillScoreMapper.selectBigvSkillOrderTotal(order.getServiceId(), order.getSkillItemId());
+        Integer orderTotal = bigvSkillScoreMapper.selectBigvSkillOrderTotal(order.getCustomerSkillId());
         orderTotal = orderTotal == null ? 0 : orderTotal;
 
         // 计算技能总比价得分

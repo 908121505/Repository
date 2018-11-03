@@ -20,11 +20,10 @@ public interface BigvSkillScoreMapper {
     /**
      * 查询大V技能的订单笔数
      *
-     * @param customerId
-     * @param skillItemId
+     * @param customerSkillId
      * @return
      */
-    Integer selectBigvSkillOrderTotal(@Param("customerId") Long customerId, @Param("skillItemId") Long skillItemId);
+    Integer selectBigvSkillOrderTotal(@Param("customerSkillId") Long customerSkillId);
 
     /**
      * 根据默认评价得到到订单表
