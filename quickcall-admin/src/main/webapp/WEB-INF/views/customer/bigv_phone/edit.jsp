@@ -15,7 +15,8 @@
 					<label class="col-sm-2 control-label">手机号<font color="red">&nbsp;*</font></label>
 					<div class="col-sm-10">
 						<input type="hidden" value="${entity.id }" name="id" />
-						<input type="text" class="form-control required" id="form_phone" name="phone" value="${entity.phone }">
+						<input type="text" class="form-control required" id="form_phone" name="phone"
+							   value="${entity.phone }" maxlength="11">
 					</div>
 				</div>
 				<div class="form-group">

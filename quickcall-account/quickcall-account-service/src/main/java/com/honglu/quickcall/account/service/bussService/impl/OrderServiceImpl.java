@@ -972,7 +972,7 @@ public class OrderServiceImpl implements IOrderService {
 		// 保存订单表评价信息
 		Order evaluationInfo = new Order();
 		evaluationInfo.setOrderId(request.getOrderId());
-		evaluationInfo.setEvaluateStart(request.getEvaluateStart());
+		evaluationInfo.setEvaluateStart(request.getEvaluateStart() == null ? 0 : request.getEvaluateStart());
 		evaluationInfo.setCustomerEvaluate(request.getEvaluateContent());
 		orderMapper.saveEvaluationInfo(evaluationInfo);
 
