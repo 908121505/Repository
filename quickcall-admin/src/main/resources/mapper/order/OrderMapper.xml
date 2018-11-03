@@ -406,9 +406,11 @@
    <select id="queryPageList" resultType="com.calf.module.order.vo.OrderVO" parameterType="map" >
     select
      order_id AS orderId,
-     revice.customer_id AS receivedOrderId,
+     revice.app_id AS receivedOrderId,
+     revice.phone AS servicePhone,
      revice.nick_name AS receiveOrderUserNickName,
-     place.customer_id AS placeOrderId,
+     place.app_id AS placeOrderId,
+     place.phone AS customerPhone,
      place.nick_name AS placeOrderUserNickName,
      skill.skill_name AS serviceType,
      od.start_time AS startTime,
@@ -429,16 +431,25 @@
        AND  od.order_id =   #{orderId}
      </if>
      <if test="placeOrderId != null" >
-       AND  place.customer_id = #{placeOrderId}
+       AND  place.app_id = #{placeOrderId}
+     </if>
+     <if test="placeOrderUserNickName != null" >
+       AND  place.nick_name LIKE  concat('%',#{placeOrderUserNickName},'%')
+     </if>
+     <if test="customerPhone != null" >
+       AND  place.phone = #{customerPhone}
      </if>
      <if test="placeOrderUserNickName != null" >
        AND  place.nick_name LIKE  concat('%',#{placeOrderUserNickName},'%')
      </if>
      <if test="receivedOrderId != null" >
-       AND  revice.customer_id = #{receivedOrderId}
+       AND  revice.app_id = #{receivedOrderId}
      </if>
      <if test="receiveOrderUserNickName != null" >
        AND  revice.nick_name LIKE  concat('%',#{receiveOrderUserNickName},'%')
+     </if>
+     <if test="servicePhone != null" >
+       AND  revice.phone   = #{servicePhone}
      </if>
      <if test="startTime != null" >
        AND  od.start_time &gt;= #{startTime}
