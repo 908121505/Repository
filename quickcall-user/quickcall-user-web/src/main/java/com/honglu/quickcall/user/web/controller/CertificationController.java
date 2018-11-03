@@ -264,7 +264,6 @@ public class CertificationController {
 
 			File f = new File(mfile.getOriginalFilename());
 			// 音频文件统一转MP3格式
-
 			File file = AudioUtils.wavTomp3(f, imageName);
 			InputStream input = new FileInputStream(file);
 			// 阿里云客户端
