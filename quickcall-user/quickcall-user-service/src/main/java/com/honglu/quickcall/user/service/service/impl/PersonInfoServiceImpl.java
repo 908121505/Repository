@@ -650,7 +650,8 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 						// 审核状态不是待审核状态
 						if (skillReview.getAuditStatus() != 1) {
 							mySkillVO.setSkillVoiceUrl(skillReview.getSkillVoiceUrl());
-							mySkillVO.setSkillVoiceTime(skillReview.getSkillVoiceTime());
+							mySkillVO.setSkillVoiceTime(
+									skillReview.getSkillVoiceTime().setScale(0, BigDecimal.ROUND_UP).intValue());
 						}
 						haveSkill.add(mySkillVO);
 						flag = false;

@@ -59,7 +59,7 @@ public class ScoreRankServiceImpl implements ScoreRankService {
         bigvSkillScoreMapper.updateValueScoreToOrder(order.getOrderId(), score);
 
         // 更新评分到大V技能评分表和总评分排名表
-        updateToBigvScore(order.getServiceId(), order.getSkillItemId(), order.getCustomerSkillId(), score);
+        updateToBigvScore(order.getServiceId(), order.getSkillItemId(), order.getCustomerSkillId(), score, 1);
 
     }
 
@@ -88,7 +88,7 @@ public class ScoreRankServiceImpl implements ScoreRankService {
             BigDecimal updateScore = evaluationScore.subtract(order.getValueScore()).setScale(0, BigDecimal.ROUND_HALF_UP);
 
             // 更新评分到大V技能评分表和总评分排名表
-            updateToBigvScore(order.getServiceId(), order.getSkillItemId(), order.getCustomerSkillId(), updateScore);
+            updateToBigvScore(order.getServiceId(), order.getSkillItemId(), order.getCustomerSkillId(), updateScore, 0);
         } else {
             // 计算该订单对应的技能的评分
             BigDecimal score = calculateOrderSkillScore(order, order.getEvaluateStart());
@@ -97,7 +97,7 @@ public class ScoreRankServiceImpl implements ScoreRankService {
             bigvSkillScoreMapper.updateValueScoreToOrder(order.getOrderId(), score);
 
             // 更新评分到大V技能评分表和总评分排名表
-            updateToBigvScore(order.getServiceId(), order.getSkillItemId(), order.getCustomerSkillId(), score);
+            updateToBigvScore(order.getServiceId(), order.getSkillItemId(), order.getCustomerSkillId(), score, 1);
         }
     }
 
@@ -135,10 +135,11 @@ public class ScoreRankServiceImpl implements ScoreRankService {
      * @param customerId
      * @param skillItemId
      * @param score
+     * @param addOrderTotal 累加订单的笔数
      */
-    private void updateToBigvScore(Long customerId, Long skillItemId, Long customerSkillId, BigDecimal score) {
+    private void updateToBigvScore(Long customerId, Long skillItemId, Long customerSkillId, BigDecimal score, Integer addOrderTotal) {
         // 存入技能排名表
-        if (bigvSkillScoreMapper.updateBigvSkillScore(customerSkillId, score) == 0) {
+        if (bigvSkillScoreMapper.updateBigvSkillScore(customerSkillId, score, addOrderTotal) == 0) {
             // 更新失败则插入
             BigvSkillScore bigvSkillScore = new BigvSkillScore();
             bigvSkillScore.setId(UUIDUtils.getId());
@@ -151,7 +152,7 @@ public class ScoreRankServiceImpl implements ScoreRankService {
         }
 
         // 存入大V排名表
-        if (bigvScoreMapper.updateBigvScore(customerId, score) == 0) {
+        if (bigvScoreMapper.updateBigvScore(customerId, score, addOrderTotal) == 0) {
             // 更新失败则插入
             BigvScore bigvScore = new BigvScore();
             bigvScore.setId(UUIDUtils.getId());
