@@ -43,6 +43,12 @@ public class OrderService {
 		paramMap.put("custNickName", parameters.get("custNickName"));
 		paramMap.put("servNickName", parameters.get("servNickName"));
 		paramMap.put("orderType", parameters.get("orderType"));
+		
+		//接单人手机号码
+		paramMap.put("servicePhone", parameters.get("servicePhone"));
+		//下单人手机号码
+		paramMap.put("customerPhone", parameters.get("customerPhone"));
+		paramMap.put("orderType", parameters.get("orderType"));
 		paramMap.put("iDisplayStart", parameters.get("iDisplayStart"));
 		paramMap.put("iDisplayLength", parameters.get("iDisplayLength"));
 		List<OrderVO> skillList = baseManager.query("Order.selectPageList", paramMap);
@@ -64,9 +70,30 @@ public class OrderService {
 		paramMap.put("receivedOrderId",parameters.get("receivedOrderId"));
 		paramMap.put("startTime",parameters.get("startTime"));
 		paramMap.put("endTime",parameters.get("endTime"));
-		paramMap.put("placeOrderUserNickName",parameters.get("placeOrderUserNickName"));
-		paramMap.put("receiveOrderUserNickName",parameters.get("receiveOrderUserNickName"));
+		
+		String  placeOrderUserNickName = (String) parameters.get("placeOrderUserNickName");
+		if(StringUtils.isNotBlank(placeOrderUserNickName)){
+			placeOrderUserNickName =  placeOrderUserNickName.trim();
+		}
+		paramMap.put("placeOrderUserNickName",placeOrderUserNickName);
+		
+		String receiveOrderUserNickName = (String) parameters.get("receiveOrderUserNickName");
+		if(StringUtils.isNotBlank(receiveOrderUserNickName)){
+			receiveOrderUserNickName =  receiveOrderUserNickName.trim();
+		}
+		paramMap.put("receiveOrderUserNickName",receiveOrderUserNickName);
 
+		
+		//接单人手机号码
+		paramMap.put("servicePhone", parameters.get("servicePhone"));
+		//下单人手机号码
+		paramMap.put("customerPhone", parameters.get("customerPhone"));
+		
+		
+		
+		
+		
+		
 		String orderStatus = (String)parameters.get("orderStatus");
 		String serviceType = (String)parameters.get("serviceType");
 		String discountType = (String)parameters.get("discountTypeVal");
@@ -238,7 +265,17 @@ public class OrderService {
         paramMap.put("orderId", entity.getOrderId());
 		paramMap.put("orderStatus", entity.getOrderStatus());
 		paramMap.put("remarkReason", entity.getRemarkReason());
+		
+		
+		
+		
 		int update = baseManager.update("Order.updateOrder",  paramMap);
+		//TODO 添加退款给用户 + 冻结大V金额
+		
+		
+		
+		
+		
         return update;
     }
 

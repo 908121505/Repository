@@ -11,6 +11,7 @@
 			</ul>
 		</div>
 		<div class="main-content">
+		<!--  第一行：公共查询 -->
 			<div class="row">
 				<div class="col-md-2">
 					<div class="form-group">
@@ -20,38 +21,6 @@
 						</div>
 					</div>
 				</div>
-
-				<div class="col-md-2">
-					<div class="form-group">
-						<div class="input-group">
-							<div class="input-group-addon">下单用户ID</div>
-							<input class="form-control" type="text" id="place_order_id">
-						</div>
-					</div>
-				</div>
-
-				<div class="col-md-2">
-					<div class="form-group">
-						<div class="input-group">
-							<div class="input-group-addon">接单用户ID</div>
-							<input class="form-control" type="text" id="received_order_id">
-						</div>
-					</div>
-				</div>
-			</div>
-			<%--<div class="row">
-				<div class="col-md-2">
-					<div class="form-group">
-						<div class="input-group">
-							<div class="input-group-addon">开始时间</div>
-							<input class="form-control" style="width:200px" type="text" id="start_time" onfocus="WdatePicker({skin:'whyGreen',dateFmt:'yyyy-MM-dd HH:mm:ss',minDate:'1950-01-01'})">
-							<div class="input-group-addon"> 到 结束时间</div>
-							<input class="form-control"  style="width:200px"  type="text" id="end_time" onfocus="WdatePicker({skin:'whyGreen',dateFmt:'yyyy-MM-dd HH:mm:ss',minDate:'1950-01-01'})">
-						</div>
-					</div>
-				</div>
-			</div>--%>
-			<div class="row">
 				<div class="col-md-2">
 					<div class="form-group">
 						<div class="input-group">
@@ -69,12 +38,58 @@
 						</div>
 					</div>
 				</div>
+			</div>
+		<!--  第一行：下单人信息查询 -->
+			<div class="row">
+				
 
+				<div class="col-md-2">
+					<div class="form-group">
+						<div class="input-group">
+							<div class="input-group-addon">下单用户轻音ID</div>
+							<input class="form-control" type="text" id="place_order_id">
+						</div>
+					</div>
+				</div>
+				<div class="col-md-2">
+					<div class="form-group">
+						<div class="input-group">
+							<div class="input-group-addon">下单手机号码</div>
+							<input class="form-control" type="text" id="customerPhoneQuery">
+						</div>
+					</div>
+				</div>
+				
 				<div class="col-md-2">
 					<div class="form-group">
 						<div class="input-group">
 							<div class="input-group-addon">下单用户昵称</div>
 							<input class="form-control" type="text" id="place_order_user_nick_name">
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			
+			
+			
+			<div class="row">
+				
+
+		
+				<div class="col-md-2">
+					<div class="form-group">
+						<div class="input-group">
+							<div class="input-group-addon">接单用户轻音ID</div>
+							<input class="form-control" type="text" id="received_order_id">
+						</div>
+					</div>
+				</div>
+				<div class="col-md-2">
+					<div class="form-group">
+						<div class="input-group">
+							<div class="input-group-addon">接单手机号码</div>
+							<input class="form-control" type="text" id="servicePhoneQuery">
 						</div>
 					</div>
 				</div>
@@ -213,8 +228,13 @@
 		            },
 		            { 
 		               "data": "receivedOrderId",
-		               "sTitle":"接单用户ID",
+		               "sTitle":"接单用户轻音ID",
 		               'sClass':"text-center", "sortable": false
+		            },
+		            { 
+		                "data": "servicePhone",
+		                "sTitle":"接单用户手机号码",
+		                'sClass':"text-center", "sortable": false
 		            },
 		            { 
 		                "data": "receiveOrderUserNickName",
@@ -223,7 +243,12 @@
 		            },
                     {
                         "data": "placeOrderId",
-                        "sTitle":"下单用户ID",
+                        "sTitle":"下单用户轻音ID",
+                        'sClass':"text-center", "sortable": false
+                    },
+                    {
+                        "data": "customerPhone",
+                        "sTitle":"下单用户手机号码",
                         'sClass':"text-center", "sortable": false
                     },
                     {
@@ -308,10 +333,11 @@
 				    aoData.push({"name":"receiveOrderUserNickName","value":$("#receive_order_user_nick_name").val()});
 				    aoData.push({"name":"serviceType","value":$("#service_type").val()});
 				    aoData.push({"name":"orderStatus","value":$("#order_status").val()});
-				    aoData.push({"name":"discountTypeVal","value":$("#discount_type_val").val()});
+				    aoData.push({"name":"customerPhone","value":$("#customerPhoneQuery").val()});
+				    aoData.push({"name":"servicePhone","value":$("#servicePhoneQuery").val()});
                     } ,
                  aoColumnDefs : [ {
-                     "aTargets": 13,
+                     "aTargets": 15,
                      "mRender": function (data, type, row) {
                          var detail = "", del = "";
                          detail = "<a href='#' onclick='addAndUpdateRow(\"" + data + "-detail\")' data-toggle='modal' class='padding-right-small label label-success'><i class='glyphicon glyphicon-edit'></i>详情</a>";
