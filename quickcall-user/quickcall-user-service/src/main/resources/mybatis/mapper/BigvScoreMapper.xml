@@ -88,7 +88,7 @@
 
   <!-- 更新大V评分 -->
   <update id="updateBigvScore">
-      UPDATE bigv_score SET order_total = order_total + 1, score_total = score_total + #{valueScore}
+      UPDATE bigv_score SET order_total = order_total + #{addOrderTotal}, score_total = score_total + #{valueScore}
       WHERE customer_id = #{customerId}
   </update>
 

@@ -1,11 +1,9 @@
 package com.honglu.quickcall.user.service.dao;
 
 import com.honglu.quickcall.user.facade.entity.BigvSkillScore;
-import com.honglu.quickcall.user.facade.entity.example.BigvSkillScoreExample;
 import org.apache.ibatis.annotations.Param;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 public interface BigvSkillScoreMapper {
 
@@ -39,7 +37,10 @@ public interface BigvSkillScoreMapper {
      *
      * @param customerSkillId
      * @param valueScore
+     * @param addOrderTotal
      * @return
      */
-    int updateBigvSkillScore(@Param("customerSkillId") Long customerSkillId, @Param("valueScore") BigDecimal valueScore);
+    int updateBigvSkillScore(@Param("customerSkillId") Long customerSkillId,
+                             @Param("valueScore") BigDecimal valueScore,
+                             @Param("addOrderTotal") Integer addOrderTotal);
 }
