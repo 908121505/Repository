@@ -244,10 +244,11 @@ public class CertificationController {
 	 */
 	private WebResponseModel uploadFile(HttpServletRequest request, String diskName) {
 		WebResponseModel response = new WebResponseModel();
+		File sourceFile = null;
+		File destFile = null;
 		try {
 			MultipartHttpServletRequest multiRequest = (MultipartHttpServletRequest) request;
 			MultipartFile mfile = multiRequest.getFile("file");
-
 			// 上传图片不能为空
 			if (mfile == null || mfile.isEmpty()) {
 				response.setCode(UserBizReturnCode.paramError.code());
@@ -256,34 +257,46 @@ public class CertificationController {
 			}
 
 			// 提取文件后缀名
-			// String fileName = file.getOriginalFilename();
-			// String extName = fileName.substring(fileName.indexOf("."));
+			String fileName = mfile.getOriginalFilename();
+			String extName = fileName.substring(fileName.indexOf("."));
 
-			// String imageName = UUIDUtils.getUUID() + extName;
-			String imageName = UUIDUtils.getUUID();
+			sourceFile = new File(UUIDUtils.getUUID() + extName);
+			mfile.transferTo(sourceFile);
+			String imageName = UUIDUtils.getUUID() + extName;
 
-			File f = new File(mfile.getOriginalFilename());
 			// 音频文件统一转MP3格式
-			File file = AudioUtils.wavTomp3(f, imageName);
-			InputStream input = new FileInputStream(file);
+			destFile = AudioUtils.wavTomp3(sourceFile, imageName);
+			InputStream input = new FileInputStream(destFile);
 			// 阿里云客户端
 			OSSClient ossClient = OSSUtil.getOSSClient();
 			// 上传
-			boolean flag = OSSUtil.uploadInputStreamObject2OSS(ossClient, input, imageName + ".mp3", diskName);
+			boolean flag = OSSUtil.uploadInputStreamObject2OSS(ossClient, input, imageName, diskName);
 			// 图片访问路径拼接
 			if (flag) {
 				response.setCode(UserBizReturnCode.Success.code());
 				response.setMsg(UserBizReturnCode.Success.desc());
-				response.setData(OSSUtil.ossUrl + "/" + diskName + "/" + imageName + ".mp3");
+				response.setData(OSSUtil.ossUrl + "/" + diskName + "/" + imageName);
 			} else {
 				response.setCode(UserBizReturnCode.Unknown.code());
 				response.setMsg("文件上传失败");
 			}
-			file.delete();
 		} catch (Exception e) {
 			logger.error("userWeb.certification upload file exception : ", e);
 			response.setCode(UserBizReturnCode.Unknown.code());
 			response.setMsg("文件上传失败，" + e.getMessage());
+		} finally {
+			if (sourceFile != null) {
+				try {
+					sourceFile.delete();
+				} catch (Exception e) {
+				}
+			}
+			if (destFile != null) {
+				try {
+					destFile.delete();
+				} catch (Exception e) {
+				}
+			}
 		}
 		return response;
 	}
