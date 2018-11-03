@@ -230,6 +230,8 @@ public interface OrderSkillConstants {
 	public static final Integer  ORDER_STATUS_GOING_USER_ACCEPCT = 26 ;
 	/**订单状态28.进行中（大V发起完成服务）*/
 	public static final Integer  ORDER_STATUS_GOING_DAV_APPAY_FINISH = 28 ;
+	/**订单状态29.已取消（强制取消）*/
+	public static final Integer  ORDER_STATUS_CANCEL_FORCE = 29 ;
 	/**订单状态30.已完成（用户同意对方）*/
 	public static final Integer  ORDER_STATUS_FINISHED_USER_ACCEPCT = 30 ;
 	/**订单状态32.已完成（大V发起已完成服务，12小时客户不响应自动完成）*/
@@ -242,6 +244,8 @@ public interface OrderSkillConstants {
 	public static final Integer  ORDER_STATUS_FINISH_BOTH_NO_OPERATE = 38 ;
 	/**订单状态40.已完成（用户评价完成）*/
 	public static final Integer  ORDER_STATUS_FINISHED_AND_PINGJIA = 40 ;
+	/**订单状态42.已完成（强制完成）*/
+	public static final Integer  ORDER_STATUS_FINISHED_FORCE = 42 ;
 	
 	
 	

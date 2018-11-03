@@ -13,6 +13,7 @@ import com.calf.module.order.entity.*;
 import com.calf.module.order.vo.OrderStatusVO;
 import com.calf.module.order.vo.OrderVO;
 import com.calf.module.order.vo.SmallOrderStatusVO;
+import com.honglu.quickcall.account.facade.constants.OrderSkillConstants;
 import com.honglu.quickcall.common.core.util.UUIDUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -185,6 +186,23 @@ public class OrderService {
 			}
 			model.addAttribute("isShow", isShow);
 		}
+        
+        Integer  orderStatus = Integer.valueOf(order.getOrderStatus());
+        
+        Integer   selectFlag = null ;
+        if(orderStatus < 29 ){
+        	//可以强制取消
+        	selectFlag = 1 ;
+        }else if(orderStatus == OrderSkillConstants.ORDER_STATUS_CANCEL_FORCE ||   orderStatus == OrderSkillConstants.ORDER_STATUS_FINISHED_FORCE){
+        	//已经强制取消或者强制完成	
+        	selectFlag = 3 ;
+        }else{
+        	//可以强制完成
+        	selectFlag = 2 ;
+        }
+        
+        model.addAttribute("selectFlag", selectFlag);
+        
 
         model.addAttribute("entity", order);
         return order;
@@ -263,19 +281,22 @@ public class OrderService {
     public int updateOrder(OrderVO entity) {
         Map<String, Object> paramMap = new HashMap<String, Object>();
         paramMap.put("orderId", entity.getOrderId());
-		paramMap.put("orderStatus", entity.getOrderStatus());
 		paramMap.put("remarkReason", entity.getRemarkReason());
 		
-		
+		Integer orderStatus = Integer.valueOf(entity.getOrderStatus());
+		//TODO 添加退款给用户 + 冻结大V金额
+		//强制取消
+		if(OrderSkillConstants.ORDER_STATUS_CANCEL_FORCE == orderStatus){
+			paramMap.put("orderStatus", orderStatus);
+			baseManager.update("Account.inAccount",  paramMap);
+			//退款给用户
+		}else if(OrderSkillConstants.ORDER_STATUS_FINISHED_FORCE == orderStatus){
+			//给大V冻结金额
+			paramMap.put("orderStatus", orderStatus);
+		}
 		
 		
 		int update = baseManager.update("Order.updateOrder",  paramMap);
-		//TODO 添加退款给用户 + 冻结大V金额
-		
-		
-		
-		
-		
         return update;
     }
 
@@ -286,6 +307,11 @@ public class OrderService {
 		skill.setModifyTime(new Date());
 		baseManager.update(skill);
 		return 0;
+	}
+	
+	
+	public void  inAccount(){
+		
 	}
 
 	

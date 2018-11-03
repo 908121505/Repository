@@ -452,10 +452,10 @@
        AND  revice.phone   = #{servicePhone}
      </if>
      <if test="startTime != null" >
-       AND  od.start_time &gt;= #{startTime}
+       AND  od.create_time &gt;= #{startTime}
      </if>
      <if test="endTime != null" >
-       AND  od.end_time &lt;= #{endTime}
+       AND  od.create_time &lt;= #{endTime}
      </if>
      <if test="serviceType != null" >
        AND  skill.skill_item_id = #{serviceType}
@@ -498,10 +498,10 @@
       AND  revice.nick_name LIKE  concat('%',#{receiveOrderUserNickName},'%')
     </if>
     <if test="startTime != null" >
-      AND  start_time &gt;= #{startTime}
+      AND  od.create_time &gt;= #{startTime}
     </if>
     <if test="endTime != null" >
-      AND  end_time &lt;= #{endTime}
+      AND  od.create_time &lt;= #{endTime}
     </if>
     <if test="serviceType != null" >
       AND  skill.skill_item_id = #{serviceType}
