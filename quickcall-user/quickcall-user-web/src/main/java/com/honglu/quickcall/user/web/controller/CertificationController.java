@@ -261,7 +261,8 @@ public class CertificationController {
 
 			// String imageName = UUIDUtils.getUUID() + extName;
 			String imageName = UUIDUtils.getUUID();
-			File f = (File) mfile;
+			InputStream ins = mfile.getInputStream();
+			File f = new File(mfile.getOriginalFilename());
 			// 音频文件统一转MP3格式
 
 			File file = AudioUtils.wavTomp3(f, imageName);
