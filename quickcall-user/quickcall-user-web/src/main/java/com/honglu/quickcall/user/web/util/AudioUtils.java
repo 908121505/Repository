@@ -45,9 +45,10 @@ public class AudioUtils {
 		File target = new File(desFileName);
 		AudioAttributes audio = new AudioAttributes();
 		audio.setCodec("libmp3lame");
-		audio.setBitRate(new Integer(36000));
-		audio.setChannels(new Integer(2));
-		audio.setSamplingRate(new Integer(44100));
+		/*
+		 * audio.setBitRate(new Integer(36000)); audio.setChannels(new Integer(2));
+		 * audio.setSamplingRate(new Integer(44100));
+		 */
 		EncodingAttributes attrs = new EncodingAttributes();
 		attrs.setFormat("mp3");
 		attrs.setAudioAttributes(audio);
