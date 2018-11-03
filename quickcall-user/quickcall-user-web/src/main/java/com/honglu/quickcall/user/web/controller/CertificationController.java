@@ -270,12 +270,12 @@ public class CertificationController {
 			// 阿里云客户端
 			OSSClient ossClient = OSSUtil.getOSSClient();
 			// 上传
-			boolean flag = OSSUtil.uploadInputStreamObject2OSS(ossClient, input, imageName + ".jpg", diskName);
+			boolean flag = OSSUtil.uploadInputStreamObject2OSS(ossClient, input, imageName + ".mp3", diskName);
 			// 图片访问路径拼接
 			if (flag) {
 				response.setCode(UserBizReturnCode.Success.code());
 				response.setMsg(UserBizReturnCode.Success.desc());
-				response.setData(OSSUtil.ossUrl + "/" + diskName + "/" + imageName + ".jpg");
+				response.setData(OSSUtil.ossUrl + "/" + diskName + "/" + imageName + ".mp3");
 			} else {
 				response.setCode(UserBizReturnCode.Unknown.code());
 				response.setMsg("文件上传失败");
