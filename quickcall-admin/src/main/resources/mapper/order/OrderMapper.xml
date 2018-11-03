@@ -491,12 +491,18 @@
     <if test="placeOrderUserNickName != null" >
       AND  place.nick_name LIKE  concat('%',#{placeOrderUserNickName},'%')
     </if>
+    <if test="customerPhone != null" >
+       AND  place.phone = #{customerPhone}
+     </if>
     <if test="receivedOrderId != null" >
       AND  revice.customer_id = #{receivedOrderId}
     </if>
     <if test="receiveOrderUserNickName != null" >
       AND  revice.nick_name LIKE  concat('%',#{receiveOrderUserNickName},'%')
     </if>
+     <if test="servicePhone != null" >
+       AND  revice.phone   = #{servicePhone}
+     </if>
     <if test="startTime != null" >
       AND  od.create_time &gt;= #{startTime}
     </if>
