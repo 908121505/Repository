@@ -259,14 +259,18 @@ public class CertificationController {
 			// 提取文件后缀名
 			String fileName = mfile.getOriginalFilename();
 			String extName = fileName.substring(fileName.indexOf("."));
-
-			sourceFile = new File(UUIDUtils.getUUID() + extName);
-			mfile.transferTo(sourceFile);
 			String imageName = UUIDUtils.getUUID() + extName;
+			InputStream input = null;
+			if (extName.endsWith("mp3")) {
+				sourceFile = new File(UUIDUtils.getUUID() + extName);
+				mfile.transferTo(sourceFile);
 
-			// 音频文件统一转MP3格式
-			destFile = AudioUtils.wavTomp3(sourceFile, imageName);
-			InputStream input = new FileInputStream(destFile);
+				// 音频文件统一转MP3格式
+				destFile = AudioUtils.wavTomp3(sourceFile, imageName);
+				input = new FileInputStream(destFile);
+			} else {
+				input = mfile.getInputStream();
+			}
 			// 阿里云客户端
 			OSSClient ossClient = OSSUtil.getOSSClient();
 			// 上传
