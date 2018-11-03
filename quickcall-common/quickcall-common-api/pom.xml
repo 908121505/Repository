@@ -56,12 +56,7 @@
             <scope>provided</scope>
         </dependency>
 
-          <!-- 音频文件转换 -->
-           <dependency>
-              <groupId>it.sauronsoftware.jave</groupId>
-              <artifactId>jave</artifactId>
-              <version>1.0.2</version>
-           </dependency>
+          
 
          <dependency>
             <groupId>com.google.code.gson</groupId>
