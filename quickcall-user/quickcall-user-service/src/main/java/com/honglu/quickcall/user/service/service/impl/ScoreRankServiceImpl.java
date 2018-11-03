@@ -78,14 +78,17 @@ public class ScoreRankServiceImpl implements ScoreRankService {
             LOGGER.info("客户评价订单 -- 更新主播评分排名表 -- 订单已计算过评分：" + order.getOrderId());
 
             // 计算出默认得分的总权重值
-            BigDecimal defaultScore = calculateEvaluateScore(ScoreRankConstants.DEFAULT_EVALUATION_LEVEL);
+            BigDecimal defaultScore = calculateEvaluateScore(ScoreRankConstants.DEFAULT_EVALUATION_LEVEL, order.getOrderNum());
 
             // 评价得分
             BigDecimal evaluationScore = order.getValueScore().divide(defaultScore, 5, BigDecimal.ROUND_HALF_EVEN)
-                    .multiply(calculateEvaluateScore(order.getEvaluateStart()));
+                    .multiply(calculateEvaluateScore(order.getEvaluateStart(), order.getOrderNum()));
+
+            // 补差 -- 四舍五入取整
+            BigDecimal updateScore = evaluationScore.subtract(order.getValueScore()).setScale(0, BigDecimal.ROUND_HALF_UP);
 
             // 更新评分到大V技能评分表和总评分排名表
-            updateToBigvScore(order.getServiceId(), order.getSkillItemId(), order.getCustomerSkillId(), evaluationScore.subtract(order.getValueScore()));
+            updateToBigvScore(order.getServiceId(), order.getSkillItemId(), order.getCustomerSkillId(), updateScore);
         } else {
             // 计算该订单对应的技能的评分
             BigDecimal score = calculateOrderSkillScore(order, order.getEvaluateStart());
@@ -104,7 +107,7 @@ public class ScoreRankServiceImpl implements ScoreRankService {
      * @param order
      * @param evaluateStars
      * @return
-     * @计算公式：完成一笔价值评价=[（log(100,该技能累计订单数)+6)*10*平台笔数权重+笔单价*平台笔单价权重]*(评价*评价权重*平台价值权重)
+     * @计算公式：完成一笔价值评价=[（log(100,该技能累计订单数+6))*10*平台笔数权重+笔单价*平台笔单价权重]*(评价*评价权重*平台价值权重)
      * @总排名：个人总价值=所有单个技能累计价值之和
      */
     private BigDecimal calculateOrderSkillScore(Order order, Integer evaluateStars) {
@@ -113,16 +116,17 @@ public class ScoreRankServiceImpl implements ScoreRankService {
         orderTotal = orderTotal == null ? 0 : orderTotal;
 
         // 计算技能总比价得分
-        BigDecimal orderTotalScore = new BigDecimal((Objects.equals(orderTotal, 1) ? 0 : (2 / Math.log10(orderTotal)) + 6)
+        BigDecimal orderTotalScore = new BigDecimal((2 / Math.log10(orderTotal + 6))
                 * 10 * ScoreRankConstants.PLATFORM_ORDER_NUM_TOTAL_WEIGHT);
 
         // 计算技能笔单价得分
         BigDecimal servicePriceScore = order.getServicePrice().multiply(new BigDecimal(ScoreRankConstants.PLATFORM_SINGLE_ORDER_PRICE_WEIGHT));
 
         // 计算总得分
-        BigDecimal valueScore = orderTotalScore.add(servicePriceScore).multiply(calculateEvaluateScore(evaluateStars));
+        BigDecimal valueScore = orderTotalScore.add(servicePriceScore).multiply(calculateEvaluateScore(evaluateStars, order.getOrderNum()));
 
-        return valueScore;
+        // 四舍五入取整
+        return valueScore.setScale(0, BigDecimal.ROUND_HALF_UP);
     }
 
     /**
@@ -160,16 +164,17 @@ public class ScoreRankServiceImpl implements ScoreRankService {
 
     /**
      * 计算评价得分
-     *
+     * @desc (评价*评价权重*平台价值权重)
      * @param evaluateStars
+     * @param orderNum
      * @return
      */
-    private static BigDecimal calculateEvaluateScore(Integer evaluateStars) {
-        if(evaluateStars == null){
+    private static BigDecimal calculateEvaluateScore(Integer evaluateStars, Integer orderNum) {
+        if (evaluateStars == null) {
             evaluateStars = 0;
         }
-        return new BigDecimal(evaluateStars
-                * ScoreRankConstants.EVALUATION_LEVEL_WEIGHT_MAP.get(evaluateStars)
+        return new BigDecimal(ScoreRankConstants.EVALUATION_LEVEL_WEIGHT_MAP.get(evaluateStars)
+                * ScoreRankConstants.getSingleOrderNumWeight(orderNum)
                 * ScoreRankConstants.PLATFORM_ORDER_EVALUATION_WEIGHT);
     }
 
