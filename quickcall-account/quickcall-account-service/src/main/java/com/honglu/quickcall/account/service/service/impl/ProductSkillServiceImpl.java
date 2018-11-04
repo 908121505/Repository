@@ -456,7 +456,6 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 	
 	
 	private  static final  Integer  WEEK_INDEX_DEFAULT = 0 ;
->>>>>>> refs/remotes/origin/master_tag(2018/11/03)
 
 	@Override
 	public void updateSkillInfoPersonal(SkillUpdateRequest request) {
