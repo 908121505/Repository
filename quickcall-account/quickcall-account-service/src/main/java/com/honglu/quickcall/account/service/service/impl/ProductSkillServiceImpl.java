@@ -2,6 +2,7 @@ package com.honglu.quickcall.account.service.service.impl;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -413,6 +414,46 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 		System.out.println("============" + json);
 		return resultVO;
 	}
+	
+	
+	
+	public static void main(String[] args) {
+//		System.out.println(getAppointEndTime("1800"));
+	}
+	
+	public   Date   getAppointEndTime(String  endTimeStr){
+		//
+		if(StringUtils.isBlank(endTimeStr) || endTimeStr.length() < 4){
+			return null;
+		}
+		
+		Integer  endTimeIndex =  Integer.valueOf(endTimeStr);
+		
+		Calendar  cal =  Calendar.getInstance();
+		Integer  currHour= cal.get(Calendar.HOUR_OF_DAY);
+		Integer  currMinute = cal.get(Calendar.MINUTE);
+		
+		String  currTimeStr =  (currHour < 10 ? "0"+currHour :currHour+"")+ (currMinute < 10  ? "0"+currMinute :currMinute +"" );
+		Integer  currTimeIndex =  Integer.valueOf(currTimeStr);
+		
+		Integer   selectHourIndex = Integer.valueOf(endTimeStr.substring(0, 2));
+		//选中的结束时间在当前时间之后
+		if(endTimeIndex >=  currTimeIndex ){
+			cal.set(Calendar.HOUR_OF_DAY, selectHourIndex);
+			cal.set(Calendar.MINUTE, 0);
+		}else{
+			//选中的结束时间在当前时间只前
+			//结束时间向后推1天
+			cal.add(Calendar.DAY_OF_YEAR, 1);
+			cal.set(Calendar.HOUR_OF_DAY, selectHourIndex);
+			cal.set(Calendar.MINUTE, 0);
+		}
+		Date  appointEndTime =cal.getTime(); 
+		return appointEndTime;
+	}
+	
+	
+	private  static final  Integer  WEEK_INDEX_DEFAULT = 0 ;
 
 	@Override
 	public void updateSkillInfoPersonal(SkillUpdateRequest request) {
@@ -423,14 +464,21 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 			return ;
 		}
 		String  endTimeStr = request.getEndServiceTimeStr();
+		//根据结束时间获取预约结束时间
+		
+		Date  appointEndTime = getAppointEndTime(endTimeStr);
+		Date  appointStartTime = new Date();
+		
+		
+		
 		Integer  receiveStatus = request.getReceiveStatus();
-		Integer sunday = request.getSunday();
-		Integer saturday = request.getSaturday();
-		Integer tuesday = request.getTuesday();
-		Integer wednesday = request.getWednesday();
-		Integer thursday = request.getThursday();
-		Integer friday = request.getFriday();
-		Integer monday = request.getMonday();
+//		Integer sunday = request.getSunday();
+//		Integer saturday = request.getSaturday();
+//		Integer tuesday = request.getTuesday();
+//		Integer wednesday = request.getWednesday();
+//		Integer thursday = request.getThursday();
+//		Integer friday = request.getFriday();
+//		Integer monday = request.getMonday();
 		Long  customerId = request.getCustomerId();
 		List<CustomerSkill>   updateList = new ArrayList<>();
 		Date  currTime = new Date();
@@ -462,16 +510,20 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 			custSkill.setDiscountRate(discountRate);
 			custSkill.setSkillItemId(skillItemId);
 			custSkill.setSwitchStatus(csrv.getSwitchStatus());
-			custSkill.setMonday(monday);
-			custSkill.setTuesday(tuesday);
-			custSkill.setWednesday(wednesday);
-			custSkill.setFriday(friday);
-			custSkill.setSunday(sunday);
-			custSkill.setThursday(thursday);
-			custSkill.setSaturday(saturday);
+			custSkill.setMonday(WEEK_INDEX_DEFAULT);
+			custSkill.setTuesday(WEEK_INDEX_DEFAULT);
+			custSkill.setWednesday(WEEK_INDEX_DEFAULT);
+			custSkill.setFriday(WEEK_INDEX_DEFAULT);
+			custSkill.setSunday(WEEK_INDEX_DEFAULT);
+			custSkill.setThursday(WEEK_INDEX_DEFAULT);
+			custSkill.setSaturday(WEEK_INDEX_DEFAULT);
 			custSkill.setModifyTime(currTime);
 			custSkill.setReceiveStatus(receiveStatus);
 			custSkill.setEndTimeStr(endTimeStr);
+			
+			//设置开始时间和结束时间
+			custSkill.setAppointStartTime(appointStartTime);
+			custSkill.setAppointEndTime(appointEndTime);
 			updateList.add(custSkill);
 		}
 		//在技能审核的时候已经初始化用户技能信息
