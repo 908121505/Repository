@@ -330,6 +330,11 @@ public class OrderServiceImpl implements IOrderService {
 				OrderTempResponseVO  responseVO = commonService.getCountDownSeconds(info.getOrderStatus(), info.getOrderTime(), info.getReceiveOrderTime());
 				info.setCountDownSeconds(responseVO.getCountDownSeconds());
 				info.setOrderStatus(responseVO.getOrderStatus());
+				//TODO 兼容安卓版本   7号需要回滚
+				if(info.getReceiveOrderTime() == null){
+					info.setReceiveOrderTime(info.getOrderTime());
+				}
+				
 			}
 		}
 			
@@ -360,6 +365,10 @@ public class OrderServiceImpl implements IOrderService {
 				OrderTempResponseVO  responseVO = commonService.getCountDownSeconds(info.getOrderStatus(), info.getOrderTime(), info.getReceiveOrderTime());
 				info.setCountDownSeconds(responseVO.getCountDownSeconds());
 				info.setOrderStatus(responseVO.getOrderStatus());
+				//TODO 兼容安卓版本   7号需要回滚
+				if(info.getReceiveOrderTime() == null){
+					info.setReceiveOrderTime(info.getOrderTime());
+				}
 			}
 		}
 		
