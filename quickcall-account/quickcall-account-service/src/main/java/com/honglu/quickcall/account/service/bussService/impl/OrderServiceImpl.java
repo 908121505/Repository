@@ -201,10 +201,10 @@ public class OrderServiceImpl implements IOrderService {
 			
 			Integer   weekIndex = DateUtils.getDayOfWeek();
 			Integer   skillSwitch = 1 ;
-			String  endTimeStr = DateUtils.formatDateHHSS(new Date()).replaceAll(":", "") ;
+//			String  endTimeStr = DateUtils.formatDateHHSS(new Date()).replaceAll(":", "") ;
 			
 			//根据技能ID 获取等级获取价格信息
-			CustomerSkill   customerSkill = customerSkillMapper.selectByPrimaryKeyExt(customerSkillId, weekIndex, skillSwitch, endTimeStr);
+			CustomerSkill   customerSkill = customerSkillMapper.selectByPrimaryKeyExt(customerSkillId, weekIndex, skillSwitch, new Date());
 			
 			if(customerSkill == null ){
 				resultMap.put("retCode",  OrderSkillConstants.RET_CODE_DV_NOT_ACCEPTE_ORDER);
@@ -525,13 +525,13 @@ public class OrderServiceImpl implements IOrderService {
 		
 		Integer   weekIndex = DateUtils.getDayOfWeek();
 		Integer   skillSwitch = 1 ;
-		String  endTimeStr = DateUtils.formatDateHHSS(new Date()).replaceAll(":", "") ;
+//		String  endTimeStr = DateUtils.formatDateHHSS(new Date()).replaceAll(":", "") ;
 	
 		
 		orderDetailForIMVO.setServiceId(serviceId);
 		orderDetailForIMVO.setCustomerId(customerId);
 		//根据技能ID 获取等级获取价格信息
-		CustomerSkillIMVO   customerSkillIMVO = customerSkillMapper.selectCustomerSkillByCustomerId(serviceId, weekIndex, skillSwitch, endTimeStr);
+		CustomerSkillIMVO   customerSkillIMVO = customerSkillMapper.selectCustomerSkillByCustomerId(serviceId, weekIndex, skillSwitch, new Date());
 		
 		//服务方当天技能不存在，则关注对方
 		if(customerSkillIMVO == null){
