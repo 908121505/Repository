@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.honglu.quickcall.task.dao.TaskCustomerSkillMapper" >
+
+
+  <!-- 查询需要打开开关的技能列表-->
+  <select id="queryCustomerSkill"   resultType="java.lang.Long" >
+		SELECT
+			customer_skill_id 
+		FROM
+			customer_skill
+		WHERE
+			receive_status = #{queryStatus}
+		AND appoint_end_time <![CDATA[ < ]]>  #{queryEndTime} 
+  </select>
+  
+  
+
+<!-- 关闭技能开关 -->
+  <update id="updateCustomerSkill"  >
+		UPDATE 
+			customer_skill
+		SET 
+			receive_status = #{updateStatus}
+		WHERE
+			customer_skill_id   IN 
+			<foreach collection="list" item="customerSkillId"    open="("  close=")"  separator=",">
+				#{customerSkillId}
+			</foreach>
+  </update>
+  
+</mapper>

@@ -57,6 +57,11 @@ public class CustomerSkill {
     private Integer sunday;
 
     private String endTimeStr;
+    
+    /**预约接单开始时间*/
+    private Date  appointStartTime;
+    /**预约接单结束时间*/
+    private Date  appointEndTime;
 
     private String skillDescribe;
 
@@ -72,7 +77,26 @@ public class CustomerSkill {
 
     
     
-    public Integer getSkillStatus() {
+    
+    
+    
+    public Date getAppointStartTime() {
+		return appointStartTime;
+	}
+
+	public void setAppointStartTime(Date appointStartTime) {
+		this.appointStartTime = appointStartTime;
+	}
+
+	public Date getAppointEndTime() {
+		return appointEndTime;
+	}
+
+	public void setAppointEndTime(Date appointEndTime) {
+		this.appointEndTime = appointEndTime;
+	}
+
+	public Integer getSkillStatus() {
 		return skillStatus;
 	}
 

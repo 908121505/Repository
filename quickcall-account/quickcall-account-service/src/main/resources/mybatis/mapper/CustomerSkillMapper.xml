@@ -24,6 +24,8 @@
     <result column="saturday" property="saturday" jdbcType="TINYINT" />
     <result column="sunday" property="sunday" jdbcType="TINYINT" />
     <result column="end_time_str" property="endTimeStr" jdbcType="VARCHAR" />
+    <result column="appoint_start_time" property="appointStartTime" jdbcType="TIMESTAMP" />
+    <result column="appoint_end_time" property="appointEndTime" jdbcType="TIMESTAMP" />
     <result column="skill_describe" property="skillDescribe" jdbcType="VARCHAR" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
@@ -36,7 +38,7 @@
    customer_skill_id, certify_id, customer_id, skill_item_id, skill_item_ext_id, skill_name, 
     service_unit, skill_price, skill_status, switch_status, receive_status, discount_rate, 
     skill_range, discount_price, monday, tuesday, wednesday, thursday, friday, saturday, 
-    sunday, end_time_str, skill_describe, create_time, modify_time, create_man, modify_man, 
+    sunday, end_time_str, appoint_start_time,appoint_end_time ,skill_describe, create_time, modify_time, create_man, modify_man, 
     remark
   </sql>
  
@@ -95,7 +97,7 @@
       skill_range, discount_price, monday, 
       tuesday, wednesday, thursday, 
       friday, saturday, sunday, 
-      end_time_str, skill_describe, create_time, 
+      end_time_str, appoint_start_time,appoint_end_time,skill_describe, create_time, 
       modify_time, create_man, modify_man, 
       remark)
     values (#{customerSkillId,jdbcType=BIGINT}, #{certifyId,jdbcType=BIGINT}, #{customerId,jdbcType=BIGINT}, 
@@ -105,7 +107,7 @@
       #{skillRange,jdbcType=TINYINT}, #{discountPrice,jdbcType=DECIMAL}, #{monday,jdbcType=TINYINT}, 
       #{tuesday,jdbcType=TINYINT}, #{wednesday,jdbcType=TINYINT}, #{thursday,jdbcType=TINYINT}, 
       #{friday,jdbcType=TINYINT}, #{saturday,jdbcType=TINYINT}, #{sunday,jdbcType=TINYINT}, 
-      #{endTimeStr,jdbcType=VARCHAR}, #{skillDescribe,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{endTimeStr,jdbcType=VARCHAR}, #{appointStartTime,jdbcType=TIMESTAMP},#{appointEndTime,jdbcType=TIMESTAMP},#{skillDescribe,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
       #{modifyTime,jdbcType=TIMESTAMP}, #{createMan,jdbcType=VARCHAR}, #{modifyMan,jdbcType=VARCHAR}, 
       #{remark,jdbcType=VARCHAR})
   </insert>
@@ -178,6 +180,12 @@
       </if>
       <if test="endTimeStr != null" >
         end_time_str,
+      </if>
+      <if test="appointStartTime != null" >
+        appoint_start_time,
+      </if>
+      <if test="appoint_end_time != null" >
+        appoint_end_time,
       </if>
       <if test="skillDescribe != null" >
         skill_describe,
@@ -264,6 +272,12 @@
       </if>
       <if test="endTimeStr != null" >
         #{endTimeStr,jdbcType=VARCHAR},
+      </if>
+      <if test="appointStartTime != null" >
+        #{appointStartTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="appointEndTime != null" >
+        #{appointEndTime,jdbcType=TIMESTAMP},
       </if>
       <if test="skillDescribe != null" >
         #{skillDescribe,jdbcType=VARCHAR},
@@ -353,6 +367,12 @@
       <if test="endTimeStr != null" >
         end_time_str = #{endTimeStr,jdbcType=VARCHAR},
       </if>
+      <if test="appointStartTime != null" >
+        appoint_start_time = #{appointStartTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="appointEndTime != null" >
+        appoint_end_time = #{appointEndTime,jdbcType=TIMESTAMP},
+      </if>
       <if test="skillDescribe != null" >
         skill_describe = #{skillDescribe,jdbcType=VARCHAR},
       </if>
@@ -400,6 +420,8 @@
       saturday = #{saturday,jdbcType=TINYINT},
       sunday = #{sunday,jdbcType=TINYINT},
       end_time_str = #{endTimeStr,jdbcType=VARCHAR},
+      appoint_start_time = #{appointStartTime,jdbcType=TIMESTAMP},
+      appoint_end_time = #{appointEndTime,jdbcType=TIMESTAMP},
       skill_describe = #{skillDescribe,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       modify_time = #{modifyTime,jdbcType=TIMESTAMP},
@@ -445,6 +467,8 @@
       saturday = #{skill.saturday,jdbcType=TINYINT},
       sunday = #{skill.sunday,jdbcType=TINYINT},
       end_time_str = #{skill.endTimeStr,jdbcType=VARCHAR},
+      appoint_start_time = #{skill.appointStartTime,jdbcType=TIMESTAMP},
+      appoint_end_time = #{skill.appointEndTime,jdbcType=TIMESTAMP},
       modify_time = #{skill.modifyTime,jdbcType=TIMESTAMP}
     where 
     	customer_skill_id = #{skill.customerSkillId,jdbcType=BIGINT} ;
