@@ -31,12 +31,12 @@ public class DeviceWhitelistController {
      * @param params
      * @return
      */
-    @PostMapping(value = "/queryDeviceWhitelist")
+    /*@PostMapping(value = "/queryDeviceWhitelist")
     public WebResponseModel queryBlacklist(QueryDeviceWhitelistReq params) {
         logger.info("查询设备白名单列表 请求参数：" + params.toString());
         WebResponseModel response = userCenterService.execute(params);
         return response;
-    }
+    }*/
 
     /**
      * 添加设备白名单
@@ -44,10 +44,10 @@ public class DeviceWhitelistController {
      * @param params
      * @return
      */
-    @PostMapping(value = "/saveDeviceWhitelist")
+    /*@PostMapping(value = "/saveDeviceWhitelist")
     public WebResponseModel saveBlacklist(SaveDeviceWhitelistReq params) {
         logger.info("添加设备白名单列表 请求参数：" + params.toString());
         WebResponseModel response = userCenterService.execute(params);
         return response;
-    }
+    }*/
 }
