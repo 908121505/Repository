@@ -753,7 +753,7 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 	public CommonResponse queryCustomerHome(CustomerHomeRequest request) {
 		Customer viewCustomer = customerMapper.selectByPrimaryKey(request.getViewCustomerId());
 		if (viewCustomer == null) {
-			return ResultUtils.result(BizCode.CustomerNotExist);
+			return ResultUtils.resultDataNotExist("用户数据不存在");
 		}
 
 		CustomerHomeVO customerHomeVO = new CustomerHomeVO();
@@ -772,7 +772,7 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 		customerHomeVO.setIdentityStatus(viewCustomer.getIdentityStatus());
 		customerHomeVO.setvStatus(viewCustomer.getvStatus());
 
-		// 查询登录用户是否关注被查看的用户 --> 传入了登录用户 && 不是查看自己
+		// 查询登录用户是否关注被查看的用户
 		if (request.getLoginCustomerId() != null
 				&& !Objects.equals(request.getLoginCustomerId(), request.getViewCustomerId())) {
 			int idFollow = fansMapper.queryIsFollow(request.getViewCustomerId(), request.getLoginCustomerId());
@@ -782,13 +782,10 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 		// 查询粉丝数
 		customerHomeVO.setFansNum(fansMapper.queryFansNumByCustomerId(request.getViewCustomerId()).intValue());
 
-		// 查看自己的标志
-		boolean viewMyselfFlag = Objects.equals(request.getLoginCustomerId(), request.getViewCustomerId());
-
 		// 查询用户形象照列表 性别(0=女,1=男)
 		List<String> appearanceList = customerAppearanceMapper
-				.queryCustomerAppearance(request.getViewCustomerId(), 0, viewMyselfFlag ? 0 : 1);
-		if (appearanceList.isEmpty()) {
+				.queryCustomerAuditedAppearance(request.getViewCustomerId(), 0);
+		if (appearanceList == null || appearanceList.size() == 0) {
 			customerHomeVO.setAppearanceUrlList(Objects.equals(customerHomeVO.getSex(), 1)
 					? Arrays.asList(PropertiesConstant.DEFAULT_CUSTOMER_APPEARANCE_URL_BOY)
 					: Arrays.asList(PropertiesConstant.DEFAULT_CUSTOMER_APPEARANCE_URL_GIRL));
@@ -801,7 +798,7 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 
 		// 查询声鉴卡
 		List<String> soundGuideCard = customerAppearanceMapper
-				.queryCustomerAppearance(request.getViewCustomerId(), 2, viewMyselfFlag ? 0 : 1);
+				.queryCustomerAuditedAppearance(request.getViewCustomerId(), 2);
 		customerHomeVO.setSoundGuideCard(soundGuideCard.isEmpty() ? null : soundGuideCard.get(0));
 
 		// 查询分享信息
