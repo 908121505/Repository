@@ -35,5 +35,7 @@ public class RedisKeyConstants {
 	public static final String ACCOUNT_USERFROZEN_ORDER_NO = "account:userfrozen:stream:orderNo:";
 	// 用户信息緩存（用戶Id）
 	public static final String USER_CUSTOMER_INFO = "voice_user:customerinfo:";
+	// 充值回调锁
+	public static final String ACCOUNT_ORDER_NO_NX = "account:orderNo:nx:";
 
 }
