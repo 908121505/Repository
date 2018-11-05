@@ -1,5 +1,21 @@
 package com.honglu.quickcall.user.service.service.impl;
 
+import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+import java.util.Objects;
+import java.util.Random;
+import java.util.ResourceBundle;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.alibaba.fastjson.JSON;
 import com.honglu.quickcall.common.api.code.BizCode;
 import com.honglu.quickcall.common.api.exception.BizException;
@@ -38,21 +54,10 @@ import com.honglu.quickcall.user.facade.exchange.request.UserIdCardInfoRequest;
 import com.honglu.quickcall.user.facade.exchange.request.UserLoginRequest;
 import com.honglu.quickcall.user.facade.exchange.request.UserRegisterRequest;
 import com.honglu.quickcall.user.service.dao.BigvPhoneMapper;
-import com.honglu.quickcall.user.facade.exchange.request.*;
 import com.honglu.quickcall.user.service.dao.CustomerMapper;
 import com.honglu.quickcall.user.service.dao.SensitivityWordMapper;
 import com.honglu.quickcall.user.service.integration.AccountDubboIntegrationService;
 import com.honglu.quickcall.user.service.service.CommonPersonService;
-import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import java.text.SimpleDateFormat;
-import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Created by len.song on 2017-12-07.
@@ -218,7 +223,6 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 		req.setUser_id(customer.getCustomerId() + "");
 		return ResultUtils.resultSuccess(customer);
 	}
-
 
 	@Override
 	public CommonResponse setpwd(SetPwdRequest params) {
@@ -412,7 +416,7 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 		req.setPhoneNumber(request.getTel());
 		req.setRegistDate(new Date());
 		req.setRegistSource(request.getAppChannelName());
-		req.setUser_id("17356985474");
+		req.setUser_id(customer.getCustomerId() + "");
 		dataDuriedPointBusiness.burySignUpResultData(req);
 		// 创建账户
 		accountDubboIntegrationService.createAccount(customer.getCustomerId());
