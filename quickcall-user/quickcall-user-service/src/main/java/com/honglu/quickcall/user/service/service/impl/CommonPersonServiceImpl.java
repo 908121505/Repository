@@ -212,7 +212,8 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 		userBean.setRegistSource(customer.getAppChannelName());
 		userBean.setGender(customer.getSex() == 0 ? "女" : "男");
 		req.setUserBean(userBean);
-		logger.info("===============开始登陆数据埋点==============");
+
+		logger.info("===============开始登陆数据埋点==============userBean:"+req.getUserBean());
 		dataDuriedPointBusiness.buryUserIdLoginResultData(req);
 		return ResultUtils.resultSuccess(customer);
 	}
