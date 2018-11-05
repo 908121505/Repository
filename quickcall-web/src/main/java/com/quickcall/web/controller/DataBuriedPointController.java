@@ -76,6 +76,11 @@ public class DataBuriedPointController {
         req.setLoginmethod("login");
         req.setPhoneNumber("17356985474");
         req.setUser_id("17356985474");
+        UserBean userBean = new UserBean();
+        userBean.setGender("男");
+        userBean.setNick("xp");
+        userBean.setYearOfBirth(new Date());
+        req.setUserBean(userBean);
         dataDuriedPointBusiness.buryUserIdLoginResultData(req);
         return "success";
     }
