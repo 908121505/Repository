@@ -23,6 +23,8 @@ public class DataBuriedPointLoginReq extends AbstractBaseReq {
     @NotBlank
     private String phoneNumber;
 
+    private UserBean userBean;
+
     public String getLoginmethod() {
         return loginmethod;
     }
@@ -47,12 +49,21 @@ public class DataBuriedPointLoginReq extends AbstractBaseReq {
         this.phoneNumber = phoneNumber;
     }
 
+    public UserBean getUserBean() {
+        return userBean;
+    }
+
+    public void setUserBean(UserBean userBean) {
+        this.userBean = userBean;
+    }
+
     @Override
     public String toString() {
-        return "DataBuriedPointLoginResp{" +
+        return "DataBuryPointLoginReq{" +
                 "loginmethod='" + loginmethod + '\'' +
                 ", user_id='" + user_id + '\'' +
                 ", phoneNumber='" + phoneNumber + '\'' +
+                ", userBean=" + userBean +
                 '}';
     }
 }

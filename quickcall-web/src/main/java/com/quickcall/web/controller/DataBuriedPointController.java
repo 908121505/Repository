@@ -53,6 +53,12 @@ public class DataBuriedPointController {
         req.setRegistDate(new Date());
         req.setRegistSource("http://www.baidu.com");
         req.setUser_id("17356985474");
+        req.setVirUserId("1233");
+        UserBean userBean = new UserBean();
+        userBean.setGender("男");
+        userBean.setNick("xp");
+        userBean.setYearOfBirth(new Date());
+        req.setUserBean(userBean);
         dataDuriedPointBusiness.burySignUpResultData(req);
         return "success";
     }

@@ -29,6 +29,8 @@ public class DataBuriedPointRegistReq extends AbstractBaseReq {
     @NotBlank
     private String registSource;
 
+    private UserBean userBean;
+
     public String getUser_id() {
         return user_id;
     }
@@ -61,13 +63,22 @@ public class DataBuriedPointRegistReq extends AbstractBaseReq {
         this.registSource = registSource;
     }
 
+    public UserBean getUserBean() {
+        return userBean;
+    }
+
+    public void setUserBean(UserBean userBean) {
+        this.userBean = userBean;
+    }
+
     @Override
     public String toString() {
-        return "DataBuriedPointRegistResp{" +
+        return "DataBuryPointRegistReq{" +
                 "user_id='" + user_id + '\'' +
                 ", phoneNumber='" + phoneNumber + '\'' +
                 ", registDate=" + registDate +
                 ", registSource='" + registSource + '\'' +
+                ", userBean=" + userBean +
                 '}';
     }
 }
