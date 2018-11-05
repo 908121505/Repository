@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="BlackList" >
+  <resultMap id="BaseResultMap" type="com.calf.module.customer.entity.BlackList" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="customer_id" property="customerId" jdbcType="BIGINT" />
+    <result column="black_customer_id" property="blackCustomerId" jdbcType="BIGINT" />
+    <result column="status" property="status" jdbcType="TINYINT" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+    <result column="create_man" property="createMan" jdbcType="VARCHAR" />
+    <result column="modify_man" property="modifyMan" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+  </resultMap>
+
+  <sql id="Base_Column_List" >
+    id, customer_id, black_customer_id, status, create_time, modify_time, create_man,
+    modify_man, remark
+  </sql>
+
+  <select id="selectPageList" resultType="com.calf.module.customer.vo.BlackListVo" parameterType="map" >
+    select bk.id as id, bk.customer_id as customerId, c.nick_name as nickName,
+    c.phone as phone, bk.black_customer_id as blackCustomerId, cc.nick_name as blackNickName,
+    DATE_FORMAT(bk.create_time,"%Y-%m-%d %H:%i:%s") as blackTime
+    from blacklist bk
+    LEFT JOIN customer c ON c.customer_id = bk.customer_id
+    LEFT JOIN customer cc ON cc.customer_id = bk.black_customer_id
+    where 1 = 1
+    <if test="status != null" >
+      and bk.status = #{status,jdbcType=TINYINT}
+    </if>
+    <if test="phone != null" >
+      and c.phone like concat( '%',#{phone},'%')
+    </if>
+    <if test="blackCustomerId != null" >
+      and bk.black_customer_id like concat( '%',#{blackCustomerId},'%')
+    </if>
+    <if test="customerId != null" >
+      and bk.customer_id like concat( '%',#{customerId},'%')
+    </if>
+     LIMIT ${iDisplayStart},${iDisplayLength}
+  </select>
+
+  <select id="selectCount" resultType="java.lang.Integer" parameterType="map" >
+    select count(1)
+    from blacklist bk
+    LEFT JOIN customer c ON c.customer_id = bk.customer_id
+    LEFT JOIN customer cc ON cc.customer_id = bk.black_customer_id
+    where 1 = 1
+    <if test="status != null" >
+      and bk.status = #{status,jdbcType=TINYINT}
+    </if>
+    <if test="phone != null" >
+      and c.phone like concat( '%',#{phone},'%')
+    </if>
+    <if test="blackCustomerId != null" >
+      and bk.black_customer_id like concat( '%',#{blackCustomerId},'%')
+    </if>
+    <if test="customerId != null" >
+      and bk.customer_id like concat( '%',#{customerId},'%')
+    </if>
+  </select>
+
+  <insert id="insert" parameterType="com.calf.module.customer.entity.BlackList" >
+  insert into blacklist (id, customer_id, black_customer_id,
+      status, create_time, modify_time,
+      create_man, modify_man, remark
+      )
+    values (#{id,jdbcType=BIGINT}, #{customerId,jdbcType=BIGINT}, #{blackCustomerId,jdbcType=BIGINT},
+      #{status,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP}, #{modifyTime,jdbcType=TIMESTAMP},
+      #{createMan,jdbcType=VARCHAR}, #{modifyMan,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}
+      )
+  </insert>
+
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select
+    <include refid="Base_Column_List" />
+    from blacklist
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+
+  <update id="updateByPrimaryKey" parameterType="com.calf.module.customer.entity.BlackList" >
+  update blacklist
+    set customer_id = #{customerId,jdbcType=BIGINT},
+      black_customer_id = #{blackCustomerId,jdbcType=BIGINT},
+      status = #{status,jdbcType=TINYINT},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      create_man = #{createMan,jdbcType=VARCHAR},
+      modify_man = #{modifyMan,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+  <update id="updateStatusDel" parameterType="Map" >
+    update blacklist
+     set status = #{status,jdbcType=TINYINT},
+        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+        modify_man = #{modifyMan,jdbcType=VARCHAR}
+     where id = #{id,jdbcType=BIGINT}
+  </update>
+
+  <update id="updateByPrimaryKeySelective" parameterType="com.calf.module.customer.entity.BlackList" >
+    update blacklist
+    <set >
+      <if test="customerId != null" >
+        customer_id = #{customerId,jdbcType=BIGINT},
+      </if>
+      <if test="blackCustomerId != null" >
+        black_customer_id = #{blackCustomerId,jdbcType=BIGINT},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyTime != null" >
+        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createMan != null" >
+        create_man = #{createMan,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyMan != null" >
+        modify_man = #{modifyMan,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+  <!--删除：根据主键ID删除-->
+  <delete id="deleteEntity" parameterType="java.lang.Long">
+       DELETE FROM blacklist
+       WHERE id = #{id}
+	</delete>
+
+</mapper>

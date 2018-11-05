@@ -43,8 +43,10 @@
         <typeAlias type="com.calf.module.appversion.entity.AppVersionManage"
 			alias="AppVersionManage" />
 		<typeAlias type="com.calf.module.appversion.entity.AppType"
-			alias="AppType" />   
+			alias="AppType" />
 
+        <!-- 设备白名单管理 -->
+        <typeAlias type="com.calf.module.customer.entity.CustomerDeviceWhitelist" alias="CustomerDeviceWhitelist"/>
 
 
     </typeAliases>
