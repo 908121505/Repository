@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="BigvPhone" >
+  <resultMap id="BaseResultMap" type="com.calf.module.customer.entity.BigvPhone" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="phone" property="phone" jdbcType="BIGINT" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+    <result column="create_man" property="createMan" jdbcType="VARCHAR" />
+    <result column="modify_man" property="modifyMan" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+
+    <!-- 扩展查询字段 -->
+    <result column="isJoin" property="isJoin" jdbcType="INTEGER" />
+    <result column="isBigv" property="isBigv" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, phone, create_time, modify_time, create_man, modify_man, remark
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="map" >
+    select
+    <include refid="Base_Column_List" />
+    from bigv_phone where id = #{arg0}
+  </select>
+
+  <delete id="delete" parameterType="map" >
+    delete from bigv_phone where id = #{arg0}
+  </delete>
+
+  <insert id="insert" parameterType="com.calf.module.customer.entity.BigvPhone" >
+    insert into bigv_phone (phone, create_man, modify_man, remark)
+    values (#{phone,jdbcType=BIGINT}, #{createMan,jdbcType=VARCHAR},
+      #{modifyMan,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR})
+  </insert>
+
+  <update id="update" parameterType="com.calf.module.customer.entity.BigvPhone" >
+    update bigv_phone
+    <set >
+      <if test="phone != null" >
+        phone = #{phone,jdbcType=BIGINT},
+      </if>
+      <if test="modifyMan != null" >
+        modify_man = #{modifyMan,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <select id="queryCount" parameterType="map" resultType="int">
+    SELECT count(bp.id) FROM bigv_phone bp
+    WHERE 1 = 1
+    <if test="phone !=null">and bp.phone = #{phone}</if>
+    <if test="isJoin == 0">
+      and (SELECT count(cs.customer_id) FROM customer cs
+      WHERE cs.phone = bp.phone
+      ) = 0
+    </if>
+    <if test="isJoin == 1">
+      and (SELECT count(cs.customer_id) FROM customer cs
+      WHERE cs.phone = bp.phone
+      ) > 0
+    </if>
+    <if test="isBigv == 0">
+      and (SELECT count(cs.customer_id) FROM customer cs
+      WHERE cs.phone = bp.phone AND cs.v_status = 2
+      ) = 0
+    </if>
+    <if test="isBigv == 1">
+      and (SELECT count(cs.customer_id) FROM customer cs
+      WHERE cs.phone = bp.phone AND cs.v_status = 2
+      ) > 0
+    </if>
+  </select>
+
+  <select id="query" parameterType="map" resultMap="BaseResultMap">
+    SELECT bp.*
+        ,(SELECT count(cs.customer_id) FROM customer cs
+          WHERE cs.phone = bp.phone
+        ) AS isJoin
+        ,(SELECT count(cs.customer_id) FROM customer cs
+        WHERE cs.phone = bp.phone AND cs.v_status = 2
+        ) AS isBigv
+    FROM bigv_phone bp
+    WHERE 1 = 1
+    <if test="phone !=null">and bp.phone = #{phone}</if>
+    <if test="isJoin == 0">
+      and (SELECT count(cs.customer_id) FROM customer cs
+            WHERE cs.phone = bp.phone
+      ) = 0
+    </if>
+    <if test="isJoin == 1">
+      and (SELECT count(cs.customer_id) FROM customer cs
+      WHERE cs.phone = bp.phone
+      ) > 0
+    </if>
+    <if test="isBigv == 0">
+      and (SELECT count(cs.customer_id) FROM customer cs
+      WHERE cs.phone = bp.phone AND cs.v_status = 2
+      ) = 0
+    </if>
+    <if test="isBigv == 1">
+      and (SELECT count(cs.customer_id) FROM customer cs
+      WHERE cs.phone = bp.phone AND cs.v_status = 2
+      ) > 0
+    </if>
+  </select>
+
+
+  <select id="checkData" parameterType="map" resultType="int">
+    SELECT count(id) FROM bigv_phone
+    WHERE phone = #{phone}
+    <if test="id != null">
+      and id != #{id}
+    </if>
+  </select>
+</mapper>

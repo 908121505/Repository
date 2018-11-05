@@ -37,7 +37,10 @@ public interface BigvSkillScoreMapper {
      *
      * @param customerSkillId
      * @param valueScore
+     * @param addOrderTotal
      * @return
      */
-    int updateBigvSkillScore(@Param("customerSkillId") Long customerSkillId, @Param("valueScore") BigDecimal valueScore);
+    int updateBigvSkillScore(@Param("customerSkillId") Long customerSkillId,
+                             @Param("valueScore") BigDecimal valueScore,
+                             @Param("addOrderTotal") Integer addOrderTotal);
 }

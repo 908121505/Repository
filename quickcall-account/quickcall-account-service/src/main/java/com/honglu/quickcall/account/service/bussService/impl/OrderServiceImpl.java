@@ -196,10 +196,10 @@ public class OrderServiceImpl implements IOrderService {
 			
 			Integer   weekIndex = DateUtils.getDayOfWeek();
 			Integer   skillSwitch = 1 ;
-			String  endTimeStr = DateUtils.formatDateHHSS(new Date()).replaceAll(":", "") ;
+//			String  endTimeStr = DateUtils.formatDateHHSS(new Date()).replaceAll(":", "") ;
 			
 			//根据技能ID 获取等级获取价格信息
-			CustomerSkill   customerSkill = customerSkillMapper.selectByPrimaryKeyExt(customerSkillId, weekIndex, skillSwitch, endTimeStr);
+			CustomerSkill   customerSkill = customerSkillMapper.selectByPrimaryKeyExt(customerSkillId, weekIndex, skillSwitch, new Date());
 			
 			if(customerSkill == null ){
 				resultMap.put("retCode",  OrderSkillConstants.RET_CODE_DV_NOT_ACCEPTE_ORDER);
@@ -341,6 +341,11 @@ public class OrderServiceImpl implements IOrderService {
 				OrderTempResponseVO  responseVO = commonService.getCountDownSeconds(info.getOrderStatus(), info.getOrderTime(), info.getReceiveOrderTime());
 				info.setCountDownSeconds(responseVO.getCountDownSeconds());
 				info.setOrderStatus(responseVO.getOrderStatus());
+				//TODO 兼容安卓版本   7号需要回滚
+				if(info.getReceiveOrderTime() == null){
+					info.setReceiveOrderTime(info.getOrderTime());
+				}
+				
 			}
 		}
 			
@@ -371,6 +376,10 @@ public class OrderServiceImpl implements IOrderService {
 				OrderTempResponseVO  responseVO = commonService.getCountDownSeconds(info.getOrderStatus(), info.getOrderTime(), info.getReceiveOrderTime());
 				info.setCountDownSeconds(responseVO.getCountDownSeconds());
 				info.setOrderStatus(responseVO.getOrderStatus());
+				//TODO 兼容安卓版本   7号需要回滚
+				if(info.getReceiveOrderTime() == null){
+					info.setReceiveOrderTime(info.getOrderTime());
+				}
 			}
 		}
 		
@@ -527,13 +536,13 @@ public class OrderServiceImpl implements IOrderService {
 		
 		Integer   weekIndex = DateUtils.getDayOfWeek();
 		Integer   skillSwitch = 1 ;
-		String  endTimeStr = DateUtils.formatDateHHSS(new Date()).replaceAll(":", "") ;
+//		String  endTimeStr = DateUtils.formatDateHHSS(new Date()).replaceAll(":", "") ;
 	
 		
 		orderDetailForIMVO.setServiceId(serviceId);
 		orderDetailForIMVO.setCustomerId(customerId);
 		//根据技能ID 获取等级获取价格信息
-		CustomerSkillIMVO   customerSkillIMVO = customerSkillMapper.selectCustomerSkillByCustomerId(serviceId, weekIndex, skillSwitch, endTimeStr);
+		CustomerSkillIMVO   customerSkillIMVO = customerSkillMapper.selectCustomerSkillByCustomerId(serviceId, weekIndex, skillSwitch, new Date());
 		
 		//服务方当天技能不存在，则关注对方
 		if(customerSkillIMVO == null){
@@ -970,7 +979,7 @@ public class OrderServiceImpl implements IOrderService {
 		// 保存订单表评价信息
 		Order evaluationInfo = new Order();
 		evaluationInfo.setOrderId(request.getOrderId());
-		evaluationInfo.setEvaluateStart(request.getEvaluateStart());
+		evaluationInfo.setEvaluateStart(request.getEvaluateStart() == null ? 0 : request.getEvaluateStart());
 		evaluationInfo.setCustomerEvaluate(request.getEvaluateContent());
 		orderMapper.saveEvaluationInfo(evaluationInfo);
 
