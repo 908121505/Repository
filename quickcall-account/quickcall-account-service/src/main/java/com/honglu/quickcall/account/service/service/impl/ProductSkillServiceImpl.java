@@ -42,7 +42,7 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 
     @Autowired
     private DataDuriedPointBusiness dataDuriedPointBusiness;
-	private  static final  Integer  WEEK_INDEX_DEFAULT = 0 ;
+	private  static final  Integer  WEEK_INDEX_DEFAULT = 1 ;
 	private  static final  String  ENDTIME_STR_24 = "2400" ;
 	private  static final  String  ENDTIME_STR_00 = "0000" ;
 	

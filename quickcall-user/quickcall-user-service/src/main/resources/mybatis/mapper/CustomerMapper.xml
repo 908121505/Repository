@@ -84,7 +84,8 @@
     nick_name AS nickName,
     head_portrait_url AS headPortraitUrl,
     sex,
-    type,
+    (case when v_status=2 then 1
+						else 0	end	) as type,
     (YEAR (NOW()) - YEAR (birthday)) AS age
     from customer
     <where>
@@ -120,7 +121,8 @@
     nick_name AS nickName,
     head_portrait_url AS headPortraitUrl,
     sex,
-    type,
+    (case when v_status=2 then 1
+						else 0	end	) as type,
     (YEAR (NOW()) - YEAR (birthday)) AS age
     <if test="customerId != null">
   	 	,IFNULL(fs.attention_state,0) AS attentionStatus,
