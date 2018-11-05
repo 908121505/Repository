@@ -166,7 +166,8 @@
 		    (YEAR (NOW()) - YEAR (ct.birthday)) AS age,
 		    ct.sex    AS sex,
 		    (IFNULL(fs.attention_state,0))  AS  attentionStatus,
-		    ct.type AS type,
+		    (case when ct.v_status=2 then 1
+						else 0	end	) as type,
 		    (IFNULL(fs.attention_state,0))&amp;(IFNULL(fs1.attention_state,0)) AS eachAttentionStatus 
 		FROM
 			fans fs
@@ -190,7 +191,8 @@
 		    (YEAR (NOW()) - YEAR (ct.birthday)) AS age,
 		    ct.sex    AS sex,
 		    (IFNULL(fs1.attention_state,0))  AS  attentionStatus,
-		    ct.type AS type,
+		    (case when ct.v_status=2 then 1
+						else 0	end	) as type,
 		    (IFNULL(fs.attention_state,0))&amp;(IFNULL(fs1.attention_state,0)) AS eachAttentionStatus 
 		FROM
 			fans fs
