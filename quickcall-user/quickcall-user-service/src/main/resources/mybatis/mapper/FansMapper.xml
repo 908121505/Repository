@@ -22,23 +22,17 @@
   	select COUNT(*) FROM fans where anchor_id=#{anchorId} AND fans_id=#{fansId} AND attention_state=1;
   </select>
   <select id="queryFansNumByCustomerId" resultType="java.lang.Long" parameterType="java.lang.Long" >
-    SELECT count(*) FROM fans fs
-    INNER JOIN customer ct ON fs.fans_id = ct.customer_id
-    LEFT JOIN fans fs1 ON fs.anchor_id = fs1.fans_id and fs.fans_id = fs1.anchor_id
-    WHERE fs.anchor_id = #{customerId}  and   fs.attention_state = 1
+    SELECT COUNT(*) FROM fans WHERE anchor_id=#{customerId} AND attention_state=1;
   </select>
   
    <select id="queryNoReadFansNumByCustomerId" resultType="java.lang.Integer" parameterType="java.lang.Long" >
     SELECT COUNT(*) FROM fans WHERE anchor_id=#{customerId} AND attention_state=1 and read_state=0
   </select>
 
-  <select id="queryAttentionNumByCustomerId" resultType="int" parameterType="java.lang.Long" >
-    SELECT count(*) FROM fans fs
-    INNER JOIN customer ct ON fs.anchor_id = ct.customer_id
-    LEFT JOIN fans fs1 ON fs.anchor_id = fs1.fans_id and fs.fans_id = fs1.anchor_id
-    WHERE fs.fans_id = #{customerId}  and   fs.attention_state = 1
-  </select>
 
+  <select id="queryAttentionNumByCustomerId" resultType="int" parameterType="java.lang.Long" >
+    SELECT COUNT(*) FROM fans WHERE fans_id=#{customerId} AND attention_state=1;
+  </select>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
     <include refid="Base_Column_List" />

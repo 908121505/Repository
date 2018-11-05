@@ -118,6 +118,13 @@
     DELETE FROM bigv_score WHERE customer_id = #{customerId}
   </delete>
 
+  <!-- 删除不是大V的数据 -->
+  <delete id="deleteNotBigvData">
+    DELETE FROM bigv_score WHERE customer_id NOT IN (
+	  SELECT customer_id FROM customer WHERE v_status=2
+    )
+  </delete>
+
   <!-- 根据客户技能ID查询所有已完成的订单 -->
   <select id="selectAllDoneOrderByCustomerSkillId" resultType="com.honglu.quickcall.account.facade.entity.Order">
     SELECT
