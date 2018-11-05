@@ -320,6 +320,10 @@ public class UserDubboBusinessImpl implements UserDubboBusiness {
 			case UserFunctionType.CANCEL_ATTENTION:
 				response = attentionService.cancelAttention((AttentionCancelRequest) request);
 				break;
+			/******** 初始化大V评分排名数据 *********/
+			case UserFunctionType.INIT_BIGV_SCORE_RANK_DATA:
+				response = queryHomeBigvListService.initBigvScoreRankData();
+				break;
 			/*case UserFunctionType.queryDeviceWhitelist:
 				response = deviceWhitelistService.queryDeviceWhitelist((QueryDeviceWhitelistReq) request);
 				break;

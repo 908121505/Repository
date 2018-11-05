@@ -392,8 +392,8 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 		String  endTimeStr = request.getEndServiceTimeStr();
 		//根据结束时间获取预约结束时间
 		Date  appointEndTime = getAppointEndTime(endTimeStr);
-		if( ENDTIME_STR_24.equals(endTimeStr)){
-			endTimeStr = ENDTIME_STR_00;
+		if( ENDTIME_STR_24.equals(endTimeStr) ||  ENDTIME_STR_00.equals(endTimeStr)){
+			endTimeStr = ENDTIME_STR_24;
 		}
 		Date  appointStartTime = new Date();
 		
@@ -468,11 +468,11 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 		}
 		
 		//更新bigv_score表
-		try {
-			customerSkillMapper.updateBigvScore(customerId, receiveStatus);
-		} catch (Exception e) {
-			LOGGER.error("更新用户状态发生异常，异常信息：",e);
-		}
+//		try {
+//			customerSkillMapper.updateBigvScore(customerId, receiveStatus);
+//		} catch (Exception e) {
+//			LOGGER.error("更新用户状态发生异常，异常信息：",e);
+//		}
 		
 
 	}
