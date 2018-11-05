@@ -223,6 +223,12 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 
 		req.setPhoneNumber(customer.getPhone());
 		req.setUser_id(customer.getCustomerId() + "");
+		UserBean userBean = new UserBean();
+		userBean.setNick(customer.getNickName());
+		userBean.setRegistDate(new Date());
+		userBean.setRegistSource(customer.getAppChannelName());
+		userBean.setGender(customer.getSex() == 0 ? "女" : "男");
+		req.setUserBean(userBean);
 		logger.info("===============开始登陆数据埋点==============");
 		dataDuriedPointBusiness.buryUserIdLoginResultData(req);
 		return ResultUtils.resultSuccess(customer);
