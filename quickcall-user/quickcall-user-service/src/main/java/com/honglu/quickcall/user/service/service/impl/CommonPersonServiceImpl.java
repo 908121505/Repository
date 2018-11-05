@@ -79,10 +79,9 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 	private SensitivityWordMapper sensitivityWordMapper;
 
 	@Autowired
-
-	private DataDuriedPointBusiness dataDuriedPointBusiness;
-
 	private BigvPhoneMapper bigvPhoneMapper;
+	@Autowired
+	private DataDuriedPointBusiness dataDuriedPointBusiness;
 
 	private static String resendexpire = ResourceBundle.getBundle("thirdconfig").getString("resend.expire");
 	private static String resendexpirehour = ResourceBundle.getBundle("thirdconfig").getString("resend.expire.hour");
@@ -197,7 +196,7 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 						login.setCustStatus(1);
 						isBlock = false;
 					}
-					SimpleDateFormat df = new SimpleDateFormat("yyyy年MM月dd日 hh时mm分");
+					SimpleDateFormat df = new SimpleDateFormat("yyyy年MM月dd日 HH时mm分");
 					Date date = customer.getBlockEndTime();
 					throw new BizException(BizCode.ParamError,
 							"因您违反平台规则，您的账号在" + df.format(date) + "前限制登陆，如有疑问，请拨打客服电话：400-156-0606进行咨询。");
