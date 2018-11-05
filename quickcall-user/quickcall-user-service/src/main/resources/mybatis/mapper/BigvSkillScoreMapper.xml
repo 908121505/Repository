@@ -65,4 +65,12 @@
     <delete id="deleteDataByCustomerId">
       DELETE FROM bigv_skill_score WHERE customer_id = #{customerId}
     </delete>
+
+    <!-- 删除不在大V技能表的数据 -->
+    <delete id="deleteNotBigvData">
+      DELETE FROM bigv_skill_score WHERE customer_skill_id NOT IN (
+        SELECT customer_skill_id FROM customer_skill
+      )
+    </delete>
+
 </mapper>

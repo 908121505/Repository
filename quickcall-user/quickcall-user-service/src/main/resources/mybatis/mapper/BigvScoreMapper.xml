@@ -145,4 +145,12 @@
     AND	t.order_status IN (30, 32, 34, 36, 38, 40)
     ORDER BY t.service_id ASC, t.skill_item_id ASC, t.create_time ASC
   </select>
+
+  <!-- 查询bigv_score表需要补的大V数据 -->
+  <select id="selectNeedInsertBigvData" resultType="java.lang.Long">
+    SELECT customer_id FROM customer WHERE v_status = 2
+    AND customer_id NOT IN(
+        SELECT customer_id FROM bigv_score
+    )
+  </select>
 </mapper>

@@ -68,4 +68,10 @@ public interface BigvSkillScoreMapper {
      * @return
      */
     int deleteDataByCustomerId(@Param("customerId") Long customerId);
+
+    /**
+     * 删除不在大V列表中的数据
+     * @return
+     */
+    int deleteNotBigvData();
 }
