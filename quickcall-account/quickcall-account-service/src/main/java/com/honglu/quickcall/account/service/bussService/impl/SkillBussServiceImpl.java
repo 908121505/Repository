@@ -47,6 +47,9 @@ public class SkillBussServiceImpl implements ISkillBussService {
 
 	@Override
 	public CommonResponse querySkillInfoPersonal(SkillInfoRequest request) {
+		if(request.getCustomerId() == null){
+			return ResultUtils.result(BizCode.CustomerNotExist);
+		}
 		if (request == null || request.getCustomerId() == null) {
 			throw new BizException(AccountBizReturnCode.paramError, "查询技能信息参数异常");
 		}
@@ -83,6 +86,9 @@ public class SkillBussServiceImpl implements ISkillBussService {
 		if (request == null) {
 			throw new BizException(AccountBizReturnCode.paramError, "查询首页大V列表参数异常");
 		}
+		if(request.getCustomerId() == null){
+			return ResultUtils.result(BizCode.CustomerNotExist);
+		}
 		//首先查询所有的技能信息
 		List<DaVinfoListVO>   resultList = new ArrayList<>();
 
@@ -104,6 +110,9 @@ public class SkillBussServiceImpl implements ISkillBussService {
 		if (request == null ) {
 			throw new BizException(AccountBizReturnCode.paramError, "查询技能列表参数异常");
 		}
+		if(request.getCustomerId() == null){
+			return ResultUtils.result(BizCode.CustomerNotExist);
+		}
 		List<FirstPageSkillIteminfoVO>   resultList = productSkillService.selectPartSkill();
 		CommonResponse commonResponse = commonService.getCommonResponse();
 		commonResponse.setData(resultList);
@@ -117,6 +126,9 @@ public class SkillBussServiceImpl implements ISkillBussService {
 	public CommonResponse getDaVListBySkillItemId(DaVListBySkillItemIdRequest request) {
 		if (request == null ) {
 			throw new BizException(AccountBizReturnCode.paramError, "查询技能大V参数异常");
+		}
+		if(request.getCustomerId() == null){
+			return ResultUtils.result(BizCode.CustomerNotExist);
 		}
 		Long  skillItemId = request.getSkillItemId();
 		List<DaVinfoVO>    resultList = productSkillService.getDaVListBySkillId(skillItemId);

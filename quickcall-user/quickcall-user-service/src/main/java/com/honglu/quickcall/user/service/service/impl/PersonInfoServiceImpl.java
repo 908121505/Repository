@@ -132,6 +132,9 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 	 */
 	@Override
 	public CommonResponse searchPerson(SearchPersonRequest params) {
+		if(params.getCustomerId() == null){
+			return ResultUtils.result(BizCode.CustomerNotExist);
+		}
 		CommonResponse commonResponse = new CommonResponse();
 		String keyword = params.getKeyword();
 		if (StringUtil.isBlank(keyword)) {
@@ -165,6 +168,9 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 	 */
 	@Override
 	public CommonResponse saveNicknameImage(SaveNickNameRequest params) {
+		if(params.getCustomerId() == null){
+			return ResultUtils.result(BizCode.CustomerNotExist);
+		}
 		CommonResponse commonResponse = new CommonResponse();
 		Customer customer = customerMapper.selectByPrimaryKey(params.getCustomerId());
 		String newNickname = params.getNickName();
@@ -258,6 +264,9 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 	 */
 	@Override
 	public CommonResponse saveGender(SaveGenderRequest params) {
+		if(params.getCustomerId() == null){
+			return ResultUtils.result(BizCode.CustomerNotExist);
+		}
 		CommonResponse commonResponse = new CommonResponse();
 		// 取账号信息并存redis
 		Customer customer = customerRedisManagement.getCustomer(params.getCustomerId());
@@ -287,7 +296,9 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 	 */
 	@Override
 	public CommonResponse saveSignName(SaveSignNameRequest params) {
-
+		if(params.getCustomerId() == null){
+			return ResultUtils.result(BizCode.CustomerNotExist);
+		}
 		CommonResponse commonResponse = new CommonResponse();
 		Customer customer = customerMapper.selectByPrimaryKey(params.getCustomerId());
 		// 获取新签名
@@ -333,6 +344,9 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 	 */
 	@Override
 	public CommonResponse saveBirthday(SaveBirthRequest params) {
+		if(params.getCustomerId() == null){
+			return ResultUtils.result(BizCode.CustomerNotExist);
+		}
 		CommonResponse commonResponse = new CommonResponse();
 		Customer customer = customerRedisManagement.getCustomer(params.getCustomerId());
 		customer.setBirthday(params.getBirthday());// 生日
@@ -364,6 +378,9 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 	@Override
 	@Transactional
 	public CommonResponse saveInterest(SaveInterestRequest params) {
+		if(params.getCustomerId() == null){
+			return ResultUtils.result(BizCode.CustomerNotExist);
+		}
 		CommonResponse commonResponse = new CommonResponse();
 		CustomerInterest customerInterest = new CustomerInterest();
 		customerInterest.setCustomerId(params.getCustomerId());
@@ -410,7 +427,9 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 	 */
 	@Override
 	public CommonResponse saveOccupation(SaveOccupationRequest params) {
-
+		if(params.getCustomerId() == null){
+			return ResultUtils.result(BizCode.CustomerNotExist);
+		}
 		CommonResponse commonResponse = new CommonResponse();
 		CustomerOccupation customerOccupation = new CustomerOccupation();
 		// 先存入用户id
@@ -489,7 +508,9 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 
 	@Override
 	public CommonResponse queryAttentionFansList(QueryAttentionFansListRequest request) {
-
+		if(request.getCustomerId() == null){
+			return ResultUtils.result(BizCode.CustomerNotExist);
+		}
 		CommonResponse commonResponse = new CommonResponse();
 		try {
 			List<AttentionFansVO> resultList = new ArrayList<AttentionFansVO>();
@@ -601,7 +622,9 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 
 	@Override
 	public CommonResponse readAttention(ReadAttentionRequest params) {
-
+		if(params.getCustomerId() == null){
+			return ResultUtils.result(BizCode.CustomerNotExist);
+		}
 		if (params.getCustomerId() == null) {
 			throw new BizException(BizCode.ParamError, "用戶Id 不能为空");
 		}
@@ -611,6 +634,9 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 
 	@Override
 	public CommonResponse queryMySkill(queryMyskillRequest params) {
+		if(params.getCustomerId() == null){
+			return ResultUtils.result(BizCode.CustomerNotExist);
+		}
 		if (params.getCustomerId() == null) {
 			throw new BizException(BizCode.ParamError, "用戶Id 不能为空");
 		}
@@ -668,6 +694,9 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 
 	@Override
 	public CommonResponse saveCustomerSkillCertify(SaveSkillAuditRequest params) {
+		if(params.getCustomerId() == null){
+			return ResultUtils.result(BizCode.CustomerNotExist);
+		}
 		CommonResponse commonResponse = new CommonResponse();
 		CustomerSkillCertify certifyNow = customerSkillCertifyMapper.selectSkillCertifyId(params.getCustomerId(),
 				params.getSkillItemId());
@@ -707,6 +736,9 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 
 	@Override
 	public CommonResponse queryCustomerCenter(CustomerCenterRequest request) {
+		if(request.getCustomerId() == null){
+			return ResultUtils.result(BizCode.CustomerNotExist);
+		}
 		Customer customer = customerMapper.selectByPrimaryKey(request.getCustomerId());
 		if (customer == null) {
 			return ResultUtils.resultDataNotExist("用户数据不存在");
@@ -859,6 +891,9 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 
 	@Override
 	public CommonResponse queryCustomerLevel(CustomerLevelRequest request) {
+		if(request.getCustomerId() == null){
+			return ResultUtils.result(BizCode.CustomerNotExist);
+		}
 		Customer customer = customerMapper.selectByPrimaryKey(request.getCustomerId());
 		if (customer == null) {
 			return ResultUtils.resultDataNotExist("用户数据不存在");
@@ -893,6 +928,9 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 
 	@Override
 	public CommonResponse noReadAttentionCount(NoReadAttentionCountRequest params) {
+		if(params.getCustomerId() == null){
+			return ResultUtils.result(BizCode.CustomerNotExist);
+		}
 		if (params.getCustomerId() == null) {
 			throw new BizException(BizCode.ParamError, "用戶Id 不能为空");
 		}
@@ -902,7 +940,9 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 
 	@Override
 	public CommonResponse isBigVidentity(IsBigVidentityRequest request) {
-
+		if(request.getCustomerId() == null){
+			return ResultUtils.result(BizCode.CustomerNotExist);
+		}
 		Customer customer = customerMapper.selectByPrimaryKey(request.getCustomerId());
 		if (customer != null && customer.getvStatus() == 2 && customer.getIdentityStatus() == 2) {
 			return ResultUtils.resultSuccess(1);

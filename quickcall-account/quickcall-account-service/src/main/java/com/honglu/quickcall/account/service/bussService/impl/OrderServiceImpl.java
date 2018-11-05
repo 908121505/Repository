@@ -55,6 +55,7 @@ import com.honglu.quickcall.account.service.bussService.IOrderService;
 import com.honglu.quickcall.account.service.dao.CustomerSkillMapper;
 import com.honglu.quickcall.account.service.dao.OrderMapper;
 import com.honglu.quickcall.account.service.dao.SkillItemMapper;
+import com.honglu.quickcall.common.api.code.BizCode;
 import com.honglu.quickcall.common.api.exception.BizException;
 import com.honglu.quickcall.common.api.exchange.CommonResponse;
 import com.honglu.quickcall.common.api.exchange.ResultUtils;
@@ -102,6 +103,9 @@ public class OrderServiceImpl implements IOrderService {
 	
 	@Override
 	public CommonResponse queryDaVSkill(OrderDaVSkillRequest request) {
+		if(request.getCustomerId() == null){
+			return ResultUtils.result(BizCode.CustomerNotExist);
+		}
 		if (request == null || request.getCustomerId() == null) {
 			throw new BizException(AccountBizReturnCode.paramError, "查询技能信息参数异常");
 		}
@@ -141,6 +145,9 @@ public class OrderServiceImpl implements IOrderService {
 	
 	@Override
 	public CommonResponse saveOrder(OrderSaveRequest request) {
+		if(request.getCustomerId() == null){
+			return ResultUtils.result(BizCode.CustomerNotExist);
+		}
 		if (request == null || request.getCustomerId() == null || request.getCustomerSkillId() == null) {
 			throw new BizException(AccountBizReturnCode.paramError, "下单参数异常");
 		}
@@ -325,6 +332,9 @@ public class OrderServiceImpl implements IOrderService {
 	 */
 	@Override
 	public CommonResponse queryReceiveOrderList(OrderReceiveOrderListRequest request) {
+		if(request.getCustomerId() == null){
+			return ResultUtils.result(BizCode.CustomerNotExist);
+		}
 		if (request == null || request.getCustomerId() == null || request.getOrderStatus() == null ) {
 			throw new BizException(AccountBizReturnCode.paramError, "查询接收订单参数异常");
 		}
@@ -362,6 +372,9 @@ public class OrderServiceImpl implements IOrderService {
 	 */
 	@Override
 	public CommonResponse querySendOrderList(OrderSendOrderListRequest request) {
+		if(request.getCustomerId() == null){
+			return ResultUtils.result(BizCode.CustomerNotExist);
+		}
 		if (request == null || request.getCustomerId() == null || request.getOrderStatus() == null) {
 			throw new BizException(AccountBizReturnCode.paramError, "查询发起订单参数异常");
 		}
@@ -484,6 +497,9 @@ public class OrderServiceImpl implements IOrderService {
 	
 	@Override
 	public CommonResponse detailOrderForIM(DetailOrderForIMRequest request) {
+		if(request.getCustomerId() == null){
+			return ResultUtils.result(BizCode.CustomerNotExist);
+		}
 		if (request == null || request.getCustomerId() == null  || request.getServiceId() == null) {
 			throw new BizException(AccountBizReturnCode.paramError, "查询订单详情参数异常");
 		}

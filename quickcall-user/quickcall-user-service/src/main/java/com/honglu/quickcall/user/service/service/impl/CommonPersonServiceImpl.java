@@ -233,7 +233,9 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 
 	@Override
 	public CommonResponse setHeardUrl(SetHeardUrlRequest params) {
-		// TODO Auto-generated method stub
+		if(params.getCustomerId() == null){
+			return ResultUtils.result(BizCode.CustomerNotExist);
+		}
 		String rongyunToken = null;
 		String img = params.getHeadPortraitUrl();
 		if (StringUtils.isNotBlank(params.getNickName()) && params.getCustomerId() != null) {
@@ -566,6 +568,9 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 
 	@Override
 	public CommonResponse queryUserIdCardCertificationInfo(UserIdCardInfoRequest request) {
+		if(request.getCustomerId() == null){
+			return ResultUtils.result(BizCode.CustomerNotExist);
+		}
 		Customer customer = customerMapper.queryUserIdCardCertificationInfo(request.getCustomerId());
 		if (customer == null) {
 			return ResultUtils.resultDataNotExist("用户数据不存在");
@@ -596,6 +601,9 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 
 	@Override
 	public CommonResponse saveUserCertificationInfo(SaveCertificationRequest request) {
+		if(request.getCustomerId() == null){
+			return ResultUtils.result(BizCode.CustomerNotExist);
+		}
 		Customer customer = customerMapper.selectByPrimaryKey(request.getCustomerId());
 		if (customer == null) {
 			return ResultUtils.resultDataNotExist("用户数据不存在");
@@ -658,6 +666,9 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 
 	@Override
 	public CommonResponse saveDvVoiceInfo(SaveDvVoiceRequest request) {
+		if(request.getCustomerId() == null){
+			return ResultUtils.result(BizCode.CustomerNotExist);
+		}
 		Long customerId = request.getCustomerId();
 		Customer customer = customerMapper.selectByPrimaryKey(customerId);
 		if (customer == null) {
@@ -674,7 +685,9 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 
 	@Override
 	public CommonResponse bindVXorQQ(BindVXorQQRequest request) {
-
+		if(request.getCustomerId() == null){
+			return ResultUtils.result(BizCode.CustomerNotExist);
+		}
 		Customer param = new Customer();
 		Customer customer = new Customer();
 
@@ -699,6 +712,9 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 
 	@Override
 	public CommonResponse loginOut(LoginOutRequest request) {
+		if(request.getCustomerId() == null){
+			return ResultUtils.result(BizCode.CustomerNotExist);
+		}
 		Long customerId = request.getCustomerId();
 		Customer customer = customerMapper.selectByPrimaryKey(customerId);
 		if (customer == null) {
@@ -713,6 +729,9 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 
 	@Override
 	public CommonResponse addSystemUser(AddSystemUserRequest request) {
+		if(request.getCustomerId() == null){
+			return ResultUtils.result(BizCode.CustomerNotExist);
+		}
 		String rongyunToken = RongYunUtil.getToken(String.valueOf(request.getCustomerId()), request.getNickName(),
 				request.getPhoto());
 		Customer customer = new Customer();

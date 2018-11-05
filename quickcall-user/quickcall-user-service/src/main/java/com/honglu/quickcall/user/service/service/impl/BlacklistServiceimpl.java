@@ -1,7 +1,9 @@
 package com.honglu.quickcall.user.service.service.impl;
 
+import com.honglu.quickcall.common.api.code.BizCode;
 import com.honglu.quickcall.common.api.exception.BizException;
 import com.honglu.quickcall.common.api.exchange.CommonResponse;
+import com.honglu.quickcall.common.api.exchange.ResultUtils;
 import com.honglu.quickcall.common.core.util.UUIDUtils;
 import com.honglu.quickcall.user.facade.code.UserBizReturnCode;
 import com.honglu.quickcall.user.facade.entity.Blacklist;
@@ -35,6 +37,9 @@ public class BlacklistServiceimpl implements BlacklistService {
 
     @Override
     public CommonResponse removeBlacklist(RemoveBlacklistReq params) {
+    	if(params.getCustomerId() == null){
+			return ResultUtils.result(BizCode.CustomerNotExist);
+		}
         CommonResponse commonResponse = new CommonResponse();
         if (params.getCustomerId() == null) {
             throw new BizException(UserBizReturnCode.paramError, "customerId不能为空");
@@ -58,6 +63,9 @@ public class BlacklistServiceimpl implements BlacklistService {
 
     @Override
     public CommonResponse queryBlacklist(QueryBlacklistReq params) {
+    	if(params.getCustomerId() == null){
+			return ResultUtils.result(BizCode.CustomerNotExist);
+		}
         CommonResponse commonResponse = new CommonResponse();
         if (params.getCustomerId() == null) {
             throw new BizException(UserBizReturnCode.paramError, "customerId不能为空");
@@ -73,6 +81,9 @@ public class BlacklistServiceimpl implements BlacklistService {
 
     @Override
     public CommonResponse saveBlacklist(SaveBlacklistReq params) {
+    	if(params.getCustomerId() == null){
+			return ResultUtils.result(BizCode.CustomerNotExist);
+		}
         CommonResponse commonResponse = new CommonResponse();
         if (params.getCustomerId() == null) {
             throw new BizException(UserBizReturnCode.paramError, "customerId不能为空");

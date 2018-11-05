@@ -1,6 +1,8 @@
 package com.honglu.quickcall.user.service.service.impl;
 
+import com.honglu.quickcall.common.api.code.BizCode;
 import com.honglu.quickcall.common.api.exchange.CommonResponse;
+import com.honglu.quickcall.common.api.exchange.ResultUtils;
 import com.honglu.quickcall.user.facade.code.UserBizReturnCode;
 import com.honglu.quickcall.user.facade.exchange.request.InternalMessageRequest;
 import com.honglu.quickcall.user.facade.vo.MessageCustomerVO;
@@ -33,6 +35,9 @@ public class InternalMessageServiceImpl implements InternalMessageService {
      */
     @Override
     public CommonResponse queryMessages(InternalMessageRequest internalMessageRequest) {
+    	if(internalMessageRequest.getCustomerId() == null){
+			return ResultUtils.result(BizCode.CustomerNotExist);
+		}
         Integer messageType = internalMessageRequest.getMessageType();
         Long customerId = internalMessageRequest.getCustomerId();
         int count = messageCustomerMapper.updateByMessageType(messageType, customerId);

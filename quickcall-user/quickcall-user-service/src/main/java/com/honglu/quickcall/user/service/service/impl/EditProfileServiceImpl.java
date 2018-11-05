@@ -8,9 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.honglu.quickcall.common.api.code.BizCode;
 import com.honglu.quickcall.common.api.exception.BizException;
 import com.honglu.quickcall.common.api.exception.RemoteException;
 import com.honglu.quickcall.common.api.exchange.CommonResponse;
+import com.honglu.quickcall.common.api.exchange.ResultUtils;
 import com.honglu.quickcall.common.api.util.CommonUtil;
 import com.honglu.quickcall.common.api.util.DateUtils;
 import com.honglu.quickcall.common.api.util.JedisUtil;
@@ -77,6 +79,9 @@ public class EditProfileServiceImpl implements EditProfileService {
 
 	@Override
 	public CommonResponse updateNickName(UpdateNickNameReq params) {
+		if(params.getCustomerId() == null){
+			return ResultUtils.result(BizCode.CustomerNotExist);
+		}
 		CommonResponse commonResponse = new CommonResponse();
 
 		if (params.getCustomerId() == null) {
@@ -139,6 +144,9 @@ public class EditProfileServiceImpl implements EditProfileService {
 
 	@Override
 	public CommonResponse updateSignName(UpdateSignNameReq params) {
+		if(params.getCustomerId() == null){
+			return ResultUtils.result(BizCode.CustomerNotExist);
+		}
 		CommonResponse commonResponse = new CommonResponse();
 
 		if (params.getCustomerId() == null) {
@@ -185,6 +193,9 @@ public class EditProfileServiceImpl implements EditProfileService {
 
 	@Override
 	public CommonResponse updateStarSign(UpdateStarSignReq params) {
+		if(params.getCustomerId() == null){
+			return ResultUtils.result(BizCode.CustomerNotExist);
+		}
 		CommonResponse commonResponse = new CommonResponse();
 
 		if (params.getCustomerId() == null) {
@@ -217,6 +228,9 @@ public class EditProfileServiceImpl implements EditProfileService {
 
 	@Override
 	public CommonResponse updateInterest(UpdateInterestReq params) {
+		if(params.getCustomerId() == null){
+			return ResultUtils.result(BizCode.CustomerNotExist);
+		}
 		CommonResponse commonResponse = new CommonResponse();
 
 		if (params.getCustomerId() == null) {
@@ -251,6 +265,9 @@ public class EditProfileServiceImpl implements EditProfileService {
 
 	@Override
 	public CommonResponse updateHeadPortrait(UpdateHeadPortraitReq params) {
+		if(params.getCustomerId() == null){
+			return ResultUtils.result(BizCode.CustomerNotExist);
+		}
 		CommonResponse commonResponse = new CommonResponse();
 
 		if (params.getCustomerId() == null) {
@@ -320,6 +337,9 @@ public class EditProfileServiceImpl implements EditProfileService {
 
 	@Override
 	public CommonResponse updateAppearance(UpdateAppearanceReq params) {
+		if(params.getCustomerId() == null){
+			return ResultUtils.result(BizCode.CustomerNotExist);
+		}
 		CommonResponse commonResponse = new CommonResponse();
 
 		if (params.getCustomerId() == null) {
@@ -375,6 +395,9 @@ public class EditProfileServiceImpl implements EditProfileService {
 
 	@Override
 	public CommonResponse updateVoiceIdentificationCard(UpdateVoiceIdentificationCardReq params) {
+		if(params.getCustomerId() == null){
+			return ResultUtils.result(BizCode.CustomerNotExist);
+		}
 		CommonResponse commonResponse = new CommonResponse();
 
 		if (params.getCustomerId() == null) {
@@ -460,6 +483,9 @@ public class EditProfileServiceImpl implements EditProfileService {
 
 	@Override
 	public CommonResponse updateGender(UpdateGenderReq params) {
+		if(params.getCustomerId() == null){
+			return ResultUtils.result(BizCode.CustomerNotExist);
+		}
 		CommonResponse commonResponse = new CommonResponse();
 		if (params.getCustomerId() == null) {
 			throw new BizException(UserBizReturnCode.paramError, "customerId不能为空");
@@ -494,6 +520,9 @@ public class EditProfileServiceImpl implements EditProfileService {
 
 	@Override
 	public CommonResponse updateBirthday(UpdateBirthdayReq params) {
+		if(params.getCustomerId() == null){
+			return ResultUtils.result(BizCode.CustomerNotExist);
+		}
 		CommonResponse commonResponse = new CommonResponse();
 		if (params.getCustomerId() == null) {
 			throw new BizException(UserBizReturnCode.paramError, "customerId不能为空");
@@ -526,6 +555,9 @@ public class EditProfileServiceImpl implements EditProfileService {
 
 	@Override
 	public CommonResponse queryUserEditInfo(QueryUserEditInfoReq params) {
+		if(params.getCustomerId() == null){
+			return ResultUtils.result(BizCode.CustomerNotExist);
+		}
 		CommonResponse commonResponse = new CommonResponse();
 		if (params.getCustomerId() == null) {
 			throw new BizException(UserBizReturnCode.paramError, "customerId不能为空");
