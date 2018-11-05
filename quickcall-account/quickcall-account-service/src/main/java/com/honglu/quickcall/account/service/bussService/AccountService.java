@@ -22,9 +22,11 @@ public interface AccountService {
 	 * @param amount
 	 * @param transferType
 	 * @param accountBusinessType
+	 * @param orderNo
+	 *            订单Id 选填
 	 */
 	void inAccount(Long customerId, BigDecimal amount, TransferTypeEnum transferType,
-			AccountBusinessTypeEnum accountBusinessType);
+			AccountBusinessTypeEnum accountBusinessType, Long orderNo);
 
 	/**
 	 * 入账
@@ -33,7 +35,9 @@ public interface AccountService {
 	 * @param amount
 	 * @param transferType
 	 * @param accountBusinessType
+	 * @param orderNo
+	 *            订单Id 选填
 	 */
 	void outAccount(Long customerId, BigDecimal amount, TransferTypeEnum transferType,
-			AccountBusinessTypeEnum accountBusinessType);
+			AccountBusinessTypeEnum accountBusinessType, Long orderNo);
 }
