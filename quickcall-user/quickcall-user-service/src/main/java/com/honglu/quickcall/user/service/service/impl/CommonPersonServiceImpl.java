@@ -36,6 +36,7 @@ import com.honglu.quickcall.producer.facade.business.DataDuriedPointBusiness;
 import com.honglu.quickcall.producer.facade.req.databury.DataBuriedPointGetCodeReq;
 import com.honglu.quickcall.producer.facade.req.databury.DataBuriedPointLoginReq;
 import com.honglu.quickcall.producer.facade.req.databury.DataBuriedPointRegistReq;
+import com.honglu.quickcall.producer.facade.req.databury.UserBean;
 import com.honglu.quickcall.user.facade.code.UserBizReturnCode;
 import com.honglu.quickcall.user.facade.constants.UserBizConstants;
 import com.honglu.quickcall.user.facade.entity.Customer;
@@ -203,6 +204,7 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 				}
 			}
 		}
+
 		// 账户被封
 		if (isBlock) {
 			throw new BizException(BizCode.ParamError, "因违反平台规则，您的账号被永久限制登陆，如有疑问，请拨打客服电话：400-156-0606进行咨询");
@@ -221,6 +223,8 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 
 		req.setPhoneNumber(customer.getPhone());
 		req.setUser_id(customer.getCustomerId() + "");
+		logger.info("===============开始登陆数据埋点==============");
+		dataDuriedPointBusiness.buryUserIdLoginResultData(req);
 		return ResultUtils.resultSuccess(customer);
 	}
 
@@ -398,13 +402,16 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 			}
 			customer.setTokenCode(rongyunToken);
 		}
-
+		UserBean userBean = new UserBean();
 		/**
 		 * 声优白名单
 		 */
 		if (bigvPhoneMapper.queryOneByPhone(request.getTel()) != null) {
 			customer.setIdentityStatus(2);
 			customer.setvStatus(2);
+			userBean.setUserIdentity("声优");
+		} else {
+			userBean.setUserIdentity("普通用户");
 		}
 
 		int row = customerMapper.insertSelective(customer);
@@ -417,6 +424,11 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 		req.setRegistDate(new Date());
 		req.setRegistSource(request.getAppChannelName());
 		req.setUser_id(customer.getCustomerId() + "");
+		userBean.setNick(customer.getNickName());
+		userBean.setRegistDate(new Date());
+		userBean.setRegistSource(request.getAppChannelName());
+		req.setUserBean(userBean);
+
 		dataDuriedPointBusiness.burySignUpResultData(req);
 		// 创建账户
 		accountDubboIntegrationService.createAccount(customer.getCustomerId());
