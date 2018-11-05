@@ -327,10 +327,4 @@ public class QueryBigvListServiceImpl implements QueryBigvListService {
         return ResultUtils.resultSuccess(daVinfoVOList);
     }
 
-    @Override
-    public CommonResponse initBigvScoreRankData() {
-
-
-        return null;
-    }
 }

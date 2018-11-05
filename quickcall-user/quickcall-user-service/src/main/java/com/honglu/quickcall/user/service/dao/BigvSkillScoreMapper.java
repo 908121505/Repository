@@ -43,4 +43,29 @@ public interface BigvSkillScoreMapper {
     int updateBigvSkillScore(@Param("customerSkillId") Long customerSkillId,
                              @Param("valueScore") BigDecimal valueScore,
                              @Param("addOrderTotal") Integer addOrderTotal);
+
+    /**
+     * 更新大V单项技能评分
+     *
+     * @param customerSkillId
+     * @param valueScore
+     * @param orderTotal
+     * @return
+     */
+    int updateBigvSkillScore2(@Param("customerSkillId") Long customerSkillId,
+                             @Param("valueScore") BigDecimal valueScore,
+                             @Param("orderTotal") Integer orderTotal);
+
+    /**
+     * 根据创主见升序，查询一条数据
+     * @return
+     */
+    BigvSkillScore selectOneData(@Param("lastId") Long lastId);
+
+    /**
+     * 根据客户ID -- 物理删除数据
+     * @param customerId
+     * @return
+     */
+    int deleteDataByCustomerId(@Param("customerId") Long customerId);
 }
