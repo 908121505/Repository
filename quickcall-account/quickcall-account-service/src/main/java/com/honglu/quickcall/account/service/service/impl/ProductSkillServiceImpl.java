@@ -2,6 +2,7 @@ package com.honglu.quickcall.account.service.service.impl;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -30,16 +31,24 @@ import com.honglu.quickcall.account.service.dao.CustomerSkillMapper;
 import com.honglu.quickcall.account.service.dao.SkillItemExtMapper;
 import com.honglu.quickcall.account.service.dao.SkillItemMapper;
 import com.honglu.quickcall.account.service.service.IProductSkillService;
+<<<<<<< HEAD
 import com.honglu.quickcall.common.api.util.DateUtils;
 import com.honglu.quickcall.producer.facade.business.DataDuriedPointBusiness;
 import com.honglu.quickcall.producer.facade.req.databury.DataBuriedPointOrderButtonReq;
+=======
+>>>>>>> refs/remotes/origin/master_tag(2018/11/03)
 
 @Service("productSkillService")
 public class ProductSkillServiceImpl implements IProductSkillService {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ProductSkillServiceImpl.class);
 
+
     @Autowired
     private DataDuriedPointBusiness dataDuriedPointBusiness;
+	private  static final  Integer  WEEK_INDEX_DEFAULT = 0 ;
+	private  static final  String  ENDTIME_STR_24 = "2400" ;
+	private  static final  String  ENDTIME_STR_00 = "0000" ;
+	
 	@Autowired
 	private SkillItemMapper skillItemMapper;
 	@Autowired
@@ -149,18 +158,29 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 	public void getNewCustomerSkillInfoVO(CustomerSkill skill, CustomerSkillInfoVO skillVO) {
 		HashMap<String, Integer> weekDataMap = new HashMap<String, Integer>();
 		String endTimeStr = skill.getEndTimeStr();
-		weekDataMap.put("tuesday", skill.getTuesday());
-		weekDataMap.put("monday", skill.getMonday());
-		weekDataMap.put("wednesday", skill.getWednesday());
-		weekDataMap.put("thursday", skill.getThursday());
-		weekDataMap.put("friday", skill.getFriday());
-		weekDataMap.put("saturday", skill.getSaturday());
-		weekDataMap.put("sunday", skill.getSunday());
+		weekDataMap.put("tuesday", WEEK_INDEX_DEFAULT);
+		weekDataMap.put("monday", WEEK_INDEX_DEFAULT);
+		weekDataMap.put("wednesday", WEEK_INDEX_DEFAULT);
+		weekDataMap.put("thursday", WEEK_INDEX_DEFAULT);
+		weekDataMap.put("friday", WEEK_INDEX_DEFAULT);
+		weekDataMap.put("saturday", WEEK_INDEX_DEFAULT);
+		weekDataMap.put("sunday", WEEK_INDEX_DEFAULT);
 		skillVO.setWeekDataMap(weekDataMap);
+		/**
+		 * 为了兼容ios和Android约定如下：
+		 * 结束时间入参：0000   2400    落库：2400   判断时采用2359进行判断时间
+		 * 
+		 * 查询：库中数据2400   同意返回前端00:00
+		 * 
+		 */
 		if(StringUtils.isNotBlank(endTimeStr)){
-			String  startStr =  endTimeStr.substring(0, 2);
-			String  endStr =  endTimeStr.substring(2, 4);
-			skillVO.setEndServiceTimeStr(startStr + ":"+endStr);
+			if(ENDTIME_STR_24.equals(endTimeStr)){
+				skillVO.setEndServiceTimeStr("00:00");
+			}else{
+				String  startStr =  endTimeStr.substring(0, 2);
+				String  endStr =  endTimeStr.substring(2, 4);
+				skillVO.setEndServiceTimeStr(startStr + ":"+endStr);
+			}
 		}
 		
 	}
@@ -306,116 +326,59 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 			customerSkillList.add(skillVO);
 
 		}
+		//需要回显原来选择的结束时间
 		resultVO.setCustomerSkillList(customerSkillList);
 		return resultVO;
 	}
 
-//	@Override
-//	public CustomerSkillInfoVO querySkillInfoPersonalExt(Long customerId) {
-//
-//		CustomerSkillInfoVO resultVO = new CustomerSkillInfoVO();
-//
-//		HashMap<String, Integer> weekDataMap = new HashMap<String, Integer>();
-//
-//		List<CustomerSkillVO> resultList = new ArrayList<CustomerSkillVO>();
-//
-//		List<BigDecimal> discontRateList = new ArrayList<BigDecimal>();
-//		discontRateList.add(new BigDecimal(7.5));
-//		discontRateList.add(new BigDecimal(10));
-//		List<BigDecimal> skillPriceList = new ArrayList<BigDecimal>();
-//		skillPriceList.add(new BigDecimal(10));
-//		skillPriceList.add(new BigDecimal(1.5));
-//		skillPriceList.add(new BigDecimal(3));
-//
-//		//0：按次     1：半小时/一小时
-//		for (int i = 0; i < 2; i++) {
-//
-//			CustomerSkillVO skillVO = new CustomerSkillVO();
-//			String skillItemName = null;
-//			String serviceUnit = null;
-//			if (i == 0) {
-//				skillItemName = "叫醒";
-//				serviceUnit = "次";
-//			} else if (i == 1) {
-//				skillItemName = "声优聊天";
-//				serviceUnit = "半小时";
-//			}
-//			skillVO.setCustomerSkillId(10000L);
-//			skillVO.setOldSkillRange(1);
-//			skillVO.setOldServiceUnit(serviceUnit);
-//			skillVO.setOldDiscountRate(new BigDecimal(7.5));
-//			skillVO.setSkillItemId(1000L);
-//			skillVO.setSkillItemName(skillItemName);
-//			skillVO.setOldSkillPrice(new BigDecimal(10));
-//			skillVO.setSwitchStatus(i > 0.5 ? 1 : 0);
-//
-//			List<CustomerSkillExtVO> skillExtList = new ArrayList<CustomerSkillExtVO>();
-//
-//			for (int j = 0; j < 3; j++) {
-//
-//				CustomerSkillExtVO extVO = new CustomerSkillExtVO();
-//				extVO.setSkillRangeValue(j + 1);
-//
-//				// 按次算
-//				List<SkillUnitPriceVO> unitPriceList = new ArrayList<>();
-//				if (i == 0) {
-//					SkillUnitPriceVO up = new SkillUnitPriceVO();
-//					up.setSkillItemExtId(new Long(1111+j));
-//					up.setUnitName("次");
-//					up.setUnitPrice(new BigDecimal(11 *(j+1)));
-//					unitPriceList.add(up);
-//				} else {
-//					for (int k = 0; k < 2; k++) {
-//						SkillUnitPriceVO up = new SkillUnitPriceVO();
-//						if (k == 0) {
-//							up.setUnitName("半小时");
-//							up.setUnitPrice(new BigDecimal(60 * (1 +j)));
-//							up.setSkillItemExtId(new Long(3333+k));
-//						} else {
-//							up.setUnitName("小时");
-//							up.setUnitPrice(new BigDecimal(100* (1+j)));
-//							up.setSkillItemExtId(new Long(2222+k));
-//						}
-//						unitPriceList.add(up);
-//					}
-//
-//				}
-//
-//				extVO.setUnitPriceList(unitPriceList);
-//				skillExtList.add(extVO);
-//			}
-//
-//			List<Long> oldSkillItemExtIdList = new ArrayList<Long>();
-//			if(i == 0){
-//				oldSkillItemExtIdList.add(1111L);
-//				skillVO.setOldSkillItemExtId(1111L);
-//			}else{
-//				skillVO.setOldSkillItemExtId(3333L);
-//				
-//			}
-//			skillVO.setDiscontRateList(discontRateList);
-//			skillVO.setSkillExtList(skillExtList);
-//			skillVO.setSkillType(i == 0 ? 1 : 2);
-//			resultList.add(skillVO);
-//		}
-//
-//		weekDataMap.put("monday", 1);
-//		weekDataMap.put("tuesday", 0);
-//		weekDataMap.put("wednesday", 1);
-//		weekDataMap.put("thursday", 0);
-//		weekDataMap.put("friday", 1);
-//		weekDataMap.put("saturday", 0);
-//		weekDataMap.put("sunday", 1);
-//
-//		resultVO.setReceiveStatus(1);
-//		resultVO.setCustomerSkillList(resultList);
-//
-//		resultVO.setEndServiceTimeStr("10:00");
-//		resultVO.setWeekDataMap(weekDataMap);
-//		String json = JSONUtil.toJson(resultVO);
-//		System.out.println("============" + json);
-//		return resultVO;
-//	}
+
+	
+	
+	public   Date   getAppointEndTime(String  endTimeStr){
+		//
+		if(StringUtils.isBlank(endTimeStr) || endTimeStr.length() < 4){
+			return null;
+		}
+		
+		if(ENDTIME_STR_00.equals(endTimeStr) ||  ENDTIME_STR_24.equals(endTimeStr)){
+			//返回当天时间的最后一分钟
+			Calendar  cal =  Calendar.getInstance();
+			cal.set(Calendar.HOUR_OF_DAY, 23);
+			cal.set(Calendar.MINUTE, 59);
+			cal.set(Calendar.SECOND, 59);
+			return  cal.getTime();
+		}
+		
+		Integer  endTimeIndex =  Integer.valueOf(endTimeStr);
+		
+		Calendar  cal =  Calendar.getInstance();
+		Integer  currHour= cal.get(Calendar.HOUR_OF_DAY);
+		Integer  currMinute = cal.get(Calendar.MINUTE);
+		
+		String  currTimeStr =  (currHour < 10 ? "0"+currHour :currHour+"")+ (currMinute < 10  ? "0"+currMinute :currMinute +"" );
+		Integer  currTimeIndex =  Integer.valueOf(currTimeStr);
+		
+		Integer   selectHourIndex = Integer.valueOf(endTimeStr.substring(0, 2));
+		//选中的结束时间在当前时间之后
+		if(endTimeIndex >=  currTimeIndex ){
+			cal.set(Calendar.HOUR_OF_DAY, selectHourIndex);
+			cal.set(Calendar.MINUTE, 0);
+		}else{
+			//选中的结束时间在当前时间只前
+			//结束时间向后推1天
+			cal.add(Calendar.DAY_OF_YEAR, 1);
+			cal.set(Calendar.HOUR_OF_DAY, selectHourIndex);
+			cal.set(Calendar.MINUTE, 0);
+		}
+		Date  appointEndTime =cal.getTime(); 
+		return appointEndTime;
+	}
+	
+	/**
+	 * 为了兼容ios和Android约定如下：
+	 * 结束时间入参：0000   2400    落库：2400   判断时采用2359进行判断时间
+	 */
+	
 
 	@Override
 	public void updateSkillInfoPersonal(SkillUpdateRequest request) {
@@ -426,14 +389,23 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 			return ;
 		}
 		String  endTimeStr = request.getEndServiceTimeStr();
+		//根据结束时间获取预约结束时间
+		Date  appointEndTime = getAppointEndTime(endTimeStr);
+		if( ENDTIME_STR_24.equals(endTimeStr)){
+			endTimeStr = ENDTIME_STR_00;
+		}
+		Date  appointStartTime = new Date();
+		
+		
+		
 		Integer  receiveStatus = request.getReceiveStatus();
-		Integer sunday = request.getSunday();
-		Integer saturday = request.getSaturday();
-		Integer tuesday = request.getTuesday();
-		Integer wednesday = request.getWednesday();
-		Integer thursday = request.getThursday();
-		Integer friday = request.getFriday();
-		Integer monday = request.getMonday();
+//		Integer sunday = request.getSunday();
+//		Integer saturday = request.getSaturday();
+//		Integer tuesday = request.getTuesday();
+//		Integer wednesday = request.getWednesday();
+//		Integer thursday = request.getThursday();
+//		Integer friday = request.getFriday();
+//		Integer monday = request.getMonday();
 		Long  customerId = request.getCustomerId();
 		List<CustomerSkill>   updateList = new ArrayList<>();
 		Date  currTime = new Date();
@@ -465,16 +437,20 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 			custSkill.setDiscountRate(discountRate);
 			custSkill.setSkillItemId(skillItemId);
 			custSkill.setSwitchStatus(csrv.getSwitchStatus());
-			custSkill.setMonday(monday);
-			custSkill.setTuesday(tuesday);
-			custSkill.setWednesday(wednesday);
-			custSkill.setFriday(friday);
-			custSkill.setSunday(sunday);
-			custSkill.setThursday(thursday);
-			custSkill.setSaturday(saturday);
+			custSkill.setMonday(WEEK_INDEX_DEFAULT);
+			custSkill.setTuesday(WEEK_INDEX_DEFAULT);
+			custSkill.setWednesday(WEEK_INDEX_DEFAULT);
+			custSkill.setFriday(WEEK_INDEX_DEFAULT);
+			custSkill.setSunday(WEEK_INDEX_DEFAULT);
+			custSkill.setThursday(WEEK_INDEX_DEFAULT);
+			custSkill.setSaturday(WEEK_INDEX_DEFAULT);
 			custSkill.setModifyTime(currTime);
 			custSkill.setReceiveStatus(receiveStatus);
 			custSkill.setEndTimeStr(endTimeStr);
+			
+			//设置开始时间和结束时间
+			custSkill.setAppointStartTime(appointStartTime);
+			custSkill.setAppointEndTime(appointEndTime);
 			updateList.add(custSkill);
 		}
 		//在技能审核的时候已经初始化用户技能信息

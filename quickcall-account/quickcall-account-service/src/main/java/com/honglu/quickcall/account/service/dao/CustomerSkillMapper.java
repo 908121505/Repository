@@ -1,5 +1,6 @@
 package com.honglu.quickcall.account.service.dao;
 
+import java.util.Date;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
@@ -21,7 +22,7 @@ public interface CustomerSkillMapper {
     CustomerSkill selectByPrimaryKey(Long userSkillId);
     
     
-    CustomerSkill selectByPrimaryKeyExt(@Param("customerSkillId")Long customerSkillId,@Param("weekIndex")Integer  weekIndex ,@Param("skillSwitch")Integer skillSwitch,@Param("endTimeStr")String  endTimeStr);
+    CustomerSkill selectByPrimaryKeyExt(@Param("customerSkillId")Long customerSkillId,@Param("weekIndex")Integer  weekIndex ,@Param("skillSwitch")Integer skillSwitch,@Param("endTime")Date  endTime);
 
     int updateByPrimaryKeySelective(CustomerSkill record);
 
@@ -53,5 +54,5 @@ public interface CustomerSkillMapper {
 	 * @param endTimeStr
 	 * @return
 	 */
-	CustomerSkillIMVO selectCustomerSkillByCustomerId(@Param("customerId")Long customerSkillId,@Param("weekIndex")Integer  weekIndex ,@Param("skillSwitch")Integer skillSwitch,@Param("endTimeStr")String  endTimeStr);
+	CustomerSkillIMVO selectCustomerSkillByCustomerId(@Param("customerId")Long customerSkillId,@Param("weekIndex")Integer  weekIndex ,@Param("skillSwitch")Integer skillSwitch,@Param("endTime")Date  endTime);
 }

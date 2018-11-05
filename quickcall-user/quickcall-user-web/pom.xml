@@ -19,6 +19,18 @@
 
     <dependencies>
         <!-- 系统内部引用 -->
+       <!--  <dependency>
+               <groupId>com.honglu.quickcall</groupId>
+    <artifactId>quickcall-producer-facade</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+        </dependency> -->
+        <!-- 系统内部引用 -->
+        <!-- <dependency>
+               <groupId>com.honglu.quickcall</groupId>
+    <artifactId>quickcall-producer-facade</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+        </dependency> -->
+        <!-- 系统内部引用 -->
         <dependency>
                <groupId>com.honglu.quickcall</groupId>
     <artifactId>quickcall-producer-facade</artifactId>
@@ -45,9 +57,14 @@
             <groupId>com.honglu.quickcall</groupId>
             <artifactId>quickcall-account-facade</artifactId>
         </dependency>
+             <!-- 音频文件转换 -->
+           <dependency>
+              <groupId>it.sauronsoftware.jave</groupId>
+              <artifactId>jave</artifactId>
+              <version>1.0.2</version>
+           </dependency>
 
-
-        <dependency>
+        <dependency>    
             <groupId>org.springframework</groupId>
             <artifactId>spring-aop</artifactId>
         </dependency>
