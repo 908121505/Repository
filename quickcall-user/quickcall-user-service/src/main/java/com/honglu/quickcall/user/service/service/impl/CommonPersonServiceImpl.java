@@ -38,7 +38,7 @@ import com.honglu.quickcall.user.facade.exchange.request.UserIdCardInfoRequest;
 import com.honglu.quickcall.user.facade.exchange.request.UserLoginRequest;
 import com.honglu.quickcall.user.facade.exchange.request.UserRegisterRequest;
 import com.honglu.quickcall.user.service.dao.BigvPhoneMapper;
-
+import com.honglu.quickcall.user.facade.exchange.request.*;
 import com.honglu.quickcall.user.service.dao.CustomerMapper;
 import com.honglu.quickcall.user.service.dao.SensitivityWordMapper;
 import com.honglu.quickcall.user.service.integration.AccountDubboIntegrationService;
@@ -74,10 +74,9 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 	private SensitivityWordMapper sensitivityWordMapper;
 
 	@Autowired
-
-	private DataDuriedPointBusiness dataDuriedPointBusiness;
-
 	private BigvPhoneMapper bigvPhoneMapper;
+	@Autowired
+	private DataDuriedPointBusiness dataDuriedPointBusiness;
 
 	private static String resendexpire = ResourceBundle.getBundle("thirdconfig").getString("resend.expire");
 	private static String resendexpirehour = ResourceBundle.getBundle("thirdconfig").getString("resend.expire.hour");

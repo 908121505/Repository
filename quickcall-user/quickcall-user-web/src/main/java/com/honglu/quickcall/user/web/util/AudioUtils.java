@@ -4,6 +4,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.aliyun.oss.OSSClient;
 import com.honglu.quickcall.common.core.util.UUIDUtils;
 import com.honglu.quickcall.common.third.OSS.OSSUtil;
@@ -13,6 +16,8 @@ import it.sauronsoftware.jave.Encoder;
 import it.sauronsoftware.jave.EncodingAttributes;
 
 public class AudioUtils {
+	private static Logger logger = LoggerFactory.getLogger(AudioUtils.class);
+
 	public static File wavTomp3(File file, String outFile) {
 		boolean status = false;
 
@@ -21,6 +26,7 @@ public class AudioUtils {
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			status = false;
+			logger.error(e.getMessage());
 			e.printStackTrace();
 		}
 		return null;
