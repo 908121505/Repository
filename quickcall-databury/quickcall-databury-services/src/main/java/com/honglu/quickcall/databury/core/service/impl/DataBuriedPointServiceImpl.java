@@ -7,6 +7,7 @@ import com.honglu.quickcall.databury.core.utils.BuryiedPointDataConvertor;
 import com.honglu.quickcall.databury.core.utils.BuryiedPointUtil;
 import com.honglu.quickcall.databury.facade.exception.DataBuriedPointException;
 import com.honglu.quickcall.databury.facade.req.databury.*;
+import org.apache.http.client.utils.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,7 +60,11 @@ public class DataBuriedPointServiceImpl implements DataBuriedPointService {
         Map<String,Object> event = new HashMap<>();
         event.put("vc_user_id",req.getUser_id());
         event.put("phoneNumber",req.getPhoneNumber());
-        event.put("registDate",req.getRegistDate());
+        if (req.getRegistDate()!=null){
+            event.put("registDate", DateUtils.formatDate(req.getRegistDate(),"yyyy-MM-dd HH:mm:ss"));
+        }else{
+            event.put("registDate",req.getRegistDate());
+        }
         event.put("registSource",req.getRegistSource());
 
 
