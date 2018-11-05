@@ -92,4 +92,50 @@
       WHERE customer_id = #{customerId}
   </update>
 
+  <!-- 更新大V评分 -->
+  <update id="updateBigvScore2">
+      UPDATE bigv_score t
+      SET t.order_total = (
+          SELECT
+              SUM(t2.order_total)
+          FROM
+              bigv_skill_score t2
+          WHERE
+              t2.customer_id = t.customer_id
+      ),
+      t.score_total = (
+          SELECT
+              SUM(t3.score_total)
+          FROM
+              bigv_skill_score t3
+          WHERE
+              t3.customer_id = t.customer_id
+      )
+  </update>
+
+  <!-- 根据客户ID删除数据 -->
+  <delete id="deleteDataByCustomerId">
+    DELETE FROM bigv_score WHERE customer_id = #{customerId}
+  </delete>
+
+  <!-- 根据客户技能ID查询所有已完成的订单 -->
+  <select id="selectAllDoneOrderByCustomerSkillId" resultType="com.honglu.quickcall.account.facade.entity.Order">
+    SELECT
+      t.service_id as serviceId,
+      t.customer_skill_id as customerSkillId,
+      t.skill_item_id as skillItemId,
+      t.order_num as orderNum,
+      t.service_price as servicePrice,
+      t.customer_is_evaluate as customerIsEvaluate,
+      t.evaluate_start as evaluateStart,
+      (
+        SELECT COUNT(t2.order_id) FROM orders t2
+        WHERE t2.service_id = t.service_id AND t2.skill_item_id = t.skill_item_id
+        AND t2.order_status IN (30, 32, 34, 36, 38, 40) AND t2.create_time <![CDATA[  < ]]> t.create_time
+      ) AS paymentType <!-- 订单累计数，暂时用字段 paymentType 接收 -->
+    FROM `orders` t
+    WHERE t.customer_skill_id = #{customerSkillId}
+    AND	t.order_status IN (30, 32, 34, 36, 38, 40)
+    ORDER BY t.service_id ASC, t.skill_item_id ASC, t.create_time ASC
+  </select>
 </mapper>

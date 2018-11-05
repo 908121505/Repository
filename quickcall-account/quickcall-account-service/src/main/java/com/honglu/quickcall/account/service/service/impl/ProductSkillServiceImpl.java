@@ -337,39 +337,44 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 		if(StringUtils.isBlank(endTimeStr) || endTimeStr.length() < 4){
 			return null;
 		}
-		
+		LOGGER.info("endTimeStr====================="+endTimeStr);
 		if(ENDTIME_STR_00.equals(endTimeStr) ||  ENDTIME_STR_24.equals(endTimeStr)){
 			//返回当天时间的最后一分钟
 			Calendar  cal =  Calendar.getInstance();
 			cal.set(Calendar.HOUR_OF_DAY, 23);
 			cal.set(Calendar.MINUTE, 59);
 			cal.set(Calendar.SECOND, 59);
+			cal.set(Calendar.MILLISECOND, 0);
+			LOGGER.info("endTime====================="+cal.getTime());
 			return  cal.getTime();
-		}
-		
-		Integer  endTimeIndex =  Integer.valueOf(endTimeStr);
-		
-		Calendar  cal =  Calendar.getInstance();
-		Integer  currHour= cal.get(Calendar.HOUR_OF_DAY);
-		Integer  currMinute = cal.get(Calendar.MINUTE);
-		
-		String  currTimeStr =  (currHour < 10 ? "0"+currHour :currHour+"")+ (currMinute < 10  ? "0"+currMinute :currMinute +"" );
-		Integer  currTimeIndex =  Integer.valueOf(currTimeStr);
-		
-		Integer   selectHourIndex = Integer.valueOf(endTimeStr.substring(0, 2));
-		//选中的结束时间在当前时间之后
-		if(endTimeIndex >=  currTimeIndex ){
-			cal.set(Calendar.HOUR_OF_DAY, selectHourIndex);
-			cal.set(Calendar.MINUTE, 0);
 		}else{
-			//选中的结束时间在当前时间只前
-			//结束时间向后推1天
-			cal.add(Calendar.DAY_OF_YEAR, 1);
-			cal.set(Calendar.HOUR_OF_DAY, selectHourIndex);
-			cal.set(Calendar.MINUTE, 0);
+			
+			Integer  endTimeIndex =  Integer.valueOf(endTimeStr);
+			
+			Calendar  cal =  Calendar.getInstance();
+			Integer  currHour= cal.get(Calendar.HOUR_OF_DAY);
+			Integer  currMinute = cal.get(Calendar.MINUTE);
+			
+			String  currTimeStr =  (currHour < 10 ? "0"+currHour :currHour+"")+ (currMinute < 10  ? "0"+currMinute :currMinute +"" );
+			Integer  currTimeIndex =  Integer.valueOf(currTimeStr);
+			
+			Integer   selectHourIndex = Integer.valueOf(endTimeStr.substring(0, 2));
+			//选中的结束时间在当前时间之后
+			if(endTimeIndex >=  currTimeIndex ){
+				cal.set(Calendar.HOUR_OF_DAY, selectHourIndex);
+				cal.set(Calendar.MINUTE, 0);
+			}else{
+				//选中的结束时间在当前时间只前
+				//结束时间向后推1天
+				cal.add(Calendar.DAY_OF_YEAR, 1);
+				cal.set(Calendar.HOUR_OF_DAY, selectHourIndex);
+				cal.set(Calendar.MINUTE, 0);
+			}
+			Date  appointEndTime =cal.getTime(); 
+			LOGGER.info("endTime====================="+cal.getTime());
+			return appointEndTime;
 		}
-		Date  appointEndTime =cal.getTime(); 
-		return appointEndTime;
+		
 	}
 	
 	/**

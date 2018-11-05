@@ -26,10 +26,4 @@ public interface QueryBigvListService {
      * @return
      */
     CommonResponse queryClassifyBigvList(DaVListBySkillItemIdRequest request);
-
-    /**
-     * 初始化大V评分排名数据
-     * @return
-     */
-    CommonResponse initBigvScoreRankData();
 }

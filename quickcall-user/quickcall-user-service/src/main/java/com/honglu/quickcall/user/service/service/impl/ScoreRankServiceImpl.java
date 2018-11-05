@@ -1,8 +1,11 @@
 package com.honglu.quickcall.user.service.service.impl;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Objects;
 
+import com.honglu.quickcall.common.api.exchange.CommonResponse;
+import com.honglu.quickcall.common.api.exchange.ResultUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -177,6 +180,65 @@ public class ScoreRankServiceImpl implements ScoreRankService {
         return new BigDecimal(ScoreRankConstants.EVALUATION_LEVEL_WEIGHT_MAP.get(evaluateStars)
                 * ScoreRankConstants.getSingleOrderNumWeight(orderNum)
                 * ScoreRankConstants.PLATFORM_ORDER_EVALUATION_WEIGHT);
+    }
+
+
+    @Override
+    public CommonResponse initBigvScoreRankData() {
+        Long lastId = null;
+        // 循环处理大V技能排名表数据
+        while (true){
+            // 查询大V技能数据
+            BigvSkillScore bigvSkillScore = bigvSkillScoreMapper.selectOneData(lastId);
+            // 若查询不到数据 -- 代表已处理完成
+            if(bigvSkillScore == null){
+                break;
+            }
+            lastId = bigvSkillScore.getId();
+
+            // 判断当前客户是否为大V
+            if(customerMapper.judgeCustomerIsBigv(bigvSkillScore.getCustomerId()) == 0){
+                // 若不是大V -- 清楚技能排名表数据
+                bigvSkillScoreMapper.deleteDataByCustomerId(bigvSkillScore.getCustomerId());
+                bigvScoreMapper.deleteDataByCustomerId(bigvSkillScore.getCustomerId());
+            }
+
+            // 声优该技能的总声量
+            BigDecimal totalScore = new BigDecimal(0);
+            // 查询声优该项技能已完成的订单
+            List<Order> orderList = bigvScoreMapper.selectAllDoneOrderByCustomerSkillId(bigvSkillScore.getCustomerSkillId());
+            // 循环计算声优该技能的累积得分值
+            for(Order order: orderList){
+                // 计算该订单对应的技能的评分
+                totalScore.add(calculateOrderSkillScore2(order, order.getEvaluateStart()));
+            }
+
+            // 存入技能排名表
+            bigvSkillScoreMapper.updateBigvSkillScore2(bigvSkillScore.getCustomerSkillId(), totalScore, orderList.size());
+        }
+
+        // 更新大V声量排名表数据
+        bigvScoreMapper.updateBigvScore2();
+
+        return ResultUtils.resultSuccess();
+    }
+
+    private BigDecimal calculateOrderSkillScore2(Order order, Integer evaluateStars) {
+        // 订单累计数，暂时用字段 paymentType 接收
+        Integer orderTotal = order.getPaymentType();
+
+        // 计算技能总比价得分
+        BigDecimal orderTotalScore = new BigDecimal((2 / Math.log10(orderTotal + 6))
+                * 10 * ScoreRankConstants.PLATFORM_ORDER_NUM_TOTAL_WEIGHT);
+
+        // 计算技能笔单价得分
+        BigDecimal servicePriceScore = order.getServicePrice().multiply(new BigDecimal(ScoreRankConstants.PLATFORM_SINGLE_ORDER_PRICE_WEIGHT));
+
+        // 计算总得分
+        BigDecimal valueScore = orderTotalScore.add(servicePriceScore).multiply(calculateEvaluateScore(evaluateStars, order.getOrderNum()));
+
+        // 四舍五入取整
+        return valueScore.setScale(0, BigDecimal.ROUND_HALF_UP);
     }
 
 }
