@@ -26,6 +26,9 @@ public class BizCode extends AbstractCodedEnum{
     public static final BizCode ChargeOrderSaveFail;
     public static final BizCode ChargeOrderFail;
 
+    /***** 与用户相关的 ****/
+    public static final BizCode CustomerNotExist;
+
     private ServiceCode serviceCode;
 
     public BizCode() {
@@ -73,5 +76,10 @@ public class BizCode extends AbstractCodedEnum{
         ChargeOrderSaveFail = new BizCode("ChargeOrderSaveFail", "301", ServiceCode.Default, "保存充值订单失败");
         ChargeOrderFail = new BizCode("ChargeOrderFail", "302", ServiceCode.Default, "充值失败");
 
+
+        /************************** 与用户相关的 - start **********************/
+        CustomerNotExist = new BizCode("CustomerNotExist", "401", ServiceCode.Default, "用户不存在");
+
+        /************************** 与用户相关的 - end **********************/
     }
 }
