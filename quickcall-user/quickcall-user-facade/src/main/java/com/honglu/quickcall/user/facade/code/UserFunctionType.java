@@ -233,4 +233,9 @@ public interface UserFunctionType {
 	 */
 	String CANCEL_ATTENTION = "003232";
 
+	/**
+	 * 初始化大V评分排名数据
+	 */
+	String INIT_BIGV_SCORE_RANK_DATA = "003233";
+
 }
