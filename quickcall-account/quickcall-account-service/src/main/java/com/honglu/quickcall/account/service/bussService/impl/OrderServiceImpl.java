@@ -181,14 +181,12 @@ public class OrderServiceImpl implements IOrderService {
 						downLoadStr = DateUtils.getDiffSeconds(remainStr);
 						
 					}
-					resultMap.put("retCode", OrderSkillConstants.RET_CODE_DV_BUSY);
 					resultMap.put("downLoadStr", downLoadStr);
-					commonResponse.setData(resultMap);
-					//返回大V正忙，以及结束时间
-					return   commonResponse ;
-					
-					
 				}
+				resultMap.put("retCode", OrderSkillConstants.RET_CODE_DV_BUSY);
+				commonResponse.setData(resultMap);
+				//返回大V正忙，以及结束时间
+				return   commonResponse ;
 				
 			}
 			DataBuriedPointSubmitOrderReq req = new DataBuriedPointSubmitOrderReq();
