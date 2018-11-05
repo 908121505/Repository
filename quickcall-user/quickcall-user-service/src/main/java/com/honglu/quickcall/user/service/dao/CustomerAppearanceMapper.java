@@ -51,12 +51,15 @@ public interface CustomerAppearanceMapper{
 	int updateEntity( CustomerAppearance record );
 
 	/**
-	 * 根据类型查询用户审核通过的照片
+	 * 查询用户照片
 	 * @param customerId
 	 * @param type
+	 * @param onlyAudited -- 1=只查审核通过的；其他=优先查待待审核的
 	 * @return
 	 */
-	List<String> queryCustomerAuditedAppearance(@Param("customerId") Long customerId, @Param("type") Integer type);
+	List<String> queryCustomerAppearance(@Param("customerId") Long customerId,
+										 @Param("type") Integer type,
+										 @Param("onlyAudited") Integer onlyAudited);
 	/**
 	 *
 	 * 查询（根据主键ID查询）

@@ -144,7 +144,7 @@ public class AliPayServiceImpl implements AliPayService {
 				// accountMapper.outAccount(params.getUserId(), params.getAmount(),
 				// TransferTypeEnum.REMAINDER.getType());
 				accountService.outAccount(params.getCustomerId(), params.getAmount(), TransferTypeEnum.REMAINDER,
-						AccountBusinessTypeEnum.Withdraw);
+						AccountBusinessTypeEnum.Withdraw, null);
 			} else {// 失败
 				recharge.setState(3);// 状态。1-申请支付，2-支付成功 3支付失败
 				errorMsg = myJson.getString("respMsg");
@@ -194,7 +194,7 @@ public class AliPayServiceImpl implements AliPayService {
 				recharge.setState(2);// 状态。1-申请支付，2-支付成功 3支付失败
 
 				accountService.inAccount(params.getAccountId(), amount, TransferTypeEnum.RECHARGE,
-						AccountBusinessTypeEnum.Recharge);
+						AccountBusinessTypeEnum.Recharge, null);
 			} else if (params.getPayState() == 0) {
 				recharge.setState(3);// 状态。1-申请支付，2-支付成功 3支付失败
 			}

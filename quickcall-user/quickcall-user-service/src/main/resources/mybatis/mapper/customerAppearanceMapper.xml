@@ -99,15 +99,27 @@ id,	customer_id,	audit_appearance,	appearance,	type,	audit_status,	sort,	status,
 		 WHERE id = #{id}
 	</update>
 
-	<!-- 据类型查询用户审核通过的照片 -->
-	<select id="queryCustomerAuditedAppearance" resultType="string">
-		SELECT appearance
+	<!-- 查询用户照片 -->
+	<select id="queryCustomerAppearance" resultType="string">
+		SELECT
+		<if test="onlyAudited == 1">
+			appearance
+		</if>
+		<if test="onlyAudited != 1">
+			IF ((audit_appearance IS NULL OR audit_appearance = ''),
+				appearance, audit_appearance
+			) AS appearance
+		</if>
 		FROM customer_appearance
 		WHERE customer_id = #{customerId}
 		AND type = #{type}
 		AND status = 1
-		AND appearance IS NOT NULL
-		AND appearance != ''
+		<if test="onlyAudited == 1">
+			AND audit_status = 1
+		</if>
+		<if test="onlyAudited != 1">
+			AND audit_status != 2
+		</if>
 		ORDER BY create_time ASC
 	</select>
 	<!-- 查询（根据用户id和类型查询） -->

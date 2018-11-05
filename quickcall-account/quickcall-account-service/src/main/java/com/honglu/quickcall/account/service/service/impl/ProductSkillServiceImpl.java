@@ -39,8 +39,13 @@ import com.honglu.quickcall.producer.facade.req.databury.DataBuriedPointOrderBut
 public class ProductSkillServiceImpl implements IProductSkillService {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ProductSkillServiceImpl.class);
 
+
     @Autowired
     private DataDuriedPointBusiness dataDuriedPointBusiness;
+	private  static final  Integer  WEEK_INDEX_DEFAULT = 0 ;
+	private  static final  String  ENDTIME_STR_24 = "2400" ;
+	private  static final  String  ENDTIME_STR_00 = "0000" ;
+	
 	@Autowired
 	private SkillItemMapper skillItemMapper;
 	@Autowired
@@ -150,18 +155,29 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 	public void getNewCustomerSkillInfoVO(CustomerSkill skill, CustomerSkillInfoVO skillVO) {
 		HashMap<String, Integer> weekDataMap = new HashMap<String, Integer>();
 		String endTimeStr = skill.getEndTimeStr();
-		weekDataMap.put("tuesday", skill.getTuesday());
-		weekDataMap.put("monday", skill.getMonday());
-		weekDataMap.put("wednesday", skill.getWednesday());
-		weekDataMap.put("thursday", skill.getThursday());
-		weekDataMap.put("friday", skill.getFriday());
-		weekDataMap.put("saturday", skill.getSaturday());
-		weekDataMap.put("sunday", skill.getSunday());
+		weekDataMap.put("tuesday", WEEK_INDEX_DEFAULT);
+		weekDataMap.put("monday", WEEK_INDEX_DEFAULT);
+		weekDataMap.put("wednesday", WEEK_INDEX_DEFAULT);
+		weekDataMap.put("thursday", WEEK_INDEX_DEFAULT);
+		weekDataMap.put("friday", WEEK_INDEX_DEFAULT);
+		weekDataMap.put("saturday", WEEK_INDEX_DEFAULT);
+		weekDataMap.put("sunday", WEEK_INDEX_DEFAULT);
 		skillVO.setWeekDataMap(weekDataMap);
+		/**
+		 * 为了兼容ios和Android约定如下：
+		 * 结束时间入参：0000   2400    落库：2400   判断时采用2359进行判断时间
+		 * 
+		 * 查询：库中数据2400   同意返回前端00:00
+		 * 
+		 */
 		if(StringUtils.isNotBlank(endTimeStr)){
-			String  startStr =  endTimeStr.substring(0, 2);
-			String  endStr =  endTimeStr.substring(2, 4);
-			skillVO.setEndServiceTimeStr(startStr + ":"+endStr);
+			if(ENDTIME_STR_24.equals(endTimeStr)){
+				skillVO.setEndServiceTimeStr("00:00");
+			}else{
+				String  startStr =  endTimeStr.substring(0, 2);
+				String  endStr =  endTimeStr.substring(2, 4);
+				skillVO.setEndServiceTimeStr(startStr + ":"+endStr);
+			}
 		}
 		
 	}
@@ -307,18 +323,28 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 			customerSkillList.add(skillVO);
 
 		}
+		//需要回显原来选择的结束时间
 		resultVO.setCustomerSkillList(customerSkillList);
 		return resultVO;
 	}
 
+
 	
 	
-	
-	
+
 	public   Date   getAppointEndTime(String  endTimeStr){
 		//
 		if(StringUtils.isBlank(endTimeStr) || endTimeStr.length() < 4){
 			return null;
+		}
+		
+		if(ENDTIME_STR_00.equals(endTimeStr) ||  ENDTIME_STR_24.equals(endTimeStr)){
+			//返回当天时间的最后一分钟
+			Calendar  cal =  Calendar.getInstance();
+			cal.set(Calendar.HOUR_OF_DAY, 23);
+			cal.set(Calendar.MINUTE, 59);
+			cal.set(Calendar.SECOND, 59);
+			return  cal.getTime();
 		}
 		
 		Integer  endTimeIndex =  Integer.valueOf(endTimeStr);
@@ -346,8 +372,14 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 		return appointEndTime;
 	}
 	
+	/**
+	 * 为了兼容ios和Android约定如下：
+	 * 结束时间入参：0000   2400    落库：2400   判断时采用2359进行判断时间
+	 */
 	
+
 	private  static final  Integer  WEEK_INDEX_DEFAULT = 0 ;
+
 
 	@Override
 	public void updateSkillInfoPersonal(SkillUpdateRequest request) {
@@ -359,8 +391,10 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 		}
 		String  endTimeStr = request.getEndServiceTimeStr();
 		//根据结束时间获取预约结束时间
-		
 		Date  appointEndTime = getAppointEndTime(endTimeStr);
+		if( ENDTIME_STR_24.equals(endTimeStr)){
+			endTimeStr = ENDTIME_STR_00;
+		}
 		Date  appointStartTime = new Date();
 		
 		
