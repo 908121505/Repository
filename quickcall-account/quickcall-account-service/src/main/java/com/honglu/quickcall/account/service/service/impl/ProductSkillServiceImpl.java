@@ -464,11 +464,11 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 		}
 		
 		//更新bigv_score表
-		try {
-			customerSkillMapper.updateBigvScore(customerId, receiveStatus);
-		} catch (Exception e) {
-			LOGGER.error("更新用户状态发生异常，异常信息：",e);
-		}
+//		try {
+//			customerSkillMapper.updateBigvScore(customerId, receiveStatus);
+//		} catch (Exception e) {
+//			LOGGER.error("更新用户状态发生异常，异常信息：",e);
+//		}
 		
 
 	}
