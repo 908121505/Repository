@@ -168,10 +168,11 @@ public class ScoreRankServiceImpl implements ScoreRankService {
 
     /**
      * 计算评价得分
-     * @desc (评价*评价权重*平台价值权重)
+     *
      * @param evaluateStars
      * @param orderNum
      * @return
+     * @desc (评价 * 评价权重 * 平台价值权重)
      */
     private static BigDecimal calculateEvaluateScore(Integer evaluateStars, Integer orderNum) {
         if (evaluateStars == null) {
@@ -190,19 +191,32 @@ public class ScoreRankServiceImpl implements ScoreRankService {
         int deleteNum = bigvScoreMapper.deleteNotBigvData();
         LOGGER.info("从【bigv_score】表删除不是大V的数量条数：{}" + deleteNum);
 
+        // 删除不在大V技能列表的排名数据
+        deleteNum = bigvSkillScoreMapper.deleteNotBigvData();
+        LOGGER.info("从【bigv_skill_score】表删除不是大V技能表中的数据条数：{}" + deleteNum);
+
+        // 查询不在大V总排名表中的大VID
+        List<Long> customerIds = bigvScoreMapper.selectNeedInsertBigvData();
+        if (!customerIds.isEmpty()) {
+            for(Long customerId: customerIds){
+
+            }
+        }
+
+
         Long lastId = null;
         // 循环处理大V技能排名表数据
-        while (true){
+        while (true) {
             // 查询大V技能数据
             BigvSkillScore bigvSkillScore = bigvSkillScoreMapper.selectOneData(lastId);
             // 若查询不到数据 -- 代表已处理完成
-            if(bigvSkillScore == null){
+            if (bigvSkillScore == null) {
                 break;
             }
             lastId = bigvSkillScore.getId();
 
             // 判断当前客户是否为大V
-            if(customerMapper.judgeCustomerIsBigv(bigvSkillScore.getCustomerId()) == 0){
+            if (customerMapper.judgeCustomerIsBigv(bigvSkillScore.getCustomerId()) == 0) {
                 // 若不是大V -- 清楚技能排名表数据
                 bigvSkillScoreMapper.deleteDataByCustomerId(bigvSkillScore.getCustomerId());
                 bigvScoreMapper.deleteDataByCustomerId(bigvSkillScore.getCustomerId());
@@ -213,7 +227,7 @@ public class ScoreRankServiceImpl implements ScoreRankService {
             // 查询声优该项技能已完成的订单
             List<Order> orderList = bigvScoreMapper.selectAllDoneOrderByCustomerSkillId(bigvSkillScore.getCustomerSkillId());
             // 循环计算声优该技能的累积得分值
-            for(Order order: orderList){
+            for (Order order : orderList) {
                 // 计算该订单对应的技能的评分
                 totalScore.add(calculateOrderSkillScore2(order, order.getEvaluateStart()));
             }

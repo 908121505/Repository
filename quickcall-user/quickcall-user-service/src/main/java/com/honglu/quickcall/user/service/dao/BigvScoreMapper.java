@@ -47,4 +47,9 @@ public interface BigvScoreMapper {
      */
     List<Order> selectAllDoneOrderByCustomerSkillId(@Param("customerSkillId") Long customerSkillId);
 
+    /**
+     * 查询bigv_score表需要补的大V数据
+     * @return
+     */
+    List<Long> selectNeedInsertBigvData();
 }
