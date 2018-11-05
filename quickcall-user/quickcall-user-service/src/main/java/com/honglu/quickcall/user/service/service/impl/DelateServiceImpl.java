@@ -3,6 +3,7 @@ package com.honglu.quickcall.user.service.service.impl;
 import com.honglu.quickcall.common.api.code.BizCode;
 import com.honglu.quickcall.common.api.exception.BizException;
 import com.honglu.quickcall.common.api.exchange.CommonResponse;
+import com.honglu.quickcall.common.api.exchange.ResultUtils;
 import com.honglu.quickcall.user.facade.entity.CustomerDelate;
 import com.honglu.quickcall.user.facade.entity.Delate;
 import com.honglu.quickcall.user.facade.exchange.request.DelateInsertRequest;
@@ -41,6 +42,9 @@ public class DelateServiceImpl implements DelateService {
 
     @Override
     public CommonResponse insertDelate(DelateInsertRequest request) {
+    	if(request.getCustomerId() == null){
+			return ResultUtils.result(BizCode.CustomerNotExist);
+		}
         Long customerId = request.getCustomerId();
         Long delateCustId = request.getDelateCustId();
         String otherReason = request.getOtherReason();

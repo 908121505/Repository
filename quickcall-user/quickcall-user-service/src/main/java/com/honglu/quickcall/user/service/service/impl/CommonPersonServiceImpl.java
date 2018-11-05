@@ -658,6 +658,9 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 
 	@Override
 	public CommonResponse saveDvVoiceInfo(SaveDvVoiceRequest request) {
+		if(request.getCustomerId() == null){
+			return ResultUtils.result(BizCode.CustomerNotExist);
+		}
 		Long customerId = request.getCustomerId();
 		Customer customer = customerMapper.selectByPrimaryKey(customerId);
 		if (customer == null) {
@@ -699,6 +702,9 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 
 	@Override
 	public CommonResponse loginOut(LoginOutRequest request) {
+		if(request.getCustomerId() == null){
+			return ResultUtils.result(BizCode.CustomerNotExist);
+		}
 		Long customerId = request.getCustomerId();
 		Customer customer = customerMapper.selectByPrimaryKey(customerId);
 		if (customer == null) {
@@ -713,6 +719,9 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 
 	@Override
 	public CommonResponse addSystemUser(AddSystemUserRequest request) {
+		if(request.getCustomerId() == null){
+			return ResultUtils.result(BizCode.CustomerNotExist);
+		}
 		String rongyunToken = RongYunUtil.getToken(String.valueOf(request.getCustomerId()), request.getNickName(),
 				request.getPhoto());
 		Customer customer = new Customer();

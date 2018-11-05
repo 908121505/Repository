@@ -112,7 +112,9 @@ public class ApplePayServiceImpl implements ApplePayService {
 			// RuntimeException("appId为"+appleOrderRequest.getAppId()+"，未能查询到appKey");
 			// }
 			// String appKey = String.valueOf(mAppVo.getAppKey());
-
+			if(applePayRequest.getCustomerId() == null){
+				return ResultUtils.result(BizCode.CustomerNotExist);
+			}
 			// 创建充值订单
 			String rechargeOrderId = createReChargeOrder(applePayRequest.getCustomerId(), applePayRequest.getAmount());
 			resMap.put("rechargeOrderId", rechargeOrderId);

@@ -58,6 +58,9 @@ public class AliPayServiceImpl implements AliPayService {
 
 	@Override
 	public CommonResponse recharge(RechargeRequest packet) {
+		if(packet.getCustomerId() == null){
+			return ResultUtils.result(BizCode.CustomerNotExist);
+		}
 		String params = "";
 		String orderNo = UUIDUtils.getUUID();// 订单
 		String orderDesc = "";
@@ -104,7 +107,9 @@ public class AliPayServiceImpl implements AliPayService {
 
 	@Override
 	public CommonResponse whthdraw(WhthdrawRequest params) {
-
+		if(params.getCustomerId() == null){
+			return ResultUtils.result(BizCode.CustomerNotExist);
+		}
 		Account account = accountMapper.queryAccount(params.getCustomerId());
 		String errorMsg = null;
 		if (account.getRemainderAmounts().compareTo(params.getAmount()) == -1) {
@@ -159,6 +164,9 @@ public class AliPayServiceImpl implements AliPayService {
 
 	@Override
 	public CommonResponse bindAliaccount(BindAliaccountRequest params) {
+		if(params.getCustomerId() == null){
+			return ResultUtils.result(BizCode.CustomerNotExist);
+		}
 		Aliacount acliacount = aliacountMapper.selectByPrimaryKey(params.getCustomerId());
 		if (params.getEtype() != null && params.getEtype() == 1) {
 			return ResultUtils.resultSuccess(acliacount);

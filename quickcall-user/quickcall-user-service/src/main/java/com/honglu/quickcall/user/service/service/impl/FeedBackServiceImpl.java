@@ -1,6 +1,8 @@
 package com.honglu.quickcall.user.service.service.impl;
 
+import com.honglu.quickcall.common.api.code.BizCode;
 import com.honglu.quickcall.common.api.exchange.CommonResponse;
+import com.honglu.quickcall.common.api.exchange.ResultUtils;
 import com.honglu.quickcall.user.facade.code.UserBizReturnCode;
 import com.honglu.quickcall.user.facade.entity.FeedBack;
 import com.honglu.quickcall.user.facade.exchange.request.FeedBackInsertRequest;
@@ -26,6 +28,9 @@ public class FeedBackServiceImpl implements FeedBackService {
 
     @Override
     public CommonResponse insertFeedBack(FeedBackInsertRequest feedBackInsertRequest) {
+    	if(feedBackInsertRequest.getCustomerId() == null){
+			return ResultUtils.result(BizCode.CustomerNotExist);
+		}
         String customerId = feedBackInsertRequest.getCustomerId();
         String feedBackContent = feedBackInsertRequest.getFeedBackContent();
         String contactWay = feedBackInsertRequest.getContactWay();

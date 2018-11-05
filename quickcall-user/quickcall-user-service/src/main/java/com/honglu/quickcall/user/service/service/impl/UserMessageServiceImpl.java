@@ -1,9 +1,12 @@
 package com.honglu.quickcall.user.service.service.impl;
 
+import com.honglu.quickcall.common.api.code.BizCode;
 import com.honglu.quickcall.common.api.exchange.CommonResponse;
 import com.honglu.quickcall.common.api.exchange.ResultUtils;
 import com.honglu.quickcall.common.api.util.JedisUtil;
+import com.honglu.quickcall.common.core.util.UUIDUtils;
 import com.honglu.quickcall.common.third.rongyun.util.RongYunUtil;
+import com.honglu.quickcall.user.facade.code.UserBizReturnCode;
 import com.honglu.quickcall.user.facade.entity.*;
 import com.honglu.quickcall.user.facade.exchange.request.BookingMessageQueryRequest;
 import com.honglu.quickcall.user.facade.exchange.request.BookingMessageSaveRequest;
@@ -55,6 +58,9 @@ public class UserMessageServiceImpl implements UserMessageService {
 
     @Override
     public CommonResponse queryUserUnreadMessageNum(UserUnreadMessageNumRequest params) {
+    	if(params.getCustomerId() == null){
+			return ResultUtils.result(BizCode.CustomerNotExist);
+		}
         int num = messageMapper.queryUserUnreadMessageNum(params.getCustomerId());
         return ResultUtils.resultSuccess(num);
     }
@@ -62,6 +68,9 @@ public class UserMessageServiceImpl implements UserMessageService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public CommonResponse saveBookingMessage(BookingMessageSaveRequest params) {
+    	if(params.getCustomerId() == null){
+			return ResultUtils.result(BizCode.CustomerNotExist);
+		}
         String key = reidsKey+params.getCustomerId()+":"+params.getReceiverId();
         String value = JedisUtil.get(key);
         if (StringUtils.isNotBlank(value)){
@@ -115,6 +124,9 @@ public class UserMessageServiceImpl implements UserMessageService {
 
     @Override
     public CommonResponse queryBookingMessage(BookingMessageQueryRequest params) {
+    	if(params.getCustomerId() == null){
+			return ResultUtils.result(BizCode.CustomerNotExist);
+		}
         List<MessageReservation> messageReservationList = messageReservationMapper.queryBookingMessage(params.getCustomerId());
         List<MessageReservationVO> mrsList = new ArrayList<>();
         for (MessageReservation mr: messageReservationList){
@@ -151,6 +163,9 @@ public class UserMessageServiceImpl implements UserMessageService {
 
 	@Override
 	public CommonResponse queryCustomerMessageSetting(CustomerMessageSettingQueryRequest params) {
+		if(params.getCustomerId() == null){
+			return ResultUtils.result(BizCode.CustomerNotExist);
+		}
 		List<CustomerMsgSetting> customerMsgSettingList = customerMsgSettingMapper.selectByPrimaryKey(params.getCustomerId());
 		CustomerMsgSetting customerMsgSetting = new CustomerMsgSetting();
 		if(customerMsgSettingList.size() < 1){
@@ -168,14 +183,33 @@ public class UserMessageServiceImpl implements UserMessageService {
 	@Override
 	@Transactional(rollbackFor = Exception.class)
 	public CommonResponse saveCustomerMessageSetting(CustomerMsgSettingRequest params) {
+		if(params.getCustomerId() == null){
+			return ResultUtils.result(BizCode.CustomerNotExist);
+		}
 		CustomerMsgSetting customerMsgSetting = new CustomerMsgSetting();
 		customerMsgSetting.setModifyTime(new Date());
+		customerMsgSetting.setId(params.getId());
+		customerMsgSetting.setCustomerId(params.getCustomerId());
+		customerMsgSetting.setReceiveStatus(params.getReceiveStatus());
+		customerMsgSetting.setReceiveType(params.getReceiveType());
+		customerMsgSetting.setRangeMinLimit(params.getRangeMinLimit());
+		customerMsgSetting.setRemark(null);
 		int num = 0;
 		if(params.getId() == null){
+			List<CustomerMsgSetting> customerMsgSettingList = customerMsgSettingMapper.selectByPrimaryKey(params.getCustomerId());
+			if(customerMsgSettingList.size() > 0){
+				CommonResponse response = new CommonResponse();
+				response.setCode(UserBizReturnCode.paramError);
+				response.setMessage(UserBizReturnCode.paramError.desc());;
+				return response;
+			}
 			customerMsgSetting.setCreateTime(new Date());
+			customerMsgSetting.setId(UUIDUtils.getId());
+			customerMsgSetting.setCreateMan(null);
 			num = customerMsgSettingMapper.insertSelective(customerMsgSetting);
 		}else{
-			num = customerMsgSettingMapper.updateByPrimaryKey(customerMsgSetting);
+			customerMsgSetting.setModifyMan(null);
+			num = customerMsgSettingMapper.updateByPrimaryKeySelective(customerMsgSetting);
 		}
 		return ResultUtils.resultSuccess(num);
 	}
