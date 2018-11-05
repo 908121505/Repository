@@ -1,14 +1,27 @@
 package com.honglu.quickcall.common.api.util;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+import java.util.Set;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
-
-import java.io.*;
-import java.util.*;
 
 public class JedisUtil {
 	private final static Logger logger = LoggerFactory.getLogger(JedisUtil.class);
@@ -28,8 +41,10 @@ public class JedisUtil {
 			}
 			JedisPoolConfig poolConfig = new JedisPoolConfig();
 			poolConfig.setMaxIdle(Integer.valueOf(constant.getProperty("redis.maxIdle", "100")));
-			//poolConfig.setMaxTotal(Integer.valueOf(constant.getProperty("redis.maxTotal", "100")));
+			// poolConfig.setMaxTotal(Integer.valueOf(constant.getProperty("redis.maxTotal",
+			// "100")));
 			poolConfig.setTimeBetweenEvictionRunsMillis(-1);
+			poolConfig.setMaxWaitMillis(Long.valueOf(constant.getProperty("redis.timeout")));
 			poolConfig.setTestOnBorrow(true);
 			String host = constant.getProperty("redis.host");
 			int port = Integer.valueOf(constant.getProperty("redis.port"));
@@ -78,8 +93,8 @@ public class JedisUtil {
 			pool.returnResource(jedis);
 		}
 	}
-	
-	public static void setex(String key,int seconds,String value) {
+
+	public static void setex(String key, int seconds, String value) {
 		Jedis jedis = null;
 		try {
 			jedis = pool.getResource();
@@ -163,8 +178,7 @@ public class JedisUtil {
 			pool.returnResource(jedis);
 		}
 	}
-	
-	
+
 	/**
 	 * 存储数据(含失效时间)
 	 * 
@@ -188,7 +202,7 @@ public class JedisUtil {
 		}
 		return value;
 	}
-	
+
 	/**
 	 * 设置失效时间
 	 * 
@@ -196,7 +210,7 @@ public class JedisUtil {
 	 * @param value
 	 * @param second
 	 */
-	public static void expire(String key,  int second) {
+	public static void expire(String key, int second) {
 		Jedis jedis = null;
 		try {
 			jedis = pool.getResource();
@@ -211,8 +225,6 @@ public class JedisUtil {
 		}
 	}
 
-
-	
 	public static boolean setObj(String key, Serializable obj) {
 		Jedis jedis = null;
 		try {
@@ -257,13 +269,14 @@ public class JedisUtil {
 		}
 		return value;
 	}
+
 	public static byte[] get(byte[] key) {
 		Jedis jedis = null;
 		byte[] value = null;
 		try {
 			jedis = pool.getResource();
 			value = jedis.get(key);
-			
+
 		} catch (Exception e) {
 			logger.error("getkey error.", e);
 			pool.returnBrokenResource(jedis);
@@ -493,8 +506,6 @@ public class JedisUtil {
 		return 0;
 	}
 
-	
-
 	public static long zremrangeByRank(String key, long start, long end) {
 		Jedis jedis = null;
 		try {
@@ -578,12 +589,12 @@ public class JedisUtil {
 		}
 		return null;
 	}
-	
+
 	public static Map<String, String> hgetAll(String key) {
 		Jedis jedis = null;
 		try {
 			jedis = pool.getResource();
-			return jedis.hgetAll(key);			 
+			return jedis.hgetAll(key);
 		} catch (Exception e) {
 			logger.error("hgetAll ", e);
 			pool.returnBrokenResource(jedis);
@@ -593,13 +604,12 @@ public class JedisUtil {
 		return null;
 	}
 
-
-	public static long setnx(String key, String value ,int timeOut) {
+	public static long setnx(String key, String value, int timeOut) {
 		Jedis jedis = null;
-		Long l =null;
+		Long l = null;
 		try {
 			jedis = pool.getResource();
-			l =  jedis.setnx(key, value);
+			l = jedis.setnx(key, value);
 			jedis.expire(key, timeOut);
 
 		} catch (Exception e) {
@@ -607,15 +617,16 @@ public class JedisUtil {
 			pool.returnBrokenResource(jedis);
 		} finally {
 			pool.returnResource(jedis);
-			return l==null?0:l;
+			return l == null ? 0 : l;
 		}
 	}
-	public static long setnx(byte[] key, byte[] value ,int timeOut) {
+
+	public static long setnx(byte[] key, byte[] value, int timeOut) {
 		Jedis jedis = null;
-		Long l =null;
+		Long l = null;
 		try {
 			jedis = pool.getResource();
-			l =  jedis.setnx(key, value);
+			l = jedis.setnx(key, value);
 			jedis.expire(key, timeOut);
 
 		} catch (Exception e) {
@@ -623,21 +634,20 @@ public class JedisUtil {
 			pool.returnBrokenResource(jedis);
 		} finally {
 			pool.returnResource(jedis);
-			return l==null?0:l;
+			return l == null ? 0 : l;
 		}
 	}
-	
-	
-	public static int ddlTimes(String key){
+
+	public static int ddlTimes(String key) {
 		Jedis jedis = null;
 		try {
 			jedis = pool.getResource();
 			Long result = jedis.ttl(key);
-			if (result < 0){
+			if (result < 0) {
 				return 0;
 			}
 			long lResult = jedis.ttl(key);
-			int iResult = (int)lResult;
+			int iResult = (int) lResult;
 			return iResult;
 		} catch (Exception e) {
 			logger.error("ddlTimes ", e);
