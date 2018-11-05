@@ -36,12 +36,15 @@ public class BlacklistServiceimpl implements BlacklistService {
     @Override
     public CommonResponse removeBlacklist(RemoveBlacklistReq params) {
         CommonResponse commonResponse = new CommonResponse();
-
-        if (params.getId() == null) {
-            throw new BizException(UserBizReturnCode.paramError, "id不能为空");
+        if (params.getCustomerId() == null) {
+            throw new BizException(UserBizReturnCode.paramError, "customerId不能为空");
+        }
+        if (params.getBlackCustomerId() == null) {
+            throw new BizException(UserBizReturnCode.paramError, "blackCustomerId不能为空");
         }
 
-        int result = blacklistMapper.deleteByPrimaryKey(params.getId());
+        //逻辑删除
+        int result = blacklistMapper.updateStatusById(params.getCustomerId(),params.getBlackCustomerId());
         logger.info("删除黑名单 removeBlacklist,更新数量" + result);
         if (result > 0) {
             commonResponse.setCode(UserBizReturnCode.Success);
@@ -87,6 +90,7 @@ public class BlacklistServiceimpl implements BlacklistService {
         Blacklist.setId(UUIDUtils.getId());
         Blacklist.setCustomerId(params.getCustomerId());
         Blacklist.setBlackCustomerId(params.getBlackCustomerId());
+        Blacklist.setStatus(1);
 
         int result = blacklistMapper.insertSelective(Blacklist);
         logger.info("添加黑名单 saveBlacklist,更新数量" + result);

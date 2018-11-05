@@ -151,9 +151,7 @@
       <if test="status != null" >
         status,
       </if>
-      <if test="createTime != null" >
         create_time,
-      </if>
       <if test="modifyTime != null" >
         modify_time,
       </if>
@@ -180,9 +178,7 @@
       <if test="status != null" >
         #{status,jdbcType=TINYINT},
       </if>
-      <if test="createTime != null" >
-        #{createTime,jdbcType=TIMESTAMP},
-      </if>
+        now(),
       <if test="modifyTime != null" >
         #{modifyTime,jdbcType=TIMESTAMP},
       </if>
@@ -337,7 +333,7 @@
    count(1)
     FROM
     blacklist b
-    WHERE b.`customer_id` = #{customerId} and b.`black_customer_id` = #{blackCustomerId}
+    WHERE b.`customer_id` = #{customerId} and b.`black_customer_id` = #{blackCustomerId} and  status = 1
 
   </select>
 
@@ -348,4 +344,13 @@
     AND b.`black_customer_id` = #{blackCustomerId}
     AND `status` = 1
   </select>
+
+  <update id="updateStatusById" parameterType="java.lang.Long" >
+    update blacklist
+    set status = 0,
+    modify_time = now()
+    where customer_id = #{customerId}
+    AND black_customer_id = #{blackCustomerId}
+    AND status = 1
+  </update>
 </mapper>
