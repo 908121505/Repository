@@ -61,4 +61,12 @@ public interface BlacklistMapper {
     List<BlacklistVo> selectListByCustomerId(@Param("customerId") Long customerId);
 
     int selectCountByCusIdAndBlackCusId(@Param("customerId") Long customerId, @Param("blackCustomerId") Long blackCustomerId);
+
+    /**
+     * 判断声音是否被拉黑
+     * @param customerId -- 客户ID
+     * @param blackCustomerId -- 被拉黑的客户ID
+     * @return 0=未拉黑；1=已拉黑
+     */
+    Integer judgeCustomerIfBacked(Long customerId, Long blackCustomerId);
 }

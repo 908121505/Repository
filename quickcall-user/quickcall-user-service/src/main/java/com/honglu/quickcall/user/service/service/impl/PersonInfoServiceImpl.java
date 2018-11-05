@@ -11,6 +11,7 @@ import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.honglu.quickcall.user.service.dao.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,18 +75,6 @@ import com.honglu.quickcall.user.facade.vo.InterestVO;
 import com.honglu.quickcall.user.facade.vo.MySkillVO;
 import com.honglu.quickcall.user.facade.vo.OccupationVO;
 import com.honglu.quickcall.user.facade.vo.SearchPersonListVO;
-import com.honglu.quickcall.user.service.dao.AppShareConfigMapper;
-import com.honglu.quickcall.user.service.dao.CustomerAppearanceMapper;
-import com.honglu.quickcall.user.service.dao.CustomerInterestMapper;
-import com.honglu.quickcall.user.service.dao.CustomerMapper;
-import com.honglu.quickcall.user.service.dao.CustomerOccupationMapper;
-import com.honglu.quickcall.user.service.dao.CustomerSkillCertifyMapper;
-import com.honglu.quickcall.user.service.dao.CustomerSkillMapper;
-import com.honglu.quickcall.user.service.dao.FansMapper;
-import com.honglu.quickcall.user.service.dao.InterestMapper;
-import com.honglu.quickcall.user.service.dao.OccupationMapper;
-import com.honglu.quickcall.user.service.dao.SensitivityWordMapper;
-import com.honglu.quickcall.user.service.dao.SkillItemMapper;
 import com.honglu.quickcall.user.service.service.CustomerRedisManagement;
 import com.honglu.quickcall.user.service.service.PersonInfoService;
 import com.honglu.quickcall.user.service.util.JsonParseUtil;
@@ -123,6 +112,8 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 	private IAccountOrderService accountOrderService;
 	@Autowired
 	private AppShareConfigMapper appShareConfigMapper;
+	@Autowired
+	private BlacklistMapper blacklistMapper;
 
 	/**
 	 * 中文、英文、数字、下划线校验 4-24位
@@ -856,6 +847,12 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 			}
 		}
 		customerHomeVO.setSkillList(skillList);
+
+		// 黑名单状态
+		if (request.getLoginCustomerId() != null){
+			customerHomeVO.setBackStatus(blacklistMapper.judgeCustomerIfBacked(
+					request.getLoginCustomerId(), request.getViewCustomerId()));
+		}
 
 		return ResultUtils.resultSuccess(customerHomeVO);
 	}

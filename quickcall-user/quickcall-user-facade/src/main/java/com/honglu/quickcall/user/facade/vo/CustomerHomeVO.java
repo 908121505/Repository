@@ -12,7 +12,7 @@ import java.util.List;
  */
 public class CustomerHomeVO implements Serializable {
 
-    private static final long serialVersionUID = -960460053239452425L;
+    private static final long serialVersionUID = -976366791856814868L;
     /**
      * 登录客户ID
      */
@@ -65,6 +65,10 @@ public class CustomerHomeVO implements Serializable {
      * 关注状态：0=未关注,1=已关注
      */
     private Integer attentionStatus = 0;
+    /**
+     * 客户黑名单状态：0=未拉黑，1=已拉黑，空=游客登录
+     */
+    private Integer backStatus;
     /**
      * 用户粉丝数
      */
@@ -397,6 +401,14 @@ public class CustomerHomeVO implements Serializable {
         this.attentionStatus = attentionStatus;
     }
 
+    public Integer getBackStatus() {
+        return backStatus;
+    }
+
+    public void setBackStatus(Integer backStatus) {
+        this.backStatus = backStatus;
+    }
+
     public Integer getFansNum() {
         return fansNum;
     }
@@ -477,6 +489,7 @@ public class CustomerHomeVO implements Serializable {
                 ", identityStatus=" + identityStatus +
                 ", vStatus=" + vStatus +
                 ", attentionStatus=" + attentionStatus +
+                ", backStatus=" + backStatus +
                 ", fansNum=" + fansNum +
                 ", soundGuideCard='" + soundGuideCard + '\'' +
                 ", appearanceUrlList=" + appearanceUrlList +
