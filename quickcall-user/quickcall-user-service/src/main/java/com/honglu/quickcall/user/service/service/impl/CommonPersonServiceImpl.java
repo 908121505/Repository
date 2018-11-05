@@ -38,7 +38,7 @@ import com.honglu.quickcall.user.facade.exchange.request.UserIdCardInfoRequest;
 import com.honglu.quickcall.user.facade.exchange.request.UserLoginRequest;
 import com.honglu.quickcall.user.facade.exchange.request.UserRegisterRequest;
 import com.honglu.quickcall.user.service.dao.BigvPhoneMapper;
-)
+
 import com.honglu.quickcall.user.service.dao.CustomerMapper;
 import com.honglu.quickcall.user.service.dao.SensitivityWordMapper;
 import com.honglu.quickcall.user.service.integration.AccountDubboIntegrationService;
