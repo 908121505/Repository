@@ -211,6 +211,8 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 		userBean.setRegistDate(new Date());
 		userBean.setRegistSource(customer.getAppChannelName());
 		userBean.setGender(customer.getSex() == 0 ? "女" : "男");
+		userBean.setPhoneNumber(customer.getPhone());
+		userBean.setYearOfBirth(customer.getBirthday());
 		req.setUserBean(userBean);
 
 		logger.info("===============开始登陆数据埋点==============userBean:"+req.getUserBean());
@@ -417,6 +419,7 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 		userBean.setNick(customer.getNickName());
 		userBean.setRegistDate(new Date());
 		userBean.setRegistSource(request.getAppChannelName());
+		userBean.setPhoneNumber(request.getTel());
 		req.setUserBean(userBean);
 
 		dataDuriedPointBusiness.burySignUpResultData(req);
