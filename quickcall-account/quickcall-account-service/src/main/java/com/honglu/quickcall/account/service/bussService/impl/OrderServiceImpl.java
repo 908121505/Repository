@@ -468,7 +468,7 @@ public class OrderServiceImpl implements IOrderService {
 		
 		if(orderDetail != null){
 			Date  birthday  =  orderDetail.getBirthday();
-			int   age = DateUtils.getAgeByBirth(birthday);
+			int   age = DateUtils.getAgeByBirthYear(birthday);
 			orderDetail.setAge(age);
 			OrderTempResponseVO  responseVO = commonService.getCountDownSeconds(orderDetail.getOrderStatus(), orderDetail.getOrderTime(), orderDetail.getReceiveOrderTime());
 			orderDetail.setCountDownSeconds(responseVO.getCountDownSeconds());
