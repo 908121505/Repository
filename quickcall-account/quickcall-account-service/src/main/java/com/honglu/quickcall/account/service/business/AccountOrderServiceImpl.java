@@ -56,15 +56,15 @@ public class AccountOrderServiceImpl implements IAccountOrderService {
 
 	@Override
 	public void inAccount(Long customerId, BigDecimal amount, TransferTypeEnum transferType,
-			AccountBusinessTypeEnum accountBusinessType) {
-		accountService.inAccount(customerId, amount, transferType, accountBusinessType);
+			AccountBusinessTypeEnum accountBusinessType,Long  orderNo) {
+		accountService.inAccount(customerId, amount, transferType, accountBusinessType,orderNo);
 
 	}
 
 	@Override
 	public void outAccount(Long customerId, BigDecimal amount, TransferTypeEnum transferType,
-			AccountBusinessTypeEnum accountBusinessType) {
-		accountService.outAccount(customerId, amount, transferType, accountBusinessType);
+			AccountBusinessTypeEnum accountBusinessType,Long  orderNo) {
+		accountService.outAccount(customerId, amount, transferType, accountBusinessType,orderNo);
 
 	}
 

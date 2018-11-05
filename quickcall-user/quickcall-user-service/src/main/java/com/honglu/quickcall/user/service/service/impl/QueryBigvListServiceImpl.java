@@ -232,8 +232,8 @@ public class QueryBigvListServiceImpl implements QueryBigvListService {
         }
 
         // 计算百分比
-        int beginIndex = cacluRandomLimitBeginIndex(bigvNum, configNum);
-        int endIndex = cacluRandomLimitEndIndex(bigvNum, configNum) - beginIndex;
+        int beginIndex = cacluRandomLimitBeginIndex(configNum, bigvNum);
+        int endIndex = cacluRandomLimitEndIndex(configNum, bigvNum) - beginIndex;
 
         // 随机根据大V排名查询一条数据
         return resourceConfigMapper.selectEnabledBigvBySkillRank(configSkills, exCustomerIds, weekIndex, endTimeStr, beginIndex, endIndex, skillOrdered);
@@ -261,7 +261,7 @@ public class QueryBigvListServiceImpl implements QueryBigvListService {
         bigv.setVoiceTime(customerSkill.getSkillVoiceTime());
         bigv.setVoiceUrl(customerSkill.getSkillVoiceUrl());
         // 查询第一张形象照 性别(0=女,1=男)
-        List<String> appearanceList = customerAppearanceMapper.queryCustomerAuditedAppearance(customerSkill.getCustomerId(), 0);
+        List<String> appearanceList = customerAppearanceMapper.queryCustomerAppearance(customerSkill.getCustomerId(), 0, 1);
         if (appearanceList.isEmpty()) {
             bigv.setCoverUrl(Objects.equals(bigv.getSex(), 1)
                     ? PropertiesConstant.DEFAULT_CUSTOMER_APPEARANCE_URL_BOY
@@ -313,7 +313,7 @@ public class QueryBigvListServiceImpl implements QueryBigvListService {
         List<DaVinfoVO> daVinfoVOList = customerSkillMapper.queryCustomerListBySkillItem(skillItemId, weekIndex, endTimeStr, start, pageSize);
         for (DaVinfoVO daVinfoVO : daVinfoVOList) {
             // 查询第一张形象照 性别(0=女,1=男)
-            List<String> appearanceList = customerAppearanceMapper.queryCustomerAuditedAppearance(daVinfoVO.getCustomerId(), 0);
+            List<String> appearanceList = customerAppearanceMapper.queryCustomerAppearance(daVinfoVO.getCustomerId(), 0, 1);
             if (appearanceList == null || appearanceList.size() == 0) {
                 if (Objects.equals(daVinfoVO.getSex(), 1)) {
                     daVinfoVO.setCoverUrl(PropertiesConstant.DEFAULT_CUSTOMER_APPEARANCE_URL_BOY);

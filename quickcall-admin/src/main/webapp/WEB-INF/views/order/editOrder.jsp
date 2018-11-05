@@ -81,10 +81,23 @@
                                 <option value="${smallOrderStatusVO.value}">${smallOrderStatusVO.desc}</option>
                             </c:forEach>
                         </select>--%>
-                        <select id="orderStatus" class="form-control"  name="orderStatus">
-                            <option value="42">强制取消</option>
-                            <option value="44">强制完成</option>
-                        </select>
+                        <c:if test="${selectFlag != 3 }">
+	                        <select id="orderStatus" class="form-control"  name="orderStatus">
+	                            	<option value="999">--请选择--</option>
+	                        	<c:if test="${selectFlag == 1 }">
+	                            	<option value="29">强制取消</option>
+	                            </c:if>
+	                        	<c:if test="${selectFlag == 2 }">
+	                            	<option value="42">强制完成</option>
+	                            </c:if>
+	                        </select>
+                        </c:if>
+                        <c:if test="${selectFlag == 3 }">
+	                        <input type="text" class="form-control"   readonly="readonly" value="${orderStatusDesc}">    	
+	                     </c:if>
+                        
+                        
+                        
                     </div>
                 </div>
                 <div class="form-group" id="remarkReasonDev">

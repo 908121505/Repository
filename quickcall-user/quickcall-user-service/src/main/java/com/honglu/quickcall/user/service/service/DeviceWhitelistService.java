@@ -7,7 +7,7 @@ import com.honglu.quickcall.user.facade.exchange.request.editprofile.SaveDeviceW
  * Created by cp on 2018/11/2.
  */
 public interface DeviceWhitelistService {
-    CommonResponse queryDeviceWhitelist(QueryDeviceWhitelistReq params);
+   /* CommonResponse queryDeviceWhitelist(QueryDeviceWhitelistReq params);
 
-    CommonResponse saveDeviceWhitelist(SaveDeviceWhitelistReq params);
+    CommonResponse saveDeviceWhitelist(SaveDeviceWhitelistReq params);*/
 }

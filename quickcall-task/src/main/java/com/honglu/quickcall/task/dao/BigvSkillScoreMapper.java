@@ -1,13 +1,10 @@
 package com.honglu.quickcall.task.dao;
 
 import com.honglu.quickcall.user.facade.entity.BigvSkillScore;
-import com.honglu.quickcall.user.facade.entity.example.BigvSkillScoreExample;
-
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 @Mapper
 public interface BigvSkillScoreMapper {

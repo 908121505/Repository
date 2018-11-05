@@ -21,6 +21,31 @@
         <module>quickcall-databury-services</module>
     </modules>
 
+    <repositories>
+        <repository>
+            <id>nexus-local</id>
+            <url>http://172.16.0.186:5000/nexus/content/groups/nexus_public</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+    <pluginRepositories>
+        <pluginRepository>
+            <id>nexus-local</id>
+            <url>http://172.16.0.186:5000/content/groups/nexus_public</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </pluginRepository>
+    </pluginRepositories>
+
     <distributionManagement>
         <snapshotRepository>
             <id>snapshots</id>

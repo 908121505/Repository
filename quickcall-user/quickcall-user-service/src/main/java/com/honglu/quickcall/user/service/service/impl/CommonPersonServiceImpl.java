@@ -25,7 +25,20 @@ import com.honglu.quickcall.user.facade.constants.UserBizConstants;
 import com.honglu.quickcall.user.facade.entity.Customer;
 import com.honglu.quickcall.user.facade.entity.SensitivityWord;
 import com.honglu.quickcall.user.facade.enums.CustomerCusStateEnum;
-import com.honglu.quickcall.user.facade.exchange.request.*;
+import com.honglu.quickcall.user.facade.exchange.request.AddSystemUserRequest;
+import com.honglu.quickcall.user.facade.exchange.request.BindVXorQQRequest;
+import com.honglu.quickcall.user.facade.exchange.request.GetSmsCodeRequest;
+import com.honglu.quickcall.user.facade.exchange.request.IsPhoneExistsRequest;
+import com.honglu.quickcall.user.facade.exchange.request.LoginOutRequest;
+import com.honglu.quickcall.user.facade.exchange.request.SaveCertificationRequest;
+import com.honglu.quickcall.user.facade.exchange.request.SaveDvVoiceRequest;
+import com.honglu.quickcall.user.facade.exchange.request.SetHeardUrlRequest;
+import com.honglu.quickcall.user.facade.exchange.request.SetPwdRequest;
+import com.honglu.quickcall.user.facade.exchange.request.UserIdCardInfoRequest;
+import com.honglu.quickcall.user.facade.exchange.request.UserLoginRequest;
+import com.honglu.quickcall.user.facade.exchange.request.UserRegisterRequest;
+import com.honglu.quickcall.user.service.dao.BigvPhoneMapper;
+
 import com.honglu.quickcall.user.service.dao.CustomerMapper;
 import com.honglu.quickcall.user.service.dao.SensitivityWordMapper;
 import com.honglu.quickcall.user.service.integration.AccountDubboIntegrationService;
@@ -61,7 +74,10 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 	private SensitivityWordMapper sensitivityWordMapper;
 
 	@Autowired
+
 	private DataDuriedPointBusiness dataDuriedPointBusiness;
+
+	private BigvPhoneMapper bigvPhoneMapper;
 
 	private static String resendexpire = ResourceBundle.getBundle("thirdconfig").getString("resend.expire");
 	private static String resendexpirehour = ResourceBundle.getBundle("thirdconfig").getString("resend.expire.hour");
@@ -361,6 +377,9 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 		customer.setQqOpenId(request.getQqOpenId());
 		customer.setWechatOpenId(request.getWechatOpenId());
 		customer.setPhone(request.getTel());
+		customer.setAppChannelName(request.getAppChannelName());
+		customer.setDeviceId(request.getDeviceNo());
+		customer.setSource(request.getScource());
 		customer.setNickName(
 				StringUtils.isNotBlank(request.getNickName()) ? request.getNickName() : "轻音_" + randomFour());
 		String img = request.getHeardUrl();
@@ -376,6 +395,15 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 			}
 			customer.setTokenCode(rongyunToken);
 		}
+
+		/**
+		 * 声优白名单
+		 */
+		if (bigvPhoneMapper.queryOneByPhone(request.getTel()) != null) {
+			customer.setIdentityStatus(2);
+			customer.setvStatus(2);
+		}
+
 		int row = customerMapper.insertSelective(customer);
 		if (row <= 0) {
 			throw new BizException(UserBizReturnCode.exceedError, "用户未注冊");

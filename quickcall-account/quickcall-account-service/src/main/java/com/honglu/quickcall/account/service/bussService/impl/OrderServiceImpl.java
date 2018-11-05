@@ -181,14 +181,12 @@ public class OrderServiceImpl implements IOrderService {
 						downLoadStr = DateUtils.getDiffSeconds(remainStr);
 						
 					}
-					resultMap.put("retCode", OrderSkillConstants.RET_CODE_DV_BUSY);
 					resultMap.put("downLoadStr", downLoadStr);
-					commonResponse.setData(resultMap);
-					//返回大V正忙，以及结束时间
-					return   commonResponse ;
-					
-					
 				}
+				resultMap.put("retCode", OrderSkillConstants.RET_CODE_DV_BUSY);
+				commonResponse.setData(resultMap);
+				//返回大V正忙，以及结束时间
+				return   commonResponse ;
 				
 			}
 			DataBuriedPointSubmitOrderReq req = new DataBuriedPointSubmitOrderReq();
@@ -198,10 +196,10 @@ public class OrderServiceImpl implements IOrderService {
 			
 			Integer   weekIndex = DateUtils.getDayOfWeek();
 			Integer   skillSwitch = 1 ;
-			String  endTimeStr = DateUtils.formatDateHHSS(new Date()).replaceAll(":", "") ;
+//			String  endTimeStr = DateUtils.formatDateHHSS(new Date()).replaceAll(":", "") ;
 			
 			//根据技能ID 获取等级获取价格信息
-			CustomerSkill   customerSkill = customerSkillMapper.selectByPrimaryKeyExt(customerSkillId, weekIndex, skillSwitch, endTimeStr);
+			CustomerSkill   customerSkill = customerSkillMapper.selectByPrimaryKeyExt(customerSkillId, weekIndex, skillSwitch, new Date());
 			
 			if(customerSkill == null ){
 				resultMap.put("retCode",  OrderSkillConstants.RET_CODE_DV_NOT_ACCEPTE_ORDER);
@@ -209,7 +207,7 @@ public class OrderServiceImpl implements IOrderService {
 				//返回大V正忙，以及结束时间
 				return   commonResponse ;
 			}
-			
+			Long  orderId =  UUIDUtils.getId();
 			Integer  orderNum =  request.getOrderNum();
 			BigDecimal  price =  customerSkill.getDiscountPrice();
 			BigDecimal orderAmounts = new BigDecimal(orderNum).multiply(price);
@@ -226,7 +224,7 @@ public class OrderServiceImpl implements IOrderService {
 						//返回余额不足状态  
 						return   commonResponse ;
 					}else{
-						accountService.outAccount(customerId, orderAmounts,TransferTypeEnum.RECHARGE,AccountBusinessTypeEnum.PlaceOrder);
+						accountService.outAccount(customerId, orderAmounts,TransferTypeEnum.RECHARGE,AccountBusinessTypeEnum.PlaceOrder,orderId);
 					}
 				}
 			}
@@ -254,7 +252,7 @@ public class OrderServiceImpl implements IOrderService {
 			record.setServicePrice(customerSkill.getSkillPrice());
 			record.setDiscountRate(customerSkill.getDiscountRate());
 			record.setSkillItemId(skillItemId);
-			Long  orderId =  UUIDUtils.getId();
+			
 			record.setOrderNo(orderId);
 			record.setCustomerSkillId(customerSkillId);
 			record.setCustomerId(customerId);
@@ -343,6 +341,11 @@ public class OrderServiceImpl implements IOrderService {
 				OrderTempResponseVO  responseVO = commonService.getCountDownSeconds(info.getOrderStatus(), info.getOrderTime(), info.getReceiveOrderTime());
 				info.setCountDownSeconds(responseVO.getCountDownSeconds());
 				info.setOrderStatus(responseVO.getOrderStatus());
+				//TODO 兼容安卓版本   7号需要回滚
+				if(info.getReceiveOrderTime() == null){
+					info.setReceiveOrderTime(info.getOrderTime());
+				}
+				
 			}
 		}
 			
@@ -373,6 +376,10 @@ public class OrderServiceImpl implements IOrderService {
 				OrderTempResponseVO  responseVO = commonService.getCountDownSeconds(info.getOrderStatus(), info.getOrderTime(), info.getReceiveOrderTime());
 				info.setCountDownSeconds(responseVO.getCountDownSeconds());
 				info.setOrderStatus(responseVO.getOrderStatus());
+				//TODO 兼容安卓版本   7号需要回滚
+				if(info.getReceiveOrderTime() == null){
+					info.setReceiveOrderTime(info.getOrderTime());
+				}
 			}
 		}
 		
@@ -421,7 +428,7 @@ public class OrderServiceImpl implements IOrderService {
 			commonService.cancelUpdateOrder(orderId, orderStatus,new Date(),request.getSelectReason(),request.getRemarkReason());
 			//金额不为空，说明需要退款给用户
 			if(payAmount != null){
-				accountService.inAccount(customerId, payAmount,TransferTypeEnum.RECHARGE,AccountBusinessTypeEnum.OrderRefund);
+				accountService.inAccount(customerId, payAmount,TransferTypeEnum.RECHARGE,AccountBusinessTypeEnum.OrderRefund,orderId);
 			}
 		}
 		
@@ -529,13 +536,13 @@ public class OrderServiceImpl implements IOrderService {
 		
 		Integer   weekIndex = DateUtils.getDayOfWeek();
 		Integer   skillSwitch = 1 ;
-		String  endTimeStr = DateUtils.formatDateHHSS(new Date()).replaceAll(":", "") ;
+//		String  endTimeStr = DateUtils.formatDateHHSS(new Date()).replaceAll(":", "") ;
 	
 		
 		orderDetailForIMVO.setServiceId(serviceId);
 		orderDetailForIMVO.setCustomerId(customerId);
 		//根据技能ID 获取等级获取价格信息
-		CustomerSkillIMVO   customerSkillIMVO = customerSkillMapper.selectCustomerSkillByCustomerId(serviceId, weekIndex, skillSwitch, endTimeStr);
+		CustomerSkillIMVO   customerSkillIMVO = customerSkillMapper.selectCustomerSkillByCustomerId(serviceId, weekIndex, skillSwitch, new Date());
 		
 		//服务方当天技能不存在，则关注对方
 		if(customerSkillIMVO == null){
@@ -596,7 +603,7 @@ public class OrderServiceImpl implements IOrderService {
 //			commonService.updateOrder(orderId, newOrderStatus);
 			commonService.custConfirmFinishUpdateOrder(orderId, newOrderStatus);
 			//大V冻结
-			accountService.inAccount(order.getServiceId(), order.getOrderAmounts(), TransferTypeEnum.FROZEN, AccountBusinessTypeEnum.FroZen);
+			accountService.inAccount(order.getServiceId(), order.getOrderAmounts(), TransferTypeEnum.FROZEN, AccountBusinessTypeEnum.FroZen,orderId);
 			// ADUAN 订单服务完成推送MQ消息
 			userCenterSendMqMessageService.sendOrderCostMqMessage(orderId);
 			
@@ -752,7 +759,7 @@ public class OrderServiceImpl implements IOrderService {
 			}else {
 				newOrderStatus = OrderSkillConstants.ORDER_STATUS_DAV_REFUSED_RECEIVE;
 				BigDecimal  payAmount = order.getOrderAmounts();
-				accountService.inAccount(customerId, payAmount, TransferTypeEnum.RECHARGE,AccountBusinessTypeEnum.OrderRefund);
+				accountService.inAccount(customerId, payAmount, TransferTypeEnum.RECHARGE,AccountBusinessTypeEnum.OrderRefund,orderId);
 				commonService.updateOrder(orderId, newOrderStatus);
 				
 				//大V拒绝订单通知用户
@@ -870,6 +877,8 @@ public class OrderServiceImpl implements IOrderService {
 				if(expectEndTime.before(new Date())){
 					//已经在服务时间之外了，可以立即结束
 					newOrderStatus = OrderSkillConstants.ORDER_STATUS_FINISH_DAV_FINISH_AFTER_SERVICE_TIME ;
+					//冻结大V金额
+					accountService.inAccount(order.getServiceId(), order.getOrderAmounts(), TransferTypeEnum.FROZEN, AccountBusinessTypeEnum.FroZen,orderId);
 					//用户未评价
 					RongYunUtil.sendOrderMessage(serviceId, OrderSkillConstants.IM_MSG_CONTENT_CUST_NOT_PING_JIA,OrderSkillConstants.MSG_CONTENT_DAV);
 					sendMsgIndex = 1 ;
@@ -883,7 +892,7 @@ public class OrderServiceImpl implements IOrderService {
 				newOrderStatus = OrderSkillConstants.ORDER_STATUS_GOING_USRE_APPAY_FINISH ;
 				sendMsgIndex =  1 ;
 				//冻结大V金额
-				accountService.inAccount(order.getServiceId(), order.getOrderAmounts(), TransferTypeEnum.FROZEN, AccountBusinessTypeEnum.FroZen);
+				accountService.inAccount(order.getServiceId(), order.getOrderAmounts(), TransferTypeEnum.FROZEN, AccountBusinessTypeEnum.FroZen,orderId);
 				RongYunUtil.sendOrderMessage(serviceId, OrderSkillConstants.IM_MSG_CONTENT_CUST_NOT_PING_JIA,OrderSkillConstants.MSG_CONTENT_DAV);
 			}
 			
@@ -972,7 +981,7 @@ public class OrderServiceImpl implements IOrderService {
 		// 保存订单表评价信息
 		Order evaluationInfo = new Order();
 		evaluationInfo.setOrderId(request.getOrderId());
-		evaluationInfo.setEvaluateStart(request.getEvaluateStart());
+		evaluationInfo.setEvaluateStart(request.getEvaluateStart() == null ? 0 : request.getEvaluateStart());
 		evaluationInfo.setCustomerEvaluate(request.getEvaluateContent());
 		orderMapper.saveEvaluationInfo(evaluationInfo);
 
