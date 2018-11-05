@@ -27,7 +27,7 @@ public class DataBuriedPointServiceImpl implements DataBuriedPointService{
     @Override
     public void saveGetCodeData(Map<String,Object> params) throws DataBuriedPointException {
         String body = (String)params.get("param");
-        DataBuriedPointGetCodeReq req = JSON.parseObject(body,DataBuriedPointGetCodeReq.class);
+        DataBuriedPointGetCodeReq req = JSON.parseObject(body, DataBuriedPointGetCodeReq.class);
         DataBuryPointGetCodeReq request = new DataBuryPointGetCodeReq();
         request.setPhone(req.getPhone());
         request.setSuccess(req.isSuccess());
