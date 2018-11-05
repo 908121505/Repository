@@ -119,6 +119,8 @@ public class UserDubboBusinessImpl implements UserDubboBusiness {
 	private DeviceWhitelistService deviceWhitelistService;
 	@Autowired
 	private AttentionService attentionService;
+	@Autowired
+	private CustomerVisitService customerVisitService;
 
 	@Override
 	public CommonResponse excute(AbstractRequest request) {
@@ -326,6 +328,8 @@ public class UserDubboBusinessImpl implements UserDubboBusiness {
 			case UserFunctionType.saveDeviceWhitelist:
 				response = deviceWhitelistService.saveDeviceWhitelist((SaveDeviceWhitelistReq) request);
 				break;
+			case UserFunctionType.Recent_Visit_List:
+				response = customerVisitService.queryRecentVisitList((RecentVisitRequest)request);
 			default:
 				throw new BizException(UserBizReturnCode.BizFunctionTypeNotMatch,
 						UserBizReturnCode.BizFunctionTypeNotMatch.desc());

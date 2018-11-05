@@ -16,6 +16,7 @@ import com.honglu.quickcall.user.facade.exchange.request.QueryAttentionFansListR
 import com.honglu.quickcall.user.facade.exchange.request.QueryInterestListRequest;
 import com.honglu.quickcall.user.facade.exchange.request.QueryOccupationListRequest;
 import com.honglu.quickcall.user.facade.exchange.request.ReadAttentionRequest;
+import com.honglu.quickcall.user.facade.exchange.request.RecentVisitRequest;
 import com.honglu.quickcall.user.facade.exchange.request.SaveBirthRequest;
 import com.honglu.quickcall.user.facade.exchange.request.SaveGenderRequest;
 import com.honglu.quickcall.user.facade.exchange.request.SaveInterestRequest;
@@ -205,6 +206,16 @@ public class AccountInfoController {
 	@RequestMapping(value = "/isBigVidentity", method = RequestMethod.POST)
 	@ResponseBody
 	public WebResponseModel isBigVidentity(IsBigVidentityRequest params) {
+		WebResponseModel response = userCenterService.execute(params);
+		return response;
+	}
+	
+	/**
+	 * 最近来访
+	 */
+	@RequestMapping(value = "/recentVisit", method = RequestMethod.POST)
+	@ResponseBody
+	public WebResponseModel recentVisit(RecentVisitRequest params) {
 		WebResponseModel response = userCenterService.execute(params);
 		return response;
 	}

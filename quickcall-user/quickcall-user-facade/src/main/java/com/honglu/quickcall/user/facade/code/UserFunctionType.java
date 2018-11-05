@@ -232,5 +232,10 @@ public interface UserFunctionType {
 	 * 技能项分类点击列表
 	 */
 	String CANCEL_ATTENTION = "003232";
+	
+	/**
+	 * 最近来访列表
+	 */
+	String Recent_Visit_List = "0011301";
 
 }
