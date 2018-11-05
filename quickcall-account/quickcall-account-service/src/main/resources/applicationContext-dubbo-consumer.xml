@@ -10,9 +10,6 @@
     <!-- 消费者 - 用户中心Dubbo服务 -->
     <dubbo:reference group="userCenter" id="userDubboBusiness" interface="com.honglu.quickcall.user.facade.business.UserDubboBusiness" check="false" version="0.0.1"/>
 
-    <!-- 消费者 - 推送App消息服务 -->
-    <dubbo:reference group="userCenter" id="userPushAppMsgBusiness" interface="com.honglu.quickcall.user.facade.business.UserPushAppMsgBusiness" check="false" version="0.0.1"/>
-
     <!-- 消费者 - 用户中心发送MQ消息服务 -->
     <dubbo:reference group="userCenter" id="userCenterSendMqMessageService" interface="com.honglu.quickcall.user.facade.business.UserCenterSendMqMessageService" check="false" version="0.0.1"/>
     <!-- 消费者 - 用户中心发送MQ消息服务 -->
