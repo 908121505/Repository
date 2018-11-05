@@ -261,7 +261,7 @@ public class QueryBigvListServiceImpl implements QueryBigvListService {
         bigv.setVoiceTime(customerSkill.getSkillVoiceTime());
         bigv.setVoiceUrl(customerSkill.getSkillVoiceUrl());
         // 查询第一张形象照 性别(0=女,1=男)
-        List<String> appearanceList = customerAppearanceMapper.queryCustomerAuditedAppearance(customerSkill.getCustomerId(), 0);
+        List<String> appearanceList = customerAppearanceMapper.queryCustomerAppearance(customerSkill.getCustomerId(), 0, 1);
         if (appearanceList.isEmpty()) {
             bigv.setCoverUrl(Objects.equals(bigv.getSex(), 1)
                     ? PropertiesConstant.DEFAULT_CUSTOMER_APPEARANCE_URL_BOY
@@ -313,7 +313,7 @@ public class QueryBigvListServiceImpl implements QueryBigvListService {
         List<DaVinfoVO> daVinfoVOList = customerSkillMapper.queryCustomerListBySkillItem(skillItemId, weekIndex, endTimeStr, start, pageSize);
         for (DaVinfoVO daVinfoVO : daVinfoVOList) {
             // 查询第一张形象照 性别(0=女,1=男)
-            List<String> appearanceList = customerAppearanceMapper.queryCustomerAuditedAppearance(daVinfoVO.getCustomerId(), 0);
+            List<String> appearanceList = customerAppearanceMapper.queryCustomerAppearance(daVinfoVO.getCustomerId(), 0, 1);
             if (appearanceList == null || appearanceList.size() == 0) {
                 if (Objects.equals(daVinfoVO.getSex(), 1)) {
                     daVinfoVO.setCoverUrl(PropertiesConstant.DEFAULT_CUSTOMER_APPEARANCE_URL_BOY);
