@@ -198,7 +198,7 @@
     </select>
 
     <sql id="SKILL_EXIST_CONDITON">
-        <if test="weekIndex == 1" >
+        <!--<if test="weekIndex == 1" >
             AND ( csk.monday = 0  or (csk.monday = 1  and  csk.end_time_str <![CDATA[  > ]]> #{endTimeStr,jdbcType=VARCHAR}) )
         </if>
         <if test="weekIndex == 2" >
@@ -218,7 +218,7 @@
         </if>
         <if test="weekIndex == 7" >
             AND ( csk.sunday = 0  or (csk.sunday = 1  and  csk.end_time_str <![CDATA[  > ]]> #{endTimeStr,jdbcType=VARCHAR}) )
-        </if>
-
+        </if>-->
+        AND csk.appoint_end_time <![CDATA[  > ]]> NOW()
     </sql>
 </mapper>

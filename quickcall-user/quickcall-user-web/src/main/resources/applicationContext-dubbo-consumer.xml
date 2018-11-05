@@ -13,10 +13,6 @@
     <dubbo:reference group="userCenter" id="userDubboBusiness"
                      interface="com.honglu.quickcall.user.facade.business.UserDubboBusiness" check="false" version="0.0.1"/>
 
-    <!-- 注册服务端 - 发送APP消息服务 -->
-    <dubbo:reference group="userCenter" id="userPushAppMsgBusiness"
-                     interface="com.honglu.quickcall.user.facade.business.UserPushAppMsgBusiness" check="false" version="0.0.1" async="true"/>
-
     <!-- 神策埋点服务 -->
     <dubbo:reference group="buryDataCenter" id="dataDuriedPointBusiness" interface="com.honglu.quickcall.producer.facade.business.DataDuriedPointBusiness" check="false" version="1.0.0"/>
 

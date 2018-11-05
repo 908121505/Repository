@@ -61,6 +61,7 @@ public class FrozenSteamJob {
 						String frozenTimeKey = RedisKeyConstants.ACCOUNT_USERFROZEN_Time + arys[i];
 						String stramValue = JedisUtil.get(steamFrozenKey);
 						String frozenTimeValue = JedisUtil.get(frozenTimeKey);
+						String frozenOrderNo = JedisUtil.get(RedisKeyConstants.ACCOUNT_USERFROZEN_ORDER_NO + arys[i]);
 						if (StringUtils.isNotBlank(stramValue)) {
 							if (StringUtils.isEmpty(frozenTimeValue)) {
 								// 操作流水
@@ -74,6 +75,10 @@ public class FrozenSteamJob {
 										TransferTypeEnum.FROZEN.getType());
 								// 记录流水
 								TradeDetail tradeDetail = new TradeDetail();
+								// 流水Id
+								if (StringUtils.isNotBlank(frozenOrderNo)) {
+									tradeDetail.setOrderNo(Long.parseLong(frozenOrderNo));
+								}
 								tradeDetail.setTradeId(UUIDUtils.getId());
 								tradeDetail.setCustomerId(account.getCustomerId());
 								tradeDetail.setCreateTime(new Date());

@@ -34,7 +34,7 @@ public interface IAccountOrderService {
 	 * @param accountBusinessType
 	 */
 	void inAccount(Long customerId, BigDecimal amount, TransferTypeEnum transferType,
-			AccountBusinessTypeEnum accountBusinessType);
+			AccountBusinessTypeEnum accountBusinessType,Long  orderNo);
 
 	/**
 	 * 出账
@@ -45,5 +45,5 @@ public interface IAccountOrderService {
 	 * @param accountBusinessType
 	 */
 	void outAccount(Long customerId, BigDecimal amount, TransferTypeEnum transferType,
-			AccountBusinessTypeEnum accountBusinessType);
+			AccountBusinessTypeEnum accountBusinessType,Long  orderNo);
 }

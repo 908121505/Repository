@@ -1,16 +1,5 @@
 package com.honglu.quickcall.account.service.bussService.impl;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-
-import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.alibaba.fastjson.JSON;
 import com.honglu.quickcall.account.facade.constants.OrderSkillConstants;
 import com.honglu.quickcall.account.facade.entity.Order;
@@ -22,38 +11,31 @@ import com.honglu.quickcall.common.api.exchange.CommonResponse;
 import com.honglu.quickcall.common.api.util.DateUtils;
 import com.honglu.quickcall.common.api.util.JedisUtil;
 import com.honglu.quickcall.common.api.util.RedisKeyConstants;
-import com.honglu.quickcall.user.facade.business.UserPushAppMsgBusiness;
 import com.honglu.quickcall.user.facade.entity.Customer;
-import com.honglu.quickcall.user.facade.enums.PushAppMsgTypeEnum;
-import com.honglu.quickcall.user.facade.exchange.request.PushAppMsgRequest;
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 
 
 @Service("commonService")
 public class CommonServiceImpl implements CommonService {
 
 	@Autowired
-	private  UserPushAppMsgBusiness  userPushAppMsgBusiness ;
-	@Autowired
 	private OrderMapper  orderMapper;
 	
+	@Override
 	public CommonResponse  getCommonResponse(){
 		 CommonResponse commonResponse = new CommonResponse();
 		 commonResponse.setCode(BizCode.Success);
 		 commonResponse.setMessage(BizCode.Success.desc());
 		 return commonResponse;
-	}
-
-
-
-	@Override
-	public void pushMessage(PushAppMsgTypeEnum msgType,Long  sellerId,Long  customerId) {
-		PushAppMsgRequest  msgRequest =  new PushAppMsgRequest();
-		msgRequest.setMsgType(PushAppMsgTypeEnum.NEW_ORDER);
-		msgRequest.setReceiverId(sellerId);
-		msgRequest.setSenderId(customerId);
-		//发送消息
-		userPushAppMsgBusiness.excute(msgRequest);
-		
 	}
 
 	@Override

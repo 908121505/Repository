@@ -514,8 +514,7 @@
         <if test="weekIndex == 7" >
             AND ( csk.sunday = 0  or (csk.sunday = 1  and  csk.end_time_str <![CDATA[  > ]]> #{endTimeStr,jdbcType=VARCHAR}) )
         </if> -->
-        AND csk.appoint_end_time <![CDATA[  > ]]> #{endTimeStr,jdbcType=VARCHAR}
-
+      AND csk.appoint_end_time <![CDATA[  > ]]> NOW()
     </sql>
 
 </mapper>
