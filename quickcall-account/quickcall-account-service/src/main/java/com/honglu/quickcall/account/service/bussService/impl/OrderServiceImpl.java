@@ -297,7 +297,7 @@ public class OrderServiceImpl implements IOrderService {
 		
 			//下单触发埋点
 			req.setActual_payment_amount(orderAmounts.doubleValue());
-			req.setOrder_amount(orderAmounts.multiply(price).doubleValue());
+			req.setOrder_amount(orderAmounts.doubleValue());
 			req.setOrder_id(orderId +"");
 			req.setOrder_quantity(Double.valueOf(orderNum +""));
 			req.setOrder_type(skillItem.getSkillItemName());
@@ -981,7 +981,7 @@ public class OrderServiceImpl implements IOrderService {
 		// 保存订单表评价信息
 		Order evaluationInfo = new Order();
 		evaluationInfo.setOrderId(request.getOrderId());
-		evaluationInfo.setEvaluateStart(request.getEvaluateStart() == null ? 0 : request.getEvaluateStart());
+		evaluationInfo.setEvaluateStart(request.getEvaluateStart() == null ? 3 : request.getEvaluateStart());
 		evaluationInfo.setCustomerEvaluate(request.getEvaluateContent());
 		orderMapper.saveEvaluationInfo(evaluationInfo);
 
