@@ -218,4 +218,34 @@
     WHERE `customer_id` = #{customerId} and `device_id` = #{deviceId} and status = 1
 
   </select>
+
+  <select id="queryCustomerByPhone" resultType="java.util.Map" parameterType="String" >
+    SELECT
+    customer_id as customerId
+    FROM
+    customer
+    where phone = #{loginId}
+  </select>
+  <select id="queryCustomerByWechatOpenId" resultType="java.util.Map" parameterType="String" >
+    SELECT
+    customer_id as customerId
+    FROM
+    customer
+    where wechat_open_id = #{loginId}
+  </select>
+  <select id="queryCustomerByQQOpenId" resultType="java.util.Map" parameterType="String" >
+    SELECT
+    customer_id as customerId
+    FROM
+    customer
+    where qq_open_id = #{loginId}
+  </select>
+  <select id="queryCustomerByMicroblogOpenId" resultType="java.util.Map" parameterType="String" >
+    SELECT
+    customer_id as customerId
+    FROM
+    customer
+    where microblog_open_id = #{loginId}
+  </select>
+
 </mapper>

@@ -4,6 +4,7 @@ import com.honglu.quickcall.common.api.exception.BizException;
 import com.honglu.quickcall.common.api.exchange.CommonResponse;
 import com.honglu.quickcall.common.core.util.UUIDUtils;
 import com.honglu.quickcall.user.facade.code.UserBizReturnCode;
+import com.honglu.quickcall.user.facade.entity.Customer;
 import com.honglu.quickcall.user.facade.entity.CustomerDeviceWhitelist;
 import com.honglu.quickcall.user.facade.exchange.request.editprofile.QueryDeviceWhitelistReq;
 import com.honglu.quickcall.user.facade.exchange.request.editprofile.SaveDeviceWhitelistReq;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Description: 设备白名单
@@ -34,11 +36,39 @@ public class DeviceWhitelistServiceImpl implements DeviceWhitelistService{
     @Override
     public CommonResponse queryDeviceWhitelist(QueryDeviceWhitelistReq params) {
         CommonResponse commonResponse = new CommonResponse();
-        if (params.getCustomerId() == null) {
-            throw new BizException(UserBizReturnCode.paramError, "customerId不能为空");
+        String loginId = params.getLoginId();
+        String type = params.getType();
+        if (loginId == null || "".equals(loginId)) {
+            throw new BizException(UserBizReturnCode.paramError, "loginId不能为空");
+        }
+        if (type == null || "".equals(type)) {
+            throw new BizException(UserBizReturnCode.paramError, "type不能为空");
+        }
+        if (!"0".equals(type) && !"1".equals(type) && !"2".equals(type) && !"3".equals(type)) {
+            throw new BizException(UserBizReturnCode.paramError, "type参数错误");
         }
 
-        List<CustomerDeviceWhitelistVO> customerDeviceWhitelist = customerDeviceWhitelistMapper.selectListByCustomerId(params.getCustomerId());
+        //通过loginId查询获取用户CustomerId
+        List<Map<String, Object>> customerList = null;
+
+        //type “0”-手机号 “1”-微信opengid “2”-QQ openid “3”-微博openid
+        if("0".equals(type)){
+            customerList = customerDeviceWhitelistMapper.queryCustomerByPhone(loginId);
+        }else if("1".equals(type)){
+            customerList = customerDeviceWhitelistMapper.queryCustomerByWechatOpenId(loginId);
+        }else if("2".equals(type)){
+            customerList = customerDeviceWhitelistMapper.queryCustomerByQQOpenId(loginId);
+        }else if("3".equals(type)){
+            customerList = customerDeviceWhitelistMapper.queryCustomerByMicroblogOpenId(loginId);
+        }
+
+        if(customerList.size() == 0){
+            throw new BizException(UserBizReturnCode.paramError, "用户不存在");
+        }
+
+        String customerId = customerList.get(0).get("customerId").toString();
+        //通过CustomerId查询用户设备白名单信息
+        List<CustomerDeviceWhitelistVO> customerDeviceWhitelist = customerDeviceWhitelistMapper.selectListByCustomerId(customerId);
 
         commonResponse.setData(customerDeviceWhitelist);
         commonResponse.setCode(UserBizReturnCode.Success);
