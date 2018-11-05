@@ -67,6 +67,7 @@ public class DataBuriedPointServiceImpl implements DataBuriedPointService {
         }
         event.put("registSource",req.getRegistSource());
 
+        logger.info("===============datbury注册埋点用户数据："+req.getUserBean());
 
         Map<String, Object> user = getUserMap(req.getUserBean());
 
@@ -107,6 +108,7 @@ public class DataBuriedPointServiceImpl implements DataBuriedPointService {
         event.put("vc_user_id",req.getUser_id());
         event.put("phoneNumber",req.getPhoneNumber());
 
+        logger.info("===============datbury登陆埋点用户数据："+req.getUserBean());
 
         Map<String, Object> user = getUserMap(req.getUserBean());
 
