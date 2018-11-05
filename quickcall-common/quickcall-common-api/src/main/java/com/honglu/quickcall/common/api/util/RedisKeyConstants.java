@@ -31,6 +31,8 @@ public class RedisKeyConstants {
 	public static final String ACCOUNT_USERFROZEN_STREAM = "account:userfrozen:stream:";
 	// 流水冻结 24小时
 	public static final String ACCOUNT_USERFROZEN_Time = "account:userfrozen:stream:time:";
+	// 流水对应的订单Id
+	public static final String ACCOUNT_USERFROZEN_ORDER_NO = "account:userfrozen:stream:orderNo:";
 	// 用户信息緩存（用戶Id）
 	public static final String USER_CUSTOMER_INFO = "voice_user:customerinfo:";
 
