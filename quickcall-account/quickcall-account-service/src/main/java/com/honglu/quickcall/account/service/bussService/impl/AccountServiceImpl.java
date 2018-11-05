@@ -70,6 +70,8 @@ public class AccountServiceImpl implements AccountService {
 			JedisUtil.set(steamFrozenKey, amount + "");
 			// 缓存24小时
 			JedisUtil.set(frozenTimeKey, "1", Integer.parseInt(froZenTime));
+			// 流水对应的订单Id
+			JedisUtil.set(RedisKeyConstants.ACCOUNT_USERFROZEN_ORDER_NO, orderNo + "");
 
 		}
 
