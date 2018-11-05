@@ -185,6 +185,11 @@ public class ScoreRankServiceImpl implements ScoreRankService {
 
     @Override
     public CommonResponse initBigvScoreRankData() {
+        LOGGER.info("初始化声优声量评分排名数据 ----------- start");
+        // 删除不是大V列表的排名数据
+        int deleteNum = bigvScoreMapper.deleteNotBigvData();
+        LOGGER.info("从【bigv_score】表删除不是大V的数量条数：{}" + deleteNum);
+
         Long lastId = null;
         // 循环处理大V技能排名表数据
         while (true){
@@ -220,6 +225,7 @@ public class ScoreRankServiceImpl implements ScoreRankService {
         // 更新大V声量排名表数据
         bigvScoreMapper.updateBigvScore2();
 
+        LOGGER.info("初始化声优声量评分排名数据 ----------- end");
         return ResultUtils.resultSuccess();
     }
 
