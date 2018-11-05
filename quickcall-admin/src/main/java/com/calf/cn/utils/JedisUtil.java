@@ -39,7 +39,9 @@ public class JedisUtil {
 			}
 			JedisPoolConfig poolConfig = new JedisPoolConfig();
 			poolConfig.setMaxIdle(Integer.valueOf(constant.getProperty("redis.maxIdle", "100")));
-			//poolConfig.setMaxTotal(Integer.valueOf(constant.getProperty("redis.maxTotal", "100")));
+			// poolConfig.setMaxTotal(Integer.valueOf(constant.getProperty("redis.maxTotal",
+			// "100")));
+			poolConfig.setMaxWaitMillis(Long.valueOf(constant.getProperty("redis.timeout")));
 			poolConfig.setTimeBetweenEvictionRunsMillis(-1);
 			poolConfig.setTestOnBorrow(true);
 			String host = constant.getProperty("redis.host");
@@ -154,14 +156,15 @@ public class JedisUtil {
 			pool.returnResource(jedis);
 		}
 	}
-	
+
 	public static Long setnx(String key, String value, Integer expireTimeInSec) {
 		Long res = 0L;
 		Jedis jedis = null;
 		try {
 			jedis = pool.getResource();
 			res = jedis.setnx(key, value);
-			if(expireTimeInSec != null) jedis.expire(key, expireTimeInSec);
+			if (expireTimeInSec != null)
+				jedis.expire(key, expireTimeInSec);
 		} catch (Exception e) {
 			logger.error("set ex error.", e);
 			pool.returnBrokenResource(jedis);
@@ -170,12 +173,15 @@ public class JedisUtil {
 		}
 		return res;
 	}
-	
+
 	/**
 	 * 
-	 * @param key  缓存key值
-	 * @param value   缓存value值
-	 * @param expireTimeInSec  过期时间（秒）
+	 * @param key
+	 *            缓存key值
+	 * @param value
+	 *            缓存value值
+	 * @param expireTimeInSec
+	 *            过期时间（秒）
 	 * @return
 	 */
 	public static Long setnxExt(String key, String value, Integer expireTimeInSec) {
@@ -184,8 +190,8 @@ public class JedisUtil {
 		try {
 			jedis = pool.getResource();
 			res = jedis.setnx(key, value);
-			if(expireTimeInSec != null) {
-				if(res == 1){
+			if (expireTimeInSec != null) {
+				if (res == 1) {
 					jedis.expire(key, expireTimeInSec);
 				}
 			}
@@ -197,8 +203,7 @@ public class JedisUtil {
 		}
 		return res;
 	}
-	
-	
+
 	/**
 	 * 存储数据(含失效时间)
 	 * 
@@ -223,8 +228,6 @@ public class JedisUtil {
 		return value;
 	}
 
-
-	
 	public static boolean setObj(String key, Serializable obj) {
 		Jedis jedis = null;
 		try {
@@ -490,8 +493,6 @@ public class JedisUtil {
 		return 0;
 	}
 
-	
-
 	public static long zremrangeByRank(String key, long start, long end) {
 		Jedis jedis = null;
 		try {
@@ -575,12 +576,12 @@ public class JedisUtil {
 		}
 		return null;
 	}
-	
+
 	public static Map<String, String> hgetAll(String key) {
 		Jedis jedis = null;
 		try {
 			jedis = pool.getResource();
-			return jedis.hgetAll(key);			 
+			return jedis.hgetAll(key);
 		} catch (Exception e) {
 			logger.error("hgetAll ", e);
 			pool.returnBrokenResource(jedis);
