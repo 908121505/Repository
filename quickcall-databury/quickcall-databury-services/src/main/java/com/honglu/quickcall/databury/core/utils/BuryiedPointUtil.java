@@ -124,6 +124,9 @@ public class BuryiedPointUtil {
         //==========================一次性设置的属性(开始)=========================
         //手机号
         String mobile_num = (String) user.get("phoneNumber");
+
+        userId = userId+mobile_num;
+
         if (!StringUtils.isEmpty(mobile_num)) {
             sa.profileSet(userId, isReal, "phoneNumber", mobile_num);
             logger.info("==========user -> phoneNum：" + mobile_num + "==========");
