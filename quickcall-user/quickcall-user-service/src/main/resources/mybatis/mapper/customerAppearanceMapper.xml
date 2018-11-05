@@ -102,7 +102,7 @@ id,	customer_id,	audit_appearance,	appearance,	type,	audit_status,	sort,	status,
 	<!-- 查询用户照片 -->
 	<select id="queryCustomerAppearance" resultType="string">
 		SELECT
-		<if test="onlyAudited = 1">
+		<if test="onlyAudited == 1">
 			appearance
 		</if>
 		<if test="onlyAudited != 1">
@@ -114,7 +114,7 @@ id,	customer_id,	audit_appearance,	appearance,	type,	audit_status,	sort,	status,
 		WHERE customer_id = #{customerId}
 		AND type = #{type}
 		AND status = 1
-		<if test="onlyAudited = 1">
+		<if test="onlyAudited == 1">
 			AND audit_status = 1
 		</if>
 		<if test="onlyAudited != 1">
