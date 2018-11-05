@@ -69,7 +69,7 @@ public class DataBuriedPointServiceImpl implements DataBuriedPointService {
 
         logger.info("===============datbury注册埋点用户数据："+req.getUserBean());
 
-        Map<String, Object> user = getUserMap(req.getUserBean());
+        Map<String, Object> user = getUserMap(req.getUserBean(),req.getPhoneNumber());
 
         Map<String,Object> data = BuryiedPointDataConvertor.newInstanceAll(EventEnums.EVENT_Sign_up_result.getValue(),req.getUser_id(),event,user,req.getVirUserId());
 
@@ -78,16 +78,16 @@ public class DataBuriedPointServiceImpl implements DataBuriedPointService {
         logger.info("----【神策埋点】注册成功数据埋点结束");
     }
 
-    private Map<String,Object> getUserMap(UserBean userBean){
+    private Map<String,Object> getUserMap(UserBean userBean,String phoneNumber){
         Map<String, Object> user = new HashMap<>(16);
         if (userBean!=null) {
             user.put("gender", userBean.getGender());
-            user.put("phoneNumber", userBean.getPhoneNumber());
+            user.put("phoneNumber", phoneNumber);
             user.put("yearOfBirth", userBean.getYearOfBirth());
             user.put("vc_user_id", userBean.getVc_user_id());
             user.put("registSource", userBean.getRegistSource());
             user.put("registDate", userBean.getRegistDate());
-            user.put("nick", userBean.getNick());
+            user.put("nickname", userBean.getNick());
             user.put("Vermicelli", userBean.getVermicelli());
             user.put("Number of cencerns", userBean.getNumberOfCencerns());
             user.put("User identity", userBean.getUserIdentity());
@@ -110,7 +110,7 @@ public class DataBuriedPointServiceImpl implements DataBuriedPointService {
 
         logger.info("===============datbury登陆埋点用户数据："+req.getUserBean());
 
-        Map<String, Object> user = getUserMap(req.getUserBean());
+        Map<String, Object> user = getUserMap(req.getUserBean(),req.getPhoneNumber());
 
         Map<String,Object> map = BuryiedPointDataConvertor.newInstanceAll(EventEnums.EVENT_User_id_login_result.getValue(),req.getUser_id(),event,user,req.getVirUserId());
 
