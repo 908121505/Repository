@@ -22,8 +22,6 @@ import com.honglu.quickcall.account.facade.exchange.request.WhthdrawRequest;
 import com.honglu.quickcall.account.web.service.AccountCenterService;
 import com.honglu.quickcall.common.api.exchange.BaseController;
 import com.honglu.quickcall.common.api.exchange.WebResponseModel;
-import com.honglu.quickcall.common.api.util.JedisUtil;
-import com.honglu.quickcall.common.api.util.RedisKeyConstants;
 
 @Controller
 @RequestMapping("/alipay")
@@ -116,14 +114,6 @@ public class AliPayController extends BaseController {
 	public WebResponseModel alipayNotify(@RequestBody AlipayNotifyRequest params) {
 		logger.info("accountWeb.pay.alipayNotify.request.data : " + JSONObject.toJSONString(params));
 		WebResponseModel response = new WebResponseModel();
-		String redisLockKey = RedisKeyConstants.ACCOUNT_ORDER_NO_NX + params.getAccountId();// redis 的open_id 数据锁
-		long redisResult = JedisUtil.setnx(redisLockKey, params.getAccountId() + "", 2);
-		logger.info("支付回调redisResult结果为：" + redisResult);
-		if (redisResult == 0) {
-			response.setCode(AccountBizReturnCode.paramError.code());
-			response.setMsg("重复点击");
-			return response;
-		}
 
 		if (params.getAccountId() == null || StringUtils.isBlank(params.getOrderNo()) || params.getAmount() == null
 				|| params.getPayState() == null) {
@@ -131,6 +121,7 @@ public class AliPayController extends BaseController {
 			response.setMsg(AccountBizReturnCode.paramError.desc());
 			return response;
 		}
+
 		response = accountCenterService.execute(params);
 		logger.info("accountWeb.pay.alipayNotify.response.data : " + JSONObject.toJSONString(response));
 		return response;
