@@ -20,7 +20,7 @@ import java.util.UUID;
 @RequestMapping("/data")
 public class DataBuriedPointController {
 
-    @Reference(version = "1.0.0", timeout = 10000, retries = 0)
+    @Reference(group = "buryDataCenter",version = "1.0.0", timeout = 10000, retries = 0)
     private DataDuriedPointBusiness dataDuriedPointBusiness;
 
     /**
