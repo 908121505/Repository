@@ -331,6 +331,7 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 
 	
 	
+
 	public   Date   getAppointEndTime(String  endTimeStr){
 		//
 		if(StringUtils.isBlank(endTimeStr) || endTimeStr.length() < 4){
@@ -376,6 +377,9 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 	 * 结束时间入参：0000   2400    落库：2400   判断时采用2359进行判断时间
 	 */
 	
+
+//	private  static final  Integer  WEEK_INDEX_DEFAULT = 0 ;
+
 
 	@Override
 	public void updateSkillInfoPersonal(SkillUpdateRequest request) {

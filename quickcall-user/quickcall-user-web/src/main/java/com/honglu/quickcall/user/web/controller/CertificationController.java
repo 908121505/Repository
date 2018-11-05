@@ -271,6 +271,7 @@ public class CertificationController {
 			} else {
 				input = mfile.getInputStream();
 			}
+
 			// 阿里云客户端
 			OSSClient ossClient = OSSUtil.getOSSClient();
 			// 上传
