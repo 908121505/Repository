@@ -198,11 +198,34 @@ public class ScoreRankServiceImpl implements ScoreRankService {
         // 查询不在大V总排名表中的大VID
         List<Long> customerIds = bigvScoreMapper.selectNeedInsertBigvData();
         if (!customerIds.isEmpty()) {
+            LOGGER.info("插入【bigv_score】表差的数据条数：{}" + customerIds.size());
+            BigvScore bigScore;
             for(Long customerId: customerIds){
-
+                bigScore = new BigvScore();
+                bigScore.setId(UUIDUtils.getId());
+                bigScore.setCustomerId(customerId);
+                bigScore.setOrderTotal(0);
+                bigScore.setScoreTotal(new BigDecimal(0));
+                bigvScoreMapper.insert(bigScore);
             }
         }
 
+        // 查询不在大V技能排名表的大V技能数据
+        List<BigvSkillScore> bigvSkillScores = bigvSkillScoreMapper.selectNeedInsertBigvData();
+        if(!bigvSkillScores.isEmpty()){
+            LOGGER.info("插入【bigv_skill_score】表差的数据条数：{}" + customerIds.size());
+            BigvSkillScore bigvSkillScore;
+            for(BigvSkillScore skillScore: bigvSkillScores){
+                bigvSkillScore = new BigvSkillScore();
+                bigvSkillScore.setId(UUIDUtils.getId());
+                bigvSkillScore.setCustomerId(skillScore.getCustomerId());
+                bigvSkillScore.setCustomerSkillId(skillScore.getCustomerSkillId());
+                bigvSkillScore.setSkillItemId(skillScore.getSkillItemId());
+                bigvSkillScore.setOrderTotal(0);
+                bigvSkillScore.setScoreTotal(new BigDecimal(0));
+                bigvSkillScoreMapper.insert(bigvSkillScore);
+            }
+        }
 
         Long lastId = null;
         // 循环处理大V技能排名表数据

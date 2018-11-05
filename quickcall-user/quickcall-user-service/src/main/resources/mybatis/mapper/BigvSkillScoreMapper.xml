@@ -73,4 +73,11 @@
       )
     </delete>
 
+    <!-- 查询大V的技能不在技能排名表中的数据 -->
+    <select id="selectNeedInsertBigvData" resultMap="BaseResultMap">
+        SELECT customer_id, customer_skill_id, skill_item_id FROM customer_skill
+        WHERE customer_skill_id NOT IN(
+            SELECT customer_skill_id FROM bigv_skill_score
+        )
+    </select>
 </mapper>

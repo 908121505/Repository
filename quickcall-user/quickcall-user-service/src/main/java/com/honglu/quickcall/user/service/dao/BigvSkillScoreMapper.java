@@ -4,6 +4,7 @@ import com.honglu.quickcall.user.facade.entity.BigvSkillScore;
 import org.apache.ibatis.annotations.Param;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 public interface BigvSkillScoreMapper {
 
@@ -74,4 +75,10 @@ public interface BigvSkillScoreMapper {
      * @return
      */
     int deleteNotBigvData();
+
+    /**
+     * 查询大V的技能不在技能排名表中的数据
+     * @return
+     */
+    List<BigvSkillScore> selectNeedInsertBigvData();
 }
