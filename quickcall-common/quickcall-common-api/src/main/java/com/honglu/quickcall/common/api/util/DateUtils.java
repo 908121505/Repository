@@ -294,7 +294,11 @@ public class DateUtils {
      * @return
      */
     public static String getDiffSeconds(long  remainStr)  {
-//		long  remainStr = 3500 ;
+
+
+    	if(remainStr <= 0){
+    		return null ;
+    	}
 		long hour =  remainStr / 3600 ;
 		long minutes =  (remainStr - hour * 3600 ) / 60 ;
 		long seconds =  remainStr % 60;

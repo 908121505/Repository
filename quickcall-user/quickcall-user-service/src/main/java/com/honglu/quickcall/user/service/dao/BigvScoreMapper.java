@@ -35,9 +35,16 @@ public interface BigvScoreMapper {
     int deleteDataByCustomerId(@Param("customerId") Long customerId);
 
     /**
+     * 删除不是大V的数据
+     * @return
+     */
+    int deleteNotBigvData();
+
+    /**
      *  根据客户技能ID查询所有已完成的订单
      * @param customerSkillId
      * @return
      */
     List<Order> selectAllDoneOrderByCustomerSkillId(@Param("customerSkillId") Long customerSkillId);
+
 }
