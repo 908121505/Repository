@@ -125,7 +125,7 @@ public class BuryiedPointUtil {
         //手机号
         String mobile_num = (String) user.get("phoneNumber");
         if (!StringUtils.isEmpty(mobile_num)) {
-            sa.profileSetOnce(userId, isReal, "phoneNumber", mobile_num);
+            sa.profileSet(userId, isReal, "phoneNumber", mobile_num);
             logger.info("==========user -> phoneNum：" + mobile_num + "==========");
         }
 
@@ -133,35 +133,35 @@ public class BuryiedPointUtil {
         //用户id
         String gj_user_id = (String) user.get("gj_user_id");
         if (!StringUtils.isEmpty(gj_user_id)) {
-            sa.profileSetOnce(userId, isReal, "gj_user_id", mobile_num);
+            sa.profileSet(userId, isReal, "gj_user_id", mobile_num);
             logger.info("==========user -> gj_user_id：" + gj_user_id + "==========");
         }
 
         //性别
         String gender = (String) user.get("gender");
         if (!StringUtils.isEmpty(gender)) {
-            sa.profileSetOnce(userId, isReal, "gender", gender);
+            sa.profileSet(userId, isReal, "gender", gender);
             logger.info("==========user -> gender：" + gender + "==========");
         }
 
         //生日
         String yearOfBirth = (String) user.get("yearOfBirth");
         if (!StringUtils.isEmpty(yearOfBirth)) {
-            sa.profileSetOnce(userId, isReal, "yearOfBirth", yearOfBirth);
+            sa.profileSet(userId, isReal, "yearOfBirth", yearOfBirth);
             logger.info("==========user -> yearOfBirth：" + yearOfBirth + "==========");
         }
 
         //注册时间
         String registDate = (String) user.get("registDate");
         if (!StringUtils.isEmpty(registDate)) {
-            sa.profileSetOnce(userId, isReal, "registDate", registDate);
+            sa.profileSet(userId, isReal, "registDate", registDate);
             logger.info("==========user -> registDate：" + registDate + "==========");
         }
 
         //注册渠道
         String registSource = (String) user.get("registSource");
         if (!StringUtils.isEmpty(registSource)) {
-            sa.profileSetOnce(userId, isReal, "registSource", registSource);
+            sa.profileSet(userId, isReal, "registSource", registSource);
             logger.info("==========user -> registSource：" + registSource + "==========");
         }
 
@@ -171,10 +171,10 @@ public class BuryiedPointUtil {
 
         //==========================变化的属性设置(开始)=========================
         //变化的属性
-        String nick = (String) user.get("nick");
+        String nick = (String) user.get("nickname");
         if(!StringUtils.isEmpty(nick)){
-            sa.profileSet(userId, isReal, "nick", nick);
-            logger.info("==========user -> nick：" + nick + "==========");
+            sa.profileSet(userId, isReal, "nickname", nick);
+            logger.info("==========user -> nickname：" + nick + "==========");
         }
 
         //==========================变化的属性设置(结束)=========================

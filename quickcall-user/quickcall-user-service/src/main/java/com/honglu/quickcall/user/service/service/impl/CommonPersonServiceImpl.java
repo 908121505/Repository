@@ -208,7 +208,7 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 		req.setUser_id(customer.getCustomerId() + "");
 		UserBean userBean = new UserBean();
 		userBean.setNick(customer.getNickName());
-		userBean.setRegistDate(new Date());
+		userBean.setRegistDate(customer.getCreateTime());
 		userBean.setRegistSource(customer.getAppChannelName());
 		userBean.setGender(customer.getSex() == 0 ? "女" : "男");
 		userBean.setPhoneNumber(customer.getPhone());
