@@ -31,12 +31,9 @@ import com.honglu.quickcall.account.service.dao.CustomerSkillMapper;
 import com.honglu.quickcall.account.service.dao.SkillItemExtMapper;
 import com.honglu.quickcall.account.service.dao.SkillItemMapper;
 import com.honglu.quickcall.account.service.service.IProductSkillService;
-<<<<<<< HEAD
 import com.honglu.quickcall.common.api.util.DateUtils;
 import com.honglu.quickcall.producer.facade.business.DataDuriedPointBusiness;
 import com.honglu.quickcall.producer.facade.req.databury.DataBuriedPointOrderButtonReq;
-=======
->>>>>>> refs/remotes/origin/master_tag(2018/11/03)
 
 @Service("productSkillService")
 public class ProductSkillServiceImpl implements IProductSkillService {

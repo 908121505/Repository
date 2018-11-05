@@ -1,6 +1,5 @@
 package com.honglu.quickcall.user.service.dao;
 
-import com.honglu.quickcall.user.facade.entity.BigvSkillScore;
 import com.honglu.quickcall.user.facade.entity.CustomerSkill;
 import com.honglu.quickcall.user.facade.entity.ResourceConfig;
 import org.apache.ibatis.annotations.Param;
