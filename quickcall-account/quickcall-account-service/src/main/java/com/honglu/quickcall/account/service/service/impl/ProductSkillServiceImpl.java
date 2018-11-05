@@ -378,7 +378,7 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 	 */
 	
 
-	private  static final  Integer  WEEK_INDEX_DEFAULT = 0 ;
+//	private  static final  Integer  WEEK_INDEX_DEFAULT = 0 ;
 
 
 	@Override
