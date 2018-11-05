@@ -186,6 +186,7 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 				}
 			}
 		}
+
 		// 账户被封
 		if (isBlock) {
 			throw new BizException(BizCode.ParamError, "因违反平台规则，您的账号被永久限制登陆，如有疑问，请拨打客服电话：400-156-0606进行咨询");
