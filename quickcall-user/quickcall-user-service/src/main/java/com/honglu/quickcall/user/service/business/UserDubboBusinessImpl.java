@@ -320,12 +320,12 @@ public class UserDubboBusinessImpl implements UserDubboBusiness {
 			case UserFunctionType.CANCEL_ATTENTION:
 				response = attentionService.cancelAttention((AttentionCancelRequest) request);
 				break;
-			case UserFunctionType.queryDeviceWhitelist:
+			/*case UserFunctionType.queryDeviceWhitelist:
 				response = deviceWhitelistService.queryDeviceWhitelist((QueryDeviceWhitelistReq) request);
 				break;
 			case UserFunctionType.saveDeviceWhitelist:
 				response = deviceWhitelistService.saveDeviceWhitelist((SaveDeviceWhitelistReq) request);
-				break;
+				break;*/
 			default:
 				throw new BizException(UserBizReturnCode.BizFunctionTypeNotMatch,
 						UserBizReturnCode.BizFunctionTypeNotMatch.desc());

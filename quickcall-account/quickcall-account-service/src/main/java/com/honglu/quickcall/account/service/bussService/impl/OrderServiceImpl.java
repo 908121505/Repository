@@ -877,6 +877,8 @@ public class OrderServiceImpl implements IOrderService {
 				if(expectEndTime.before(new Date())){
 					//已经在服务时间之外了，可以立即结束
 					newOrderStatus = OrderSkillConstants.ORDER_STATUS_FINISH_DAV_FINISH_AFTER_SERVICE_TIME ;
+					//冻结大V金额
+					accountService.inAccount(order.getServiceId(), order.getOrderAmounts(), TransferTypeEnum.FROZEN, AccountBusinessTypeEnum.FroZen);
 					//用户未评价
 					RongYunUtil.sendOrderMessage(serviceId, OrderSkillConstants.IM_MSG_CONTENT_CUST_NOT_PING_JIA,OrderSkillConstants.MSG_CONTENT_DAV);
 					sendMsgIndex = 1 ;
