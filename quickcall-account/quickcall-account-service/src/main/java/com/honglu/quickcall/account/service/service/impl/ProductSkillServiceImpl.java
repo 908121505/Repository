@@ -381,6 +381,9 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 		String  endTimeStr = request.getEndServiceTimeStr();
 		//根据结束时间获取预约结束时间
 		Date  appointEndTime = getAppointEndTime(endTimeStr);
+		if( ENDTIME_STR_24.equals(endTimeStr)){
+			endTimeStr = ENDTIME_STR_00;
+		}
 		Date  appointStartTime = new Date();
 		
 		
