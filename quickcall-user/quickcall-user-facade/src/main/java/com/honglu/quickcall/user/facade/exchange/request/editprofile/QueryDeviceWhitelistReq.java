@@ -10,30 +10,30 @@ import com.honglu.quickcall.user.facade.exchange.UserCenterRequest;
  * @date 2018/10/22 11:51
  */
 public class QueryDeviceWhitelistReq extends UserCenterRequest {
-    private String loginId;
-    private String type;
+    private Long customerId;
+    private String deviceId;
 
-    public String getLoginId() {
-        return loginId;
+    public Long getCustomerId() {
+        return customerId;
     }
 
-    public void setLoginId(String loginId) {
-        this.loginId = loginId;
+    public void setCustomerId(Long customerId) {
+        this.customerId = customerId;
     }
 
-    public String getType() {
-        return type;
+    public String getDeviceId() {
+        return deviceId;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setDeviceId(String deviceId) {
+        this.deviceId = deviceId;
     }
 
     @Override
     public String toString() {
         return "QueryDeviceWhitelistReq{" +
-                "loginId='" + loginId + '\'' +
-                ", type='" + type + '\'' +
+                "customerId='" + customerId + '\'' +
+                ", deviceId='" + deviceId + '\'' +
                 '}';
     }
 

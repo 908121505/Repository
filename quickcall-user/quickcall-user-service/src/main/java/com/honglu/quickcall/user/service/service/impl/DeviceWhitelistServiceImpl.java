@@ -36,41 +36,25 @@ public class DeviceWhitelistServiceImpl implements DeviceWhitelistService{
     @Override
     public CommonResponse queryDeviceWhitelist(QueryDeviceWhitelistReq params) {
         CommonResponse commonResponse = new CommonResponse();
-        String loginId = params.getLoginId();
-        String type = params.getType();
-        if (loginId == null || "".equals(loginId)) {
-            throw new BizException(UserBizReturnCode.paramError, "loginId不能为空");
+        Long customerId = params.getCustomerId();
+        String deviceId = params.getDeviceId();
+        if (customerId == null || "".equals(customerId)) {
+            throw new BizException(UserBizReturnCode.paramError, "customerId不能为空");
         }
-        if (type == null || "".equals(type)) {
-            throw new BizException(UserBizReturnCode.paramError, "type不能为空");
-        }
-        if (!"0".equals(type) && !"1".equals(type) && !"2".equals(type) && !"3".equals(type)) {
-            throw new BizException(UserBizReturnCode.paramError, "type参数错误");
+        if (deviceId == null || "".equals(deviceId)) {
+            throw new BizException(UserBizReturnCode.paramError, "deviceId不能为空");
         }
 
-        //通过loginId查询获取用户CustomerId
-        List<Map<String, Object>> customerList = null;
-
-        //type “0”-手机号 “1”-微信opengid “2”-QQ openid “3”-微博openid
-        if("0".equals(type)){
-            customerList = customerDeviceWhitelistMapper.queryCustomerByPhone(loginId);
-        }else if("1".equals(type)){
-            customerList = customerDeviceWhitelistMapper.queryCustomerByWechatOpenId(loginId);
-        }else if("2".equals(type)){
-            customerList = customerDeviceWhitelistMapper.queryCustomerByQQOpenId(loginId);
-        }else if("3".equals(type)){
-            customerList = customerDeviceWhitelistMapper.queryCustomerByMicroblogOpenId(loginId);
+        //查询数据库中是否已存在
+        int count = customerDeviceWhitelistMapper.selectCountByCusIdAndDeviceId(customerId, deviceId);
+        if(count > 0){
+            //存在 不需要短验
+            commonResponse.setData(true);
+        }else{
+            //不存在 需要短验
+            commonResponse.setData(false);
         }
 
-        if(customerList.size() == 0){
-            throw new BizException(UserBizReturnCode.paramError, "用户不存在");
-        }
-
-        String customerId = customerList.get(0).get("customerId").toString();
-        //通过CustomerId查询用户设备白名单信息
-        List<CustomerDeviceWhitelistVO> customerDeviceWhitelist = customerDeviceWhitelistMapper.selectListByCustomerId(customerId);
-
-        commonResponse.setData(customerDeviceWhitelist);
         commonResponse.setCode(UserBizReturnCode.Success);
         commonResponse.setMessage(UserBizReturnCode.Success.desc());
         return commonResponse;
