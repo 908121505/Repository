@@ -231,6 +231,7 @@ public class OrderServiceImpl implements IOrderService {
 						//返回余额不足状态  
 						return   commonResponse ;
 					}else{
+						//用户下单，用户出账
 						accountService.outAccount(customerId, orderAmounts,TransferTypeEnum.RECHARGE,AccountBusinessTypeEnum.PlaceOrder);
 					}
 				}
@@ -348,7 +349,7 @@ public class OrderServiceImpl implements IOrderService {
 		
 		if(!CollectionUtils.isEmpty(resultList)){
 			for (OrderReceiveOrderListVO info : resultList) {
-				OrderTempResponseVO  responseVO = commonService.getCountDownSeconds(info.getOrderStatus(), info.getOrderTime(), info.getReceiveOrderTime());
+				OrderTempResponseVO  responseVO = commonService.getCountDownSeconds(info.getOrderStatus(), info.getOrderTime(), info.getReceiveOrderTime(),info.getst);
 				info.setCountDownSeconds(responseVO.getCountDownSeconds());
 				info.setOrderStatus(responseVO.getOrderStatus());
 				//TODO 兼容安卓版本   7号需要回滚
@@ -386,7 +387,7 @@ public class OrderServiceImpl implements IOrderService {
 		List<OrderSendOrderListVO>  resultList =  orderMapper.querySendOrderList(customerId,statusList);
 		if(!CollectionUtils.isEmpty(resultList)){
 			for (OrderSendOrderListVO info : resultList) {
-				OrderTempResponseVO  responseVO = commonService.getCountDownSeconds(info.getOrderStatus(), info.getOrderTime(), info.getReceiveOrderTime());
+				OrderTempResponseVO  responseVO = commonService.getCountDownSeconds(info.getOrderStatus(), info.getOrderTime(), info.getReceiveOrderTime(),info.getStartServiceTime());
 				info.setCountDownSeconds(responseVO.getCountDownSeconds());
 				info.setOrderStatus(responseVO.getOrderStatus());
 				//TODO 兼容安卓版本   7号需要回滚
@@ -441,6 +442,7 @@ public class OrderServiceImpl implements IOrderService {
 			commonService.cancelUpdateOrder(orderId, orderStatus,new Date(),request.getSelectReason(),request.getRemarkReason());
 			//金额不为空，说明需要退款给用户
 			if(payAmount != null){
+				//订单取消，用户回款
 				accountService.inAccount(customerId, payAmount,TransferTypeEnum.RECHARGE,AccountBusinessTypeEnum.OrderRefund);
 			}
 		}
@@ -546,6 +548,8 @@ public class OrderServiceImpl implements IOrderService {
 			orderDetailForIMVO.setCustomerId(order.getCustomerId());
 			orderDetailForIMVO.setOrderIMVO(orderIMVO);
 			commonResponse.setData(orderDetailForIMVO);
+			//需要计算倒计时时间
+			
 			return commonResponse ;
 		}
 		

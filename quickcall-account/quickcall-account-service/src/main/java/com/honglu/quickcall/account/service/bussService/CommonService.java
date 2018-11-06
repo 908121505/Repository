@@ -98,13 +98,14 @@ public interface CommonService {
 	
 	
 	/**
-	 * 获取新的数据
-	 * @param oldOrderStatus  订单状态
-	 * @param orderTime  下单时间
-	 * @param receiveOrderTime  接单时间
+	 * 获取新的数据，获取实时数据
+	 * @param oldOrderStatus
+	 * @param orderTime
+	 * @param receiveOrderTime
+	 * @param startServiceTime
 	 * @return
 	 */
-	public OrderTempResponseVO  getCountDownSeconds(Integer   oldOrderStatus ,Date  orderTime,Date  receiveOrderTime);
+	public OrderTempResponseVO  getCountDownSeconds(Integer   oldOrderStatus ,Date  orderTime,Date  receiveOrderTime,Date startServiceTime);
 	
 	
 	

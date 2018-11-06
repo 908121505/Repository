@@ -12,6 +12,15 @@ package com.honglu.quickcall.account.facade.constants;
 public interface OrderSkillConstants {
 	
 	
+	/**接单超时15分钟*/
+	public static final  Integer  RECEIVE_ORDER_OVER_TIME =  15;
+	/**声优5分钟未发起立即服务*/
+	public static final  Integer  START_SERVICE_OVER_TIME_DAV =  5;
+	/**用户5分钟未接受立即服务*/
+	public static final  Integer  START_SERVICE_OVER_TIME_CUST =  5;
+	
+	
+	
 	/**消息标识：大V方*/
 	public static final  String  MSG_CONTENT_DAV = "V";
 	/**消息标识：用户方*/
