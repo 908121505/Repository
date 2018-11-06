@@ -25,6 +25,13 @@ public interface BigvSkillScoreMapper {
     Integer selectBigvSkillOrderTotal(@Param("customerSkillId") Long customerSkillId);
 
     /**
+     * 根据客户技能ID查询该技能的声量
+     * @param customerSkillId
+     * @return
+     */
+    Integer selectBigvScoreValue(@Param("customerSkillId") Long customerSkillId);
+
+    /**
      * 根据默认评价得到到订单表
      *
      * @param orderId
@@ -81,4 +88,5 @@ public interface BigvSkillScoreMapper {
      * @return
      */
     List<BigvSkillScore> selectNeedInsertBigvData();
+
 }
