@@ -23,14 +23,6 @@
 				<div class="col-md-2">
 					<div class="form-group">
 						<div class="input-group">
-							<div class="input-group-addon">举报名称</div>
-							<input class="form-control" type="text" id="delateName">
-						</div>
-					</div>
-				</div>
-				<div class="col-md-2">
-					<div class="form-group">
-						<div class="input-group">
 							<div class="input-group-addon">用户手机号</div>
 							<input class="form-control" type="text" id="phone">
 						</div>
@@ -120,11 +112,6 @@
 			              'sClass':"text-center"
 			            },
 			            { 
-			              "data": "delateName",
-			              "sTitle":"举报名称",
-			              'sClass':"text-center"
-			            },
-			            { 
 			               "data": "delateContent",
 			               "sTitle":"举报内容",
 			               'sClass':"text-center",
@@ -185,13 +172,12 @@
 			         ],
 			         fnServerParams: function (aoData) {  //查询条件
 	                       aoData.push({ "name": "nickName", "value": $("#nickName").val().replace(new RegExp(" ","g"),"") } );
-	                       aoData.push({ "name": "delateName", "value": $("#delateName").val().replace(new RegExp(" ","g"),"") } );
 		                   aoData.push({"name": "phone", "value": $("#phone").val()});
 		                   aoData.push({"name": "startTime", "value": $("#startTime").val()});
 		                   aoData.push({"name": "endTime", "value": $("#endTime").val()});
 	                    },
 	                    aoColumnDefs : [ {
-							"aTargets" : 8,
+							"aTargets" : 7,
 							"mRender" : function(data,type, row) {
 								var detail = "",del = "";
 								<shiro:hasPermission name="customerDelate:update">
