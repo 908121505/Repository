@@ -24,6 +24,7 @@ import com.honglu.quickcall.user.facade.exchange.request.SaveNickNameRequest;
 import com.honglu.quickcall.user.facade.exchange.request.SaveOccupationRequest;
 import com.honglu.quickcall.user.facade.exchange.request.SaveSignNameRequest;
 import com.honglu.quickcall.user.facade.exchange.request.SearchPersonRequest;
+import com.honglu.quickcall.user.facade.exchange.request.SetVisitReadRequest;
 import com.honglu.quickcall.user.facade.exchange.request.queryMyskillRequest;
 import com.honglu.quickcall.user.web.service.UserCenterService;
 
@@ -216,6 +217,16 @@ public class AccountInfoController {
 	@RequestMapping(value = "/recentVisit", method = RequestMethod.POST)
 	@ResponseBody
 	public WebResponseModel recentVisit(RecentVisitRequest params) {
+		WebResponseModel response = userCenterService.execute(params);
+		return response;
+	}
+	
+	/**
+	 * 来访设为已读
+	 */
+	@RequestMapping(value = "/setVisitRead", method = RequestMethod.POST)
+	@ResponseBody
+	public WebResponseModel setVisitRead(SetVisitReadRequest params) {
 		WebResponseModel response = userCenterService.execute(params);
 		return response;
 	}

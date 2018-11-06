@@ -330,6 +330,10 @@ public class UserDubboBusinessImpl implements UserDubboBusiness {
 				break;
 			case UserFunctionType.Recent_Visit_List:
 				response = customerVisitService.queryRecentVisitList((RecentVisitRequest)request);
+				break;
+			case UserFunctionType.Set_Visit_Read:
+				response = customerVisitService.setVisitRead((SetVisitReadRequest)request);
+				break;
 			default:
 				throw new BizException(UserBizReturnCode.BizFunctionTypeNotMatch,
 						UserBizReturnCode.BizFunctionTypeNotMatch.desc());

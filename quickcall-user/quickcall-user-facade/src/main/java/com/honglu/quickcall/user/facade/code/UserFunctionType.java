@@ -237,5 +237,9 @@ public interface UserFunctionType {
 	 * 最近来访列表
 	 */
 	String Recent_Visit_List = "0011301";
-
+	
+	/**
+	 * 设置来访已读
+	 */
+	String Set_Visit_Read = "0011302";
 }
