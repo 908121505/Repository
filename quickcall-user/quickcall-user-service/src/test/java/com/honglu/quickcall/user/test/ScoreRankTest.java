@@ -14,11 +14,44 @@ import java.math.BigDecimal;
 public class ScoreRankTest {
 
     public static void main(String[] args) {
-        Integer orderTotal = 2;
-        Integer evaluateStars = 3;
+        BigDecimal totalScore = new BigDecimal(0);
+
         Order order = new Order();
-        order.setServicePrice(new BigDecimal("1599"));
-        order.setOrderNum(10);
+        order.setOrderNum(1);
+        order.setEvaluateStart(5);
+        order.setServicePrice(new BigDecimal("30"));
+        totalScore = totalScore.add(caclScore(0, order));
+
+        order = new Order();
+        order.setOrderNum(1);
+        order.setEvaluateStart(5);
+        order.setServicePrice(new BigDecimal("30"));
+        totalScore = totalScore.add(caclScore(1, order));
+
+        order = new Order();
+        order.setOrderNum(1);
+        order.setEvaluateStart(5);
+        order.setServicePrice(new BigDecimal("30"));
+        totalScore = totalScore.add(caclScore(2, order));
+
+        order = new Order();
+        order.setOrderNum(20);
+        order.setEvaluateStart(5);
+        order.setServicePrice(new BigDecimal("30"));
+        totalScore = totalScore.add(caclScore(3, order));
+
+        order = new Order();
+        order.setOrderNum(1);
+        order.setEvaluateStart(3);
+        order.setServicePrice(new BigDecimal("30"));
+        totalScore = totalScore.add(caclScore(4, order));
+
+
+        System.out.println("totalScore == " + totalScore);
+    }
+
+    private static BigDecimal caclScore(Integer orderTotal, Order order){
+        Integer evaluateStars = order.getEvaluateStart();
 
         // 查询该用户该技能的订单笔数
 
@@ -53,6 +86,7 @@ public class ScoreRankTest {
         // 补差取整
         BigDecimal bucha = evaluationScore.subtract(order.getValueScore()).setScale(0, BigDecimal.ROUND_HALF_UP);
         System.out.println("补差：" + bucha);
+        return valueScore;
     }
 
     /**

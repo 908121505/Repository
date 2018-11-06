@@ -33,6 +33,12 @@
         WHERE customer_skill_id = #{customerSkillId}
     </select>
 
+    <!-- 查询大V技能的订单笔数 -->
+    <select id="selectBigvScoreValue" resultType="java.lang.Integer">
+        SELECT score_total FROM `bigv_skill_score`
+        WHERE customer_skill_id = #{customerSkillId}
+    </select>
+
     <!-- 更新默认评价得到到订单表 -->
     <update id="updateValueScoreToOrder">
         UPDATE orders SET value_score = #{valueScore} WHERE order_id = #{orderId}

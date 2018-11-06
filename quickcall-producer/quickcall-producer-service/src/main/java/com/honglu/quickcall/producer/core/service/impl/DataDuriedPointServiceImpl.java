@@ -51,7 +51,7 @@ public class DataDuriedPointServiceImpl implements DataDuriedPointService {
 
     @Override
     public void buryUserIdLoginResultData(DataBuriedPointLoginReq req) {
-        LOGGER.info("======producer:埋点--登陆--组装数据");
+        LOGGER.info("======producer:埋点--登陆--组装数据--req:"+req+"--userBean:"+req.getUserBean());
         Map<String,Object> param = new HashMap<>();
         param.put("param",JSON.toJSONString(req));
         param.put("type", EventEnums.EVENT_User_id_login_result.getValue());

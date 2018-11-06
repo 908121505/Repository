@@ -45,7 +45,7 @@ public class DataBuriedPointServiceImpl implements DataBuriedPointService{
         request.setRegistDate(req.getRegistDate());
         request.setRegistSource(req.getRegistSource());
         request.setUser_id(req.getUser_id());
-
+        logger.info("===============consumer注册埋点用户数据："+req.getUserBean());
         if (req.getUserBean()!=null){
             UserBean userBean = new UserBean();
             userBean.setGender(req.getUserBean().getGender());
@@ -78,6 +78,8 @@ public class DataBuriedPointServiceImpl implements DataBuriedPointService{
         request.setLoginmethod(req.getLoginmethod());
         request.setPhoneNumber(req.getPhoneNumber());
         request.setUser_id(req.getUser_id());
+
+        logger.info("===============consumer登陆埋点用户数据："+req.getUserBean());
 
         if (req.getUserBean()!=null){
             UserBean userBean = new UserBean();

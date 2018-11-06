@@ -203,6 +203,7 @@ public class CommonServiceImpl implements CommonService {
 		}else if(OrderSkillConstants.ORDER_STATUS_PARAM_WAITING_START == orderStatusParam){
 			
 			retList.add(OrderSkillConstants.ORDER_STATUS_WAITING_START);
+			retList.add(OrderSkillConstants.ORDER_STATUS_WAITING_START_DA_APPAY_START_SERVICE);
 			retList.add(OrderSkillConstants.ORDER_STATUS_GOING_WAITING_START);
 			
 			
@@ -252,7 +253,7 @@ public class CommonServiceImpl implements CommonService {
 		}else if(OrderSkillConstants.ORDER_STATUS_PARAM_WAITING_RECEIVE_ORDER == orderStatusParam){
 			retList.add(OrderSkillConstants.ORDER_STATUS_PARAM_WAITING_RECEIVE_ORDER);
 		}else if(OrderSkillConstants.ORDER_STATUS_PARAM_WAITING_START == orderStatusParam){
-			
+			retList.add(OrderSkillConstants.ORDER_STATUS_WAITING_START_DA_APPAY_START_SERVICE);
 			retList.add(OrderSkillConstants.ORDER_STATUS_WAITING_START);
 			retList.add(OrderSkillConstants.ORDER_STATUS_GOING_WAITING_START);
 			
