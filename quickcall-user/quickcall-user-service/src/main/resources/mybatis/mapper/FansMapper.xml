@@ -22,16 +22,16 @@
   	select COUNT(*) FROM fans where anchor_id=#{anchorId} AND fans_id=#{fansId} AND attention_state=1;
   </select>
   <select id="queryFansNumByCustomerId" resultType="java.lang.Long" parameterType="java.lang.Long" >
-    SELECT COUNT(*) FROM fans WHERE anchor_id=#{customerId} AND attention_state=1; 
+    SELECT COUNT(*) FROM fans WHERE anchor_id=#{customerId} AND attention_state=1;
   </select>
   
    <select id="queryNoReadFansNumByCustomerId" resultType="java.lang.Integer" parameterType="java.lang.Long" >
     SELECT COUNT(*) FROM fans WHERE anchor_id=#{customerId} AND attention_state=1 and read_state=0
   </select>
-  
-  
+
+
   <select id="queryAttentionNumByCustomerId" resultType="int" parameterType="java.lang.Long" >
-    SELECT COUNT(*) FROM fans WHERE fans_id=#{customerId} AND attention_state=1; 
+    SELECT COUNT(*) FROM fans WHERE fans_id=#{customerId} AND attention_state=1;
   </select>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
@@ -166,7 +166,8 @@
 		    (YEAR (NOW()) - YEAR (ct.birthday)) AS age,
 		    ct.sex    AS sex,
 		    (IFNULL(fs.attention_state,0))  AS  attentionStatus,
-		    ct.type AS type,
+		    (case when ct.v_status=2 then 1
+						else 0	end	) as type,
 		    (IFNULL(fs.attention_state,0))&amp;(IFNULL(fs1.attention_state,0)) AS eachAttentionStatus 
 		FROM
 			fans fs
@@ -176,9 +177,9 @@
 			fs.fans_id = #{customerId}  and   fs.attention_state = #{attentionStatus} 
 		ORDER BY eachAttentionStatus desc,fs.modify_time desc
   </select>
-  
-  
-  
+
+
+
   
   
   <!-- 查询粉丝列表 -->
@@ -190,7 +191,8 @@
 		    (YEAR (NOW()) - YEAR (ct.birthday)) AS age,
 		    ct.sex    AS sex,
 		    (IFNULL(fs1.attention_state,0))  AS  attentionStatus,
-		    ct.type AS type,
+		    (case when ct.v_status=2 then 1
+						else 0	end	) as type,
 		    (IFNULL(fs.attention_state,0))&amp;(IFNULL(fs1.attention_state,0)) AS eachAttentionStatus 
 		FROM
 			fans fs

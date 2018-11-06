@@ -1,8 +1,13 @@
 package com.honglu.quickcall.user.web.controller;
 
+import com.honglu.quickcall.common.api.code.BizCode;
 import com.honglu.quickcall.common.api.exchange.WebResponseModel;
+import com.honglu.quickcall.common.core.util.UUIDUtils;
+import com.honglu.quickcall.user.facade.code.UserBizReturnCode;
 import com.honglu.quickcall.user.facade.exchange.request.FirstPageBigvListRequest;
+import com.honglu.quickcall.user.facade.exchange.request.InitBigvScoreRankDataRequest;
 import com.honglu.quickcall.user.web.service.UserCenterService;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,4 +45,26 @@ public class AppHomeController {
         LOGGER.info("userWeb.AppHomeController getFirstPageDaVinfo response data : " + response);
         return response;
     }
+
+    /**
+     * 初始化大V评分排名数据
+     *
+     * @param params
+     * @return
+     */
+    @RequestMapping(value = "/initBigvScoreRankData", method = RequestMethod.POST)
+    @ResponseBody
+    public WebResponseModel initBigvScoreRankData(InitBigvScoreRankDataRequest params) {
+        LOGGER.info("userWeb.AppHomeController initBigvScoreRankData request data : " + params);
+        WebResponseModel response = new WebResponseModel();
+        if(!"72739a1ac8374447ad04f56f2f265246".equals(params.getPassword())){
+            response.setCode(UserBizReturnCode.CheckSignError.code());
+            response.setMsg("密码错误");
+            return response;
+        }
+        response = userCenterService.execute(params);
+        LOGGER.info("userWeb.AppHomeController initBigvScoreRankData response data : " + response);
+        return response;
+    }
+
 }

@@ -5,6 +5,7 @@ import com.honglu.quickcall.user.facade.vo.DaVinfoVO;
 
 import org.apache.ibatis.annotations.Param;
 
+import java.util.Date;
 import java.util.List;
 
 public interface CustomerSkillMapper {
@@ -70,7 +71,7 @@ public interface CustomerSkillMapper {
      */
     List<DaVinfoVO> queryCustomerListBySkillItem(@Param("skillItemId") Long skillItemId,
 									    		@Param("weekIndex") Integer weekIndex,
-									            @Param("endTimeStr") String endTimeStr,
+									            @Param("endTime") Date endTime,
 									    		@Param("start") Integer start, 
 									    		@Param("size") Integer size);
 

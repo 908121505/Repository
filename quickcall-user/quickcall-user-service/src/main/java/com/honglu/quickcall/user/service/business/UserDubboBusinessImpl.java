@@ -119,6 +119,8 @@ public class UserDubboBusinessImpl implements UserDubboBusiness {
 	private DeviceWhitelistService deviceWhitelistService;
 	@Autowired
 	private AttentionService attentionService;
+	@Autowired
+	private ScoreRankService scoreRankService;
 
 	@Override
 	public CommonResponse excute(AbstractRequest request) {
@@ -319,6 +321,10 @@ public class UserDubboBusinessImpl implements UserDubboBusiness {
 				response = userMessageService.saveCustomerMessageSetting((CustomerMsgSettingRequest) request);
 			case UserFunctionType.CANCEL_ATTENTION:
 				response = attentionService.cancelAttention((AttentionCancelRequest) request);
+				break;
+			/******** 初始化大V评分排名数据 *********/
+			case UserFunctionType.INIT_BIGV_SCORE_RANK_DATA:
+				response = scoreRankService.initBigvScoreRankData();
 				break;
 			/*case UserFunctionType.queryDeviceWhitelist:
 				response = deviceWhitelistService.queryDeviceWhitelist((QueryDeviceWhitelistReq) request);
