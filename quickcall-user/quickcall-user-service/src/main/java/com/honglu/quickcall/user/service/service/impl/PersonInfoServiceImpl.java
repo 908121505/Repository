@@ -69,6 +69,8 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 	private IAccountOrderService accountOrderService;
 	@Autowired
 	private AppShareConfigMapper appShareConfigMapper;
+	@Autowired
+	private BigvSkillScoreMapper bigvSkillScoreMapper;
 
 	/**
 	 * 中文、英文、数字、下划线校验 4-24位
@@ -786,10 +788,10 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 				customerSkill.setCustomerLabel(customerSkillMapper
 						.selectCustomerSkillHotLabel(request.getViewCustomerId(), bean.getSkillItemId()));
 
-				// 声量 ADUAN -- 一期前段不显示
-				customerSkill.setSkillVolume(250);
+				// 查询技能声量
+				customerSkill.setSkillVolume(bigvSkillScoreMapper.selectBigvScoreValue(bean.getCustomerSkillId()));
 
-				// 判断是否可下单 ADUAN -- 待做
+				// 判断是否可下单
 				if (Objects.equals(request.getLoginCustomerId(), request.getViewCustomerId())) {
 					customerSkill.setCanOrder(0); // 自己看自己的个人主页时 -- 直接返回 0=不可接单
 				} else {

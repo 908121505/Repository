@@ -47,12 +47,12 @@ public class QueryBigvListServiceImpl implements QueryBigvListService {
         List<AppHomeBigvListVO> resultList = new LinkedList<>();
 
         Integer weekIndex = DateUtils.getDayOfWeek();
-        String endTimeStr = DateUtils.formatDateHHSS(new Date()).replaceAll(":", "");
+        Date endTime = new Date();
 
         /****** 查询首页6帧资源位数据*****/
         AppHomeBigvListVO recomedBigv = new AppHomeBigvListVO();
         recomedBigv.setSkillItemName("推荐列表");
-        List<AppHomeBigvListVO.BigvInfoVO> bigvList = this.queryConfigBigvList(recomedBigv, weekIndex, endTimeStr);
+        List<AppHomeBigvListVO.BigvInfoVO> bigvList = this.queryConfigBigvList(recomedBigv, weekIndex, endTime);
         if (bigvList != null && bigvList.size() > 0) {
             recomedBigv.setDaVinfoList(bigvList);
             resultList.add(recomedBigv);
@@ -66,7 +66,7 @@ public class QueryBigvListServiceImpl implements QueryBigvListService {
             AppHomeBigvListVO bigvListVO = new AppHomeBigvListVO();
             bigvListVO.setSkillItemName(skillItem.getSkillItemName());
             bigvListVO.setSkillItemId(skillItem.getId());
-            bigvListVO = this.querySkillItemTypeBigvList(bigvListVO, weekIndex, endTimeStr);
+            bigvListVO = this.querySkillItemTypeBigvList(bigvListVO, weekIndex, endTime);
             if (bigvListVO == null) {
                 LOGGER.warn("首页查询数据 - 【{}】技能未查询到有效大V数据", skillItem.getSkillItemName());
                 continue;
@@ -85,7 +85,7 @@ public class QueryBigvListServiceImpl implements QueryBigvListService {
      * @param endTimeStr
      * @return
      */
-    private List<AppHomeBigvListVO.BigvInfoVO> queryConfigBigvList(AppHomeBigvListVO recomedBigv, Integer weekIndex, String endTimeStr) {
+    private List<AppHomeBigvListVO.BigvInfoVO> queryConfigBigvList(AppHomeBigvListVO recomedBigv, Integer weekIndex, Date endTimeStr) {
         // 查询出资源位的配置信息
         List<ResourceConfig> configs = resourceConfigMapper.selectAllResourceConfig();
         if (configs.isEmpty()) {
@@ -194,7 +194,7 @@ public class QueryBigvListServiceImpl implements QueryBigvListService {
      * @param endTimeStr
      * @return
      */
-    private AppHomeBigvListVO querySkillItemTypeBigvList(AppHomeBigvListVO bigvListVO, Integer weekIndex, String endTimeStr) {
+    private AppHomeBigvListVO querySkillItemTypeBigvList(AppHomeBigvListVO bigvListVO, Integer weekIndex, Date endTimeStr) {
         // 根据大V排名查询到数据
         List<CustomerSkill> customerSkillList = resourceConfigMapper.selectRankBigvListBySkillItemId(bigvListVO.getSkillItemId(), weekIndex, endTimeStr);
         if (customerSkillList.isEmpty()) {
@@ -224,7 +224,7 @@ public class QueryBigvListServiceImpl implements QueryBigvListService {
      * @param skillOrdered  技能是否被【下单】暂用：0=否，其他=不限制
      * @return
      */
-    private CustomerSkill getRandomBigv(Integer configNum, List<Long> configSkills, List<Long> exCustomerIds, Integer weekIndex, String endTimeStr, Integer skillOrdered) {
+    private CustomerSkill getRandomBigv(Integer configNum, List<Long> configSkills, List<Long> exCustomerIds, Integer weekIndex, Date endTimeStr, Integer skillOrdered) {
         // 查询满足条件的大V数量 -- 用于统计百分比 -- 条件：可接单 && 未被下单
         int bigvNum = resourceConfigMapper.countEnabledBigvBySkillRank(configSkills, exCustomerIds, weekIndex, endTimeStr, skillOrdered);
         if (bigvNum == 0) {
@@ -309,8 +309,7 @@ public class QueryBigvListServiceImpl implements QueryBigvListService {
             start = pageIndex * pageSize;
         }
         Integer weekIndex = DateUtils.getDayOfWeek();
-        String endTimeStr = DateUtils.formatDateHHSS(new Date()).replaceAll(":", "");
-        List<DaVinfoVO> daVinfoVOList = customerSkillMapper.queryCustomerListBySkillItem(skillItemId, weekIndex, endTimeStr, start, pageSize);
+        List<DaVinfoVO> daVinfoVOList = customerSkillMapper.queryCustomerListBySkillItem(skillItemId, weekIndex, new Date(), start, pageSize);
         for (DaVinfoVO daVinfoVO : daVinfoVOList) {
             // 查询第一张形象照 性别(0=女,1=男)
             List<String> appearanceList = customerAppearanceMapper.queryCustomerAppearance(daVinfoVO.getCustomerId(), 0, 1);
@@ -327,10 +326,4 @@ public class QueryBigvListServiceImpl implements QueryBigvListService {
         return ResultUtils.resultSuccess(daVinfoVOList);
     }
 
-    @Override
-    public CommonResponse initBigvScoreRankData() {
-
-
-        return null;
-    }
 }

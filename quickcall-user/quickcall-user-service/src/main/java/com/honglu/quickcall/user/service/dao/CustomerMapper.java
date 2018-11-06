@@ -99,4 +99,10 @@ public interface CustomerMapper {
 	 */
 	Customer queryCustomerByCustomerId(@Param("customerId") Long customerId);
 
+	/**
+	 * 判断客户是否为声优
+	 * @param customerId
+	 * @return 1=是；0=否
+	 */
+	int judgeCustomerIsBigv(@Param("customerId") Long customerId);
 }

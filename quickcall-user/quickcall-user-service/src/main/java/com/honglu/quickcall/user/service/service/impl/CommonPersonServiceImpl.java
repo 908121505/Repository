@@ -1,21 +1,5 @@
 package com.honglu.quickcall.user.service.service.impl;
 
-import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
-import java.util.Random;
-import java.util.ResourceBundle;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.alibaba.fastjson.JSON;
 import com.honglu.quickcall.common.api.code.BizCode;
 import com.honglu.quickcall.common.api.exception.BizException;
@@ -36,28 +20,28 @@ import com.honglu.quickcall.producer.facade.business.DataDuriedPointBusiness;
 import com.honglu.quickcall.producer.facade.req.databury.DataBuriedPointGetCodeReq;
 import com.honglu.quickcall.producer.facade.req.databury.DataBuriedPointLoginReq;
 import com.honglu.quickcall.producer.facade.req.databury.DataBuriedPointRegistReq;
+import com.honglu.quickcall.producer.facade.req.databury.UserBean;
 import com.honglu.quickcall.user.facade.code.UserBizReturnCode;
 import com.honglu.quickcall.user.facade.constants.UserBizConstants;
 import com.honglu.quickcall.user.facade.entity.Customer;
 import com.honglu.quickcall.user.facade.entity.SensitivityWord;
 import com.honglu.quickcall.user.facade.enums.CustomerCusStateEnum;
-import com.honglu.quickcall.user.facade.exchange.request.AddSystemUserRequest;
-import com.honglu.quickcall.user.facade.exchange.request.BindVXorQQRequest;
-import com.honglu.quickcall.user.facade.exchange.request.GetSmsCodeRequest;
-import com.honglu.quickcall.user.facade.exchange.request.IsPhoneExistsRequest;
-import com.honglu.quickcall.user.facade.exchange.request.LoginOutRequest;
-import com.honglu.quickcall.user.facade.exchange.request.SaveCertificationRequest;
-import com.honglu.quickcall.user.facade.exchange.request.SaveDvVoiceRequest;
-import com.honglu.quickcall.user.facade.exchange.request.SetHeardUrlRequest;
-import com.honglu.quickcall.user.facade.exchange.request.SetPwdRequest;
-import com.honglu.quickcall.user.facade.exchange.request.UserIdCardInfoRequest;
-import com.honglu.quickcall.user.facade.exchange.request.UserLoginRequest;
-import com.honglu.quickcall.user.facade.exchange.request.UserRegisterRequest;
+import com.honglu.quickcall.user.facade.exchange.request.*;
 import com.honglu.quickcall.user.service.dao.BigvPhoneMapper;
 import com.honglu.quickcall.user.service.dao.CustomerMapper;
 import com.honglu.quickcall.user.service.dao.SensitivityWordMapper;
 import com.honglu.quickcall.user.service.integration.AccountDubboIntegrationService;
 import com.honglu.quickcall.user.service.service.CommonPersonService;
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.text.SimpleDateFormat;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by len.song on 2017-12-07.
@@ -203,6 +187,7 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 				}
 			}
 		}
+
 		// 账户被封
 		if (isBlock) {
 			throw new BizException(BizCode.ParamError, "因违反平台规则，您的账号被永久限制登陆，如有疑问，请拨打客服电话：400-156-0606进行咨询");
@@ -221,6 +206,17 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 
 		req.setPhoneNumber(customer.getPhone());
 		req.setUser_id(customer.getCustomerId() + "");
+		UserBean userBean = new UserBean();
+		userBean.setNick(customer.getNickName());
+		userBean.setRegistDate(customer.getCreateTime());
+		userBean.setRegistSource(customer.getAppChannelName());
+		userBean.setGender(customer.getSex() == 0 ? "女" : "男");
+		userBean.setPhoneNumber(customer.getPhone());
+		userBean.setYearOfBirth(customer.getBirthday());
+		req.setUserBean(userBean);
+
+		logger.info("===============开始登陆数据埋点==============userBean:"+req.getUserBean());
+		dataDuriedPointBusiness.buryUserIdLoginResultData(req);
 		return ResultUtils.resultSuccess(customer);
 	}
 
@@ -398,13 +394,16 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 			}
 			customer.setTokenCode(rongyunToken);
 		}
-
+		UserBean userBean = new UserBean();
 		/**
 		 * 声优白名单
 		 */
 		if (bigvPhoneMapper.queryOneByPhone(request.getTel()) != null) {
 			customer.setIdentityStatus(2);
 			customer.setvStatus(2);
+			userBean.setUserIdentity("声优");
+		} else {
+			userBean.setUserIdentity("普通用户");
 		}
 
 		int row = customerMapper.insertSelective(customer);
@@ -417,6 +416,12 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 		req.setRegistDate(new Date());
 		req.setRegistSource(request.getAppChannelName());
 		req.setUser_id(customer.getCustomerId() + "");
+		userBean.setNick(customer.getNickName());
+		userBean.setRegistDate(new Date());
+		userBean.setRegistSource(request.getAppChannelName());
+		userBean.setPhoneNumber(request.getTel());
+		req.setUserBean(userBean);
+
 		dataDuriedPointBusiness.burySignUpResultData(req);
 		// 创建账户
 		accountDubboIntegrationService.createAccount(customer.getCustomerId());

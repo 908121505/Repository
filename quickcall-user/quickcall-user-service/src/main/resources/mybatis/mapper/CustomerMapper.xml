@@ -659,4 +659,10 @@
   customer
   where customer_id = #{customerId}
   </select>
+
+  <!-- 判断客户是否为声优 -->
+  <select id="judgeCustomerIsBigv" resultType="int">
+    SELECT COUNT(1) FROM `customer`
+    WHERE customer_id=#{customerId} AND v_status=2;
+  </select>
 </mapper>

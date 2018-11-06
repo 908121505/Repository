@@ -18,27 +18,27 @@ public class DataDuriedPointBusinessImpl implements DataDuriedPointBusiness {
 
     @Override
     public void buryGetCodeData(DataBuriedPointGetCodeReq req) {
-        dataDuriedPointService.buryGetCodeData(req);
+        //dataDuriedPointService.buryGetCodeData(req);
     }
 
     @Override
     public void burySignUpResultData(DataBuriedPointRegistReq req) {
-        dataDuriedPointService.burySignUpResultData(req);
+        //dataDuriedPointService.burySignUpResultData(req);
     }
 
     @Override
     public void buryUserIdLoginResultData(DataBuriedPointLoginReq req) {
-        dataDuriedPointService.buryUserIdLoginResultData(req);
+        //dataDuriedPointService.buryUserIdLoginResultData(req);
     }
 
     @Override
     public void buryOrderButtonData(DataBuriedPointOrderButtonReq req) {
-        dataDuriedPointService.buryOrderButtonData(req);
+        //dataDuriedPointService.buryOrderButtonData(req);
     }
 
     @Override
     public void burySubmitOrderData(DataBuriedPointSubmitOrderReq req) {
-        dataDuriedPointService.burySubmitOrderData(req);
+        //dataDuriedPointService.burySubmitOrderData(req);
     }
 
 }
