@@ -135,7 +135,7 @@
 		WHERE
 			order_status = #{queryStatus}
 		AND expect_end_time <![CDATA[ < ]]> #{endTime}
-		AND create_time <![CDATA[ > ]]>  #{queryEndTime}
+		<!-- AND expect_end_time <![CDATA[ > ]]>  #{queryEndTime} -->
   </select>
   
   <!-- ///////////////////////////////////////////////////////////////////-->
