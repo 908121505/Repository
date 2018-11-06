@@ -64,7 +64,7 @@ public class BuryiedPointUtil {
             }
 
             //设置用户Id
-            String userId = "vc_user_id";
+            String userId = "";
             boolean isReal = true;
             // 虚拟userId
             String virUserId = (String)data.get("virUserId");
