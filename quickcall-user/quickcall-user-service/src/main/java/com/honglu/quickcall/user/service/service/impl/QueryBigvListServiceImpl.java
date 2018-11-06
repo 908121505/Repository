@@ -196,7 +196,7 @@ public class QueryBigvListServiceImpl implements QueryBigvListService {
      */
     private AppHomeBigvListVO querySkillItemTypeBigvList(AppHomeBigvListVO bigvListVO, Integer weekIndex, Date endTimeStr) {
         // 根据大V排名查询到数据
-        List<CustomerSkill> customerSkillList = resourceConfigMapper.selectRankBigvListBySkillItemId(bigvListVO.getSkillItemId(), weekIndex, endTimeStr);
+        List<CustomerSkill> customerSkillList = resourceConfigMapper.selectRankBigvListBySkillItemId(bigvListVO.getSkillItemId(), weekIndex, endTimeStr, 0, 4);
         if (customerSkillList.isEmpty()) {
             return null;
         }

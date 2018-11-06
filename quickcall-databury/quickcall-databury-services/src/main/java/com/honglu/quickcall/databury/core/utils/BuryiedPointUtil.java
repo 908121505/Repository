@@ -127,6 +127,8 @@ public class BuryiedPointUtil {
 
         userId = userId+mobile_num;
 
+        logger.info("******************userid唯一标识:"+userId);
+
         if (!StringUtils.isEmpty(mobile_num)) {
             sa.profileSet(userId, isReal, "phoneNumber", mobile_num);
             logger.info("==========user -> phoneNum：" + mobile_num + "==========");
@@ -167,7 +169,6 @@ public class BuryiedPointUtil {
             sa.profileSet(userId, isReal, "registSource", registSource);
             logger.info("==========user -> registSource：" + registSource + "==========");
         }
-
         //==========================一次性设置的属性(结束)=========================
 
 
