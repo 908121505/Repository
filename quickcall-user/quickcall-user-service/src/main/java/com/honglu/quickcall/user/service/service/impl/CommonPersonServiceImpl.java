@@ -27,6 +27,7 @@ import com.honglu.quickcall.user.facade.entity.Customer;
 import com.honglu.quickcall.user.facade.entity.SensitivityWord;
 import com.honglu.quickcall.user.facade.enums.CustomerCusStateEnum;
 import com.honglu.quickcall.user.facade.exchange.request.*;
+import com.honglu.quickcall.user.facade.vo.SearchPersonByPhoneVO;
 import com.honglu.quickcall.user.service.dao.BigvPhoneMapper;
 import com.honglu.quickcall.user.service.dao.CustomerMapper;
 import com.honglu.quickcall.user.service.dao.SensitivityWordMapper;
@@ -732,6 +733,17 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 		int row = customerMapper.insertSelective(customer);
 		return ResultUtils.resultSuccess();
 
+	}
+	
+	@Override
+	public CommonResponse searchPersonByPhone(SearchPersonByPhoneRequest request) {
+		Long phone = request.getPhone();
+		List<SearchPersonByPhoneVO> list = customerMapper.queryPersonByPhone(phone);
+		SearchPersonByPhoneVO customer = new SearchPersonByPhoneVO();
+		if(list.size() > 0){
+			customer = list.get(0);
+		}
+		return ResultUtils.resultSuccess(customer);
 	}
 
 }

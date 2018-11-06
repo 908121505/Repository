@@ -8,6 +8,7 @@ import com.honglu.quickcall.user.facade.exchange.request.IsPhoneExistsRequest;
 import com.honglu.quickcall.user.facade.exchange.request.LoginOutRequest;
 import com.honglu.quickcall.user.facade.exchange.request.SaveCertificationRequest;
 import com.honglu.quickcall.user.facade.exchange.request.SaveDvVoiceRequest;
+import com.honglu.quickcall.user.facade.exchange.request.SearchPersonByPhoneRequest;
 import com.honglu.quickcall.user.facade.exchange.request.SetHeardUrlRequest;
 import com.honglu.quickcall.user.facade.exchange.request.SetPwdRequest;
 import com.honglu.quickcall.user.facade.exchange.request.UserIdCardInfoRequest;
@@ -113,5 +114,12 @@ public interface CommonPersonService {
 	 * @return
 	 */
 	CommonResponse addSystemUser(AddSystemUserRequest request);
+	
+	/**
+     * 根据手机号，查询用户信息
+     * @param request
+     * @return
+     */
+	CommonResponse searchPersonByPhone(SearchPersonByPhoneRequest request);
 
 }
