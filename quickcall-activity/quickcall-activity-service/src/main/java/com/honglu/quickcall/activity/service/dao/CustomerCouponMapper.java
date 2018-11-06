@@ -67,13 +67,13 @@ public interface CustomerCouponMapper {
      * 查询券
      * @return
      */
-    String getCouponIdBySkillItemId(@Param("list") List<String> statusList);
+    //String getCouponIdBySkillItemId(@Param("list") List<String> statusList);
 
     /**
      * 查询是否展示提示
      * @return
      */
-    int getShowTip(@Param("couponId")String couponId ,@Param("customerId")String customerId);
+    //int getShowTip(@Param("couponId")String couponId ,@Param("customerId")String customerId);
 
 
     CustomerCoupon queryCustomerCouponByCustomerIdAndOrderId(@Param("customerId") Long customerId, @Param("orderId") Long orderId);
@@ -86,5 +86,23 @@ public interface CustomerCouponMapper {
      * @return
      */
     Map<String,String> selectActivityNameAndCouponName(@Param("couponId")Long couponId);
+
+    /**
+     * 判断现在时间是否有活动
+     * @return
+     */
+    int getActivityNum();
+
+    /**
+     * 根据技能ID查询券ID
+     * @return
+     */
+    String getCouponIdBySkillItemId(String skillItemId);
+
+    /**
+     * 根据客户ID和券ID查询用户券关系数量
+     * @return Map<String,String> map  Long couponId,Long customerId
+     */
+    int getCountByCustomerIdAndCouponId(Map<String,String> map);
 
 }

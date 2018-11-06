@@ -28,6 +28,7 @@ import com.honglu.quickcall.task.dao.AccountMapper;
 import com.honglu.quickcall.task.dao.BigvScoreMapper;
 import com.honglu.quickcall.task.dao.BigvSkillScoreMapper;
 import com.honglu.quickcall.task.dao.CustomerMapper;
+import com.honglu.quickcall.task.dao.TaskCustomerCouponMapper;
 import com.honglu.quickcall.task.dao.TaskOrderMapper;
 import com.honglu.quickcall.task.dao.TradeDetailMapper;
 import com.honglu.quickcall.task.entity.TaskOrder;
@@ -60,6 +61,9 @@ public class OrderUpdateJob {
     private BigvSkillScoreMapper bigvSkillScoreMapper ;
     @Autowired
     private BigvScoreMapper bigvScoreMapper ;
+    
+    @Autowired
+    private TaskCustomerCouponMapper   taskCustomerCouponMapper ;
     
     /**默认超时小时数      扣减12小时*/
     private final static  Integer   END_OVER_TIME_HOUR = -12;
@@ -274,10 +278,24 @@ public class OrderUpdateJob {
     	
     	if(!CollectionUtils.isEmpty(orderList)){
     		List<Long>  orderIdList =  new ArrayList<Long>();
+    		List<Long>  orderIdCouponList =  new ArrayList<Long>();
+    		
     		for (TaskOrder order : orderList) {
     			orderIdList.add(order.getOrderId());
+    			Integer  couponFlag = order.getCouponFlag();
+    			if(couponFlag != null  && OrderSkillConstants.ORDER_COUPON_FLAG_USE == couponFlag){
+    				orderIdCouponList.add(order.getOrderId());
+    			}
     		}
-    		taskOrderMapper.updateOrderStatus(updateOrderStatus, orderIdList,new Date());
+    		taskOrderMapper.updateOrderStatus(updateOrderStatus, orderIdList,new Date(),OrderSkillConstants.ORDER_COUPON_FLAG_CANCEL);
+    		//用户所得券返回给用户
+    		try {
+				taskCustomerCouponMapper.batchUpdateCustomerCoupon(orderIdCouponList, OrderSkillConstants.ORDER_COUPON_FLAG_CANCEL);
+			} catch (Exception e) {
+				LOGGER.error("用户券返还发生异常，异常信息：",e);
+			}
+    		
+    		
     	}
     }
     /**

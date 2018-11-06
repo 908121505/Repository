@@ -20,8 +20,7 @@ public class OrderDaVSkillVO implements  Serializable{
 	private String  nickName;
 	/**主播头像*/
 	private String  headPortraitUrl;
-	/**是否展示活动优惠券提示,0=不展示，1=展示*/
-	private int showTip;
+
 	/**产品ID*/
 	private List<OrderSkillItemVO>  custSkillList;
 	public Long getServiceId() {
@@ -42,8 +41,6 @@ public class OrderDaVSkillVO implements  Serializable{
 	public void setHeadPortraitUrl(String headPortraitUrl) {
 		this.headPortraitUrl = headPortraitUrl;
 	}
-	public int getShowTip() { return showTip; }
-	public void setShowTip(int showTip) { this.showTip = showTip; }
 	public List<OrderSkillItemVO> getCustSkillList() {
 		return custSkillList;
 	}

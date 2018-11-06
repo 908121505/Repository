@@ -56,14 +56,15 @@ public class OrderReceiveOrderListVO implements  Serializable{
 	private Long  customerSkillId;
 	/**技能开关：1=开启,0=关闭*/
 	private Integer  switchStatus;
+	/**券标识*/
+	private Integer  couponFlag;
 	
-	
-	
-	
-	
-	
-	
-	
+	public Integer getCouponFlag() {
+		return couponFlag;
+	}
+	public void setCouponFlag(Integer couponFlag) {
+		this.couponFlag = couponFlag;
+	}
 	public Integer getSwitchStatus() {
 		return switchStatus;
 	}

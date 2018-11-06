@@ -21,11 +21,11 @@ public interface CouponDubboBusiness {
 
 	/**
 	 * 查询是否显示活动优惠券提示
-	 * @param skillItemIdList
+	 * @param skillItemId
 	 * @param customerId
 	 * @return
 	 */
-	int getShowTipForActivity(List<String> skillItemIdList,String customerId);
+	int getShowTipForActivity(String skillItemId,String customerId);
 
 
 
