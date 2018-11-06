@@ -416,10 +416,13 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 		req.setRegistDate(new Date());
 		req.setRegistSource(request.getAppChannelName());
 		req.setUser_id(customer.getCustomerId() + "");
+
+
 		userBean.setNick(customer.getNickName());
 		userBean.setRegistDate(new Date());
 		userBean.setRegistSource(request.getAppChannelName());
 		userBean.setPhoneNumber(request.getTel());
+
 		req.setUserBean(userBean);
 
 		dataDuriedPointBusiness.burySignUpResultData(req);

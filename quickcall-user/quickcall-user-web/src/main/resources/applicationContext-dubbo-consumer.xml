@@ -13,7 +13,4 @@
     <dubbo:reference group="userCenter" id="userDubboBusiness"
                      interface="com.honglu.quickcall.user.facade.business.UserDubboBusiness" check="false" version="0.0.1"/>
 
-    <!-- 神策埋点服务 -->
-    <dubbo:reference group="buryDataCenter" id="dataDuriedPointBusiness" interface="com.honglu.quickcall.producer.facade.business.DataDuriedPointBusiness" check="false" version="1.0.0"/>
-
 </beans>
