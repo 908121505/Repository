@@ -34,7 +34,7 @@ public class BlacklistController {
      * @return
      */
     @PostMapping(value = "/queryBlacklist")
-    public WebResponseModel queryBlacklist(@RequestBody QueryBlacklistReq params) {
+    public WebResponseModel queryBlacklist(QueryBlacklistReq params) {
         logger.info("查询黑名单 请求参数：" + params.toString());
         WebResponseModel response = userCenterService.execute(params);
         return response;
@@ -47,7 +47,7 @@ public class BlacklistController {
      * @return
      */
     @PostMapping(value = "/removeBlacklist")
-    public WebResponseModel removeBlacklist(@RequestBody RemoveBlacklistReq params) {
+    public WebResponseModel removeBlacklist(RemoveBlacklistReq params) {
         logger.info("删除黑名单 请求参数：" + params.toString());
         WebResponseModel response = userCenterService.execute(params);
         return response;
@@ -59,7 +59,7 @@ public class BlacklistController {
      * @return
      */
     @PostMapping(value = "/saveBlacklist")
-    public WebResponseModel saveBlacklist(@RequestBody SaveBlacklistReq params) {
+    public WebResponseModel saveBlacklist(SaveBlacklistReq params) {
         logger.info("添加黑名单 请求参数：" + params.toString());
         WebResponseModel response = userCenterService.execute(params);
         return response;

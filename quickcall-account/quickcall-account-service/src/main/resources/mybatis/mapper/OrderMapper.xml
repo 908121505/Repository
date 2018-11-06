@@ -720,7 +720,6 @@
 		AND order_status IN 
 		<foreach collection="list"  item="orderStatus"  open="("  close=")"  separator=","  >
 		#{orderStatus}
-		
 		</foreach>
   </select>
   <!-- 查询客户信息 -->

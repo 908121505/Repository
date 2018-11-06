@@ -4,6 +4,8 @@ import com.honglu.quickcall.common.api.exchange.WebResponseModel;
 import com.honglu.quickcall.user.facade.code.UserBizReturnCode;
 import com.honglu.quickcall.user.facade.exchange.request.BookingMessageQueryRequest;
 import com.honglu.quickcall.user.facade.exchange.request.BookingMessageSaveRequest;
+import com.honglu.quickcall.user.facade.exchange.request.CustomerMessageSettingQueryRequest;
+import com.honglu.quickcall.user.facade.exchange.request.CustomerMsgSettingRequest;
 import com.honglu.quickcall.user.facade.exchange.request.UserUnreadMessageNumRequest;
 import com.honglu.quickcall.user.web.service.UserCenterService;
 import org.apache.commons.lang3.StringUtils;
@@ -86,4 +88,24 @@ public class UserMessageController {
         }
         return userCenterService.execute(request);
     }
+    
+    @RequestMapping(value = "/getCustomerMessageSetting", method = RequestMethod.POST)
+    @ResponseBody
+    public WebResponseModel customerMessageSetting(CustomerMessageSettingQueryRequest request) {
+        return userCenterService.execute(request);
+    }
+    
+    @RequestMapping(value = "/saveCustomerMessageSetting", method = RequestMethod.POST)
+    @ResponseBody
+    public WebResponseModel saveCustomerMessageSetting(CustomerMsgSettingRequest request) {
+        if (StringUtils.isBlank(String.valueOf(request.getCustomerId()))) {
+            WebResponseModel response = new WebResponseModel();
+            response.setCode(UserBizReturnCode.paramError.code());
+            response.setMsg(UserBizReturnCode.paramError.desc());
+            return response;
+        }
+        return userCenterService.execute(request);
+    }
+    
+    
 }

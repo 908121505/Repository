@@ -18,7 +18,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.UUID;
 
 /**
  * Description: 黑名单管理
@@ -27,7 +26,6 @@ import java.util.UUID;
  * @date 2018/10/21 19:19
  */
 @Service
-@Transactional
 public class BlacklistServiceimpl implements BlacklistService {
 
     private static final Logger logger = LoggerFactory.getLogger(PersonInfoServiceImpl.class);

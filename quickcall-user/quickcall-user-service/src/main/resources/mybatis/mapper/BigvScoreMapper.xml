@@ -14,64 +14,6 @@
     <result column="modify_man" property="modifyMan" jdbcType="VARCHAR" />
     <result column="remark" property="remark" jdbcType="VARCHAR" />
   </resultMap>
-  <sql id="Example_Where_Clause" >
-    <where >
-      <foreach collection="oredCriteria" item="criteria" separator="or" >
-        <if test="criteria.valid" >
-          <trim prefix="(" suffix=")" prefixOverrides="and" >
-            <foreach collection="criteria.criteria" item="criterion" >
-              <choose >
-                <when test="criterion.noValue" >
-                  and ${criterion.condition}
-                </when>
-                <when test="criterion.singleValue" >
-                  and ${criterion.condition} #{criterion.value}
-                </when>
-                <when test="criterion.betweenValue" >
-                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
-                </when>
-                <when test="criterion.listValue" >
-                  and ${criterion.condition}
-                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
-                    #{listItem}
-                  </foreach>
-                </when>
-              </choose>
-            </foreach>
-          </trim>
-        </if>
-      </foreach>
-    </where>
-  </sql>
-  <sql id="Update_By_Example_Where_Clause" >
-    <where >
-      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
-        <if test="criteria.valid" >
-          <trim prefix="(" suffix=")" prefixOverrides="and" >
-            <foreach collection="criteria.criteria" item="criterion" >
-              <choose >
-                <when test="criterion.noValue" >
-                  and ${criterion.condition}
-                </when>
-                <when test="criterion.singleValue" >
-                  and ${criterion.condition} #{criterion.value}
-                </when>
-                <when test="criterion.betweenValue" >
-                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
-                </when>
-                <when test="criterion.listValue" >
-                  and ${criterion.condition}
-                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
-                    #{listItem}
-                  </foreach>
-                </when>
-              </choose>
-            </foreach>
-          </trim>
-        </if>
-      </foreach>
-    </where>
-  </sql>
   <sql id="Base_Column_List" >
     id, customer_id, order_total, score_total, online_status, cust_status,
     create_time, modify_time, create_man, modify_man, remark
@@ -81,15 +23,78 @@
       score_total, create_man, modify_man, remark
       )
     values (#{id,jdbcType=BIGINT}, #{customerId,jdbcType=BIGINT}, #{orderTotal,jdbcType=INTEGER},
-      #{scoreTotal,jdbcType=DECIMAL}, #{createMan,jdbcType=VARCHAR}, #{modifyMan,jdbcType=VARCHAR},
-      #{remark,jdbcType=VARCHAR}
+      #{scoreTotal,jdbcType=DECIMAL}, NOW(), #{modifyMan,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}
       )
   </insert>
 
   <!-- 更新大V评分 -->
   <update id="updateBigvScore">
-      UPDATE bigv_score SET order_total = order_total + 1, score_total = score_total + #{valueScore}
+      UPDATE bigv_score SET order_total = order_total + #{addOrderTotal}, score_total = score_total + #{valueScore}
       WHERE customer_id = #{customerId}
   </update>
 
+  <!-- 更新大V评分 -->
+  <update id="updateBigvScore2">
+    UPDATE bigv_score
+    SET order_total = IFNULL((
+        SELECT
+            SUM(t2.order_total)
+        FROM
+            bigv_skill_score t2
+        WHERE
+            t2.customer_id = bigv_score.customer_id
+    ),0),
+     score_total = IFNULL((
+        SELECT
+            SUM(t3.score_total)
+        FROM
+            bigv_skill_score t3
+        WHERE
+            t3.customer_id = bigv_score.customer_id
+    ),0)
+  </update>
+
+  <!-- 根据客户ID删除数据 -->
+  <delete id="deleteDataByCustomerId">
+    DELETE FROM bigv_score WHERE customer_id = #{customerId}
+  </delete>
+
+  <!-- 删除不是大V的数据 -->
+  <delete id="deleteNotBigvData">
+    DELETE FROM bigv_score WHERE customer_id NOT IN (
+	  SELECT customer_id FROM customer WHERE v_status=2
+    )
+  </delete>
+
+  <!-- 根据客户技能ID查询所有已完成的订单 -->
+  <select id="selectAllDoneOrderByCustomerSkillId" resultType="com.honglu.quickcall.account.facade.entity.Order">
+    SELECT
+      t.service_id as serviceId,
+      t.customer_skill_id as customerSkillId,
+      t.skill_item_id as skillItemId,
+      t.order_num as orderNum,
+      t.service_price as servicePrice,
+      t.customer_is_evaluate as customerIsEvaluate,
+      t.evaluate_start as evaluateStart,
+      (
+        SELECT COUNT(t2.order_id) FROM orders t2
+        WHERE t2.service_id = t.service_id AND t2.skill_item_id = t.skill_item_id
+        AND t2.order_status IN (30, 32, 34, 36, 38, 40) AND t2.order_id <![CDATA[  < ]]> t.order_id
+      ) AS paymentType <!-- 订单累计数，暂时用字段 paymentType 接收 -->
+    FROM `orders` t
+    WHERE 1 = 1
+      <if test="customerSkillId != null">
+        AND t.customer_skill_id = #{customerSkillId}
+      </if>
+    AND	t.order_status IN (30, 32, 34, 36, 38, 40)
+    ORDER BY t.service_id ASC, t.skill_item_id ASC, t.create_time ASC
+  </select>
+
+  <!-- 查询bigv_score表需要补的大V数据 -->
+  <select id="selectNeedInsertBigvData" resultType="java.lang.Long">
+    SELECT customer_id FROM customer WHERE v_status = 2
+    AND customer_id NOT IN(
+        SELECT customer_id FROM bigv_score
+    )
+  </select>
 </mapper>

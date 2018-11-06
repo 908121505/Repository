@@ -50,7 +50,7 @@ public interface OrderSkillConstants {
 	public  static final  String  IM_MSG_CONTENT_CANCEL_ORDER_TO_DV = "用户取消订单，赶快去了解原因吧~";
 	public  static final  String  IM_MSG_CONTENT_CANCEL_ORDER_TO_CUST = "您已取消订单，音符已退还至您的账户";
 //	public  static final  String  IM_MSG_CONTENT_USER_CONFIRM_FINISH= "订单完成啦";
-//	public  static final  String  IM_MSG_CONTENT_USER_CONFIRM_START_SERVICE = "用户同意开始服务啦";
+	public  static final  String  IM_MSG_CONTENT_USER_CONFIRM_START_SERVICE_TO_DAV = "用户已同意立即服务，请联系用户开始服务吧~";
 	
 	public  static final  String  IM_MSG_CONTENT_DAV_REFUSE_TO_CUST = "对方已接单，快去找ta沟通开始时间吧~";
 	public  static final  String  IM_MSG_CONTENT_DAV_REFUSE_TO_DV = "您已接单，快去联系用户协商开始时间吧~";
@@ -230,6 +230,8 @@ public interface OrderSkillConstants {
 	public static final Integer  ORDER_STATUS_GOING_USER_ACCEPCT = 26 ;
 	/**订单状态28.进行中（大V发起完成服务）*/
 	public static final Integer  ORDER_STATUS_GOING_DAV_APPAY_FINISH = 28 ;
+	/**订单状态29.已取消（强制取消）*/
+	public static final Integer  ORDER_STATUS_CANCEL_FORCE = 29 ;
 	/**订单状态30.已完成（用户同意对方）*/
 	public static final Integer  ORDER_STATUS_FINISHED_USER_ACCEPCT = 30 ;
 	/**订单状态32.已完成（大V发起已完成服务，12小时客户不响应自动完成）*/
@@ -242,6 +244,8 @@ public interface OrderSkillConstants {
 	public static final Integer  ORDER_STATUS_FINISH_BOTH_NO_OPERATE = 38 ;
 	/**订单状态40.已完成（用户评价完成）*/
 	public static final Integer  ORDER_STATUS_FINISHED_AND_PINGJIA = 40 ;
+	/**订单状态42.已完成（强制完成）*/
+	public static final Integer  ORDER_STATUS_FINISHED_FORCE = 42 ;
 	
 	
 	

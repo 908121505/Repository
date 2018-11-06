@@ -47,6 +47,14 @@
             <groupId>com.honglu.quickcall</groupId>
             <artifactId>quickcall-common-third</artifactId>
         </dependency>
+        
+        <!-- 神策埋点 -->
+        <dependency>
+        	    <groupId>com.honglu.quickcall</groupId>
+    <artifactId>quickcall-producer-facade</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+        </dependency>
+        
 
 
         <!-- spring -->

@@ -460,7 +460,7 @@
             csc.skill_voice_time as voiceTime,
             si.skill_item_name as skillItemName, 
             si.back_color as backColor, 
-            si.home_black_color as skillHomeBackColor, 
+            si.home_black_color as skillBackColor, 
             si.font_color as skillFontColor,
             c.nick_name as nickName, 
             c.sex as sex, 
@@ -468,14 +468,15 @@
         FROM bigv_skill_score bss
         INNER JOIN customer c ON c.customer_id = bss.customer_id AND c.cust_state = 2 AND c.cust_status = 1 AND c.v_status = 2
         INNER JOIN skill_item si ON si.id = bss.skill_item_id AND si.skill_status = 1
-        INNER JOIN customer_skill csk ON csk.customer_skill_id = bss.customer_skill_id AND csk.skill_status = 1
-                    <include refid="SKILL_EXIST_CONDITON"/>
+        INNER JOIN customer_skill csk ON csk.customer_skill_id = bss.customer_skill_id
+                    AND csk.skill_status = 1 AND csk.switch_status = 1 AND csk.receive_status =1
+                    AND csk.appoint_end_time <![CDATA[  > ]]> #{endTime,jdbcType=TIMESTAMP}
         LEFT JOIN customer_skill_certify csc ON csc.certify_id = csk.certify_id
         WHERE 1=1 
-	<if test="skillItemId == '' or skillItemId != null">
-	and bss.skill_item_id = #{skillItemId}
-	</if>
-	ORDER BY (SELECT count(o.order_id) FROM orders o WHERE o.customer_skill_id = bss.customer_skill_id
+        <if test="skillItemId == '' or skillItemId != null">
+		and bss.skill_item_id = #{skillItemId}
+		</if>
+        ORDER BY (SELECT count(o.order_id) FROM orders o WHERE o.customer_skill_id = bss.customer_skill_id
                     AND o.skill_type = (select si.skill_type from skill_item si where si.id = bss.skill_item_id)
                     AND o.order_status IN (10, 18, 26, 28)) ASC
                 , bss.score_total DESC
@@ -492,29 +493,4 @@
       customer_skill_id = #{customerSkillId,jdbcType=BIGINT}
   </select>
   
-  <sql id="SKILL_EXIST_CONDITON">
-        <if test="weekIndex == 1" >
-            AND ( csk.monday = 0  or (csk.monday = 1  and  csk.end_time_str <![CDATA[  > ]]> #{endTimeStr,jdbcType=VARCHAR}) )
-        </if>
-        <if test="weekIndex == 2" >
-            AND ( csk.tuesday = 0  or (csk.tuesday = 1  and  csk.end_time_str <![CDATA[  > ]]> #{endTimeStr,jdbcType=VARCHAR}) )
-        </if>
-        <if test="weekIndex == 3" >
-            AND ( csk.wednesday = 0  or (csk.wednesday = 1  and  csk.end_time_str <![CDATA[  > ]]> #{endTimeStr,jdbcType=VARCHAR}) )
-        </if>
-        <if test="weekIndex == 4" >
-            AND ( csk.thursday = 0  or (csk.thursday = 1  and  csk.end_time_str <![CDATA[  > ]]> #{endTimeStr,jdbcType=VARCHAR}) )
-        </if>
-        <if test="weekIndex == 5" >
-            AND ( csk.friday = 0  or (csk.friday = 1  and  csk.end_time_str <![CDATA[  > ]]> #{endTimeStr,jdbcType=VARCHAR}) )
-        </if>
-        <if test="weekIndex == 6" >
-            AND ( csk.saturday = 0  or (csk.saturday = 1  and  csk.end_time_str <![CDATA[  > ]]> #{endTimeStr,jdbcType=VARCHAR}) )
-        </if>
-        <if test="weekIndex == 7" >
-            AND ( csk.sunday = 0  or (csk.sunday = 1  and  csk.end_time_str <![CDATA[  > ]]> #{endTimeStr,jdbcType=VARCHAR}) )
-        </if>
-
-    </sql>
-
 </mapper>

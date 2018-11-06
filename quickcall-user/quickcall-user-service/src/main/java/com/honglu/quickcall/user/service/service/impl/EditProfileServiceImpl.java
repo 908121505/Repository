@@ -2,8 +2,6 @@ package com.honglu.quickcall.user.service.service.impl;
 
 import java.util.List;
 
-import com.honglu.quickcall.common.api.util.CommonUtil;
-import com.honglu.quickcall.common.api.util.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +11,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.honglu.quickcall.common.api.exception.BizException;
 import com.honglu.quickcall.common.api.exception.RemoteException;
 import com.honglu.quickcall.common.api.exchange.CommonResponse;
+import com.honglu.quickcall.common.api.util.CommonUtil;
+import com.honglu.quickcall.common.api.util.DateUtils;
 import com.honglu.quickcall.common.api.util.JedisUtil;
 import com.honglu.quickcall.common.api.util.RedisKeyConstants;
 import com.honglu.quickcall.common.core.util.Detect;
@@ -119,12 +119,13 @@ public class EditProfileServiceImpl implements EditProfileService {
 		if (result > 0) {
 
 			// 刷新融云用户信息
-			CodeSuccessReslut reslut = RongYunUtil.refreshUser(String.valueOf(customer.getCustomerId()), customer.getNickName(), null);
-			if (reslut.getCode() != 200) {
-				logger.error("刷新融云用户信息失败，用户id为：" + String.valueOf(customer.getCustomerId()) + "失败原因为：" + reslut.getErrorMessage());
-			} else {
-				logger.info("刷新融云用户信息成功！");
-			}
+			CodeSuccessReslut reslut = RongYunUtil.refreshUser(String.valueOf(customer.getCustomerId()),
+					customer.getNickName(), null);
+			/*
+			 * if (reslut.getCode() != 200) { logger.error("刷新融云用户信息失败，用户id为：" +
+			 * String.valueOf(customer.getCustomerId())); } else {
+			 * logger.info("刷新融云用户信息成功！"); }
+			 */
 
 			JedisUtil.set(RedisKeyConstants.USER_CUSTOMER_INFO + params.getCustomerId(),
 					JsonParseUtil.castToJson(customer));
@@ -264,34 +265,33 @@ public class EditProfileServiceImpl implements EditProfileService {
 		}
 
 		// 先判断表中是否存在这个用户头像记录 存在则更新，不存在则插入
-		/*int result = 0;
-		CustomerAppearance customerAppearance = customerAppearanceMapper
-				.selectByCustomerIdAndType(params.getCustomerId(), AppearanceTypeEnum.HEAD_PORTRAIT.getCode());
-		if (null != customerAppearance) {
+		/*
+		 * int result = 0; CustomerAppearance customerAppearance =
+		 * customerAppearanceMapper .selectByCustomerIdAndType(params.getCustomerId(),
+		 * AppearanceTypeEnum.HEAD_PORTRAIT.getCode()); if (null != customerAppearance)
+		 * {
+		 * 
+		 * // customerAppearance.setAuditAppearance(params.getHeadPortraitUrl()); //
+		 * customerAppearance.setAuditStatus(0);
+		 * 
+		 * // 修改头像这一版不用审核 陈鹏 2018-10-24
+		 * customerAppearance.setAppearance(params.getHeadPortraitUrl());
+		 * 
+		 * result = customerAppearanceMapper.updateAppearance(customerAppearance);
+		 * logger.info("修改头像 updateHeadPortrait,更新数量" + result);
+		 * 
+		 * } else { CustomerAppearance customerAppearanceNew = new CustomerAppearance();
+		 * customerAppearanceNew.setId(UUIDUtils.getId()); // 修改头像这一版不用审核 陈鹏 2018-10-24
+		 * customerAppearanceNew.setAppearance(params.getHeadPortraitUrl()); //
+		 * customerAppearanceNew.setAuditAppearance(params.getHeadPortraitUrl());
+		 * customerAppearanceNew.setCustomerId(params.getCustomerId());
+		 * customerAppearanceNew.setType(AppearanceTypeEnum.HEAD_PORTRAIT.getCode());
+		 * result = customerAppearanceMapper.insertAppearance(customerAppearanceNew);
+		 * 
+		 * logger.info("修改头像 updateHeadPortrait,插入数量" + result); }
+		 */
 
-//			 customerAppearance.setAuditAppearance(params.getHeadPortraitUrl());
-//			 customerAppearance.setAuditStatus(0);
-
-			// 修改头像这一版不用审核 陈鹏 2018-10-24
-			customerAppearance.setAppearance(params.getHeadPortraitUrl());
-
-			result = customerAppearanceMapper.updateAppearance(customerAppearance);
-			logger.info("修改头像 updateHeadPortrait,更新数量" + result);
-
-		} else {
-			CustomerAppearance customerAppearanceNew = new CustomerAppearance();
-			customerAppearanceNew.setId(UUIDUtils.getId());
-			// 修改头像这一版不用审核 陈鹏 2018-10-24
-			customerAppearanceNew.setAppearance(params.getHeadPortraitUrl());
-//			customerAppearanceNew.setAuditAppearance(params.getHeadPortraitUrl());
-			customerAppearanceNew.setCustomerId(params.getCustomerId());
-			customerAppearanceNew.setType(AppearanceTypeEnum.HEAD_PORTRAIT.getCode());
-			result = customerAppearanceMapper.insertAppearance(customerAppearanceNew);
-
-			logger.info("修改头像 updateHeadPortrait,插入数量" + result);
-		}*/
-
-		//现在头像不用审核，直接保存到custmoer表 ，以后要审核，则需要审核通过之后更新到custmoer表
+		// 现在头像不用审核，直接保存到custmoer表 ，以后要审核，则需要审核通过之后更新到custmoer表
 		customer.setHeadPortraitUrl(params.getHeadPortraitUrl());
 		int updateCustomerResult = customerMapper.updateByPrimaryKeySelective(customer);
 		logger.info("修改头像 updateHeadPortrait,更新数量" + updateCustomerResult);
@@ -299,12 +299,16 @@ public class EditProfileServiceImpl implements EditProfileService {
 		if (updateCustomerResult > 0) {
 
 			// 刷新融云用户信息
-			CodeSuccessReslut reslut = RongYunUtil.refreshUser(String.valueOf(params.getCustomerId()), null, params.getHeadPortraitUrl());
-			if (reslut.getCode() != 200) {
-				logger.error("刷新融云用户信息失败，用户id为：" + String.valueOf(params.getCustomerId()) + "失败原因为：" + reslut.getErrorMessage());
-			} else {
-				logger.info("刷新融云用户信息成功！");
-			}
+			CodeSuccessReslut reslut = RongYunUtil.refreshUser(String.valueOf(params.getCustomerId()), null,
+					params.getHeadPortraitUrl());
+			// if (reslut.getCode() != 200) {
+			// logger.error("刷新融云用户信息失败，用户id为：" + String.valueOf(params.getCustomerId()));
+			// } else {
+			// logger.info("刷新融云用户信息成功！");
+			// }
+
+			JedisUtil.set(RedisKeyConstants.USER_CUSTOMER_INFO + params.getCustomerId(),
+					JsonParseUtil.castToJson(customer));
 
 			commonResponse.setCode(UserBizReturnCode.Success);
 			commonResponse.setMessage(UserBizReturnCode.Success.desc());
@@ -383,7 +387,6 @@ public class EditProfileServiceImpl implements EditProfileService {
 		if (customer == null) {
 			throw new BizException(UserBizReturnCode.paramError, "参数错误，customerId不存在");
 		}
-
 
 		// 先判断表中是否存在这个用户声鉴卡记录，存在则更新，不存在则插入
 		int result = 0;
@@ -536,7 +539,7 @@ public class EditProfileServiceImpl implements EditProfileService {
 				return commonResponse;
 			}
 
-			//此处根据年份来计算年龄
+			// 此处根据年份来计算年龄
 			userEditInfoVO.setAge(DateUtils.getAgeByBirthYear(userEditInfoVO.getBirthday()));
 
 			List<InterestVO> interestList = interestMapper.selectInterestListByCustomerId(params.getCustomerId());

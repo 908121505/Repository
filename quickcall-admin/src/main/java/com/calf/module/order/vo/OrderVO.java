@@ -42,6 +42,26 @@ public class OrderVO {
 	private String orderStatus;
 	//订单状态值
 	private String orderStatusVal;
+	/**服务方手机号码*/
+	private Long   servicePhone;
+	/**下单方手机号码*/
+	private Long   customerPhone;
+
+	public Long getServicePhone() {
+		return servicePhone;
+	}
+
+	public void setServicePhone(Long servicePhone) {
+		this.servicePhone = servicePhone;
+	}
+
+	public Long getCustomerPhone() {
+		return customerPhone;
+	}
+
+	public void setCustomerPhone(Long customerPhone) {
+		this.customerPhone = customerPhone;
+	}
 
 	public String getOrderId() {
 		return orderId;

@@ -1,23 +1,6 @@
 package com.honglu.quickcall.user.service.service.impl;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import com.honglu.quickcall.common.api.util.DateUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
+import cn.jiguang.commom.utils.StringUtils;
 import com.honglu.quickcall.account.facade.business.IAccountOrderService;
 import com.honglu.quickcall.account.facade.code.AccountBizReturnCode;
 import com.honglu.quickcall.common.api.code.BizCode;
@@ -25,6 +8,7 @@ import com.honglu.quickcall.common.api.exception.BizException;
 import com.honglu.quickcall.common.api.exception.RemoteException;
 import com.honglu.quickcall.common.api.exchange.CommonResponse;
 import com.honglu.quickcall.common.api.exchange.ResultUtils;
+import com.honglu.quickcall.common.api.util.DateUtils;
 import com.honglu.quickcall.common.api.util.JedisUtil;
 import com.honglu.quickcall.common.api.util.RedisKeyConstants;
 import com.honglu.quickcall.common.constants.PropertiesConstant;
@@ -35,62 +19,24 @@ import com.honglu.quickcall.common.third.rongyun.models.CodeSuccessReslut;
 import com.honglu.quickcall.common.third.rongyun.util.RongYunUtil;
 import com.honglu.quickcall.user.facade.code.UserBizReturnCode;
 import com.honglu.quickcall.user.facade.constants.UserBizConstants;
-import com.honglu.quickcall.user.facade.entity.AppShareConfig;
-import com.honglu.quickcall.user.facade.entity.Customer;
-import com.honglu.quickcall.user.facade.entity.CustomerInterest;
-import com.honglu.quickcall.user.facade.entity.CustomerOccupation;
-import com.honglu.quickcall.user.facade.entity.CustomerSkill;
-import com.honglu.quickcall.user.facade.entity.CustomerSkillCertify;
-import com.honglu.quickcall.user.facade.entity.Fans;
-import com.honglu.quickcall.user.facade.entity.SensitivityWord;
-import com.honglu.quickcall.user.facade.entity.SkillItem;
+import com.honglu.quickcall.user.facade.entity.*;
 import com.honglu.quickcall.user.facade.entity.example.AppShareConfigExample;
-import com.honglu.quickcall.user.facade.exchange.request.AddOrCancelFansRequest;
-import com.honglu.quickcall.user.facade.exchange.request.CheckAttentionRequest;
-import com.honglu.quickcall.user.facade.exchange.request.CheckEachAttentionRequest;
-import com.honglu.quickcall.user.facade.exchange.request.CustomerCenterRequest;
-import com.honglu.quickcall.user.facade.exchange.request.CustomerHomeRequest;
-import com.honglu.quickcall.user.facade.exchange.request.CustomerLevelRequest;
-import com.honglu.quickcall.user.facade.exchange.request.IsBigVidentityRequest;
-import com.honglu.quickcall.user.facade.exchange.request.NoReadAttentionCountRequest;
-import com.honglu.quickcall.user.facade.exchange.request.QueryAttentionFansListRequest;
-import com.honglu.quickcall.user.facade.exchange.request.QueryInterestListRequest;
-import com.honglu.quickcall.user.facade.exchange.request.QueryOccupationListRequest;
-import com.honglu.quickcall.user.facade.exchange.request.ReadAttentionRequest;
-import com.honglu.quickcall.user.facade.exchange.request.SaveBirthRequest;
-import com.honglu.quickcall.user.facade.exchange.request.SaveGenderRequest;
-import com.honglu.quickcall.user.facade.exchange.request.SaveInterestRequest;
-import com.honglu.quickcall.user.facade.exchange.request.SaveNickNameRequest;
-import com.honglu.quickcall.user.facade.exchange.request.SaveOccupationRequest;
-import com.honglu.quickcall.user.facade.exchange.request.SaveSignNameRequest;
-import com.honglu.quickcall.user.facade.exchange.request.SaveSkillAuditRequest;
-import com.honglu.quickcall.user.facade.exchange.request.SearchPersonRequest;
-import com.honglu.quickcall.user.facade.exchange.request.queryMyskillRequest;
-import com.honglu.quickcall.user.facade.vo.AttentionFansVO;
-import com.honglu.quickcall.user.facade.vo.CustomerCenterVO;
-import com.honglu.quickcall.user.facade.vo.CustomerHomeVO;
-import com.honglu.quickcall.user.facade.vo.CustomerLevelVO;
-import com.honglu.quickcall.user.facade.vo.InterestVO;
-import com.honglu.quickcall.user.facade.vo.MySkillVO;
-import com.honglu.quickcall.user.facade.vo.OccupationVO;
-import com.honglu.quickcall.user.facade.vo.SearchPersonListVO;
-import com.honglu.quickcall.user.service.dao.AppShareConfigMapper;
-import com.honglu.quickcall.user.service.dao.CustomerAppearanceMapper;
-import com.honglu.quickcall.user.service.dao.CustomerInterestMapper;
-import com.honglu.quickcall.user.service.dao.CustomerMapper;
-import com.honglu.quickcall.user.service.dao.CustomerOccupationMapper;
-import com.honglu.quickcall.user.service.dao.CustomerSkillCertifyMapper;
-import com.honglu.quickcall.user.service.dao.CustomerSkillMapper;
-import com.honglu.quickcall.user.service.dao.FansMapper;
-import com.honglu.quickcall.user.service.dao.InterestMapper;
-import com.honglu.quickcall.user.service.dao.OccupationMapper;
-import com.honglu.quickcall.user.service.dao.SensitivityWordMapper;
-import com.honglu.quickcall.user.service.dao.SkillItemMapper;
+import com.honglu.quickcall.user.facade.exchange.request.*;
+import com.honglu.quickcall.user.facade.vo.*;
+import com.honglu.quickcall.user.service.dao.*;
 import com.honglu.quickcall.user.service.service.CustomerRedisManagement;
 import com.honglu.quickcall.user.service.service.PersonInfoService;
 import com.honglu.quickcall.user.service.util.JsonParseUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import cn.jiguang.commom.utils.StringUtils;
+import java.math.BigDecimal;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Service
 @Transactional
@@ -123,6 +69,8 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 	private IAccountOrderService accountOrderService;
 	@Autowired
 	private AppShareConfigMapper appShareConfigMapper;
+	@Autowired
+	private BigvSkillScoreMapper bigvSkillScoreMapper;
 
 	/**
 	 * 中文、英文、数字、下划线校验 4-24位
@@ -210,12 +158,11 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 			CodeSuccessReslut reslut = RongYunUtil.refreshUser(String.valueOf(customer.getCustomerId()),
 					customer.getNickName(), customer.getHeadPortraitUrl());
 			// 刷新失败
-			if (reslut.getCode() != 200) {
-				logger.error("刷新融云用户信息失败，用户id为：" + String.valueOf(customer.getCustomerId()) + "失败原因为："
-						+ reslut.getErrorMessage());
-			} else {
-				logger.info("刷新融云用户信息成功！");
-			}
+			// if (reslut.getCode() != 200) {
+			// logger.error("刷新融云用户信息失败，用户id为：" + String.valueOf(customer.getCustomerId()));
+			// } else {
+			// logger.info("刷新融云用户信息成功！");
+			// }
 
 			JedisUtil.set(RedisKeyConstants.USER_CUSTOMER_INFO + params.getCustomerId(),
 					JsonParseUtil.castToJson(customer));
@@ -243,7 +190,7 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 			if (!m.matches()) {
 				return 2;
 			}
-			// 昵称敏感词校验
+			// 昵称敏感词校验R
 			List<SensitivityWord> sensitivityList = sensitivityWordMapper.querySensitiveName();
 			if (Detect.notEmpty(sensitivityList)) {
 				for (SensitivityWord obj : sensitivityList) {
@@ -651,7 +598,8 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 						// 审核状态不是待审核状态
 						if (skillReview.getAuditStatus() != 1) {
 							mySkillVO.setSkillVoiceUrl(skillReview.getSkillVoiceUrl());
-							mySkillVO.setSkillVoiceTime(skillReview.getSkillVoiceTime());
+							mySkillVO.setSkillVoiceTime(
+									skillReview.getSkillVoiceTime().setScale(0, BigDecimal.ROUND_UP).intValue());
 						}
 						haveSkill.add(mySkillVO);
 						flag = false;
@@ -772,7 +720,7 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 		customerHomeVO.setIdentityStatus(viewCustomer.getIdentityStatus());
 		customerHomeVO.setvStatus(viewCustomer.getvStatus());
 
-		// 查询登录用户是否关注被查看的用户
+		// 查询登录用户是否关注被查看的用户 --> 传入了登录用户 && 不是查看自己
 		if (request.getLoginCustomerId() != null
 				&& !Objects.equals(request.getLoginCustomerId(), request.getViewCustomerId())) {
 			int idFollow = fansMapper.queryIsFollow(request.getViewCustomerId(), request.getLoginCustomerId());
@@ -782,12 +730,15 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 		// 查询粉丝数
 		customerHomeVO.setFansNum(fansMapper.queryFansNumByCustomerId(request.getViewCustomerId()).intValue());
 
+		// 查看自己的标志
+		boolean viewMyselfFlag = Objects.equals(request.getLoginCustomerId(), request.getViewCustomerId());
+
 		// 查询用户形象照列表 性别(0=女,1=男)
 		List<String> appearanceList = customerAppearanceMapper
-				.queryCustomerAuditedAppearance(request.getViewCustomerId(), 0);
-		if (appearanceList == null || appearanceList.size() == 0) {
-			customerHomeVO.setAppearanceUrlList(Objects.equals(customerHomeVO.getSex(), 1) ?
-					Arrays.asList(PropertiesConstant.DEFAULT_CUSTOMER_APPEARANCE_URL_BOY)
+				.queryCustomerAppearance(request.getViewCustomerId(), 0, viewMyselfFlag ? 0 : 1);
+		if (appearanceList.isEmpty()) {
+			customerHomeVO.setAppearanceUrlList(Objects.equals(customerHomeVO.getSex(), 1)
+					? Arrays.asList(PropertiesConstant.DEFAULT_CUSTOMER_APPEARANCE_URL_BOY)
 					: Arrays.asList(PropertiesConstant.DEFAULT_CUSTOMER_APPEARANCE_URL_GIRL));
 		} else {
 			customerHomeVO.setAppearanceUrlList(appearanceList);
@@ -798,7 +749,7 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 
 		// 查询声鉴卡
 		List<String> soundGuideCard = customerAppearanceMapper
-				.queryCustomerAuditedAppearance(request.getViewCustomerId(), 2);
+				.queryCustomerAppearance(request.getViewCustomerId(), 2, viewMyselfFlag ? 0 : 1);
 		customerHomeVO.setSoundGuideCard(soundGuideCard.isEmpty() ? null : soundGuideCard.get(0));
 
 		// 查询分享信息
@@ -811,7 +762,8 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 			customerHomeVO.setShareTitle(share.getTitle());
 			customerHomeVO.setShareContent(share.getContent());
 			customerHomeVO.setShareIconUrl(share.getIconUrl());
-			customerHomeVO.setShareLinkUrl(String.format(share.getLinkUrl(), request.getViewCustomerId(), request.getLoginCustomerId()));
+			customerHomeVO.setShareLinkUrl(
+					String.format(share.getLinkUrl(), request.getViewCustomerId(), request.getLoginCustomerId()));
 		}
 
 		// 查询用户技能 -- 条件是大V
@@ -836,10 +788,10 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 				customerSkill.setCustomerLabel(customerSkillMapper
 						.selectCustomerSkillHotLabel(request.getViewCustomerId(), bean.getSkillItemId()));
 
-				// 声量 ADUAN -- 一期前段不显示
-				customerSkill.setSkillVolume(250);
+				// 查询技能声量
+				customerSkill.setSkillVolume(bigvSkillScoreMapper.selectBigvScoreValue(bean.getCustomerSkillId()));
 
-				// 判断是否可下单 ADUAN -- 待做
+				// 判断是否可下单
 				if (Objects.equals(request.getLoginCustomerId(), request.getViewCustomerId())) {
 					customerSkill.setCanOrder(0); // 自己看自己的个人主页时 -- 直接返回 0=不可接单
 				} else {
@@ -847,8 +799,7 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 							accountOrderService.checkReceiveOrderByCustomerSkillId(bean.getCustomerSkillId()));
 				}
 				// 查询技能订单数-wq
-				customerSkill.setSkillOrderNo(
-						customerSkillMapper.selectSkillOrderNo(bean.getCustomerSkillId()));
+				customerSkill.setSkillOrderNo(customerSkillMapper.selectSkillOrderNo(bean.getCustomerSkillId()));
 				skillList.add(customerSkill);
 			}
 		}

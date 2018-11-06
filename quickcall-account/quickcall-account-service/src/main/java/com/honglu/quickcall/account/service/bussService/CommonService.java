@@ -29,16 +29,6 @@ public interface CommonService {
 	
 	public CommonResponse  getCommonResponse();
 	
-	
-	
-	/**
-	 * 向用户发送消息
-	 * @param msgType
-	 * @param sellerId
-	 * @param customerId
-	 */
-	public  void  pushMessage(PushAppMsgTypeEnum msgType,Long  sellerId,Long  customerId);
-	
 	/**
 	 * 根据订单ID更新订单状态
 	 * @param orderId
@@ -49,12 +39,14 @@ public interface CommonService {
 	 * 根据订单ID更新订单状态
 	 * @param orderId
 	 * @param orderStatus
-	 * @param cancelTime
-	 * @param selectReason
-	 * @param remarkReason
-	 * @param couponFlag
 	 */
-	public void cancelUpdateOrder(Long orderId, Integer orderStatus,Date cancelTime,String  selectReason,String   remarkReason, Integer couponFlag);
+	public void custConfirmFinishUpdateOrder(Long orderId, Integer orderStatus);
+	/**
+	 * 根据订单ID更新订单状态
+	 * @param orderId
+	 * @param orderStatus
+	 */
+	public void cancelUpdateOrder(Long orderId, Integer orderStatus,Date cancelTime,String  selectReason,String   remarkReason);
 	
 	/**
 	 * 根据订单ID更新订单状态

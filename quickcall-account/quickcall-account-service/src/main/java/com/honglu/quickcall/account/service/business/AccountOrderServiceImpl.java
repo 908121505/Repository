@@ -2,6 +2,7 @@ package com.honglu.quickcall.account.service.business;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,9 +10,11 @@ import org.springframework.stereotype.Service;
 
 import com.honglu.quickcall.account.facade.business.IAccountOrderService;
 import com.honglu.quickcall.account.facade.constants.OrderSkillConstants;
+import com.honglu.quickcall.account.facade.entity.CustomerSkill;
 import com.honglu.quickcall.account.facade.enums.AccountBusinessTypeEnum;
 import com.honglu.quickcall.account.facade.enums.TransferTypeEnum;
 import com.honglu.quickcall.account.service.bussService.AccountService;
+import com.honglu.quickcall.account.service.dao.CustomerSkillMapper;
 import com.honglu.quickcall.account.service.dao.OrderMapper;
 
 /**
@@ -29,18 +32,25 @@ public class AccountOrderServiceImpl implements IAccountOrderService {
 
 	@Autowired
 	private OrderMapper orderMapper;
+	@Autowired
+	private CustomerSkillMapper  customerSkillMapper;
 
 	@Autowired
 	private AccountService accountService;
 
 	@Override
 	public Integer checkReceiveOrderByCustomerSkillId(Long customerSkillId) {
+		
+		CustomerSkill   customerSkill = customerSkillMapper.selectByPrimaryKeyExt(customerSkillId, null, null, new Date());
+		if(customerSkill == null){
+			return  0 ;
+		}
 		List<Integer> statusList = new ArrayList<Integer>();
 		statusList.add(OrderSkillConstants.ORDER_STATUS_WAITING_START);// 待开始
 		statusList.add(OrderSkillConstants.ORDER_STATUS_WAITING_START_DA_APPAY_START_SERVICE);// 大V发起开始服务
 		statusList.add(OrderSkillConstants.ORDER_STATUS_GOING_USER_ACCEPCT);// 进行中
 		statusList.add(OrderSkillConstants.ORDER_STATUS_GOING_DAV_APPAY_FINISH);// 进行中（大V发起完成服务）
-		statusList.add(OrderSkillConstants.ORDER_STATUS_WAITING_START);// 待开始
+//		statusList.add(OrderSkillConstants.ORDER_STATUS_WAITING_START);// 待开始
 		Integer resultCount = orderMapper.selectGongIngOrderListByCustomerSkillId(customerSkillId,
 				OrderSkillConstants.SKILL_TYPE_YES, statusList);
 		if (resultCount == null) {
@@ -56,15 +66,15 @@ public class AccountOrderServiceImpl implements IAccountOrderService {
 
 	@Override
 	public void inAccount(Long customerId, BigDecimal amount, TransferTypeEnum transferType,
-			AccountBusinessTypeEnum accountBusinessType) {
-		accountService.inAccount(customerId, amount, transferType, accountBusinessType);
+			AccountBusinessTypeEnum accountBusinessType,Long  orderNo) {
+		accountService.inAccount(customerId, amount, transferType, accountBusinessType,orderNo);
 
 	}
 
 	@Override
 	public void outAccount(Long customerId, BigDecimal amount, TransferTypeEnum transferType,
-			AccountBusinessTypeEnum accountBusinessType) {
-		accountService.outAccount(customerId, amount, transferType, accountBusinessType);
+			AccountBusinessTypeEnum accountBusinessType,Long  orderNo) {
+		accountService.outAccount(customerId, amount, transferType, accountBusinessType,orderNo);
 
 	}
 

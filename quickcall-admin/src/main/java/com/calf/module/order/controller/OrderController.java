@@ -83,6 +83,7 @@ public class OrderController implements BaseController<OrderVO>{
 			for (SmallOrderStatusVO vo:lists){
 				if (vo.getValue().equals(order.getOrderStatus())){
 					vo.setShow(true);
+					model.addAttribute("orderStatusDesc",vo.getDesc());
 					break;
 				}
 			}

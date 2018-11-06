@@ -25,8 +25,6 @@
         <typeAlias type="com.calf.module.system.entity.SysRoleMenu" alias="SysRoleMenu"/>
         <typeAlias type="com.calf.module.system.entity.SysLog" alias="SysLog"/>
         <typeAlias type="com.calf.module.system.entity.QueryOperUserRole" alias="QueryOperUserRole"/>
-        <typeAlias type="com.calf.module.system.entity.BizParam" alias="BizParam"/>
-        <typeAlias type="com.calf.module.system.entity.BizParamType" alias="BizParamType"/>
 
         <!-- export -->
         <typeAlias type="com.calf.module.export.entity.ExportPlayData" alias="ExportPlayData"/>

@@ -41,7 +41,7 @@ public class FrozenSteamJob {
 	@Autowired
 	private TradeDetailMapper tradeDetailMapper;
 
-	@Scheduled(cron = "* 0/15 * * * ?")
+	@Scheduled(cron = "* 0/10 * * * ?")
 	public void execute() {
 
 		logger.info("冻结金额12小时后   到账户越操作 job 开启------------------------");
@@ -57,10 +57,11 @@ public class FrozenSteamJob {
 					List<String> strList = new ArrayList<String>();
 					String[] arys = userFrozenValue.split(",");
 					for (int i = 0; i < arys.length; i++) {
-						String steamFrozenKey = RedisKeyConstants.ACCOUNT_USERFROZEN_USER + arys[i];
+						String steamFrozenKey = RedisKeyConstants.ACCOUNT_USERFROZEN_STREAM + arys[i];
 						String frozenTimeKey = RedisKeyConstants.ACCOUNT_USERFROZEN_Time + arys[i];
 						String stramValue = JedisUtil.get(steamFrozenKey);
 						String frozenTimeValue = JedisUtil.get(frozenTimeKey);
+						String frozenOrderNo = JedisUtil.get(RedisKeyConstants.ACCOUNT_USERFROZEN_ORDER_NO + arys[i]);
 						if (StringUtils.isNotBlank(stramValue)) {
 							if (StringUtils.isEmpty(frozenTimeValue)) {
 								// 操作流水
@@ -74,18 +75,22 @@ public class FrozenSteamJob {
 										TransferTypeEnum.FROZEN.getType());
 								// 记录流水
 								TradeDetail tradeDetail = new TradeDetail();
+								// 流水Id
+								if (StringUtils.isNotBlank(frozenOrderNo)) {
+									tradeDetail.setOrderNo(Long.parseLong(frozenOrderNo));
+								}
 								tradeDetail.setTradeId(UUIDUtils.getId());
 								tradeDetail.setCustomerId(account.getCustomerId());
 								tradeDetail.setCreateTime(new Date());
 								tradeDetail.setType(AccountBusinessTypeEnum.FroZenAccount.getType());
 								tradeDetail.setOutPrice(new BigDecimal(stramValue));
 								tradeDetailMapper.insertSelective(tradeDetail);
-								// 记录操过24小时的冻结流水Id
-								strList.add(stramValue);
+								// 记录操过12小时的冻结流水Id
+								strList.add(arys[i]);
 							}
 						}
 					}
-					// 数组移除操过24小时的冻结流水Id
+					// 数组移除操过12小时的冻结流水Id
 					for (int i = 0; i < strList.size(); i++) {
 						arys = remove(arys, strList.get(i));
 					}
