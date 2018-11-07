@@ -925,9 +925,12 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 
 	@Override
 	public CommonResponse submitCustomerApplyBigv(CustomerApplyBigvRequest request) {
-		Customer viewCustomer = customerMapper.selectByPrimaryKey(request.getCustomerId());
-		if (viewCustomer == null) {
+		Customer customer = customerMapper.selectByPrimaryKey(request.getCustomerId());
+		if (customer == null) {
 			return ResultUtils.result(BizCode.CustomerNotExist);
+		}
+		if(Objects.equals(customer.getvStatus(), 2)){
+			return ResultUtils.resultDataStateError("您已经是声优了，不需要申请哟");
 		}
 		CustomerApplyBigv applyBigv = new CustomerApplyBigv();
 		applyBigv.setApplyId(UUIDUtils.getId());
@@ -935,7 +938,7 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 		applyBigv.setApplyTime(new Date());
 
 		if(customerMapper.insertApplyBigvData(applyBigv) == 0){
-			return ResultUtils.resultDuplicateOperation("您已申请过，请勿重复提交!");
+			return ResultUtils.resultDuplicateOperation("您已申请过，请勿重复提交");
 		}
 		return ResultUtils.resultSuccess();
 	}
