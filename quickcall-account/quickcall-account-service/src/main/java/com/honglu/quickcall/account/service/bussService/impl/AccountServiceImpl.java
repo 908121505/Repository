@@ -72,7 +72,7 @@ public class AccountServiceImpl implements AccountService {
 			JedisUtil.set(frozenTimeKey, "1", Integer.parseInt(froZenTime));
 			// 流水对应的订单Id
 			JedisUtil.set(RedisKeyConstants.ACCOUNT_USERFROZEN_ORDER_NO + tradeDetail.getTradeId(),
-					new BigDecimal(orderNo) + "");
+					String.valueOf(orderNo));
 
 		}
 
