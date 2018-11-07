@@ -21,11 +21,14 @@ public class OrderEvaluationVo implements Serializable {
      * 用户昵称
      */
     private String nickName;
+    private String headPortraitUrl;
+    /**
+     * 关注状态：0=未关注；1=已关注
+     */
+    private Integer attentionFlag;
     /**
      * 用户头像
      */
-    private String headPortraitUrl;
-
     /**
      * 评价标签列表
      */
@@ -88,6 +91,14 @@ public class OrderEvaluationVo implements Serializable {
 
     public void setNickName(String nickName) {
         this.nickName = nickName;
+    }
+
+    public Integer getAttentionFlag() {
+        return attentionFlag;
+    }
+
+    public void setAttentionFlag(Integer attentionFlag) {
+        this.attentionFlag = attentionFlag;
     }
 
     public String getHeadPortraitUrl() {
