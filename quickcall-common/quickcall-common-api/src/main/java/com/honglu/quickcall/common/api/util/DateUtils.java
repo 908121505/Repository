@@ -14,6 +14,8 @@ public class DateUtils {
 
     static final String date_format = "yyyy-MM-dd HH:mm:ss";
     
+    static final String DATE_FORMAT_HH_MM = "HH:mm";
+    
     static final String format = "yyyy-MM-dd";
 
     //一分钟
@@ -55,6 +57,15 @@ public class DateUtils {
         }
         dateFormat = new SimpleDateFormat(pattern);
         return dateFormat.format(new Date(System.currentTimeMillis()));
+    }
+    /**
+     * 获取当前时间的小时：分钟
+     * @param date
+     * @return
+     */
+    public static String getDateHHMMTime(Date  date) {
+    	dateFormat = new SimpleDateFormat(DATE_FORMAT_HH_MM);
+    	return dateFormat.format(date);
     }
 
     /**

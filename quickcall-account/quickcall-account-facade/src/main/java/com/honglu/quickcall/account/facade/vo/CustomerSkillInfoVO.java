@@ -20,10 +20,25 @@ public class CustomerSkillInfoVO {
     private String endServiceTimeStr;
     /**每周数据*/
     private  HashMap<String, Integer>  weekDataMap; 
+    /**服务开始时间字符串，格式 10:00*/
+    private String startServiceTimeStr;
     /**接单开关1：开启  0 ：关闭*/
     private Integer  receiveStatus;
-
+    /**自动接单1：开启  0 ：关闭*/
+    private Integer  autoReceiveStatus;
     
+	public String getStartServiceTimeStr() {
+		return startServiceTimeStr;
+	}
+	public void setStartServiceTimeStr(String startServiceTimeStr) {
+		this.startServiceTimeStr = startServiceTimeStr;
+	}
+	public Integer getAutoReceiveStatus() {
+		return autoReceiveStatus;
+	}
+	public void setAutoReceiveStatus(Integer autoReceiveStatus) {
+		this.autoReceiveStatus = autoReceiveStatus;
+	}
 	public Integer getReceiveStatus() {
 		return receiveStatus;
 	}
