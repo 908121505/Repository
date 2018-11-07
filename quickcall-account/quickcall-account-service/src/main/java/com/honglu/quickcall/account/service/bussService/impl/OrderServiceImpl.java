@@ -349,7 +349,7 @@ public class OrderServiceImpl implements IOrderService {
 		
 		if(!CollectionUtils.isEmpty(resultList)){
 			for (OrderReceiveOrderListVO info : resultList) {
-				OrderTempResponseVO  responseVO = commonService.getCountDownSeconds(info.getOrderStatus(), info.getOrderTime(), info.getReceiveOrderTime(),info.getst);
+				OrderTempResponseVO  responseVO = commonService.getCountDownSeconds(info.getOrderStatus(), info.getOrderTime(), info.getReceiveOrderTime(),info.getStartServiceTime());
 				info.setCountDownSeconds(responseVO.getCountDownSeconds());
 				info.setOrderStatus(responseVO.getOrderStatus());
 				//TODO 兼容安卓版本   7号需要回滚
@@ -485,7 +485,7 @@ public class OrderServiceImpl implements IOrderService {
 			Date  birthday  =  orderDetail.getBirthday();
 			int   age = DateUtils.getAgeByBirth(birthday);
 			orderDetail.setAge(age);
-			OrderTempResponseVO  responseVO = commonService.getCountDownSeconds(orderDetail.getOrderStatus(), orderDetail.getOrderTime(), orderDetail.getReceiveOrderTime());
+			OrderTempResponseVO  responseVO = commonService.getCountDownSeconds(orderDetail.getOrderStatus(), orderDetail.getOrderTime(), orderDetail.getReceiveOrderTime(),orderDetail.getStartServiceTime());
 			orderDetail.setCountDownSeconds(responseVO.getCountDownSeconds());
 			orderDetail.setOrderStatus(responseVO.getOrderStatus());
 		}

@@ -14,7 +14,7 @@ import java.util.Date;
  */
 public class OrderDetailVO implements  Serializable{
 
-	private static final long serialVersionUID = -3999247576164334939L;
+	private static final long serialVersionUID = 2191262960016676469L;
 	/**订单ID*/
 	private Long  orderId;
 	/**服务方编号*/
@@ -71,10 +71,24 @@ public class OrderDetailVO implements  Serializable{
 	
     private BigDecimal discountRate;
     
+    /**服务开始时间*/
+    private Date  startServiceTime;
+    /**预计结束时间*/
+    private Date  expectEndTime;
     
 	
-	
-	
+	public Date getStartServiceTime() {
+		return startServiceTime;
+	}
+	public void setStartServiceTime(Date startServiceTime) {
+		this.startServiceTime = startServiceTime;
+	}
+	public Date getExpectEndTime() {
+		return expectEndTime;
+	}
+	public void setExpectEndTime(Date expectEndTime) {
+		this.expectEndTime = expectEndTime;
+	}
 	public BigDecimal getDiscountRate() {
 		return discountRate;
 	}
