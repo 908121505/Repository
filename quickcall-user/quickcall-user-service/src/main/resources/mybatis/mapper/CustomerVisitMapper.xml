@@ -25,6 +25,7 @@
     id, visitor_id, interviewee_id, visit_path, read_status, create_time, modify_time, 
     create_man, modify_man, remark
   </sql>
+  
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     <!--
       WARNING - @mbg.generated
@@ -34,6 +35,15 @@
     <include refid="Base_Column_List" />
     from customer_visit
     where id = #{id,jdbcType=INTEGER}
+  </select>
+  
+  <select id="selectUnreadCountByCustomerId">
+  	SELECT
+		count( * ) 
+	FROM
+		customer_visit 
+	WHERE
+		interviewee_id = #{customerId} and read_status = 0
   </select>
   
   <select id="queryCustomerVisitList" resultType="map">

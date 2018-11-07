@@ -18,4 +18,6 @@ public interface CustomerVisitService {
      * @return
      */
     CommonResponse setVisitRead(SetVisitReadRequest params);
+    
+    
 }

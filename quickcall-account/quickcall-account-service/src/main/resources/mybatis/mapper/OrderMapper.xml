@@ -773,8 +773,16 @@
       #{orderId}
     </foreach>
   </update>
-  
-  
-  
-  
+
+  <!-- 查询声优是否被客户关注 -->
+  <select id="findServicerIsAttentioned" resultType="integer">
+    SELECT COUNT(1) FROM `fans` WHERE anchor_id=#{serviceId} AND fans_id=#{customerId} AND attention_state = 1;
+  </select>
+
+  <!-- 插入订单服务者的粉丝 -->
+  <insert id="insertOrderServicerFans">
+    INSERT INTO fans (id, anchor_id, fans_id, attention_state)
+    VALUES(#{id}, #{serviceId}, #{customerId}, 1)
+    ON DUPLICATE KEY UPDATE attention_state = 1
+  </insert>
 </mapper>
