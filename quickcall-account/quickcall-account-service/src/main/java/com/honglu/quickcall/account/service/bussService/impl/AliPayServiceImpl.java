@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,6 +78,9 @@ public class AliPayServiceImpl implements AliPayService {
 		params += "appName=3&orderId=" + orderNo + "&orderDesc=" + orderDesc;
 		params += "&amount=" + amount + "&xnPayType=" + xnPayType + "&extData=" + extData + "&createIp=" + createIp
 				+ "&customerId=" + accountId;
+		if (StringUtils.isNotBlank(packet.getOpenid())) {
+			params += "&openid=" + packet.getOpenid();
+		}
 		String result = null;
 		try {
 			result = HttpClientUtils.doPostForm(aliPayUrl, params);
@@ -98,7 +102,7 @@ public class AliPayServiceImpl implements AliPayService {
 		recharge.setType(TradeTypeEnum.Pay.getType());// 1充值 2提现
 		recharge.setOrdersn(orderNo);
 		recharge.setState(1);// 状态。1-申请支付，2-支付成功 3支付失败
-		recharge.setRechargeType(packet.getPayType());// 充值类型。1为支付宝，2为微信 3为苹果内购
+		recharge.setRechargeType(packet.getPayType());// 充值类型。1为支付宝，2为微信 3为苹果内购 5微信公众号
 		rechargeMapper.insertSelective(recharge);
 		return ResultUtils.resultSuccess(result);
 
