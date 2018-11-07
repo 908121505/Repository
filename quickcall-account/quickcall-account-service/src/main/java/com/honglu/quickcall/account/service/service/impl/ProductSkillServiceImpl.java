@@ -329,7 +329,7 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 			}
 			
 			if(autoReceiveStatus == null){
-				autoReceiveStatus = custSkill.get
+				autoReceiveStatus = custSkill.getAutoReceiveStatus();
 			}
 			skillIdList.add(custSkill.getCustomerSkillId());
 			skillVO.setCustomerSkillId(custSkill.getCustomerSkillId());
@@ -365,7 +365,6 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 		resultVO.setStartServiceTimeStr(startServiceTimeStr);
 		resultVO.setEndServiceTimeStr(endServiceTimeStr);
 		//返回自动接单开关
-		
 		//需要回显原来选择的结束时间
 		resultVO.setCustomerSkillList(customerSkillList);
 		return resultVO;
