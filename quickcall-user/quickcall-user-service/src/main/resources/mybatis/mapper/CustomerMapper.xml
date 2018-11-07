@@ -643,7 +643,7 @@
     nick_name AS nickName,
     sign_name AS signName,
     star_sign AS starSign,
-    birthday,
+    IFNULL(DATE_FORMAT(birthday, '%Y-%m-%d' ),"") AS birthday,
     identity_status as identityStatus,
     head_portrait_url as defaultHeadPortrait
   FROM

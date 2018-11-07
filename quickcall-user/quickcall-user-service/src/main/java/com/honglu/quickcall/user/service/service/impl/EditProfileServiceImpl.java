@@ -1,5 +1,6 @@
 package com.honglu.quickcall.user.service.service.impl;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -500,6 +501,9 @@ public class EditProfileServiceImpl implements EditProfileService {
 		if (customer == null) {
 			throw new BizException(UserBizReturnCode.paramError, "参数错误，customerId不存在");
 		}
+		if (customer.getIdentityStatus() == 2) {
+			throw new BizException(UserBizReturnCode.certification, "您已完成实名认证，不能更改该信息");
+		}
 
 		customer.setSex(newGender);
 		// 更新性别
@@ -572,7 +576,14 @@ public class EditProfileServiceImpl implements EditProfileService {
 			}
 
 			// 此处根据年份来计算年龄
-			userEditInfoVO.setAge(DateUtils.getAgeByBirthYear(userEditInfoVO.getBirthday()));
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			String birthday = userEditInfoVO.getBirthday();
+			if("".equals(birthday) || null == birthday){
+				userEditInfoVO.setAge(0);
+			}else {
+				userEditInfoVO.setAge(DateUtils.getAgeByBirthYear(sdf.parse(birthday)));
+			}
+
 
 			List<InterestVO> interestList = interestMapper.selectInterestListByCustomerId(params.getCustomerId());
 			userEditInfoVO.setInterestList(interestList);

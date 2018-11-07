@@ -154,7 +154,7 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 
 	public void getNewCustomerSkillInfoVO(CustomerSkill skill, CustomerSkillInfoVO skillVO) {
 		HashMap<String, Integer> weekDataMap = new HashMap<String, Integer>();
-		String endTimeStr = skill.getEndTimeStr();
+//		String endTimeStr = skill.getEndTimeStr();
 		weekDataMap.put("tuesday", WEEK_INDEX_DEFAULT);
 		weekDataMap.put("monday", WEEK_INDEX_DEFAULT);
 		weekDataMap.put("wednesday", WEEK_INDEX_DEFAULT);
@@ -170,7 +170,17 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 		 * 查询：库中数据2400   同意返回前端00:00
 		 * 
 		 */
-		if(StringUtils.isNotBlank(endTimeStr)){
+//		if(StringUtils.isNotBlank(endTimeStr)){
+//			if(ENDTIME_STR_24.equals(endTimeStr)){
+//				skillVO.setEndServiceTimeStr("00:00");
+//			}else{
+//				String  startStr =  endTimeStr.substring(0, 2);
+//				String  endStr =  endTimeStr.substring(2, 4);
+//				skillVO.setEndServiceTimeStr(startStr + ":"+endStr);
+//			}
+//		}
+		
+		/*if(StringUtils.isNotBlank(endTimeStr)){
 			if(ENDTIME_STR_24.equals(endTimeStr)){
 				skillVO.setEndServiceTimeStr("00:00");
 			}else{
@@ -178,7 +188,7 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 				String  endStr =  endTimeStr.substring(2, 4);
 				skillVO.setEndServiceTimeStr(startStr + ":"+endStr);
 			}
-		}
+		}*/
 		
 	}
 	
@@ -297,7 +307,17 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 		if (CollectionUtils.isEmpty(custSkillList)) {
 			return resultVO;
 		}
+		
+		//自动接单开始时间
+		String   startServiceTimeStr = null ;
+		//自动接单结束时间
+		String   endServiceTimeStr = null;
+		//接单设置开关
 		Integer receiveStatus = null;
+		//自动接单开关
+		Integer autoReceiveStatus = null ;
+		
+		
 		List<Long> skillIdList = new ArrayList<Long>();
 		List<CustomerSkillVO> customerSkillList = new ArrayList<CustomerSkillVO>();
 		for (CustomerSkill custSkill : custSkillList) {
@@ -306,6 +326,10 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 				receiveStatus = custSkill.getReceiveStatus();
 				resultVO.setReceiveStatus(receiveStatus);
 				getNewCustomerSkillInfoVO(custSkill, resultVO);
+			}
+			
+			if(autoReceiveStatus == null){
+				autoReceiveStatus = custSkill.get
 			}
 			skillIdList.add(custSkill.getCustomerSkillId());
 			skillVO.setCustomerSkillId(custSkill.getCustomerSkillId());
@@ -319,10 +343,29 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 			// 根据技能ID获取可选技能信息
 			Long skillItemId = custSkill.getSkillItemId();
 			getSkillExtList(skillItemId,skillVO);
+			//返回给客户端自动接单开始时间和结束时间
+			if(StringUtils.isBlank(startServiceTimeStr)){
+				Date  appointStartTime = custSkill.getAppointStartTime();
+				if(appointStartTime != null){
+					startServiceTimeStr = DateUtils.getDateHHMMTime(appointStartTime);
+				}
+			}
+			if(StringUtils.isBlank(endServiceTimeStr)){
+				Date  appointEndTime = custSkill.getAppointEndTime();
+				if(endServiceTimeStr != null){
+					startServiceTimeStr = DateUtils.getDateHHMMTime(appointEndTime);
+				}
+			}
+			
 			skillVO.setSkillItemId(skillItemId);
 			customerSkillList.add(skillVO);
 
 		}
+		
+		resultVO.setStartServiceTimeStr(startServiceTimeStr);
+		resultVO.setEndServiceTimeStr(endServiceTimeStr);
+		//返回自动接单开关
+		
 		//需要回显原来选择的结束时间
 		resultVO.setCustomerSkillList(customerSkillList);
 		return resultVO;
