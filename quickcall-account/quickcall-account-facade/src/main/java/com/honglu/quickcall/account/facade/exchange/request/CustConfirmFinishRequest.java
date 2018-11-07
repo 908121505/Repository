@@ -36,5 +36,12 @@ public class CustConfirmFinishRequest extends AbstractRequest {
 	}
 
 
+	@Override
+	public String toString() {
+		return "CustConfirmFinishRequest [orderId=" + orderId + "]";
+	}
+	
+
+
 
 }
