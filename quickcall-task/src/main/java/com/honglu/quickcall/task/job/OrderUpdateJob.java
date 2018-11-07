@@ -184,7 +184,7 @@ public class OrderUpdateJob {
     		Integer  queryStatus = OrderSkillConstants.ORDER_STATUS_GOING_WAITING_START;
     		Integer  updateStatus = OrderSkillConstants.ORDER_STATUS_GOING_USER_ACCEPCT;
     		Integer  skillType = OrderSkillConstants.SKILL_TYPE_NO;
-    		Date  queryEndTime =  getEndTimeByAddHours(-1);
+    		Date  queryEndTime =  getEndTimeByAddDays(-2);
     		List<TaskOrder>  orderList = taskOrderMapper.queryAppointOrderGoing(currTime,endTime, queryStatus, updateStatus, skillType,queryEndTime);
     		updateOrderStatusByOrderListForCancel(orderList, updateStatus);
 //    		taskOrderMapper.appointOrderGoing(currTime,endTime, queryStatus, updateStatus, skillType,queryEndTime);

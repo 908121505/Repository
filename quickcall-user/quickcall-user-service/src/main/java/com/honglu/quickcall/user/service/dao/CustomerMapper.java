@@ -2,6 +2,7 @@ package com.honglu.quickcall.user.service.dao;
 
 import com.honglu.quickcall.account.facade.entity.Order;
 import com.honglu.quickcall.user.facade.entity.Customer;
+import com.honglu.quickcall.user.facade.vo.SearchPersonByPhoneVO;
 import com.honglu.quickcall.user.facade.vo.SearchPersonListVO;
 import com.honglu.quickcall.user.facade.vo.UserEditInfoVO;
 import org.apache.ibatis.annotations.Param;
@@ -105,4 +106,11 @@ public interface CustomerMapper {
 	 * @return 1=是；0=否
 	 */
 	int judgeCustomerIsBigv(@Param("customerId") Long customerId);
+	
+	/**
+	 * 根据电话查询用户信息
+	 * @param phone
+	 * @return
+	 */
+	List<SearchPersonByPhoneVO> queryPersonByPhone(@Param("phone") Long phone);
 }

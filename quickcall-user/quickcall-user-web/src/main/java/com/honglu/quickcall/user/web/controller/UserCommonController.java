@@ -30,6 +30,7 @@ import com.honglu.quickcall.user.facade.exchange.request.CustomerLevelRequest;
 import com.honglu.quickcall.user.facade.exchange.request.GetSmsCodeRequest;
 import com.honglu.quickcall.user.facade.exchange.request.IsPhoneExistsRequest;
 import com.honglu.quickcall.user.facade.exchange.request.LoginOutRequest;
+import com.honglu.quickcall.user.facade.exchange.request.SearchPersonByPhoneRequest;
 import com.honglu.quickcall.user.facade.exchange.request.SetHeardUrlRequest;
 import com.honglu.quickcall.user.facade.exchange.request.SetPwdRequest;
 import com.honglu.quickcall.user.facade.exchange.request.UserLoginRequest;
@@ -438,5 +439,16 @@ public class UserCommonController {
 		logger.info("userWeb.user.checkVerifyCode.response.data : " + JSONObject.toJSONString(response));
 		return response;
 
+	}
+	/**
+	 * 根据手机号查询用户信息
+	 * @param params phone
+	 * @return
+	 */
+	@RequestMapping(value = "/searchPersonByPhone", method = RequestMethod.POST)
+	@ResponseBody
+	public WebResponseModel searchPersonByPhone(SearchPersonByPhoneRequest params) {
+		WebResponseModel response = userCenterService.execute(params);
+		return response;
 	}
 }
