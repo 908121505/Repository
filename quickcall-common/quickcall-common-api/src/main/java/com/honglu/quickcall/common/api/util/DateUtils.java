@@ -344,5 +344,22 @@ public class DateUtils {
     }
     
     
+    /**
+     * 获取每天的最后一秒钟的时刻即：23:59:59
+     * @param date
+     * @return
+     */
+    public static   Date  getDayEndTime(Date   date){
+    	if(date == null){
+    		return null ;
+    	}
+    	Calendar cal = Calendar.getInstance();
+    	cal.set(Calendar.HOUR_OF_DAY, 23);
+    	cal.set(Calendar.MINUTE,59);
+    	cal.set(Calendar.SECOND, 59);
+    	return cal.getTime();
+    }
+    
+    
 
 }

@@ -334,6 +334,9 @@ public class UserDubboBusinessImpl implements UserDubboBusiness {
 			case UserFunctionType.Set_Visit_Read:
 				response = customerVisitService.setVisitRead((SetVisitReadRequest)request);
 				break;
+			case UserFunctionType.CUSTOMER_APPLY_BIGV:
+				response = personInfoService.submitCustomerApplyBigv((CustomerApplyBigvRequest)request);
+				break;
 			default:
 				throw new BizException(UserBizReturnCode.BizFunctionTypeNotMatch,
 						UserBizReturnCode.BizFunctionTypeNotMatch.desc());

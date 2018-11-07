@@ -242,4 +242,8 @@ public interface UserFunctionType {
 	 * 设置来访已读
 	 */
 	String Set_Visit_Read = "0011302";
+	/**
+	 * 客户申请成为大V
+	 */
+	String CUSTOMER_APPLY_BIGV = "0011303";
 }

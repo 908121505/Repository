@@ -2,7 +2,6 @@ package com.honglu.quickcall.user.facade.vo;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.List;
 
 /**
  * 个人中心返回数据 -- 页面对象
@@ -12,7 +11,7 @@ import java.util.List;
  */
 public class CustomerCenterVO implements Serializable {
 
-    private static final long serialVersionUID = -1209835663261243685L;
+    private static final long serialVersionUID = 8320850440223728219L;
     /**
      * 客户ID
      */
@@ -53,6 +52,10 @@ public class CustomerCenterVO implements Serializable {
      * 大V认证状态：0=未认证,1=待审核,2=已通过,3=拒绝
      */
     private Integer vStatus;
+    /**
+     * 申请大V状态：0=未申请,1=已申请
+     */
+    private Integer applyBigvStatus;
     /**
      * 关注数
      */
@@ -150,6 +153,14 @@ public class CustomerCenterVO implements Serializable {
         this.vStatus = vStatus;
     }
 
+    public Integer getApplyBigvStatus() {
+        return applyBigvStatus;
+    }
+
+    public void setApplyBigvStatus(Integer applyBigvStatus) {
+        this.applyBigvStatus = applyBigvStatus;
+    }
+
     public Integer getAttentionNum() {
         return attentionNum;
     }
@@ -195,6 +206,7 @@ public class CustomerCenterVO implements Serializable {
                 ", signName='" + signName + '\'' +
                 ", identityStatus=" + identityStatus +
                 ", vStatus=" + vStatus +
+                ", applyBigvStatus=" + applyBigvStatus +
                 ", attentionNum=" + attentionNum +
                 ", fansNum=" + fansNum +
                 ", rechargeAmounts=" + rechargeAmounts +
