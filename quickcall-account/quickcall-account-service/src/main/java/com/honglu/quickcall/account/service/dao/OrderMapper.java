@@ -139,9 +139,24 @@ public interface OrderMapper {
 	 * @return
 	 */
 	List<Order> selectOrderReceiveOrder(@Param("serviceId")Long  serviceId ,@Param("orderId")Long orderId, @Param("orderStatus")Integer orderStatus, @Param("skillType")Integer skillType);
-	
-	
-	
-	
-	
+
+	/**
+	 * 查询声优是否被客户关注
+	 * @param serviceId -- 服务者ID
+	 * @param customerId -- 客户ID
+	 * @return
+	 */
+    Integer findServicerIsAttentioned(@Param("serviceId") Long serviceId, @Param("customerId") Long customerId);
+
+	/**
+	 * 插入订单服务者的粉丝
+	 *
+	 * @param id
+	 * @param serviceId
+	 * @param customerId
+	 * @return
+	 */
+	int insertOrderServicerFans(@Param("id") Long id,
+								@Param("serviceId") Long serviceId,
+								@Param("customerId") Long customerId);
 }

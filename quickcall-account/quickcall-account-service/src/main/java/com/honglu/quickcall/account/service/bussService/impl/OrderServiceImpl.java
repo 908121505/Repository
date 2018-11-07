@@ -1,12 +1,10 @@
 package com.honglu.quickcall.account.service.bussService.impl;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
+import com.honglu.quickcall.user.facade.constants.UserBizConstants;
+import com.honglu.quickcall.user.facade.entity.Fans;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -988,11 +986,22 @@ public class OrderServiceImpl implements IOrderService {
             labelLists.add(label);
         }
         orderEvaluationVo.setEvaluationLabelList(labelLists);
+
+        // 查询客户对声优的关注状态
+		orderEvaluationVo.setAttentionFlag(
+				orderMapper.findServicerIsAttentioned(
+						orderDetailVO.getServiceId(), orderDetailVO.getCustomerId()) > 0 ? 1 : 0);
+
         return ResultUtils.resultSuccess(orderEvaluationVo);
     }
 
     @Override
     public CommonResponse submitOrderEvaluation(OrderEvaluationSubmitRequest request) {
+		// 根据订单Id查询评价页面需要的数据
+		OrderDetailVO orderDetail = orderMapper.queryEvaluationData(request.getOrderId());
+		if (orderDetail == null) {
+			return ResultUtils.resultDataNotExist("订单信息不存在");
+		}
 		// 保存订单表评价信息
 		Order evaluationInfo = new Order();
 		evaluationInfo.setOrderId(request.getOrderId());
@@ -1030,6 +1039,12 @@ public class OrderServiceImpl implements IOrderService {
 		}
 
 		commonService.updateOrder(request.getOrderId(), OrderSkillConstants.ORDER_STATUS_FINISHED_AND_PINGJIA);
+
+		// 插入关注
+		if(Objects.equals(request.getAttentionFlag(), 1)){
+			orderMapper.insertOrderServicerFans(UUIDUtils.getId(), orderDetail.getServiceId(), orderDetail.getCustomerId());
+		}
+
 		// ADUAN -- 用户评价，计算主播评分排名，发送MQ消息
 		userCenterSendMqMessageService.sendEvaluationOrderMqMessage(request.getOrderId());
 
