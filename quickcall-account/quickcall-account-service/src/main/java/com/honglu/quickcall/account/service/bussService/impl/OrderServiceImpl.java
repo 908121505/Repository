@@ -743,8 +743,15 @@ public class OrderServiceImpl implements IOrderService {
 						List<Long>  orderIdList =  new ArrayList<Long>();
 						for (Order od : orderList) {
 							orderIdList.add(od.getOrderId());
+							try {
+								accountService.inAccount(customerId, od.getOrderAmounts(),TransferTypeEnum.RECHARGE,AccountBusinessTypeEnum.OrderRefund,orderId);
+							} catch (Exception e) {
+								LOGGER.error("用户退款异常异常信息：",e);
+							}
 						}
 						commonService.updateOrderReceiveOrder(orderIdList, OrderSkillConstants.ORDER_STATUS_CANCEL_DAV_START_ONE_ORDER);
+						
+						
 					}
 				}
 				
