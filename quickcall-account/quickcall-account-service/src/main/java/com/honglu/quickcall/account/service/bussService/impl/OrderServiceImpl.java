@@ -745,7 +745,7 @@ public class OrderServiceImpl implements IOrderService {
 							orderIdList.add(od.getOrderId());
 							try {
 								LOGGER.info("===shengyoujiedan,yonghutuikuan,customerId:"+od.getCustomerId() +"amount:"+od.getOrderAmounts());
-								accountService.inAccount(od.getCustomerId(), od.getOrderAmounts(),TransferTypeEnum.RECHARGE,AccountBusinessTypeEnum.OrderRefund,orderId);
+								accountService.inAccount(od.getCustomerId(), od.getOrderAmounts(),TransferTypeEnum.RECHARGE,AccountBusinessTypeEnum.OrderRefund,od.getOrderId());
 							} catch (Exception e) {
 								LOGGER.error("用户退款异常异常信息：",e);
 							}
