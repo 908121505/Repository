@@ -925,6 +925,10 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 
 	@Override
 	public CommonResponse submitCustomerApplyBigv(CustomerApplyBigvRequest request) {
+		Customer viewCustomer = customerMapper.selectByPrimaryKey(request.getCustomerId());
+		if (viewCustomer == null) {
+			return ResultUtils.result(BizCode.CustomerNotExist);
+		}
 		CustomerApplyBigv applyBigv = new CustomerApplyBigv();
 		applyBigv.setApplyId(UUIDUtils.getId());
 		applyBigv.setCustomerId(request.getCustomerId());
