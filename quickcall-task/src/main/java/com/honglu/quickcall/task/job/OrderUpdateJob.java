@@ -418,6 +418,7 @@ public class OrderUpdateJob {
     public void inAccount(Long customerId, BigDecimal amount, TransferTypeEnum transferType,
 			AccountBusinessTypeEnum accountBusinessType,Long orderNo) {
 
+    	LOGGER.info("=======inAccount========customerId:"+customerId+",amount:"+amount +",orderNo:"+orderNo);
 		// 入账
 		accountMapper.inAccount(customerId, amount, transferType.getType());
 		// 记录流水
@@ -455,6 +456,7 @@ public class OrderUpdateJob {
     
 	public void outAccount(Long customerId, BigDecimal amount, TransferTypeEnum transferType,
 			AccountBusinessTypeEnum accountBusinessType, Long orderNo) {
+		LOGGER.info(">>>>>>>>>>>>>>>outAccount>>>>>>>>>>>>>>>customerId:"+customerId+",amount:"+amount +",orderNo:"+orderNo);
 		// 入账
 		accountMapper.outAccount(customerId, amount, transferType.getType());
 		// 记录流水
