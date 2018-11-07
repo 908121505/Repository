@@ -7,7 +7,6 @@ import com.honglu.quickcall.account.facade.entity.Order;
 import com.honglu.quickcall.account.facade.vo.OrderTempResponseVO;
 import com.honglu.quickcall.common.api.exchange.CommonResponse;
 import com.honglu.quickcall.user.facade.entity.Customer;
-import com.honglu.quickcall.user.facade.enums.PushAppMsgTypeEnum;
 
 /**
  * 

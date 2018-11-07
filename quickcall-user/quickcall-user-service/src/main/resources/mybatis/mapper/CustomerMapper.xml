@@ -665,4 +665,12 @@
     SELECT COUNT(1) FROM `customer`
     WHERE customer_id=#{customerId} AND v_status=2;
   </select>
+  
+  <select id="queryPersonByPhone" resultType="com.honglu.quickcall.user.facade.vo.SearchPersonByPhoneVO">
+  	 SELECT
+    	customer_id AS customerId,nick_name AS nickName,phone AS phone,head_portrait_url AS headPortraitUrl
+  	FROM
+  		customer
+    where phone = #{phone}
+  </select>
 </mapper>
