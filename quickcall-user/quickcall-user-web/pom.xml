@@ -20,12 +20,6 @@
     <dependencies>
         <!-- 系统内部引用 -->
         <dependency>
-               <groupId>com.honglu.quickcall</groupId>
-    <artifactId>quickcall-producer-facade</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
-        </dependency>
-        <!-- 系统内部引用 -->
-        <dependency>
             <groupId>com.honglu.quickcall</groupId>
             <artifactId>quickcall-user-facade</artifactId>
         </dependency>
@@ -252,7 +246,9 @@
     </dependencies>
 
 
+
     <profiles>
+    
         <profile>
             <id>vpro</id>
             <properties>
@@ -299,6 +295,16 @@
                     <skip>true</skip>
                 </configuration>
             </plugin>
+             <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-war-plugin</artifactId>
+            <version>2.6</version>
+            <configuration>
+                <failOnMissingWebXml>false</failOnMissingWebXml>
+            </configuration>
+        </plugin>
+            
+            
         </plugins>
         <resources>
             <resource>

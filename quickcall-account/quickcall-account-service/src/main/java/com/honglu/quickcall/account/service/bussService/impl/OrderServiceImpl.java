@@ -297,7 +297,7 @@ public class OrderServiceImpl implements IOrderService {
 		
 			//下单触发埋点
 			req.setActual_payment_amount(orderAmounts.doubleValue());
-			req.setOrder_amount(orderAmounts.multiply(price).doubleValue());
+			req.setOrder_amount(orderAmounts.doubleValue());
 			req.setOrder_id(orderId +"");
 			req.setOrder_quantity(Double.valueOf(orderNum +""));
 			req.setOrder_type(skillItem.getSkillItemName());
@@ -468,7 +468,7 @@ public class OrderServiceImpl implements IOrderService {
 		
 		if(orderDetail != null){
 			Date  birthday  =  orderDetail.getBirthday();
-			int   age = DateUtils.getAgeByBirth(birthday);
+			int   age = DateUtils.getAgeByBirthYear(birthday);
 			orderDetail.setAge(age);
 			OrderTempResponseVO  responseVO = commonService.getCountDownSeconds(orderDetail.getOrderStatus(), orderDetail.getOrderTime(), orderDetail.getReceiveOrderTime());
 			orderDetail.setCountDownSeconds(responseVO.getCountDownSeconds());
@@ -660,23 +660,24 @@ public class OrderServiceImpl implements IOrderService {
 		    int  addMinute =  0 ;
 		    Integer  orderNum = order.getOrderNum();
 		    
+		    Calendar cal =  Calendar.getInstance();
+		    Date   startTime =  order.getStartTime();
+		    if(startTime != null){
+		    	//应该取订单进行中起始时间
+		    	cal.setTime(startTime);
+		    }else{
+		    	cal.setTime(currTime);
+		    }
 		    if(serviceUnit.contains(OrderSkillConstants.SERVICE_UNIT_TIMES)){
-		    	//叫醒服务时需要添加5分钟过期时间
-		    	addMinute = 12 * 60 + 5;
+		    	//叫醒服务时需要添加5分钟过期时间+时间起点是预期开始时间
+		    	addMinute =  5;
+		    	cal.setTime(order.getAppointTime());
 		    }else if (serviceUnit.contains(OrderSkillConstants.SERVICE_UNIT_HALF_HOUR)){
 		    	addMinute = orderNum * 30 ;
 		    }else {
 		    	addMinute = orderNum * 60 ;
 		    }
 			
-			Calendar cal =  Calendar.getInstance();
-			Date   startTime =  order.getStartTime();
-			if(startTime != null){
-				//应该取订单进行中起始时间
-				cal.setTime(startTime);
-			}else{
-				cal.setTime(currTime);
-			}
 			Date  endTime =  null;
 			if(addMinute > 0){
 				cal.add(Calendar.MINUTE, addMinute);
@@ -742,8 +743,15 @@ public class OrderServiceImpl implements IOrderService {
 						List<Long>  orderIdList =  new ArrayList<Long>();
 						for (Order od : orderList) {
 							orderIdList.add(od.getOrderId());
+							try {
+								accountService.inAccount(customerId, od.getOrderAmounts(),TransferTypeEnum.RECHARGE,AccountBusinessTypeEnum.OrderRefund,orderId);
+							} catch (Exception e) {
+								LOGGER.error("用户退款异常异常信息：",e);
+							}
 						}
 						commonService.updateOrderReceiveOrder(orderIdList, OrderSkillConstants.ORDER_STATUS_CANCEL_DAV_START_ONE_ORDER);
+						
+						
 					}
 				}
 				
@@ -981,7 +989,7 @@ public class OrderServiceImpl implements IOrderService {
 		// 保存订单表评价信息
 		Order evaluationInfo = new Order();
 		evaluationInfo.setOrderId(request.getOrderId());
-		evaluationInfo.setEvaluateStart(request.getEvaluateStart() == null ? 0 : request.getEvaluateStart());
+		evaluationInfo.setEvaluateStart(request.getEvaluateStart() == null ? 3 : request.getEvaluateStart());
 		evaluationInfo.setCustomerEvaluate(request.getEvaluateContent());
 		orderMapper.saveEvaluationInfo(evaluationInfo);
 

@@ -114,12 +114,14 @@ public class AliPayController extends BaseController {
 	public WebResponseModel alipayNotify(@RequestBody AlipayNotifyRequest params) {
 		logger.info("accountWeb.pay.alipayNotify.request.data : " + JSONObject.toJSONString(params));
 		WebResponseModel response = new WebResponseModel();
+
 		if (params.getAccountId() == null || StringUtils.isBlank(params.getOrderNo()) || params.getAmount() == null
 				|| params.getPayState() == null) {
 			response.setCode(AccountBizReturnCode.paramError.code());
 			response.setMsg(AccountBizReturnCode.paramError.desc());
 			return response;
 		}
+
 		response = accountCenterService.execute(params);
 		logger.info("accountWeb.pay.alipayNotify.response.data : " + JSONObject.toJSONString(response));
 		return response;

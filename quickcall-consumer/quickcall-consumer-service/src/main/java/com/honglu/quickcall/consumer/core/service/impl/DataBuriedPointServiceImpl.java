@@ -6,7 +6,9 @@ import com.honglu.quickcall.consumer.core.service.DataBuriedPointService;
 import com.honglu.quickcall.databury.facade.business.DataBuryBusiness;
 import com.honglu.quickcall.databury.facade.exception.DataBuriedPointException;
 import com.honglu.quickcall.databury.facade.req.databury.*;
+import com.honglu.quickcall.databury.facade.req.databury.UserBean;
 import com.honglu.quickcall.producer.facade.req.databury.*;
+import org.apache.http.client.utils.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -43,6 +45,28 @@ public class DataBuriedPointServiceImpl implements DataBuriedPointService{
         request.setRegistDate(req.getRegistDate());
         request.setRegistSource(req.getRegistSource());
         request.setUser_id(req.getUser_id());
+        logger.info("===============consumer注册埋点用户数据："+req.getUserBean());
+        if (req.getUserBean()!=null){
+            UserBean userBean = new UserBean();
+            userBean.setGender(req.getUserBean().getGender());
+            userBean.setNick(req.getUserBean().getNick());
+            userBean.setNumberOfCencerns(req.getUserBean().getNumberOfCencerns());
+            userBean.setPhoneNumber(req.getUserBean().getPhoneNumber());
+            if (req.getUserBean().getRegistDate()!=null) {
+                userBean.setRegistDate(DateUtils.formatDate(req.getUserBean().getRegistDate(),"yyyy-MM-dd HH:mm:ss"));
+            }
+            userBean.setRegistSource(req.getUserBean().getRegistSource());
+            userBean.setUserEquipment(req.getUserBean().getUserEquipment());
+            userBean.setUserIdentity(req.getUserBean().getUserIdentity());
+            userBean.setVc_user_id(req.getUser_id());
+            userBean.setVermicelli(req.getUserBean().getVermicelli());
+
+            if (req.getUserBean().getYearOfBirth()!=null) {
+                userBean.setYearOfBirth(DateUtils.formatDate(req.getUserBean().getYearOfBirth(),"yyyy-MM-dd HH:mm:ss"));
+            }
+            request.setUserBean(userBean);
+        }
+
         dataDuryBusiness.saveSignUpResultData(request);
     }
 
@@ -54,6 +78,30 @@ public class DataBuriedPointServiceImpl implements DataBuriedPointService{
         request.setLoginmethod(req.getLoginmethod());
         request.setPhoneNumber(req.getPhoneNumber());
         request.setUser_id(req.getUser_id());
+
+        logger.info("===============consumer登陆埋点用户数据："+req.getUserBean());
+
+        if (req.getUserBean()!=null){
+            UserBean userBean = new UserBean();
+            userBean.setGender(req.getUserBean().getGender());
+            userBean.setNick(req.getUserBean().getNick());
+            userBean.setNumberOfCencerns(req.getUserBean().getNumberOfCencerns());
+            userBean.setPhoneNumber(req.getUserBean().getPhoneNumber());
+            if (req.getUserBean().getRegistDate()!=null) {
+                userBean.setRegistDate(DateUtils.formatDate(req.getUserBean().getRegistDate(),"yyyy-MM-dd HH:mm:ss"));
+            }
+            userBean.setRegistSource(req.getUserBean().getRegistSource());
+            userBean.setUserEquipment(req.getUserBean().getUserEquipment());
+            userBean.setUserIdentity(req.getUserBean().getUserIdentity());
+            userBean.setVc_user_id(req.getUser_id());
+            userBean.setVermicelli(req.getUserBean().getVermicelli());
+
+            if (req.getUserBean().getYearOfBirth()!=null) {
+                userBean.setYearOfBirth(DateUtils.formatDate(req.getUserBean().getYearOfBirth(),"yyyy-MM-dd HH:mm:ss"));
+            }
+            request.setUserBean(userBean);
+        }
+
         dataDuryBusiness.saveUserIdLoginResultData(request);
     }
 

@@ -84,7 +84,8 @@
     nick_name AS nickName,
     head_portrait_url AS headPortraitUrl,
     sex,
-    type,
+    (case when v_status=2 then 1
+						else 0	end	) as type,
     (YEAR (NOW()) - YEAR (birthday)) AS age
     from customer
     <where>
@@ -120,7 +121,8 @@
     nick_name AS nickName,
     head_portrait_url AS headPortraitUrl,
     sex,
-    type,
+    (case when v_status=2 then 1
+						else 0	end	) as type,
     (YEAR (NOW()) - YEAR (birthday)) AS age
     <if test="customerId != null">
   	 	,IFNULL(fs.attention_state,0) AS attentionStatus,
@@ -656,5 +658,19 @@
   FROM
   customer
   where customer_id = #{customerId}
+  </select>
+
+  <!-- 判断客户是否为声优 -->
+  <select id="judgeCustomerIsBigv" resultType="int">
+    SELECT COUNT(1) FROM `customer`
+    WHERE customer_id=#{customerId} AND v_status=2;
+  </select>
+  
+  <select id="queryPersonByPhone" resultType="com.honglu.quickcall.user.facade.vo.SearchPersonByPhoneVO">
+  	 SELECT
+    	customer_id AS customerId,nick_name AS nickName,phone AS phone,head_portrait_url AS headPortraitUrl
+  	FROM
+  		customer
+    where phone = #{phone}
   </select>
 </mapper>

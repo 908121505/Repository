@@ -42,7 +42,7 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 
     @Autowired
     private DataDuriedPointBusiness dataDuriedPointBusiness;
-	private  static final  Integer  WEEK_INDEX_DEFAULT = 0 ;
+	private  static final  Integer  WEEK_INDEX_DEFAULT = 1 ;
 	private  static final  String  ENDTIME_STR_24 = "2400" ;
 	private  static final  String  ENDTIME_STR_00 = "0000" ;
 	
@@ -331,44 +331,50 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 
 	
 	
+
 	public   Date   getAppointEndTime(String  endTimeStr){
 		//
 		if(StringUtils.isBlank(endTimeStr) || endTimeStr.length() < 4){
 			return null;
 		}
-		
+		LOGGER.info("endTimeStr====================="+endTimeStr);
 		if(ENDTIME_STR_00.equals(endTimeStr) ||  ENDTIME_STR_24.equals(endTimeStr)){
 			//返回当天时间的最后一分钟
 			Calendar  cal =  Calendar.getInstance();
 			cal.set(Calendar.HOUR_OF_DAY, 23);
 			cal.set(Calendar.MINUTE, 59);
 			cal.set(Calendar.SECOND, 59);
+			cal.set(Calendar.MILLISECOND, 0);
+			LOGGER.info("endTime====================="+cal.getTime());
 			return  cal.getTime();
-		}
-		
-		Integer  endTimeIndex =  Integer.valueOf(endTimeStr);
-		
-		Calendar  cal =  Calendar.getInstance();
-		Integer  currHour= cal.get(Calendar.HOUR_OF_DAY);
-		Integer  currMinute = cal.get(Calendar.MINUTE);
-		
-		String  currTimeStr =  (currHour < 10 ? "0"+currHour :currHour+"")+ (currMinute < 10  ? "0"+currMinute :currMinute +"" );
-		Integer  currTimeIndex =  Integer.valueOf(currTimeStr);
-		
-		Integer   selectHourIndex = Integer.valueOf(endTimeStr.substring(0, 2));
-		//选中的结束时间在当前时间之后
-		if(endTimeIndex >=  currTimeIndex ){
-			cal.set(Calendar.HOUR_OF_DAY, selectHourIndex);
-			cal.set(Calendar.MINUTE, 0);
 		}else{
-			//选中的结束时间在当前时间只前
-			//结束时间向后推1天
-			cal.add(Calendar.DAY_OF_YEAR, 1);
-			cal.set(Calendar.HOUR_OF_DAY, selectHourIndex);
-			cal.set(Calendar.MINUTE, 0);
+			
+			Integer  endTimeIndex =  Integer.valueOf(endTimeStr);
+			
+			Calendar  cal =  Calendar.getInstance();
+			Integer  currHour= cal.get(Calendar.HOUR_OF_DAY);
+			Integer  currMinute = cal.get(Calendar.MINUTE);
+			
+			String  currTimeStr =  (currHour < 10 ? "0"+currHour :currHour+"")+ (currMinute < 10  ? "0"+currMinute :currMinute +"" );
+			Integer  currTimeIndex =  Integer.valueOf(currTimeStr);
+			
+			Integer   selectHourIndex = Integer.valueOf(endTimeStr.substring(0, 2));
+			//选中的结束时间在当前时间之后
+			if(endTimeIndex >=  currTimeIndex ){
+				cal.set(Calendar.HOUR_OF_DAY, selectHourIndex);
+				cal.set(Calendar.MINUTE, 0);
+			}else{
+				//选中的结束时间在当前时间只前
+				//结束时间向后推1天
+				cal.add(Calendar.DAY_OF_YEAR, 1);
+				cal.set(Calendar.HOUR_OF_DAY, selectHourIndex);
+				cal.set(Calendar.MINUTE, 0);
+			}
+			Date  appointEndTime =cal.getTime(); 
+			LOGGER.info("endTime====================="+cal.getTime());
+			return appointEndTime;
 		}
-		Date  appointEndTime =cal.getTime(); 
-		return appointEndTime;
+		
 	}
 	
 	/**
@@ -376,6 +382,9 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 	 * 结束时间入参：0000   2400    落库：2400   判断时采用2359进行判断时间
 	 */
 	
+
+//	private  static final  Integer  WEEK_INDEX_DEFAULT = 0 ;
+
 
 	@Override
 	public void updateSkillInfoPersonal(SkillUpdateRequest request) {
@@ -388,8 +397,8 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 		String  endTimeStr = request.getEndServiceTimeStr();
 		//根据结束时间获取预约结束时间
 		Date  appointEndTime = getAppointEndTime(endTimeStr);
-		if( ENDTIME_STR_24.equals(endTimeStr)){
-			endTimeStr = ENDTIME_STR_00;
+		if( ENDTIME_STR_24.equals(endTimeStr) ||  ENDTIME_STR_00.equals(endTimeStr)){
+			endTimeStr = ENDTIME_STR_24;
 		}
 		Date  appointStartTime = new Date();
 		
@@ -464,11 +473,11 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 		}
 		
 		//更新bigv_score表
-		try {
-			customerSkillMapper.updateBigvScore(customerId, receiveStatus);
-		} catch (Exception e) {
-			LOGGER.error("更新用户状态发生异常，异常信息：",e);
-		}
+//		try {
+//			customerSkillMapper.updateBigvScore(customerId, receiveStatus);
+//		} catch (Exception e) {
+//			LOGGER.error("更新用户状态发生异常，异常信息：",e);
+//		}
 		
 
 	}
