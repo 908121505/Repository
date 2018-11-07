@@ -13,6 +13,7 @@
     <result column="skill_status" property="skillStatus" jdbcType="TINYINT" />
     <result column="switch_status" property="switchStatus" jdbcType="TINYINT" />
     <result column="receive_status" property="receiveStatus" jdbcType="TINYINT" />
+    <result column="auto_receive_status" property="autoReceiveStatus" jdbcType="TINYINT" />
     <result column="discount_rate" property="discountRate" jdbcType="DECIMAL" />
     <result column="skill_range" property="skillRange" jdbcType="TINYINT" />
     <result column="discount_price" property="discountPrice" jdbcType="DECIMAL" />
@@ -36,7 +37,7 @@
   
   <sql id="Base_Column_List" >
    customer_skill_id, certify_id, customer_id, skill_item_id, skill_item_ext_id, skill_name, 
-    service_unit, skill_price, skill_status, switch_status, receive_status, discount_rate, 
+    service_unit, skill_price, skill_status, switch_status, receive_status,auto_receive_status, discount_rate, 
     skill_range, discount_price, monday, tuesday, wednesday, thursday, friday, saturday, 
     sunday, end_time_str, appoint_start_time,appoint_end_time ,skill_describe, create_time, modify_time, create_man, modify_man, 
     remark
@@ -95,7 +96,7 @@
         insert into customer_skill (customer_skill_id, certify_id, customer_id, 
       skill_item_id, skill_item_ext_id, skill_name, 
       service_unit, skill_price, skill_status, 
-      switch_status, receive_status, discount_rate, 
+      switch_status, receive_status,auto_receive_status, discount_rate, 
       skill_range, discount_price, monday, 
       tuesday, wednesday, thursday, 
       friday, saturday, sunday, 
@@ -105,7 +106,7 @@
     values (#{customerSkillId,jdbcType=BIGINT}, #{certifyId,jdbcType=BIGINT}, #{customerId,jdbcType=BIGINT}, 
       #{skillItemId,jdbcType=BIGINT}, #{skillItemExtId,jdbcType=BIGINT}, #{skillName,jdbcType=VARCHAR}, 
       #{serviceUnit,jdbcType=VARCHAR}, #{skillPrice,jdbcType=DECIMAL}, #{skillStatus,jdbcType=TINYINT}, 
-      #{switchStatus,jdbcType=TINYINT}, #{receiveStatus,jdbcType=TINYINT}, #{discountRate,jdbcType=DECIMAL}, 
+      #{switchStatus,jdbcType=TINYINT}, #{receiveStatus,jdbcType=TINYINT},#{autoReceiveStatus,jdbcType=TINYINT}, #{discountRate,jdbcType=DECIMAL}, 
       #{skillRange,jdbcType=TINYINT}, #{discountPrice,jdbcType=DECIMAL}, #{monday,jdbcType=TINYINT}, 
       #{tuesday,jdbcType=TINYINT}, #{wednesday,jdbcType=TINYINT}, #{thursday,jdbcType=TINYINT}, 
       #{friday,jdbcType=TINYINT}, #{saturday,jdbcType=TINYINT}, #{sunday,jdbcType=TINYINT}, 
@@ -149,6 +150,9 @@
       </if>
       <if test="receiveStatus != null" >
         receive_status,
+      </if>
+      <if test="autoReceiveStatus != null" >
+        auto_receive_status,,
       </if>
       <if test="discountRate != null" >
         discount_rate,
@@ -241,6 +245,9 @@
       </if>
       <if test="receiveStatus != null" >
         #{receiveStatus,jdbcType=TINYINT},
+      </if>
+      <if test="autoReceiveStatus != null" >
+        #{autoReceiveStatus,jdbcType=TINYINT},
       </if>
       <if test="discountRate != null" >
         #{discountRate,jdbcType=DECIMAL},
@@ -336,6 +343,9 @@
       <if test="receiveStatus != null" >
         receive_status = #{receiveStatus,jdbcType=TINYINT},
       </if>
+      <if test="autoReceiveStatus != null" >
+        auto_receive_status, = #{autoReceiveStatus,jdbcType=TINYINT},
+      </if>
       <if test="discountRate != null" >
         discount_rate = #{discountRate,jdbcType=DECIMAL},
       </if>
@@ -411,6 +421,7 @@
       skill_status = #{skillStatus,jdbcType=TINYINT},
       switch_status = #{switchStatus,jdbcType=TINYINT},
       receive_status = #{receiveStatus,jdbcType=TINYINT},
+      auto_receive_status, = #{autoReceiveStatus,jdbcType=TINYINT},
       discount_rate = #{discountRate,jdbcType=DECIMAL},
       skill_range = #{skillRange,jdbcType=TINYINT},
       discount_price = #{discountPrice,jdbcType=DECIMAL},
@@ -437,7 +448,7 @@
   <select id="querySkillInfoPersonal" resultType="com.honglu.quickcall.account.facade.entity.CustomerSkill" parameterType="java.lang.Long" >
     SELECT 
      cs.customer_skill_id  AS customerSkillId, cs.customer_id  AS customerId, cs.skill_item_id AS skillItemId, cs.skill_item_ext_id AS skillItemExtId, st.skill_item_name   AS  skillName, 
-     cs.service_unit  AS serviceUnit, cs.skill_price  AS skillPrice, cs.skill_status  AS skillStatus, cs.switch_status AS switchStatus, cs.receive_status AS receiveStatus, cs.discount_rate AS discountRate, 
+     cs.service_unit  AS serviceUnit, cs.skill_price  AS skillPrice, cs.skill_status  AS skillStatus, cs.switch_status AS switchStatus, cs.receive_status AS receiveStatus, cs.auto_receive_status AS autoReceiveStatus, cs.discount_rate AS discountRate, 
      cs.skill_range AS skillRange, cs.discount_price AS discountPrice, cs.monday, cs.tuesday, cs.wednesday, cs.thursday, cs.friday, cs.saturday, 
      cs.sunday, cs.end_time_str  AS endTimeStr
     FROM customer_skill  cs  LEFT JOIN  skill_item   st  ON  cs.skill_item_id  = st.id
@@ -458,6 +469,7 @@
       skill_price = #{skill.skillPrice,jdbcType=DECIMAL},
       switch_status = #{skill.switchStatus,jdbcType=TINYINT},
       receive_status = #{skill.receiveStatus,jdbcType=TINYINT},
+      auto_receive_status = #{skill.autoReceiveStatus,jdbcType=TINYINT},
       discount_rate = #{skill.discountRate,jdbcType=DECIMAL},
       skill_range = #{skill.skillRange,jdbcType=TINYINT},
       discount_price = #{skill.discountPrice,jdbcType=DECIMAL},

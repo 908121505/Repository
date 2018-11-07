@@ -51,7 +51,9 @@ public class QueryBigvListServiceImpl implements QueryBigvListService {
 
         /****** 查询首页6帧资源位数据*****/
         AppHomeBigvListVO recomedBigv = new AppHomeBigvListVO();
-        recomedBigv.setSkillItemName("推荐列表");
+        recomedBigv.setSkillItemName("推荐");
+        // 默认100为推荐类别ID
+        recomedBigv.setSkillItemId(100L);
         List<AppHomeBigvListVO.BigvInfoVO> bigvList = this.queryConfigBigvList(recomedBigv, weekIndex, endTimeStr);
         if (bigvList != null && bigvList.size() > 0) {
             recomedBigv.setDaVinfoList(bigvList);

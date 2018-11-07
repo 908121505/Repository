@@ -18,9 +18,11 @@ import com.honglu.quickcall.common.api.exchange.AbstractRequest;
 public class SkillUpdateRequest extends AbstractRequest {
 
 	
-	private static final long serialVersionUID = 7279476978703182695L;
+	private static final long serialVersionUID = 3201272243034900752L;
 	private List<CustomerSkillRequestVO> customerSkillList;
 	private String endServiceTimeStr;
+	private String startServiceTimeStr;
+	private Integer autoReceiveStatus;
 	private Integer receiveStatus;
 	private Integer sunday;
 	private Integer saturday;
@@ -110,8 +112,22 @@ public class SkillUpdateRequest extends AbstractRequest {
 	public Integer getMonday() {
 		return monday;
 	}
-	
-	
+
+	public String getStartServiceTimeStr() {
+		return startServiceTimeStr;
+	}
+
+	public void setStartServiceTimeStr(String startServiceTimeStr) {
+		this.startServiceTimeStr = startServiceTimeStr;
+	}
+
+	public Integer getAutoReceiveStatus() {
+		return autoReceiveStatus;
+	}
+
+	public void setAutoReceiveStatus(Integer autoReceiveStatus) {
+		this.autoReceiveStatus = autoReceiveStatus;
+	}
 
 	public Long getCustomerId() {
 		return customerId;

@@ -37,6 +37,9 @@ public class CustomerSkill {
     private Integer switchStatus;
 
     private Integer receiveStatus;
+    
+    
+    private Integer autoReceiveStatus;
 
     private BigDecimal discountRate;
 
@@ -77,10 +80,15 @@ public class CustomerSkill {
 
     
     
-    
-    
-    
-    public Date getAppointStartTime() {
+    public Integer getAutoReceiveStatus() {
+		return autoReceiveStatus;
+	}
+
+	public void setAutoReceiveStatus(Integer autoReceiveStatus) {
+		this.autoReceiveStatus = autoReceiveStatus;
+	}
+
+	public Date getAppointStartTime() {
 		return appointStartTime;
 	}
 

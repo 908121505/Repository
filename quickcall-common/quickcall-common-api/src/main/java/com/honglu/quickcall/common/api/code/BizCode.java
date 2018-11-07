@@ -25,6 +25,7 @@ public class BizCode extends AbstractCodedEnum{
     public static final BizCode ActivityIsNotExist;
     public static final BizCode ChargeOrderSaveFail;
     public static final BizCode ChargeOrderFail;
+    public static final BizCode DataStateError;
 
     /***** 与用户相关的 ****/
     public static final BizCode CustomerNotExist;
@@ -69,6 +70,7 @@ public class BizCode extends AbstractCodedEnum{
         ActivityUnBegin = new BizCode("ActivityUnBegin", "695", ServiceCode.Default, "活动未开始");
         ActivityIsEnd = new BizCode("ActivityIsEnd", "694", ServiceCode.Default, "活动已结束");
         ActivityIsNotExist = new BizCode("ActivityIsNotExist", "699", ServiceCode.Default, "活动不存在");
+        DataStateError = new BizCode("DataStateError", "700", ServiceCode.Default, "数据状态异常");
 
         /**
          * 300 开头，与支付订单相关
