@@ -701,23 +701,24 @@ public class OrderServiceImpl implements IOrderService {
 		    int  addMinute =  0 ;
 		    Integer  orderNum = order.getOrderNum();
 		    
+		    Calendar cal =  Calendar.getInstance();
+		    Date   startTime =  order.getStartTime();
+		    if(startTime != null){
+		    	//应该取订单进行中起始时间
+		    	cal.setTime(startTime);
+		    }else{
+		    	cal.setTime(currTime);
+		    }
 		    if(serviceUnit.contains(OrderSkillConstants.SERVICE_UNIT_TIMES)){
-		    	//叫醒服务时需要添加5分钟过期时间
-		    	addMinute = 12 * 60 + 5;
+		    	//叫醒服务时需要添加5分钟过期时间+时间起点是预期开始时间
+		    	addMinute =  5;
+		    	cal.setTime(order.getAppointTime());
 		    }else if (serviceUnit.contains(OrderSkillConstants.SERVICE_UNIT_HALF_HOUR)){
 		    	addMinute = orderNum * 30 ;
 		    }else {
 		    	addMinute = orderNum * 60 ;
 		    }
 			
-			Calendar cal =  Calendar.getInstance();
-			Date   startTime =  order.getStartTime();
-			if(startTime != null){
-				//应该取订单进行中起始时间
-				cal.setTime(startTime);
-			}else{
-				cal.setTime(currTime);
-			}
 			Date  endTime =  null;
 			if(addMinute > 0){
 				cal.add(Calendar.MINUTE, addMinute);

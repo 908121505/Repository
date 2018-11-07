@@ -237,5 +237,9 @@ public interface UserFunctionType {
 	 * 初始化大V评分排名数据
 	 */
 	String INIT_BIGV_SCORE_RANK_DATA = "003233";
+	/**
+	 * 根据电话查询用户信息
+	 */
+	String searchPersonByPhone = "0011138";
 
 }

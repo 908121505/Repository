@@ -18,8 +18,6 @@ import com.calf.cn.service.BaseManager;
 import com.calf.cn.utils.SearchUtil;
 import com.calf.module.customer.entity.CustomerSkillCertify;
 import com.calf.module.customer.vo.CustomerSkillCertifyVO;
-import com.calf.module.internal.entity.Message;
-import com.calf.module.internal.entity.MessageCustomer;
 import com.calf.module.order.entity.SkillItemExt;
 import com.honglu.quickcall.common.core.util.UUIDUtils;
 import com.honglu.quickcall.common.third.rongyun.util.RongYunUtil;
@@ -117,28 +115,10 @@ public class CustomerSkillCertifyController implements BaseController<CustomerSk
 			}
 		}
 		int n = baseManager.update("CustomerSkillCertify.updateEntity",param);
-		//插入消息数据库
-		Message msg = new Message();
-		MessageCustomer mc = new MessageCustomer();
-		Long messageId = UUIDUtils.getId();
-		msg.setMessageId(messageId.toString());
-		msg.setTitle("技能审核");
-		mc.setId(UUIDUtils.getId().toString());
-		mc.setMessageId(messageId);
-		mc.setReceiverId(csc.getCustomerId());
-		String content = "";
 		if(entity.getAuditStatus() == 2){
-			content = "您的\""+entity.getSkillItemName()+"\"技能已通过审核，可以提供服务啦";
-			msg.setMessageContent(content);
-			baseManager.insert("MessageMapper.insertSelective",msg);
-			baseManager.insert("MessageCustomerMapper.insertSelective",mc);
-			RongYunUtil.sendSystemMessage(csc.getCustomerId(),content);
+			RongYunUtil.sendSystemMessage(csc.getCustomerId(), "您的\""+entity.getSkillItemName()+"\"技能已通过审核，可以提供服务啦");
 		}else{
-			content = "很遗憾，您申请的\""+entity.getSkillItemName()+"\"技能未通过审核，请重新提交审核材料";
-			msg.setMessageContent(content);
-			baseManager.insert("MessageMapper.insertSelective",msg);
-			baseManager.insert("MessageCustomerMapper.insertSelective",mc);
-			RongYunUtil.sendSystemMessage(csc.getCustomerId(),content );
+			RongYunUtil.sendSystemMessage(csc.getCustomerId(), "很遗憾，您申请的\""+entity.getSkillItemName()+"\"技能未通过审核，请重新提交审核材料");
 		}
 		return n;
 	}

@@ -332,6 +332,9 @@ public class UserDubboBusinessImpl implements UserDubboBusiness {
 			case UserFunctionType.saveDeviceWhitelist:
 				response = deviceWhitelistService.saveDeviceWhitelist((SaveDeviceWhitelistReq) request);
 				break;*/
+			case UserFunctionType.searchPersonByPhone:
+				response = commonPersonService.searchPersonByPhone((SearchPersonByPhoneRequest) request);
+				break;
 			default:
 				throw new BizException(UserBizReturnCode.BizFunctionTypeNotMatch,
 						UserBizReturnCode.BizFunctionTypeNotMatch.desc());
