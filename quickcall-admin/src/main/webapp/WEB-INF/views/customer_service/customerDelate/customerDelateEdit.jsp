@@ -16,6 +16,12 @@
 			<form class="form-horizontal" method="post" id="customerDelateForm" name="customerDelateForm" role="form"
 				action="customerDelate/saveUpdate.htm?id=${entity.id}">
 				<div class="form-group">
+					<label class="col-sm-3 control-label">举报名称<font color="red"> </font></label>
+					<div class="col-sm-6">
+						<input type="text" class="form-control" name="delateName" value="${entity.delateName}" disabled='disabled'/>
+					</div>
+				</div>
+				<div class="form-group">
 					<label class="col-sm-3 control-label">举报内容<font color="red">&nbsp;*</font></label>
 					<div class="col-sm-6">
 						<textarea id="delateContent" name="delateContent" rows="6" cols="20"class="form-control" disabled='disabled'>${entity.delateContent}</textarea>
