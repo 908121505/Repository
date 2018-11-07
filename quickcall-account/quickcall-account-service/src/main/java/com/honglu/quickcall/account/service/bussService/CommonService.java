@@ -103,9 +103,10 @@ public interface CommonService {
 	 * @param orderTime
 	 * @param receiveOrderTime
 	 * @param startServiceTime
+	 * @param ecpectEndTime
 	 * @return
 	 */
-	public OrderTempResponseVO  getCountDownSeconds(Integer   oldOrderStatus ,Date  orderTime,Date  receiveOrderTime,Date startServiceTime);
+	public OrderTempResponseVO  getCountDownSeconds(Integer   oldOrderStatus ,Date  orderTime,Date  receiveOrderTime,Date startServiceTime,Date expectEndTime);
 	
 	
 	
