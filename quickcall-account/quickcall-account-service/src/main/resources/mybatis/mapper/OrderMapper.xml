@@ -490,7 +490,10 @@
 	      od.order_time  AS  orderTime,
 	      od.receive_order_time  AS receiveOrderTime,
 	      od.customer_skill_id AS customerSkillId,
-		  cs.switch_status AS switchStatus
+		  cs.switch_status AS switchStatus,
+		  od.start_servie_time  AS  startServiceTime ,
+		  od.expect_end_time  AS expectEndTime
+		  
 	FROM
 		orders od LEFT JOIN   customer_skill  cs  ON  od.customer_skill_id  = cs.customer_skill_id
 	        LEFT JOIN   skill_item   st ON  cs.skill_item_id  =  st.id
@@ -524,7 +527,9 @@
 		od.order_time AS orderTime,
 		od.receive_order_time AS receiveOrderTime,
 		od.customer_skill_id AS customerSkillId,
-		cs.switch_status AS switchStatus
+		cs.switch_status AS switchStatus,
+		od.start_servie_time  AS  startServiceTime ,
+		od.expect_end_time  AS expectEndTime
 	FROM
 		orders od
 	LEFT JOIN customer_skill cs ON od.customer_skill_id = cs.customer_skill_id
@@ -567,7 +572,9 @@
   			cs.skill_item_id   AS  skillItemId,
 	  		od.receive_order_time AS receiveOrderTime,
 	  		od.remark as  remark,
-	  		od.discount_rate  as discountRate
+	  		od.discount_rate  as discountRate,
+	  		od.start_servie_time  AS  startServiceTime ,
+		    od.expect_end_time  AS expectEndTime
 			
 		FROM
 			orders od
@@ -601,7 +608,9 @@
 		od.end_time AS endTime ,
 		od.receive_order_time AS receiveOrderTime,
 		od.remark as  remark,
-		od.discount_rate  as discountRate
+		od.discount_rate  as discountRate,
+		od.start_servie_time  AS  startServiceTime ,
+		od.expect_end_time  AS expectEndTime
 	FROM
 		orders od
 	INNER JOIN customer ct ON ct.customer_id = od.service_id

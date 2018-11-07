@@ -84,10 +84,12 @@ public class CommonServiceImpl implements CommonService {
 		
 	}
 
+	/***
+	 * 主要获取订单真是状态+真实的倒计时秒数
+	 */
 	@Override
-	public OrderTempResponseVO getCountDownSeconds(Integer   oldOrderStatus ,Date  orderTime,Date  receiveOrderTime,Date startServiceTime) {
+	public OrderTempResponseVO getCountDownSeconds(Integer   oldOrderStatus ,Date  orderTime,Date  receiveOrderTime,Date startServiceTime,Date  expectEndTime) {
 		OrderTempResponseVO  tempVO = new OrderTempResponseVO();
-//		Calendar  cal =  Calendar.getInstance();
 		Date  currTime = new Date();
 		Long  countDownSeconds = null ;
 		Date  endTime = null ;
@@ -120,18 +122,14 @@ public class CommonServiceImpl implements CommonService {
 				tempVO.setCountDownSeconds(countDownSeconds);
 			}else{
 				//小于O说明真实状态已经变更
-				Integer  newOrderStatus = null ;
-				if(oldOrderStatus == OrderSkillConstants.ORDER_STATUS_WAITING_START ){
-					newOrderStatus = OrderSkillConstants.ORDER_STATUS_CANCEL_NOT_START ;
-				}else if (oldOrderStatus == OrderSkillConstants.ORDER_STATUS_WAITING_START_DA_APPAY_START_SERVICE){
-					newOrderStatus = OrderSkillConstants.ORDER_STATUS_CANCEL_USER_NOT_ACCEPCT ;
-				}
+				Integer  newOrderStatus = OrderSkillConstants.ORDER_STATUS_CANCEL_NOT_START ;
 				tempVO.setOrderStatus(newOrderStatus);
 			}
 			//用户5分钟未同意大V立即服务
 		}else if(oldOrderStatus == OrderSkillConstants.ORDER_STATUS_WAITING_START_DA_APPAY_START_SERVICE){
 			Calendar  cal =  Calendar.getInstance();
-			cal.setTime(receiveOrderTime);
+			//开始时间取声优发起立即服务这一刻
+			cal.setTime(startServiceTime);
 			cal.add(Calendar.MINUTE, OrderSkillConstants.START_SERVICE_OVER_TIME_DAV);//TODO 定义常量
 			endTime = cal.getTime();
 			countDownSeconds =  DateUtils.getDiffSeconds(currTime, endTime);
@@ -141,14 +139,19 @@ public class CommonServiceImpl implements CommonService {
 				tempVO.setCountDownSeconds(countDownSeconds);
 			}else{
 				//小于O说明真实状态已经变更
-				Integer  newOrderStatus = null ;
-				if(oldOrderStatus == OrderSkillConstants.ORDER_STATUS_WAITING_START ){
-					newOrderStatus = OrderSkillConstants.ORDER_STATUS_CANCEL_NOT_START ;
-				}else if (oldOrderStatus == OrderSkillConstants.ORDER_STATUS_WAITING_START_DA_APPAY_START_SERVICE){
-					newOrderStatus = OrderSkillConstants.ORDER_STATUS_CANCEL_USER_NOT_ACCEPCT ;
-				}
+				Integer  newOrderStatus = OrderSkillConstants.ORDER_STATUS_CANCEL_USER_NOT_ACCEPCT ;
 				tempVO.setOrderStatus(newOrderStatus);
 			}
+			//进行中倒计时计算，不同状态逻辑不同 ，需要重新梳理一下    TODO
+		}else if(oldOrderStatus == OrderSkillConstants.ORDER_STATUS_GOING_USER_ACCEPCT   || oldOrderStatus == OrderSkillConstants.ORDER_STATUS_GOING_DAV_APPAY_FINISH){
+			//
+			endTime =  expectEndTime;
+			countDownSeconds =  DateUtils.getDiffSeconds(currTime, endTime);
+			//大于0说明正在倒计时，状态不变  小于0的逻辑暂时不考虑
+			if(countDownSeconds > 0){
+				tempVO.setOrderStatus(oldOrderStatus);
+			}
+			tempVO.setCountDownSeconds(countDownSeconds);
 		}
 		return tempVO ;
 	}

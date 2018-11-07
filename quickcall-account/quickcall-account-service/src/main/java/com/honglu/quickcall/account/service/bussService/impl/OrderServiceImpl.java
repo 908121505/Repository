@@ -186,7 +186,6 @@ public class OrderServiceImpl implements IOrderService {
 					String  downLoadStr = null ;
 					if(remainStr != null &&  remainStr > 0){
 						downLoadStr = DateUtils.getDiffSeconds(remainStr);
-						
 					}
 					resultMap.put("downLoadStr", downLoadStr);
 				}
@@ -315,8 +314,6 @@ public class OrderServiceImpl implements IOrderService {
 			} catch (Exception e) {
 				LOGGER.error("下单埋点发生异常，异常信息：",e);
 			}
-		
-		
 		} catch (Exception e) {
 			e.printStackTrace();
 			resultMap.put("retCode",  OrderSkillConstants.RET_CODE_SYSTEM_ERROR);
@@ -349,13 +346,13 @@ public class OrderServiceImpl implements IOrderService {
 		
 		if(!CollectionUtils.isEmpty(resultList)){
 			for (OrderReceiveOrderListVO info : resultList) {
-				OrderTempResponseVO  responseVO = commonService.getCountDownSeconds(info.getOrderStatus(), info.getOrderTime(), info.getReceiveOrderTime(),info.getStartServiceTime());
+				OrderTempResponseVO  responseVO = commonService.getCountDownSeconds(info.getOrderStatus(), info.getOrderTime(), info.getReceiveOrderTime(),info.getStartServiceTime(),info.getExpectEndTime());
 				info.setCountDownSeconds(responseVO.getCountDownSeconds());
 				info.setOrderStatus(responseVO.getOrderStatus());
 				//TODO 兼容安卓版本   7号需要回滚
-				if(info.getReceiveOrderTime() == null){
-					info.setReceiveOrderTime(info.getOrderTime());
-				}
+//				if(info.getReceiveOrderTime() == null){
+//					info.setReceiveOrderTime(info.getOrderTime());
+//				}
 				
 			}
 		}
@@ -387,13 +384,13 @@ public class OrderServiceImpl implements IOrderService {
 		List<OrderSendOrderListVO>  resultList =  orderMapper.querySendOrderList(customerId,statusList);
 		if(!CollectionUtils.isEmpty(resultList)){
 			for (OrderSendOrderListVO info : resultList) {
-				OrderTempResponseVO  responseVO = commonService.getCountDownSeconds(info.getOrderStatus(), info.getOrderTime(), info.getReceiveOrderTime(),info.getStartServiceTime());
+				OrderTempResponseVO  responseVO = commonService.getCountDownSeconds(info.getOrderStatus(), info.getOrderTime(), info.getReceiveOrderTime(),info.getStartServiceTime(),info.getExpectEndTime());
 				info.setCountDownSeconds(responseVO.getCountDownSeconds());
 				info.setOrderStatus(responseVO.getOrderStatus());
 				//TODO 兼容安卓版本   7号需要回滚
-				if(info.getReceiveOrderTime() == null){
-					info.setReceiveOrderTime(info.getOrderTime());
-				}
+//				if(info.getReceiveOrderTime() == null){
+//					info.setReceiveOrderTime(info.getOrderTime());
+//				}
 			}
 		}
 		
@@ -485,7 +482,7 @@ public class OrderServiceImpl implements IOrderService {
 			Date  birthday  =  orderDetail.getBirthday();
 			int   age = DateUtils.getAgeByBirth(birthday);
 			orderDetail.setAge(age);
-			OrderTempResponseVO  responseVO = commonService.getCountDownSeconds(orderDetail.getOrderStatus(), orderDetail.getOrderTime(), orderDetail.getReceiveOrderTime(),orderDetail.getStartServiceTime());
+			OrderTempResponseVO  responseVO = commonService.getCountDownSeconds(orderDetail.getOrderStatus(), orderDetail.getOrderTime(), orderDetail.getReceiveOrderTime(),orderDetail.getStartServiceTime(),orderDetail.getExpectEndTime());
 			orderDetail.setCountDownSeconds(responseVO.getCountDownSeconds());
 			orderDetail.setOrderStatus(responseVO.getOrderStatus());
 		}
