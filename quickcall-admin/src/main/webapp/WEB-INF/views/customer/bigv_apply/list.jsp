@@ -28,11 +28,11 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-2">
+                <div class="col-md-3">
                     <div class="form-group">
                         <div class="input-group">
                             <div class="input-group-addon">用户ID或用户昵称</div>
-                            <input class="form-control" type="text" id="name" maxlength="11">
+                            <input class="form-control" type="text" id="name" maxlength="20">
                         </div>
                     </div>
                 </div>
@@ -62,39 +62,32 @@
                 var table = $('#example').initTable({
                     sAjaxSource: "customerApplyBigv/initTable.htm",
                     aoColumns: [
-                        {"data": "customerId", "sTitle": "用户ID", 'sClass': "text-center", "sortable": false},
-                        {"data": "appId", "sTitle": "AppID", 'sClass': "text-center", "sortable": false},
-                        {"data": "nickName", "sTitle": "用户昵称", 'sClass': "text-center", "sortable": false},
-                        {"data": "phone", "sTitle": "手机号", 'sClass': "text-center", "sortable": false},
-                        {"data": "customerId", "sTitle": "用户ID", 'sClass': "text-center", "sortable": false},
-                        {"data": "applyTime", "sTitle": "申请时间", 'sClass': "text-center", "sortable": false},
-                        {"data": "applyTime", "sTitle": "备注", 'sClass': "text-center", "sortable": false},
-                        {"data": "handleStatus", "sTitle": "联系状态", 'sClass': "text-center", "sortable": false,
+                        {"data": "customerId", "sTitle": "用户ID", 'sClass': "text-center"},
+                        {"data": "appId", "sTitle": "AppID", 'sClass': "text-center"},
+                        {"data": "nickName", "sTitle": "用户昵称", 'sClass': "text-center"},
+                        {"data": "phone", "sTitle": "手机号", 'sClass': "text-center"},
+                        {"data": "applyTime", "sTitle": "申请时间", 'sClass': "text-center"},
+                        {"data": "remark", "sTitle": "备注", 'sClass': "text-center"},
+                        {"data": "handleStatus", "sTitle": "联系状态", 'sClass': "text-center",
                             "mRender": function (data, type, full) {
                                 return data == 0 ? "<font color='red'>未联系</font>" : "<font color='blue'>已联系</font>";
                             }
-                        },
-                        <shiro:hasPermission name="customerApplyBigv:update or customerApplyBigv:delete">
-                        , {"data": "applyId", "sTitle": "操作", 'sClass': "text-center", "sortable": false}
+                        }
+                        <shiro:hasPermission name="customerApplyBigv:update">
+                        , {"data": "applyId", "sTitle": "操作", 'sClass': "text-center", "mRender": function (data, type, row) {
+                                var edit = "";
+                                edit = "<a href='#' onclick='addAndUpdateRow(\"" + data + "\")' data-toggle='modal' class='padding-right-small label label-success'><i class='glyphicon glyphicon-edit'></i> 编辑</a>";
+                                return edit;
+                            }
+                        }
                         </shiro:hasPermission>
                     ],
                     fnServerParams: function (aoData) {  //查询条件
                         aoData.push({"name": "startTime", "value": $("#startTime").val()});
                         aoData.push({"name": "endTime", "value": $("#endTime").val()});
-                        aoData.push({"name": "name", "value": $("#name").val()});
+                        aoData.push({"name": "name", "value": $.trim($("#name").val())});
                         aoData.push({"name": "handleStatus", "value": $("#handleStatus").val()});
-                    },
-                    aoColumnDefs: [
-                        {
-                            "aTargets":8, "mRender": function (data, type, row) {
-                                var edit = "";
-                                <shiro:hasPermission name="customerApplyBigv:update">
-                                edit = "<a href='#' onclick='addAndUpdateRow(\"" + data + "\")' data-toggle='modal' class='padding-right-small label label-success'><i class='glyphicon glyphicon-edit'></i> 编辑</a>";
-                                </shiro:hasPermission>
-                                return edit;
-                            }
-                        }
-                    ]
+                    }
                 });
 
                 $('#query').click(function () {

@@ -28,7 +28,8 @@
 					<label class="col-sm-2 control-label">联系状态</label>
 					<div class="col-sm-10">
 						<c:choose>
-							<c:when test="entity.handleStatus == 0">
+							<c:when test="${entity.handleStatus == 0}">
+								<input type="hidden" value="${entity.handleStatus }" name="oldHandleStatus" />
 								<label class="radio-inline">
 									<input type="radio" name="handleStatus" id="unconnect" value="0" checked />未联系
 								</label>
@@ -65,5 +66,7 @@
 	</div>
 </div>
 <script type="text/javascript">
-
+    function check_fun() {
+        return true;
+    }
 </script>

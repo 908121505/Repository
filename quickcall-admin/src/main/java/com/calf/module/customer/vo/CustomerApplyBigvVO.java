@@ -10,7 +10,7 @@ import java.util.Date;
  */
 public class CustomerApplyBigvVO {
 	// 主键(15位时间+4位随机数)
-	private Long applyId;
+	private String applyId;
 	// appId
 	private String appId;
 	// 用户昵称
@@ -18,13 +18,13 @@ public class CustomerApplyBigvVO {
 	// 手机
 	private Long phone;
 	// 关联客户ID
-	private Long customerId;
+	private String customerId;
 	//处理状态(0=未联系,1=已联系)
 	private Byte handleStatus;
 	//申请时间
 	private String applyTime;
 	//处理人
-	private String handleMan;
+	private String handleUser;
 	//处理时间
 	private String handleTime;
 	//修改人
@@ -34,11 +34,11 @@ public class CustomerApplyBigvVO {
 	//备注
 	private String remark;
 
-	public Long getApplyId() {
+	public String getApplyId() {
 		return applyId;
 	}
 
-	public void setApplyId(Long applyId) {
+	public void setApplyId(String applyId) {
 		this.applyId = applyId;
 	}
 
@@ -66,11 +66,11 @@ public class CustomerApplyBigvVO {
 		this.phone = phone;
 	}
 
-	public Long getCustomerId() {
+	public String getCustomerId() {
 		return customerId;
 	}
 
-	public void setCustomerId(Long customerId) {
+	public void setCustomerId(String customerId) {
 		this.customerId = customerId;
 	}
 
@@ -90,12 +90,12 @@ public class CustomerApplyBigvVO {
 		this.applyTime = applyTime;
 	}
 
-	public String getHandleMan() {
-		return handleMan;
+	public String getHandleUser() {
+		return handleUser;
 	}
 
-	public void setHandleMan(String handleMan) {
-		this.handleMan = handleMan;
+	public void setHandleUser(String handleUser) {
+		this.handleUser = handleUser;
 	}
 
 	public String getHandleTime() {

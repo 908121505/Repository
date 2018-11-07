@@ -15,17 +15,16 @@ import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 /**
  * 普通客户申请大vController
+ *
  * @Auther: Sunju
  * @Date: 2018/11/7 15:25
  */
@@ -38,19 +37,18 @@ public class CustomerApplyBigvController implements BaseController<CustomerApply
 
 	@Override
 	public String home() {
-		ModelMap modelMap = new ModelMap();
-		Map<String, Object> parameters = new HashMap<String, Object>();
-		parameters.put("iDisplayStart", 0);
-		parameters.put("iDisplayLength", 100);
+		return "customer/bigv_apply/list";
+	}
+
+	@RequestMapping(value = "/list.htm")
+	public String list(Model model) {
+		// 默认展示最近30天数据
 		Date curDate = new Date();
 		Date sDate = DateUtils.getAddDate(curDate, -60 * 24 * 30);
 		String startTime = org.apache.commons.httpclient.util.DateUtil.formatDate(sDate, "yyyy-MM-dd 00:00:00");
 		String endTime = org.apache.commons.httpclient.util.DateUtil.formatDate(curDate, "yyyy-MM-dd 23:59:59");
-		modelMap.addAttribute("showStartTime",startTime);
-		modelMap.addAttribute("showEndTime",endTime);
-
-		List<CustomerApplyBigv> CustomerApplyBigv = baseManager.query(CustomerApplyBigv.class, parameters);
-		modelMap.addAttribute("CustomerApplyBigv", CustomerApplyBigv);
+		model.addAttribute("showStartTime", startTime);
+		model.addAttribute("showEndTime", endTime);
 		return "customer/bigv_apply/list";
 	}
 
@@ -92,10 +90,16 @@ public class CustomerApplyBigvController implements BaseController<CustomerApply
 	}
 
 	@Override
+	@RequiresPermissions(value = "customerApplyBigv:update")
 	public int saveUpdate(CustomerApplyBigv entity) {
 		Subject currentUser = SecurityUtils.getSubject();
 		entity.setModifyMan((String) currentUser.getPrincipal());
 		entity.setModifyTime(DateUtil.dateFormat());
+		// 将状态置为已联系时，将处理人和处理时间更新
+		if (StringUtils.equals(entity.getOldHandleStatus(), "0") && StringUtils.equals(entity.getHandleStatus().toString(), "1")) {
+			entity.setHandleUser((String) currentUser.getPrincipal());
+			entity.setHandleTime(DateUtil.dateFormat());
+		}
 		return baseManager.update(entity);
 	}
 

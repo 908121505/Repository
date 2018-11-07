@@ -4,13 +4,13 @@
   <resultMap id="BaseResultMap" type="com.calf.module.customer.vo.CustomerApplyBigvVO" >
     <id column="apply_id" property="applyId" jdbcType="BIGINT" />
     <result column="customer_id" property="customerId" jdbcType="BIGINT" />
-    <result column="app_id" property="app_id" jdbcType="VARCHAR" />
+    <result column="app_id" property="appId" jdbcType="VARCHAR" />
     <result column="nick_name" property="nickName" jdbcType="VARCHAR" />
     <result column="phone" property="phone" jdbcType="BIGINT" />
     <result column="handle_status" property="handleStatus" jdbcType="TINYINT" />
     <result column="apply_time" property="applyTime" jdbcType="TIMESTAMP" />
     <result column="handle_time" property="handleTime" jdbcType="TIMESTAMP" />
-    <result column="handle_man" property="handleMan" jdbcType="VARCHAR" />
+    <result column="handle_user" property="handleUser" jdbcType="VARCHAR" />
     <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
     <result column="modify_man" property="modifyMan" jdbcType="VARCHAR" />
     <result column="remark" property="remark" jdbcType="VARCHAR" />
@@ -18,7 +18,7 @@
 
   <sql id="Base_Column_List" >
     apply.apply_id, apply.customer_id, cus.app_id, cus.nick_name, cus.phone, apply.handle_status, apply.apply_time, apply.handle_time,
-    apply.handle_man, apply.modify_time, apply.modify_man, apply.remark
+    apply.handle_user, apply.modify_time, apply.modify_man, apply.remark
   </sql>
 
   <!-- 查询（根据主键ID查询） -->
@@ -36,7 +36,7 @@
     from customer_apply_bigv apply
     INNER JOIN customer cus ON apply.customer_id=cus.customer_id
     where 1=1
-    <if test="name != null"> and (cus.customer_id like concat('%',#{name},'%') or cus.nick_name like concat('%',#{name},'%') or )</if>
+    <if test="name != null and name != '' "> and (cus.customer_id like concat('%',#{name},'%') or cus.nick_name like concat('%',#{name},'%') )</if>
     <if test="handleStatus != null"> and apply.handle_status = #{handleStatus}</if>
     <if test="startTime != null"> and apply.apply_time <![CDATA[ >= ]]> #{startTime}</if>
     <if test="endTime != null"> and apply.apply_time <![CDATA[ <= ]]> #{endTime}</if>
@@ -49,7 +49,7 @@
     from customer_apply_bigv apply
     INNER JOIN customer cus ON apply.customer_id=cus.customer_id
     where 1=1
-    <if test="name !=null"> and (cus.customer_id like concat('%',#{name},'%') or cus.nick_name like concat('%',#{name},'%') or )</if>
+    <if test="name !=null and name != ''"> and (cus.customer_id like concat('%',#{name},'%') or cus.nick_name like concat('%',#{name},'%') )</if>
     <if test="handleStatus !=null"> and apply.handle_status = #{handleStatus}</if>
     <if test="startTime !=null"> and apply.apply_time <![CDATA[ >= ]]> #{startTime}</if>
     <if test="endTime !=null"> and apply.apply_time <![CDATA[ <= ]]> #{endTime}</if>
@@ -60,10 +60,10 @@
   <!-- 插入 -->
   <insert id="insert" parameterType="com.calf.module.customer.entity.CustomerApplyBigv" >
     insert into customer_apply_bigv (apply_id, customer_id, handle_status,
-      apply_time, handle_time, handle_man, modify_time, modify_man,
+      apply_time, handle_time, handle_user, modify_time, modify_man,
       remark)
     values (#{applyId,jdbcType=BIGINT}, #{customerId,jdbcType=BIGINT}, #{handleStatus,jdbcType=TINYINT}, 
-      #{applyTime,jdbcType=TIMESTAMP}, #{handleTime,jdbcType=TIMESTAMP}, #{handleMan,jdbcType=VARCHAR},
+      #{applyTime,jdbcType=TIMESTAMP}, #{handleTime,jdbcType=TIMESTAMP}, #{handleUser,jdbcType=VARCHAR},
       #{modifyTime,jdbcType=TIMESTAMP}, #{modifyMan,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR})
   </insert>
 
@@ -71,17 +71,17 @@
   <update id="update" parameterType="com.calf.module.customer.entity.CustomerApplyBigv" >
     update customer_apply_bigv
     <set >
-      <if test="title != null" >
+      <if test="handleStatus != null" >
         handle_status = #{handleStatus,jdbcType=VARCHAR},
       </if>
       <if test="handleTime != null" >
         handle_time = #{handleTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="handleMan != null" >
-        handle_man = #{handleMan,jdbcType=VARCHAR},
+      <if test="handleUser != null" >
+        handle_user = #{handleUser,jdbcType=VARCHAR},
       </if>
-      <if test="modifytime != null" >
-        modify_time = #{modifytime,jdbcType=TIMESTAMP},
+      <if test="modifyTime != null" >
+        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
       </if>
       <if test="modifyMan != null" >
         modify_man = #{modifyMan,jdbcType=VARCHAR},
