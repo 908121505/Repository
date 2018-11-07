@@ -16,12 +16,19 @@ public class RecentVisitRequest extends  UserCenterRequest{
 	 */
 	private static final long serialVersionUID = -2360838781875279571L;
 	
-	private Long startTime;
-	
+	/**
+	 * 客户编号
+	 */
 	private Long customerId;
 	
+	/**
+	 * 当前页面数
+	 */
 	private Integer pageIndex;
 	
+	/**
+	 * 每页数量
+	 */
 	private Integer pageSize;
 	
 	public Long getCustomerId() {
@@ -46,14 +53,6 @@ public class RecentVisitRequest extends  UserCenterRequest{
 
 	public void setPageSize(Integer pageSize) {
 		this.pageSize = pageSize;
-	}
-
-	public Long getStartTime() {
-		return startTime;
-	}
-
-	public void setStartTime(Long startTime) {
-		this.startTime = startTime;
 	}
 
 	@Override

@@ -86,6 +86,8 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 	private AppShareConfigMapper appShareConfigMapper;
 	@Autowired
 	private BlacklistMapper blacklistMapper;
+	@Autowired
+	private CustomerVisitMapper customerVisitMapper;
 
 	/**
 	 * 中文、英文、数字、下划线校验 4-24位
@@ -735,6 +737,9 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 
 		// 查询粉丝数
 		customerCenterVO.setFansNum(fansMapper.queryFansNumByCustomerId(request.getCustomerId()).intValue());
+		
+		// 查询被访问数量
+		customerCenterVO.setVisitNum(customerVisitMapper.selectUnreadCountByCustomerId(request.getCustomerId()));
 
 		// 查询充值、提现金额
 		Map<String, BigDecimal> customerMoney = customerMapper.queryCustomerAccountMoney(request.getCustomerId());

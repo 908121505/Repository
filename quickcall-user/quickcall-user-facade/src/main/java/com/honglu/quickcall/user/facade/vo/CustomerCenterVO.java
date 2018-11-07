@@ -65,6 +65,10 @@ public class CustomerCenterVO implements Serializable {
      */
     private Integer fansNum;
     /**
+     * 用户访问数
+     */
+    private Integer visitNum;
+    /**
      * 充值金额
      */
     private BigDecimal rechargeAmounts;
@@ -177,7 +181,15 @@ public class CustomerCenterVO implements Serializable {
         this.fansNum = fansNum;
     }
 
-    public BigDecimal getRechargeAmounts() {
+    public Integer getVisitNum() {
+		return visitNum;
+	}
+
+	public void setVisitNum(Integer visitNum) {
+		this.visitNum = visitNum;
+	}
+
+	public BigDecimal getRechargeAmounts() {
         return rechargeAmounts;
     }
 
