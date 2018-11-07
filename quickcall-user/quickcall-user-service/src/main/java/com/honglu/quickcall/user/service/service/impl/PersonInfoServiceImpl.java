@@ -112,7 +112,8 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 		if (StringUtil.isBlank(keyword)) {
 			throw new BizException(UserBizReturnCode.paramError, "搜索关键字不能为空");
 		}
-		Pattern pattern = Pattern.compile("[0-9]{4,10}");
+		keyword = keyword.replaceAll("%","\\\\%");
+		Pattern pattern = Pattern.compile("[0-9]{8,10}");
 		Long currentCustomer = params.getCustomerId();
 		List<SearchPersonListVO> customerList = null;
 		// 匹配搜索关键字是模糊搜索还是精准搜索

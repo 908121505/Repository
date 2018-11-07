@@ -576,7 +576,7 @@ public class EditProfileServiceImpl implements EditProfileService {
 			}
 
 			// 此处根据年份来计算年龄
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
 			String birthday = userEditInfoVO.getBirthday();
 			if("".equals(birthday) || null == birthday){
 				userEditInfoVO.setAge(0);

@@ -71,4 +71,12 @@ public interface CustomerVisitMapper {
 										    		@Param("customerId") Long customerId,
 										    		@Param("start") Integer start,
 										    		@Param("size") Integer size );
+    
+    
+    /**
+     * 查询访问未读数量
+     * @param customerId
+     * @return
+     */
+    int selectUnreadCountByCustomerId(@Param("customerId") Long customerId);
 }
