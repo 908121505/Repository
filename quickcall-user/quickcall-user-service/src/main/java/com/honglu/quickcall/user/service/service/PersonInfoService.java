@@ -1,27 +1,7 @@
 package com.honglu.quickcall.user.service.service;
 
 import com.honglu.quickcall.common.api.exchange.CommonResponse;
-import com.honglu.quickcall.user.facade.exchange.request.AddOrCancelFansRequest;
-import com.honglu.quickcall.user.facade.exchange.request.CheckAttentionRequest;
-import com.honglu.quickcall.user.facade.exchange.request.CheckEachAttentionRequest;
-import com.honglu.quickcall.user.facade.exchange.request.CustomerCenterRequest;
-import com.honglu.quickcall.user.facade.exchange.request.CustomerHomeRequest;
-import com.honglu.quickcall.user.facade.exchange.request.CustomerLevelRequest;
-import com.honglu.quickcall.user.facade.exchange.request.IsBigVidentityRequest;
-import com.honglu.quickcall.user.facade.exchange.request.NoReadAttentionCountRequest;
-import com.honglu.quickcall.user.facade.exchange.request.QueryAttentionFansListRequest;
-import com.honglu.quickcall.user.facade.exchange.request.QueryInterestListRequest;
-import com.honglu.quickcall.user.facade.exchange.request.QueryOccupationListRequest;
-import com.honglu.quickcall.user.facade.exchange.request.ReadAttentionRequest;
-import com.honglu.quickcall.user.facade.exchange.request.SaveBirthRequest;
-import com.honglu.quickcall.user.facade.exchange.request.SaveGenderRequest;
-import com.honglu.quickcall.user.facade.exchange.request.SaveInterestRequest;
-import com.honglu.quickcall.user.facade.exchange.request.SaveNickNameRequest;
-import com.honglu.quickcall.user.facade.exchange.request.SaveOccupationRequest;
-import com.honglu.quickcall.user.facade.exchange.request.SaveSignNameRequest;
-import com.honglu.quickcall.user.facade.exchange.request.SaveSkillAuditRequest;
-import com.honglu.quickcall.user.facade.exchange.request.SearchPersonRequest;
-import com.honglu.quickcall.user.facade.exchange.request.queryMyskillRequest;
+import com.honglu.quickcall.user.facade.exchange.request.*;
 
 /**
  * 
@@ -155,4 +135,10 @@ public interface PersonInfoService {
 	 */
 	CommonResponse isBigVidentity(IsBigVidentityRequest request);
 
+	/**
+	 * 提交客户申请成为大V数据
+	 * @param request
+	 * @return
+	 */
+    CommonResponse submitCustomerApplyBigv(CustomerApplyBigvRequest request);
 }

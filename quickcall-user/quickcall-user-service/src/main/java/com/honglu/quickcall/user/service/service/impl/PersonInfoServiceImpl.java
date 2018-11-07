@@ -11,6 +11,8 @@ import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.honglu.quickcall.user.facade.entity.*;
+import com.honglu.quickcall.user.facade.exchange.request.*;
 import com.honglu.quickcall.user.service.dao.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,37 +38,7 @@ import com.honglu.quickcall.common.third.rongyun.models.CodeSuccessReslut;
 import com.honglu.quickcall.common.third.rongyun.util.RongYunUtil;
 import com.honglu.quickcall.user.facade.code.UserBizReturnCode;
 import com.honglu.quickcall.user.facade.constants.UserBizConstants;
-import com.honglu.quickcall.user.facade.entity.AppShareConfig;
-import com.honglu.quickcall.user.facade.entity.Customer;
-import com.honglu.quickcall.user.facade.entity.CustomerInterest;
-import com.honglu.quickcall.user.facade.entity.CustomerOccupation;
-import com.honglu.quickcall.user.facade.entity.CustomerSkill;
-import com.honglu.quickcall.user.facade.entity.CustomerSkillCertify;
-import com.honglu.quickcall.user.facade.entity.Fans;
-import com.honglu.quickcall.user.facade.entity.SensitivityWord;
-import com.honglu.quickcall.user.facade.entity.SkillItem;
 import com.honglu.quickcall.user.facade.entity.example.AppShareConfigExample;
-import com.honglu.quickcall.user.facade.exchange.request.AddOrCancelFansRequest;
-import com.honglu.quickcall.user.facade.exchange.request.CheckAttentionRequest;
-import com.honglu.quickcall.user.facade.exchange.request.CheckEachAttentionRequest;
-import com.honglu.quickcall.user.facade.exchange.request.CustomerCenterRequest;
-import com.honglu.quickcall.user.facade.exchange.request.CustomerHomeRequest;
-import com.honglu.quickcall.user.facade.exchange.request.CustomerLevelRequest;
-import com.honglu.quickcall.user.facade.exchange.request.IsBigVidentityRequest;
-import com.honglu.quickcall.user.facade.exchange.request.NoReadAttentionCountRequest;
-import com.honglu.quickcall.user.facade.exchange.request.QueryAttentionFansListRequest;
-import com.honglu.quickcall.user.facade.exchange.request.QueryInterestListRequest;
-import com.honglu.quickcall.user.facade.exchange.request.QueryOccupationListRequest;
-import com.honglu.quickcall.user.facade.exchange.request.ReadAttentionRequest;
-import com.honglu.quickcall.user.facade.exchange.request.SaveBirthRequest;
-import com.honglu.quickcall.user.facade.exchange.request.SaveGenderRequest;
-import com.honglu.quickcall.user.facade.exchange.request.SaveInterestRequest;
-import com.honglu.quickcall.user.facade.exchange.request.SaveNickNameRequest;
-import com.honglu.quickcall.user.facade.exchange.request.SaveOccupationRequest;
-import com.honglu.quickcall.user.facade.exchange.request.SaveSignNameRequest;
-import com.honglu.quickcall.user.facade.exchange.request.SaveSkillAuditRequest;
-import com.honglu.quickcall.user.facade.exchange.request.SearchPersonRequest;
-import com.honglu.quickcall.user.facade.exchange.request.queryMyskillRequest;
 import com.honglu.quickcall.user.facade.vo.AttentionFansVO;
 import com.honglu.quickcall.user.facade.vo.CustomerCenterVO;
 import com.honglu.quickcall.user.facade.vo.CustomerHomeVO;
@@ -949,5 +921,18 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 		}
 
 		return ResultUtils.resultSuccess(0);
+	}
+
+	@Override
+	public CommonResponse submitCustomerApplyBigv(CustomerApplyBigvRequest request) {
+		CustomerApplyBigv applyBigv = new CustomerApplyBigv();
+		applyBigv.setApplyId(UUIDUtils.getId());
+		applyBigv.setCustomerId(request.getCustomerId());
+		applyBigv.setApplyTime(new Date());
+
+		if(customerMapper.insertApplyBigvData(applyBigv) == 0){
+			return ResultUtils.resultDuplicateOperation("您已申请过，请勿重复提交!");
+		}
+		return ResultUtils.resultSuccess();
 	}
 }
