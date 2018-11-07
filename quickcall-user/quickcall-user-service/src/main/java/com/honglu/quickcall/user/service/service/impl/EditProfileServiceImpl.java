@@ -501,6 +501,9 @@ public class EditProfileServiceImpl implements EditProfileService {
 		if (customer == null) {
 			throw new BizException(UserBizReturnCode.paramError, "参数错误，customerId不存在");
 		}
+		if (customer.getIdentityStatus() == 2) {
+			throw new BizException(UserBizReturnCode.certification, "您已完成实名认证，不能更改该信息");
+		}
 
 		customer.setSex(newGender);
 		// 更新性别
