@@ -91,6 +91,14 @@ public class OrderSaveRequest extends AbstractRequest {
 		return OrderRequestType.ORDER_SAVE;
 	}
 
+
+	@Override
+	public String toString() {
+		return "OrderSaveRequest [customerId=" + customerId + ", serviceId=" + serviceId + ", customerSkillId="
+				+ customerSkillId + ", orderNum=" + orderNum + ", remark=" + remark + ", appointTimeStr="
+				+ appointTimeStr + "]";
+	}
+
 	
 	
 

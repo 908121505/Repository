@@ -56,9 +56,12 @@ public class CancelOrderRequest extends AbstractRequest {
 
 	@Override
 	public String toString() {
-		return "CancelOrderRequest [orderId=" + orderId + "]";
+		return "CancelOrderRequest [orderId=" + orderId + ", selectReason=" + selectReason + ", remarkReason="
+				+ remarkReason + "]";
 	}
 
+
+	
 	
 
 
