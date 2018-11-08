@@ -17,7 +17,7 @@ public interface CustomerMapper {
 
 	int insertSelective(Customer record);
 
-	Customer selectByPrimaryKey(Long customerId);
+	Customer selectByPrimaryKey(@Param("customerId") Long customerId);
 
 	Customer selectByAppId(@Param("appId") String appId);
 

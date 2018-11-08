@@ -65,11 +65,11 @@
     create_time, modify_time, create_man, modify_man, remark, app_channel_name,cumulate_experience,
     customer_level, device_id, login_time,gt_client_id,block_start_time,block_end_time,cust_state,uid
   </sql>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
     from customer
-    where customer_id = #{customerId,jdbcType=BIGINT}
+    where customer_id = #{customerId}
   </select>
   
   <select id="selectFuzzySearch" resultType="com.honglu.quickcall.user.facade.vo.SearchPersonListVO" >
