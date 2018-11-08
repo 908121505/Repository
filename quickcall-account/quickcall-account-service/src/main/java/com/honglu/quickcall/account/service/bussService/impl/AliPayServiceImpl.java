@@ -61,11 +61,16 @@ public class AliPayServiceImpl implements AliPayService {
 
 	@Override
 	public CommonResponse recharge(RechargeRequest packet) {
+		CommonResponse response = new CommonResponse();
 		String params = "";
 		String orderNo = UUIDUtils.getUUID();// 订单
 		String orderDesc = "";
 		if (packet.getPayType() == 1) {
 			orderDesc = "支付宝充值";
+			response.setCode(BizCode.ParamError);
+			response.setData("11");
+			response.setMessage("维护中,请使用微信支付。带来不便,敬请谅解。");
+			return response;
 		} else {
 			orderDesc = "微信充值";
 		}
