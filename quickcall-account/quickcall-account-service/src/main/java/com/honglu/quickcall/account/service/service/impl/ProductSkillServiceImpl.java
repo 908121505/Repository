@@ -408,7 +408,7 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 			cal.set(Calendar.HOUR_OF_DAY, selectHourIndex);
 			cal.set(Calendar.MINUTE, 0);
 			//计算结束时间
-			appointEndTime =cal.getTime(); 
+			appointStartTime =cal.getTime(); 
 		}
 		
 		if(StringUtils.isBlank(endTimeStr)){

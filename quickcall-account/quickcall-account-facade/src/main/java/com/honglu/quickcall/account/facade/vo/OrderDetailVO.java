@@ -76,7 +76,34 @@ public class OrderDetailVO implements  Serializable{
     /**预计结束时间*/
     private Date  expectEndTime;
     
+    /**技能类型*/
+    private Integer  skillType;
+    /**券金额*/
+    private BigDecimal  couponPrice;
+    /**预约开始时间*/
+    private  Date   appointStartTime;
+    
+    
+    
 	
+	public Integer getSkillType() {
+		return skillType;
+	}
+	public void setSkillType(Integer skillType) {
+		this.skillType = skillType;
+	}
+	public BigDecimal getCouponPrice() {
+		return couponPrice;
+	}
+	public void setCouponPrice(BigDecimal couponPrice) {
+		this.couponPrice = couponPrice;
+	}
+	public Date getAppointStartTime() {
+		return appointStartTime;
+	}
+	public void setAppointStartTime(Date appointStartTime) {
+		this.appointStartTime = appointStartTime;
+	}
 	public Date getStartServiceTime() {
 		return startServiceTime;
 	}
