@@ -66,6 +66,7 @@ public class AliPayServiceImpl implements AliPayService {
 		String orderDesc = "";
 		if (packet.getPayType() == 1) {
 			orderDesc = "支付宝充值";
+			throw new BizException(BizCode.ParamError, "推荐微信充值");
 		} else {
 			orderDesc = "微信充值";
 		}
