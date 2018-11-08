@@ -101,7 +101,7 @@ public class OrderUpdateJob {
     		Integer  queryStatus = OrderSkillConstants.ORDER_STATUS_WAITING_RECEIVE;
     		Integer  updateStatus = OrderSkillConstants.ORDER_STATUS_CANCEL_SYSTEM_NOT_RECEIVE;
 			
-    		Date  queryEndTime =  getEndTimeByAddHours(-1);
+    		Date  queryEndTime =  getEndTimeByAddHours(-10);
     		//大V未接单返回给账户金额  先退款，再更新状态
     		List<TaskOrder>  orderList = taskOrderMapper.queryReceiveOrderOverTime(currTime, endTime, queryStatus, updateStatus, skillType,queryEndTime);
     		refundToCustomer(orderList,CANCEL_ONE);
@@ -133,7 +133,7 @@ public class OrderUpdateJob {
     		Integer  updateStatus = OrderSkillConstants.ORDER_STATUS_CANCEL_NOT_START;
     		Integer skillType = OrderSkillConstants.SKILL_TYPE_YES; 
     		//大V未发起立即服务超时给账户金额
-    		Date  queryEndTime =  getEndTimeByAddHours(-1);
+    		Date  queryEndTime =  getEndTimeByAddHours(-10);
     		List<TaskOrder>  orderList = taskOrderMapper.queryStartOrderOverTime(currTime, endTime, queryStatus, updateStatus, skillType,queryEndTime);
     		refundToCustomer(orderList,CANCEL_TWO);
     		updateOrderStatusByOrderListForCancel(orderList, updateStatus);
@@ -163,8 +163,8 @@ public class OrderUpdateJob {
     		
     		
     		//用户5分钟未响应大V未发起立即服务超时给账户金额
-    		Date  queryEndTime =  getEndTimeByAddHours(-1);
-    		List<TaskOrder>  orderList = taskOrderMapper.queryStartOrderOverTime(currTime, endTime, queryStatus, updateStatus, skillType,queryEndTime);
+    		Date  queryEndTime =  getEndTimeByAddHours(-10);
+    		List<TaskOrder>  orderList = taskOrderMapper.queryStartOrderOverTimeCust(currTime, endTime, queryStatus, updateStatus, skillType,queryEndTime);
     		refundToCustomer(orderList,CANCEL_THREE);
     		updateOrderStatusByOrderListForCancel(orderList, updateStatus);
 //    		taskOrderMapper.startOrderOverTime(currTime, endTime, queryStatus, updateStatus, skillType);

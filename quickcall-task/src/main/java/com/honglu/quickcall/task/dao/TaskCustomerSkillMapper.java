@@ -23,5 +23,43 @@ public interface TaskCustomerSkillMapper {
 	 */
 	List<Long>  queryCustomerSkill(@Param("queryStatus")Integer queryStatus ,@Param("queryEndTime")Date  queryEndTime);
 	
+	
+	/**
+	 * 根据周索引开启接单开关
+	 * @param queryStatus
+	 * @param recevieStatus
+	 * @param updateStatus
+	 * @param weekIndex
+	 * @param currTimeStr
+	 * @return
+	 */
+	void  openReceiveByWeek(@Param("autoReceiveStatus")Integer autoReceiveStatus ,@Param("recevieStatus")Integer receiveStatus ,@Param("updateStatus")Integer  updateStatus,@Param("weekIndex")Integer  weekIndex,@Param("currTimeStr")String  currTimeStr);
+	/**
+	 * 根据周索引关闭接单开关
+	 * @param queryStatus
+	 * @param recevieStatus
+	 * @param updateStatus
+	 * @param weekIndex
+	 * @param currTimeStr
+	 * @return
+	 */
+	void  closeReceiveByWeek(@Param("autoReceiveStatus")Integer autoReceiveStatus ,@Param("recevieStatus")Integer receiveStatus ,@Param("updateStatus")Integer  updateStatus,@Param("weekIndex")Integer  weekIndex,@Param("currTimeStr")String  currTimeStr);
+	/**
+	 * 根据当前时间开启接单开关
+	 * @param queryStatus
+	 * @param recevieStatus
+	 * @param updateStatus
+	 * @param currTime
+	 */
+	void  openReceiveByCurrentTime(@Param("autoReceiveStatus")Integer autoReceiveStatus ,@Param("recevieStatus")Integer receiveStatus ,@Param("updateStatus")Integer  updateStatus,@Param("currTimeStr")Date  currTime);
+	/**
+	 * 根据当前时间关闭接单开关
+	 * @param queryStatus
+	 * @param recevieStatus
+	 * @param updateStatus
+	 * @param currTime
+	 */
+	void  closeReceiveByCurrentTime(@Param("autoReceiveStatus")Integer autoReceiveStatus ,@Param("recevieStatus")Integer receiveStatus ,@Param("updateStatus")Integer  updateStatus,@Param("currTimeStr")Date  currTime);
+	
 
 }

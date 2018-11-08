@@ -12,6 +12,17 @@ package com.honglu.quickcall.account.facade.constants;
 public interface OrderSkillConstants {
 	
 	
+	/**自动接单开关1：开启*/
+	public  static final  Integer  AUTO_RECEIVE_OPEN =  1 ;
+	/**自动接单开关0：关闭*/
+	public  static final  Integer  AUTO_RECEIVE_CLOSE =  0 ;
+	/**接单开关1：开启*/
+	public  static final  Integer  RECEIVE_OPEN =  1 ;
+	/**接单开关0：关闭*/
+	public  static final  Integer  RECEIVE_CLOSE =  0 ;
+	
+	
+	
 	/**接单超时15分钟*/
 	public static final  Integer  RECEIVE_ORDER_OVER_TIME =  15;
 	/**声优5分钟未发起立即服务*/
