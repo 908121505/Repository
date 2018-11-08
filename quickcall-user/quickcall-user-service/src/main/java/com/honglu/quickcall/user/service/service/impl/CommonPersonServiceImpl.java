@@ -242,6 +242,7 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 		userBean.setPhoneNumber(customer.getPhone());
 		userBean.setYearOfBirth(customer.getBirthday());
 		req.setUserBean(userBean);
+		req.setVirUserId(params.getFictitiousId());
 
 		logger.info("===============开始登陆数据埋点==============userBean:" + req.getUserBean());
 		dataDuriedPointBusiness.buryUserIdLoginResultData(req);
@@ -478,6 +479,7 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 		userBean.setPhoneNumber(request.getTel());
 
 		req.setUserBean(userBean);
+		req.setVirUserId(request.getFictitiousId());
 
 		dataDuriedPointBusiness.burySignUpResultData(req);
 		// 创建账户
