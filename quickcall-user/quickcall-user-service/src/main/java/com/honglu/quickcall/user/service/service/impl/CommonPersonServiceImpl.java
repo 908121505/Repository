@@ -250,6 +250,8 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 	public CommonResponse setHeardUrl(SetHeardUrlRequest params) {
 		Customer customer = customerMapper.selectByPrimaryKey(params.getCustomerId());
 		if(customer == null){
+			return ResultUtils.result(BizCode.CustomerNotExist);
+		}
 		CommonResponse response = new CommonResponse();
 		String rongyunToken = null;
 		String img = params.getHeadPortraitUrl();
@@ -316,7 +318,6 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 			return response;
 		}
 		return ResultUtils.resultSuccess();
-	}
 	}
 	/**
 	 * 昵称规则校验
