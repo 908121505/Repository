@@ -35,16 +35,24 @@ import com.honglu.quickcall.producer.facade.business.DataDuriedPointBusiness;
 import com.honglu.quickcall.producer.facade.req.databury.DataBuriedPointGetCodeReq;
 import com.honglu.quickcall.producer.facade.req.databury.DataBuriedPointLoginReq;
 import com.honglu.quickcall.producer.facade.req.databury.DataBuriedPointRegistReq;
-<<<<<<< HEAD
-=======
 import com.honglu.quickcall.producer.facade.req.databury.UserBean;
-import com.honglu.quickcall.user.facade.code.UserBizReturnCode;
->>>>>>> refs/remotes/origin/activity
 import com.honglu.quickcall.user.facade.constants.UserBizConstants;
 import com.honglu.quickcall.user.facade.entity.Customer;
 import com.honglu.quickcall.user.facade.entity.SensitivityWord;
 import com.honglu.quickcall.user.facade.enums.CustomerCusStateEnum;
-import com.honglu.quickcall.user.facade.exchange.request.*;
+import com.honglu.quickcall.user.facade.exchange.request.AddSystemUserRequest;
+import com.honglu.quickcall.user.facade.exchange.request.BindVXorQQRequest;
+import com.honglu.quickcall.user.facade.exchange.request.GetSmsCodeRequest;
+import com.honglu.quickcall.user.facade.exchange.request.IsPhoneExistsRequest;
+import com.honglu.quickcall.user.facade.exchange.request.LoginOutRequest;
+import com.honglu.quickcall.user.facade.exchange.request.SaveCertificationRequest;
+import com.honglu.quickcall.user.facade.exchange.request.SaveDvVoiceRequest;
+import com.honglu.quickcall.user.facade.exchange.request.SearchPersonByPhoneRequest;
+import com.honglu.quickcall.user.facade.exchange.request.SetHeardUrlRequest;
+import com.honglu.quickcall.user.facade.exchange.request.SetPwdRequest;
+import com.honglu.quickcall.user.facade.exchange.request.UserIdCardInfoRequest;
+import com.honglu.quickcall.user.facade.exchange.request.UserLoginRequest;
+import com.honglu.quickcall.user.facade.exchange.request.UserRegisterRequest;
 import com.honglu.quickcall.user.facade.vo.SearchPersonByPhoneVO;
 import com.honglu.quickcall.user.service.dao.BigvPhoneMapper;
 import com.honglu.quickcall.user.service.dao.CustomerMapper;
@@ -72,15 +80,9 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 	private SensitivityWordMapper sensitivityWordMapper;
 
 	@Autowired
-<<<<<<< HEAD
-
 	private DataDuriedPointBusiness dataDuriedPointBusiness;
 
-=======
->>>>>>> refs/remotes/origin/activity
 	private BigvPhoneMapper bigvPhoneMapper;
-	@Autowired
-	private DataDuriedPointBusiness dataDuriedPointBusiness;
 
 	private static String resendexpire = ResourceBundle.getBundle("thirdconfig").getString("resend.expire");
 	private static String resendexpirehour = ResourceBundle.getBundle("thirdconfig").getString("resend.expire.hour");
@@ -241,7 +243,7 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 		userBean.setYearOfBirth(customer.getBirthday());
 		req.setUserBean(userBean);
 
-		logger.info("===============开始登陆数据埋点==============userBean:"+req.getUserBean());
+		logger.info("===============开始登陆数据埋点==============userBean:" + req.getUserBean());
 		dataDuriedPointBusiness.buryUserIdLoginResultData(req);
 		return ResultUtils.resultSuccess(customer);
 	}
@@ -261,7 +263,7 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 	@Override
 	public CommonResponse setHeardUrl(SetHeardUrlRequest params) {
 		Customer customer = customerMapper.selectByPrimaryKey(params.getCustomerId());
-		if(customer == null){
+		if (customer == null) {
 			return ResultUtils.result(BizCode.CustomerNotExist);
 		}
 		CommonResponse response = new CommonResponse();
@@ -331,6 +333,7 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 		}
 		return ResultUtils.resultSuccess();
 	}
+
 	/**
 	 * 昵称规则校验
 	 *
@@ -466,7 +469,6 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 		req.setRegistDate(new Date());
 		req.setRegistSource(request.getAppChannelName());
 		req.setUser_id(customer.getCustomerId() + "");
-
 
 		userBean.setNick(customer.getNickName());
 		userBean.setRegistDate(new Date());
@@ -769,7 +771,7 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 		Customer param = new Customer();
 		Customer customer = new Customer();
 		Customer customers = customerMapper.selectByPrimaryKey(request.getCustomerId());
-		if(customers == null){
+		if (customers == null) {
 			return ResultUtils.result(BizCode.CustomerNotExist);
 		}
 		// QQ判断
@@ -819,13 +821,13 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 		return ResultUtils.resultSuccess();
 
 	}
-	
+
 	@Override
 	public CommonResponse searchPersonByPhone(SearchPersonByPhoneRequest request) {
 		Long phone = request.getPhone();
 		List<SearchPersonByPhoneVO> list = customerMapper.queryPersonByPhone(phone);
 		SearchPersonByPhoneVO customer = new SearchPersonByPhoneVO();
-		if(list.size() > 0){
+		if (list.size() > 0) {
 			customer = list.get(0);
 		}
 		return ResultUtils.resultSuccess(customer);
