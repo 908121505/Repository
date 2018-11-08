@@ -81,7 +81,7 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 
 	@Autowired
 	private DataDuriedPointBusiness dataDuriedPointBusiness;
-
+	@Autowired
 	private BigvPhoneMapper bigvPhoneMapper;
 
 	private static String resendexpire = ResourceBundle.getBundle("thirdconfig").getString("resend.expire");
