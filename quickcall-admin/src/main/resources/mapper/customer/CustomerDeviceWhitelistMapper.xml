@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="CustomerDeviceWhitelist" >
+  <resultMap id="BaseResultMap" type="com.calf.module.customer.entity.CustomerDeviceWhitelist" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="customer_id" property="customerId" jdbcType="BIGINT" />
+    <result column="device_id" property="deviceId" jdbcType="VARCHAR" />
+    <result column="device_type" property="deviceType" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="TINYINT" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+    <result column="create_man" property="createMan" jdbcType="VARCHAR" />
+    <result column="modify_man" property="modifyMan" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+  </resultMap>
+
+  <sql id="Base_Column_List" >
+    id, customer_id, device_id, device_type, status, create_time, modify_time, create_man,
+    modify_man, remark
+  </sql>
+
+  <select id="selectPageList" resultType="com.calf.module.customer.vo.CustomerDeviceWhitelistVo" parameterType="map" >
+
+    select cdw.id as id, cdw.customer_id as customerId,c.phone as phone, cdw.device_id as deviceId,
+      cdw.device_type as deviceType,c.app_id as appId,c.nick_name as nickName,cdw.status as status
+      from customer_device_whitelist cdw
+      LEFT JOIN customer c ON cdw.customer_id = c.customer_id
+      where 1 = 1
+      <if test="status != null" >
+        and cdw.status = #{status,jdbcType=TINYINT}
+      </if>
+      <if test="searchStr != null" >
+        and (
+        cdw.customer_id like  concat( '%',#{searchStr},'%')
+        or cdw.device_id like  concat( '%',#{searchStr},'%')
+        or c.phone like  concat( '%',#{searchStr},'%')
+        )
+      </if>
+     LIMIT ${iDisplayStart},${iDisplayLength}
+  </select>
+
+  <select id="selectCount" resultType="java.lang.Integer" parameterType="map" >
+    select count(1)
+    from customer_device_whitelist cdw
+    LEFT JOIN customer c ON cdw.customer_id = c.customer_id
+    where 1 = 1
+    <if test="status != null" >
+      and cdw.status = #{status,jdbcType=TINYINT}
+    </if>
+    <if test="searchStr != null" >
+      and (
+      cdw.customer_id like  concat( '%',#{searchStr},'%')
+      or cdw.device_id like  concat( '%',#{searchStr},'%')
+      or c.phone like  concat( '%',#{searchStr},'%')
+      )
+    </if>
+  </select>
+
+  <insert id="insert" parameterType="com.calf.module.customer.entity.CustomerDeviceWhitelist" >
+    insert into customer_device_whitelist (id, customer_id, device_id,
+      device_type, status, create_time,
+      modify_time, create_man, modify_man,
+      remark)
+    values (#{id,jdbcType=BIGINT}, #{customerId,jdbcType=BIGINT}, #{deviceId,jdbcType=VARCHAR},
+      #{deviceType,jdbcType=VARCHAR}, #{status,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP},
+      #{modifyTime,jdbcType=TIMESTAMP}, #{createMan,jdbcType=VARCHAR}, #{modifyMan,jdbcType=VARCHAR},
+      #{remark,jdbcType=VARCHAR})
+  </insert>
+
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select
+    <include refid="Base_Column_List" />
+    from customer_device_whitelist
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+
+  <update id="updateByPrimaryKey" parameterType="com.calf.module.customer.entity.CustomerDeviceWhitelist" >
+    update customer_device_whitelist
+    set customer_id = #{customerId,jdbcType=BIGINT},
+      device_id = #{deviceId,jdbcType=VARCHAR},
+      device_type = #{deviceType,jdbcType=VARCHAR},
+      status = #{status,jdbcType=TINYINT},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      create_man = #{createMan,jdbcType=VARCHAR},
+      modify_man = #{modifyMan,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+  <update id="updateStatusDel" parameterType="Map" >
+    update customer_device_whitelist
+     set status = #{status,jdbcType=TINYINT},
+        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+        modify_man = #{modifyMan,jdbcType=VARCHAR}
+     where id = #{id,jdbcType=BIGINT}
+  </update>
+
+  <update id="updateByPrimaryKeySelective" parameterType="com.calf.module.customer.entity.CustomerDeviceWhitelist" >
+    update customer_device_whitelist
+    <set >
+      <if test="customerId != null" >
+        customer_id = #{customerId,jdbcType=BIGINT},
+      </if>
+      <if test="deviceId != null" >
+        device_id = #{deviceId,jdbcType=VARCHAR},
+      </if>
+      <if test="deviceType != null" >
+        device_type = #{deviceType,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyTime != null" >
+        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createMan != null" >
+        create_man = #{createMan,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyMan != null" >
+        modify_man = #{modifyMan,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+  <!--删除：根据主键ID删除-->
+  <delete id="deleteEntity" parameterType="java.lang.Long">
+       DELETE FROM customer_device_whitelist
+       WHERE id = #{id}
+	</delete>
+
+</mapper>

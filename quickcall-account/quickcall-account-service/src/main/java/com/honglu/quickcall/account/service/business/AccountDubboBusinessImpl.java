@@ -12,6 +12,7 @@ import com.honglu.quickcall.account.facade.code.OrderRequestType;
 import com.honglu.quickcall.account.service.bussService.AliPayService;
 import com.honglu.quickcall.account.service.bussService.ApplePayService;
 import com.honglu.quickcall.account.service.bussService.BarrageMessageService;
+import com.honglu.quickcall.account.service.bussService.ChannelSwitchService;
 import com.honglu.quickcall.account.service.bussService.IOrderService;
 import com.honglu.quickcall.account.service.bussService.ISkillBussService;
 import com.honglu.quickcall.account.service.bussService.UserAccountService;
@@ -41,6 +42,8 @@ public class AccountDubboBusinessImpl implements AccountDubboBusiness {
 	private BarrageMessageService barrageMessageService;
 	@Autowired
 	private ApplePayService applePayService;
+	@Autowired
+	private ChannelSwitchService channelSwitchService;
 
 	@Override
 	public CommonResponse excute(AbstractRequest request) {
@@ -194,6 +197,9 @@ public class AccountDubboBusinessImpl implements AccountDubboBusiness {
 			case AccountFunctionType.FirstOnceWindowEverthDay:
 				response = barrageMessageService.popWindowOnce((FirstBarrageRequest) request);
 					break;
+			case AccountFunctionType.CHANNEL_SWITCH_STATUS:
+				response = channelSwitchService.getChannelSwitchStatus((ChannelSwitchRequest)request);
+				break;
 			default:
 
 			}

@@ -21,7 +21,7 @@
 					</div>
 				</div>
 				<div class="form-group">
-					<label class="col-sm-2 control-label">H5链接<font color="red">&nbsp;*</font></label>
+					<label class="col-sm-2 control-label">H5链接<%--<font color="red">&nbsp;*</font>--%></label>
 					<div class="col-sm-10">
 						<input type="text" class="form-control" id="h5Url" name="h5Url"
 							   style="width: 80%;" value="${entity.h5Url}"><br>
@@ -37,7 +37,7 @@
 					</div>
 				</div>
 				<div class="form-group">
-					<label class="col-sm-2 control-label">图片上传<c:if test="${entity eq null }"><font color="red">&nbsp;*</font></c:if>
+					<label class="col-sm-2 control-label">图片上传<%--<c:if test="${entity eq null }"><font color="red">&nbsp;*</font></c:if>--%>
 					</label>
 					<div class="col-sm-10">
 						<div class="input-group">
@@ -138,19 +138,21 @@
 			return false;
 		}
 
-		var url = $("#h5Url").val();
-		if(url == null || url.trim() == ''){
-			$("#tip").html("请输入H5链接");
-			return false;
-		}
+		//h5Url不必传
+		// var url = $("#h5Url").val();
+		// if(url == null || url.trim() == ''){
+		// 	$("#tip").html("请输入H5链接");
+		// 	return false;
+		// }
 
-		if('${entity}' == ''){
-			var filepath = $("#backgroundImageUrl").val();
-			if( filepath == null || filepath == ''){
-				$("#tip").html("请上传图片");
-				return false;
-			}
-		}
+        //图片不必传
+		//if('${entity}' == ''){
+		//	var filepath = $("#backgroundImageUrl").val();
+		//	if( filepath == null || filepath == ''){
+		//		$("#tip").html("请上传图片");
+		//		return false;
+		//	}
+		//}
 
 		var messageContent = $('input[name="messageContent"]').val();
 		if(messageContent && messageContent.length>250){
