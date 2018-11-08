@@ -362,10 +362,10 @@ public class OrderServiceImpl implements IOrderService {
 		}
 		LOGGER.info("======>>>>>queryReceiveOrderList()入参：" + request.toString());
 		Long customerId = request.getCustomerId();
-		String customerJson = JedisUtil.get(RedisKeyConstants.USER_CUSTOMER_INFO + customerId);
-		if (StringUtils.isEmpty(customerJson)) {
-			return ResultUtils.result(BizCode.CustomerNotExist);
-		}
+//		String customerJson = JedisUtil.get(RedisKeyConstants.USER_CUSTOMER_INFO + customerId);
+//		if (StringUtils.isEmpty(customerJson)) {
+//			return ResultUtils.result(BizCode.CustomerNotExist);
+//		}
 		Integer orderStatusParam = request.getOrderStatus();
 		List<Integer> statusList = commonService.getReceiveOrderStatusList(orderStatusParam);
 
