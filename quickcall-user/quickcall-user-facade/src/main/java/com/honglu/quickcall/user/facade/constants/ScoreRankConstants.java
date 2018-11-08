@@ -1,5 +1,6 @@
 package com.honglu.quickcall.user.facade.constants;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -71,17 +72,28 @@ public class ScoreRankConstants {
         return SINGLE_ORDER_NUM_WEIGHT_MAP.get(index);
     }
 
+    private static final String[] unit = {"k", "m", "b"};
+    private static final BigDecimal ONE_THOUSAND = new BigDecimal(1000);
     /**
      * 格式化技能声量
      *
-     * @param socre
+     * @param score
      * @return
      */
-    public static String formatSkillScore(Integer socre) {
-        if(socre == null){
+    public static String formatSkillScore(Integer score) {
+        if (score == null) {
             return "0";
         }
+        BigDecimal decimal = new BigDecimal(score);
 
-        return socre + "";
+        int index = 0;
+        do {
+            decimal = decimal.divide(ONE_THOUSAND);
+            index++;
+        }while (decimal.compareTo(ONE_THOUSAND) >= 0 && index <= 2);
+        index--;
+        decimal = decimal.setScale(2, BigDecimal.ROUND_DOWN);
+        return decimal + unit[index];
     }
+
 }
