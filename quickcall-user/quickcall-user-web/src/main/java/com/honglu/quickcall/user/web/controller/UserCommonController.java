@@ -23,6 +23,21 @@ import com.honglu.quickcall.common.api.util.RedisKeyConstants;
 import com.honglu.quickcall.common.core.util.UUIDUtils;
 import com.honglu.quickcall.common.third.OSS.OSSUtil;
 import com.honglu.quickcall.user.facade.code.UserBizReturnCode;
+
+import com.honglu.quickcall.user.facade.exchange.request.AddSystemUserRequest;
+import com.honglu.quickcall.user.facade.exchange.request.BindVXorQQRequest;
+import com.honglu.quickcall.user.facade.exchange.request.CustomerCenterRequest;
+import com.honglu.quickcall.user.facade.exchange.request.CustomerHomeRequest;
+import com.honglu.quickcall.user.facade.exchange.request.CustomerLevelRequest;
+import com.honglu.quickcall.user.facade.exchange.request.GetSmsCodeRequest;
+import com.honglu.quickcall.user.facade.exchange.request.IsPhoneExistsRequest;
+import com.honglu.quickcall.user.facade.exchange.request.LoginOutRequest;
+import com.honglu.quickcall.user.facade.exchange.request.SearchPersonByPhoneRequest;
+import com.honglu.quickcall.user.facade.exchange.request.SetHeardUrlRequest;
+import com.honglu.quickcall.user.facade.exchange.request.SetPwdRequest;
+import com.honglu.quickcall.user.facade.exchange.request.UserLoginRequest;
+import com.honglu.quickcall.user.facade.exchange.request.UserRegisterRequest;
+
 import com.honglu.quickcall.user.web.service.UserCenterService;
 
 /**
@@ -430,6 +445,7 @@ public class UserCommonController {
 	}
 
 
+
 	/**
 	 * 提交申请成为大V接口
 	 *
@@ -448,6 +464,18 @@ public class UserCommonController {
 		}
 		response = userCenterService.execute(params);
 		logger.info("userWeb.user.submitApplyBigv.response.data : " + JSONObject.toJSONString(response));
+		return response;
+
+	}
+	/**
+	 * 根据手机号查询用户信息
+	 * @param params phone
+	 * @return
+	 */
+	@RequestMapping(value = "/searchPersonByPhone", method = RequestMethod.POST)
+	@ResponseBody
+	public WebResponseModel searchPersonByPhone(SearchPersonByPhoneRequest params) {
+		WebResponseModel response = userCenterService.execute(params);
 		return response;
 
 	}

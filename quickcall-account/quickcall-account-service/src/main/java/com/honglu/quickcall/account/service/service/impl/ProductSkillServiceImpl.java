@@ -42,11 +42,14 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 
     @Autowired
     private DataDuriedPointBusiness dataDuriedPointBusiness;
+
 	private  static final  Integer  WEEK_INDEX_DEFAULT = 0 ;
 	public  static final  String  ENDTIME_STR_24 = "2400" ;
 	public  static final  String  ENDTIME_STR_00 = "0000" ;
 	private  static  final  String  START_TIME_KEY =  "startTime";
 	private  static  final  String  END_TIME_KEY =  "endTime";
+
+
 	
 	@Autowired
 	private SkillItemMapper skillItemMapper;
@@ -371,11 +374,16 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 
 	
 	
+
 	public   Map<String, Date>   getAppointEndTime(String  startTimeStr,String  endTimeStr){
+
+
+
 		//
 		if(StringUtils.isBlank(startTimeStr) || startTimeStr.length() < 4){
 			return null;
 		}
+
 		
 		
 		Map<String, Date>  resultMap = new HashMap<String,Date>();
@@ -401,7 +409,6 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 			cal.set(Calendar.HOUR_OF_DAY, selectHourIndex);
 			cal.set(Calendar.MINUTE, 0);
 			appointStartTime = cal.getTime();
-		}else{
 			//选中的结束时间在当前时间只前
 			//结束时间向后推1天
 			cal.add(Calendar.DAY_OF_YEAR, 1);
@@ -409,6 +416,31 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 			cal.set(Calendar.MINUTE, 0);
 			//计算结束时间
 			appointStartTime =cal.getTime(); 
+			
+			Integer  endTimeIndex =  Integer.valueOf(endTimeStr);
+			
+			Calendar  cal =  Calendar.getInstance();
+			Integer  currHour= cal.get(Calendar.HOUR_OF_DAY);
+			Integer  currMinute = cal.get(Calendar.MINUTE);
+			
+			String  currTimeStr =  (currHour < 10 ? "0"+currHour :currHour+"")+ (currMinute < 10  ? "0"+currMinute :currMinute +"" );
+			Integer  currTimeIndex =  Integer.valueOf(currTimeStr);
+			
+			Integer   selectHourIndex = Integer.valueOf(endTimeStr.substring(0, 2));
+			//选中的结束时间在当前时间之后
+			if(endTimeIndex >=  currTimeIndex ){
+				cal.set(Calendar.HOUR_OF_DAY, selectHourIndex);
+				cal.set(Calendar.MINUTE, 0);
+			}else{
+				//选中的结束时间在当前时间只前
+				//结束时间向后推1天
+				cal.add(Calendar.DAY_OF_YEAR, 1);
+				cal.set(Calendar.HOUR_OF_DAY, selectHourIndex);
+				cal.set(Calendar.MINUTE, 0);
+			}
+			Date  appointEndTime =cal.getTime(); 
+			LOGGER.info("endTime====================="+cal.getTime());
+			return appointEndTime;
 		}
 		
 		if(StringUtils.isBlank(endTimeStr)){
@@ -438,6 +470,9 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 	 * 结束时间入参：0000   2400    落库：2400   判断时采用2359进行判断时间
 	 */
 	
+
+//	private  static final  Integer  WEEK_INDEX_DEFAULT = 0 ;
+
 
 	@Override
 	public void updateSkillInfoPersonal(SkillUpdateRequest request) {
@@ -524,11 +559,11 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 		}
 		
 		//更新bigv_score表
-		try {
-			customerSkillMapper.updateBigvScore(customerId, receiveStatus);
-		} catch (Exception e) {
-			LOGGER.error("更新用户状态发生异常，异常信息：",e);
-		}
+//		try {
+//			customerSkillMapper.updateBigvScore(customerId, receiveStatus);
+//		} catch (Exception e) {
+//			LOGGER.error("更新用户状态发生异常，异常信息：",e);
+//		}
 		
 
 	}

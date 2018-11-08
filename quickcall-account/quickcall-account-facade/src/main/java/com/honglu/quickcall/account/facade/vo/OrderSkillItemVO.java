@@ -29,6 +29,9 @@ public class OrderSkillItemVO implements  Serializable{
 	private String  serviceUnit;
 	/**技能类型1：按次收费 有预约时间，2：按时间段收费 没有预约时间*/
 	private Integer  skillType;
+	/**是否展示活动优惠券提示,0=不展示，1=展示*/
+	private int showTip;
+
 	public Long getUserSkillItemId() {
 		return userSkillItemId;
 	}
@@ -72,12 +75,12 @@ public class OrderSkillItemVO implements  Serializable{
 	public void setSkillType(Integer skillType) {
 		this.skillType = skillType;
 	}
-	
-	
-	
-	
-	
-	
-	
-	
+
+	public int getShowTip() {
+		return showTip;
+	}
+
+	public void setShowTip(int showTip) {
+		this.showTip = showTip;
+	}
 }

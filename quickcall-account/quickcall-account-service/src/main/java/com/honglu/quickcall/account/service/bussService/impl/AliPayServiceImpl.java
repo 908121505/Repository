@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +34,8 @@ import com.honglu.quickcall.common.api.exception.BizException;
 import com.honglu.quickcall.common.api.exchange.CommonResponse;
 import com.honglu.quickcall.common.api.exchange.ResultUtils;
 import com.honglu.quickcall.common.api.util.HttpClientUtils;
+import com.honglu.quickcall.common.api.util.JedisUtil;
+import com.honglu.quickcall.common.api.util.RedisKeyConstants;
 import com.honglu.quickcall.common.core.util.UUIDUtils;
 
 import net.sf.json.JSONObject;
@@ -78,6 +81,9 @@ public class AliPayServiceImpl implements AliPayService {
 		params += "appName=3&orderId=" + orderNo + "&orderDesc=" + orderDesc;
 		params += "&amount=" + amount + "&xnPayType=" + xnPayType + "&extData=" + extData + "&createIp=" + createIp
 				+ "&customerId=" + accountId;
+		if (StringUtils.isNotBlank(packet.getOpenid())) {
+			params += "&openid=" + packet.getOpenid();
+		}
 		String result = null;
 		try {
 			result = HttpClientUtils.doPostForm(aliPayUrl, params);
@@ -99,7 +105,7 @@ public class AliPayServiceImpl implements AliPayService {
 		recharge.setType(TradeTypeEnum.Pay.getType());// 1充值 2提现
 		recharge.setOrdersn(orderNo);
 		recharge.setState(1);// 状态。1-申请支付，2-支付成功 3支付失败
-		recharge.setRechargeType(packet.getPayType());// 充值类型。1为支付宝，2为微信 3为苹果内购
+		recharge.setRechargeType(packet.getPayType());// 充值类型。1为支付宝，2为微信 3为苹果内购 5微信公众号
 		rechargeMapper.insertSelective(recharge);
 		return ResultUtils.resultSuccess(result);
 
@@ -149,7 +155,7 @@ public class AliPayServiceImpl implements AliPayService {
 				// accountMapper.outAccount(params.getUserId(), params.getAmount(),
 				// TransferTypeEnum.REMAINDER.getType());
 				accountService.outAccount(params.getCustomerId(), params.getAmount(), TransferTypeEnum.REMAINDER,
-						AccountBusinessTypeEnum.Withdraw);
+						AccountBusinessTypeEnum.Withdraw, null);
 			} else {// 失败
 				recharge.setState(3);// 状态。1-申请支付，2-支付成功 3支付失败
 				errorMsg = myJson.getString("respMsg");
@@ -189,6 +195,13 @@ public class AliPayServiceImpl implements AliPayService {
 	public CommonResponse alipayNotify(AlipayNotifyRequest params) {
 		// TODO Auto-generated method stub
 		logger.info("支付回调参数===========" + JSON.toJSONString(params));
+		// 回调锁
+		String redisLockKey = RedisKeyConstants.ACCOUNT_ORDER_NO_NX + params.getAccountId();// redis 的open_id 数据锁
+		long redisResult = JedisUtil.setnx(redisLockKey, params.getAccountId() + "", 2);
+		logger.info("支付回调redisResult结果为：" + redisResult);
+		if (redisResult == 0) {
+			return ResultUtils.resultParamEmpty("重复点击");
+		}
 
 		// RMB转换轻音货币 比例1:100
 		BigDecimal amount = params.getAmount().multiply(new BigDecimal("100"));
@@ -202,7 +215,7 @@ public class AliPayServiceImpl implements AliPayService {
 				recharge.setState(2);// 状态。1-申请支付，2-支付成功 3支付失败
 
 				accountService.inAccount(params.getAccountId(), amount, TransferTypeEnum.RECHARGE,
-						AccountBusinessTypeEnum.Recharge);
+						AccountBusinessTypeEnum.Recharge, null);
 			} else if (params.getPayState() == 0) {
 				recharge.setState(3);// 状态。1-申请支付，2-支付成功 3支付失败
 			}

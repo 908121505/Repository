@@ -123,7 +123,7 @@ public interface TaskOrderMapper {
 	 * @param updateStatus
 	 * @param statusList
 	 */
-	void  updateOrderStatus(@Param("updateStatus")Integer  updateStatus,@Param("list")List<Long>  orderIdList,@Param("cancelTime")Date  cancelTime);
+	void  updateOrderStatus(@Param("updateStatus")Integer  updateStatus,@Param("list")List<Long>  orderIdList,@Param("cancelTime")Date  cancelTime,@Param("couponFlag")Integer  couponFlag);
 	/**
 	 * 根据订单ID列表更新订单状态
 	 * @param updateStatus

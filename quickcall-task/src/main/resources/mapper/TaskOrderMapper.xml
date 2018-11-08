@@ -23,7 +23,8 @@
 		    order_id  AS orderId ,
 			customer_id AS customerId,
 			service_id AS serviceId,
-			order_amounts AS orderAmounts
+			order_amounts AS orderAmounts,
+			coupon_flag AS couponFlag
 		FROM  
 		   orders
 		WHERE
@@ -56,7 +57,8 @@
 		order_id  AS orderId ,
 			customer_id AS customerId,
 			service_id AS serviceId,
-			order_amounts AS orderAmounts
+			order_amounts AS orderAmounts,
+			coupon_flag AS couponFlag
 		FROM  
 		   orders
 		WHERE
@@ -89,7 +91,8 @@
 		order_id  AS orderId ,
 			customer_id AS customerId,
 			service_id AS serviceId,
-			order_amounts AS orderAmounts
+			order_amounts AS orderAmounts,
+			coupon_flag AS couponFlag
 			
 		FROM  
 		   orders
@@ -129,13 +132,14 @@
 		order_id  AS orderId ,
 			customer_id AS customerId,
 			service_id AS serviceId,
-			order_amounts AS orderAmounts
+			order_amounts AS orderAmounts,
+			coupon_flag AS couponFlag
 		FROM  
 		   orders
 		WHERE
 			order_status = #{queryStatus}
 		AND expect_end_time <![CDATA[ < ]]> #{endTime}
-		AND create_time <![CDATA[ > ]]>  #{queryEndTime}
+		<!-- AND expect_end_time <![CDATA[ > ]]>  #{queryEndTime} -->
   </select>
   
   <!-- ///////////////////////////////////////////////////////////////////-->
@@ -159,7 +163,8 @@
 		    order_id  AS orderId ,
 			customer_id AS customerId,
 			service_id AS serviceId,
-			order_amounts AS orderAmounts
+			order_amounts AS orderAmounts,
+			coupon_flag AS couponFlag
 		FROM  
 		   orders
 		WHERE
@@ -194,7 +199,8 @@
 		order_id  AS orderId ,
 			customer_id AS customerId,
 			service_id AS serviceId,
-			order_amounts AS orderAmounts
+			order_amounts AS orderAmounts,
+			coupon_flag AS couponFlag
 		FROM  
 		   orders
 		WHERE
@@ -213,7 +219,8 @@
 			orders
 		SET 
 			system_cancel_time = #{cancelTime},
-		 	order_status = #{updateStatus}
+		 	order_status = #{updateStatus},
+		 	coupon_flag = #{couponFlag}
 		WHERE
 			order_id  IN 
 			<foreach collection="list" item="orderId"    open="("  close=")"  separator=",">

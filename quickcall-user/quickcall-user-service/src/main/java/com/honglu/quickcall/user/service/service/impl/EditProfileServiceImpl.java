@@ -3,6 +3,7 @@ package com.honglu.quickcall.user.service.service.impl;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
+import com.alibaba.fastjson.JSON;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -134,7 +135,7 @@ public class EditProfileServiceImpl implements EditProfileService {
 			 */
 
 			JedisUtil.set(RedisKeyConstants.USER_CUSTOMER_INFO + params.getCustomerId(),
-					JsonParseUtil.castToJson(customer));
+					customer == null ? "" : JSON.toJSONString(customer));
 			commonResponse.setCode(UserBizReturnCode.Success);
 			commonResponse.setMessage(UserBizReturnCode.Success.desc());
 			return commonResponse;
@@ -182,7 +183,7 @@ public class EditProfileServiceImpl implements EditProfileService {
 		logger.info("修改签名 updateSignName,更新数量" + result);
 		if (result > 0) {
 			JedisUtil.set(RedisKeyConstants.USER_CUSTOMER_INFO + params.getCustomerId(),
-					JsonParseUtil.castToJson(customer));
+					customer == null ? "" : JSON.toJSONString(customer));
 
 			commonResponse.setCode(UserBizReturnCode.Success);
 			commonResponse.setMessage(UserBizReturnCode.Success.desc());
@@ -217,7 +218,7 @@ public class EditProfileServiceImpl implements EditProfileService {
 		logger.info("修改星座 updateStarSign,更新数量" + result);
 		if (result > 0) {
 			JedisUtil.set(RedisKeyConstants.USER_CUSTOMER_INFO + params.getCustomerId(),
-					JsonParseUtil.castToJson(customer));
+					customer == null ? "" : JSON.toJSONString(customer));
 
 			commonResponse.setCode(UserBizReturnCode.Success);
 			commonResponse.setMessage(UserBizReturnCode.Success.desc());
@@ -326,7 +327,7 @@ public class EditProfileServiceImpl implements EditProfileService {
 			// }
 
 			JedisUtil.set(RedisKeyConstants.USER_CUSTOMER_INFO + params.getCustomerId(),
-					JsonParseUtil.castToJson(customer));
+					customer == null ? "" : JSON.toJSONString(customer));
 
 			commonResponse.setCode(UserBizReturnCode.Success);
 			commonResponse.setMessage(UserBizReturnCode.Success.desc());
@@ -511,7 +512,7 @@ public class EditProfileServiceImpl implements EditProfileService {
 		logger.info("修改性别 updateGender,更新数量" + result);
 		if (result > 0) {
 			JedisUtil.set(RedisKeyConstants.USER_CUSTOMER_INFO + params.getCustomerId(),
-					JsonParseUtil.castToJson(customer));
+					customer == null ? "" : JSON.toJSONString(customer));
 
 			commonResponse.setCode(UserBizReturnCode.Success);
 			commonResponse.setMessage(UserBizReturnCode.Success.desc());
@@ -546,7 +547,7 @@ public class EditProfileServiceImpl implements EditProfileService {
 		logger.info("修改年龄 updateBirthday,更新数量" + result);
 		if (result > 0) {
 			JedisUtil.set(RedisKeyConstants.USER_CUSTOMER_INFO + params.getCustomerId(),
-					JsonParseUtil.castToJson(customer));
+					customer == null ? "" : JSON.toJSONString(customer));
 
 			commonResponse.setCode(UserBizReturnCode.Success);
 			commonResponse.setMessage(UserBizReturnCode.Success.desc());

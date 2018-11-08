@@ -246,4 +246,14 @@ public interface UserFunctionType {
 	 * 客户申请成为大V
 	 */
 	String CUSTOMER_APPLY_BIGV = "0011303";
+
+	/**
+	 * 初始化大V评分排名数据
+	 */
+	String INIT_BIGV_SCORE_RANK_DATA = "003233";
+	/**
+	 * 根据电话查询用户信息
+	 */
+	String searchPersonByPhone = "0011138";
+
 }

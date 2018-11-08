@@ -1,10 +1,10 @@
 package com.honglu.quickcall.user.service.dao;
 
-import com.honglu.quickcall.user.facade.entity.BigvSkillScore;
 import com.honglu.quickcall.user.facade.entity.CustomerSkill;
 import com.honglu.quickcall.user.facade.entity.ResourceConfig;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.Date;
 import java.util.List;
 
 public interface ResourceConfigMapper {
@@ -44,13 +44,13 @@ public interface ResourceConfigMapper {
      * @param configSkills
      * @param exCustomerIds
      * @param weekIndex
-     * @param endTimeStr
+     * @param endTime
      * @return
      */
     int countEnabledBigvBySkillRank(@Param("configSkills") List<Long> configSkills,
                                          @Param("exCustomerIds") List<Long> exCustomerIds,
                                          @Param("weekIndex") Integer weekIndex,
-                                         @Param("endTimeStr") String endTimeStr,
+                                         @Param("endTime") Date endTime,
                                          @Param("skillOrdered") Integer skillOrdered);
 
     /**
@@ -61,7 +61,7 @@ public interface ResourceConfigMapper {
     CustomerSkill selectEnabledBigvBySkillRank(@Param("configSkills") List<Long> configSkills,
                                                      @Param("exCustomerIds") List<Long> exCustomerIds,
                                                      @Param("weekIndex") Integer weekIndex,
-                                                     @Param("endTimeStr") String endTimeStr,
+                                                     @Param("endTime") Date endTime,
                                                      @Param("beginIndex") int beginIndex,
                                                      @Param("endIndex") int endIndex,
                                                      @Param("skillOrdered") Integer skillOrdered);
@@ -73,14 +73,14 @@ public interface ResourceConfigMapper {
      * @param configSkills
      * @param exCustomerIds
      * @param weekIndex
-     * @param endTimeStr
+     * @param endTime
      * @return
      */
     CustomerSkill selectRandomBigvFromResourcePool(@Param("resourcePoolId") Long resourcePoolId,
                                                     @Param("configSkills") List<Long> configSkills,
                                                     @Param("exCustomerIds") List<Long> exCustomerIds,
                                                     @Param("weekIndex") Integer weekIndex,
-                                                    @Param("endTimeStr") String endTimeStr,
+                                                    @Param("endTime") Date endTime,
                                                     @Param("skillOrdered") Integer skillOrdered);
 
     /**
@@ -88,10 +88,14 @@ public interface ResourceConfigMapper {
      *
      * @param skillItemId
      * @param weekIndex
-     * @param endTimeStr
+     * @param endTime
+     * @param start
+     * @param size
      * @return
      */
     List<CustomerSkill> selectRankBigvListBySkillItemId(@Param("skillItemId") Long skillItemId,
                                                         @Param("weekIndex") Integer weekIndex,
-                                                        @Param("endTimeStr") String endTimeStr);
+                                                        @Param("endTime") Date endTime,
+                                                        @Param("start") Integer start,
+                                                        @Param("size") Integer size);
 }

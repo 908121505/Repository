@@ -2,7 +2,11 @@ package com.honglu.quickcall.user.service.dao;
 
 import com.honglu.quickcall.account.facade.entity.Order;
 import com.honglu.quickcall.user.facade.entity.Customer;
+<<<<<<< HEAD
 import com.honglu.quickcall.user.facade.entity.CustomerApplyBigv;
+=======
+import com.honglu.quickcall.user.facade.vo.SearchPersonByPhoneVO;
+>>>>>>> refs/remotes/origin/activity
 import com.honglu.quickcall.user.facade.vo.SearchPersonListVO;
 import com.honglu.quickcall.user.facade.vo.UserEditInfoVO;
 import org.apache.ibatis.annotations.Param;
@@ -101,6 +105,7 @@ public interface CustomerMapper {
 	Customer queryCustomerByCustomerId(@Param("customerId") Long customerId);
 
 	/**
+<<<<<<< HEAD
 	 * 获取客户是否申请过成为大V
 	 * @param customerId
 	 * @return
@@ -113,4 +118,18 @@ public interface CustomerMapper {
 	 * @return
 	 */
 	int insertApplyBigvData(CustomerApplyBigv applyBigv);
+=======
+	 * 判断客户是否为声优
+	 * @param customerId
+	 * @return 1=是；0=否
+	 */
+	int judgeCustomerIsBigv(@Param("customerId") Long customerId);
+	
+	/**
+	 * 根据电话查询用户信息
+	 * @param phone
+	 * @return
+	 */
+	List<SearchPersonByPhoneVO> queryPersonByPhone(@Param("phone") Long phone);
+>>>>>>> refs/remotes/origin/activity
 }

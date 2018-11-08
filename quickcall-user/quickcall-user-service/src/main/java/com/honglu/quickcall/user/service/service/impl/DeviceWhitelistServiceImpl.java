@@ -35,7 +35,7 @@ public class DeviceWhitelistServiceImpl implements DeviceWhitelistService{
     @Autowired
     private CustomerDeviceWhitelistMapper customerDeviceWhitelistMapper;
 
-    @Override
+    /*@Override
     public CommonResponse queryDeviceWhitelist(QueryDeviceWhitelistReq params) {
         CommonResponse commonResponse = new CommonResponse();
         Long customerId = params.getCustomerId();
@@ -98,5 +98,5 @@ public class DeviceWhitelistServiceImpl implements DeviceWhitelistService{
             logger.error("添加设备白名单 异常");
             throw new BizException(UserBizReturnCode.jdbcError, "操作数据库异常");
         }
-    }
+    }*/
 }

@@ -10,6 +10,15 @@ public class RechargeRequest extends AbstractRequest {
 	private Long customerId;// 用户Id
 	private BigDecimal amount;// 支付金额
 	private Integer payType;// 支付类型 1：支付宝 2微信
+	private String openid;// 支付类型为5 时必传
+
+	public String getOpenid() {
+		return openid;
+	}
+
+	public void setOpenid(String openid) {
+		this.openid = openid;
+	}
 
 	public Integer getPayType() {
 		return payType;

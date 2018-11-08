@@ -217,7 +217,7 @@ public class ApplePayServiceImpl implements ApplePayService {
 				// 2. 账户充值操作 内购充值 打七折
 				accountService.inAccount(rechargeVO.getCustomerId(),
 						rechargeVO.getAmount().multiply(BigDecimal.valueOf(100).multiply(new BigDecimal(0.7 + ""))),
-						TransferTypeEnum.RECHARGE, AccountBusinessTypeEnum.AppRecharge);
+						TransferTypeEnum.RECHARGE, AccountBusinessTypeEnum.AppRecharge, null);
 				return ResultUtils.resultSuccess();
 				/****************************************
 				 * +自己的业务逻辑end

@@ -1,5 +1,6 @@
 package com.honglu.quickcall.user.service.service.impl;
 
+<<<<<<< HEAD
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -20,6 +21,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+=======
+import cn.jiguang.commom.utils.StringUtils;
+>>>>>>> refs/remotes/origin/activity
 import com.honglu.quickcall.account.facade.business.IAccountOrderService;
 import com.honglu.quickcall.account.facade.code.AccountBizReturnCode;
 import com.honglu.quickcall.common.api.code.BizCode;
@@ -38,7 +42,12 @@ import com.honglu.quickcall.common.third.rongyun.models.CodeSuccessReslut;
 import com.honglu.quickcall.common.third.rongyun.util.RongYunUtil;
 import com.honglu.quickcall.user.facade.code.UserBizReturnCode;
 import com.honglu.quickcall.user.facade.constants.UserBizConstants;
+<<<<<<< HEAD
+=======
+import com.honglu.quickcall.user.facade.entity.*;
+>>>>>>> refs/remotes/origin/activity
 import com.honglu.quickcall.user.facade.entity.example.AppShareConfigExample;
+<<<<<<< HEAD
 import com.honglu.quickcall.user.facade.vo.AttentionFansVO;
 import com.honglu.quickcall.user.facade.vo.CustomerCenterVO;
 import com.honglu.quickcall.user.facade.vo.CustomerHomeVO;
@@ -47,11 +56,24 @@ import com.honglu.quickcall.user.facade.vo.InterestVO;
 import com.honglu.quickcall.user.facade.vo.MySkillVO;
 import com.honglu.quickcall.user.facade.vo.OccupationVO;
 import com.honglu.quickcall.user.facade.vo.SearchPersonListVO;
+=======
+import com.honglu.quickcall.user.facade.exchange.request.*;
+import com.honglu.quickcall.user.facade.vo.*;
+import com.honglu.quickcall.user.service.dao.*;
+>>>>>>> refs/remotes/origin/activity
 import com.honglu.quickcall.user.service.service.CustomerRedisManagement;
 import com.honglu.quickcall.user.service.service.PersonInfoService;
 import com.honglu.quickcall.user.service.util.JsonParseUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import cn.jiguang.commom.utils.StringUtils;
+import java.math.BigDecimal;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Service
 @Transactional
@@ -88,6 +110,8 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 	private BlacklistMapper blacklistMapper;
 	@Autowired
 	private CustomerVisitMapper customerVisitMapper;
+	@Autowired
+	private BigvSkillScoreMapper bigvSkillScoreMapper;
 
 	/**
 	 * 中文、英文、数字、下划线校验 4-24位
@@ -841,10 +865,10 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 				customerSkill.setCustomerLabel(customerSkillMapper
 						.selectCustomerSkillHotLabel(request.getViewCustomerId(), bean.getSkillItemId()));
 
-				// 声量 ADUAN -- 一期前段不显示
-				customerSkill.setSkillVolume(250);
+				// 查询技能声量
+				customerSkill.setSkillVolume(bigvSkillScoreMapper.selectBigvScoreValue(bean.getCustomerSkillId()));
 
-				// 判断是否可下单 ADUAN -- 待做
+				// 判断是否可下单
 				if (Objects.equals(request.getLoginCustomerId(), request.getViewCustomerId())) {
 					customerSkill.setCanOrder(0); // 自己看自己的个人主页时 -- 直接返回 0=不可接单
 				} else {

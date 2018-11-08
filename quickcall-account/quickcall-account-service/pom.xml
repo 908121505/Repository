@@ -37,6 +37,11 @@
             <groupId>com.honglu.quickcall</groupId>
             <artifactId>quickcall-account-facade</artifactId>
         </dependency>
+        <!-- 依赖活动工程 -->
+        <dependency>
+                <groupId>com.honglu.quickcall</groupId>
+    			<artifactId>quickcall-activity-facade</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>com.honglu.quickcall</groupId>

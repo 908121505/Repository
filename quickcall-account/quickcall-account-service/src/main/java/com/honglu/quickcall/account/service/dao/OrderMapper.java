@@ -140,6 +140,7 @@ public interface OrderMapper {
 	 */
 	List<Order> selectOrderReceiveOrder(@Param("serviceId")Long  serviceId ,@Param("orderId")Long orderId, @Param("orderStatus")Integer orderStatus, @Param("skillType")Integer skillType);
 
+
 	/**
 	 * 查询声优是否被客户关注
 	 * @param serviceId -- 服务者ID
@@ -159,4 +160,8 @@ public interface OrderMapper {
 	int insertOrderServicerFans(@Param("id") Long id,
 								@Param("serviceId") Long serviceId,
 								@Param("customerId") Long customerId);
+
+
+
+
 }

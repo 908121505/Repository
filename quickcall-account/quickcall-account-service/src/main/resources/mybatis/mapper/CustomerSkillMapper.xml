@@ -53,7 +53,7 @@
     select 
     <include refid="Base_Column_List" />
     from customer_skill
-    where customer_skill_id = #{customerSkillId,jdbcType=BIGINT}  AND switch_status = 1 AND receive_status =1 
+    where customer_skill_id = #{customerSkillId,jdbcType=BIGINT}  AND switch_status = 1 AND receive_status =1  AND skill_status =1 
       <!--  <include refid="SKILL_EXIST_CONDITON"></include> -->
        AND   appoint_end_time <![CDATA[  > ]]> #{endTime,jdbcType=TIMESTAMP}
   </select>
@@ -530,7 +530,7 @@
 		FROM
 			customer_skill cs
 		LEFT JOIN skill_item st ON cs.skill_item_id = st.id
-    where cs.customer_id = #{customerId,jdbcType=BIGINT}  AND cs.switch_status = 1 AND cs.receive_status =1 
+    where cs.customer_id = #{customerId,jdbcType=BIGINT}  AND cs.switch_status = 1 AND cs.receive_status =1    AND cs.skill_status =1 
 <!--        <if test="weekIndex == 1" >
         AND  cs.monday = #{skillSwitch,jdbcType=TINYINT}
       </if>

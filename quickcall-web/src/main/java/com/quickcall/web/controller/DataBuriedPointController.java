@@ -20,7 +20,7 @@ import java.util.UUID;
 @RequestMapping("/data")
 public class DataBuriedPointController {
 
-    @Reference(version = "1.0.0", timeout = 10000, retries = 0)
+    @Reference(group = "buryDataCenter",version = "1.0.0", timeout = 10000, retries = 0)
     private DataDuriedPointBusiness dataDuriedPointBusiness;
 
     /**
@@ -53,6 +53,12 @@ public class DataBuriedPointController {
         req.setRegistDate(new Date());
         req.setRegistSource("http://www.baidu.com");
         req.setUser_id("17356985474");
+        req.setVirUserId("1233");
+        UserBean userBean = new UserBean();
+        userBean.setGender("男");
+        userBean.setNick("xp");
+        userBean.setYearOfBirth(new Date());
+        req.setUserBean(userBean);
         dataDuriedPointBusiness.burySignUpResultData(req);
         return "success";
     }
@@ -70,6 +76,11 @@ public class DataBuriedPointController {
         req.setLoginmethod("login");
         req.setPhoneNumber("17356985474");
         req.setUser_id("17356985474");
+        UserBean userBean = new UserBean();
+        userBean.setGender("男");
+        userBean.setNick("xp");
+        userBean.setYearOfBirth(new Date());
+        req.setUserBean(userBean);
         dataDuriedPointBusiness.buryUserIdLoginResultData(req);
         return "success";
     }

@@ -278,5 +278,16 @@ public interface OrderSkillConstants {
 	/**大V声音状态4：审核通过*/
 	public static final  Integer  VOICE_STATUS_APPROVE_PASS = 4;
 	
+	//////////////////////////////订单用券状态///////////////////////////////////////////
+	/**订单用券状态0：不使用*/
+	public static final  Integer  ORDER_COUPON_FLAG_DEFAULT = 0;
+	/**订单用券状态1：使用券*/
+	public static final  Integer  ORDER_COUPON_FLAG_USE = 1;
+	/**订单用券状态2：使用券订单取消*/
+	public static final  Integer  ORDER_COUPON_FLAG_CANCEL = 2;
+	
+	
+	
+	
 	
 }

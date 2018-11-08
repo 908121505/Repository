@@ -28,6 +28,7 @@
     <result column="order_time" property="orderTime" jdbcType="TIMESTAMP" />
     <result column="skill_type" property="skillType" jdbcType="TINYINT" />
     <result column="order_status" property="orderStatus" jdbcType="TINYINT" />
+    <result column="coupon_flag" property="couponFlag" jdbcType="TINYINT" />
     <result column="payment_time" property="paymentTime" jdbcType="TIMESTAMP" />
     <result column="customer_is_evaluate" property="customerIsEvaluate" jdbcType="TINYINT" />
     <result column="customer_message" property="customerMessage" jdbcType="VARCHAR" />
@@ -50,7 +51,7 @@
     order_id, order_no, customer_skill_id, skill_item_id,customer_id, service_id, trade_id, payment_type, 
     order_num, service_unit, service_price, order_amounts, coupon_price,discount_rate, appoint_time,cust_cancel_time, 
     system_cancel_time, receive_order_time, start_service_time, appay_end_time, start_time, 
-    end_time, expect_end_time,order_time,skill_type, order_status, payment_time, customer_is_evaluate, customer_message, 
+    end_time, expect_end_time,order_time,skill_type, order_status, coupon_flag,payment_time, customer_is_evaluate, customer_message, 
     evaluate_start, customer_evaluate, order_describe, create_time, modify_time, create_man, 
     modify_man, remark,select_reason,remark_reason
   </sql>
@@ -77,7 +78,7 @@
       service_price, order_amounts,coupon_price, discount_rate, appoint_time,
       cust_cancel_time, system_cancel_time, receive_order_time, 
       start_service_time, appay_end_time, start_time, 
-      end_time, expect_end_time,order_time,skill_type, order_status, 
+      end_time, expect_end_time,order_time,skill_type, order_status,coupon_flag, 
       payment_time, customer_is_evaluate, customer_message, 
       evaluate_start, customer_evaluate, order_describe, 
       create_time, modify_time, create_man, 
@@ -88,7 +89,7 @@
       #{servicePrice,jdbcType=DECIMAL}, #{orderAmounts,jdbcType=DECIMAL}, #{couponPrice,jdbcType=DECIMAL}, #{discountRate,jdbcType=DECIMAL}, 
       #{appointTime,jdbcType=TIMESTAMP}, #{custCancelTime,jdbcType=TIMESTAMP}, #{systemCancelTime,jdbcType=TIMESTAMP}, #{receiveOrderTime,jdbcType=TIMESTAMP}, 
       #{startServiceTime,jdbcType=TIMESTAMP}, #{appayEndTime,jdbcType=TIMESTAMP}, #{startTime,jdbcType=TIMESTAMP}, 
-      #{endTime,jdbcType=TIMESTAMP},#{expectEndTime,jdbcType=TIMESTAMP}, #{orderTime,jdbcType=TIMESTAMP}, #{skillType,jdbcType=TINYINT}, #{orderStatus,jdbcType=TINYINT}, 
+      #{endTime,jdbcType=TIMESTAMP},#{expectEndTime,jdbcType=TIMESTAMP}, #{orderTime,jdbcType=TIMESTAMP}, #{skillType,jdbcType=TINYINT}, #{orderStatus,jdbcType=TINYINT}, #{couponFlag,jdbcType=TINYINT}, 
       #{paymentTime,jdbcType=TIMESTAMP}, #{customerIsEvaluate,jdbcType=TINYINT}, #{customerMessage,jdbcType=VARCHAR}, 
       #{evaluateStart,jdbcType=INTEGER}, #{customerEvaluate,jdbcType=VARCHAR}, #{orderDescribe,jdbcType=VARCHAR}, 
       #{createTime,jdbcType=TIMESTAMP}, #{modifyTime,jdbcType=TIMESTAMP}, #{createMan,jdbcType=VARCHAR}, 
@@ -173,6 +174,9 @@
       </if>
       <if test="orderStatus != null" >
         order_status,
+      </if>
+      <if test="couponFlag != null" >
+        coupon_flag,
       </if>
       <if test="paymentTime != null" >
         payment_time,
@@ -283,6 +287,9 @@
       </if>
       <if test="orderStatus != null" >
         #{orderStatus,jdbcType=TINYINT},
+      </if>
+      <if test="couponFlag != null" >
+        #{couponFlag,jdbcType=TINYINT},
       </if>
       <if test="paymentTime != null" >
         #{paymentTime,jdbcType=TIMESTAMP},
@@ -401,6 +408,9 @@
       <if test="orderStatus != null" >
         order_status = #{orderStatus,jdbcType=TINYINT},
       </if>
+      <if test="couponFlag != null" >
+        coupon_flag = #{couponFlag,jdbcType=TINYINT},
+      </if>
       <if test="paymentTime != null" >
         payment_time = #{paymentTime,jdbcType=TIMESTAMP},
       </if>
@@ -467,6 +477,7 @@
       order_time = #{orderTime,jdbcType=TIMESTAMP},
       skill_type = #{skillType,jdbcType=TINYINT},
       order_status = #{orderStatus,jdbcType=TINYINT},
+      coupon_flag = #{couponFlag,jdbcType=TINYINT},
       payment_time = #{paymentTime,jdbcType=TIMESTAMP},
       customer_is_evaluate = #{customerIsEvaluate,jdbcType=TINYINT},
       customer_message = #{customerMessage,jdbcType=VARCHAR},
@@ -535,7 +546,8 @@
 		od.order_time AS orderTime,
 		od.receive_order_time AS receiveOrderTime,
 		od.customer_skill_id AS customerSkillId,
-		cs.switch_status AS switchStatus
+		cs.switch_status AS switchStatus,
+		od.coupon_flag  AS  couponFlag
 	FROM
 		orders od
 	LEFT JOIN customer_skill cs ON od.customer_skill_id = cs.customer_skill_id
@@ -778,8 +790,6 @@
       #{orderId}
     </foreach>
   </update>
-  
-  
-  
-  
+
+
 </mapper>

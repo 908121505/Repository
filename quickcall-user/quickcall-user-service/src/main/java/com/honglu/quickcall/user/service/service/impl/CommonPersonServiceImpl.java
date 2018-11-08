@@ -35,22 +35,17 @@ import com.honglu.quickcall.producer.facade.business.DataDuriedPointBusiness;
 import com.honglu.quickcall.producer.facade.req.databury.DataBuriedPointGetCodeReq;
 import com.honglu.quickcall.producer.facade.req.databury.DataBuriedPointLoginReq;
 import com.honglu.quickcall.producer.facade.req.databury.DataBuriedPointRegistReq;
+<<<<<<< HEAD
+=======
+import com.honglu.quickcall.producer.facade.req.databury.UserBean;
+import com.honglu.quickcall.user.facade.code.UserBizReturnCode;
+>>>>>>> refs/remotes/origin/activity
 import com.honglu.quickcall.user.facade.constants.UserBizConstants;
 import com.honglu.quickcall.user.facade.entity.Customer;
 import com.honglu.quickcall.user.facade.entity.SensitivityWord;
 import com.honglu.quickcall.user.facade.enums.CustomerCusStateEnum;
-import com.honglu.quickcall.user.facade.exchange.request.AddSystemUserRequest;
-import com.honglu.quickcall.user.facade.exchange.request.BindVXorQQRequest;
-import com.honglu.quickcall.user.facade.exchange.request.GetSmsCodeRequest;
-import com.honglu.quickcall.user.facade.exchange.request.IsPhoneExistsRequest;
-import com.honglu.quickcall.user.facade.exchange.request.LoginOutRequest;
-import com.honglu.quickcall.user.facade.exchange.request.SaveCertificationRequest;
-import com.honglu.quickcall.user.facade.exchange.request.SaveDvVoiceRequest;
-import com.honglu.quickcall.user.facade.exchange.request.SetHeardUrlRequest;
-import com.honglu.quickcall.user.facade.exchange.request.SetPwdRequest;
-import com.honglu.quickcall.user.facade.exchange.request.UserIdCardInfoRequest;
-import com.honglu.quickcall.user.facade.exchange.request.UserLoginRequest;
-import com.honglu.quickcall.user.facade.exchange.request.UserRegisterRequest;
+import com.honglu.quickcall.user.facade.exchange.request.*;
+import com.honglu.quickcall.user.facade.vo.SearchPersonByPhoneVO;
 import com.honglu.quickcall.user.service.dao.BigvPhoneMapper;
 import com.honglu.quickcall.user.service.dao.CustomerMapper;
 import com.honglu.quickcall.user.service.dao.SensitivityWordMapper;
@@ -77,10 +72,15 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 	private SensitivityWordMapper sensitivityWordMapper;
 
 	@Autowired
+<<<<<<< HEAD
 
 	private DataDuriedPointBusiness dataDuriedPointBusiness;
 
+=======
+>>>>>>> refs/remotes/origin/activity
 	private BigvPhoneMapper bigvPhoneMapper;
+	@Autowired
+	private DataDuriedPointBusiness dataDuriedPointBusiness;
 
 	private static String resendexpire = ResourceBundle.getBundle("thirdconfig").getString("resend.expire");
 	private static String resendexpirehour = ResourceBundle.getBundle("thirdconfig").getString("resend.expire.hour");
@@ -211,6 +211,7 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 				}
 			}
 		}
+
 		// 账户被封
 		if (isBlock) {
 			response.setCode(BizCode.CustomerClosure);
@@ -231,6 +232,17 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 
 		req.setPhoneNumber(customer.getPhone());
 		req.setUser_id(customer.getCustomerId() + "");
+		UserBean userBean = new UserBean();
+		userBean.setNick(customer.getNickName());
+		userBean.setRegistDate(customer.getCreateTime());
+		userBean.setRegistSource(customer.getAppChannelName());
+		userBean.setGender(customer.getSex() == 0 ? "女" : "男");
+		userBean.setPhoneNumber(customer.getPhone());
+		userBean.setYearOfBirth(customer.getBirthday());
+		req.setUserBean(userBean);
+
+		logger.info("===============开始登陆数据埋点==============userBean:"+req.getUserBean());
+		dataDuriedPointBusiness.buryUserIdLoginResultData(req);
 		return ResultUtils.resultSuccess(customer);
 	}
 
@@ -430,13 +442,16 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 			}
 			customer.setTokenCode(rongyunToken);
 		}
-
+		UserBean userBean = new UserBean();
 		/**
 		 * 声优白名单
 		 */
 		if (bigvPhoneMapper.queryOneByPhone(request.getTel()) != null) {
 			customer.setIdentityStatus(2);
 			customer.setvStatus(2);
+			userBean.setUserIdentity("声优");
+		} else {
+			userBean.setUserIdentity("普通用户");
 		}
 
 		int row = customerMapper.insertSelective(customer);
@@ -450,7 +465,16 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 		req.setPhoneNumber(request.getTel());
 		req.setRegistDate(new Date());
 		req.setRegistSource(request.getAppChannelName());
-		req.setUser_id("17356985474");
+		req.setUser_id(customer.getCustomerId() + "");
+
+
+		userBean.setNick(customer.getNickName());
+		userBean.setRegistDate(new Date());
+		userBean.setRegistSource(request.getAppChannelName());
+		userBean.setPhoneNumber(request.getTel());
+
+		req.setUserBean(userBean);
+
 		dataDuriedPointBusiness.burySignUpResultData(req);
 		// 创建账户
 		accountDubboIntegrationService.createAccount(customer.getCustomerId());
@@ -809,6 +833,17 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 		int row = customerMapper.insertSelective(customer);
 		return ResultUtils.resultSuccess();
 
+	}
+	
+	@Override
+	public CommonResponse searchPersonByPhone(SearchPersonByPhoneRequest request) {
+		Long phone = request.getPhone();
+		List<SearchPersonByPhoneVO> list = customerMapper.queryPersonByPhone(phone);
+		SearchPersonByPhoneVO customer = new SearchPersonByPhoneVO();
+		if(list.size() > 0){
+			customer = list.get(0);
+		}
+		return ResultUtils.resultSuccess(customer);
 	}
 
 }

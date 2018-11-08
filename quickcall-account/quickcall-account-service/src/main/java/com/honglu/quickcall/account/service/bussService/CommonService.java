@@ -29,16 +29,6 @@ public interface CommonService {
 	
 	public CommonResponse  getCommonResponse();
 	
-	
-	
-	/**
-	 * 向用户发送消息
-	 * @param msgType
-	 * @param sellerId
-	 * @param customerId
-	 */
-	public  void  pushMessage(PushAppMsgTypeEnum msgType,Long  sellerId,Long  customerId);
-	
 	/**
 	 * 根据订单ID更新订单状态
 	 * @param orderId

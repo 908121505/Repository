@@ -20,6 +20,7 @@ public class OrderDaVSkillVO implements  Serializable{
 	private String  nickName;
 	/**主播头像*/
 	private String  headPortraitUrl;
+
 	/**产品ID*/
 	private List<OrderSkillItemVO>  custSkillList;
 	public Long getServiceId() {

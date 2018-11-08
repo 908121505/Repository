@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 import org.apache.commons.lang3.StringUtils;
@@ -184,7 +185,7 @@ public class OrderUpdateJob {
     		Integer  queryStatus = OrderSkillConstants.ORDER_STATUS_GOING_WAITING_START;
     		Integer  updateStatus = OrderSkillConstants.ORDER_STATUS_GOING_USER_ACCEPCT;
     		Integer  skillType = OrderSkillConstants.SKILL_TYPE_NO;
-    		Date  queryEndTime =  getEndTimeByAddHours(-1);
+    		Date  queryEndTime =  getEndTimeByAddDays(-2);
     		List<TaskOrder>  orderList = taskOrderMapper.queryAppointOrderGoing(currTime,endTime, queryStatus, updateStatus, skillType,queryEndTime);
     		updateOrderStatusByOrderListForCancel(orderList, updateStatus);
 //    		taskOrderMapper.appointOrderGoing(currTime,endTime, queryStatus, updateStatus, skillType,queryEndTime);
@@ -273,10 +274,24 @@ public class OrderUpdateJob {
     	
     	if(!CollectionUtils.isEmpty(orderList)){
     		List<Long>  orderIdList =  new ArrayList<Long>();
+    		List<Long>  orderIdCouponList =  new ArrayList<Long>();
+    		
     		for (TaskOrder order : orderList) {
     			orderIdList.add(order.getOrderId());
+    			Integer  couponFlag = order.getCouponFlag();
+    			if(couponFlag != null  && OrderSkillConstants.ORDER_COUPON_FLAG_USE == couponFlag){
+    				orderIdCouponList.add(order.getOrderId());
+    			}
     		}
     		taskOrderMapper.updateOrderStatus(updateOrderStatus, orderIdList,new Date());
+    		//用户所得券返回给用户
+    		try {
+				taskCustomerCouponMapper.batchUpdateCustomerCoupon(orderIdCouponList, OrderSkillConstants.ORDER_COUPON_FLAG_CANCEL);
+			} catch (Exception e) {
+				LOGGER.error("用户券返还发生异常，异常信息：",e);
+			}
+    		
+    		
     	}
     }
     /**
@@ -326,9 +341,9 @@ public class OrderUpdateJob {
     				Long  customerId =  order.getCustomerId();
     				BigDecimal  payAmount =  order.getOrderAmounts();
     				//调用接口退款给用户
-    				LOGGER.info("用户信息："+order.toString());
-    				inAccount(customerId, payAmount,TransferTypeEnum.RECHARGE,AccountBusinessTypeEnum.OrderRefund);
-    				LOGGER.info("用户ID："+customerId +"订单超时，系统自动退款给用户"+payAmount);
+    				LOGGER.info("OrderInfo"+order.toString());
+    				inAccount(customerId, payAmount,TransferTypeEnum.RECHARGE,AccountBusinessTypeEnum.OrderRefund,order.getOrderId());
+    				LOGGER.info("CID："+customerId +"订单超时，系统自动退款给用户"+payAmount);
     				
     				sendOrderMessage(customerId, cancelType, false);
     				sendOrderMessage(order.getServiceId(), cancelType, true);
@@ -397,8 +412,8 @@ public class OrderUpdateJob {
 					Long  serviceId =  order.getServiceId();
 					BigDecimal   payAmount =  order.getOrderAmounts();
 					//大V冻结
-					inAccount(order.getServiceId(), order.getOrderAmounts(), TransferTypeEnum.FROZEN, AccountBusinessTypeEnum.FroZen);
-					LOGGER.info("主播用户ID："+serviceId +"订单超时，系统自动退款给用户"+payAmount);
+					inAccount(order.getServiceId(), order.getOrderAmounts(), TransferTypeEnum.FROZEN, AccountBusinessTypeEnum.FroZen,order.getOrderId());
+					LOGGER.info("SY_ID："+serviceId +"资金流水冻结，冻结金额"+payAmount);
 				}
 			} catch (Exception e) {
 				LOGGER.error("大V账户冻结发生异常，异常信息",e);
@@ -416,13 +431,15 @@ public class OrderUpdateJob {
 	private final static String froZenTime = ResourceBundle.getBundle("thirdconfig").getString("froZenTime");
     
     public void inAccount(Long customerId, BigDecimal amount, TransferTypeEnum transferType,
-			AccountBusinessTypeEnum accountBusinessType) {
+			AccountBusinessTypeEnum accountBusinessType,Long orderNo) {
 
+    	LOGGER.info("=======inAccount========customerId:"+customerId+",amount:"+amount +",orderNo:"+orderNo);
 		// 入账
 		accountMapper.inAccount(customerId, amount, transferType.getType());
 		// 记录流水
 		TradeDetail tradeDetail = new TradeDetail();
 		tradeDetail.setTradeId(UUIDUtils.getId());
+		tradeDetail.setOrderNo(orderNo);
 		tradeDetail.setCustomerId(customerId);
 		tradeDetail.setCreateTime(new Date());
 		tradeDetail.setType(accountBusinessType.getType());
@@ -431,11 +448,12 @@ public class OrderUpdateJob {
 
 		if (transferType == TransferTypeEnum.FROZEN) {
 			String userFrozenkey = RedisKeyConstants.ACCOUNT_USERFROZEN_USER + customerId;
-			String steamFrozenKey = RedisKeyConstants.ACCOUNT_USERFROZEN_USER + tradeDetail.getTradeId();
+			String steamFrozenKey = RedisKeyConstants.ACCOUNT_USERFROZEN_STREAM + tradeDetail.getTradeId();
 			String frozenTimeKey = RedisKeyConstants.ACCOUNT_USERFROZEN_Time + tradeDetail.getTradeId();
 			String userFrozenValue = JedisUtil.get(userFrozenkey);
 			if (StringUtils.isNotBlank(userFrozenValue)) {
 				userFrozenValue = userFrozenValue + "," + tradeDetail.getTradeId();
+				JedisUtil.set(userFrozenkey, userFrozenValue);
 			} else {
 				JedisUtil.set(userFrozenkey, tradeDetail.getTradeId() + "");
 
@@ -443,6 +461,8 @@ public class OrderUpdateJob {
 			JedisUtil.set(steamFrozenKey, amount + "");
 			// 缓存24小时
 			JedisUtil.set(frozenTimeKey, "1", Integer.parseInt(froZenTime));
+			// 流水对应的订单Id
+			JedisUtil.set(RedisKeyConstants.ACCOUNT_USERFROZEN_ORDER_NO, orderNo + "");
 
 		}
 
@@ -450,12 +470,14 @@ public class OrderUpdateJob {
     
     
 	public void outAccount(Long customerId, BigDecimal amount, TransferTypeEnum transferType,
-			AccountBusinessTypeEnum accountBusinessType) {
+			AccountBusinessTypeEnum accountBusinessType, Long orderNo) {
+		LOGGER.info(">>>>>>>>>>>>>>>outAccount>>>>>>>>>>>>>>>customerId:"+customerId+",amount:"+amount +",orderNo:"+orderNo);
 		// 入账
 		accountMapper.outAccount(customerId, amount, transferType.getType());
 		// 记录流水
 		TradeDetail tradeDetail = new TradeDetail();
 		tradeDetail.setTradeId(UUIDUtils.getId());
+		tradeDetail.setOrderNo(orderNo);
 		tradeDetail.setCustomerId(customerId);
 		tradeDetail.setCreateTime(new Date());
 		tradeDetail.setType(accountBusinessType.getType());
@@ -536,9 +558,9 @@ public class OrderUpdateJob {
         updateToBigvScore(order.getServiceId(), order.getSkillItemId(), order.getCustomerSkillId(), score);
 
     }
-
-
-	/**
+    
+    
+   	/**
 	 * 计算该笔订单的评价值
 	 *
 	 * @param order
@@ -562,9 +584,14 @@ public class OrderUpdateJob {
 		// 计算总得分
 		BigDecimal valueScore = orderTotalScore.add(servicePriceScore).multiply(calculateEvaluateScore(evaluateStars, order.getOrderNum()));
 
+		// 有抵扣券参与的订单时，在计算此次订单价值时需要额外*40，以此来提高免费服务声优的技能升级速度和平台资源位露出机会.
+		if(Objects.equals(order.getCouponFlag(), 1)){
+			valueScore = valueScore.multiply(new BigDecimal(40));
+		}
 		// 四舍五入取整
 		return valueScore.setScale(0, BigDecimal.ROUND_HALF_UP);
 	}
+
     /**
      * 更新评分到大V技能评分表和总评分排名表
      *
@@ -597,6 +624,11 @@ public class OrderUpdateJob {
             bigvScoreMapper.insert(bigvScore);
         }
     }
+    
+    
+  
+    
+    
 
 
 	/**

@@ -3,7 +3,6 @@ package com.honglu.quickcall.databury.core.service;
 
 import com.honglu.quickcall.databury.facade.exception.DataBuriedPointException;
 import com.honglu.quickcall.databury.facade.req.databury.*;
-import com.honglu.quickcall.databury.facade.resp.databury.*;
 
 /**
  * @author xiangping
@@ -18,7 +17,7 @@ public interface DataBuriedPointService {
      * @return
      * @throws DataBuriedPointException
      */
-    DataBuryPointGetCodeResp saveGetCodeData(DataBuryPointGetCodeReq req) throws DataBuriedPointException;
+    void saveGetCodeData(DataBuryPointGetCodeReq req) throws DataBuriedPointException;
 
     /**
      * 注册成功数据--埋点
@@ -26,7 +25,7 @@ public interface DataBuriedPointService {
      * @param req
      * @throws DataBuriedPointException
      */
-    DataBuryPointRegistResp saveSignUpResultData(DataBuryPointRegistReq req) throws DataBuriedPointException;
+    void saveSignUpResultData(DataBuryPointRegistReq req) throws DataBuriedPointException;
 
     /**
      * 登陆成功数据--埋点
@@ -34,7 +33,7 @@ public interface DataBuriedPointService {
      * @param req
      * @throws DataBuriedPointException
      */
-    DataBuryPointLoginResp saveUserIdLoginResultData(DataBuryPointLoginReq req) throws DataBuriedPointException;
+    void saveUserIdLoginResultData(DataBuryPointLoginReq req) throws DataBuriedPointException;
 
     /**
      * 接单按钮状态数据--埋点
@@ -42,7 +41,7 @@ public interface DataBuriedPointService {
      * @param req
      * @throws DataBuriedPointException
      */
-    DataBuryPointOrderButtonResp saveOrderButtonData(DataBuryPointOrderButtonReq req) throws DataBuriedPointException;
+    void saveOrderButtonData(DataBuryPointOrderButtonReq req) throws DataBuriedPointException;
 
     /**
      * 提交订单数据-埋点
@@ -51,6 +50,6 @@ public interface DataBuriedPointService {
      * @return
      * @throws DataBuriedPointException
      */
-    DataBuryPointSubmitOrderResp saveSubmitOrderData(DataBuryPointSubmitOrderReq req) throws DataBuriedPointException;
+    void saveSubmitOrderData(DataBuryPointSubmitOrderReq req) throws DataBuriedPointException;
 
 }

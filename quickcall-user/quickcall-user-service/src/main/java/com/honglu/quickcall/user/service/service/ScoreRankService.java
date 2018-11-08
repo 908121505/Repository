@@ -1,5 +1,6 @@
 package com.honglu.quickcall.user.service.service;
 
+import com.honglu.quickcall.common.api.exchange.CommonResponse;
 import com.honglu.quickcall.user.facade.exchange.mqrequest.DoOrderCastMqRequest;
 import com.honglu.quickcall.user.facade.exchange.mqrequest.EvaluationOrderMqRequest;
 
@@ -23,4 +24,10 @@ public interface ScoreRankService {
      * @param request
      */
     void evaluationOrder(EvaluationOrderMqRequest request);
+
+    /**
+     * 初始化大V评分排名数据
+     * @return
+     */
+    CommonResponse initBigvScoreRankData();
 }

@@ -60,7 +60,8 @@ public class OrderReceiveOrderListVO implements  Serializable{
 	private Date  startServiceTime;
 	/**订单预计结束时间*/
 	private Date  expectEndTime;
-	
+	/**券标识*/
+	private Integer  couponFlag;
 	
 	public Date getExpectEndTime() {
 		return expectEndTime;
@@ -73,6 +74,11 @@ public class OrderReceiveOrderListVO implements  Serializable{
 	}
 	public void setStartServiceTime(Date startServiceTime) {
 		this.startServiceTime = startServiceTime;
+	public Integer getCouponFlag() {
+		return couponFlag;
+	}
+	public void setCouponFlag(Integer couponFlag) {
+		this.couponFlag = couponFlag;
 	}
 	public Integer getSwitchStatus() {
 		return switchStatus;
