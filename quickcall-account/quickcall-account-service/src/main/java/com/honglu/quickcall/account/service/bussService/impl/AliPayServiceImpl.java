@@ -68,7 +68,7 @@ public class AliPayServiceImpl implements AliPayService {
 		if (packet.getPayType() == 1) {
 			orderDesc = "支付宝充值";
 			response.setCode(BizCode.ParamError);
-			response.setData("");
+			response.setData("11");
 			response.setMessage("维护中，请使用微信支付。带来不便，敬请谅解。");
 			return response;
 		} else {
