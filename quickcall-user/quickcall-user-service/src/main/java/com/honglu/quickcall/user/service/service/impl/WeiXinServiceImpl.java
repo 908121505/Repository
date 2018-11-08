@@ -2,6 +2,7 @@ package com.honglu.quickcall.user.service.service.impl;
 
 import com.honglu.quickcall.common.api.exchange.CommonResponse;
 import com.honglu.quickcall.common.api.exchange.ResultUtils;
+import com.honglu.quickcall.user.facade.entity.WeiXinBean;
 import com.honglu.quickcall.user.facade.exchange.request.WeiXinRequest;
 import com.honglu.quickcall.user.facade.vo.SearchPersonByPhoneVO;
 import com.honglu.quickcall.user.service.dao.CustomerMapper;
@@ -13,9 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.text.MessageFormat;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author xiangping
@@ -35,15 +34,15 @@ public class WeiXinServiceImpl implements WeiXinService {
     public CommonResponse getOpenId(WeiXinRequest params) {
         String url = MessageFormat.format(openid_url, appId, appSecret, params.getCode());
         SnsAccessToken msg = HttpUtils.doGet(url, SnsAccessToken.class);
-        Map<String,String> map = new HashMap<>();
-        map.put("openid",msg.getOpenid());
+        WeiXinBean bean = new WeiXinBean();
+        bean.setOpen_id(msg.getOpenid());
         if (StringUtils.isNotBlank(params.getPhone())) {
             List<SearchPersonByPhoneVO> customers = customerMapper.queryPersonByPhone(Long.parseLong(params.getPhone()));
             if (customers!=null&&customers.size()>0){
-                map.put("customer_id",String.valueOf(customers.get(0).getCustomerId()));
-                map.put("nickname",customers.get(0).getNickName());
+                bean.setCustomer_id(customers.get(0).getCustomerId());
+                bean.setNickname(customers.get(0).getNickName());
             }
         }
-        return ResultUtils.resultSuccess(map);
+        return ResultUtils.resultSuccess(bean);
     }
 }

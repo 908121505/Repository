@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * @date 2018-11-08 21:04
  */
 @Controller
+@RequestMapping("weixin")
 public class WeiXinController {
 
     @Autowired
@@ -25,10 +26,10 @@ public class WeiXinController {
      * @param params
      * @return
      */
-    @RequestMapping("/getOpenId")
+    @RequestMapping("getOpenId")
     @ResponseBody
     public WebResponseModel getOpenId(WeiXinRequest params){
-        if (StringUtils.isNotBlank(params.getCode())&& StringUtils.isNotBlank(params.getPhone())) {
+        if (StringUtils.isBlank(params.getCode())&& StringUtils.isBlank(params.getPhone())) {
             WebResponseModel response = new WebResponseModel();
             response.setCode(UserBizReturnCode.paramError.code());
             response.setMsg(UserBizReturnCode.paramError.desc());
