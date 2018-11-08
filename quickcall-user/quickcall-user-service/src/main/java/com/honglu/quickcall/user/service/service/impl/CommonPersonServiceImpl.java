@@ -420,7 +420,9 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 		customer.setAppChannelName(request.getAppChannelName());
 		customer.setDeviceId(request.getDeviceNo());
 		customer.setCustomerId(UUIDUtils.getId());
-		customer.setAppId(randomAppId());
+		String appidAndUid = randomAppId();
+		customer.setAppId(appidAndUid);
+		customer.setUid(appidAndUid);
 		customer.setCreateTime(new Date());
 		customer.setGtClientId(request.getGtClientId());
 		customer.setMicroblogOpenId(request.getMicroblogOpenId());

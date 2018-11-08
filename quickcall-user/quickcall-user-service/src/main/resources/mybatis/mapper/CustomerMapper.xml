@@ -54,6 +54,7 @@
     <result column="login_time" property="loginTime" jdbcType="TIMESTAMP" />
     <result column="block_start_time" property="blockStartTime" jdbcType="TIMESTAMP" />
     <result column="block_end_time" property="blockEndTime" jdbcType="TIMESTAMP" />
+    <result column="uid" property="uid" jdbcType="VARCHAR" />
   </resultMap>
  <sql id="Base_Column_List" >
         customer_id,app_id, phone, real_name, sex, nick_name, type, credentials_type, credentials_num, 
@@ -62,7 +63,7 @@
     star_sign, birthday, voice_url, voice_time, v_voice_url, v_voice_url_tmp, v_voice_time_tmp, 
     v_voice_status, v_voice_time, v_status, identity_status, token_code, other_relation, 
     create_time, modify_time, create_man, modify_man, remark, app_channel_name,cumulate_experience,
-    customer_level, device_id, login_time,gt_client_id,block_start_time,block_end_time,cust_state
+    customer_level, device_id, login_time,gt_client_id,block_start_time,block_end_time,cust_state,uid
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
@@ -150,6 +151,9 @@
       </if>
       <if test="appId != null and appId!=''" >
         app_id,
+      </if>
+      <if test="uid != null and uid!=''" >
+        uid,
       </if>
       <if test="phone != null" >
         phone,
@@ -278,6 +282,9 @@
       </if>
       <if test="appId != null and appId!=''" >
         #{appId,jdbcType=VARCHAR},
+      </if>
+      <if test="uid != null and uid!=''" >
+        #{uid,jdbcType=VARCHAR},
       </if>
       <if test="phone != null" >
         #{phone,jdbcType=BIGINT},
