@@ -390,7 +390,7 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 			customerSkillList.add(skillVO);
 
 		}
-		
+		resultVO.setAutoReceiveStatus(autoReceiveStatus);
 		resultVO.setStartServiceTimeStr(startServiceTimeStr);
 		resultVO.setEndServiceTimeStr(endServiceTimeStr);
 		//返回自动接单开关
