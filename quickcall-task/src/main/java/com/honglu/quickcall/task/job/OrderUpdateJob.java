@@ -28,6 +28,7 @@ import com.honglu.quickcall.task.dao.AccountMapper;
 import com.honglu.quickcall.task.dao.BigvScoreMapper;
 import com.honglu.quickcall.task.dao.BigvSkillScoreMapper;
 import com.honglu.quickcall.task.dao.CustomerMapper;
+import com.honglu.quickcall.task.dao.TaskCustomerCouponMapper;
 import com.honglu.quickcall.task.dao.TaskOrderMapper;
 import com.honglu.quickcall.task.dao.TradeDetailMapper;
 import com.honglu.quickcall.task.entity.TaskOrder;
@@ -60,6 +61,10 @@ public class OrderUpdateJob {
     private BigvSkillScoreMapper bigvSkillScoreMapper ;
     @Autowired
     private BigvScoreMapper bigvScoreMapper ;
+    @Autowired
+    private TaskCustomerCouponMapper taskCustomerCouponMapper ;
+    
+    
     
     /**默认超时小时数      扣减12小时*/
     private final static  Integer   END_OVER_TIME_HOUR = -12;
@@ -283,7 +288,8 @@ public class OrderUpdateJob {
     				orderIdCouponList.add(order.getOrderId());
     			}
     		}
-    		taskOrderMapper.updateOrderStatus(updateOrderStatus, orderIdList,new Date());
+    		//TODO  
+    		taskOrderMapper.updateOrderStatus(updateOrderStatus, orderIdList,new Date(),null);
     		//用户所得券返回给用户
     		try {
 				taskCustomerCouponMapper.batchUpdateCustomerCoupon(orderIdCouponList, OrderSkillConstants.ORDER_COUPON_FLAG_CANCEL);

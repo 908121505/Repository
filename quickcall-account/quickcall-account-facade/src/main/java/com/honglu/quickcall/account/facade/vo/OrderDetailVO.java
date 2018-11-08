@@ -82,7 +82,7 @@ public class OrderDetailVO implements  Serializable{
     /**券金额*/
     private BigDecimal  couponPrice;
     /**预约开始时间*/
-    private  Date   appointStartTime;
+    private  Date   appointTime;
 
 	private String couponName;//客户订单优惠券的名称'
 
@@ -94,11 +94,13 @@ public class OrderDetailVO implements  Serializable{
 	public void setSkillType(Integer skillType) {
 		this.skillType = skillType;
 	}
-	public Date getAppointStartTime() {
-		return appointStartTime;
+	
+	
+	public Date getAppointTime() {
+		return appointTime;
 	}
-	public void setAppointStartTime(Date appointStartTime) {
-		this.appointStartTime = appointStartTime;
+	public void setAppointTime(Date appointTime) {
+		this.appointTime = appointTime;
 	}
 	public Date getStartServiceTime() {
 		return startServiceTime;
