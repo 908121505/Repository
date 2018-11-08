@@ -66,7 +66,7 @@ public interface TaskOrderMapper {
 	 * @param updateStatus
 	 * @param skillType
 	 */
-	List<TaskOrder>  queryOrderStatusAfter12HourCust(@Param("currTime")Date  currTime,@Param("endTime")Date  endTime,@Param("queryStatus")Integer queryStatus ,@Param("updateStatus")Integer  updateStatus,@Param("skillType")Integer  skillType,@Param("queryEndTime")Date  queryEndTime);
+	List<TaskOrder>  queryOrderStatusAfter12HourCust(@Param("endTime")Date  endTime,@Param("queryStatus")Integer queryStatus ,@Param("updateStatus")Integer  updateStatus,@Param("queryEndTime")Date  queryEndTime,@Param("updateStatusExt")Integer  updateStatusExt);
 	
 	
 	
@@ -138,5 +138,14 @@ public interface TaskOrderMapper {
 	 * @param statusList
 	 */
 	void  updateOrderStatusForFinish(@Param("updateStatus")Integer  updateStatus,@Param("list")List<Long>  orderIdList,@Param("finishTime")Date  finishTime);
+	
+	
+	/**
+	 * 大V服务时间内发起结束服务，到预期结束时间，释放大V
+	 * @param currTime
+	 * @param queryStatus
+	 * @return
+	 */
+	List<TaskOrder> queryReleaseDaV(@Param("currTime")Date  currTime,@Param("queryStatus")Integer queryStatus);
 
 }
