@@ -72,7 +72,13 @@ public class ScoreRankConstants {
         return SINGLE_ORDER_NUM_WEIGHT_MAP.get(index);
     }
 
+    /**
+     * 声量格式化的单位
+     */
     private static final String[] unit = {"k", "m", "b"};
+    /**
+     * 声量格式化的分界线
+     */
     private static final BigDecimal ONE_THOUSAND = new BigDecimal(1000);
     /**
      * 格式化技能声量
