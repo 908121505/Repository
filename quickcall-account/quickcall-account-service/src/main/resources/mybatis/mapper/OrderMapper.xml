@@ -592,7 +592,7 @@
 	  		od.remark as  remark,
 	  		od.discount_rate  as discountRate,
 	  		od.coupon_price  as  couponPrice,
-	  		od.appoint_start_time  as  appointStartTime
+	  		od.appoint_time  as  appointTime
 			
 		FROM
 			orders od
@@ -628,7 +628,7 @@
 		od.remark as  remark,
 		od.discount_rate  as discountRate,
 		od.coupon_price  as  couponPrice,
-		od.appoint_start_time  as  appointStartTime
+		od.appoint_time  as  appointTime
 	FROM
 		orders od
 	INNER JOIN customer ct ON ct.customer_id = od.service_id
