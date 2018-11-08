@@ -82,7 +82,7 @@ public class ScoreRankConstants {
      */
     public static String formatSkillScore(Integer score) {
         if (score == null) {
-            return "0";
+            return null;
         }
         BigDecimal decimal = new BigDecimal(score);
 
