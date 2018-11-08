@@ -80,9 +80,6 @@ public class EditProfileServiceImpl implements EditProfileService {
 
 	@Override
 	public CommonResponse updateNickName(UpdateNickNameReq params) {
-		if(params.getCustomerId() == null){
-			return ResultUtils.result(BizCode.CustomerNotExist);
-		}
 		CommonResponse commonResponse = new CommonResponse();
 
 		if (params.getCustomerId() == null) {
@@ -94,7 +91,7 @@ public class EditProfileServiceImpl implements EditProfileService {
 
 		Customer customer = customerMapper.selectByPrimaryKey(params.getCustomerId());
 		if (customer == null) {
-			throw new BizException(UserBizReturnCode.paramError, "参数错误，customerId不存在");
+			return ResultUtils.result(BizCode.CustomerNotExist);
 		}
 		String newNickname = params.getNickName();
 		customer.setNickName(newNickname);
@@ -145,9 +142,6 @@ public class EditProfileServiceImpl implements EditProfileService {
 
 	@Override
 	public CommonResponse updateSignName(UpdateSignNameReq params) {
-		if(params.getCustomerId() == null){
-			return ResultUtils.result(BizCode.CustomerNotExist);
-		}
 		CommonResponse commonResponse = new CommonResponse();
 
 		if (params.getCustomerId() == null) {
@@ -159,7 +153,7 @@ public class EditProfileServiceImpl implements EditProfileService {
 
 		Customer customer = customerMapper.selectByPrimaryKey(params.getCustomerId());
 		if (customer == null) {
-			throw new BizException(UserBizReturnCode.paramError, "参数错误，customerId不存在");
+			return ResultUtils.result(BizCode.CustomerNotExist);
 		}
 
 		String newSign = params.getSignName();
@@ -194,9 +188,6 @@ public class EditProfileServiceImpl implements EditProfileService {
 
 	@Override
 	public CommonResponse updateStarSign(UpdateStarSignReq params) {
-		if(params.getCustomerId() == null){
-			return ResultUtils.result(BizCode.CustomerNotExist);
-		}
 		CommonResponse commonResponse = new CommonResponse();
 
 		if (params.getCustomerId() == null) {
@@ -208,7 +199,7 @@ public class EditProfileServiceImpl implements EditProfileService {
 
 		Customer customer = customerMapper.selectByPrimaryKey(params.getCustomerId());
 		if (customer == null) {
-			throw new BizException(UserBizReturnCode.paramError, "参数错误，customerId不存在");
+			return ResultUtils.result(BizCode.CustomerNotExist);
 		}
 		String newStarSign = params.getStarSign();
 		customer.setStarSign(newStarSign);
@@ -229,9 +220,6 @@ public class EditProfileServiceImpl implements EditProfileService {
 
 	@Override
 	public CommonResponse updateInterest(UpdateInterestReq params) {
-		if(params.getCustomerId() == null){
-			return ResultUtils.result(BizCode.CustomerNotExist);
-		}
 		CommonResponse commonResponse = new CommonResponse();
 
 		if (params.getCustomerId() == null) {
@@ -243,7 +231,7 @@ public class EditProfileServiceImpl implements EditProfileService {
 
 		Customer customer = customerMapper.selectByPrimaryKey(params.getCustomerId());
 		if (customer == null) {
-			throw new BizException(UserBizReturnCode.paramError, "参数错误，customerId不存在");
+			return ResultUtils.result(BizCode.CustomerNotExist);
 		}
 
 		CustomerInterest customerInterest = new CustomerInterest();
@@ -266,9 +254,6 @@ public class EditProfileServiceImpl implements EditProfileService {
 
 	@Override
 	public CommonResponse updateHeadPortrait(UpdateHeadPortraitReq params) {
-		if(params.getCustomerId() == null){
-			return ResultUtils.result(BizCode.CustomerNotExist);
-		}
 		CommonResponse commonResponse = new CommonResponse();
 
 		if (params.getCustomerId() == null) {
@@ -279,7 +264,7 @@ public class EditProfileServiceImpl implements EditProfileService {
 		}
 		Customer customer = customerMapper.selectByPrimaryKey(params.getCustomerId());
 		if (customer == null) {
-			throw new BizException(UserBizReturnCode.paramError, "参数错误，customerId不存在");
+			return ResultUtils.result(BizCode.CustomerNotExist);
 		}
 
 		// 先判断表中是否存在这个用户头像记录 存在则更新，不存在则插入
@@ -338,9 +323,6 @@ public class EditProfileServiceImpl implements EditProfileService {
 
 	@Override
 	public CommonResponse updateAppearance(UpdateAppearanceReq params) {
-		if(params.getCustomerId() == null){
-			return ResultUtils.result(BizCode.CustomerNotExist);
-		}
 		CommonResponse commonResponse = new CommonResponse();
 
 		if (params.getCustomerId() == null) {
@@ -351,7 +333,7 @@ public class EditProfileServiceImpl implements EditProfileService {
 		}
 		Customer customer = customerMapper.selectByPrimaryKey(params.getCustomerId());
 		if (customer == null) {
-			throw new BizException(UserBizReturnCode.paramError, "参数错误，customerId不存在");
+			return ResultUtils.result(BizCode.CustomerNotExist);
 		}
 
 		CustomerAppearance customerAppearance = new CustomerAppearance();
@@ -396,9 +378,6 @@ public class EditProfileServiceImpl implements EditProfileService {
 
 	@Override
 	public CommonResponse updateVoiceIdentificationCard(UpdateVoiceIdentificationCardReq params) {
-		if(params.getCustomerId() == null){
-			return ResultUtils.result(BizCode.CustomerNotExist);
-		}
 		CommonResponse commonResponse = new CommonResponse();
 
 		if (params.getCustomerId() == null) {
@@ -409,7 +388,7 @@ public class EditProfileServiceImpl implements EditProfileService {
 		}
 		Customer customer = customerMapper.selectByPrimaryKey(params.getCustomerId());
 		if (customer == null) {
-			throw new BizException(UserBizReturnCode.paramError, "参数错误，customerId不存在");
+			return ResultUtils.result(BizCode.CustomerNotExist);
 		}
 
 		// 先判断表中是否存在这个用户声鉴卡记录，存在则更新，不存在则插入
@@ -484,9 +463,6 @@ public class EditProfileServiceImpl implements EditProfileService {
 
 	@Override
 	public CommonResponse updateGender(UpdateGenderReq params) {
-		if(params.getCustomerId() == null){
-			return ResultUtils.result(BizCode.CustomerNotExist);
-		}
 		CommonResponse commonResponse = new CommonResponse();
 		if (params.getCustomerId() == null) {
 			throw new BizException(UserBizReturnCode.paramError, "customerId不能为空");
@@ -499,7 +475,7 @@ public class EditProfileServiceImpl implements EditProfileService {
 
 		Customer customer = customerMapper.selectByPrimaryKey(params.getCustomerId());
 		if (customer == null) {
-			throw new BizException(UserBizReturnCode.paramError, "参数错误，customerId不存在");
+			return ResultUtils.result(BizCode.CustomerNotExist);
 		}
 		if (customer.getIdentityStatus() == 2) {
 			throw new BizException(UserBizReturnCode.certification, "您已完成实名认证，不能更改该信息");
@@ -524,9 +500,6 @@ public class EditProfileServiceImpl implements EditProfileService {
 
 	@Override
 	public CommonResponse updateBirthday(UpdateBirthdayReq params) {
-		if(params.getCustomerId() == null){
-			return ResultUtils.result(BizCode.CustomerNotExist);
-		}
 		CommonResponse commonResponse = new CommonResponse();
 		if (params.getCustomerId() == null) {
 			throw new BizException(UserBizReturnCode.paramError, "customerId不能为空");
@@ -537,7 +510,7 @@ public class EditProfileServiceImpl implements EditProfileService {
 
 		Customer customer = customerMapper.selectByPrimaryKey(params.getCustomerId());
 		if (customer == null) {
-			throw new BizException(UserBizReturnCode.paramError, "参数错误，customerId不存在");
+			return ResultUtils.result(BizCode.CustomerNotExist);
 		}
 
 		customer.setBirthday(params.getBirthday());
@@ -559,9 +532,6 @@ public class EditProfileServiceImpl implements EditProfileService {
 
 	@Override
 	public CommonResponse queryUserEditInfo(QueryUserEditInfoReq params) {
-		if(params.getCustomerId() == null){
-			return ResultUtils.result(BizCode.CustomerNotExist);
-		}
 		CommonResponse commonResponse = new CommonResponse();
 		if (params.getCustomerId() == null) {
 			throw new BizException(UserBizReturnCode.paramError, "customerId不能为空");
@@ -570,9 +540,7 @@ public class EditProfileServiceImpl implements EditProfileService {
 			UserEditInfoVO userEditInfoVO = customerMapper.queryUserEditInfo(params.getCustomerId());
 
 			if (userEditInfoVO == null) {
-				commonResponse.setCode(UserBizReturnCode.paramError);
-				commonResponse.setMessage("参数错误，用户数据不存在");
-				return commonResponse;
+				return ResultUtils.result(BizCode.CustomerNotExist);
 			}
 
 			// 此处根据年份来计算年龄

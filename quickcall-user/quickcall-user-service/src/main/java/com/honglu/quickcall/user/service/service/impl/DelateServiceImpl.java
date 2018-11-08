@@ -4,11 +4,13 @@ import com.honglu.quickcall.common.api.code.BizCode;
 import com.honglu.quickcall.common.api.exception.BizException;
 import com.honglu.quickcall.common.api.exchange.CommonResponse;
 import com.honglu.quickcall.common.api.exchange.ResultUtils;
+import com.honglu.quickcall.user.facade.entity.Customer;
 import com.honglu.quickcall.user.facade.entity.CustomerDelate;
 import com.honglu.quickcall.user.facade.entity.Delate;
 import com.honglu.quickcall.user.facade.exchange.request.DelateInsertRequest;
 import com.honglu.quickcall.user.facade.vo.DelateVO;
 import com.honglu.quickcall.user.service.dao.CustomerDelateMapper;
+import com.honglu.quickcall.user.service.dao.CustomerMapper;
 import com.honglu.quickcall.user.service.dao.DelateMapper;
 import com.honglu.quickcall.user.service.service.DelateService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +30,8 @@ public class DelateServiceImpl implements DelateService {
 
     @Autowired
     private CustomerDelateMapper customerDelateMapper;
-
+    @Autowired
+    private CustomerMapper customerMapper;
 
     @Override
     public CommonResponse getAllDelatesExcludeOther() {
@@ -42,9 +45,6 @@ public class DelateServiceImpl implements DelateService {
 
     @Override
     public CommonResponse insertDelate(DelateInsertRequest request) {
-    	if(request.getCustomerId() == null){
-			return ResultUtils.result(BizCode.CustomerNotExist);
-		}
         Long customerId = request.getCustomerId();
         Long delateCustId = request.getDelateCustId();
         String otherReason = request.getOtherReason();
@@ -55,6 +55,10 @@ public class DelateServiceImpl implements DelateService {
             throw new BizException(BizCode.ParamError, "举报人或者被举报人不能为null");
         }
 
+       Customer customer = customerMapper.selectByPrimaryKey(customerId);
+		if(customer == null){
+			return ResultUtils.result(BizCode.CustomerNotExist);
+		}
         if(delateIds == null && Strings.isNullOrEmpty(otherReason)){
             throw new BizException(BizCode.ParamError, "举报内容不能为空");
         }

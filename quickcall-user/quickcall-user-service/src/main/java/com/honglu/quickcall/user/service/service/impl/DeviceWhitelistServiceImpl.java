@@ -12,6 +12,7 @@ import com.honglu.quickcall.user.facade.exchange.request.editprofile.QueryDevice
 import com.honglu.quickcall.user.facade.exchange.request.editprofile.SaveDeviceWhitelistReq;
 import com.honglu.quickcall.user.facade.vo.CustomerDeviceWhitelistVO;
 import com.honglu.quickcall.user.service.dao.CustomerDeviceWhitelistMapper;
+import com.honglu.quickcall.user.service.dao.CustomerMapper;
 import com.honglu.quickcall.user.service.service.DeviceWhitelistService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,7 +35,8 @@ public class DeviceWhitelistServiceImpl implements DeviceWhitelistService{
 
     @Autowired
     private CustomerDeviceWhitelistMapper customerDeviceWhitelistMapper;
-
+    @Autowired
+    private CustomerMapper customerMapper;
     @Override
     public CommonResponse queryDeviceWhitelist(QueryDeviceWhitelistReq params) {
         CommonResponse commonResponse = new CommonResponse();
@@ -64,9 +66,6 @@ public class DeviceWhitelistServiceImpl implements DeviceWhitelistService{
 
     @Override
     public CommonResponse saveDeviceWhitelist(SaveDeviceWhitelistReq params) {
-    	if(params.getCustomerId() == null){
-			return ResultUtils.result(BizCode.CustomerNotExist);
-		}
         CommonResponse commonResponse = new CommonResponse();
         if (params.getCustomerId() == null) {
             throw new BizException(UserBizReturnCode.paramError, "customerId不能为空");
@@ -74,6 +73,11 @@ public class DeviceWhitelistServiceImpl implements DeviceWhitelistService{
         if (params.getDeviceId() == null) {
             throw new BizException(UserBizReturnCode.paramError, "deviceId不能为空");
         }
+
+        Customer customer = customerMapper.selectByPrimaryKey(params.getCustomerId());
+		if(customer == null){
+			return ResultUtils.result(BizCode.CustomerNotExist);
+		}
         //先查询数据库中是否已存在
         int count = customerDeviceWhitelistMapper.selectCountByCusIdAndDeviceId(params.getCustomerId(), params.getDeviceId());
         if(count > 0){
