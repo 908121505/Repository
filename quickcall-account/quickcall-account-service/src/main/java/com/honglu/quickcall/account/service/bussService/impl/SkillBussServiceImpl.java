@@ -3,12 +3,6 @@ package com.honglu.quickcall.account.service.bussService.impl;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.honglu.quickcall.common.api.exchange.ResultUtils;
-import com.honglu.quickcall.common.api.util.JedisUtil;
-import com.honglu.quickcall.common.api.util.RedisKeyConstants;
-
-import cn.jiguang.commom.utils.StringUtils;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +24,7 @@ import com.honglu.quickcall.account.service.service.IProductSkillService;
 import com.honglu.quickcall.common.api.code.BizCode;
 import com.honglu.quickcall.common.api.exception.BizException;
 import com.honglu.quickcall.common.api.exchange.CommonResponse;
+import com.honglu.quickcall.common.api.exchange.ResultUtils;
 
 /**
  * 
@@ -56,10 +51,10 @@ public class SkillBussServiceImpl implements ISkillBussService {
 			throw new BizException(AccountBizReturnCode.paramError, "查询技能信息参数异常");
 		}
 		Long  customerId =  request.getCustomerId();
-		String customerJson = JedisUtil.get(RedisKeyConstants.USER_CUSTOMER_INFO+request.getCustomerId());
-		if(StringUtils.isEmpty(customerJson)){
-			return ResultUtils.result(BizCode.CustomerNotExist);
-		}
+//		String customerJson = JedisUtil.get(RedisKeyConstants.USER_CUSTOMER_INFO+request.getCustomerId());
+//		if(StringUtils.isEmpty(customerJson)){
+//			return ResultUtils.result(BizCode.CustomerNotExist);
+//		}
 		//
 		CustomerSkillInfoVO   resultVO =  productSkillService.querySkillInfoPersonal(customerId);
 		CommonResponse commonResponse = new CommonResponse();
@@ -77,10 +72,10 @@ public class SkillBussServiceImpl implements ISkillBussService {
 		if (request == null ) {
 			throw new BizException(AccountBizReturnCode.paramError, "更改技能参数异常");
 		}
-		String customerJson = JedisUtil.get(RedisKeyConstants.USER_CUSTOMER_INFO+request.getCustomerId());
-		if(StringUtils.isEmpty(customerJson)){
-			return ResultUtils.result(BizCode.CustomerNotExist);
-		}
+//		String customerJson = JedisUtil.get(RedisKeyConstants.USER_CUSTOMER_INFO+request.getCustomerId());
+//		if(StringUtils.isEmpty(customerJson)){
+//			return ResultUtils.result(BizCode.CustomerNotExist);
+//		}
 		productSkillService.updateSkillInfoPersonal(request);
 		CommonResponse commonResponse = new CommonResponse();
 		commonResponse.setCode(BizCode.Success);
