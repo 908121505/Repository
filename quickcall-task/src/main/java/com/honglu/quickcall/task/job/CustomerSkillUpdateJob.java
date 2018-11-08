@@ -1,15 +1,15 @@
 package com.honglu.quickcall.task.job;
 
 import java.util.Date;
-import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-import org.springframework.util.CollectionUtils;
 
+import com.honglu.quickcall.account.facade.constants.OrderSkillConstants;
+import com.honglu.quickcall.common.api.util.DateUtils;
 import com.honglu.quickcall.task.dao.TaskCustomerSkillMapper;
 
 /**
@@ -37,22 +37,98 @@ public class CustomerSkillUpdateJob {
 
 
     
-    /***接单开关定时关闭*/
-    @Scheduled(cron = "55 * * * * ?")
-    public void updateOrderStatusReceiveOrder() {
-    	LOGGER.info("=============接单开关定时关闭自动任务开始=================");
+    /***根据周索引开启接单开关*/
+    @Scheduled(cron = "0 * * * * ?")
+    public void openReceiveByWeek() {
+    	LOGGER.info("=============根据周索引开启接单开关自动任务开始=================");
     	try {
-    		Date  queryEndTime = new Date();
-    		List<Long>  skillIdList = taskCustomerSkillMapper.queryCustomerSkill(RECEIVE_STATUS_OPEN, queryEndTime);
-    		if(CollectionUtils.isEmpty(skillIdList)){
-    			return  ;
-    		}
-    		taskCustomerSkillMapper.updateCustomerSkill(RECEIVE_STATUS_CLOSE, skillIdList);
+    		
+    		//判断当前时间是星期几
+    		Integer   weekIndex = DateUtils.getDayOfWeek();
+    		//自动开关开启
+    		Integer  autoReceiveStatus  = OrderSkillConstants.AUTO_RECEIVE_OPEN;
+    		//更新为开启
+    		Integer  updateStatus = OrderSkillConstants.AUTO_RECEIVE_OPEN;
+    		//接单开关关闭
+    		Integer  receiveStatus =  OrderSkillConstants.RECEIVE_CLOSE;
+    		//当前时间字符串
+    		String  currTimeStr = DateUtils.formatDateHHMM(new Date());
+    		taskCustomerSkillMapper.openReceiveByWeek(autoReceiveStatus, receiveStatus, updateStatus, weekIndex, currTimeStr);
     	} catch (Exception e) {
-    		LOGGER.error("接单开关定时关闭发生异常，异常信息：", e);
+    		LOGGER.error("根据周索引开启接单开关发生异常，异常信息：", e);
     	}
-    	LOGGER.info("=============接单开关定时关闭自动任务结束=================");
+    	LOGGER.info("=============根据周索引开启接单开关自动任务结束=================");
     }
+    
+    
+    /*** 根据当前时间开启接单开关*/
+    @Scheduled(cron = "5 * * * * ?")
+    public void openReceiveByCurrTime() {
+    	LOGGER.info("============= 根据当前时间开启接单开关自动任务开始=================");
+    	try {
+    		
+    		//自动开关开启
+    		Integer  autoReceiveStatus  = OrderSkillConstants.AUTO_RECEIVE_OPEN;
+    		//更新为开启
+    		Integer  updateStatus = OrderSkillConstants.AUTO_RECEIVE_OPEN;
+    		//接单开关关闭
+    		Integer  receiveStatus =  OrderSkillConstants.RECEIVE_CLOSE;
+    		//当前时间
+    		Date  currTime = new Date();
+    		taskCustomerSkillMapper.openReceiveByCurrentTime(autoReceiveStatus, receiveStatus, updateStatus, currTime);
+    	} catch (Exception e) {
+    		LOGGER.error(" 根据当前时间开启接单开关发生异常，异常信息：", e);
+    	}
+    	LOGGER.info("============= 根据当前时间开启接单开关自动任务结束=================");
+    }
+    /***根据周索引关闭接单开关*/
+    @Scheduled(cron = "10 * * * * ?")
+    public void closeReceiveByWeek() {
+    	LOGGER.info("=============根据周索引关闭接单开关自动任务开始=================");
+    	try {
+    		
+    		//判断当前时间是星期几
+    		Integer   weekIndex = DateUtils.getDayOfWeek();
+    		//自动开关开启
+    		Integer  autoReceiveStatus  = OrderSkillConstants.AUTO_RECEIVE_OPEN;
+    		//更新为关闭
+    		Integer  updateStatus = OrderSkillConstants.AUTO_RECEIVE_CLOSE;
+    		//接单开关开启
+    		Integer  receiveStatus =  OrderSkillConstants.RECEIVE_OPEN;
+    		//当前时间字符串
+    		String  currTimeStr = DateUtils.formatDateHHMM(new Date());
+    		taskCustomerSkillMapper.closeReceiveByWeek(autoReceiveStatus, receiveStatus, updateStatus, weekIndex, currTimeStr);
+    	} catch (Exception e) {
+    		LOGGER.error("根据周索引关闭接单开关发生异常，异常信息：", e);
+    	}
+    	LOGGER.info("=============根据周索引关闭接单开关自动任务结束=================");
+    }
+    
+    
+    /***根据当前时间关闭接单开关*/
+    @Scheduled(cron = "15 * * * * ?")
+    public void closeReceiveByCurrTime() {
+    	LOGGER.info("============= 根据当前时间关闭接单开关自动任务开始=================");
+    	try {
+    		
+    		//自动开关开启
+    		Integer  autoReceiveStatus  = OrderSkillConstants.AUTO_RECEIVE_OPEN;
+    		//更新为开启
+    		Integer  updateStatus = OrderSkillConstants.AUTO_RECEIVE_CLOSE;
+    		//接单开关--开启
+    		Integer  receiveStatus =  OrderSkillConstants.RECEIVE_OPEN;
+    		//当前时间
+    		Date  currTime = new Date();
+    		taskCustomerSkillMapper.closeReceiveByCurrentTime(autoReceiveStatus, receiveStatus, updateStatus, currTime);
+    	} catch (Exception e) {
+    		LOGGER.error(" 根据当前时间关闭接单开关发生异常，异常信息：", e);
+    	}
+    	LOGGER.info("============= 根据当前时间关闭接单开关自动任务结束=================");
+    }
+    
+    
+    
+    
     
     
     
