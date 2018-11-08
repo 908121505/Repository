@@ -338,7 +338,7 @@ public class EditProfileServiceImpl implements EditProfileService {
 		}
 
 		int appearanceCount = customerAppearanceMapper.queryAppearanceCountByCustomerId(params.getCustomerId());
-		if(appearanceCount > 2){
+		if(appearanceCount >= 2){
 			throw new BizException(UserBizReturnCode.paramError, "形象照最多只能传2张");
 		}
 
