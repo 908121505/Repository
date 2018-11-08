@@ -668,7 +668,6 @@
   where customer_id = #{customerId}
   </select>
 
-<<<<<<< HEAD
   <!-- 获取客户是否申请过成为大V -->
   <select id="getCustomerIfAppliedBigv" resultType="integer">
     SELECT COUNT(1) FROM customer_apply_bigv WHERE customer_id=#{customerId}
@@ -680,7 +679,7 @@
     SELECT #{applyId}, #{customerId}, #{applyTime}
     FROM DUAL WHERE NOT EXISTS (SELECT customer_id FROM customer_apply_bigv WHERE customer_id = #{customerId})
   </insert>
-=======
+
   <!-- 判断客户是否为声优 -->
   <select id="judgeCustomerIsBigv" resultType="int">
     SELECT COUNT(1) FROM `customer`
@@ -694,5 +693,4 @@
   		customer
     where phone = #{phone}
   </select>
->>>>>>> refs/remotes/origin/activity
 </mapper>

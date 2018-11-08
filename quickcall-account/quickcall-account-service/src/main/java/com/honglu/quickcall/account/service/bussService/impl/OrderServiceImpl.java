@@ -258,9 +258,6 @@ public class OrderServiceImpl implements IOrderService {
 					} else {
 
 						// 用户下单，用户出账
-						accountService.outAccount(customerId, orderAmounts, TransferTypeEnum.RECHARGE,
-								AccountBusinessTypeEnum.PlaceOrder);
-
 						LOGGER.info("---------saveOrder：customerId=" + customerId + ";orderAmounts=" + orderAmounts);
 						accountService.outAccount(customerId, orderAmounts, TransferTypeEnum.RECHARGE,
 								AccountBusinessTypeEnum.PlaceOrder, orderId);
@@ -381,11 +378,6 @@ public class OrderServiceImpl implements IOrderService {
 						info.getExpectEndTime());
 				info.setCountDownSeconds(responseVO.getCountDownSeconds());
 				info.setOrderStatus(responseVO.getOrderStatus());
-				// TODO 兼容安卓版本 7号需要回滚
-				// if(info.getReceiveOrderTime() == null){
-				// info.setReceiveOrderTime(info.getOrderTime());
-				// }
-
 			}
 		}
 
@@ -419,10 +411,6 @@ public class OrderServiceImpl implements IOrderService {
 						info.getExpectEndTime());
 				info.setCountDownSeconds(responseVO.getCountDownSeconds());
 				info.setOrderStatus(responseVO.getOrderStatus());
-				// TODO 兼容安卓版本 7号需要回滚
-				// if(info.getReceiveOrderTime() == null){
-				// info.setReceiveOrderTime(info.getOrderTime());
-				// }
 			}
 		}
 
@@ -466,15 +454,14 @@ public class OrderServiceImpl implements IOrderService {
 				throw new BizException(AccountBizReturnCode.ORDER_STATUS_ERROR, "订单状态异常");
 			}
 			BigDecimal payAmount = order.getOrderAmounts();
+			//TODO 需要关注一下订单用券逻辑
+			Integer  couponFlag = order.getCouponFlag();
 			commonService.cancelUpdateOrder(orderId, orderStatus, new Date(), request.getSelectReason(),
-					request.getRemarkReason());
+					request.getRemarkReason(),couponFlag);
 			// 金额不为空，说明需要退款给用户
 			if (payAmount != null) {
 
 				// 订单取消，用户回款
-				accountService.inAccount(customerId, payAmount, TransferTypeEnum.RECHARGE,
-						AccountBusinessTypeEnum.OrderRefund);
-
 				LOGGER.info("---------cancelOrder：customerId=" + customerId + ";orderAmounts=" + payAmount);
 				accountService.inAccount(customerId, payAmount, TransferTypeEnum.RECHARGE,
 						AccountBusinessTypeEnum.OrderRefund, orderId);
@@ -539,7 +526,7 @@ public class OrderServiceImpl implements IOrderService {
 			// 根据订单ID查询客户优惠券
 			Map<String, String> map = couponDubboBusiness.getCustomerCouponByOrderId(orderId);
 			orderDetail.setCouponName(map.get("couponName") == null ? "" : map.get("couponName"));
-			orderDetail.setCouponPrice(map.get("couponPrice") == null ? "" : String.valueOf(map.get("couponPrice")));
+			orderDetail.setCouponPrice(map.get("couponPrice") == null ? null : new BigDecimal(map.get("couponPrice")));
 
 		}
 

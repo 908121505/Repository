@@ -38,15 +38,17 @@ public interface FansMapper {
 
 	/**
 	 * 根据customerId查询关注数量
+	 * @param customerId
+	 * @return
 	 */
-	int queryAttentionNumByCustomerId(Long customerId);
+	int queryAttentionNumByCustomerId(@Param("customerId") Long customerId);
 
 	/**
 	 * 根据customerId查询粉丝数量
 	 * @param customerId
 	 * @return
 	 */
-	Long queryFansNumByCustomerId(Long customerId);
+	Long queryFansNumByCustomerId(@Param("customerId") Long customerId);
 
 	/**
 	 * 查询关注列表

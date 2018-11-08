@@ -1,29 +1,6 @@
 package com.honglu.quickcall.user.service.service.impl;
 
-<<<<<<< HEAD
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import com.honglu.quickcall.user.facade.entity.*;
-import com.honglu.quickcall.user.facade.exchange.request.*;
-import com.honglu.quickcall.user.service.dao.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-=======
 import cn.jiguang.commom.utils.StringUtils;
->>>>>>> refs/remotes/origin/activity
 import com.honglu.quickcall.account.facade.business.IAccountOrderService;
 import com.honglu.quickcall.account.facade.code.AccountBizReturnCode;
 import com.honglu.quickcall.common.api.code.BizCode;
@@ -42,25 +19,11 @@ import com.honglu.quickcall.common.third.rongyun.models.CodeSuccessReslut;
 import com.honglu.quickcall.common.third.rongyun.util.RongYunUtil;
 import com.honglu.quickcall.user.facade.code.UserBizReturnCode;
 import com.honglu.quickcall.user.facade.constants.UserBizConstants;
-<<<<<<< HEAD
-=======
 import com.honglu.quickcall.user.facade.entity.*;
->>>>>>> refs/remotes/origin/activity
 import com.honglu.quickcall.user.facade.entity.example.AppShareConfigExample;
-<<<<<<< HEAD
-import com.honglu.quickcall.user.facade.vo.AttentionFansVO;
-import com.honglu.quickcall.user.facade.vo.CustomerCenterVO;
-import com.honglu.quickcall.user.facade.vo.CustomerHomeVO;
-import com.honglu.quickcall.user.facade.vo.CustomerLevelVO;
-import com.honglu.quickcall.user.facade.vo.InterestVO;
-import com.honglu.quickcall.user.facade.vo.MySkillVO;
-import com.honglu.quickcall.user.facade.vo.OccupationVO;
-import com.honglu.quickcall.user.facade.vo.SearchPersonListVO;
-=======
 import com.honglu.quickcall.user.facade.exchange.request.*;
 import com.honglu.quickcall.user.facade.vo.*;
 import com.honglu.quickcall.user.service.dao.*;
->>>>>>> refs/remotes/origin/activity
 import com.honglu.quickcall.user.service.service.CustomerRedisManagement;
 import com.honglu.quickcall.user.service.service.PersonInfoService;
 import com.honglu.quickcall.user.service.util.JsonParseUtil;
@@ -118,9 +81,6 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 	 */
 	private final static Pattern CH_EN_PATTERN = Pattern.compile("^[\\u4e00-\\u9fa5a-z\\d_]{4,24}$");
 	private static final Logger logger = LoggerFactory.getLogger(PersonInfoServiceImpl.class);
-
-	// private static String CUSTOMER_HOME_SHARE_H5_URL =
-	// ResourceBundle.getBundle("thirdconfig").getString("CUSTOMER_HOME_SHARE_H5_URL");
 
 	/**
 	 * 首页搜索用户

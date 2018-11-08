@@ -21,26 +21,11 @@
   <select id="queryIsFollow" resultType="int" parameterType="map">
   	select COUNT(*) FROM fans where anchor_id=#{anchorId} AND fans_id=#{fansId} AND attention_state=1;
   </select>
-<<<<<<< HEAD
 
   <select id="queryNoReadFansNumByCustomerId" resultType="java.lang.Integer" parameterType="java.lang.Long" >
-=======
-  <select id="queryFansNumByCustomerId" resultType="java.lang.Long" parameterType="java.lang.Long" >
-    SELECT COUNT(*) FROM fans WHERE anchor_id=#{customerId} AND attention_state=1;
-  </select>
-  
-   <select id="queryNoReadFansNumByCustomerId" resultType="java.lang.Integer" parameterType="java.lang.Long" >
->>>>>>> refs/remotes/origin/activity
     SELECT COUNT(*) FROM fans WHERE anchor_id=#{customerId} AND attention_state=1 and read_state=0
   </select>
 
-<<<<<<< HEAD
-=======
-
-  <select id="queryAttentionNumByCustomerId" resultType="int" parameterType="java.lang.Long" >
-    SELECT COUNT(*) FROM fans WHERE fans_id=#{customerId} AND attention_state=1;
-  </select>
->>>>>>> refs/remotes/origin/activity
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
     <include refid="Base_Column_List" />
@@ -202,13 +187,6 @@
 		ORDER BY eachAttentionStatus desc,fs.modify_time desc
   </select>
 
-<<<<<<< HEAD
-=======
-
-
-  
-  
->>>>>>> refs/remotes/origin/activity
   <!-- 查询粉丝列表 -->
   <select id="queryFansIdListByCustomerId" resultType="com.honglu.quickcall.user.facade.vo.AttentionFansVO"  >
 		SELECT
