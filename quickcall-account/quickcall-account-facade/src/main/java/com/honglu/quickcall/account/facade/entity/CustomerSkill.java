@@ -60,6 +60,9 @@ public class CustomerSkill {
     private Integer sunday;
 
     private String endTimeStr;
+
+    /**接单开关开启时间*/
+    private String startTimeStr;
     
     /**预约接单开始时间*/
     private Date  appointStartTime;
@@ -80,7 +83,16 @@ public class CustomerSkill {
 
     
     
-    public Integer getAutoReceiveStatus() {
+    
+    public String getStartTimeStr() {
+		return startTimeStr;
+	}
+
+	public void setStartTimeStr(String startTimeStr) {
+		this.startTimeStr = startTimeStr;
+	}
+
+	public Integer getAutoReceiveStatus() {
 		return autoReceiveStatus;
 	}
 
