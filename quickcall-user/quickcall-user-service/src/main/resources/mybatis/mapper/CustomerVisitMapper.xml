@@ -37,13 +37,9 @@
     where id = #{id,jdbcType=INTEGER}
   </select>
   
-  <select id="selectUnreadCountByCustomerId">
-  	SELECT
-		count( * ) 
-	FROM
-		customer_visit 
-	WHERE
-		interviewee_id = #{customerId} and read_status = 0
+  <select id="selectUnreadCountByCustomerId" resultType="int">
+  	SELECT count( * ) FROM customer_visit
+	WHERE interviewee_id = #{customerId} and read_status = 0
   </select>
   
   <select id="queryCustomerVisitList" resultType="map">
