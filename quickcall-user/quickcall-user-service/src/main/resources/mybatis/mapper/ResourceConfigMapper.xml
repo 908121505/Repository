@@ -197,6 +197,9 @@
             <if test="skillItemId != null">
                 AND bss.skill_item_id = #{skillItemId}
             </if>
+            <if test="skillItemId == null">
+                GROUP BY bss.customer_id 
+            </if>
             ORDER BY (SELECT count(o.order_id) FROM orders o WHERE o.customer_skill_id = bss.customer_skill_id
             AND o.skill_type = (select si.skill_type from skill_item si where si.id = bss.skill_item_id)
             AND o.order_status IN (10, 18, 26, 28)) ASC , bss.score_total DESC
