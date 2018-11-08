@@ -18,6 +18,7 @@ import com.honglu.quickcall.common.core.util.UUIDUtils;
 import com.honglu.quickcall.common.third.rongyun.models.CodeSuccessReslut;
 import com.honglu.quickcall.common.third.rongyun.util.RongYunUtil;
 import com.honglu.quickcall.user.facade.code.UserBizReturnCode;
+import com.honglu.quickcall.user.facade.constants.ScoreRankConstants;
 import com.honglu.quickcall.user.facade.constants.UserBizConstants;
 import com.honglu.quickcall.user.facade.entity.*;
 import com.honglu.quickcall.user.facade.entity.example.AppShareConfigExample;
@@ -825,7 +826,7 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 						.selectCustomerSkillHotLabel(request.getViewCustomerId(), bean.getSkillItemId()));
 
 				// 查询技能声量
-				customerSkill.setSkillVolume(bigvSkillScoreMapper.selectBigvScoreValue(bean.getCustomerSkillId()));
+				customerSkill.setSkillVolume(ScoreRankConstants.formatSkillScore(bigvSkillScoreMapper.selectBigvScoreValue(bean.getCustomerSkillId())));
 
 				// 判断是否可下单
 				if (Objects.equals(request.getLoginCustomerId(), request.getViewCustomerId())) {

@@ -64,11 +64,24 @@ public class ScoreRankConstants {
     public static Double getSingleOrderNumWeight(Integer orderNo) {
         Integer index = 1;
         for (Integer key : SINGLE_ORDER_NUM_WEIGHT_MAP.keySet()) {
-            if(key <= orderNo){
+            if (key <= orderNo) {
                 index = key;
             }
         }
         return SINGLE_ORDER_NUM_WEIGHT_MAP.get(index);
     }
 
+    /**
+     * 格式化技能声量
+     *
+     * @param socre
+     * @return
+     */
+    public static String formatSkillScore(Integer socre) {
+        if(socre == null){
+            return "0";
+        }
+
+        return socre + "";
+    }
 }

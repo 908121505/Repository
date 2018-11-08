@@ -112,8 +112,8 @@ public class CustomerHomeVO implements Serializable {
      * 用户技能对象
      */
     public class CustomerSkill implements Serializable{
-        private static final long serialVersionUID = 2871296634994569921L;
 
+        private static final long serialVersionUID = 6933499103108177213L;
         /**
          * 客户技能ID
          */
@@ -157,7 +157,7 @@ public class CustomerHomeVO implements Serializable {
         /**
          * 声量：该技能的综合表现维度
          */
-        private Integer skillVolume;
+        private String skillVolume;
         /**
          * 用户标签 -- 最多的3个标签
          */
@@ -247,11 +247,11 @@ public class CustomerHomeVO implements Serializable {
             this.serviceUnit = serviceUnit;
         }
 
-        public Integer getSkillVolume() {
+        public String getSkillVolume() {
             return skillVolume;
         }
 
-        public void setSkillVolume(Integer skillVolume) {
+        public void setSkillVolume(String skillVolume) {
             this.skillVolume = skillVolume;
         }
 
