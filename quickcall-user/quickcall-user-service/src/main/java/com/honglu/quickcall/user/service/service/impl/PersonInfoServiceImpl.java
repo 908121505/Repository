@@ -724,7 +724,7 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 		customerCenterVO.setAttentionNum(fansMapper.queryAttentionNumByCustomerId(request.getCustomerId()));
 
 		// 查询粉丝数
-		customerCenterVO.setFansNum(fansMapper.queryFansNumByCustomerId(request.getCustomerId()).intValue());
+		customerCenterVO.setFansNum(fansMapper.queryFansNumByCustomerId(request.getCustomerId()));
 		
 		// 查询被访问数量
 		customerCenterVO.setVisitNum(customerVisitMapper.selectUnreadCountByCustomerId(request.getCustomerId()));
@@ -769,7 +769,7 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 		}
 
 		// 查询粉丝数
-		customerHomeVO.setFansNum(fansMapper.queryFansNumByCustomerId(request.getViewCustomerId()).intValue());
+		customerHomeVO.setFansNum(fansMapper.queryFansNumByCustomerId(request.getViewCustomerId()));
 
 		// 查看自己的标志
 		boolean viewMyselfFlag = Objects.equals(request.getLoginCustomerId(), request.getViewCustomerId());
