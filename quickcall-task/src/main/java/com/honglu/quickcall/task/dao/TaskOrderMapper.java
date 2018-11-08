@@ -40,6 +40,14 @@ public interface TaskOrderMapper {
 	 * @return
 	 */
 	List<TaskOrder>  queryStartOrderOverTime(@Param("currTime")Date  currTime,@Param("endTime")Date  endTime,@Param("queryStatus")Integer queryStatus ,@Param("updateStatus")Integer  updateStatus,@Param("skillType")Integer  skillType,@Param("queryEndTime")Date  queryEndTime);
+	
+	/**
+	 * 用户5分钟未响应声优的立即服务申请
+	 * @param currTime
+	 * @param statusList
+	 * @return
+	 */
+	List<TaskOrder>  queryStartOrderOverTimeCust(@Param("currTime")Date  currTime,@Param("endTime")Date  endTime,@Param("queryStatus")Integer queryStatus ,@Param("updateStatus")Integer  updateStatus,@Param("skillType")Integer  skillType,@Param("queryEndTime")Date  queryEndTime);
 
 	/**
 	 *用户未接立即服务超时超时
