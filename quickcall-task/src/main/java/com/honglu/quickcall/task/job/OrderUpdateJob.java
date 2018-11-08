@@ -341,9 +341,9 @@ public class OrderUpdateJob {
     				Long  customerId =  order.getCustomerId();
     				BigDecimal  payAmount =  order.getOrderAmounts();
     				//调用接口退款给用户
-    				LOGGER.info("用户信息："+order.toString());
-    				inAccount(customerId, payAmount,TransferTypeEnum.RECHARGE,AccountBusinessTypeEnum.OrderRefund);
-    				LOGGER.info("用户ID："+customerId +"订单超时，系统自动退款给用户"+payAmount);
+    				LOGGER.info("OrderInfo"+order.toString());
+    				inAccount(customerId, payAmount,TransferTypeEnum.RECHARGE,AccountBusinessTypeEnum.OrderRefund,order.getOrderId());
+    				LOGGER.info("CID："+customerId +"订单超时，系统自动退款给用户"+payAmount);
     				
     				sendOrderMessage(customerId, cancelType, false);
     				sendOrderMessage(order.getServiceId(), cancelType, true);
@@ -412,8 +412,8 @@ public class OrderUpdateJob {
 					Long  serviceId =  order.getServiceId();
 					BigDecimal   payAmount =  order.getOrderAmounts();
 					//大V冻结
-					inAccount(order.getServiceId(), order.getOrderAmounts(), TransferTypeEnum.FROZEN, AccountBusinessTypeEnum.FroZen);
-					LOGGER.info("主播用户ID："+serviceId +"订单超时，系统自动退款给用户"+payAmount);
+					inAccount(order.getServiceId(), order.getOrderAmounts(), TransferTypeEnum.FROZEN, AccountBusinessTypeEnum.FroZen,order.getOrderId());
+					LOGGER.info("SY_ID："+serviceId +"资金流水冻结，冻结金额"+payAmount);
 				}
 			} catch (Exception e) {
 				LOGGER.error("大V账户冻结发生异常，异常信息",e);
@@ -431,13 +431,15 @@ public class OrderUpdateJob {
 	private final static String froZenTime = ResourceBundle.getBundle("thirdconfig").getString("froZenTime");
     
     public void inAccount(Long customerId, BigDecimal amount, TransferTypeEnum transferType,
-			AccountBusinessTypeEnum accountBusinessType) {
+			AccountBusinessTypeEnum accountBusinessType,Long orderNo) {
 
+    	LOGGER.info("=======inAccount========customerId:"+customerId+",amount:"+amount +",orderNo:"+orderNo);
 		// 入账
 		accountMapper.inAccount(customerId, amount, transferType.getType());
 		// 记录流水
 		TradeDetail tradeDetail = new TradeDetail();
 		tradeDetail.setTradeId(UUIDUtils.getId());
+		tradeDetail.setOrderNo(orderNo);
 		tradeDetail.setCustomerId(customerId);
 		tradeDetail.setCreateTime(new Date());
 		tradeDetail.setType(accountBusinessType.getType());
@@ -446,11 +448,12 @@ public class OrderUpdateJob {
 
 		if (transferType == TransferTypeEnum.FROZEN) {
 			String userFrozenkey = RedisKeyConstants.ACCOUNT_USERFROZEN_USER + customerId;
-			String steamFrozenKey = RedisKeyConstants.ACCOUNT_USERFROZEN_USER + tradeDetail.getTradeId();
+			String steamFrozenKey = RedisKeyConstants.ACCOUNT_USERFROZEN_STREAM + tradeDetail.getTradeId();
 			String frozenTimeKey = RedisKeyConstants.ACCOUNT_USERFROZEN_Time + tradeDetail.getTradeId();
 			String userFrozenValue = JedisUtil.get(userFrozenkey);
 			if (StringUtils.isNotBlank(userFrozenValue)) {
 				userFrozenValue = userFrozenValue + "," + tradeDetail.getTradeId();
+				JedisUtil.set(userFrozenkey, userFrozenValue);
 			} else {
 				JedisUtil.set(userFrozenkey, tradeDetail.getTradeId() + "");
 
@@ -458,6 +461,8 @@ public class OrderUpdateJob {
 			JedisUtil.set(steamFrozenKey, amount + "");
 			// 缓存24小时
 			JedisUtil.set(frozenTimeKey, "1", Integer.parseInt(froZenTime));
+			// 流水对应的订单Id
+			JedisUtil.set(RedisKeyConstants.ACCOUNT_USERFROZEN_ORDER_NO, orderNo + "");
 
 		}
 
@@ -465,12 +470,14 @@ public class OrderUpdateJob {
     
     
 	public void outAccount(Long customerId, BigDecimal amount, TransferTypeEnum transferType,
-			AccountBusinessTypeEnum accountBusinessType) {
+			AccountBusinessTypeEnum accountBusinessType, Long orderNo) {
+		LOGGER.info(">>>>>>>>>>>>>>>outAccount>>>>>>>>>>>>>>>customerId:"+customerId+",amount:"+amount +",orderNo:"+orderNo);
 		// 入账
 		accountMapper.outAccount(customerId, amount, transferType.getType());
 		// 记录流水
 		TradeDetail tradeDetail = new TradeDetail();
 		tradeDetail.setTradeId(UUIDUtils.getId());
+		tradeDetail.setOrderNo(orderNo);
 		tradeDetail.setCustomerId(customerId);
 		tradeDetail.setCreateTime(new Date());
 		tradeDetail.setType(accountBusinessType.getType());

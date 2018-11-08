@@ -249,6 +249,7 @@ public class OrderServiceImpl implements IOrderService {
 						//返回余额不足状态  
 						return   commonResponse ;
 					}else{
+						LOGGER.info("---------saveOrder：customerId="+customerId +";orderAmounts="+orderAmounts);
 						accountService.outAccount(customerId, orderAmounts,TransferTypeEnum.RECHARGE,AccountBusinessTypeEnum.PlaceOrder,orderId);
 					}
 				}
@@ -455,6 +456,7 @@ public class OrderServiceImpl implements IOrderService {
 			commonService.cancelUpdateOrder(orderId, orderStatus,new Date(),request.getSelectReason(),request.getRemarkReason());
 			//金额不为空，说明需要退款给用户
 			if(payAmount != null){
+				LOGGER.info("---------cancelOrder：customerId="+customerId +";orderAmounts="+payAmount);
 				accountService.inAccount(customerId, payAmount,TransferTypeEnum.RECHARGE,AccountBusinessTypeEnum.OrderRefund,orderId);
 			}
                                        //----start---chenpeng 2018.11.1 取消订单时，查询是否使用优惠券，如果有则退回优惠券
@@ -644,6 +646,7 @@ public class OrderServiceImpl implements IOrderService {
 //			commonService.updateOrder(orderId, newOrderStatus);
 			commonService.custConfirmFinishUpdateOrder(orderId, newOrderStatus);
 			//大V冻结
+			LOGGER.info("---------custConfirmFinish：serviceId="+order.getServiceId() +";orderAmounts="+order.getOrderAmounts());
 			accountService.inAccount(order.getServiceId(), order.getOrderAmounts(), TransferTypeEnum.FROZEN, AccountBusinessTypeEnum.FroZen,orderId);
 			// ADUAN 订单服务完成推送MQ消息
 			userCenterSendMqMessageService.sendOrderCostMqMessage(orderId);
@@ -784,8 +787,16 @@ public class OrderServiceImpl implements IOrderService {
 						List<Long>  orderIdList =  new ArrayList<Long>();
 						for (Order od : orderList) {
 							orderIdList.add(od.getOrderId());
+							try {
+								LOGGER.info("---------dvReceiveOrder：customerId="+order.getCustomerId() +";orderAmounts="+od.getOrderAmounts());
+								accountService.inAccount(od.getCustomerId(), od.getOrderAmounts(),TransferTypeEnum.RECHARGE,AccountBusinessTypeEnum.OrderRefund,od.getOrderId());
+							} catch (Exception e) {
+								LOGGER.error("用户退款异常异常信息：",e);
+							}
 						}
 						commonService.updateOrderReceiveOrder(orderIdList, OrderSkillConstants.ORDER_STATUS_CANCEL_DAV_START_ONE_ORDER);
+						
+						
 					}
 				}
 				
@@ -801,6 +812,7 @@ public class OrderServiceImpl implements IOrderService {
 			}else {
 				newOrderStatus = OrderSkillConstants.ORDER_STATUS_DAV_REFUSED_RECEIVE;
 				BigDecimal  payAmount = order.getOrderAmounts();
+				LOGGER.info("---------dvReceiveOrder--refuse：customerId="+order.getCustomerId() +";orderAmounts="+order.getOrderAmounts());
 				accountService.inAccount(customerId, payAmount, TransferTypeEnum.RECHARGE,AccountBusinessTypeEnum.OrderRefund,orderId);
 				commonService.updateOrder(orderId, newOrderStatus);
 				
@@ -920,6 +932,7 @@ public class OrderServiceImpl implements IOrderService {
 					//已经在服务时间之外了，可以立即结束
 					newOrderStatus = OrderSkillConstants.ORDER_STATUS_FINISH_DAV_FINISH_AFTER_SERVICE_TIME ;
 					//冻结大V金额
+					LOGGER.info("---------finishOrder--outtime：serviceId="+order.getServiceId() +";orderAmounts="+order.getOrderAmounts());
 					accountService.inAccount(order.getServiceId(), order.getOrderAmounts(), TransferTypeEnum.FROZEN, AccountBusinessTypeEnum.FroZen,orderId);
 					//用户未评价
 					RongYunUtil.sendOrderMessage(serviceId, OrderSkillConstants.IM_MSG_CONTENT_CUST_NOT_PING_JIA,OrderSkillConstants.MSG_CONTENT_DAV);
@@ -934,6 +947,7 @@ public class OrderServiceImpl implements IOrderService {
 				newOrderStatus = OrderSkillConstants.ORDER_STATUS_GOING_USRE_APPAY_FINISH ;
 				sendMsgIndex =  1 ;
 				//冻结大V金额
+				LOGGER.info("---------finishOrder--cust：serviceId="+order.getServiceId() +";orderAmounts="+order.getOrderAmounts());
 				accountService.inAccount(order.getServiceId(), order.getOrderAmounts(), TransferTypeEnum.FROZEN, AccountBusinessTypeEnum.FroZen,orderId);
 				RongYunUtil.sendOrderMessage(serviceId, OrderSkillConstants.IM_MSG_CONTENT_CUST_NOT_PING_JIA,OrderSkillConstants.MSG_CONTENT_DAV);
 			}
