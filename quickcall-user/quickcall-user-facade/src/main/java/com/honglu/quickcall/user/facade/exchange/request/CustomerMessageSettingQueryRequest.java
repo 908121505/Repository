@@ -1,5 +1,6 @@
 package com.honglu.quickcall.user.facade.exchange.request;
 
+import com.honglu.quickcall.user.facade.code.UserFunctionType;
 import com.honglu.quickcall.user.facade.exchange.UserCenterRequest;
 
 public class CustomerMessageSettingQueryRequest extends UserCenterRequest{
@@ -24,8 +25,7 @@ public class CustomerMessageSettingQueryRequest extends UserCenterRequest{
 
 	@Override
 	public String getBizCode() {
-		// TODO Auto-generated method stub
-		return null;
+		return UserFunctionType.CUSYOMER_MESSAGE_SETTING;
 	}
 
 }

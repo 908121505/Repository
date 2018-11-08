@@ -6,68 +6,60 @@ import com.honglu.quickcall.user.facade.code.UserFunctionType;
 import com.honglu.quickcall.user.facade.exchange.UserCenterRequest;
 
 public class CustomerMsgSettingRequest extends UserCenterRequest  {
-    /**
+
+
+	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 5702087654682913731L;
 
 	/**
      * 主键ID(15位时间+4位随机数)
-     * @mbggenerated Fri Nov 02 15:38:25 CST 2018
      */
     private Long id;
 
     /**
      * 客户ID
-     * @mbggenerated Fri Nov 02 15:38:25 CST 2018
      */
     private Long customerId;
 
     /**
      * 接收类型(0=接收所有，1=仅接收粉丝)
-     * @mbggenerated Fri Nov 02 15:38:25 CST 2018
      */
     private Integer receiveType;
 
     /**
      * 用户最小等级阈值,默认1000
-     * @mbggenerated Fri Nov 02 15:38:25 CST 2018
      */
     private Integer rangeMinLimit;
 
     /**
      * 接收状态(0=开启，1=关闭)
-     * @mbggenerated Fri Nov 02 15:38:25 CST 2018
      */
     private Integer receiveStatus;
 
     /**
      * 创建时间
-     * @mbggenerated Fri Nov 02 15:38:25 CST 2018
      */
     private Date createTime;
 
     /**
      * 修改时间
-     * @mbggenerated Fri Nov 02 15:38:25 CST 2018
      */
     private Date modifyTime;
 
     /**
      * 创建人
-     * @mbggenerated Fri Nov 02 15:38:25 CST 2018
      */
     private String createMan;
 
     /**
      * 修改人
-     * @mbggenerated Fri Nov 02 15:38:25 CST 2018
      */
     private String modifyMan;
 
     /**
      * 备注
-     * @mbggenerated Fri Nov 02 15:38:25 CST 2018
      */
     private String remark;
 
@@ -132,7 +124,7 @@ public class CustomerMsgSettingRequest extends UserCenterRequest  {
     }
 
     public void setCreateMan(String createMan) {
-        this.createMan = createMan == null ? null : createMan.trim();
+        this.createMan = createMan;
     }
 
     public String getModifyMan() {
@@ -140,7 +132,7 @@ public class CustomerMsgSettingRequest extends UserCenterRequest  {
     }
 
     public void setModifyMan(String modifyMan) {
-        this.modifyMan = modifyMan == null ? null : modifyMan.trim();
+        this.modifyMan = modifyMan;
     }
 
     public String getRemark() {
@@ -148,7 +140,7 @@ public class CustomerMsgSettingRequest extends UserCenterRequest  {
     }
 
     public void setRemark(String remark) {
-        this.remark = remark == null ? null : remark.trim();
+        this.remark = remark;
     }
 
 	@Override

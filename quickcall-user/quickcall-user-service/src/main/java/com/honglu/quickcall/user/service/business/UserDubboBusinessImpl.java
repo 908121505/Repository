@@ -321,6 +321,7 @@ public class UserDubboBusinessImpl implements UserDubboBusiness {
 				break;
 			case UserFunctionType.ADD_CUSYOMER_MESSAGE_SETTING:
 				response = userMessageService.saveCustomerMessageSetting((CustomerMsgSettingRequest) request);
+				break;
 			case UserFunctionType.CANCEL_ATTENTION:
 				response = attentionService.cancelAttention((AttentionCancelRequest) request);
 				break;
