@@ -449,6 +449,14 @@
     limit 1;
   </select>
   
+  <select id="queryCustomerSkillByCertifyId" resultMap="BaseResultMap"  >
+    select
+    <include refid="Base_Column_List" />
+    from customer_skill
+    where certify_id = #{certifyId,jdbcType=BIGINT}
+    limit 1;
+  </select>
+  
   <select id="queryCustomerListBySkillItem" resultType ="com.honglu.quickcall.user.facade.vo.DaVinfoVO">
   		select * from( SELECT
             bss.customer_id as customerId, 

@@ -630,6 +630,10 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 							mySkillVO.setSkillVoiceUrl(skillReview.getSkillVoiceUrl());
 							mySkillVO.setSkillVoiceTime(
 									skillReview.getSkillVoiceTime().setScale(0, BigDecimal.ROUND_UP).intValue());
+							mySkillVO.setBackColor(skill.getBackColor());
+							CustomerSkill cs = customerSkillMapper.queryCustomerSkillByCertifyId(skillReview.getCertifyId());
+							mySkillVO.setPrice(cs.getDiscountPrice());
+							mySkillVO.setUnit(cs.getServiceUnit());
 						}
 						haveSkill.add(mySkillVO);
 						flag = false;

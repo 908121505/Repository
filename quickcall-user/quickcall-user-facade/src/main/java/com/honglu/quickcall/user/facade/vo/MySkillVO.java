@@ -1,7 +1,13 @@
 package com.honglu.quickcall.user.facade.vo;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
+/**
+ * 我的技能输出
+ * @author zhaozheyi
+ *
+ */
 public class MySkillVO implements Serializable {
 
 	/**
@@ -23,6 +29,14 @@ public class MySkillVO implements Serializable {
 	private Integer skillVoiceTime;
 	// 技能支持申请状态
 	private Integer skillStatus;
+	//技能背景颜色
+	private String backColor;
+	//技能价格
+	private BigDecimal price;
+	//技能单位
+	private String unit;
+
+	
 
 	public MySkillVO() {
 		super();
@@ -100,4 +114,34 @@ public class MySkillVO implements Serializable {
 		this.skillVoiceTime = skillVoiceTime;
 	}
 
+	public String getBackColor() {
+		return backColor;
+	}
+
+	public void setBackColor(String backColor) {
+		this.backColor = backColor;
+	}
+	
+	public BigDecimal getPrice() {
+		return price;
+	}
+
+	public void setPrice(BigDecimal price) {
+		this.price = price;
+	}
+
+	public String getUnit() {
+		return unit;
+	}
+
+	public void setUnit(String unit) {
+		this.unit = unit;
+	}
+
+	@Override
+	public String toString() {
+		return "MySkillVO [name=" + name + ", imageUrl=" + imageUrl + ", auditStatus=" + auditStatus + ", skillId="
+				+ skillId + ", skillVoiceUrl=" + skillVoiceUrl + ", skillVoiceTime=" + skillVoiceTime + ", skillStatus="
+				+ skillStatus + ", backColor=" + backColor + ", price=" + price + ", unit=" + unit + "]";
+	}
 }
