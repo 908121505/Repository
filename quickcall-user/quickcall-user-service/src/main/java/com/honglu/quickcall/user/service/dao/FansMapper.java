@@ -20,14 +20,12 @@ public interface FansMapper {
 
 	int updateByPrimaryKey(Fans record);
 
-	// 根据customerId查询粉丝数量
-	Long queryFansNumByCustomerId(Long customerId);
-
-	// 根据customerId查询未读粉丝数量
+	/**
+	 * 根据customerId查询未读粉丝数量
+	 * @param customerId
+	 * @return
+	 */
 	int queryNoReadFansNumByCustomerId(Long customerId);
-
-	// 根据customerId查询关注数量
-	int queryAttentionNumByCustomerId(Long customerId);
 
 	/**
 	 * 判断是否关注
@@ -37,6 +35,18 @@ public interface FansMapper {
 	 * @return
 	 */
 	int queryIsFollow(@Param("anchorId") Long anchorId, @Param("fansId") Long fansId);
+
+	/**
+	 * 根据customerId查询关注数量
+	 */
+	int queryAttentionNumByCustomerId(Long customerId);
+
+	/**
+	 * 根据customerId查询粉丝数量
+	 * @param customerId
+	 * @return
+	 */
+	Long queryFansNumByCustomerId(Long customerId);
 
 	/**
 	 * 查询关注列表
@@ -67,7 +77,7 @@ public interface FansMapper {
 	/**
 	 * 通过范围查询关注列表
 	 * 
-	 * @param fansId
+	 * @param anchorId
 	 * @param customerId
 	 * @return
 	 */
