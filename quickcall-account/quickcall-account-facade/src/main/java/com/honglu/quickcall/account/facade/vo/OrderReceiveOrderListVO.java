@@ -74,6 +74,8 @@ public class OrderReceiveOrderListVO implements  Serializable{
 	}
 	public void setStartServiceTime(Date startServiceTime) {
 		this.startServiceTime = startServiceTime;
+		
+	}
 	public Integer getCouponFlag() {
 		return couponFlag;
 	}

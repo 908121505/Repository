@@ -83,15 +83,9 @@ public class OrderDetailVO implements  Serializable{
     private BigDecimal  couponPrice;
     /**预约开始时间*/
     private  Date   appointStartTime;
-    
-    
-    
 
-
-	//private CustomerCouponVO customerCouponVO;//客户订单优惠券信息
 	private String couponName;//客户订单优惠券的名称'
 
-	private String couponPrice;//客户订单优惠券的价值
 
 	
 	public Integer getSkillType() {
@@ -99,12 +93,6 @@ public class OrderDetailVO implements  Serializable{
 	}
 	public void setSkillType(Integer skillType) {
 		this.skillType = skillType;
-	}
-	public BigDecimal getCouponPrice() {
-		return couponPrice;
-	}
-	public void setCouponPrice(BigDecimal couponPrice) {
-		this.couponPrice = couponPrice;
 	}
 	public Date getAppointStartTime() {
 		return appointStartTime;
@@ -288,11 +276,11 @@ public class OrderDetailVO implements  Serializable{
 		this.couponName = couponName;
 	}
 
-	public String getCouponPrice() {
+	public BigDecimal getCouponPrice() {
 		return couponPrice;
 	}
 
-	public void setCouponPrice(String couponPrice) {
+	public void setCouponPrice(BigDecimal couponPrice) {
 		this.couponPrice = couponPrice;
 	}
 }
