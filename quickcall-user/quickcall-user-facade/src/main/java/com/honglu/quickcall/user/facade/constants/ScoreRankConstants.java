@@ -82,7 +82,10 @@ public class ScoreRankConstants {
      */
     public static String formatSkillScore(Integer score) {
         if (score == null) {
-            return null;
+            return "0";
+        }
+        if(score < 1000){
+            return String.valueOf(score);
         }
         BigDecimal decimal = new BigDecimal(score);
 
