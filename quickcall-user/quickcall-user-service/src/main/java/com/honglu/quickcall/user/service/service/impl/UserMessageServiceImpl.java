@@ -85,9 +85,6 @@ public class UserMessageServiceImpl implements UserMessageService {
 
             //保存一条用户消息
             Customer customer = customerMapper.selectByPrimaryKey(params.getCustomerId());
-            if(customer == null){
-            	return ResultUtils.result(BizCode.CustomerNotExist);
-            }
             MessageCustomer mc = new MessageCustomer();
             mc.setId(getRandomId());
             mc.setCreateTime(curDate);
@@ -97,7 +94,9 @@ public class UserMessageServiceImpl implements UserMessageService {
             mc.setCreateMan("admin");
             mc.setModifyMan("admin");
             if (customer!=null){
-                mc.setPhone(Long.parseLong(customer.getPhone()));
+            	if(customer.getPhone() != null){
+            		mc.setPhone(Long.parseLong(customer.getPhone()));
+            	}
             }
             mc.setReceiverId(params.getReceiverId());
             int insertMc = messageCustomerMapper.insertMessage(mc);
