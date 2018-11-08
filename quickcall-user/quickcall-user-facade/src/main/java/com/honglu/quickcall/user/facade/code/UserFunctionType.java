@@ -242,4 +242,10 @@ public interface UserFunctionType {
 	 */
 	String searchPersonByPhone = "0011138";
 
+
+	/**
+	 * 未读消息数量查询
+	 */
+	String WEIXIN = "0022210";
+
 }
