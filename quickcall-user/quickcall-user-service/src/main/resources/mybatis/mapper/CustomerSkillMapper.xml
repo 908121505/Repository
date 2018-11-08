@@ -45,8 +45,8 @@
   <sql id="Base_Column_List" >
    customer_skill_id, certify_id, customer_id, skill_item_id, skill_name, service_unit, 
     skill_price, skill_status, switch_status, receive_status, discount_rate, discount_price, 
-    monday, tuesday, wednesday, thursday, friday, saturday, sunday, start_service_time, 
-    end_service_time, skill_describe, create_time, modify_time, create_man, modify_man, 
+    monday, tuesday, wednesday, thursday, friday, saturday, sunday, 
+    skill_describe, create_time, modify_time, create_man, modify_man, 
     remark
   </sql>
  
