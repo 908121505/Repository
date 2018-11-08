@@ -414,7 +414,7 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 		if (customer != null) {
 			logger.info("用户已存在");
 			response.setCode(BizCode.CustomerError);
-			response.setMessage("手机号格式不正确");
+			response.setMessage("用户已存在");
 			return response;
 		}
 		customer = new Customer();
