@@ -390,8 +390,20 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 			customerSkillList.add(skillVO);
 
 		}
+		//自动接单开关为空，则给默认值
+		if(autoReceiveStatus == null){
+			autoReceiveStatus = 0;
+		}
 		resultVO.setAutoReceiveStatus(autoReceiveStatus);
+		//默认值
+		if(StringUtils.isBlank(startServiceTimeStr)){
+			startServiceTimeStr = "00:00";
+		}
+		//默认值
 		resultVO.setStartServiceTimeStr(startServiceTimeStr);
+		if(StringUtils.isBlank(endServiceTimeStr)){
+			endServiceTimeStr = "23:59";
+		}
 		resultVO.setEndServiceTimeStr(endServiceTimeStr);
 		//返回自动接单开关
 		//需要回显原来选择的结束时间
