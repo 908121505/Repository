@@ -8,6 +8,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
  * @author xiangping
@@ -25,6 +26,7 @@ public class WeiXinController {
      * @return
      */
     @RequestMapping("/getOpenId")
+    @ResponseBody
     public WebResponseModel getOpenId(WeiXinRequest params){
         if (StringUtils.isNotBlank(params.getCode())&& StringUtils.isNotBlank(params.getPhone())) {
             WebResponseModel response = new WebResponseModel();
