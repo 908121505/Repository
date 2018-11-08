@@ -58,9 +58,6 @@ public class UserMessageServiceImpl implements UserMessageService {
 
     @Override
     public CommonResponse queryUserUnreadMessageNum(UserUnreadMessageNumRequest params) {
-    	if(params.getCustomerId() == null){
-			return ResultUtils.result(BizCode.CustomerNotExist);
-		}
         int num = messageMapper.queryUserUnreadMessageNum(params.getCustomerId());
         return ResultUtils.resultSuccess(num);
     }
@@ -68,9 +65,6 @@ public class UserMessageServiceImpl implements UserMessageService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public CommonResponse saveBookingMessage(BookingMessageSaveRequest params) {
-    	if(params.getCustomerId() == null){
-			return ResultUtils.result(BizCode.CustomerNotExist);
-		}
         String key = reidsKey+params.getCustomerId()+":"+params.getReceiverId();
         String value = JedisUtil.get(key);
         if (StringUtils.isNotBlank(value)){
@@ -91,6 +85,9 @@ public class UserMessageServiceImpl implements UserMessageService {
 
             //保存一条用户消息
             Customer customer = customerMapper.selectByPrimaryKey(params.getCustomerId());
+            if(customer == null){
+            	return ResultUtils.result(BizCode.CustomerNotExist);
+            }
             MessageCustomer mc = new MessageCustomer();
             mc.setId(getRandomId());
             mc.setCreateTime(curDate);
@@ -124,10 +121,11 @@ public class UserMessageServiceImpl implements UserMessageService {
 
     @Override
     public CommonResponse queryBookingMessage(BookingMessageQueryRequest params) {
-    	if(params.getCustomerId() == null){
+        List<MessageReservation> messageReservationList = messageReservationMapper.queryBookingMessage(params.getCustomerId());
+        Customer cus = customerMapper.selectByPrimaryKey(params.getCustomerId());
+		if(cus == null){
 			return ResultUtils.result(BizCode.CustomerNotExist);
 		}
-        List<MessageReservation> messageReservationList = messageReservationMapper.queryBookingMessage(params.getCustomerId());
         List<MessageReservationVO> mrsList = new ArrayList<>();
         for (MessageReservation mr: messageReservationList){
             Customer customer = customerMapper.selectByPrimaryKey(mr.getCustomerId());
@@ -163,7 +161,8 @@ public class UserMessageServiceImpl implements UserMessageService {
 
 	@Override
 	public CommonResponse queryCustomerMessageSetting(CustomerMessageSettingQueryRequest params) {
-		if(params.getCustomerId() == null){
+		Customer customer = customerMapper.selectByPrimaryKey(params.getCustomerId());
+		if(customer == null){
 			return ResultUtils.result(BizCode.CustomerNotExist);
 		}
 		List<CustomerMsgSetting> customerMsgSettingList = customerMsgSettingMapper.selectByPrimaryKey(params.getCustomerId());
@@ -183,7 +182,8 @@ public class UserMessageServiceImpl implements UserMessageService {
 	@Override
 	@Transactional(rollbackFor = Exception.class)
 	public CommonResponse saveCustomerMessageSetting(CustomerMsgSettingRequest params) {
-		if(params.getCustomerId() == null){
+		Customer customer = customerMapper.selectByPrimaryKey(params.getCustomerId());
+		if(customer == null){
 			return ResultUtils.result(BizCode.CustomerNotExist);
 		}
 		CustomerMsgSetting customerMsgSetting = new CustomerMsgSetting();

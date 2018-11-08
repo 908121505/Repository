@@ -70,6 +70,8 @@ import com.honglu.quickcall.common.api.exception.BizException;
 import com.honglu.quickcall.common.api.exchange.CommonResponse;
 import com.honglu.quickcall.common.api.exchange.ResultUtils;
 import com.honglu.quickcall.common.api.util.DateUtils;
+import com.honglu.quickcall.common.api.util.JedisUtil;
+import com.honglu.quickcall.common.api.util.RedisKeyConstants;
 import com.honglu.quickcall.common.core.util.UUIDUtils;
 import com.honglu.quickcall.common.third.AliyunSms.utils.SendSmsUtil;
 import com.honglu.quickcall.common.third.push.GtPushUtil;
@@ -115,11 +117,12 @@ public class OrderServiceImpl implements IOrderService {
 	
 	@Override
 	public CommonResponse queryDaVSkill(OrderDaVSkillRequest request) {
-		if(request.getCustomerId() == null){
-			return ResultUtils.result(BizCode.CustomerNotExist);
-		}
 		if (request == null || request.getCustomerId() == null) {
 			throw new BizException(AccountBizReturnCode.paramError, "查询技能信息参数异常");
+		}
+		String customerJson = JedisUtil.get(RedisKeyConstants.USER_CUSTOMER_INFO+request.getCustomerId());
+		if(StringUtils.isEmpty(customerJson)){
+			return ResultUtils.result(BizCode.CustomerNotExist);
 		}
 		LOGGER.info("======>>>>>queryDaVSkill()入参："+request.toString());
 		
@@ -157,11 +160,12 @@ public class OrderServiceImpl implements IOrderService {
 	
 	@Override
 	public CommonResponse saveOrder(OrderSaveRequest request) {
-		if(request.getCustomerId() == null){
-			return ResultUtils.result(BizCode.CustomerNotExist);
-		}
 		if (request == null || request.getCustomerId() == null || request.getCustomerSkillId() == null) {
 			throw new BizException(AccountBizReturnCode.paramError, "下单参数异常");
+		}
+		String customerJson = JedisUtil.get(RedisKeyConstants.USER_CUSTOMER_INFO+request.getCustomerId());
+		if(StringUtils.isEmpty(customerJson)){
+			return ResultUtils.result(BizCode.CustomerNotExist);
 		}
 		LOGGER.info("======>>>>>saveOrder()入参："+request.toString());
 		
@@ -369,15 +373,15 @@ public class OrderServiceImpl implements IOrderService {
 	 */
 	@Override
 	public CommonResponse queryReceiveOrderList(OrderReceiveOrderListRequest request) {
-		if(request.getCustomerId() == null){
-			return ResultUtils.result(BizCode.CustomerNotExist);
-		}
 		if (request == null || request.getCustomerId() == null || request.getOrderStatus() == null ) {
 			throw new BizException(AccountBizReturnCode.paramError, "查询接收订单参数异常");
 		}
 		LOGGER.info("======>>>>>queryReceiveOrderList()入参："+request.toString());
 		Long  customerId =  request.getCustomerId();
-		
+		String customerJson = JedisUtil.get(RedisKeyConstants.USER_CUSTOMER_INFO+customerId);
+		if(StringUtils.isEmpty(customerJson)){
+			return ResultUtils.result(BizCode.CustomerNotExist);
+		}
 		Integer orderStatusParam = request.getOrderStatus();
 		List<Integer>  statusList = commonService.getReceiveOrderStatusList(orderStatusParam );
 		
@@ -409,13 +413,13 @@ public class OrderServiceImpl implements IOrderService {
 	 */
 	@Override
 	public CommonResponse querySendOrderList(OrderSendOrderListRequest request) {
-		if(request.getCustomerId() == null){
-			return ResultUtils.result(BizCode.CustomerNotExist);
-		}
 		if (request == null || request.getCustomerId() == null || request.getOrderStatus() == null) {
 			throw new BizException(AccountBizReturnCode.paramError, "查询发起订单参数异常");
 		}
-		
+		String customerJson = JedisUtil.get(RedisKeyConstants.USER_CUSTOMER_INFO+request.getCustomerId());
+		if(StringUtils.isEmpty(customerJson)){
+			return ResultUtils.result(BizCode.CustomerNotExist);
+		}
 		LOGGER.info("======>>>>>querySendOrderList()入参："+request.toString());
 		Long  customerId =  request.getCustomerId();
 		Integer orderStatusParam = request.getOrderStatus();
@@ -554,9 +558,6 @@ public class OrderServiceImpl implements IOrderService {
 	
 	@Override
 	public CommonResponse detailOrderForIM(DetailOrderForIMRequest request) {
-		if(request.getCustomerId() == null){
-			return ResultUtils.result(BizCode.CustomerNotExist);
-		}
 		if (request == null || request.getCustomerId() == null  || request.getServiceId() == null) {
 			throw new BizException(AccountBizReturnCode.paramError, "查询订单详情参数异常");
 		}

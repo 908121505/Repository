@@ -7,11 +7,13 @@ import com.honglu.quickcall.common.api.exchange.ResultUtils;
 import com.honglu.quickcall.common.core.util.UUIDUtils;
 import com.honglu.quickcall.user.facade.code.UserBizReturnCode;
 import com.honglu.quickcall.user.facade.entity.Blacklist;
+import com.honglu.quickcall.user.facade.entity.Customer;
 import com.honglu.quickcall.user.facade.exchange.request.editprofile.QueryBlacklistReq;
 import com.honglu.quickcall.user.facade.exchange.request.editprofile.RemoveBlacklistReq;
 import com.honglu.quickcall.user.facade.exchange.request.editprofile.SaveBlacklistReq;
 import com.honglu.quickcall.user.facade.vo.BlacklistVo;
 import com.honglu.quickcall.user.service.dao.BlacklistMapper;
+import com.honglu.quickcall.user.service.dao.CustomerMapper;
 import com.honglu.quickcall.user.service.service.BlacklistService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,11 +37,10 @@ public class BlacklistServiceimpl implements BlacklistService {
     @Autowired
     private BlacklistMapper blacklistMapper;
 
+    @Autowired
+    private CustomerMapper customerMapper;
     @Override
     public CommonResponse removeBlacklist(RemoveBlacklistReq params) {
-    	if(params.getCustomerId() == null){
-			return ResultUtils.result(BizCode.CustomerNotExist);
-		}
         CommonResponse commonResponse = new CommonResponse();
         if (params.getCustomerId() == null) {
             throw new BizException(UserBizReturnCode.paramError, "customerId不能为空");
@@ -47,6 +48,10 @@ public class BlacklistServiceimpl implements BlacklistService {
         if (params.getBlackCustomerId() == null) {
             throw new BizException(UserBizReturnCode.paramError, "blackCustomerId不能为空");
         }
+        Customer customer = customerMapper.selectByPrimaryKey(params.getCustomerId());
+		if(customer == null){
+			return ResultUtils.result(BizCode.CustomerNotExist);
+		}
 
         //逻辑删除
         int result = blacklistMapper.updateStatusById(params.getCustomerId(),params.getBlackCustomerId());
@@ -63,14 +68,15 @@ public class BlacklistServiceimpl implements BlacklistService {
 
     @Override
     public CommonResponse queryBlacklist(QueryBlacklistReq params) {
-    	if(params.getCustomerId() == null){
-			return ResultUtils.result(BizCode.CustomerNotExist);
-		}
         CommonResponse commonResponse = new CommonResponse();
         if (params.getCustomerId() == null) {
             throw new BizException(UserBizReturnCode.paramError, "customerId不能为空");
         }
 
+        Customer customer = customerMapper.selectByPrimaryKey(params.getCustomerId());
+		if(customer == null){
+			return ResultUtils.result(BizCode.CustomerNotExist);
+		}
         List<BlacklistVo> customerList = blacklistMapper.selectListByCustomerId(params.getCustomerId());
 
         commonResponse.setData(customerList);
@@ -81,9 +87,6 @@ public class BlacklistServiceimpl implements BlacklistService {
 
     @Override
     public CommonResponse saveBlacklist(SaveBlacklistReq params) {
-    	if(params.getCustomerId() == null){
-			return ResultUtils.result(BizCode.CustomerNotExist);
-		}
         CommonResponse commonResponse = new CommonResponse();
         if (params.getCustomerId() == null) {
             throw new BizException(UserBizReturnCode.paramError, "customerId不能为空");
@@ -91,6 +94,11 @@ public class BlacklistServiceimpl implements BlacklistService {
         if (params.getBlackCustomerId() == null) {
             throw new BizException(UserBizReturnCode.paramError, "blackCustomerId不能为空");
         }
+        Customer customer = customerMapper.selectByPrimaryKey(params.getCustomerId());
+		if(customer == null){
+			return ResultUtils.result(BizCode.CustomerNotExist);
+		}
+
         //先查询数据库中是否已存在
         int count = blacklistMapper.selectCountByCusIdAndBlackCusId(params.getCustomerId(), params.getBlackCustomerId());
         if(count > 0){

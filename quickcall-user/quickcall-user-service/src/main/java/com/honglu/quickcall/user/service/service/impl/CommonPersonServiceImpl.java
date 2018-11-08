@@ -260,10 +260,11 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 
 	@Override
 	public CommonResponse setHeardUrl(SetHeardUrlRequest params) {
-		CommonResponse response = new CommonResponse();
-		if (params.getCustomerId() == null) {
+		Customer customer = customerMapper.selectByPrimaryKey(params.getCustomerId());
+		if(customer == null){
 			return ResultUtils.result(BizCode.CustomerNotExist);
 		}
+		CommonResponse response = new CommonResponse();
 		String rongyunToken = null;
 		String img = params.getHeadPortraitUrl();
 		if (StringUtils.isNotBlank(params.getNickName()) && params.getCustomerId() != null) {
@@ -330,7 +331,6 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 		}
 		return ResultUtils.resultSuccess();
 	}
-
 	/**
 	 * 昵称规则校验
 	 *
@@ -658,12 +658,9 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 
 	@Override
 	public CommonResponse queryUserIdCardCertificationInfo(UserIdCardInfoRequest request) {
-		if (request.getCustomerId() == null) {
-			return ResultUtils.result(BizCode.CustomerNotExist);
-		}
 		Customer customer = customerMapper.queryUserIdCardCertificationInfo(request.getCustomerId());
 		if (customer == null) {
-			return ResultUtils.resultDataNotExist("用户数据不存在");
+			return ResultUtils.result(BizCode.CustomerNotExist);
 		}
 
 		if (customer.getIdentityStatus() == null) {
@@ -691,12 +688,9 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 
 	@Override
 	public CommonResponse saveUserCertificationInfo(SaveCertificationRequest request) {
-		if (request.getCustomerId() == null) {
-			return ResultUtils.result(BizCode.CustomerNotExist);
-		}
 		Customer customer = customerMapper.selectByPrimaryKey(request.getCustomerId());
 		if (customer == null) {
-			return ResultUtils.resultDataNotExist("用户数据不存在");
+			return ResultUtils.result(BizCode.CustomerNotExist);
 		}
 
 		Customer certifyCustomer = new Customer();
@@ -756,13 +750,10 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 
 	@Override
 	public CommonResponse saveDvVoiceInfo(SaveDvVoiceRequest request) {
-		if (request.getCustomerId() == null) {
-			return ResultUtils.result(BizCode.CustomerNotExist);
-		}
 		Long customerId = request.getCustomerId();
 		Customer customer = customerMapper.selectByPrimaryKey(customerId);
 		if (customer == null) {
-			return ResultUtils.resultDataNotExist("用户数据不存在");
+			return ResultUtils.result(BizCode.CustomerNotExist);
 		}
 		Customer record = new Customer();
 		record.setCustomerId(customerId);
@@ -775,12 +766,12 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 
 	@Override
 	public CommonResponse bindVXorQQ(BindVXorQQRequest request) {
-		if (request.getCustomerId() == null) {
-			return ResultUtils.result(BizCode.CustomerNotExist);
-		}
 		Customer param = new Customer();
 		Customer customer = new Customer();
-
+		Customer customers = customerMapper.selectByPrimaryKey(request.getCustomerId());
+		if(customers == null){
+			return ResultUtils.result(BizCode.CustomerNotExist);
+		}
 		// QQ判断
 		if (StringUtils.isNotBlank(request.getQqOpenId())) {
 			param.setQqOpenId(request.getQqOpenId());
@@ -802,13 +793,10 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 
 	@Override
 	public CommonResponse loginOut(LoginOutRequest request) {
-		if (request.getCustomerId() == null) {
-			return ResultUtils.result(BizCode.CustomerNotExist);
-		}
 		Long customerId = request.getCustomerId();
 		Customer customer = customerMapper.selectByPrimaryKey(customerId);
 		if (customer == null) {
-			return ResultUtils.resultDataNotExist("用户数据不存在");
+			return ResultUtils.result(BizCode.CustomerNotExist);
 		}
 		Customer cus = new Customer();
 		cus.setCustomerId(customerId);
@@ -819,9 +807,6 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 
 	@Override
 	public CommonResponse addSystemUser(AddSystemUserRequest request) {
-		if (request.getCustomerId() == null) {
-			return ResultUtils.result(BizCode.CustomerNotExist);
-		}
 		String rongyunToken = RongYunUtil.getToken(String.valueOf(request.getCustomerId()), request.getNickName(),
 				request.getPhoto());
 		Customer customer = new Customer();

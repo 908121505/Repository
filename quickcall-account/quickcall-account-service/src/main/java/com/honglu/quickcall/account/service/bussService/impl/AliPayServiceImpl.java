@@ -61,7 +61,8 @@ public class AliPayServiceImpl implements AliPayService {
 
 	@Override
 	public CommonResponse recharge(RechargeRequest packet) {
-		if(packet.getCustomerId() == null){
+		String customerJson = JedisUtil.get(RedisKeyConstants.USER_CUSTOMER_INFO+packet.getCustomerId());
+		if(StringUtils.isEmpty(customerJson)){
 			return ResultUtils.result(BizCode.CustomerNotExist);
 		}
 		String params = "";
@@ -113,7 +114,8 @@ public class AliPayServiceImpl implements AliPayService {
 
 	@Override
 	public CommonResponse whthdraw(WhthdrawRequest params) {
-		if(params.getCustomerId() == null){
+		String customerJson = JedisUtil.get(RedisKeyConstants.USER_CUSTOMER_INFO+params.getCustomerId());
+		if(StringUtils.isEmpty(customerJson)){
 			return ResultUtils.result(BizCode.CustomerNotExist);
 		}
 		Account account = accountMapper.queryAccount(params.getCustomerId());
@@ -170,7 +172,8 @@ public class AliPayServiceImpl implements AliPayService {
 
 	@Override
 	public CommonResponse bindAliaccount(BindAliaccountRequest params) {
-		if(params.getCustomerId() == null){
+		String customerJson = JedisUtil.get(RedisKeyConstants.USER_CUSTOMER_INFO+params.getCustomerId());
+		if(StringUtils.isEmpty(customerJson)){
 			return ResultUtils.result(BizCode.CustomerNotExist);
 		}
 		Aliacount acliacount = aliacountMapper.selectByPrimaryKey(params.getCustomerId());
