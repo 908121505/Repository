@@ -14,6 +14,7 @@
     <result column="service_unit" property="serviceUnit" jdbcType="VARCHAR" />
     <result column="service_price" property="servicePrice" jdbcType="DECIMAL" />
     <result column="order_amounts" property="orderAmounts" jdbcType="DECIMAL" />
+    <result column="coupon_price" property="couponPrice" jdbcType="DECIMAL" />
     <result column="discount_rate" property="discountRate" jdbcType="DECIMAL" />
     <result column="appoint_time" property="appointTime" jdbcType="TIMESTAMP" />
     <result column="cust_cancel_time" property="custCancelTime" jdbcType="TIMESTAMP" />
@@ -47,7 +48,7 @@
   
   <sql id="Base_Column_List" >
     order_id, order_no, customer_skill_id, skill_item_id,customer_id, service_id, trade_id, payment_type, 
-    order_num, service_unit, service_price, order_amounts, discount_rate, appoint_time,cust_cancel_time, 
+    order_num, service_unit, service_price, order_amounts, coupon_price,discount_rate, appoint_time,cust_cancel_time, 
     system_cancel_time, receive_order_time, start_service_time, appay_end_time, start_time, 
     end_time, expect_end_time,order_time,skill_type, order_status, payment_time, customer_is_evaluate, customer_message, 
     evaluate_start, customer_evaluate, order_describe, create_time, modify_time, create_man, 
@@ -73,7 +74,7 @@
     insert into orders (order_id, order_no, customer_skill_id, skill_item_id,
       customer_id, service_id, trade_id, 
       payment_type, order_num, service_unit, 
-      service_price, order_amounts, discount_rate, appoint_time,
+      service_price, order_amounts,coupon_price, discount_rate, appoint_time,
       cust_cancel_time, system_cancel_time, receive_order_time, 
       start_service_time, appay_end_time, start_time, 
       end_time, expect_end_time,order_time,skill_type, order_status, 
@@ -84,7 +85,7 @@
     values (#{orderId,jdbcType=BIGINT}, #{orderNo,jdbcType=BIGINT}, #{customerSkillId,jdbcType=BIGINT},  #{skillItemId,jdbcType=BIGINT}, 
       #{customerId,jdbcType=BIGINT}, #{serviceId,jdbcType=BIGINT}, #{tradeId,jdbcType=BIGINT}, 
       #{paymentType,jdbcType=TINYINT}, #{orderNum,jdbcType=INTEGER}, #{serviceUnit,jdbcType=VARCHAR}, 
-      #{servicePrice,jdbcType=DECIMAL}, #{orderAmounts,jdbcType=DECIMAL}, #{discountRate,jdbcType=DECIMAL}, 
+      #{servicePrice,jdbcType=DECIMAL}, #{orderAmounts,jdbcType=DECIMAL}, #{couponPrice,jdbcType=DECIMAL}, #{discountRate,jdbcType=DECIMAL}, 
       #{appointTime,jdbcType=TIMESTAMP}, #{custCancelTime,jdbcType=TIMESTAMP}, #{systemCancelTime,jdbcType=TIMESTAMP}, #{receiveOrderTime,jdbcType=TIMESTAMP}, 
       #{startServiceTime,jdbcType=TIMESTAMP}, #{appayEndTime,jdbcType=TIMESTAMP}, #{startTime,jdbcType=TIMESTAMP}, 
       #{endTime,jdbcType=TIMESTAMP},#{expectEndTime,jdbcType=TIMESTAMP}, #{orderTime,jdbcType=TIMESTAMP}, #{skillType,jdbcType=TINYINT}, #{orderStatus,jdbcType=TINYINT}, 
@@ -133,6 +134,9 @@
       </if>
       <if test="orderAmounts != null" >
         order_amounts,
+      </if>
+      <if test="couponPrice != null" >
+        coupon_price,
       </if>
       <if test="discountRate != null" >
         discount_rate,
@@ -240,6 +244,9 @@
       </if>
       <if test="orderAmounts != null" >
         #{orderAmounts,jdbcType=DECIMAL},
+      </if>
+      <if test="coupon_price != null" >
+        #{couponPrice,jdbcType=DECIMAL},
       </if>
       <if test="discountRate != null" >
         #{discountRate,jdbcType=DECIMAL},
@@ -352,6 +359,9 @@
       <if test="orderAmounts != null" >
         order_amounts = #{orderAmounts,jdbcType=DECIMAL},
       </if>
+      <if test="couponPrice != null" >
+        coupon_price = #{couponPrice,jdbcType=DECIMAL},
+      </if>
       <if test="discountRate != null" >
         discount_rate = #{discountRate,jdbcType=DECIMAL},
       </if>
@@ -443,6 +453,7 @@
       service_unit = #{serviceUnit,jdbcType=VARCHAR},
       service_price = #{servicePrice,jdbcType=DECIMAL},
       order_amounts = #{orderAmounts,jdbcType=DECIMAL},
+      coupon_price = #{couponPrice,jdbcType=DECIMAL},
       discount_rate = #{discountRate,jdbcType=DECIMAL},
       appoint_time = #{appointTime,jdbcType=TIMESTAMP},
       cust_cancel_time = #{custCancelTime,jdbcType=TIMESTAMP},
@@ -490,10 +501,7 @@
 	      od.order_time  AS  orderTime,
 	      od.receive_order_time  AS receiveOrderTime,
 	      od.customer_skill_id AS customerSkillId,
-		  cs.switch_status AS switchStatus,
-		  od.start_servie_time  AS  startServiceTime ,
-		  od.expect_end_time  AS expectEndTime
-		  
+		  cs.switch_status AS switchStatus
 	FROM
 		orders od LEFT JOIN   customer_skill  cs  ON  od.customer_skill_id  = cs.customer_skill_id
 	        LEFT JOIN   skill_item   st ON  cs.skill_item_id  =  st.id
@@ -527,9 +535,7 @@
 		od.order_time AS orderTime,
 		od.receive_order_time AS receiveOrderTime,
 		od.customer_skill_id AS customerSkillId,
-		cs.switch_status AS switchStatus,
-		od.start_servie_time  AS  startServiceTime ,
-		od.expect_end_time  AS expectEndTime
+		cs.switch_status AS switchStatus
 	FROM
 		orders od
 	LEFT JOIN customer_skill cs ON od.customer_skill_id = cs.customer_skill_id
@@ -573,8 +579,8 @@
 	  		od.receive_order_time AS receiveOrderTime,
 	  		od.remark as  remark,
 	  		od.discount_rate  as discountRate,
-	  		od.start_servie_time  AS  startServiceTime ,
-		    od.expect_end_time  AS expectEndTime
+	  		od.coupon_price  as  couponPrice,
+	  		od.appoint_start_time  as  appointStartTime
 			
 		FROM
 			orders od
@@ -609,8 +615,8 @@
 		od.receive_order_time AS receiveOrderTime,
 		od.remark as  remark,
 		od.discount_rate  as discountRate,
-		od.start_servie_time  AS  startServiceTime ,
-		od.expect_end_time  AS expectEndTime
+		od.coupon_price  as  couponPrice,
+		od.appoint_start_time  as  appointStartTime
 	FROM
 		orders od
 	INNER JOIN customer ct ON ct.customer_id = od.service_id
@@ -717,7 +723,6 @@
 		AND order_status IN 
 		<foreach collection="list"  item="orderStatus"  open="("  close=")"  separator=","  >
 		#{orderStatus}
-		
 		</foreach>
   </select>
   <!-- 查询客户信息 -->
@@ -773,16 +778,8 @@
       #{orderId}
     </foreach>
   </update>
-
-  <!-- 查询声优是否被客户关注 -->
-  <select id="findServicerIsAttentioned" resultType="integer">
-    SELECT COUNT(1) FROM `fans` WHERE anchor_id=#{serviceId} AND fans_id=#{customerId} AND attention_state = 1;
-  </select>
-
-  <!-- 插入订单服务者的粉丝 -->
-  <insert id="insertOrderServicerFans">
-    INSERT INTO fans (id, anchor_id, fans_id, attention_state)
-    VALUES(#{id}, #{serviceId}, #{customerId}, 1)
-    ON DUPLICATE KEY UPDATE attention_state = 1
-  </insert>
+  
+  
+  
+  
 </mapper>

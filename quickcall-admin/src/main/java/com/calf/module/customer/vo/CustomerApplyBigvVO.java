@@ -1,16 +1,22 @@
-package com.calf.module.customer.entity;
+package com.calf.module.customer.vo;
 
 import java.util.Date;
 
 /**
- * 客户申请大V实体
+ * 客户申请大V VO
  *
  * @Auther: Sunju
  * @Date: 2018/11/7 13:47
  */
-public class CustomerApplyBigv {
+public class CustomerApplyBigvVO {
 	// 主键(15位时间+4位随机数)
 	private String applyId;
+	// appId
+	private String appId;
+	// 用户昵称
+	private String nickName;
+	// 手机
+	private Long phone;
 	// 关联客户ID
 	private String customerId;
 	//处理状态(0=未联系,1=已联系)
@@ -27,8 +33,6 @@ public class CustomerApplyBigv {
 	private String modifyTime;
 	//备注
 	private String remark;
-	//原处理状态
-	private String oldHandleStatus;
 
 	public String getApplyId() {
 		return applyId;
@@ -36,6 +40,30 @@ public class CustomerApplyBigv {
 
 	public void setApplyId(String applyId) {
 		this.applyId = applyId;
+	}
+
+	public String getAppId() {
+		return appId;
+	}
+
+	public void setAppId(String appId) {
+		this.appId = appId;
+	}
+
+	public String getNickName() {
+		return nickName;
+	}
+
+	public void setNickName(String nickName) {
+		this.nickName = nickName;
+	}
+
+	public Long getPhone() {
+		return phone;
+	}
+
+	public void setPhone(Long phone) {
+		this.phone = phone;
 	}
 
 	public String getCustomerId() {
@@ -100,13 +128,5 @@ public class CustomerApplyBigv {
 
 	public void setRemark(String remark) {
 		this.remark = remark;
-	}
-
-	public String getOldHandleStatus() {
-		return oldHandleStatus;
-	}
-
-	public void setOldHandleStatus(String oldHandleStatus) {
-		this.oldHandleStatus = oldHandleStatus;
 	}
 }

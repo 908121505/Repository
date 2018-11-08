@@ -25,7 +25,7 @@ public class CustomerVisitServiceImpl implements CustomerVisitService {
 	@Override
 	public CommonResponse queryRecentVisitList(RecentVisitRequest params) {
 		//现在时间
-		Date now = new Date(params.getStartTime());
+		Date now = new Date();
 		//获得30天前的时间
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(now);
@@ -41,6 +41,10 @@ public class CustomerVisitServiceImpl implements CustomerVisitService {
 			size = params.getPageSize();
 		}
 		List<Map<String,Object>> ls = customerVisitMapper.queryCustomerVisitList(before, now, customerId, start, size);
+		
+		if(start == null || start == 0){
+			customerVisitMapper.updateReadStatus(now, customerId);
+		}
 		
 		return ResultUtils.resultSuccess(ls);
 	}
