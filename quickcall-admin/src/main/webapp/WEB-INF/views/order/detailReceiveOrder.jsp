@@ -8,6 +8,7 @@
 <script type="text/javascript" language="javascript" src="resources/bootstrap/js/bootstrap-datetimepicker.min.js"  charset="utf-8"></script>
 
 
+
 <div class="modal-dialog">
 	<div class="modal-content">
 		<div class="modal-header">
@@ -60,12 +61,14 @@
 						<input type="text" id="discountType" class="form-control"  name="discountType" readonly="readonly" value="${entity.discountType}">
 					</div>
 				</div>
-				<div class="form-group">
+
+
+				<%--<div class="form-group">
 					<label class="col-sm-3 control-label">结束时间<font color="red">&nbsp;*</font></label>
 					<div class="col-sm-6">
 						<input type="text" id="endTime" class="form-control"  name="endTime" readonly="readonly" value="${entity.endTime}">
 					</div>
-				</div>
+				</div>--%>
 				<div class="form-group">
 					<label class="col-sm-3 control-label">创建时间<font color="red">&nbsp;*</font></label>
 					<div class="col-sm-6">
