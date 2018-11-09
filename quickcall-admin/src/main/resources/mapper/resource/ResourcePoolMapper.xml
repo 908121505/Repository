@@ -31,7 +31,7 @@
   <select id="selectPageList" resultType="com.calf.module.resource.vo.ResourcePoolVo" parameterType="map" >
     select
     id, resource_name as resourceName, sound_total as soundTotal
-    , (select count(1) from resource_config rc where rc.resource_pool_id=rp.id) as activeStatus
+    , (select count(1) from resource_config rc where rc.resource_pool_id=rp.id and rc.strategy !=1) as activeStatus
     from resource_pool rp
     where 1 = 1
     <if test="status != null" >

@@ -166,7 +166,7 @@
                         "sTitle":"接单状态",
                         'sClass':"text-center",
                     },
-					{
+					/*{
 						"data" : "endTime",
 						"sTitle" : "结束时间",
 						'sClass' : "text-center",
@@ -177,7 +177,8 @@
                                 return '--';
                             }
                         }
-					},
+					}*/
+					,
                     {
                         "data": "serviceUnit",
                         "sTitle":"单价（次/音符、半小时/音符、小时/音符）",
