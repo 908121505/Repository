@@ -97,6 +97,8 @@ public class FrozenSteamJob {
 					userFrozenValue = StringUtils.join(arys, ",");
 					if (userFrozenValue.length() > 0) {
 						JedisUtil.set(userFrozenkey, userFrozenValue);
+					} else {
+						JedisUtil.del(userFrozenkey);
 					}
 				} else {
 					logger.error("订单异常,不存在冻结金额流水 异常用户Id:" + account.getCustomerId());

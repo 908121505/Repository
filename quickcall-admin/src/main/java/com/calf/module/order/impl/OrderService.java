@@ -1,5 +1,22 @@
 package com.calf.module.order.impl;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.ui.Model;
+
 import com.calf.cn.entity.DataTables;
 import com.calf.cn.service.BaseManager;
 import com.calf.cn.utils.DateUtil;
@@ -9,45 +26,44 @@ import com.calf.module.common.impl.CommonUtilService;
 import com.calf.module.customer.entity.Customer;
 import com.calf.module.enums.OrderStatusEnums;
 import com.calf.module.enums.SmallOrderStatusEnums;
-import com.calf.module.order.entity.*;
+import com.calf.module.order.entity.Account;
+import com.calf.module.order.entity.CustomerSkill;
+import com.calf.module.order.entity.Order;
+import com.calf.module.order.entity.Orders;
+import com.calf.module.order.entity.Skill;
+import com.calf.module.order.entity.SkillItem;
+import com.calf.module.order.entity.TradeDetail;
 import com.calf.module.order.vo.OrderStatusVO;
 import com.calf.module.order.vo.OrderVO;
 import com.calf.module.order.vo.SmallOrderStatusVO;
 import com.honglu.quickcall.account.facade.constants.OrderSkillConstants;
+import com.honglu.quickcall.common.api.util.JedisUtil;
+import com.honglu.quickcall.common.api.util.RedisKeyConstants;
 import com.honglu.quickcall.common.core.util.UUIDUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.ui.Model;
-
-import javax.servlet.http.HttpServletRequest;
-import java.math.BigDecimal;
-import java.util.*;
 
 @Service("orderService")
 public class OrderService {
 
 	@Autowired
-	private BaseManager  baseManager;
+	private BaseManager baseManager;
 	@Autowired
-	private CommonUtilService  commonUtilService;
-
+	private CommonUtilService commonUtilService;
 
 	@SuppressWarnings("unchecked")
 	public DataTables<OrderVO> getOrderPageList(HttpServletRequest request) {
-		
-		HashMap<String,Object> parameters = (HashMap<String, Object>) SearchUtil.convertorEntitysToMap(request.getParameterMap());
-		
+
+		HashMap<String, Object> parameters = (HashMap<String, Object>) SearchUtil
+				.convertorEntitysToMap(request.getParameterMap());
+
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		paramMap.put("orderId", parameters.get("orderId"));
 		paramMap.put("custNickName", parameters.get("custNickName"));
 		paramMap.put("servNickName", parameters.get("servNickName"));
 		paramMap.put("orderType", parameters.get("orderType"));
-		
-		//接单人手机号码
+
+		// 接单人手机号码
 		paramMap.put("servicePhone", parameters.get("servicePhone"));
-		//下单人手机号码
+		// 下单人手机号码
 		paramMap.put("customerPhone", parameters.get("customerPhone"));
 		paramMap.put("orderType", parameters.get("orderType"));
 		paramMap.put("iDisplayStart", parameters.get("iDisplayStart"));
@@ -60,46 +76,42 @@ public class OrderService {
 
 	/**
 	 * 分页查询订单
+	 * 
 	 * @param request
 	 * @return
 	 */
 	public DataTables<OrderVO> queryOrderPageList(HttpServletRequest request) {
-		HashMap<String,Object> parameters = (HashMap<String, Object>) SearchUtil.convertorEntitysToMap(request.getParameterMap());
+		HashMap<String, Object> parameters = (HashMap<String, Object>) SearchUtil
+				.convertorEntitysToMap(request.getParameterMap());
 		Map<String, Object> paramMap = new HashMap<String, Object>();
-		paramMap.put("orderId",parameters.get("orderId"));
-		paramMap.put("placeOrderId",parameters.get("placeOrderId"));
-		paramMap.put("receivedOrderId",parameters.get("receivedOrderId"));
-		paramMap.put("startTime",parameters.get("startTime"));
-		paramMap.put("endTime",parameters.get("endTime"));
-		
-		String  placeOrderUserNickName = (String) parameters.get("placeOrderUserNickName");
-		if(StringUtils.isNotBlank(placeOrderUserNickName)){
-			placeOrderUserNickName =  placeOrderUserNickName.trim();
-		}
-		paramMap.put("placeOrderUserNickName",placeOrderUserNickName);
-		
-		String receiveOrderUserNickName = (String) parameters.get("receiveOrderUserNickName");
-		if(StringUtils.isNotBlank(receiveOrderUserNickName)){
-			receiveOrderUserNickName =  receiveOrderUserNickName.trim();
-		}
-		paramMap.put("receiveOrderUserNickName",receiveOrderUserNickName);
+		paramMap.put("orderId", parameters.get("orderId"));
+		paramMap.put("placeOrderId", parameters.get("placeOrderId"));
+		paramMap.put("receivedOrderId", parameters.get("receivedOrderId"));
+		paramMap.put("startTime", parameters.get("startTime"));
+		paramMap.put("endTime", parameters.get("endTime"));
 
-		
-		//接单人手机号码
+		String placeOrderUserNickName = (String) parameters.get("placeOrderUserNickName");
+		if (StringUtils.isNotBlank(placeOrderUserNickName)) {
+			placeOrderUserNickName = placeOrderUserNickName.trim();
+		}
+		paramMap.put("placeOrderUserNickName", placeOrderUserNickName);
+
+		String receiveOrderUserNickName = (String) parameters.get("receiveOrderUserNickName");
+		if (StringUtils.isNotBlank(receiveOrderUserNickName)) {
+			receiveOrderUserNickName = receiveOrderUserNickName.trim();
+		}
+		paramMap.put("receiveOrderUserNickName", receiveOrderUserNickName);
+
+		// 接单人手机号码
 		paramMap.put("servicePhone", parameters.get("servicePhone"));
-		//下单人手机号码
+		// 下单人手机号码
 		paramMap.put("customerPhone", parameters.get("customerPhone"));
-		
-		
-		
-		
-		
-		
-		String orderStatus = (String)parameters.get("orderStatus");
-		String serviceType = (String)parameters.get("serviceType");
-		String discountType = (String)parameters.get("discountTypeVal");
-		if (serviceType !=null && (!serviceType.equals("-1"))){
-			paramMap.put("serviceType",parameters.get("serviceType"));
+
+		String orderStatus = (String) parameters.get("orderStatus");
+		String serviceType = (String) parameters.get("serviceType");
+		String discountType = (String) parameters.get("discountTypeVal");
+		if (serviceType != null && (!serviceType.equals("-1"))) {
+			paramMap.put("serviceType", parameters.get("serviceType"));
 		}
 		if (orderStatus !=null && (!orderStatus.equals("-1"))){
 			OrderStatusEnums order = OrderStatusEnums.getOrderStautsEnums(orderStatus);
@@ -107,33 +119,35 @@ public class OrderService {
 			String[] items = smallOrderItem.split(",");
 			paramMap.put("orderStatus",Arrays.asList(items));
 //			paramMap.put("orderStatus",parameters.get("orderStatus"));
+		if (orderStatus != null && (!orderStatus.equals("-1"))) {
+			paramMap.put("orderStatus", parameters.get("orderStatus"));
 		}
-		if (discountType !=null && (!discountType.equals("-1"))){
+		if (discountType != null && (!discountType.equals("-1"))) {
 			String[] discountTypes = discountType.split("-");
-			paramMap.put("discountTypeMin",discountTypes[0]);
-			paramMap.put("discountTypeMax",discountTypes[1]);
+			paramMap.put("discountTypeMin", discountTypes[0]);
+			paramMap.put("discountTypeMax", discountTypes[1]);
 		}
 		paramMap.put("iDisplayStart", parameters.get("iDisplayStart"));
 		paramMap.put("iDisplayLength", parameters.get("iDisplayLength"));
 		List<OrderVO> skillList = baseManager.query("Order.queryPageList", paramMap);
-		for(OrderVO vo:skillList){
+		for (OrderVO vo : skillList) {
 			if (StringUtils.isNotBlank(vo.getDiscountType())) {
 				double dis = Double.parseDouble(vo.getDiscountType());
 				dis = dis * 10;
 				vo.setDiscountType(dis + "%");
 			}
-            SmallOrderStatusEnums status =SmallOrderStatusEnums.getSmallOrderStatusEnums(vo.getOrderStatus());
-			if (status!=null){
-                vo.setOrderStatusVal(status.getDesc());
-            }
+			SmallOrderStatusEnums status = SmallOrderStatusEnums.getSmallOrderStatusEnums(vo.getOrderStatus());
+			if (status != null) {
+				vo.setOrderStatusVal(status.getDesc());
+			}
 		}
 		String sEcho = (String) parameters.get("sEcho");
 		int total = baseManager.get("Order.selectCount", paramMap);
 		return new DataTables<OrderVO>(sEcho, skillList, skillList.size(), total);
 	}
 
-	public List<OrderStatusVO> getOrderStatusList(){
-		//获取订单状态
+	public List<OrderStatusVO> getOrderStatusList() {
+		// 获取订单状态
 		List<OrderStatusVO> statusVOS = new ArrayList<>();
 		for (OrderStatusEnums orderStatusEnums : OrderStatusEnums.values()) {
 			OrderStatusVO vo = new OrderStatusVO();
@@ -145,8 +159,8 @@ public class OrderService {
 		return statusVOS;
 	}
 
-	public List<SmallOrderStatusVO> getSamllOrderStatusList(){
-		//获取小类订单状态
+	public List<SmallOrderStatusVO> getSamllOrderStatusList() {
+		// 获取小类订单状态
 		List<SmallOrderStatusVO> statusVOS = new ArrayList<>();
 		for (SmallOrderStatusEnums orderStatusEnums : SmallOrderStatusEnums.values()) {
 			SmallOrderStatusVO vo = new SmallOrderStatusVO();
@@ -158,170 +172,312 @@ public class OrderService {
 		return statusVOS;
 	}
 
-	public List<SkillItem> getSkillItemsList(){
-		//获取服务类型
-		List<SkillItem> skillItems = baseManager.query("SkillItem.selectAll",null);
+	public List<SkillItem> getSkillItemsList() {
+		// 获取服务类型
+		List<SkillItem> skillItems = baseManager.query("SkillItem.selectAll", null);
 		return skillItems;
 	}
 
 	public void getOrderDetail(Model model, String id) {
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		paramMap.put("orderId", id);
-		Order order = baseManager.get("Order.selectByPrimaryKey",  paramMap);
+		Order order = baseManager.get("Order.selectByPrimaryKey", paramMap);
 		model.addAttribute("entity", order);
 	}
 
 	public OrderVO queryOrderDetail(Model model, String id) {
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		paramMap.put("orderId", id);
-		OrderVO order = baseManager.get("Order.queryOrderDetail",  paramMap);
-        SmallOrderStatusEnums status = SmallOrderStatusEnums.getSmallOrderStatusEnums(order.getOrderStatus());
-        if (status==null) {
+		OrderVO order = baseManager.get("Order.queryOrderDetail", paramMap);
+		SmallOrderStatusEnums status = SmallOrderStatusEnums.getSmallOrderStatusEnums(order.getOrderStatus());
+		if (status == null) {
 			order.setOrderStatusVal(order.getOrderStatus());
-		}else{
+		} else {
 			order.setOrderStatusVal(status.getDesc());
 			String[] cancels = OrderStatusEnums.Cancel.getSubset().split(",");
 			boolean isShow = false;
-			for (String can:cancels){
-				if (can.equals(status.getValue())){
+			for (String can : cancels) {
+				if (can.equals(status.getValue())) {
 					isShow = true;
 					break;
 				}
 			}
 			model.addAttribute("isShow", isShow);
 		}
-        
-        Integer  orderStatus = Integer.valueOf(order.getOrderStatus());
-        
-        Integer   selectFlag = null ;
-        if(orderStatus < 29 ){
-        	//可以强制取消
-        	selectFlag = 1 ;
-        }else if(orderStatus == OrderSkillConstants.ORDER_STATUS_CANCEL_FORCE ||   orderStatus == OrderSkillConstants.ORDER_STATUS_FINISHED_FORCE){
-        	//已经强制取消或者强制完成	
-        	selectFlag = 3 ;
-        }else{
-        	//可以强制完成
-        	selectFlag = 2 ;
-        }
-        
-        model.addAttribute("selectFlag", selectFlag);
-        
 
-        model.addAttribute("entity", order);
-        return order;
+		Integer orderStatus = Integer.valueOf(order.getOrderStatus());
+
+		Integer selectFlag = null;
+		if (orderStatus < 29) {
+			// 可以强制取消
+			selectFlag = 1;
+		} else if (orderStatus == OrderSkillConstants.ORDER_STATUS_CANCEL_FORCE
+				|| orderStatus == OrderSkillConstants.ORDER_STATUS_FINISHED_FORCE) {
+			// 已经强制取消或者强制完成
+			selectFlag = 3;
+		} else {
+			// 可以强制完成
+			selectFlag = 2;
+		}
+
+		model.addAttribute("selectFlag", selectFlag);
+
+		model.addAttribute("entity", order);
+		return order;
 	}
 
 	public int saveAdd(OrderVO entity) {
-		//根据名称获取公司信息
-		Skill  skill =  new Skill();
-		Long  id = UUIDUtils.getId();
+		// 根据名称获取公司信息
+		Skill skill = new Skill();
+		Long id = UUIDUtils.getId();
 		BeanUtils.copyProperties(entity, skill);
-		skill.setId(id+"");
+		skill.setId(id + "");
 		skill.setCreateMan(commonUtilService.getCurrUser());
-		skill.setSkillStatus(0);//有效
+		skill.setSkillStatus(0);// 有效
 		skill.setCreateTime(new Date());
 		baseManager.insert(skill);
 		return 0;
 	}
 
-    /**
-     * 添加订单
-     * @param entity
-     * @return
-     */
-    public int addOrder(OrderVO entity) {
-        Map<String, Object> paramMap = new HashMap<String, Object>();
-        paramMap.put("customerId", entity.getPlaceOrderId());
-		Customer customer = baseManager.get("Customer.selectByPrimaryKey",paramMap);
+	/**
+	 * 添加订单
+	 * 
+	 * @param entity
+	 * @return
+	 */
+	public int addOrder(OrderVO entity) {
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+		paramMap.put("customerId", entity.getPlaceOrderId());
+		Customer customer = baseManager.get("Customer.selectByPrimaryKey", paramMap);
 		Map<String, Object> paramMap1 = new HashMap<String, Object>();
 		paramMap1.put("customerId", entity.getReceivedOrderId());
-		List<CustomerSkill> skillList = baseManager.query("CustomerSkill.queryCustomerSkill",paramMap1);
-        if (customer == null){
-            //不存在下单用户
-            return 0;
-        }
-        if (skillList==null||skillList.size()<=0){
-            //接单用户不存在技能
-            return 0;
-        }
-        CustomerSkill skill = skillList.get(0);
-        Orders order = new Orders();
-        String orderId = DateUtil.dateFormat(new Date(), "yyyyMMddHHmmss")+ RadomUtil.generateNumber2(4);
-        order.setOrderId(Long.parseLong(orderId));
-        order.setOrderNo(Long.parseLong(orderId));
-        order.setCustomerSkillId(skill.getCustomerSkillId());
-        order.setCustomerId(Long.parseLong(entity.getPlaceOrderId()));
+		List<CustomerSkill> skillList = baseManager.query("CustomerSkill.queryCustomerSkill", paramMap1);
+		if (customer == null) {
+			// 不存在下单用户
+			return 0;
+		}
+		if (skillList == null || skillList.size() <= 0) {
+			// 接单用户不存在技能
+			return 0;
+		}
+		CustomerSkill skill = skillList.get(0);
+		Orders order = new Orders();
+		String orderId = DateUtil.dateFormat(new Date(), "yyyyMMddHHmmss") + RadomUtil.generateNumber2(4);
+		order.setOrderId(Long.parseLong(orderId));
+		order.setOrderNo(Long.parseLong(orderId));
+		order.setCustomerSkillId(skill.getCustomerSkillId());
+		order.setCustomerId(Long.parseLong(entity.getPlaceOrderId()));
 
-		if (StringUtils.isNotBlank(entity.getOrderAmount())&&
-				StringUtils.isNotBlank(entity.getOrderNum())&&
-				StringUtils.isNotBlank(entity.getDiscountType())&&
-				(!"-1".equals(entity.getDiscountType()))){
+		if (StringUtils.isNotBlank(entity.getOrderAmount()) && StringUtils.isNotBlank(entity.getOrderNum())
+				&& StringUtils.isNotBlank(entity.getDiscountType()) && (!"-1".equals(entity.getDiscountType()))) {
 			double amount = Double.parseDouble(entity.getOrderAmount());
 			double num = Double.parseDouble(entity.getOrderNum());
-			double rate = Integer.parseInt(entity.getDiscountType())*0.1;
+			double rate = Integer.parseInt(entity.getDiscountType()) * 0.1;
 			double amountS = amount * num;
 			double amountSum = amountS * rate;
 			order.setOrderAmounts(new BigDecimal(amountSum));
 		}
-        byte status = (byte) Integer.parseInt(entity.getOrderStatus());
-        order.setOrderStatus(status);
-        order.setServiceId(skill.getCustomerId());
-        order.setServicePrice(new BigDecimal(entity.getOrderAmount()));
-        order.setOrderNum(Integer.parseInt(entity.getOrderNum()));
-        order.setDiscountRate(new BigDecimal(entity.getDiscountType()));
-        order.setStartTime(DateUtil.StrToDate(entity.getStartTime(),"yyyy-MM-dd HH:mm:dd"));
-        order.setEndTime(DateUtil.StrToDate(entity.getEndTime(),"yyyy-MM-dd HH:mm:dd"));
-        order.setCreateTime(new Date());
-        int insert = baseManager.insert(order);
-        return insert;
-    }
+		byte status = (byte) Integer.parseInt(entity.getOrderStatus());
+		order.setOrderStatus(status);
+		order.setServiceId(skill.getCustomerId());
+		order.setServicePrice(new BigDecimal(entity.getOrderAmount()));
+		order.setOrderNum(Integer.parseInt(entity.getOrderNum()));
+		order.setDiscountRate(new BigDecimal(entity.getDiscountType()));
+		order.setStartTime(DateUtil.StrToDate(entity.getStartTime(), "yyyy-MM-dd HH:mm:dd"));
+		order.setEndTime(DateUtil.StrToDate(entity.getEndTime(), "yyyy-MM-dd HH:mm:dd"));
+		order.setCreateTime(new Date());
+		int insert = baseManager.insert(order);
+		return insert;
+	}
 
-    /**
-     * 修改订单
-     * @param entity
-     * @return
-     */
-    public int updateOrder(OrderVO entity) {
-        Map<String, Object> paramMap = new HashMap<String, Object>();
-        paramMap.put("orderId", entity.getOrderId());
+	/**
+	 * 修改订单
+	 * 
+	 * @param entity
+	 * @return
+	 */
+	public int updateOrder(OrderVO entity) {
+
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+		paramMap.put("orderId", entity.getOrderId());
 		paramMap.put("remarkReason", entity.getRemarkReason());
-		
+
 		Integer orderStatus = Integer.valueOf(entity.getOrderStatus());
-		//TODO 添加退款给用户 + 冻结大V金额
-		//强制取消
-		if(OrderSkillConstants.ORDER_STATUS_CANCEL_FORCE == orderStatus){
+		// TODO 添加退款给用户 + 冻结大V金额 // 强制取消
+		if (OrderSkillConstants.ORDER_STATUS_CANCEL_FORCE == orderStatus) {
 			paramMap.put("orderStatus", orderStatus);
-			baseManager.update("Account.inAccount",  paramMap);
-			//退款给用户
-		}else if(OrderSkillConstants.ORDER_STATUS_FINISHED_FORCE == orderStatus){
-			//给大V冻结金额
+			baseManager.update("Account.inAccount", paramMap);
+			// 退款给用户
+		} else if (OrderSkillConstants.ORDER_STATUS_FINISHED_FORCE == orderStatus) { // 给大V冻结金额
 			paramMap.put("orderStatus", orderStatus);
 		}
-		
-		
-		int update = baseManager.update("Order.updateOrder",  paramMap);
-        return update;
-    }
+
+		int update = baseManager.update("Order.updateOrder", paramMap);
+
+		return 0;
+	}
 
 	public int saveUpdate(OrderVO entity) {
-		Skill  skill =  new Skill();
+		Skill skill = new Skill();
 		BeanUtils.copyProperties(entity, skill);
 		skill.setModifyMan(commonUtilService.getCurrUser());
 		skill.setModifyTime(new Date());
 		baseManager.update(skill);
 		return 0;
 	}
-	
-	
-	public void  inAccount(){
-		
+
+	public void inAccount() {
+
 	}
 
-	
-	
-	
-	
+	/**
+	 * 强制完成
+	 * 
+	 * @param orderNo
+	 * @return
+	 */
+	@Transactional
+	public int compulsoryCompletion(Long orderId, BigDecimal amount) {
+		boolean flag = false;
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("orderId", orderId);
+		Orders order = baseManager.get("Orders.selectByPrimaryKey", map);
 
-	
+		map.put("userId", order.getServiceId());
+		Account account = baseManager.get("Account.queryAccount", map);
+		if (account.getFrozenAmounts().compareTo(amount) == -1) {
+
+			return -1;
+		}
+		map.put("orderNo", order.getOrderNo());
+		TradeDetail tradeDetail = baseManager.get("TradeDetail.selectFrozenByOrderNo", map);
+
+		String userFrozenkey = RedisKeyConstants.ACCOUNT_USERFROZEN_USER + order.getServiceId();
+		String steamFrozenKey = RedisKeyConstants.ACCOUNT_USERFROZEN_STREAM + tradeDetail.getTradeId();
+		String steamFrozenValue = JedisUtil.get(steamFrozenKey);
+		String userFrozenValue = JedisUtil.get(userFrozenkey);
+		if (StringUtils.isNotBlank(userFrozenValue) && StringUtils.isNotBlank(steamFrozenValue)) {
+			if (userFrozenValue.contains(steamFrozenValue)) {
+				flag = true;
+				JedisUtil.del(steamFrozenKey);
+				String[] arys = userFrozenValue.split(",");
+				arys = remove(arys, tradeDetail.getTradeId() + "");
+				userFrozenValue = StringUtils.join(arys, ",");
+				if (userFrozenValue.length() > 0) {
+					JedisUtil.set(userFrozenkey, userFrozenValue);
+				} else {
+					JedisUtil.del(userFrozenkey);
+				}
+			}
+		}
+
+		// 冻结流水正常 开始强制完成逻辑
+		if (flag) {
+			// 入账
+			Map<String, Object> pram = new HashMap<String, Object>();
+			pram.put("type", 3);
+			pram.put("amount", amount);
+			pram.put("userId", order.getServiceId());
+			baseManager.update("Account.outAccount", pram);
+			// 记录流水
+			tradeDetail = new TradeDetail();
+			tradeDetail.setTradeId(UUIDUtils.getId());
+			tradeDetail.setOrderNo(order.getOrderNo());
+			tradeDetail.setCustomerId(order.getServiceId());
+			tradeDetail.setCreateTime(new Date());
+			tradeDetail.setType(8);
+			tradeDetail.setInPrice(amount);
+			baseManager.insert("TradeDetail.insertSelective", tradeDetail);
+			return 1;
+		}
+		return 0;
+
+	}
+
+	/**
+	 * 数组删除一个元素
+	 * 
+	 * @param arr
+	 * @param str
+	 * @return
+	 */
+	private static String[] remove(String[] arr, String str) {
+		String[] tmp = new String[arr.length - 1];
+		int idx = 0;
+		boolean hasRemove = false;
+		for (int i = 0; i < arr.length; i++) {
+
+			if (!hasRemove && arr[i] == str) {
+				hasRemove = true;
+				continue;
+			}
+
+			tmp[idx++] = arr[i];
+		}
+
+		return tmp;
+	}
+
+	/**
+	 * 强制取消
+	 * 
+	 * @param orderNo
+	 * @return
+	 */
+	@Transactional
+	public int compulsoryCancellation(Long orderId, BigDecimal amount) {
+		boolean flag = false;
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("orderId", orderId);
+		Orders order = baseManager.get("Orders.selectByPrimaryKey", map);
+
+		map.put("userId", order.getServiceId());
+		Account account = baseManager.get("Account.queryAccount", map);
+		if (account.getFrozenAmounts().compareTo(amount) == -1) {
+			return -1;
+		}
+		map.put("orderNo", order.getOrderNo());
+		TradeDetail tradeDetail = baseManager.get("TradeDetail.selectFrozenByOrderNo", map);
+
+		String userFrozenkey = RedisKeyConstants.ACCOUNT_USERFROZEN_USER + order.getServiceId();
+		String steamFrozenKey = RedisKeyConstants.ACCOUNT_USERFROZEN_STREAM + tradeDetail.getTradeId();
+		String steamFrozenValue = JedisUtil.get(steamFrozenKey);
+		String userFrozenValue = JedisUtil.get(userFrozenkey);
+		if (StringUtils.isNotBlank(userFrozenValue) && StringUtils.isNotBlank(steamFrozenValue)) {
+			if (userFrozenValue.contains(steamFrozenValue)) {
+				flag = true;
+				JedisUtil.del(steamFrozenKey);
+				String[] arys = userFrozenValue.split(",");
+				arys = remove(arys, tradeDetail.getTradeId() + "");
+				userFrozenValue = StringUtils.join(arys, ",");
+				if (userFrozenValue.length() > 0) {
+					JedisUtil.set(userFrozenkey, userFrozenValue);
+				} else {
+					JedisUtil.del(userFrozenkey);
+				}
+			}
+		}
+
+		// 冻结流水正常 开始强制完成逻辑
+		if (flag) {
+			// 入账
+			Map<String, Object> pram = new HashMap<String, Object>();
+			pram.put("type", 1);
+			pram.put("amount", amount);
+			pram.put("userId", order.getCustomerId());
+			baseManager.update("Account.inAccount", pram);
+			// 记录流水
+			tradeDetail = new TradeDetail();
+			tradeDetail.setTradeId(UUIDUtils.getId());
+			tradeDetail.setOrderNo(order.getOrderNo());
+			tradeDetail.setCustomerId(order.getServiceId());
+			tradeDetail.setCreateTime(new Date());
+			tradeDetail.setType(5);
+			tradeDetail.setInPrice(amount);
+			baseManager.insert("TradeDetail.insertSelective", tradeDetail);
+			return 1;
+		}
+		return 0;
+	}
+
 }
