@@ -341,7 +341,8 @@ public class OrderServiceImpl implements IOrderService {
 			for (OrderReceiveOrderListVO info : resultList) {
 				OrderTempResponseVO  responseVO = commonService.getCountDownSeconds(info.getOrderStatus(), info.getOrderTime(), info.getReceiveOrderTime());
 				info.setCountDownSeconds(responseVO.getCountDownSeconds());
-				info.setOrderStatus(responseVO.getOrderStatus());
+				//TODO 兼容测试，需回滚
+				info.setOrderStatus(setOrderStatus(responseVO.getOrderStatus()));
 				//TODO 兼容安卓版本   7号需要回滚
 				if(info.getReceiveOrderTime() == null){
 					info.setReceiveOrderTime(info.getOrderTime());
@@ -376,7 +377,8 @@ public class OrderServiceImpl implements IOrderService {
 			for (OrderSendOrderListVO info : resultList) {
 				OrderTempResponseVO  responseVO = commonService.getCountDownSeconds(info.getOrderStatus(), info.getOrderTime(), info.getReceiveOrderTime());
 				info.setCountDownSeconds(responseVO.getCountDownSeconds());
-				info.setOrderStatus(responseVO.getOrderStatus());
+				//TODO 兼容测试，需回滚
+				info.setOrderStatus(setOrderStatus(responseVO.getOrderStatus()));
 				//TODO 兼容安卓版本   7号需要回滚
 				if(info.getReceiveOrderTime() == null){
 					info.setReceiveOrderTime(info.getOrderTime());
@@ -474,7 +476,9 @@ public class OrderServiceImpl implements IOrderService {
 			orderDetail.setAge(age);
 			OrderTempResponseVO  responseVO = commonService.getCountDownSeconds(orderDetail.getOrderStatus(), orderDetail.getOrderTime(), orderDetail.getReceiveOrderTime());
 			orderDetail.setCountDownSeconds(responseVO.getCountDownSeconds());
-			orderDetail.setOrderStatus(responseVO.getOrderStatus());
+			//TODO 11111
+			//TODO 兼容测试，需回滚
+			orderDetail.setOrderStatus(setOrderStatus(responseVO.getOrderStatus()));
 		}
 		
 		CommonResponse commonResponse = commonService.getCommonResponse();
@@ -524,7 +528,8 @@ public class OrderServiceImpl implements IOrderService {
 			OrderIMVO orderIMVO = new OrderIMVO();
 			Long  customerSkillId =  order.getCustomerSkillId();
 			orderIMVO = customerSkillMapper.selectCustSkillItem(customerSkillId);
-			orderIMVO.setOrderStatus(order.getOrderStatus());
+			//TODO 兼容测试，需回滚
+			orderIMVO.setOrderStatus(setOrderStatus(order.getOrderStatus()));
 			orderIMVO.setOrderId(order.getOrderId());
 			orderIMVO.setServicePrice(order.getServicePrice());
 			orderIMVO.setServiceUnit(order.getServiceUnit());
@@ -1035,5 +1040,17 @@ public class OrderServiceImpl implements IOrderService {
 
         return ResultUtils.resultSuccess();
     }
-
+    /**
+     * temp方法 兼容测试
+     * @param status
+     * @return
+     */
+    private Integer setOrderStatus(Integer status){
+    	if(status.equals(OrderSkillConstants.ORDER_STATUS_FINISHED_FORCE)){
+    		return OrderSkillConstants.ORDER_STATUS_FINISHED_AND_PINGJIA;
+    	}else if(status.equals(OrderSkillConstants.ORDER_STATUS_CANCEL_FORCE)){
+    		return OrderSkillConstants.ORDER_STATUS_CANCEL_USER_NOT_ACCEPCT;
+    	}
+    	return status;
+    }
 }
