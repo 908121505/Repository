@@ -187,7 +187,8 @@ public class OrderUpdateJob {
     		
     		//大V服务时间内发起结束服务，到预期结束时间，释放大V，使大V可以继续接单
     		List<TaskOrder>  orderList = taskOrderMapper.queryReleaseDaV(currTime, queryStatus);
-    		refundToCustomer(orderList,CANCEL_THREE);
+    		//TODO  此时不应该
+//    		refundToCustomer(orderList,CANCEL_THREE);
     		updateOrderStatusByOrderListForCancel(orderList, updateStatus);
     	} catch (Exception e) {
     		LOGGER.error("大V服务时间内发起结束服务，到预期结束时间，释放大V定时任务执行发生异常，异常信息：", e);
@@ -211,7 +212,7 @@ public class OrderUpdateJob {
     		Integer  queryStatus = OrderSkillConstants.ORDER_STATUS_GOING_WAITING_START;
     		Integer  updateStatus = OrderSkillConstants.ORDER_STATUS_GOING_USER_ACCEPCT;
     		Integer  skillType = OrderSkillConstants.SKILL_TYPE_NO;
-    		Date  queryEndTime =  getEndTimeByAddDays(-2);
+    		Date  queryEndTime =  getEndTimeByAddDays(-10);
     		List<TaskOrder>  orderList = taskOrderMapper.queryAppointOrderGoing(currTime,endTime, queryStatus, updateStatus, skillType,queryEndTime);
     		updateOrderStatusByOrderListForCancel(orderList, updateStatus);
 //    		taskOrderMapper.appointOrderGoing(currTime,endTime, queryStatus, updateStatus, skillType,queryEndTime);
@@ -275,7 +276,7 @@ public class OrderUpdateJob {
     		//获取接单设置超时
     		Integer queryStatus = OrderSkillConstants.ORDER_STATUS_GOING_USER_ACCEPCT;
     		Integer updateStatus = OrderSkillConstants.ORDER_STATUS_FINISH_BOTH_NO_OPERATE;
-    		Date  queryEndTime =  getEndTimeByAddDays(-2);
+    		Date  queryEndTime =  getEndTimeByAddDays(-10);
     		//服务完成，大V金额冻结
     		List<TaskOrder>  orderList = taskOrderMapper.queryOrderStatusAfter12HourBoth(currTime, endTime, queryStatus, updateStatus, skillType,queryEndTime);
     		freezeToService(orderList);
