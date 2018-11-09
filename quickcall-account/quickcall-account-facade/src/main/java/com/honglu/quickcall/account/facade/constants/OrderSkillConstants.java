@@ -131,7 +131,7 @@ public interface OrderSkillConstants {
 	public static final String  RET_CODE_SYSTEM_ERROR = "4";
 	
 	/**默认空字符串*/
-	public static final String  DEFAULT_NULL_STR = "";
+	public static final Integer  DEFAULT_NULL_STR = 0;
 	
 	/**半小时秒数：1800秒*/
 	public  static final  Integer  HALF_HOUR_SECONDS = 1800;
