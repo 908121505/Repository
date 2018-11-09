@@ -90,7 +90,7 @@ public class ScoreRankConstants {
         if (score == null) {
             return "0";
         }
-        if(score < 1000){
+        if(score < 10000){
             return String.valueOf(score);
         }
         BigDecimal decimal = new BigDecimal(score);
@@ -105,4 +105,8 @@ public class ScoreRankConstants {
         return decimal + unit[index];
     }
 
+    public static void main(String[] args) {
+        System.out.println(formatSkillScore(9999));
+        System.out.println(formatSkillScore(10000));
+    }
 }

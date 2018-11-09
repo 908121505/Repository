@@ -2,7 +2,6 @@ package com.honglu.quickcall.user.web.controller;
 
 import javax.servlet.http.HttpServletRequest;
 
-import com.honglu.quickcall.user.facade.exchange.request.*;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,15 +16,16 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import com.alibaba.fastjson.JSONObject;
 import com.aliyun.oss.OSSClient;
 import com.honglu.quickcall.common.api.code.AliYunFilePaths;
+import com.honglu.quickcall.common.api.code.BizCode;
 import com.honglu.quickcall.common.api.exchange.WebResponseModel;
 import com.honglu.quickcall.common.api.util.JedisUtil;
 import com.honglu.quickcall.common.api.util.RedisKeyConstants;
 import com.honglu.quickcall.common.core.util.UUIDUtils;
 import com.honglu.quickcall.common.third.OSS.OSSUtil;
 import com.honglu.quickcall.user.facade.code.UserBizReturnCode;
-
 import com.honglu.quickcall.user.facade.exchange.request.AddSystemUserRequest;
 import com.honglu.quickcall.user.facade.exchange.request.BindVXorQQRequest;
+import com.honglu.quickcall.user.facade.exchange.request.CustomerApplyBigvRequest;
 import com.honglu.quickcall.user.facade.exchange.request.CustomerCenterRequest;
 import com.honglu.quickcall.user.facade.exchange.request.CustomerHomeRequest;
 import com.honglu.quickcall.user.facade.exchange.request.CustomerLevelRequest;
@@ -37,7 +37,6 @@ import com.honglu.quickcall.user.facade.exchange.request.SetHeardUrlRequest;
 import com.honglu.quickcall.user.facade.exchange.request.SetPwdRequest;
 import com.honglu.quickcall.user.facade.exchange.request.UserLoginRequest;
 import com.honglu.quickcall.user.facade.exchange.request.UserRegisterRequest;
-
 import com.honglu.quickcall.user.web.service.UserCenterService;
 
 /**
@@ -95,13 +94,13 @@ public class UserCommonController {
 				&& !"".equals(params.getCodeType())) {
 			if (StringUtils.isBlank(
 					JedisUtil.get(RedisKeyConstants.USER_VERIFYCODE + params.getTel() + params.getCodeType()))) {
-				response.setCode(UserBizReturnCode.paramError.code());
+				response.setCode(BizCode.CustomerSmsError.getCode());
 				response.setMsg("验证码失效请重新获取");
 				return response;
 			}
 			if (!params.getVerifyCode().equals(
 					JedisUtil.get(RedisKeyConstants.USER_VERIFYCODE + params.getTel() + params.getCodeType()))) {
-				response.setCode(UserBizReturnCode.paramError.code());
+				response.setCode(BizCode.CustomerSmsError.getCode());
 				response.setMsg("验证码输入不正确");
 				return response;
 			}
@@ -133,13 +132,13 @@ public class UserCommonController {
 				&& !"".equals(params.getCodeType())) {
 			if (StringUtils.isBlank(
 					JedisUtil.get(RedisKeyConstants.USER_VERIFYCODE + params.getTel() + params.getCodeType()))) {
-				response.setCode(UserBizReturnCode.paramError.code());
+				response.setCode(BizCode.CustomerSmsError.getCode());
 				response.setMsg("验证码失效请重新获取");
 				return response;
 			}
 			if (!params.getVerifyCode().equals(
 					JedisUtil.get(RedisKeyConstants.USER_VERIFYCODE + params.getTel() + params.getCodeType()))) {
-				response.setCode(UserBizReturnCode.paramError.code());
+				response.setCode(BizCode.CustomerSmsError.getCode());
 				response.setMsg("验证码输入不正确");
 				return response;
 			}
@@ -170,13 +169,13 @@ public class UserCommonController {
 				&& !"".equals(params.getCodeType())) {
 			if (StringUtils.isBlank(
 					JedisUtil.get(RedisKeyConstants.USER_VERIFYCODE + params.getTel() + params.getCodeType()))) {
-				response.setCode(UserBizReturnCode.paramError.code());
+				response.setCode(BizCode.CustomerSmsError.getCode());
 				response.setMsg("验证码失效请重新获取");
 				return response;
 			}
 			if (!params.getVerifyCode().equals(
 					JedisUtil.get(RedisKeyConstants.USER_VERIFYCODE + params.getTel() + params.getCodeType()))) {
-				response.setCode(UserBizReturnCode.paramError.code());
+				response.setCode(BizCode.CustomerSmsError.getCode());
 				response.setMsg("验证码输入不正确");
 				return response;
 			}
@@ -444,8 +443,6 @@ public class UserCommonController {
 
 	}
 
-
-
 	/**
 	 * 提交申请成为大V接口
 	 *
@@ -467,9 +464,12 @@ public class UserCommonController {
 		return response;
 
 	}
+
 	/**
 	 * 根据手机号查询用户信息
-	 * @param params phone
+	 * 
+	 * @param params
+	 *            phone
 	 * @return
 	 */
 	@RequestMapping(value = "/searchPersonByPhone", method = RequestMethod.POST)

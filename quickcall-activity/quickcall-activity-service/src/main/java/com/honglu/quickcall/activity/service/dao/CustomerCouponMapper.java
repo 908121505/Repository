@@ -1,6 +1,7 @@
 package com.honglu.quickcall.activity.service.dao;
 
 import com.honglu.quickcall.activity.facade.entity.CustomerCoupon;
+import com.honglu.quickcall.activity.facade.vo.CouponOrderVo;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -103,6 +104,18 @@ public interface CustomerCouponMapper {
      * 根据客户ID和券ID查询用户券关系数量
      * @return Map<String,String> map  Long couponId,Long customerId
      */
-    int getCountByCustomerIdAndCouponId(Map<String,String> map);
+    CustomerCoupon getCountByCustomerIdAndCouponId(Map<String,String> map);
+
+    /**
+     * 下单页数据展示优惠券接口用
+     * @param map
+     */
+    CouponOrderVo showActivityCouponForOrder(Map<String,String> map);
+
+    /**
+     * 获取可抵扣的优惠券
+     * @param map
+     */
+    CouponOrderVo getDeductCoupon(Map<String,String> map);
 
 }

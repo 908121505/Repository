@@ -418,12 +418,15 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 	public   Map<String, Date>   getAppointEndTime(String  startTimeStr,String  endTimeStr){
 
 		//
+		Map<String, Date>  resultMap = new HashMap<String,Date>();
 		if(StringUtils.isBlank(startTimeStr) || startTimeStr.length() < 4){
-			return null;
+			startTimeStr = "0000";
+		}
+		if(StringUtils.isBlank(endTimeStr) || endTimeStr.length() < 4){
+			endTimeStr = "2359";
 		}
 		
 		
-		Map<String, Date>  resultMap = new HashMap<String,Date>();
 		
 		Integer  startTimeIndex =  Integer.valueOf(startTimeStr);
 		

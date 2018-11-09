@@ -242,12 +242,49 @@
         LIMIT 1
     </select>
 
-    <select id="getCountByCustomerIdAndCouponId" parameterType="map" resultType="int">
+<!--    <select id="getCountByCustomerIdAndCouponId" parameterType="map" resultType="int">
         select count(1)
         from customer_coupon
         where
         coupon_id = #{couponId}
         and customer_id = #{customerId}
+     </select>-->
+
+  <select id="getCountByCustomerIdAndCouponId" parameterType="map" resultMap="BaseResultMap">
+        select *
+        from customer_coupon
+        where
+        coupon_id = #{couponId}
+        and customer_id = #{customerId}
      </select>
+
+  <select id="showActivityCouponForOrder" resultType="com.honglu.quickcall.activity.facade.vo.CouponOrderVo" parameterType="map">
+      select cs.coupon_id as couponId,c.coupon_name as couponName,c.coupon_price as couponPrice
+        from coupon_skill cs
+        LEFT JOIN coupon c ON c.coupon_id = cs.coupon_id
+        LEFT JOIN activity a ON a.activity_id = c.activity_id
+        where
+        cs.skill_item_id = #{skillItemId}
+         and ( NOW() BETWEEN a.start_time AND a.end_time)
+        LIMIT 1
+  </select>
+
+  <select id="getDeductCoupon" resultType="com.honglu.quickcall.activity.facade.vo.CouponOrderVo" parameterType="map">
+       select cc.id as customerCouponId,x.couponId,x.couponName,x.couponDeductPrice
+          from customer_coupon cc,
+            (select cs.coupon_id as couponId,c.coupon_name as couponName,c.coupon_price as couponDeductPrice
+            from coupon_skill cs
+            LEFT JOIN coupon c ON c.coupon_id = cs.coupon_id
+                    where
+                    cs.skill_item_id = #{skillItemId}
+                     and ( NOW() BETWEEN c.start_time AND c.end_time or c.is_permanent=1)
+                    order by c.coupon_price desc
+                    LIMIT 1 ) x
+        where
+        cc.customer_id = #{customerId}
+        and cc.coupon_id = x.couponId
+        and cc.is_used = 0
+         LIMIT 1
+  </select>
 
 </mapper>

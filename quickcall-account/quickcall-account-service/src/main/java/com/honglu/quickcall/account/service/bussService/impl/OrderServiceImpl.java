@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import com.honglu.quickcall.activity.facade.vo.CouponOrderVo;
+//import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -113,10 +115,10 @@ public class OrderServiceImpl implements IOrderService {
 		if (request == null || request.getCustomerId() == null) {
 			throw new BizException(AccountBizReturnCode.paramError, "查询技能信息参数异常");
 		}
-		String customerJson = JedisUtil.get(RedisKeyConstants.USER_CUSTOMER_INFO + request.getCustomerId());
-		if (StringUtils.isEmpty(customerJson)) {
-			return ResultUtils.result(BizCode.CustomerNotExist);
-		}
+//		String customerJson = JedisUtil.get(RedisKeyConstants.USER_CUSTOMER_INFO + request.getCustomerId());
+//		if (StringUtils.isEmpty(customerJson)) {
+//			return ResultUtils.result(BizCode.CustomerNotExist);
+//		}
 		LOGGER.info("======>>>>>queryDaVSkill()入参：" + request.toString());
 
 		Long customerId = request.getCustomerId();
@@ -137,6 +139,17 @@ public class OrderServiceImpl implements IOrderService {
 				vo.setSkillIcon(skillItem.getUnlockIcon());
 				vo.setServiceUnit(skill.getServiceUnit());
 				vo.setSkillItemName(skillItem.getSkillItemName());
+
+				//技能-客户优惠券
+				CouponOrderVo cov = couponDubboBusiness.showActivityCouponForOrder(skillItemId+"",customerId+"");
+				vo.setShowTip(cov.getShowTip());
+				vo.setCouponPrice(cov.getCouponPrice());
+                //vo.setTipHtml(cov.getTipHtml());
+                vo.setCouponId(cov.getCouponId());
+                vo.setCouponName(cov.getCouponName());
+                vo.setCouponDeductPrice(cov.getCouponDeductPrice());
+				vo.setCustomerCouponId(cov.getCustomerCouponId());
+
 				custSkillList.add(vo);
 			}
 		}
@@ -188,11 +201,11 @@ public class OrderServiceImpl implements IOrderService {
 				if (expectEndTime != null) {
 					// 当前时间和截止时间的间隔秒数
 					Long remainStr = DateUtils.getDiffSeconds(currTime, expectEndTime);
-					String downLoadStr = null;
+				/*	String downLoadStr = null;
 					if (remainStr != null && remainStr > 0) {
 						downLoadStr = DateUtils.getDiffSeconds(remainStr);
-					}
-					resultMap.put("downLoadStr", downLoadStr);
+					}*/
+					resultMap.put("downLoadStr", remainStr+"");
 				}
 				resultMap.put("retCode", OrderSkillConstants.RET_CODE_DV_BUSY);
 				commonResponse.setData(resultMap);
@@ -230,7 +243,7 @@ public class OrderServiceImpl implements IOrderService {
 			Integer couponFlag = OrderSkillConstants.ORDER_COUPON_FLAG_DEFAULT;
 			// 获取券金额
 			BigDecimal couponPrice = request.getCouponPrice();
-			Long customerCouponId = request.getCustomerCouponId();
+			Integer customerCouponId = request.getCustomerCouponId();
 			if (customerCouponId != null && couponPrice != null) {
 				BigDecimal discountPrice = price.subtract(couponPrice);
 				orderAmounts = new BigDecimal(orderNum - 1).multiply(price);
@@ -302,6 +315,14 @@ public class OrderServiceImpl implements IOrderService {
 			record.setOrderTime(currTime);
 			record.setRemark(request.getRemark());
 			orderMapper.insert(record);
+			
+			CustomerCoupon customerCoupon = new CustomerCoupon();
+			customerCoupon.setId(customerCouponId);
+			try {
+				couponDubboBusiness.updateCustomerCouponById(customerCoupon );
+			} catch (Exception e1) {
+				LOGGER.warn("======>>>>>saveOrder()消费券发生异常：",e1);
+			}
 			resultMap.put("retCode", OrderSkillConstants.RET_CODE_SUCCESS);
 			resultMap.put("orderId", orderId + "");
 
@@ -395,10 +416,10 @@ public class OrderServiceImpl implements IOrderService {
 		if (request == null || request.getCustomerId() == null || request.getOrderStatus() == null) {
 			throw new BizException(AccountBizReturnCode.paramError, "查询发起订单参数异常");
 		}
-		String customerJson = JedisUtil.get(RedisKeyConstants.USER_CUSTOMER_INFO + request.getCustomerId());
-		if (StringUtils.isEmpty(customerJson)) {
-			return ResultUtils.result(BizCode.CustomerNotExist);
-		}
+//		String customerJson = JedisUtil.get(RedisKeyConstants.USER_CUSTOMER_INFO + request.getCustomerId());
+//		if (StringUtils.isEmpty(customerJson)) {
+//			return ResultUtils.result(BizCode.CustomerNotExist);
+//		}
 		LOGGER.info("======>>>>>querySendOrderList()入参：" + request.toString());
 		Long customerId = request.getCustomerId();
 		Integer orderStatusParam = request.getOrderStatus();

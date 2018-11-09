@@ -30,7 +30,7 @@ public class OrderSaveRequest extends AbstractRequest {
 	/** 预约时间 */
 	private String appointTimeStr;
 	/** 用户优惠券Id */
-	private Long customerCouponId;
+	private Integer customerCouponId;
 	/** 券面值 */
 	private BigDecimal couponPrice;
 
@@ -82,11 +82,11 @@ public class OrderSaveRequest extends AbstractRequest {
 		this.appointTimeStr = appointTimeStr;
 	}
 
-	public Long getCustomerCouponId() {
+	public Integer getCustomerCouponId() {
 		return customerCouponId;
 	}
 
-	public void setCustomerCouponId(Long customerCouponId) {
+	public void setCustomerCouponId(Integer customerCouponId) {
 		this.customerCouponId = customerCouponId;
 	}
 

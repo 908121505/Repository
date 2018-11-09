@@ -35,6 +35,10 @@ public class MySkillVO implements Serializable {
 	private BigDecimal price;
 	//技能单位
 	private String unit;
+	//技能字体颜色
+	private String skillFontColor;
+	//技能声量
+	private BigDecimal skillVolume;
 
 	
 
@@ -134,6 +138,22 @@ public class MySkillVO implements Serializable {
 		return unit;
 	}
 
+	public String getSkillFontColor() {
+		return skillFontColor;
+	}
+
+	public void setSkillFontColor(String skillFontColor) {
+		this.skillFontColor = skillFontColor;
+	}
+
+	public BigDecimal getSkillVolume() {
+		return skillVolume;
+	}
+
+	public void setSkillVolume(BigDecimal skillVolume) {
+		this.skillVolume = skillVolume;
+	}
+
 	public void setUnit(String unit) {
 		this.unit = unit;
 	}
@@ -142,6 +162,7 @@ public class MySkillVO implements Serializable {
 	public String toString() {
 		return "MySkillVO [name=" + name + ", imageUrl=" + imageUrl + ", auditStatus=" + auditStatus + ", skillId="
 				+ skillId + ", skillVoiceUrl=" + skillVoiceUrl + ", skillVoiceTime=" + skillVoiceTime + ", skillStatus="
-				+ skillStatus + ", backColor=" + backColor + ", price=" + price + ", unit=" + unit + "]";
+				+ skillStatus + ", backColor=" + backColor + ", price=" + price + ", unit=" + unit + ", skillFontColor="
+				+ skillFontColor + ", skillVolume=" + skillVolume + "]";
 	}
 }

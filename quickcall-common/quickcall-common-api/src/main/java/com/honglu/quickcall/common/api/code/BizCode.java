@@ -34,6 +34,12 @@ public class BizCode extends AbstractCodedEnum {
 	public static final BizCode CustomerClosure;
 	// 用户操作异常 前端显示 统一code
 	public static final BizCode CustomerError;
+	// 404 永久封禁
+	public static final BizCode CustomerClosureNx;
+	// 405 密码
+	public static final BizCode CustomerPwdError;
+	// 406 验证码
+	public static final BizCode CustomerSmsError;
 
 	private ServiceCode serviceCode;
 
@@ -85,9 +91,19 @@ public class BizCode extends AbstractCodedEnum {
 
 		/************************** 与用户相关的 - start **********************/
 		CustomerNotExist = new BizCode("CustomerNotExist", "401", ServiceCode.Default, "用户不存在");
-		CustomerClosure = new BizCode("CustomerClosure", "402", ServiceCode.Default, "用户封禁");
+		CustomerClosure = new BizCode("CustomerClosure", "402", ServiceCode.Default, "用户临时封禁");
 		CustomerError = new BizCode("CustomerError", "403", ServiceCode.Default, "");
 
+		CustomerClosureNx = new BizCode("CustomerClosureNx", "404", ServiceCode.Default, "用户永久封禁");
+
+		CustomerPwdError = new BizCode("CustomerPwdError", "405", ServiceCode.Default, "密码错误");
+
+		CustomerSmsError = new BizCode("CustomerSmsError", "406", ServiceCode.Default, "验证码错误");
+
 		/************************** 与用户相关的 - end **********************/
+	}
+
+	public String getCode() {
+		return this.code();
 	}
 }

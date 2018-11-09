@@ -84,6 +84,22 @@
 		AND create_time <![CDATA[ > ]]>  #{queryEndTime}
   </select>
   
+  
+    <!-- 大V服务时间内发起结束服务，到预期结束时间，释放大V-->
+  <select id="queryReleaseDaV"   resultType="com.honglu.quickcall.task.entity.TaskOrder" >
+		SELECT
+		order_id  AS orderId ,
+			customer_id AS customerId,
+			service_id AS serviceId,
+			order_amounts AS orderAmounts,
+			coupon_flag AS couponFlag
+		FROM  
+		   orders
+		WHERE
+			order_status = #{queryStatus}
+		AND expect_service_time <![CDATA[ < ]]> #{currTime}
+  </select>
+  
   <!-- ///////////////////////////////////////////////////////////////////-->
   
   
@@ -114,7 +130,7 @@
 		FROM  
 		   orders
 		WHERE
-			order_status = #{queryStatus}
+			order_status in ( #{queryStatus}  ,#{queryStatusExt})
 		AND appay_end_time <![CDATA[ < ]]> #{endTime}
 		AND create_time <![CDATA[ > ]]>  #{queryEndTime}
   </select>
