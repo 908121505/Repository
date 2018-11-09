@@ -12,7 +12,6 @@ import com.honglu.quickcall.user.facade.exchange.request.FirstPageBigvListReques
 import com.honglu.quickcall.user.facade.vo.AppHomeBigvListVO;
 import com.honglu.quickcall.user.facade.vo.DaVinfoVO;
 import com.honglu.quickcall.user.service.dao.CustomerAppearanceMapper;
-import com.honglu.quickcall.user.service.dao.CustomerSkillMapper;
 import com.honglu.quickcall.user.service.dao.ResourceConfigMapper;
 import com.honglu.quickcall.user.service.dao.SkillItemMapper;
 import com.honglu.quickcall.user.service.service.QueryBigvListService;
