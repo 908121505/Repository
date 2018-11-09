@@ -29,7 +29,7 @@ public interface BigvSkillScoreMapper {
      * @param customerSkillId
      * @return
      */
-    Integer selectBigvScoreValue(@Param("customerSkillId") Long customerSkillId);
+    BigDecimal selectBigvScoreValue(@Param("customerSkillId") Long customerSkillId);
 
     /**
      * 根据默认评价得到到订单表

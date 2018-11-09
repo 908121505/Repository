@@ -86,27 +86,26 @@ public class ScoreRankConstants {
      * @param score
      * @return
      */
-    public static String formatSkillScore(Integer score) {
+    public static String formatSkillScore(BigDecimal score) {
         if (score == null) {
             return "0";
         }
-        if(score < 10000){
+        if(score.compareTo(new BigDecimal(10000)) < 0){
             return String.valueOf(score);
         }
-        BigDecimal decimal = new BigDecimal(score);
-
         int index = 0;
         do {
-            decimal = decimal.divide(ONE_THOUSAND);
+            score = score.divide(ONE_THOUSAND);
             index++;
-        }while (decimal.compareTo(ONE_THOUSAND) >= 0 && index <= 2);
+        }while (score.compareTo(ONE_THOUSAND) >= 0 && index <= 2);
         index--;
-        decimal = decimal.setScale(2, BigDecimal.ROUND_DOWN);
-        return decimal + unit[index];
+        score = score.setScale(2, BigDecimal.ROUND_DOWN);
+        return score + unit[index];
     }
 
     public static void main(String[] args) {
-        System.out.println(formatSkillScore(9999));
-        System.out.println(formatSkillScore(10000));
+        System.out.println(formatSkillScore(new BigDecimal(9999)));
+        System.out.println(formatSkillScore(new BigDecimal(10000)));
+        System.out.println(formatSkillScore(new BigDecimal("1000000000000")));
     }
 }
