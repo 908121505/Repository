@@ -125,6 +125,18 @@
                                 }
                             }
                         },
+                        {
+                            "data": "getWay",
+                            "sTitle": "领取方式",
+                            'sClass': "text-center",
+                            "mRender": function (data, type, full) {
+                                if (data == 0) {
+                                    return "直接领取";
+                                } else if (data == 1) {
+                                    return '下单领取';
+                                }
+                            }
+                        },
                        /* {
                             "data": "couponCode",
                             "sTitle": "券码",
