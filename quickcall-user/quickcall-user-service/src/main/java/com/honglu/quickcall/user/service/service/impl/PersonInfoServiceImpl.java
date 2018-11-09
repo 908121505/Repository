@@ -738,6 +738,10 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 			customerCenterVO.setRechargeAmounts(customerMoney.get("rechargeAmounts"));
 			customerCenterVO.setWithdrawAmounts(customerMoney.get("withdrawAmounts"));
 		}
+
+		// 是否申请过声优
+		customerCenterVO.setApplyBigvStatus(customerMapper.getCustomerIfAppliedBigv(request.getCustomerId()));
+
 		return ResultUtils.resultSuccess(customerCenterVO);
 	}
 
