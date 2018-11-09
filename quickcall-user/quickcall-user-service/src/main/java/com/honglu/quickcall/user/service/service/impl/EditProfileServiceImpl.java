@@ -337,6 +337,11 @@ public class EditProfileServiceImpl implements EditProfileService {
 			return ResultUtils.result(BizCode.CustomerNotExist);
 		}
 
+		int appearanceCount = customerAppearanceMapper.queryAppearanceCountByCustomerId(params.getCustomerId());
+		if(appearanceCount >= 2){
+			throw new BizException(UserBizReturnCode.paramError, "形象照最多只能传2张");
+		}
+
 		CustomerAppearance customerAppearance = new CustomerAppearance();
 		Long id = UUIDUtils.getId();
 		customerAppearance.setId(id);
@@ -557,17 +562,20 @@ public class EditProfileServiceImpl implements EditProfileService {
 			List<InterestVO> interestList = interestMapper.selectInterestListByCustomerId(params.getCustomerId());
 			userEditInfoVO.setInterestList(interestList);
 
-			List<AppearanceVO> headPortrait = customerAppearanceMapper
-					.selectAppearanceVOByCustomerIdAndType(params.getCustomerId(), 1);
+			//现在头像不用审核，是直接保存到用户表中的，就不从这里取了
+			/*List<AppearanceVO> headPortrait = customerAppearanceMapper
+					.selectAppearanceVOByCustomerIdAndType(params.getCustomerId(), 1);*/
+			//查询形象照
 			List<AppearanceVO> appearanceList = customerAppearanceMapper
-					.selectAppearanceVOByCustomerIdAndType(params.getCustomerId(), 0);
+					.selectAppearanceVOByCustomerId(params.getCustomerId());
+			//查询声鉴卡
 			List<AppearanceVO> viceCard = customerAppearanceMapper
 					.selectAppearanceVOByCustomerIdAndType(params.getCustomerId(), 2);
-			if (headPortrait.size() == 0) {
+			/*if (headPortrait.size() == 0) {
 				userEditInfoVO.setHeadPortrait(new AppearanceVO(null, null, "", "", null, null));
 			} else {
 				userEditInfoVO.setHeadPortrait(headPortrait.get(0));
-			}
+			}*/
 
 			userEditInfoVO.setAppearanceList(appearanceList);
 

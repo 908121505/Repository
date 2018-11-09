@@ -34,7 +34,7 @@
     </select>
 
     <!-- 查询大V技能的订单笔数 -->
-    <select id="selectBigvScoreValue" resultType="java.lang.Integer">
+    <select id="selectBigvScoreValue" resultType="java.math.BigDecimal">
         SELECT score_total FROM `bigv_skill_score`
         WHERE customer_skill_id = #{customerSkillId}
     </select>

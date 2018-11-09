@@ -81,7 +81,7 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 
 	@Autowired
 	private DataDuriedPointBusiness dataDuriedPointBusiness;
-
+	@Autowired
 	private BigvPhoneMapper bigvPhoneMapper;
 
 	private static String resendexpire = ResourceBundle.getBundle("thirdconfig").getString("resend.expire");
@@ -176,7 +176,7 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 			if (StringUtils.isNotBlank(params.getPassWord())) {
 				if (!MD5.md5(params.getPassWord()).equals(customer.getCustPassword())) {
 					logger.info("密码错误");
-					response.setCode(BizCode.CustomerError);
+					response.setCode(BizCode.CustomerPwdError);
 					response.setMessage("密码错误");
 					return response;
 				}
@@ -216,7 +216,7 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 
 		// 账户被封
 		if (isBlock) {
-			response.setCode(BizCode.CustomerClosure);
+			response.setCode(BizCode.CustomerClosureNx);
 			response.setMessage("永久封禁");
 			return response;
 		}
@@ -414,7 +414,7 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 		if (customer != null) {
 			logger.info("用户已存在");
 			response.setCode(BizCode.CustomerError);
-			response.setMessage("手机号格式不正确");
+			response.setMessage("用户已存在");
 			return response;
 		}
 		customer = new Customer();
@@ -578,7 +578,7 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 		if (JedisUtil.get(RedisKeyConstants.USER_VERIFYCODE_M + phoneNum) == null) {
 			JedisUtil.set(RedisKeyConstants.USER_VERIFYCODE_M + phoneNum, "1", Integer.parseInt(resendexpire));
 		} else {
-			response.setCode(BizCode.CustomerError);
+			response.setCode(BizCode.CustomerSmsError);
 			response.setMessage("请勿重复发送验证码");
 			return response;
 		}
@@ -589,7 +589,7 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 		} else {
 			String count = JedisUtil.get(RedisKeyConstants.USER_VERIFYCODE_H + phoneNum);
 			if (Integer.parseInt(count) >= Integer.parseInt(onehourfreq)) {
-				response.setCode(BizCode.CustomerError);
+				response.setCode(BizCode.CustomerSmsError);
 				response.setMessage("验证码每小时只能获取五次");
 				return response;
 			}
@@ -604,7 +604,7 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 		} else {
 			String count = JedisUtil.get(RedisKeyConstants.USER_VERIFYCODE_D + phoneNum);
 			if (Integer.parseInt(count) >= Integer.parseInt(onedayfreq)) {
-				response.setCode(BizCode.CustomerError);
+				response.setCode(BizCode.CustomerSmsError);
 				response.setMessage("验证码日发送次数已达到上限");
 				return response;
 			}

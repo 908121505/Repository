@@ -1,5 +1,6 @@
 package com.honglu.quickcall.activity.service.service.impl;
 
+import com.honglu.quickcall.activity.facade.vo.CouponOrderVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -9,6 +10,7 @@ import com.honglu.quickcall.activity.service.dao.CouponMapper;
 import com.honglu.quickcall.activity.service.dao.CustomerCouponMapper;
 import com.honglu.quickcall.activity.service.service.CouponDubboService;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -80,8 +82,31 @@ public class CouponDubboServiceImpl implements CouponDubboService{
      * 根据客户ID和券ID查询用户券关系数量
      * @return
      */
-    public int getCountByCustomerIdAndCouponId(Map<String,String> map){
+    public CustomerCoupon getCountByCustomerIdAndCouponId(Map<String,String> map){
         return customerCouponMapper.getCountByCustomerIdAndCouponId(map);
     }
 
+	/**
+	 * 下单页数据展示优惠券接口用
+	 * @param skillItemId 技能ID
+	 * @param customerId 客户ID
+	 */
+	public CouponOrderVo showActivityCouponForOrder(String skillItemId, String customerId){
+		Map<String,String> map = new HashMap<String,String>();
+		map.put("skillItemId",skillItemId);
+		map.put("customerId",customerId);
+		return customerCouponMapper.showActivityCouponForOrder(map);
+	}
+
+	/**
+	 * 获取可抵扣的优惠券
+	 * @param skillItemId 技能ID
+	 * @param customerId 客户ID
+	 */
+	public CouponOrderVo getDeductCoupon(String skillItemId, String customerId){
+		Map<String,String> map = new HashMap<String,String>();
+		map.put("skillItemId",skillItemId);
+		map.put("customerId",customerId);
+		return customerCouponMapper.getDeductCoupon(map);
+	}
 }

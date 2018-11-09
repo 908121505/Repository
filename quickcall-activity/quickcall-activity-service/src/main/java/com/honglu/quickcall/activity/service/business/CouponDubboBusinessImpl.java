@@ -1,5 +1,6 @@
 package com.honglu.quickcall.activity.service.business;
 
+import com.honglu.quickcall.activity.facade.vo.CouponOrderVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -64,27 +65,73 @@ public class CouponDubboBusinessImpl implements CouponDubboBusiness{
      * @param skillItemId
      * @param customerId
      * @return
+	 *
      */
-    @Override
-    public int getShowTipForActivity(String skillItemId, String customerId){
+    public CouponOrderVo getShowTipForActivity(String skillItemId, String customerId){
+        CouponOrderVo cov = new CouponOrderVo();
 		int showTip = 0;//0=不展示，1=展示
 		int activityNum = couponDubboService.getActivityNum();
 		if(activityNum > 0){//现在存在活动
-			String couponId = couponDubboService.getCouponIdBySkillItemId(skillItemId);
-			if(StringUtils.isBlank(couponId)){//没查到，显示
-				showTip = 1;
+		    //查出该券所有信息
+            CouponOrderVo vo = couponDubboService.showActivityCouponForOrder(skillItemId,customerId);//customerId这里暂时不用
+			//String couponId = couponDubboService.getCouponIdBySkillItemId(skillItemId);
+            String couponId = "";
+            if(vo!=null && vo.getCouponId()!=null){
+                couponId = vo.getCouponId();
+            }
+			if(StringUtils.isBlank(couponId)){//没查到，不显示
+				showTip = 0;
 			}else{
 				Map<String,String> map = new HashMap<String,String>();
 				map.put("couponId",couponId);
 				map.put("customerId",customerId);
-				int num = couponDubboService.getCountByCustomerIdAndCouponId(map);
-				if(num == 0){//customer_coupon没查到,显示
+				//查出用户与券的关系信息
+				//int num = couponDubboService.getCountByCustomerIdAndCouponId(map);
+                CustomerCoupon cc = couponDubboService.getCountByCustomerIdAndCouponId(map);
+				if(cc == null){ //customer_coupon没查到,显示
 					showTip = 1;
+                    cov.setCouponPrice(vo.getCouponPrice());
 				}
 			}
 		}
-        return showTip;
+        cov.setShowTip(showTip);
+        return cov;
     }
 
+    /**
+     * 获取可抵扣的优惠券
+     * @param skillItemId
+     * @param customerId
+     * @return
+     *
+     */
+    public CouponOrderVo getDeductCoupon(String skillItemId, String customerId){
+        CouponOrderVo vo = couponDubboService.getDeductCoupon(skillItemId,customerId);
+        return vo;
+    }
+
+	/**
+	 * 下单页数据展示优惠券接口用
+	 * @param skillItemId 技能ID
+	 * @param customerId 客户ID
+	 */
+	@Override
+	public CouponOrderVo showActivityCouponForOrder(String skillItemId, String customerId){
+		//CouponOrderVo vo = couponDubboService.showActivityCouponForOrder(skillItemId, customerId);
+		//int showTip = getShowTipForActivity(skillItemId, customerId);
+		//vo.setShowTip(showTip);
+		/*String str = "<a><font color=\"#FFFFFF\" font-size=\"12pt\" line-height=\"16.5pt\">下单即可获得</font>" +
+                "<font color=\"#FFFFFF\" font-size=\"18pt\" line-height=\"22pt\">"+vo.getCouponPrice()+"</font>" +
+                "<font color=\"#FFFFFF\" font-size=\"12pt\" line-height=\"16.5pt\">音符</font>" +
+                "<font color=\"#FFFFFF\" font-size=\"12pt\" line-height=\"16.5pt\">抵扣券</font><a>";*/
+		//vo.setTipHtml(str);
+        CouponOrderVo vo = getShowTipForActivity(skillItemId, customerId);
+        CouponOrderVo dvo = getDeductCoupon(skillItemId, customerId);
+        vo.setCustomerCouponId(dvo.getCustomerCouponId());
+        vo.setCouponId(dvo.getCouponId());
+        vo.setCouponName(dvo.getCouponName());
+        vo.setCouponDeductPrice(dvo.getCouponDeductPrice());
+		return vo;
+	}
 
 }

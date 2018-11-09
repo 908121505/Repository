@@ -131,7 +131,7 @@ public interface OrderSkillConstants {
 	public static final String  RET_CODE_SYSTEM_ERROR = "4";
 	
 	/**默认空字符串*/
-	public static final String  DEFAULT_NULL_STR = "";
+	public static final Integer  DEFAULT_NULL_STR = 0;
 	
 	/**半小时秒数：1800秒*/
 	public  static final  Integer  HALF_HOUR_SECONDS = 1800;
@@ -256,6 +256,8 @@ public interface OrderSkillConstants {
 	public static final Integer  ORDER_STATUS_FINISHED_USER_ACCEPCT = 30 ;
 	/**订单状态32.已完成（大V发起已完成服务，12小时客户不响应自动完成）*/
 	public static final Integer  ORDER_STATUS_FINISH_DV_FINISH = 32 ;
+	/**订单状态33.已完成（大V发起在服务时间内发起完成服务，到服务时间释放大V）*/
+	public static final Integer  ORDER_STATUS_FINISH_DV_RELEASE = 33 ;
 	/**订单状态34.已完成（用户发起完成服务）*/
 	public static final Integer  ORDER_STATUS_GOING_USRE_APPAY_FINISH = 34 ;
 	/**订单状态36.已完成（大V在服务时间外完成）;*/

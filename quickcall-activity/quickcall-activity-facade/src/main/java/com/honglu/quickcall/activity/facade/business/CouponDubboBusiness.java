@@ -2,6 +2,7 @@ package com.honglu.quickcall.activity.facade.business;
 
 import com.honglu.quickcall.activity.facade.entity.Coupon;
 import com.honglu.quickcall.activity.facade.entity.CustomerCoupon;
+import com.honglu.quickcall.activity.facade.vo.CouponOrderVo;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -24,8 +25,9 @@ public interface CouponDubboBusiness {
 	 * @param skillItemId
 	 * @param customerId
 	 * @return
+	 * 作废
 	 */
-	int getShowTipForActivity(String skillItemId,String customerId);
+	//int getShowTipForActivity(String skillItemId,String customerId);
 
 
 
@@ -44,5 +46,13 @@ public interface CouponDubboBusiness {
 	 */
 	int cancelUpdateCustomerCoupon(Integer id);
 
+	/**
+	 * 下单页数据展示优惠券接口用
+	 * @param skillItemId 技能ID
+	 * @param customerId 客户ID
+	 * @return
+	 *
+	 */
+	CouponOrderVo showActivityCouponForOrder(String skillItemId, String customerId);
 
 }
