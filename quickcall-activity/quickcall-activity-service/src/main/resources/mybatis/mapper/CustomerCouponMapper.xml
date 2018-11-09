@@ -253,8 +253,8 @@
   <select id="getCountByCustomerIdAndCouponId" parameterType="map" resultMap="BaseResultMap">
         select *
         from customer_coupon
-        where
-        coupon_id = #{couponId}
+        where is_used = 0
+		and coupon_id = #{couponId}
         and customer_id = #{customerId}
      </select>
 
