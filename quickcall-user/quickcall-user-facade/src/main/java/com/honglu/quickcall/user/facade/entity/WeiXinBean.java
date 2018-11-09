@@ -6,7 +6,7 @@ package com.honglu.quickcall.user.facade.entity;
  */
 public class WeiXinBean {
     private String open_id;
-    private Long customer_id;
+    private Long customerId;
     private String nickname;
 
     public String getOpen_id() {
@@ -17,12 +17,12 @@ public class WeiXinBean {
         this.open_id = open_id;
     }
 
-    public Long getCustomer_id() {
-        return customer_id;
+    public Long getCustomerId() {
+        return customerId;
     }
 
-    public void setCustomer_id(Long customer_id) {
-        this.customer_id = customer_id;
+    public void setCustomerId(Long customerId) {
+        this.customerId = customerId;
     }
 
     public String getNickname() {
@@ -37,7 +37,7 @@ public class WeiXinBean {
     public String toString() {
         return "WeiXinBean{" +
                 "open_id='" + open_id + '\'' +
-                ", customer_id=" + customer_id +
+                ", customerId=" + customerId +
                 ", nickname='" + nickname + '\'' +
                 '}';
     }
