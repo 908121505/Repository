@@ -723,6 +723,10 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 		customerCenterVO.setIdentityStatus(customer.getIdentityStatus());
 		customerCenterVO.setvStatus(customer.getvStatus());
 
+		// 不是大V -- 查询是否申请过声优
+		if(!Objects.equals(customer.getvStatus(), 2)){
+			customerCenterVO.setApplyBigvStatus(customerMapper.getCustomerIfAppliedBigv(request.getCustomerId()));
+		}
 		// 查询关注数
 		customerCenterVO.setAttentionNum(fansMapper.queryAttentionNumByCustomerId(request.getCustomerId()));
 
@@ -738,6 +742,7 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 			customerCenterVO.setRechargeAmounts(customerMoney.get("rechargeAmounts"));
 			customerCenterVO.setWithdrawAmounts(customerMoney.get("withdrawAmounts"));
 		}
+
 		return ResultUtils.resultSuccess(customerCenterVO);
 	}
 
