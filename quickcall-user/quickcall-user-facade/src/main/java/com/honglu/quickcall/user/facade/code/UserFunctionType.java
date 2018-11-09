@@ -242,4 +242,9 @@ public interface UserFunctionType {
 	 */
 	String searchPersonByPhone = "0011138";
 
+	/**
+	 * 微信
+	 */
+	String WEIXIN = "0022001";
+
 }
