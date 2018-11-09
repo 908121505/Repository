@@ -101,7 +101,7 @@ public class UserCommonController {
 			if (!params.getVerifyCode().equals(
 					JedisUtil.get(RedisKeyConstants.USER_VERIFYCODE + params.getTel() + params.getCodeType()))) {
 				response.setCode(BizCode.CustomerSmsError.getCode());
-				response.setMsg("验证码输入不正确");
+				response.setMsg("验证码错误");
 				return response;
 			}
 		}
@@ -139,7 +139,7 @@ public class UserCommonController {
 			if (!params.getVerifyCode().equals(
 					JedisUtil.get(RedisKeyConstants.USER_VERIFYCODE + params.getTel() + params.getCodeType()))) {
 				response.setCode(BizCode.CustomerSmsError.getCode());
-				response.setMsg("验证码输入不正确");
+				response.setMsg("验证码错误");
 				return response;
 			}
 		}
@@ -176,7 +176,7 @@ public class UserCommonController {
 			if (!params.getVerifyCode().equals(
 					JedisUtil.get(RedisKeyConstants.USER_VERIFYCODE + params.getTel() + params.getCodeType()))) {
 				response.setCode(BizCode.CustomerSmsError.getCode());
-				response.setMsg("验证码输入不正确");
+				response.setMsg("验证码错误");
 				return response;
 			}
 		}
@@ -424,13 +424,13 @@ public class UserCommonController {
 				&& !"".equals(params.getCodeType())) {
 			if (StringUtils.isBlank(
 					JedisUtil.get(RedisKeyConstants.USER_VERIFYCODE + params.getTel() + params.getCodeType()))) {
-				response.setCode(UserBizReturnCode.paramError.code());
+				response.setCode(BizCode.CustomerSmsError.code());
 				response.setMsg("验证码失效请重新获取");
 				return response;
 			}
 			if (!params.getVerifyCode().equals(
 					JedisUtil.get(RedisKeyConstants.USER_VERIFYCODE + params.getTel() + params.getCodeType()))) {
-				response.setCode(UserBizReturnCode.paramError.code());
+				response.setCode(BizCode.CustomerSmsError.code());
 				response.setMsg("验证码输入不正确");
 				return response;
 			}
