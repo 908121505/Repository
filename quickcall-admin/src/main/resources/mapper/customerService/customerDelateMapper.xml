@@ -62,7 +62,7 @@ id,	customer_id,	delate_cust_id,	delate_id,	delate_content,	handle_status,	handl
 			<if test="startTime !=null and startTime!=''">and cd.create_time <![CDATA[  >= ]]> #{startTime}</if>
         	<if test="endTime !=null and endTime!=''">and cd.create_time <![CDATA[  <= ]]> #{endTime}</if>
 		</where>
-		order by modify_time desc
+		order by cd.modify_time desc
 		limit ${iDisplayStart},${iDisplayLength}
 	</select>
 	

@@ -16,6 +16,7 @@ import com.calf.cn.controller.BaseController;
 import com.calf.cn.entity.DataTables;
 import com.calf.cn.service.BaseManager;
 import com.calf.cn.utils.SearchUtil;
+import com.calf.module.customer.entity.Customer;
 import com.calf.module.customer.entity.CustomerSkillCertify;
 import com.calf.module.customer.vo.CustomerSkillCertifyVO;
 import com.calf.module.internal.entity.Message;
@@ -87,9 +88,6 @@ public class CustomerSkillCertifyController implements BaseController<CustomerSk
 			param.put("skillVoiceUrl", csc.getSkillVoiceUrlTmp());
 			param.put("isAudited", 1);
 			
-			Map<String, Object> map = new HashMap<String, Object>();
-			map.put("customerId", csc.getCustomerId());
-			map.put("skillItemId", csc.getSkillItemId());
 //			int count = baseManager.get("CustomerSkill.selectCustomerSkillExist",map);
 			if(csc.getIsAudited() == 0){
 				//如果没有则初始化用户技能表
@@ -117,12 +115,17 @@ public class CustomerSkillCertifyController implements BaseController<CustomerSk
 			}
 		}
 		int n = baseManager.update("CustomerSkillCertify.updateEntity",param);
+		//查询客户手机号
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("customerId", csc.getCustomerId());
+		Customer cus = baseManager.get("Customer.selectByPrimaryKey", map);
 		//插入消息数据库
 		Message msg = new Message();
 		MessageCustomer mc = new MessageCustomer();
 		Long messageId = UUIDUtils.getId();
 		msg.setMessageId(messageId.toString());
 		msg.setTitle("技能审核");
+		mc.setPhone(Long.valueOf(cus.getPhone()));
 		mc.setId(UUIDUtils.getId().toString());
 		mc.setMessageId(messageId);
 		mc.setReceiverId(csc.getCustomerId());
