@@ -201,11 +201,11 @@ public class OrderServiceImpl implements IOrderService {
 				if (expectEndTime != null) {
 					// 当前时间和截止时间的间隔秒数
 					Long remainStr = DateUtils.getDiffSeconds(currTime, expectEndTime);
-					String downLoadStr = null;
+				/*	String downLoadStr = null;
 					if (remainStr != null && remainStr > 0) {
 						downLoadStr = DateUtils.getDiffSeconds(remainStr);
-					}
-					resultMap.put("downLoadStr", downLoadStr);
+					}*/
+					resultMap.put("downLoadStr", remainStr+"");
 				}
 				resultMap.put("retCode", OrderSkillConstants.RET_CODE_DV_BUSY);
 				commonResponse.setData(resultMap);
