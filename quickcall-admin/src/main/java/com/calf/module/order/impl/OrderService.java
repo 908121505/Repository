@@ -102,7 +102,11 @@ public class OrderService {
 			paramMap.put("serviceType",parameters.get("serviceType"));
 		}
 		if (orderStatus !=null && (!orderStatus.equals("-1"))){
-			paramMap.put("orderStatus",parameters.get("orderStatus"));
+			OrderStatusEnums order = OrderStatusEnums.getOrderStautsEnums(orderStatus);
+			String smallOrderItem = order.getSubset();
+			String[] items = smallOrderItem.split(",");
+			paramMap.put("orderStatus",Arrays.asList(items));
+//			paramMap.put("orderStatus",parameters.get("orderStatus"));
 		}
 		if (discountType !=null && (!discountType.equals("-1"))){
 			String[] discountTypes = discountType.split("-");

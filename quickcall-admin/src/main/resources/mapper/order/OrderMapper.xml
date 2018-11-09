@@ -460,8 +460,14 @@
      <if test="serviceType != null" >
        AND  skill.skill_item_id = #{serviceType}
      </if>
-     <if test="orderStatus != null" >
+     <!-- <if test="orderStatus != null" >
        AND order_status in (#{orderStatus})
+     </if> -->
+     <if test="orderStatus != null and orderStatus.size()>0" >
+       AND
+       <foreach collection="orderStatus" item="item" open="(" separator="or" close=")">
+         order_status = #{item}
+       </foreach> 
      </if>
      <if test="discountTypeMin != null" >
        AND ext.skill_ext_discont &gt;= #{discountTypeMin}
@@ -512,9 +518,15 @@
     <if test="serviceType != null" >
       AND  skill.skill_item_id = #{serviceType}
     </if>
-    <if test="orderStatus != null" >
+    <!-- <if test="orderStatus != null" >
       AND order_status in (#{orderStatus})
-    </if>
+    </if> -->
+    <if test="orderStatus != null and orderStatus.size()>0" >
+       AND
+       <foreach collection="orderStatus" item="item" open="(" separator="or" close=")">
+         order_status = #{item}
+       </foreach> 
+     </if>
     <if test="discountTypeMin != null" >
       AND ext.skill_ext_discont &gt;= #{discountTypeMin}
     </if>
