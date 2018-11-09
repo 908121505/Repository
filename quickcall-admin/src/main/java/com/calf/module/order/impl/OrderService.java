@@ -31,10 +31,13 @@ import com.calf.module.order.entity.Order;
 import com.calf.module.order.entity.Orders;
 import com.calf.module.order.entity.Skill;
 import com.calf.module.order.entity.SkillItem;
+import com.calf.module.order.entity.TradeDetail;
 import com.calf.module.order.vo.OrderStatusVO;
 import com.calf.module.order.vo.OrderVO;
 import com.calf.module.order.vo.SmallOrderStatusVO;
 import com.honglu.quickcall.account.facade.constants.OrderSkillConstants;
+import com.honglu.quickcall.common.api.util.JedisUtil;
+import com.honglu.quickcall.common.api.util.RedisKeyConstants;
 import com.honglu.quickcall.common.core.util.UUIDUtils;
 
 @Service("orderService")
@@ -327,18 +330,83 @@ public class OrderService {
 	 * @return
 	 */
 	@Transactional
-	public boolean compulsoryCompletion(Long orderId, BigDecimal amount) {
+	public int compulsoryCompletion(Long orderId, BigDecimal amount) {
+		boolean flag = false;
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("orderId", orderId);
 		Orders order = baseManager.get("Orders.selectByPrimaryKey", map);
-		map.clear();
-		map.put("userId", order.getCustomerId());
+
+		map.put("userId", order.getServiceId());
 		Account account = baseManager.get("Account.queryAccount", map);
 		if (account.getFrozenAmounts().compareTo(amount) == -1) {
-			return false;
+
+			return -1;
+		}
+		map.put("orderNo", order.getOrderNo());
+		TradeDetail tradeDetail = baseManager.get("TradeDetail.selectFrozenByOrderNo", map);
+		String userFrozenkey = RedisKeyConstants.ACCOUNT_USERFROZEN_USER + order.getServiceId();
+		String steamFrozenKey = RedisKeyConstants.ACCOUNT_USERFROZEN_STREAM + tradeDetail.getTradeId();
+		String steamFrozenValue = JedisUtil.get(steamFrozenKey);
+		String userFrozenValue = JedisUtil.get(userFrozenkey);
+		if (StringUtils.isNotBlank(userFrozenValue) && StringUtils.isNotBlank(steamFrozenValue)) {
+			if (userFrozenValue.contains(steamFrozenValue)) {
+				flag = true;
+				JedisUtil.del(steamFrozenKey);
+				String[] arys = userFrozenValue.split(",");
+				arys = remove(arys, tradeDetail.getTradeId() + "");
+				userFrozenValue = StringUtils.join(arys, ",");
+				if (userFrozenValue.length() > 0) {
+					JedisUtil.set(userFrozenkey, userFrozenValue);
+				} else {
+					JedisUtil.del(userFrozenkey);
+				}
+			}
+		}
+		// 冻结流水正常 开始强制完成逻辑
+		if (flag) {
+			// 入账
+			Map<String, Object> pram = new HashMap<String, Object>();
+			pram.put("type", 3);
+			pram.put("amount", amount);
+			pram.put("userId", order.getServiceId());
+			baseManager.update("Account.outAccount", pram);
+			// 记录流水
+			tradeDetail = new TradeDetail();
+			tradeDetail.setTradeId(UUIDUtils.getId());
+			tradeDetail.setOrderNo(order.getOrderNo());
+			tradeDetail.setCustomerId(order.getServiceId());
+			tradeDetail.setCreateTime(new Date());
+			tradeDetail.setType(8);
+			tradeDetail.setInPrice(amount);
+			baseManager.insert("TradeDetail.insertSelective", tradeDetail);
+			return 1;
+		}
+		return 0;
+
+	}
+
+	/**
+	 * 数组删除一个元素
+	 * 
+	 * @param arr
+	 * @param str
+	 * @return
+	 */
+	private static String[] remove(String[] arr, String str) {
+		String[] tmp = new String[arr.length - 1];
+		int idx = 0;
+		boolean hasRemove = false;
+		for (int i = 0; i < arr.length; i++) {
+
+			if (!hasRemove && arr[i] == str) {
+				hasRemove = true;
+				continue;
+			}
+
+			tmp[idx++] = arr[i];
 		}
 
-		return true;
+		return tmp;
 	}
 
 	/**
