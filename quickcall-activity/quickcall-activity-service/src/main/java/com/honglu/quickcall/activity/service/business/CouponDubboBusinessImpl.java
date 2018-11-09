@@ -127,10 +127,12 @@ public class CouponDubboBusinessImpl implements CouponDubboBusiness{
 		//vo.setTipHtml(str);
         CouponOrderVo vo = getShowTipForActivity(skillItemId, customerId);
         CouponOrderVo dvo = getDeductCoupon(skillItemId, customerId);
-        vo.setCustomerCouponId(dvo.getCustomerCouponId());
-        vo.setCouponId(dvo.getCouponId());
-        vo.setCouponName(dvo.getCouponName());
-        vo.setCouponDeductPrice(dvo.getCouponDeductPrice());
+        if(dvo != null){
+            vo.setCustomerCouponId(dvo.getCustomerCouponId());
+            vo.setCouponId(dvo.getCouponId());
+            vo.setCouponName(dvo.getCouponName());
+            vo.setCouponDeductPrice(dvo.getCouponDeductPrice());
+        }
 		return vo;
 	}
 

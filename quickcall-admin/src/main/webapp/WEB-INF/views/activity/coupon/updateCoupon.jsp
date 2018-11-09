@@ -48,6 +48,15 @@
                         </select>
                     </div>
                 </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">领取方式<font color="red">&nbsp;*</font></label>
+                    <div class="col-sm-10">
+                        <select class="form-control" id="getWay" name="getWay">
+                            <option value="0" ${entity.getWay=='0'?'selected':''}>直接领取</option>
+                            <option value="1" ${entity.getWay=='1'?'selected':''}>下单领取</option>
+                        </select>
+                    </div>
+                </div>
                 <%--<div class="form-group">
                     <label class="col-sm-2 control-label">券码<font color="red">&nbsp;*</font></label>
                     <div class="col-sm-10">
@@ -83,7 +92,7 @@
                     <label class="col-sm-2 control-label">选择活动<font color="red">&nbsp;*</font></label>
                     <div class="col-sm-10">
                         <select  class="form-control" id="activitySelect" name="activityId">
-                            <option value="0">请选择</option>
+                            <option value="">请选择</option>
                             <c:if test="${not empty activityList}">
                                 <c:forEach items="${activityList}" var="activity">
                                     <option value=${activity.activityId}>名称：${activity.activityName}       编码：${activity.activityCode}</option>
@@ -153,6 +162,13 @@
             return false;
         }
 
+        var getWay = $("#getWay").val();
+
+        if(getWay != 0 && getWay != 1){
+            $("#tip").html("请选择领取方式");
+            return false;
+        }
+
         var couponType = $("#couponType").val();
         if(couponType != 0 && couponType != 1){
             $("#tip").html("请选择券类型");
@@ -160,13 +176,11 @@
         }
 
         var activitySelect = $("#activitySelect").val();
-        alert(activitySelect);
 
         if(('${entity.activityId}' == '') && (activitySelect == null || activitySelect  == '')){
             $("#tip").html("请选择活动");
             return false;
         }
-
 
 
         var startTime = $("#banner_startTime").val();

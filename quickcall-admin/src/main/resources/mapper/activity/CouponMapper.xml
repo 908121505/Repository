@@ -11,6 +11,7 @@
         <result column="coupon_name" property="couponName" jdbcType="VARCHAR" />
         <result column="is_permanent" property="isPermanent" jdbcType="TINYINT" />
         <result column="coupon_type" property="couponType" jdbcType="TINYINT" />
+        <result column="get_way" property="getWay" jdbcType="TINYINT" />
         <result column="start_time" property="startTime" jdbcType="TIMESTAMP" />
         <result column="end_time" property="endTime" jdbcType="TIMESTAMP" />
         <result column="activity_id" property="activityId" jdbcType="INTEGER" />
@@ -185,6 +186,9 @@
             <if test="couponCode != null" >
                 coupon_code,
             </if>
+            <if test="getWay != null" >
+                get_way,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides="," >
             <if test="couponId != null" >
@@ -226,6 +230,9 @@
             </if>
             <if test="couponCode != null" >
                 #{couponCode,jdbcType=VARCHAR},
+            </if>
+            <if test="getWay != null" >
+                #{getWay,jdbcType=TINYINT},
             </if>
         </trim>
     </insert>
@@ -276,6 +283,9 @@
             <if test="couponCode != null" >
                 coupon_code = #{couponCode,jdbcType=VARCHAR},
             </if>
+            <if test="getWay != null" >
+                get_way = #{getWay,jdbcType=TINYINT},
+            </if>
         </set>
         where coupon_id = #{couponId,jdbcType=BIGINT}
     </update>
@@ -317,6 +327,7 @@
           c.create_man AS createMan,
           c.modify_man AS modifyMan,
           c.remark AS remark,
+          c.get_way as getWay,
           a.activity_name AS activityName,
           a.activity_code AS activityCode
 
