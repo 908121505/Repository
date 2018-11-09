@@ -4,17 +4,14 @@ import com.honglu.quickcall.common.api.exchange.CommonResponse;
 import com.honglu.quickcall.common.api.exchange.ResultUtils;
 import com.honglu.quickcall.user.facade.entity.WeiXinBean;
 import com.honglu.quickcall.user.facade.exchange.request.WeiXinRequest;
-import com.honglu.quickcall.user.facade.vo.SearchPersonByPhoneVO;
 import com.honglu.quickcall.user.service.dao.CustomerMapper;
 import com.honglu.quickcall.user.service.service.WeiXinService;
 import com.honglu.quickcall.user.service.util.HttpUtils;
 import com.honglu.quickcall.user.service.util.SnsAccessToken;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.text.MessageFormat;
-import java.util.List;
 
 /**
  * @author xiangping
@@ -36,13 +33,13 @@ public class WeiXinServiceImpl implements WeiXinService {
         SnsAccessToken msg = HttpUtils.doGet(url, SnsAccessToken.class);
         WeiXinBean bean = new WeiXinBean();
         bean.setOpen_id(msg.getOpenid());
-        if (StringUtils.isNotBlank(params.getPhone())) {
-            List<SearchPersonByPhoneVO> customers = customerMapper.queryPersonByPhone(Long.parseLong(params.getPhone()));
-            if (customers!=null&&customers.size()>0){
-                bean.setCustomer_id(customers.get(0).getCustomerId());
-                bean.setNickname(customers.get(0).getNickName());
-            }
-        }
+//        if (StringUtils.isNotBlank(params.getPhone())) {
+//            List<SearchPersonByPhoneVO> customers = customerMapper.queryPersonByPhone(Long.parseLong(params.getPhone()));
+//            if (customers!=null&&customers.size()>0){
+//                bean.setCustomer_id(customers.get(0).getCustomerId());
+//                bean.setNickname(customers.get(0).getNickName());
+//            }
+//        }
         return ResultUtils.resultSuccess(bean);
     }
 }

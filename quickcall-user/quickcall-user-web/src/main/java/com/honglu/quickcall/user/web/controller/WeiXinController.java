@@ -29,7 +29,7 @@ public class WeiXinController {
     @RequestMapping("getOpenId")
     @ResponseBody
     public WebResponseModel getOpenId(WeiXinRequest params){
-        if (StringUtils.isBlank(params.getCode())&& StringUtils.isBlank(params.getPhone())) {
+        if (StringUtils.isBlank(params.getCode())) {
             WebResponseModel response = new WebResponseModel();
             response.setCode(UserBizReturnCode.paramError.code());
             response.setMsg(UserBizReturnCode.paramError.desc());
@@ -37,4 +37,21 @@ public class WeiXinController {
         }
         return userCenterService.execute(params);
     }
+
+//    /**
+//     * 获取微信openid
+//     * @param params
+//     * @return
+//     */
+//    @RequestMapping("getOpenId")
+//    @ResponseBody
+//    public WebResponseModel getOpenId(WeiXinRequest params){
+//        if (StringUtils.isBlank(params.getCode())&& StringUtils.isBlank(params.getPhone())) {
+//            WebResponseModel response = new WebResponseModel();
+//            response.setCode(UserBizReturnCode.paramError.code());
+//            response.setMsg(UserBizReturnCode.paramError.desc());
+//            return response;
+//        }
+//        return userCenterService.execute(params);
+//    }
 }
