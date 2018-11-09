@@ -54,4 +54,19 @@ public interface CouponDubboService {
 	 */
 	CouponOrderVo getDeductCoupon(String skillItemId, String customerId);
 
+	/**
+	 * 下单获取券接口用
+	 * @param customerCoupo 客户券
+	 * @return0=不成功，1=成功
+	 *
+	 */
+	int insertCustomerCoupon(CustomerCoupon customerCoupo);
+
+	/**
+	 * 发送消息
+	 * @param couponId
+	 * @param customerId
+	 */
+	void sendActivityMessage(String couponId, String customerId);
+
 }
