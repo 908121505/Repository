@@ -141,14 +141,21 @@ public class OrderServiceImpl implements IOrderService {
 				vo.setSkillItemName(skillItem.getSkillItemName());
 
 				//技能-客户优惠券
-				CouponOrderVo cov = couponDubboBusiness.showActivityCouponForOrder(skillItemId+"",customerId+"");
-				vo.setShowTip(cov.getShowTip());
-				vo.setCouponPrice(cov.getCouponPrice());
-                //vo.setTipHtml(cov.getTipHtml());
-                vo.setCouponId(cov.getCouponId());
-                vo.setCouponName(cov.getCouponName());
-                vo.setCouponDeductPrice(cov.getCouponDeductPrice());
-				vo.setCustomerCouponId(cov.getCustomerCouponId());
+				CouponOrderVo cov = null;
+				try {
+					cov = couponDubboBusiness.showActivityCouponForOrder(skillItemId+"",customerId+"");
+				} catch (Exception e) {
+					LOGGER.warn("根据技能ID获取券信息发生异常，异常信息：",e);
+				}
+				if(cov != null){
+					vo.setShowTip(cov.getShowTip());
+					vo.setCouponPrice(cov.getCouponPrice());
+					//vo.setTipHtml(cov.getTipHtml());
+					vo.setCouponId(cov.getCouponId());
+					vo.setCouponName(cov.getCouponName());
+					vo.setCouponDeductPrice(cov.getCouponDeductPrice());
+					vo.setCustomerCouponId(cov.getCustomerCouponId());
+				}
 
 				custSkillList.add(vo);
 			}
