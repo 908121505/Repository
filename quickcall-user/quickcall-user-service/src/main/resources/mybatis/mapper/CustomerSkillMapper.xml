@@ -39,7 +39,7 @@
     <result column="skill_font_color" property="skillFontColor" jdbcType="VARCHAR" />
     <result column="skill_voice_url" property="skillVoiceUrl" jdbcType="VARCHAR" />
     <result column="skill_voice_time" property="skillVoiceTime" jdbcType="DECIMAL" />
-
+	<result column="score_total" property="skillVolume" jdbcType="DECIMAL" />
   </resultMap>
   
   <sql id="Base_Column_List" >
@@ -451,8 +451,9 @@
   
   <select id="queryCustomerSkillByCertifyId" resultMap="BaseResultMap"  >
     select
-    <include refid="Base_Column_List" />
-    from customer_skill
+    cs.*,bss.score_total
+    from customer_skill cs 
+    left join bigv_skill_score bss on cs.customer_skill_id = bss.customer_skill_id 
     where certify_id = #{certifyId,jdbcType=BIGINT}
     limit 1;
   </select>
