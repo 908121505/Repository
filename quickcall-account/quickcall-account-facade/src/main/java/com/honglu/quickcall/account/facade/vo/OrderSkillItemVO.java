@@ -44,7 +44,7 @@ public class OrderSkillItemVO implements  Serializable{
 	/**券的抵扣价值*/
 	private Integer couponDeductPrice;
 	/**customer_coupon的ID*/
-	private String customerCouponId;
+	private Integer customerCouponId;
 
 	public Long getUserSkillItemId() {
 		return userSkillItemId;
@@ -138,11 +138,11 @@ public class OrderSkillItemVO implements  Serializable{
 		this.couponDeductPrice = couponDeductPrice;
 	}
 
-	public String getCustomerCouponId() {
+	public Integer getCustomerCouponId() {
 		return customerCouponId;
 	}
 
-	public void setCustomerCouponId(String customerCouponId) {
+	public void setCustomerCouponId(Integer customerCouponId) {
 		this.customerCouponId = customerCouponId;
 	}
 }

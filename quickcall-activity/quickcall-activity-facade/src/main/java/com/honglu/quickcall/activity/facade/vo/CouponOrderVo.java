@@ -18,7 +18,7 @@ public class CouponOrderVo {
 	private String couponName;//券的名称
 	private Integer couponDeductPrice;//券的抵扣价值
 
-	private String customerCouponId;//customer_coupon的ID
+	private Integer customerCouponId;//customer_coupon的ID
 
 	public Integer getShowTip() {
 		return showTip;
@@ -68,11 +68,11 @@ public class CouponOrderVo {
 		this.couponDeductPrice = couponDeductPrice;
 	}
 
-	public String getCustomerCouponId() {
+	public Integer getCustomerCouponId() {
 		return customerCouponId;
 	}
 
-	public void setCustomerCouponId(String customerCouponId) {
+	public void setCustomerCouponId(Integer customerCouponId) {
 		this.customerCouponId = customerCouponId;
 	}
 }
