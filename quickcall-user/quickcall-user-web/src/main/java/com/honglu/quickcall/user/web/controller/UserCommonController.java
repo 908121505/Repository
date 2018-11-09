@@ -431,7 +431,7 @@ public class UserCommonController {
 			if (!params.getVerifyCode().equals(
 					JedisUtil.get(RedisKeyConstants.USER_VERIFYCODE + params.getTel() + params.getCodeType()))) {
 				response.setCode(BizCode.CustomerSmsError.code());
-				response.setMsg("验证码输入不正确");
+				response.setMsg("验证码错误");
 				return response;
 			}
 		}
