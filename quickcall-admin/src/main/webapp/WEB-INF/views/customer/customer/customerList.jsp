@@ -19,6 +19,14 @@
                 </div>
             </div>
             <div class="col-md-2">
+                <div class="form-group">
+                    <div class="input-group">
+                        <div class="input-group-addon">手机号</div>
+                        <input class="form-control" type="text" id="phoneQuery">
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2">
                 <button type="button" class="btn btn-primary btn-small btn-block"
                         id="query">
                     <i class="glyphicon glyphicon-search"></i> 查询
@@ -296,6 +304,7 @@
                     aoData.push({"name": "nickName", "value": $("#nameQuery").val().replace(new RegExp(" ", "g"), "")});
                     aoData.push({"name": "vStatus", "value": $("#customTypeQuery").val()});
                     aoData.push({"name": "appId", "value": $("#nameQuery").val().replace(new RegExp(" ", "g"), "")});
+                    aoData.push({"name": "phone", "value": $("#phoneQuery").val().replace(new RegExp(" ", "g"), "")});
                     var status = $('#customerStatusQuery').val();
                     if(status == 1){
                         aoData.push({"name": "custStatus", "value": 1});
