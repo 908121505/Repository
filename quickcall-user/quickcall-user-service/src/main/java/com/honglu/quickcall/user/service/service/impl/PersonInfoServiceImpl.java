@@ -630,6 +630,13 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 							mySkillVO.setSkillVoiceUrl(skillReview.getSkillVoiceUrl());
 							mySkillVO.setSkillVoiceTime(
 									skillReview.getSkillVoiceTime().setScale(0, BigDecimal.ROUND_UP).intValue());
+							mySkillVO.setBackColor(skill.getBackColor());
+							mySkillVO.setSkillFontColor(skill.getFontColor());
+							//获取客户技能
+							CustomerSkill cs = customerSkillMapper.queryCustomerSkillByCertifyId(skillReview.getCertifyId());
+							mySkillVO.setPrice(cs.getDiscountPrice());
+							mySkillVO.setUnit(cs.getServiceUnit());
+							mySkillVO.setSkillVolume(cs.getSkillVolume());
 						}
 						haveSkill.add(mySkillVO);
 						flag = false;
@@ -720,7 +727,7 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 		customerCenterVO.setAttentionNum(fansMapper.queryAttentionNumByCustomerId(request.getCustomerId()));
 
 		// 查询粉丝数
-		customerCenterVO.setFansNum(fansMapper.queryFansNumByCustomerId(request.getCustomerId()).intValue());
+		customerCenterVO.setFansNum(fansMapper.queryFansNumByCustomerId(request.getCustomerId()));
 		
 		// 查询被访问数量
 		customerCenterVO.setVisitNum(customerVisitMapper.selectUnreadCountByCustomerId(request.getCustomerId()));
@@ -765,7 +772,7 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 		}
 
 		// 查询粉丝数
-		customerHomeVO.setFansNum(fansMapper.queryFansNumByCustomerId(request.getViewCustomerId()).intValue());
+		customerHomeVO.setFansNum(fansMapper.queryFansNumByCustomerId(request.getViewCustomerId()));
 
 		// 查看自己的标志
 		boolean viewMyselfFlag = Objects.equals(request.getLoginCustomerId(), request.getViewCustomerId());

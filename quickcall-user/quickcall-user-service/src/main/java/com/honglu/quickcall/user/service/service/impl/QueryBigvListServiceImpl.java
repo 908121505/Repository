@@ -36,8 +36,6 @@ public class QueryBigvListServiceImpl implements QueryBigvListService {
     @Autowired
     private SkillItemMapper skillItemMapper;
     @Autowired
-    private CustomerSkillMapper customerSkillMapper;
-    @Autowired
     private CustomerAppearanceMapper customerAppearanceMapper;
     @Autowired
     private ResourceConfigMapper resourceConfigMapper;
@@ -309,10 +307,28 @@ public class QueryBigvListServiceImpl implements QueryBigvListService {
         //分页参数
         if (pageIndex != null && pageSize != null) {
             start = pageIndex * pageSize;
+        }else{
+    	//如果不分页只显示100条防止前后台内存报警
+        	start = 0;
+        	pageSize = 100;
         }
         Integer weekIndex = DateUtils.getDayOfWeek();
-        List<DaVinfoVO> daVinfoVOList = customerSkillMapper.queryCustomerListBySkillItem(skillItemId, weekIndex, new Date(), start, pageSize);
-        for (DaVinfoVO daVinfoVO : daVinfoVOList) {
+        List<DaVinfoVO> daVinfoVOList = new ArrayList<>();
+		List<CustomerSkill> customerSkillList = resourceConfigMapper.selectRankBigvListBySkillItemId(skillItemId, weekIndex, new Date(), start, pageSize);
+		//对象转换
+        for (CustomerSkill customerSkill : customerSkillList) {
+        	DaVinfoVO daVinfoVO = new DaVinfoVO();
+        	daVinfoVO.setCustomerId(customerSkill.getCustomerId());
+        	daVinfoVO.setAge(DateUtils.getAgeByBirthYear(customerSkill.getCustomerBirthday()));
+        	daVinfoVO.setCustomerSkillId(customerSkill.getCustomerSkillId());
+        	daVinfoVO.setSkillBackColor(customerSkill.getSkillHomeBackColor());
+        	daVinfoVO.setPrice(customerSkill.getDiscountPrice());
+        	daVinfoVO.setUnitName(customerSkill.getServiceUnit());
+        	daVinfoVO.setVoiceUrl(customerSkill.getSkillVoiceUrl());
+        	daVinfoVO.setVoiceTime(customerSkill.getSkillVoiceTime());
+        	daVinfoVO.setSkillItemName(customerSkill.getSkillName());
+        	daVinfoVO.setNickName(customerSkill.getCustomerNickName());
+        	daVinfoVO.setSex(customerSkill.getCustomerSex());
             // 查询第一张形象照 性别(0=女,1=男)
             List<String> appearanceList = customerAppearanceMapper.queryCustomerAppearance(daVinfoVO.getCustomerId(), 0, 1);
             if (appearanceList == null || appearanceList.size() == 0) {
@@ -324,6 +340,7 @@ public class QueryBigvListServiceImpl implements QueryBigvListService {
             } else {
                 daVinfoVO.setCoverUrl(appearanceList.get(0));
             }
+            daVinfoVOList.add(daVinfoVO);
         }
         return ResultUtils.resultSuccess(daVinfoVOList);
     }

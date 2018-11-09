@@ -124,11 +124,25 @@ public class Order {
     private String selectReason;
     private String remarkReason;
     
+    private BigDecimal  couponPrice;
+    
+    
+    
     
     
 
     
-    public Long getSkillItemId() {
+    public BigDecimal getCouponPrice() {
+		return couponPrice;
+	}
+
+
+	public void setCouponPrice(BigDecimal couponPrice) {
+		this.couponPrice = couponPrice;
+	}
+
+
+	public Long getSkillItemId() {
 		return skillItemId;
 	}
 

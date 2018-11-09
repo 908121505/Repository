@@ -243,7 +243,7 @@ public class OrderServiceImpl implements IOrderService {
 			Integer couponFlag = OrderSkillConstants.ORDER_COUPON_FLAG_DEFAULT;
 			// 获取券金额
 			BigDecimal couponPrice = request.getCouponPrice();
-			Long customerCouponId = request.getCustomerCouponId();
+			Integer customerCouponId = request.getCustomerCouponId();
 			if (customerCouponId != null && couponPrice != null) {
 				BigDecimal discountPrice = price.subtract(couponPrice);
 				orderAmounts = new BigDecimal(orderNum - 1).multiply(price);
@@ -315,6 +315,14 @@ public class OrderServiceImpl implements IOrderService {
 			record.setOrderTime(currTime);
 			record.setRemark(request.getRemark());
 			orderMapper.insert(record);
+			
+			CustomerCoupon customerCoupon = new CustomerCoupon();
+			customerCoupon.setId(customerCouponId);
+			try {
+				couponDubboBusiness.updateCustomerCouponById(customerCoupon );
+			} catch (Exception e1) {
+				LOGGER.warn("======>>>>>saveOrder()消费券发生异常：",e1);
+			}
 			resultMap.put("retCode", OrderSkillConstants.RET_CODE_SUCCESS);
 			resultMap.put("orderId", orderId + "");
 

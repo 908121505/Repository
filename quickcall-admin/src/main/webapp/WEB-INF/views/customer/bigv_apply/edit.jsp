@@ -15,13 +15,19 @@
 					<label class="col-sm-2 control-label">用户ID</label>
 					<div class="col-sm-10">
 						<input type="hidden" value="${entity.applyId }" name="applyId" />
-						${entity.customerId }
+						<label class="control-label">${entity.customerId }</label>
 					</div>
 				</div>
 				<div class="form-group">
 					<label class="col-sm-2 control-label">用户昵称</label>
 					<div class="col-sm-10">
-						${entity.nickName }
+						<label class="control-label">${entity.nickName }</label>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-2 control-label">手机号</label>
+					<div class="col-sm-10">
+						<label class="control-label">${entity.phone }</label>
 					</div>
 				</div>
 				<div class="form-group">

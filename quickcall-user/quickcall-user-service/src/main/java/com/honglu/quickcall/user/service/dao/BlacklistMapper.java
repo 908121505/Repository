@@ -68,7 +68,7 @@ public interface BlacklistMapper {
      * @param blackCustomerId -- 被拉黑的客户ID
      * @return 0=未拉黑；1=已拉黑
      */
-    Integer judgeCustomerIfBacked(Long customerId, Long blackCustomerId);
+    Integer judgeCustomerIfBacked(@Param("customerId") Long customerId, @Param("blackCustomerId") Long blackCustomerId);
 
     int updateStatusById(@Param("customerId") Long customerId, @Param("blackCustomerId") Long blackCustomerId);
 }

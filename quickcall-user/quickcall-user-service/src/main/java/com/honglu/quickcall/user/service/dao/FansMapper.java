@@ -48,7 +48,7 @@ public interface FansMapper {
 	 * @param customerId
 	 * @return
 	 */
-	Long queryFansNumByCustomerId(@Param("customerId") Long customerId);
+	int queryFansNumByCustomerId(@Param("customerId") Long customerId);
 
 	/**
 	 * 查询关注列表

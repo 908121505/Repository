@@ -22,7 +22,7 @@
     id, customer_id, receive_type, range_min_limit, receive_status, create_time, modify_time, 
     create_man, modify_man, remark
   </sql>
-  <select id="selectByCustomerId" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
     <include refid="Base_Column_List" />
     from customer_msg_setting

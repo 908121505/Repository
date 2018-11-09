@@ -73,4 +73,8 @@ public interface CustomerAppearanceMapper{
 
 	List<AppearanceVO> selectAppearanceVOByCustomerIdAndType(@Param("customerId") Long customerId, @Param("type") Integer type);
 
+    List<AppearanceVO> selectAppearanceVOByCustomerId(@Param("customerId") Long customerId);
+
+	int queryAppearanceCountByCustomerId(@Param("customerId") Long customerId);
+
 }

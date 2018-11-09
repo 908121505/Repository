@@ -151,7 +151,7 @@
   </update> -->
 
   <!-- 查询关注数量 -->
-  <select id="queryAttentionNumByCustomerId" resultType="int" parameterType="java.lang.Long" >
+  <select id="queryAttentionNumByCustomerId" resultType="int">
     SELECT count(*) FROM fans fs
     INNER JOIN customer ct ON fs.anchor_id = ct.customer_id
     LEFT JOIN fans fs1 ON fs.anchor_id = fs1.fans_id and fs.fans_id = fs1.anchor_id
@@ -159,7 +159,7 @@
   </select>
 
   <!-- 查询粉丝数量 -->
-  <select id="queryFansNumByCustomerId" resultType="java.lang.Long" parameterType="java.lang.Long" >
+  <select id="queryFansNumByCustomerId" resultType="int" >
     SELECT count(*) FROM fans fs
     INNER JOIN customer ct ON fs.fans_id = ct.customer_id
     LEFT JOIN fans fs1 ON fs.anchor_id = fs1.fans_id and fs.fans_id = fs1.anchor_id
