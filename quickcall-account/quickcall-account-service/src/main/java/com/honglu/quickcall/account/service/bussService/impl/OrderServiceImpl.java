@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import com.honglu.quickcall.activity.facade.vo.CouponOrderVo;
+//import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -137,6 +139,17 @@ public class OrderServiceImpl implements IOrderService {
 				vo.setSkillIcon(skillItem.getUnlockIcon());
 				vo.setServiceUnit(skill.getServiceUnit());
 				vo.setSkillItemName(skillItem.getSkillItemName());
+
+				//技能-客户优惠券
+				CouponOrderVo cov = couponDubboBusiness.showActivityCouponForOrder(skillItemId+"",customerId+"");
+				vo.setShowTip(cov.getShowTip());
+				vo.setCouponPrice(cov.getCouponPrice());
+                //vo.setTipHtml(cov.getTipHtml());
+                vo.setCouponId(cov.getCouponId());
+                vo.setCouponName(cov.getCouponName());
+                vo.setCouponDeductPrice(cov.getCouponDeductPrice());
+				vo.setCustomerCouponId(cov.getCustomerCouponId());
+
 				custSkillList.add(vo);
 			}
 		}

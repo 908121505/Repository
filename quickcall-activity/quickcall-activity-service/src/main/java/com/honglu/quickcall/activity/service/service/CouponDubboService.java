@@ -2,6 +2,7 @@ package com.honglu.quickcall.activity.service.service;
 
 import com.honglu.quickcall.activity.facade.entity.Coupon;
 import com.honglu.quickcall.activity.facade.entity.CustomerCoupon;
+import com.honglu.quickcall.activity.facade.vo.CouponOrderVo;
 
 import java.util.List;
 import java.util.Map;
@@ -37,6 +38,20 @@ public interface CouponDubboService {
      * 根据客户ID和券ID查询用户券关系数量
      * @return
      */
-	int getCountByCustomerIdAndCouponId(Map<String,String> map);
+	CustomerCoupon getCountByCustomerIdAndCouponId(Map<String,String> map);
+
+	/**
+	 * 下单页数据展示优惠券接口用
+	 * @param skillItemId 技能ID
+	 * @param customerId 客户ID
+	 */
+	CouponOrderVo showActivityCouponForOrder(String skillItemId, String customerId);
+
+	/**
+	 * 获取可抵扣的优惠券
+	 * @param skillItemId 技能ID
+	 * @param customerId 客户ID
+	 */
+	CouponOrderVo getDeductCoupon(String skillItemId, String customerId);
 
 }
