@@ -127,11 +127,37 @@ public class CouponDubboBusinessImpl implements CouponDubboBusiness{
 		//vo.setTipHtml(str);
         CouponOrderVo vo = getShowTipForActivity(skillItemId, customerId);
         CouponOrderVo dvo = getDeductCoupon(skillItemId, customerId);
-        vo.setCustomerCouponId(dvo.getCustomerCouponId());
-        vo.setCouponId(dvo.getCouponId());
-        vo.setCouponName(dvo.getCouponName());
-        vo.setCouponDeductPrice(dvo.getCouponDeductPrice());
+        if(dvo != null){
+            vo.setCustomerCouponId(dvo.getCustomerCouponId());
+            vo.setCouponId(dvo.getCouponId());
+            vo.setCouponName(dvo.getCouponName());
+            vo.setCouponDeductPrice(dvo.getCouponDeductPrice());
+        }
 		return vo;
+	}
+
+	/**
+	 * 下单获取券接口用
+	 * @param skillItemId 技能ID
+	 * @param customerId 客户ID
+	 * @return0=不成功，1=成功
+	 *
+	 */
+	@Override
+	public int getCouponInOrder(String skillItemId, String customerId){
+		int num = 0;
+		/*CouponOrderVo cvo = getShowTipForActivity(skillItemId, customerId);
+		int tip = cvo.getShowTip();
+		if(tip==1){
+			CouponOrderVo vo = couponDubboService.showActivityCouponForOrder(skillItemId,customerId);//customerId这里暂时不用
+			//String couponId = couponDubboService.getCouponIdBySkillItemId(skillItemId);
+			String couponId = "";
+			if(vo!=null && vo.getCouponId()!=null){
+				couponId = vo.getCouponId();
+			}
+			//num = insert(customerCoupon);
+		}*/
+		return num;
 	}
 
 }
