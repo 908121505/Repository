@@ -290,24 +290,24 @@ public class OrderService {
 	 * @return
 	 */
 	public int updateOrder(OrderVO entity) {
+
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		paramMap.put("orderId", entity.getOrderId());
 		paramMap.put("remarkReason", entity.getRemarkReason());
 
 		Integer orderStatus = Integer.valueOf(entity.getOrderStatus());
-		// TODO 添加退款给用户 + 冻结大V金额
-		// 强制取消
+		// TODO 添加退款给用户 + 冻结大V金额 // 强制取消
 		if (OrderSkillConstants.ORDER_STATUS_CANCEL_FORCE == orderStatus) {
 			paramMap.put("orderStatus", orderStatus);
 			baseManager.update("Account.inAccount", paramMap);
 			// 退款给用户
-		} else if (OrderSkillConstants.ORDER_STATUS_FINISHED_FORCE == orderStatus) {
-			// 给大V冻结金额
+		} else if (OrderSkillConstants.ORDER_STATUS_FINISHED_FORCE == orderStatus) { // 给大V冻结金额
 			paramMap.put("orderStatus", orderStatus);
 		}
 
 		int update = baseManager.update("Order.updateOrder", paramMap);
-		return update;
+
+		return 0;
 	}
 
 	public int saveUpdate(OrderVO entity) {
@@ -344,6 +344,7 @@ public class OrderService {
 		}
 		map.put("orderNo", order.getOrderNo());
 		TradeDetail tradeDetail = baseManager.get("TradeDetail.selectFrozenByOrderNo", map);
+
 		String userFrozenkey = RedisKeyConstants.ACCOUNT_USERFROZEN_USER + order.getServiceId();
 		String steamFrozenKey = RedisKeyConstants.ACCOUNT_USERFROZEN_STREAM + tradeDetail.getTradeId();
 		String steamFrozenValue = JedisUtil.get(steamFrozenKey);
@@ -362,6 +363,7 @@ public class OrderService {
 				}
 			}
 		}
+
 		// 冻结流水正常 开始强制完成逻辑
 		if (flag) {
 			// 入账
@@ -416,9 +418,59 @@ public class OrderService {
 	 * @return
 	 */
 	@Transactional
-	public boolean compulsoryCancellation(Long orderNo) {
+	public int compulsoryCancellation(Long orderId, BigDecimal amount) {
+		boolean flag = false;
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("orderId", orderId);
+		Orders order = baseManager.get("Orders.selectByPrimaryKey", map);
 
-		return false;
+		map.put("userId", order.getServiceId());
+		Account account = baseManager.get("Account.queryAccount", map);
+		if (account.getFrozenAmounts().compareTo(amount) == -1) {
+			return -1;
+		}
+		map.put("orderNo", order.getOrderNo());
+		TradeDetail tradeDetail = baseManager.get("TradeDetail.selectFrozenByOrderNo", map);
+
+		String userFrozenkey = RedisKeyConstants.ACCOUNT_USERFROZEN_USER + order.getServiceId();
+		String steamFrozenKey = RedisKeyConstants.ACCOUNT_USERFROZEN_STREAM + tradeDetail.getTradeId();
+		String steamFrozenValue = JedisUtil.get(steamFrozenKey);
+		String userFrozenValue = JedisUtil.get(userFrozenkey);
+		if (StringUtils.isNotBlank(userFrozenValue) && StringUtils.isNotBlank(steamFrozenValue)) {
+			if (userFrozenValue.contains(steamFrozenValue)) {
+				flag = true;
+				JedisUtil.del(steamFrozenKey);
+				String[] arys = userFrozenValue.split(",");
+				arys = remove(arys, tradeDetail.getTradeId() + "");
+				userFrozenValue = StringUtils.join(arys, ",");
+				if (userFrozenValue.length() > 0) {
+					JedisUtil.set(userFrozenkey, userFrozenValue);
+				} else {
+					JedisUtil.del(userFrozenkey);
+				}
+			}
+		}
+
+		// 冻结流水正常 开始强制完成逻辑
+		if (flag) {
+			// 入账
+			Map<String, Object> pram = new HashMap<String, Object>();
+			pram.put("type", 1);
+			pram.put("amount", amount);
+			pram.put("userId", order.getCustomerId());
+			baseManager.update("Account.inAccount", pram);
+			// 记录流水
+			tradeDetail = new TradeDetail();
+			tradeDetail.setTradeId(UUIDUtils.getId());
+			tradeDetail.setOrderNo(order.getOrderNo());
+			tradeDetail.setCustomerId(order.getServiceId());
+			tradeDetail.setCreateTime(new Date());
+			tradeDetail.setType(5);
+			tradeDetail.setInPrice(amount);
+			baseManager.insert("TradeDetail.insertSelective", tradeDetail);
+			return 1;
+		}
+		return 0;
 	}
 
 }
