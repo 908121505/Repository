@@ -31,7 +31,13 @@ public class ChannelSwitchServiceImpl implements ChannelSwitchService {
 		if(status == null){
 			return ResultUtils.resultDataNotExist("没有该渠道和版本");
 		}
-		map.put("status", status);
+		String str = "";
+		if(status == 1){
+			str = "678";
+		}else{
+			str = "123"; 
+		}
+		map.put("talk_version", str);
 		return ResultUtils.resultSuccess(map);
 	}
 
