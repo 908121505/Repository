@@ -80,11 +80,24 @@ public class CustomerSkill {
     private String modifyMan;
 
     private String remark;
+    
+    private  Integer  skillType;
+    
+    
+    
 
     
     
     
-    public String getStartTimeStr() {
+    public Integer getSkillType() {
+		return skillType;
+	}
+
+	public void setSkillType(Integer skillType) {
+		this.skillType = skillType;
+	}
+
+	public String getStartTimeStr() {
 		return startTimeStr;
 	}
 

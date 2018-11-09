@@ -353,6 +353,7 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 			skillVO.setSkillItemName(custSkill.getSkillName());
 			skillVO.setSwitchStatus(custSkill.getSwitchStatus());
 			skillVO.setOldSkillPrice(custSkill.getDiscountPrice());
+			skillVO.setSkillType(custSkill.getSkillType());
 			// 根据技能ID获取可选技能信息
 			Long skillItemId = custSkill.getSkillItemId();
 			getSkillExtList(skillItemId,skillVO);
