@@ -556,7 +556,7 @@ public class OrderServiceImpl implements IOrderService {
 			try {
 				map = couponDubboBusiness.getCustomerCouponByOrderId(orderId);
 			} catch (Exception e) {
-				LOGGER.warn("获取券信息发生异常");
+				LOGGER.warn("获取券信息发生异常,异常信息：",e);
 			}
 			orderDetail.setCouponName(map.get("couponName") == null ? "" : map.get("couponName"));
 			orderDetail.setCouponPrice(map.get("couponPrice") == null ? null : new BigDecimal(map.get("couponPrice")));
