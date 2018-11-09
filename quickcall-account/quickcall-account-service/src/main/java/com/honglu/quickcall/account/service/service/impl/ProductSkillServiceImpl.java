@@ -171,7 +171,7 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 		weekDataMap.put("monday", skill.getMonday());
 		weekDataMap.put("wednesday", skill.getWednesday());
 		weekDataMap.put("thursday", skill.getThursday());
-		weekDataMap.put("friday", skill.getReceiveStatus());
+		weekDataMap.put("friday", skill.getFriday());
 		weekDataMap.put("saturday", skill.getSaturday());
 		weekDataMap.put("sunday", skill.getSunday());
 		skillVO.setWeekDataMap(weekDataMap);
