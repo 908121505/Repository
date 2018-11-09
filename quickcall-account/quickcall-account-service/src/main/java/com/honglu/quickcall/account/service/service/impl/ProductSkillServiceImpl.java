@@ -171,7 +171,7 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 		weekDataMap.put("monday", skill.getMonday());
 		weekDataMap.put("wednesday", skill.getWednesday());
 		weekDataMap.put("thursday", skill.getThursday());
-		weekDataMap.put("friday", skill.getReceiveStatus());
+		weekDataMap.put("friday", skill.getFriday());
 		weekDataMap.put("saturday", skill.getSaturday());
 		weekDataMap.put("sunday", skill.getSunday());
 		skillVO.setWeekDataMap(weekDataMap);
@@ -353,6 +353,7 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 			skillVO.setSkillItemName(custSkill.getSkillName());
 			skillVO.setSwitchStatus(custSkill.getSwitchStatus());
 			skillVO.setOldSkillPrice(custSkill.getDiscountPrice());
+			skillVO.setSkillType(custSkill.getSkillType());
 			// 根据技能ID获取可选技能信息
 			Long skillItemId = custSkill.getSkillItemId();
 			getSkillExtList(skillItemId,skillVO);
@@ -380,7 +381,7 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 					}
 				}else{
 					Date  appointEndTime = custSkill.getAppointEndTime();
-					if(endServiceTimeStr != null){
+					if(appointEndTime != null){
 						endServiceTimeStr = DateUtils.getDateHHMMTime(appointEndTime);
 					}
 				}

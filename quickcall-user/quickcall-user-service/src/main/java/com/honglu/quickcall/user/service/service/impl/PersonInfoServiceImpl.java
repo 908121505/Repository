@@ -636,7 +636,7 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 							CustomerSkill cs = customerSkillMapper.queryCustomerSkillByCertifyId(skillReview.getCertifyId());
 							mySkillVO.setPrice(cs.getDiscountPrice());
 							mySkillVO.setUnit(cs.getServiceUnit());
-							mySkillVO.setSkillVolume(cs.getSkillVolume());
+							mySkillVO.setSkillVolume(cs.getSkillVolume()==null?new BigDecimal(0):cs.getSkillVolume());
 						}
 						haveSkill.add(mySkillVO);
 						flag = false;
