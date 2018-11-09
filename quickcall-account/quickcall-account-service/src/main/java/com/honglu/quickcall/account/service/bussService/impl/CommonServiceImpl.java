@@ -126,12 +126,14 @@ public class CommonServiceImpl implements CommonService {
 			}
 			//进行中倒计时计算，不同状态逻辑不同 ，需要重新梳理一下    TODO
 		}else if(oldOrderStatus == OrderSkillConstants.ORDER_STATUS_GOING_USER_ACCEPCT   || oldOrderStatus == OrderSkillConstants.ORDER_STATUS_GOING_DAV_APPAY_FINISH){
-			//
+			//TODO  如果订单已经过了预计结束时间，则需要变更订单状态为已完成
 			endTime =  expectEndTime;
 			countDownSeconds =  DateUtils.getDiffSeconds(currTime, endTime);
 			//大于0说明正在倒计时，状态不变  小于0的逻辑暂时不考虑
 			if(countDownSeconds > 0){
 				tempVO.setOrderStatus(oldOrderStatus);
+			}else{
+				tempVO.setOrderStatus(OrderSkillConstants.ORDER_STATUS_FINISH_DAV_FINISH_AFTER_SERVICE_TIME);
 			}
 			tempVO.setCountDownSeconds(countDownSeconds);
 		}

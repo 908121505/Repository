@@ -180,7 +180,7 @@ public class OrderServiceImpl implements IOrderService {
 		LOGGER.info("======>>>>>saveOrder()入参：" + request.toString());
 
 		CommonResponse commonResponse = commonService.getCommonResponse();
-		HashMap<String, String> resultMap = new HashMap<>();
+		HashMap<String, Object> resultMap = new HashMap<>();
 		resultMap.put("retCode", OrderSkillConstants.DEFAULT_NULL_STR);
 		resultMap.put("downLoadStr", OrderSkillConstants.DEFAULT_NULL_STR);
 		resultMap.put("orderId", OrderSkillConstants.DEFAULT_NULL_STR);
@@ -212,7 +212,7 @@ public class OrderServiceImpl implements IOrderService {
 					if (remainStr != null && remainStr > 0) {
 						downLoadStr = DateUtils.getDiffSeconds(remainStr);
 					}*/
-					resultMap.put("downLoadStr", remainStr+"");
+					resultMap.put("downLoadStr", remainStr);
 				}
 				resultMap.put("retCode", OrderSkillConstants.RET_CODE_DV_BUSY);
 				commonResponse.setData(resultMap);
@@ -556,10 +556,12 @@ public class OrderServiceImpl implements IOrderService {
 			try {
 				map = couponDubboBusiness.getCustomerCouponByOrderId(orderId);
 			} catch (Exception e) {
-				LOGGER.warn("获取券信息发生异常");
+				LOGGER.warn("获取券信息发生异常,异常信息：",e);
 			}
-			orderDetail.setCouponName(map.get("couponName") == null ? "" : map.get("couponName"));
-			orderDetail.setCouponPrice(map.get("couponPrice") == null ? null : new BigDecimal(map.get("couponPrice")));
+			if(map != null){
+				orderDetail.setCouponName(map.get("couponName") == null ? "" : map.get("couponName"));
+				orderDetail.setCouponPrice(map.get("couponPrice") == null ? null : new BigDecimal(map.get("couponPrice")));
+			}
 
 		}
 
