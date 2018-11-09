@@ -381,7 +381,7 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 					}
 				}else{
 					Date  appointEndTime = custSkill.getAppointEndTime();
-					if(endServiceTimeStr != null){
+					if(appointEndTime != null){
 						endServiceTimeStr = DateUtils.getDateHHMMTime(appointEndTime);
 					}
 				}
