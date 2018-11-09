@@ -74,6 +74,14 @@ public class AccountDubboBusinessImpl implements AccountDubboBusiness {
 			case OrderRequestType.QUERY_DV_LIST_BY_TYPE:
 				response = skillService.getDaVListBySkillItemId((DaVListBySkillItemIdRequest) request);
 				break;
+				/** 首页技能种类展示 */
+			case OrderRequestType.CHECK_RECEIVE_SWITCH:
+				response = skillService.checkReceiveSwitch((CheckReceiveSwitchRequest) request);
+				break;
+				/** 开启接单开关 */
+			case OrderRequestType.OPEN_RECEIVE_SWITCH:
+				response = skillService.openReceiveSwitch((CheckReceiveSwitchRequest) request);
+				break;
 			/////////////////////////////////////////////////////////////////
 			/** 获取主播开启产品 */
 			case OrderRequestType.ORDER_DAV_PRODUCT_LIST:

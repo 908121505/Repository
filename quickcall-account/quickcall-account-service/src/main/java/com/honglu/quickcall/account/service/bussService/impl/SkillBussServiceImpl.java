@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.honglu.quickcall.account.facade.code.AccountBizReturnCode;
+import com.honglu.quickcall.account.facade.exchange.request.CheckReceiveSwitchRequest;
 import com.honglu.quickcall.account.facade.exchange.request.DaVListBySkillItemIdRequest;
 import com.honglu.quickcall.account.facade.exchange.request.FirstPageDaVinfoRequest;
 import com.honglu.quickcall.account.facade.exchange.request.FirstPageSkillinfoRequest;
@@ -129,6 +130,36 @@ public class SkillBussServiceImpl implements ISkillBussService {
 		List<DaVinfoVO>    resultList = productSkillService.getDaVListBySkillId(skillItemId);
 		CommonResponse commonResponse = commonService.getCommonResponse();
 		commonResponse.setData(resultList);
+		LOGGER.info("用户编号为：" + request.getCustomerId() + "查询成功");
+		return commonResponse;
+	}
+
+
+
+	@Override
+	public CommonResponse checkReceiveSwitch(CheckReceiveSwitchRequest request) {
+		if (request == null ) {
+			throw new BizException(AccountBizReturnCode.paramError, "检查声优接单开关是否开启参数异常");
+		}
+		Long  customerId = request.getCustomerId();
+		Integer     retType = productSkillService.checkReceiveSwitch(customerId);
+		CommonResponse commonResponse = commonService.getCommonResponse();
+		commonResponse.setData(retType);
+		LOGGER.info("用户编号为：" + request.getCustomerId() + "查询成功");
+		return commonResponse;
+	}
+
+
+
+	@Override
+	public CommonResponse openReceiveSwitch(CheckReceiveSwitchRequest request) {
+		if (request == null ) {
+			throw new BizException(AccountBizReturnCode.paramError, "开启声优接单开关参数异常");
+		}
+		Long  customerId = request.getCustomerId();
+		productSkillService.openReceiveSwitch(customerId);
+		CommonResponse commonResponse = commonService.getCommonResponse();
+		commonResponse.setData("");
 		LOGGER.info("用户编号为：" + request.getCustomerId() + "查询成功");
 		return commonResponse;
 	}
