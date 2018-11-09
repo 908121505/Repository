@@ -119,9 +119,7 @@ public class OrderService {
 			String[] items = smallOrderItem.split(",");
 			paramMap.put("orderStatus",Arrays.asList(items));
 //			paramMap.put("orderStatus",parameters.get("orderStatus"));
-		if (orderStatus != null && (!orderStatus.equals("-1"))) {
-			paramMap.put("orderStatus", parameters.get("orderStatus"));
-		}
+		}		
 		if (discountType != null && (!discountType.equals("-1"))) {
 			String[] discountTypes = discountType.split("-");
 			paramMap.put("discountTypeMin", discountTypes[0]);
@@ -296,25 +294,30 @@ public class OrderService {
 	 * @param entity
 	 * @return
 	 */
+	@Transactional
 	public int updateOrder(OrderVO entity) {
 
+		if(entity == null){
+			return 0;
+		}
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		paramMap.put("orderId", entity.getOrderId());
-		paramMap.put("remarkReason", entity.getRemarkReason());
-
+		paramMap.put("compulsion_reason", entity.getCompulsionReason());
 		Integer orderStatus = Integer.valueOf(entity.getOrderStatus());
-		// TODO 添加退款给用户 + 冻结大V金额 // 强制取消
+		BigDecimal orderAmount = new BigDecimal(entity.getOrderAmount());
+		Long orderId = Long.valueOf(entity.getOrderId());
+		int update = 0;
 		if (OrderSkillConstants.ORDER_STATUS_CANCEL_FORCE == orderStatus) {
 			paramMap.put("orderStatus", orderStatus);
-			baseManager.update("Account.inAccount", paramMap);
+			update = compulsoryCancellation(orderId,orderAmount);
 			// 退款给用户
 		} else if (OrderSkillConstants.ORDER_STATUS_FINISHED_FORCE == orderStatus) { // 给大V冻结金额
-			paramMap.put("orderStatus", orderStatus);
+			update = compulsoryCompletion(orderId, orderAmount);
 		}
 
-		int update = baseManager.update("Order.updateOrder", paramMap);
+		update = baseManager.update("Order.updateOrder", paramMap);
 
-		return 0;
+		return update;
 	}
 
 	public int saveUpdate(OrderVO entity) {
@@ -342,7 +345,6 @@ public class OrderService {
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("orderId", orderId);
 		Orders order = baseManager.get("Orders.selectByPrimaryKey", map);
-
 		map.put("userId", order.getServiceId());
 		Account account = baseManager.get("Account.queryAccount", map);
 		if (account.getFrozenAmounts().compareTo(amount) == -1) {
