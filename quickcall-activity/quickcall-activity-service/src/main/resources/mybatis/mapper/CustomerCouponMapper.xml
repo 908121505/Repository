@@ -278,6 +278,7 @@
                     where
                     cs.skill_item_id = #{skillItemId}
                      and ( NOW() BETWEEN c.start_time AND c.end_time or c.is_permanent=1)
+                     and c.get_way =1
                     order by c.coupon_price desc
                     LIMIT 1 ) x
         where
