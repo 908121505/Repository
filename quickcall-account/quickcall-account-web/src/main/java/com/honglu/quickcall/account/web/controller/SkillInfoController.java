@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.honglu.quickcall.account.facade.exchange.request.CheckReceiveSwitchRequest;
 import com.honglu.quickcall.account.facade.exchange.request.DaVListBySkillItemIdRequest;
 import com.honglu.quickcall.account.facade.exchange.request.FirstPageDaVinfoRequest;
 import com.honglu.quickcall.account.facade.exchange.request.FirstPageSkillinfoRequest;
@@ -73,14 +74,43 @@ public class SkillInfoController {
     }
     
     
+
+    
+    
     /**
-     * 根据技能ID获取该分类下的大V列表
+     * 检查接单开关
      * @param params
      * @return
      */
     @RequestMapping(value = "/getDaVListByType", method = RequestMethod.POST)
     @ResponseBody
     public WebResponseModel getDaVListBySkillId(DaVListBySkillItemIdRequest params) {
+    	WebResponseModel response = orderInfoService.execute(params);
+    	return response;
+    }
+    
+    
+    /**
+     * 检查声优接单开关是否开启
+     * @param params
+     * @return
+     */
+    @RequestMapping(value = "/checkReceiveSwitch", method = RequestMethod.POST)
+    @ResponseBody
+    public WebResponseModel checkReceiveSwitch(CheckReceiveSwitchRequest params) {
+    	WebResponseModel response = orderInfoService.execute(params);
+    	return response;
+    }
+    
+    
+    /**
+     * 开启声优接单开关
+     * @param params
+     * @return
+     */
+    @RequestMapping(value = "/openReceiveSwitch", method = RequestMethod.POST)
+    @ResponseBody
+    public WebResponseModel openReceiveSwitch(CheckReceiveSwitchRequest params) {
     	WebResponseModel response = orderInfoService.execute(params);
     	return response;
     }

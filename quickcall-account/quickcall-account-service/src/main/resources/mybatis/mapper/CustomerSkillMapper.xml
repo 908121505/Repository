@@ -528,6 +528,7 @@
 		ORDER BY
 			sort DESC ,create_time  DESC
   </select>
+
   
   
   
@@ -582,6 +583,31 @@
 		cust_status = #{receiveStatus}
 	WHERE
 		customer_id =#{customerId}
+	</update>
+
+	
+	    <!-- 获取技能开关-->
+  <select id="queryReceiveStatusByCustomerId" resultType="java.lang.Integer" >
+
+		SELECT
+			receive_status
+		FROM
+			customer_skill
+		WHERE
+			customer_id = #{customerId}
+			and  skill_status = 1
+			limit 1
+  </select>
+  
+  
+      <!-- 根据客户编号开启接单开关 -->
+    <update id="openReceiveSwitch" >
+	UPDATE 
+		customer_skill
+	SET 
+		receive_status = #{receiveStatus}
+	WHERE
+		customer_id = #{customerId}
 	</update>
   
 

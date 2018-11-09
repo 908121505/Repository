@@ -55,4 +55,17 @@ public interface CustomerSkillMapper {
 	 * @return
 	 */
 	CustomerSkillIMVO selectCustomerSkillByCustomerId(@Param("customerId")Long customerSkillId,@Param("weekIndex")Integer  weekIndex ,@Param("skillSwitch")Integer skillSwitch,@Param("endTime")Date  endTime);
+
+	/**
+	 * 根据客户ID获取接单开关
+	 * @param customerId
+	 * @return
+	 */
+	Integer queryReceiveStatusByCustomerId(@Param("customerId")Long customerId);
+
+	/**
+	 * 根据客户编号开启接单开关
+	 * @param customerId
+	 */
+	void openReceiveSwitch(@Param("customerId")Long customerId,@Param("receiveStatus")Integer  receiveStatus);
 }

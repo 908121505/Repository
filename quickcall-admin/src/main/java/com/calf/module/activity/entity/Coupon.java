@@ -117,6 +117,16 @@ public class Coupon {
     private String activityName;
     private String activityCode;
 
+    private Integer getWay;
+
+    public Integer getGetWay() {
+        return getWay;
+    }
+
+    public void setGetWay(Integer getWay) {
+        this.getWay = getWay;
+    }
+
     public String getActivityName() {
         return activityName;
     }

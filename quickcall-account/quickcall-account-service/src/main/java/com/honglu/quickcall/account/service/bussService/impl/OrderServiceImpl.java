@@ -180,7 +180,7 @@ public class OrderServiceImpl implements IOrderService {
 		LOGGER.info("======>>>>>saveOrder()入参：" + request.toString());
 
 		CommonResponse commonResponse = commonService.getCommonResponse();
-		HashMap<String, String> resultMap = new HashMap<>();
+		HashMap<String, Object> resultMap = new HashMap<>();
 		resultMap.put("retCode", OrderSkillConstants.DEFAULT_NULL_STR);
 		resultMap.put("downLoadStr", OrderSkillConstants.DEFAULT_NULL_STR);
 		resultMap.put("orderId", OrderSkillConstants.DEFAULT_NULL_STR);
@@ -212,7 +212,7 @@ public class OrderServiceImpl implements IOrderService {
 					if (remainStr != null && remainStr > 0) {
 						downLoadStr = DateUtils.getDiffSeconds(remainStr);
 					}*/
-					resultMap.put("downLoadStr", remainStr+"");
+					resultMap.put("downLoadStr", remainStr);
 				}
 				resultMap.put("retCode", OrderSkillConstants.RET_CODE_DV_BUSY);
 				commonResponse.setData(resultMap);
@@ -403,7 +403,7 @@ public class OrderServiceImpl implements IOrderService {
 			for (OrderReceiveOrderListVO info : resultList) {
 				OrderTempResponseVO responseVO = commonService.getCountDownSeconds(info.getOrderStatus(),
 						info.getOrderTime(), info.getReceiveOrderTime(), info.getStartServiceTime(),
-						info.getExpectEndTime());
+						info.getExpectEndTime(),info.getAppointTime());
 				info.setCountDownSeconds(responseVO.getCountDownSeconds());
 				info.setOrderStatus(responseVO.getOrderStatus());
 			}
@@ -436,7 +436,7 @@ public class OrderServiceImpl implements IOrderService {
 			for (OrderSendOrderListVO info : resultList) {
 				OrderTempResponseVO responseVO = commonService.getCountDownSeconds(info.getOrderStatus(),
 						info.getOrderTime(), info.getReceiveOrderTime(), info.getStartServiceTime(),
-						info.getExpectEndTime());
+						info.getExpectEndTime(),info.getAppointTime());
 				info.setCountDownSeconds(responseVO.getCountDownSeconds());
 				info.setOrderStatus(responseVO.getOrderStatus());
 			}
@@ -547,7 +547,7 @@ public class OrderServiceImpl implements IOrderService {
 			orderDetail.setAge(age);
 			OrderTempResponseVO responseVO = commonService.getCountDownSeconds(orderDetail.getOrderStatus(),
 					orderDetail.getOrderTime(), orderDetail.getReceiveOrderTime(), orderDetail.getStartServiceTime(),
-					orderDetail.getExpectEndTime());
+					orderDetail.getExpectEndTime(),orderDetail.getAppointTime());
 			orderDetail.setCountDownSeconds(responseVO.getCountDownSeconds());
 			orderDetail.setOrderStatus(responseVO.getOrderStatus());
 
@@ -558,8 +558,10 @@ public class OrderServiceImpl implements IOrderService {
 			} catch (Exception e) {
 				LOGGER.warn("获取券信息发生异常,异常信息：",e);
 			}
-			orderDetail.setCouponName(map.get("couponName") == null ? "" : map.get("couponName"));
-			orderDetail.setCouponPrice(map.get("couponPrice") == null ? null : new BigDecimal(map.get("couponPrice")));
+			if(map != null){
+				orderDetail.setCouponName(map.get("couponName") == null ? "" : map.get("couponName"));
+				orderDetail.setCouponPrice(map.get("couponPrice") == null ? null : new BigDecimal(map.get("couponPrice")));
+			}
 
 		}
 
@@ -607,13 +609,18 @@ public class OrderServiceImpl implements IOrderService {
 			OrderIMVO orderIMVO = new OrderIMVO();
 			Long customerSkillId = order.getCustomerSkillId();
 			orderIMVO = customerSkillMapper.selectCustSkillItem(customerSkillId);
-			orderIMVO.setOrderStatus(order.getOrderStatus());
 			orderIMVO.setOrderId(order.getOrderId());
 			orderIMVO.setServicePrice(order.getServicePrice());
 			orderIMVO.setServiceUnit(order.getServiceUnit());
+			
+			//订单倒计时计算
+			OrderTempResponseVO responseVO = commonService.getCountDownSeconds(order.getOrderStatus(),order.getOrderTime(), order.getReceiveOrderTime(), order.getStartServiceTime(),order.getExpectEndTime(),order.getAppointTime());
+			orderIMVO.setCountDownSeconds(responseVO.getCountDownSeconds());
+			orderIMVO.setOrderStatus(responseVO.getOrderStatus());
 			orderDetailForIMVO.setServiceId(order.getServiceId());
 			orderDetailForIMVO.setCustomerId(order.getCustomerId());
 			orderDetailForIMVO.setOrderIMVO(orderIMVO);
+			
 			commonResponse.setData(orderDetailForIMVO);
 			// 需要计算倒计时时间
 

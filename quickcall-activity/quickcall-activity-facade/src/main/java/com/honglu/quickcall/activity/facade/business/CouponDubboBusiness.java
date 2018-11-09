@@ -55,4 +55,13 @@ public interface CouponDubboBusiness {
 	 */
 	CouponOrderVo showActivityCouponForOrder(String skillItemId, String customerId);
 
+	/**
+	 * 下单获取券接口用
+	 * @param skillItemId 技能ID
+	 * @param customerId 客户ID
+	 * @return
+	 *
+	 */
+	int getCouponInOrder(String skillItemId, String customerId);
+
 }

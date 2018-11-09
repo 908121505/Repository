@@ -512,7 +512,8 @@
 	      od.order_time  AS  orderTime,
 	      od.receive_order_time  AS receiveOrderTime,
 	      od.customer_skill_id AS customerSkillId,
-		  cs.switch_status AS switchStatus
+		  cs.switch_status AS switchStatus,
+		  od.appoint_time  AS  appointTime
 	FROM
 		orders od LEFT JOIN   customer_skill  cs  ON  od.customer_skill_id  = cs.customer_skill_id
 	        LEFT JOIN   skill_item   st ON  cs.skill_item_id  =  st.id
@@ -547,7 +548,8 @@
 		od.receive_order_time AS receiveOrderTime,
 		od.customer_skill_id AS customerSkillId,
 		cs.switch_status AS switchStatus,
-		od.coupon_flag  AS  couponFlag
+		od.coupon_flag  AS  couponFlag,
+		od.appoint_time  AS  appointTime
 	FROM
 		orders od
 	LEFT JOIN customer_skill cs ON od.customer_skill_id = cs.customer_skill_id
@@ -585,7 +587,8 @@
 			od.remark AS remark,
 			od.order_id AS orderId,
 			od.order_time AS orderTime,
-			od.start_service_time AS startTime,
+			od.start_service_time AS startServiceTime,
+			od.expect_end_time AS expectEndTime,
 			od.end_time AS endTime ,
   			cs.skill_item_id   AS  skillItemId,
 	  		od.receive_order_time AS receiveOrderTime,
@@ -622,7 +625,8 @@
 		od.remark AS remark,
 		od.order_id AS orderId,
 		od.order_time AS orderTime,
-		od.start_service_time AS startTime,
+		od.start_service_time AS startServiceTime,
+		od.expect_end_time AS expectEndTime,
 		od.end_time AS endTime ,
 		od.receive_order_time AS receiveOrderTime,
 		od.remark as  remark,
@@ -791,5 +795,15 @@
     </foreach>
   </update>
 
+  <!-- 查询声优是否被客户关注 -->
+  <select id="findServicerIsAttentioned" resultType="integer">
+    SELECT COUNT(1) FROM `fans` WHERE anchor_id=#{serviceId} AND fans_id=#{customerId} AND attention_state = 1;
+  </select>
 
+  <!-- 插入订单服务者的粉丝 -->
+  <insert id="insertOrderServicerFans">
+    INSERT INTO fans (id, anchor_id, fans_id, attention_state)
+    VALUES(#{id}, #{serviceId}, #{customerId}, 1)
+    ON DUPLICATE KEY UPDATE attention_state = 1
+  </insert>
 </mapper>
