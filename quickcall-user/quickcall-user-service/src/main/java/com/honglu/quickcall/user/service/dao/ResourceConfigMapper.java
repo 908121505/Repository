@@ -44,13 +44,11 @@ public interface ResourceConfigMapper {
      * @param configSkills
      * @param exCustomerIds
      * @param weekIndex
-     * @param endTime
      * @return
      */
     int countEnabledBigvBySkillRank(@Param("configSkills") List<Long> configSkills,
                                          @Param("exCustomerIds") List<Long> exCustomerIds,
                                          @Param("weekIndex") Integer weekIndex,
-                                         @Param("endTime") Date endTime,
                                          @Param("skillOrdered") Integer skillOrdered);
 
     /**
@@ -61,7 +59,6 @@ public interface ResourceConfigMapper {
     CustomerSkill selectEnabledBigvBySkillRank(@Param("configSkills") List<Long> configSkills,
                                                      @Param("exCustomerIds") List<Long> exCustomerIds,
                                                      @Param("weekIndex") Integer weekIndex,
-                                                     @Param("endTime") Date endTime,
                                                      @Param("beginIndex") int beginIndex,
                                                      @Param("endIndex") int endIndex,
                                                      @Param("skillOrdered") Integer skillOrdered);
@@ -73,14 +70,12 @@ public interface ResourceConfigMapper {
      * @param configSkills
      * @param exCustomerIds
      * @param weekIndex
-     * @param endTime
      * @return
      */
     CustomerSkill selectRandomBigvFromResourcePool(@Param("resourcePoolId") Long resourcePoolId,
                                                     @Param("configSkills") List<Long> configSkills,
                                                     @Param("exCustomerIds") List<Long> exCustomerIds,
                                                     @Param("weekIndex") Integer weekIndex,
-                                                    @Param("endTime") Date endTime,
                                                     @Param("skillOrdered") Integer skillOrdered);
 
     /**
@@ -88,14 +83,12 @@ public interface ResourceConfigMapper {
      *
      * @param skillItemId
      * @param weekIndex
-     * @param endTime
      * @param start
      * @param size
      * @return
      */
     List<CustomerSkill> selectRankBigvListBySkillItemId(@Param("skillItemId") Long skillItemId,
                                                         @Param("weekIndex") Integer weekIndex,
-                                                        @Param("endTime") Date endTime,
                                                         @Param("start") Integer start,
                                                         @Param("size") Integer size);
 }
