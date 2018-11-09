@@ -13,7 +13,7 @@ import com.honglu.quickcall.account.web.service.IOrderInfoService;
 import com.honglu.quickcall.common.api.exchange.WebResponseModel;
 
 @Controller
-@RequestMapping("/channelSwitch")
+@RequestMapping("/voice")
 public class ChannelSwitchController {
 	 @SuppressWarnings("unused")
 	private final static Logger LOGGER = LoggerFactory.getLogger(OrderController.class);
@@ -26,7 +26,7 @@ public class ChannelSwitchController {
 	     * @param params
 	     * @return
 	     */
-	    @RequestMapping(value = "/getStatus", method = RequestMethod.POST)
+	    @RequestMapping(value = "/get_talk_version", method = RequestMethod.POST)
 	    @ResponseBody
 	    public WebResponseModel queryChannelStatus(ChannelSwitchRequest params) {
 	    	WebResponseModel response = orderInfoService.execute(params);
