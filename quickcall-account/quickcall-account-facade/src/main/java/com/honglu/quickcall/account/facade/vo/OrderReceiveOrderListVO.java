@@ -14,7 +14,7 @@ import java.util.Date;
  */
 public class OrderReceiveOrderListVO implements  Serializable{
 
-	private static final long serialVersionUID = -8762985858778353826L;
+	private static final long serialVersionUID = 9932873120044243L;
 	/**主播ID*/
 	private Long  orderId;
 	/**主播昵称*/
@@ -62,7 +62,17 @@ public class OrderReceiveOrderListVO implements  Serializable{
 	private Date  expectEndTime;
 	/**券标识*/
 	private Integer  couponFlag;
+	/**预约时间*/
+	private Date  appointTime;
 	
+	
+	
+	public Date getAppointTime() {
+		return appointTime;
+	}
+	public void setAppointTime(Date appointTime) {
+		this.appointTime = appointTime;
+	}
 	public Date getExpectEndTime() {
 		return expectEndTime;
 	}

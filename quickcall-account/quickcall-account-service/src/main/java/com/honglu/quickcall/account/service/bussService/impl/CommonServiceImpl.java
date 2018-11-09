@@ -70,7 +70,7 @@ public class CommonServiceImpl implements CommonService {
 	 * 主要获取订单真是状态+真实的倒计时秒数
 	 */
 	@Override
-	public OrderTempResponseVO getCountDownSeconds(Integer   oldOrderStatus ,Date  orderTime,Date  receiveOrderTime,Date startServiceTime,Date  expectEndTime) {
+	public OrderTempResponseVO getCountDownSeconds(Integer   oldOrderStatus ,Date  orderTime,Date  receiveOrderTime,Date startServiceTime,Date  expectEndTime,Date  appointTime) {
 		OrderTempResponseVO  tempVO = new OrderTempResponseVO();
 		Date  currTime = new Date();
 		Long  countDownSeconds = null ;
@@ -130,12 +130,26 @@ public class CommonServiceImpl implements CommonService {
 			endTime =  expectEndTime;
 			countDownSeconds =  DateUtils.getDiffSeconds(currTime, endTime);
 			//大于0说明正在倒计时，状态不变  小于0的逻辑暂时不考虑
-			if(countDownSeconds > 0){
+			if(countDownSeconds <= 0){
 				tempVO.setOrderStatus(oldOrderStatus);
 			}else{
 				tempVO.setOrderStatus(OrderSkillConstants.ORDER_STATUS_FINISH_DAV_FINISH_AFTER_SERVICE_TIME);
 			}
 			tempVO.setCountDownSeconds(countDownSeconds);
+		//叫醒的24状态需要单独处理
+		}else if(oldOrderStatus ==OrderSkillConstants.ORDER_STATUS_GOING_WAITING_START){
+			//时间接单从当前时间到预约开始时间
+			endTime = appointTime;
+			countDownSeconds =  DateUtils.getDiffSeconds(currTime, endTime);
+			//大于0说明正在倒计时，状态不变  小于0的逻辑暂时不考虑
+			tempVO.setOrderStatus(oldOrderStatus);
+			if(countDownSeconds <= 0){
+				//小于0说明已经到了进行中状态
+//				tempVO.setOrderStatus(OrderSkillConstants.ORDER_STATUS_GOING_USER_ACCEPCT);
+			}
+			tempVO.setCountDownSeconds(countDownSeconds);
+			
+			
 		}
 		return tempVO ;
 	}

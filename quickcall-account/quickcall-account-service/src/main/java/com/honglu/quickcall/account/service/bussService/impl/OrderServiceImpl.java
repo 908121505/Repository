@@ -403,7 +403,7 @@ public class OrderServiceImpl implements IOrderService {
 			for (OrderReceiveOrderListVO info : resultList) {
 				OrderTempResponseVO responseVO = commonService.getCountDownSeconds(info.getOrderStatus(),
 						info.getOrderTime(), info.getReceiveOrderTime(), info.getStartServiceTime(),
-						info.getExpectEndTime());
+						info.getExpectEndTime(),info.getAppointTime());
 				info.setCountDownSeconds(responseVO.getCountDownSeconds());
 				info.setOrderStatus(responseVO.getOrderStatus());
 			}
@@ -436,7 +436,7 @@ public class OrderServiceImpl implements IOrderService {
 			for (OrderSendOrderListVO info : resultList) {
 				OrderTempResponseVO responseVO = commonService.getCountDownSeconds(info.getOrderStatus(),
 						info.getOrderTime(), info.getReceiveOrderTime(), info.getStartServiceTime(),
-						info.getExpectEndTime());
+						info.getExpectEndTime(),info.getAppointTime());
 				info.setCountDownSeconds(responseVO.getCountDownSeconds());
 				info.setOrderStatus(responseVO.getOrderStatus());
 			}
@@ -547,7 +547,7 @@ public class OrderServiceImpl implements IOrderService {
 			orderDetail.setAge(age);
 			OrderTempResponseVO responseVO = commonService.getCountDownSeconds(orderDetail.getOrderStatus(),
 					orderDetail.getOrderTime(), orderDetail.getReceiveOrderTime(), orderDetail.getStartServiceTime(),
-					orderDetail.getExpectEndTime());
+					orderDetail.getExpectEndTime(),orderDetail.getAppointTime());
 			orderDetail.setCountDownSeconds(responseVO.getCountDownSeconds());
 			orderDetail.setOrderStatus(responseVO.getOrderStatus());
 
@@ -609,13 +609,18 @@ public class OrderServiceImpl implements IOrderService {
 			OrderIMVO orderIMVO = new OrderIMVO();
 			Long customerSkillId = order.getCustomerSkillId();
 			orderIMVO = customerSkillMapper.selectCustSkillItem(customerSkillId);
-			orderIMVO.setOrderStatus(order.getOrderStatus());
 			orderIMVO.setOrderId(order.getOrderId());
 			orderIMVO.setServicePrice(order.getServicePrice());
 			orderIMVO.setServiceUnit(order.getServiceUnit());
+			
+			//订单倒计时计算
+			OrderTempResponseVO responseVO = commonService.getCountDownSeconds(order.getOrderStatus(),order.getOrderTime(), order.getReceiveOrderTime(), order.getStartServiceTime(),order.getExpectEndTime(),order.getAppointTime());
+			orderIMVO.setCountDownSeconds(responseVO.getCountDownSeconds());
+			orderIMVO.setOrderStatus(responseVO.getOrderStatus());
 			orderDetailForIMVO.setServiceId(order.getServiceId());
 			orderDetailForIMVO.setCustomerId(order.getCustomerId());
 			orderDetailForIMVO.setOrderIMVO(orderIMVO);
+			
 			commonResponse.setData(orderDetailForIMVO);
 			// 需要计算倒计时时间
 
