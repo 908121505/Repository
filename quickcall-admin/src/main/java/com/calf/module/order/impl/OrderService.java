@@ -289,7 +289,7 @@ public class OrderService {
 	}
 
 	/**
-	 * 修改订单
+	 * 修改订单强制取消，强制完成
 	 * 
 	 * @param entity
 	 * @return
