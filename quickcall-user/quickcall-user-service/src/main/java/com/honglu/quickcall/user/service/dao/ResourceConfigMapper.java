@@ -43,12 +43,10 @@ public interface ResourceConfigMapper {
      *
      * @param configSkills
      * @param exCustomerIds
-     * @param weekIndex
      * @return
      */
     int countEnabledBigvBySkillRank(@Param("configSkills") List<Long> configSkills,
                                          @Param("exCustomerIds") List<Long> exCustomerIds,
-                                         @Param("weekIndex") Integer weekIndex,
                                          @Param("skillOrdered") Integer skillOrdered);
 
     /**
@@ -58,7 +56,6 @@ public interface ResourceConfigMapper {
      */
     CustomerSkill selectEnabledBigvBySkillRank(@Param("configSkills") List<Long> configSkills,
                                                      @Param("exCustomerIds") List<Long> exCustomerIds,
-                                                     @Param("weekIndex") Integer weekIndex,
                                                      @Param("beginIndex") int beginIndex,
                                                      @Param("endIndex") int endIndex,
                                                      @Param("skillOrdered") Integer skillOrdered);
@@ -69,26 +66,22 @@ public interface ResourceConfigMapper {
      * @param resourcePoolId
      * @param configSkills
      * @param exCustomerIds
-     * @param weekIndex
      * @return
      */
     CustomerSkill selectRandomBigvFromResourcePool(@Param("resourcePoolId") Long resourcePoolId,
                                                     @Param("configSkills") List<Long> configSkills,
                                                     @Param("exCustomerIds") List<Long> exCustomerIds,
-                                                    @Param("weekIndex") Integer weekIndex,
                                                     @Param("skillOrdered") Integer skillOrdered);
 
     /**
      * 根据大V排名查询大V数据
      *
      * @param skillItemId
-     * @param weekIndex
      * @param start
      * @param size
      * @return
      */
     List<CustomerSkill> selectRankBigvListBySkillItemId(@Param("skillItemId") Long skillItemId,
-                                                        @Param("weekIndex") Integer weekIndex,
                                                         @Param("start") Integer start,
                                                         @Param("size") Integer size);
 }

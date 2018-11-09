@@ -44,14 +44,12 @@ public class QueryBigvListServiceImpl implements QueryBigvListService {
     public CommonResponse queryHomeBigvList(FirstPageBigvListRequest request) {
         List<AppHomeBigvListVO> resultList = new LinkedList<>();
 
-        Integer weekIndex = DateUtils.getDayOfWeek();
-
         /****** 查询首页6帧资源位数据*****/
         AppHomeBigvListVO recomedBigv = new AppHomeBigvListVO();
         recomedBigv.setSkillItemName("推荐");
         // 默认100为推荐类别ID
         recomedBigv.setSkillItemId(100L);
-        List<AppHomeBigvListVO.BigvInfoVO> bigvList = this.queryConfigBigvList(recomedBigv, weekIndex);
+        List<AppHomeBigvListVO.BigvInfoVO> bigvList = this.queryConfigBigvList(recomedBigv);
         if (bigvList != null && bigvList.size() > 0) {
             recomedBigv.setDaVinfoList(bigvList);
             resultList.add(recomedBigv);
@@ -65,7 +63,7 @@ public class QueryBigvListServiceImpl implements QueryBigvListService {
             AppHomeBigvListVO bigvListVO = new AppHomeBigvListVO();
             bigvListVO.setSkillItemName(skillItem.getSkillItemName());
             bigvListVO.setSkillItemId(skillItem.getId());
-            bigvListVO = this.querySkillItemTypeBigvList(bigvListVO, weekIndex);
+            bigvListVO = this.querySkillItemTypeBigvList(bigvListVO);
             if (bigvListVO == null) {
                 LOGGER.warn("首页查询数据 - 【{}】技能未查询到有效大V数据", skillItem.getSkillItemName());
                 continue;
@@ -80,10 +78,9 @@ public class QueryBigvListServiceImpl implements QueryBigvListService {
      * 获取首页6帧配置位数据大V列表
      *
      * @param recomedBigv
-     * @param weekIndex
      * @return
      */
-    private List<AppHomeBigvListVO.BigvInfoVO> queryConfigBigvList(AppHomeBigvListVO recomedBigv, Integer weekIndex) {
+    private List<AppHomeBigvListVO.BigvInfoVO> queryConfigBigvList(AppHomeBigvListVO recomedBigv) {
         // 查询出资源位的配置信息
         List<ResourceConfig> configs = resourceConfigMapper.selectAllResourceConfig();
         if (configs.isEmpty()) {
@@ -123,7 +120,7 @@ public class QueryBigvListServiceImpl implements QueryBigvListService {
             // 自然推荐
             if (Objects.equals(config.getStrategy(), 1)) {
                 // 得到随机大V -- 排除被下单的大V
-                bigv = this.getRandomBigv(config.getConfigNum(), configSkills, resourceExCustomerIds, weekIndex, 0);
+                bigv = this.getRandomBigv(config.getConfigNum(), configSkills, resourceExCustomerIds, 0);
                 if (bigv == null) {
                     LOGGER.warn("【首页6帧】资源配置位【{} - 自然推荐】-【未被下单大V排名】- 未查询到可用的大V数据", config.getConfigNum());
                 }
@@ -131,15 +128,15 @@ public class QueryBigvListServiceImpl implements QueryBigvListService {
             // 运营推荐
             else {
                 // 从推荐池获取大V -- 排除被下单的大V
-                bigv = resourceConfigMapper.selectRandomBigvFromResourcePool(config.getResourcePoolId(), configSkills, exCustomerIds, weekIndex, 0);
+                bigv = resourceConfigMapper.selectRandomBigvFromResourcePool(config.getResourcePoolId(), configSkills, exCustomerIds, 0);
                 if (bigv == null) {
                     LOGGER.warn("【首页6帧】资源配置位【{} - 运营推荐】-【未被下单大V排名】-【资源池】- 未查询到可用的大V数据 - 切换到自然推荐", config.getConfigNum());
                     // 推荐池选取不到切换到自然推荐
-                    bigv = this.getRandomBigv(config.getConfigNum(), configSkills, resourceExCustomerIds, weekIndex, 0);
+                    bigv = this.getRandomBigv(config.getConfigNum(), configSkills, resourceExCustomerIds, 0);
                     // 若自然推荐也找不到 -- 再取消下单状态的限制
                     if (bigv == null) {
                         LOGGER.warn("资源位【{} - 运营推荐】-【未被下单】 - 切换到自然推荐后，又未查询到可用的大V数据，取消未被下单的限制再次从资源池中查询", config.getConfigNum());
-                        bigv = resourceConfigMapper.selectRandomBigvFromResourcePool(config.getResourcePoolId(), configSkills, exCustomerIds, weekIndex, null);
+                        bigv = resourceConfigMapper.selectRandomBigvFromResourcePool(config.getResourcePoolId(), configSkills, exCustomerIds, null);
                     }
                 }
             }
@@ -167,7 +164,7 @@ public class QueryBigvListServiceImpl implements QueryBigvListService {
                 resourceExCustomerIds.addAll(exCustomerIds);
 
                 // 若该资源位未查询到数据 -- 则取消技能被下单的限制 -- 再次全部用自然推荐算法查询数据
-                bigv = getRandomBigv(configNum, configSkillsMap.get(configNum), resourceExCustomerIds, weekIndex, null);
+                bigv = getRandomBigv(configNum, configSkillsMap.get(configNum), resourceExCustomerIds, null);
                 if (bigv != null) {
                     // 加入排除列表
                     exCustomerIds.add(bigv.getCustomerId());
@@ -188,12 +185,11 @@ public class QueryBigvListServiceImpl implements QueryBigvListService {
      * 查询分类页的现实的大V数据
      *
      * @param bigvListVO
-     * @param weekIndex
      * @return
      */
-    private AppHomeBigvListVO querySkillItemTypeBigvList(AppHomeBigvListVO bigvListVO, Integer weekIndex) {
+    private AppHomeBigvListVO querySkillItemTypeBigvList(AppHomeBigvListVO bigvListVO) {
         // 根据大V排名查询到数据
-        List<CustomerSkill> customerSkillList = resourceConfigMapper.selectRankBigvListBySkillItemId(bigvListVO.getSkillItemId(), weekIndex, 0, 4);
+        List<CustomerSkill> customerSkillList = resourceConfigMapper.selectRankBigvListBySkillItemId(bigvListVO.getSkillItemId(), 0, 4);
         if (customerSkillList.isEmpty()) {
             return null;
         }
@@ -216,13 +212,12 @@ public class QueryBigvListServiceImpl implements QueryBigvListService {
      * @param configNum
      * @param configSkills
      * @param exCustomerIds
-     * @param weekIndex
      * @param skillOrdered  技能是否被【下单】暂用：0=否，其他=不限制
      * @return
      */
-    private CustomerSkill getRandomBigv(Integer configNum, List<Long> configSkills, List<Long> exCustomerIds, Integer weekIndex, Integer skillOrdered) {
+    private CustomerSkill getRandomBigv(Integer configNum, List<Long> configSkills, List<Long> exCustomerIds, Integer skillOrdered) {
         // 查询满足条件的大V数量 -- 用于统计百分比 -- 条件：可接单 && 未被下单
-        int bigvNum = resourceConfigMapper.countEnabledBigvBySkillRank(configSkills, exCustomerIds, weekIndex, skillOrdered);
+        int bigvNum = resourceConfigMapper.countEnabledBigvBySkillRank(configSkills, exCustomerIds, skillOrdered);
         if (bigvNum == 0) {
             return null;
         }
@@ -232,7 +227,7 @@ public class QueryBigvListServiceImpl implements QueryBigvListService {
         int endIndex = cacluRandomLimitEndIndex(configNum, bigvNum) - beginIndex;
 
         // 随机根据大V排名查询一条数据
-        return resourceConfigMapper.selectEnabledBigvBySkillRank(configSkills, exCustomerIds, weekIndex, beginIndex, endIndex, skillOrdered);
+        return resourceConfigMapper.selectEnabledBigvBySkillRank(configSkills, exCustomerIds, beginIndex, endIndex, skillOrdered);
     }
 
     /**
@@ -308,9 +303,8 @@ public class QueryBigvListServiceImpl implements QueryBigvListService {
         	start = 0;
         	pageSize = 100;
         }
-        Integer weekIndex = DateUtils.getDayOfWeek();
         List<DaVinfoVO> daVinfoVOList = new ArrayList<>();
-		List<CustomerSkill> customerSkillList = resourceConfigMapper.selectRankBigvListBySkillItemId(skillItemId, weekIndex, start, pageSize);
+		List<CustomerSkill> customerSkillList = resourceConfigMapper.selectRankBigvListBySkillItemId(skillItemId, start, pageSize);
 		//对象转换
         for (CustomerSkill customerSkill : customerSkillList) {
         	DaVinfoVO daVinfoVO = new DaVinfoVO();
