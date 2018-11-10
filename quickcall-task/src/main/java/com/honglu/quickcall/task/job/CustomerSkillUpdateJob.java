@@ -38,9 +38,9 @@ public class CustomerSkillUpdateJob {
 
     
     /***根据周索引开启接单开关*/
-    @Scheduled(cron = "0 * * * * ?")
+    @Scheduled(cron = "55 * * * * ?")
     public void openReceiveByWeek() {
-    	LOGGER.info("=============根据周索引开启接单开关自动任务开始=================");
+    	LOGGER.info("=============week_close自动任务开始=================");
     	try {
     		
     		//判断当前时间是星期几
@@ -55,16 +55,16 @@ public class CustomerSkillUpdateJob {
     		String  currTimeStr = DateUtils.formatDateHHMM(new Date());
     		taskCustomerSkillMapper.openReceiveByWeek(autoReceiveStatus, receiveStatus, updateStatus, weekIndex, currTimeStr);
     	} catch (Exception e) {
-    		LOGGER.error("根据周索引开启接单开关发生异常，异常信息：", e);
+    		LOGGER.error("week_close自动任务关发生异常，异常信息：", e);
     	}
-    	LOGGER.info("=============根据周索引开启接单开关自动任务结束=================");
+    	LOGGER.info("=============week_close自动任务结束=================");
     }
     
     
     /*** 根据当前时间开启接单开关*/
-    @Scheduled(cron = "5 * * * * ?")
+    @Scheduled(cron = "50 * * * * ?")
     public void openReceiveByCurrTime() {
-    	LOGGER.info("============= 根据当前时间开启接单开关自动任务开始=================");
+    	LOGGER.info("============= curr_open自动任务开始=================");
     	try {
     		
     		//自动开关开启
@@ -77,14 +77,14 @@ public class CustomerSkillUpdateJob {
     		Date  currTime = new Date();
     		taskCustomerSkillMapper.openReceiveByCurrentTime(autoReceiveStatus, receiveStatus, updateStatus, currTime);
     	} catch (Exception e) {
-    		LOGGER.error(" 根据当前时间开启接单开关发生异常，异常信息：", e);
+    		LOGGER.error("curr_open自动任务发生异常，异常信息：", e);
     	}
-    	LOGGER.info("============= 根据当前时间开启接单开关自动任务结束=================");
+    	LOGGER.info("============= curr_open自动任务结束=================");
     }
     /***根据周索引关闭接单开关*/
-    @Scheduled(cron = "10 * * * * ?")
+    @Scheduled(cron = "45 * * * * ?")
     public void closeReceiveByWeek() {
-    	LOGGER.info("=============根据周索引关闭接单开关自动任务开始=================");
+    	LOGGER.info("=============week_close自动任务开始=================");
     	try {
     		
     		//判断当前时间是星期几
@@ -99,16 +99,16 @@ public class CustomerSkillUpdateJob {
     		String  currTimeStr = DateUtils.formatDateHHMM(new Date());
     		taskCustomerSkillMapper.closeReceiveByWeek(autoReceiveStatus, receiveStatus, updateStatus, weekIndex, currTimeStr);
     	} catch (Exception e) {
-    		LOGGER.error("根据周索引关闭接单开关发生异常，异常信息：", e);
+    		LOGGER.error("week_close自动任务发生异常，异常信息：", e);
     	}
-    	LOGGER.info("=============根据周索引关闭接单开关自动任务结束=================");
+    	LOGGER.info("=============week_close自动任务结束=================");
     }
     
     
     /***根据当前时间关闭接单开关*/
-    @Scheduled(cron = "15 * * * * ?")
+    @Scheduled(cron = "40 * * * * ?")
     public void closeReceiveByCurrTime() {
-    	LOGGER.info("============= 根据当前时间关闭接单开关自动任务开始=================");
+    	LOGGER.info("============= curr_close自动任务开始=================");
     	try {
     		
     		//自动开关开启
@@ -121,9 +121,9 @@ public class CustomerSkillUpdateJob {
     		Date  currTime = new Date();
     		taskCustomerSkillMapper.closeReceiveByCurrentTime(autoReceiveStatus, receiveStatus, updateStatus, currTime);
     	} catch (Exception e) {
-    		LOGGER.error(" 根据当前时间关闭接单开关发生异常，异常信息：", e);
+    		LOGGER.error("curr_close自动任务发生异常，异常信息：", e);
     	}
-    	LOGGER.info("============= 根据当前时间关闭接单开关自动任务结束=================");
+    	LOGGER.info("============= curr_close自动任务结束=================");
     }
     
     
