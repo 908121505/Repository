@@ -569,7 +569,7 @@
         AND  cs.end_time_str <![CDATA[  > ]]> #{endTimeStr,jdbcType=VARCHAR}
       </if> -->
       <!-- <include refid="SKILL_EXIST_CONDITON"></include> -->
-      AND   cs.appoint_end_time <![CDATA[  > ]]> #{endTime,jdbcType=TIMESTAMP}
+      <!-- AND   cs.appoint_end_time <![CDATA[  > ]]> #{endTime,jdbcType=TIMESTAMP} -->
       order by  cs.modify_time desc
       limit 1
   </select>

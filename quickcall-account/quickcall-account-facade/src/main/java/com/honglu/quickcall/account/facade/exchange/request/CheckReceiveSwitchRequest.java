@@ -28,7 +28,7 @@ public class CheckReceiveSwitchRequest  extends  AbstractRequest{
 	
 	@Override
 	public String getBizCode() {
-		return  OrderRequestType.OPEN_RECEIVE_SWITCH;
+		return  OrderRequestType.CHECK_RECEIVE_SWITCH;
 	}
 	@Override
 	public String toString() {

@@ -6,6 +6,7 @@ import com.calf.cn.utils.SearchUtil;
 import com.calf.module.activity.entity.Coupon;
 import com.calf.module.appconfig.impl.AdvertisementService;
 import com.calf.module.common.impl.CommonUtilService;
+import com.honglu.quickcall.common.core.util.StringUtil;
 import com.honglu.quickcall.common.core.util.UUIDUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -47,6 +48,8 @@ public class CouponService {
         paramMap.put("couponName", parameters.get("couponName"));
         paramMap.put("startTime", parameters.get("startTime"));
         paramMap.put("endTime", parameters.get("endTime"));
+        paramMap.put("activityName", parameters.get("activityName"));
+        paramMap.put("activityCode", parameters.get("activityCode"));
         List<Coupon> CouponList = baseManager.query("Coupon.selectPageList", paramMap);
         String sEcho = (String) parameters.get("sEcho");
         int total = baseManager.get("Coupon.selectCount", paramMap);
@@ -63,6 +66,9 @@ public class CouponService {
         }
         List<Map<String, String>> activityList = baseManager.query("Coupon.selectActivityList", paramMap);
         model.addAttribute("activityList", activityList);
+
+        List<Map<String, String>> skillItemList = baseManager.query("Coupon.selectSkillItemList", paramMap);
+        model.addAttribute("skillItemList", skillItemList);
     }
 
     public int saveAdd(Coupon entity) {
@@ -74,6 +80,18 @@ public class CouponService {
         int insertAdCount = baseManager.insert(coupon);
         if(insertAdCount < 1){
             return -1;
+        }
+        //插入coupon_skill 券与品类对应表
+        String skillItemIds = coupon.getSkillItemIdList();
+        if(!StringUtil.isBlank(skillItemIds)) {
+            String[] skillItemIdArr = skillItemIds.split(",");
+            for (String skillItemId : skillItemIdArr) {
+                coupon.setSkillItemId(skillItemId);
+                int insertCouponSkillCount = baseManager.insert("Coupon.insertCouponSkill", coupon);
+                if (insertCouponSkillCount < 1) {
+                    return -1;
+                }
+            }
         }
 
         return 0;
@@ -87,6 +105,32 @@ public class CouponService {
         int updateAdCount = baseManager.update(coupon);
         if(updateAdCount < 1){
             return -1;
+        }
+
+        String skillItemIds = coupon.getSkillItemIdList();
+        if(!StringUtil.isBlank(skillItemIds)) {
+
+            //如果多选框不为空，则删除coupon_skill 券与品类对应表中的数据
+            if(!StringUtil.isBlank(coupon.getSkillItemName())){
+                Map<String, Object> paramMap = new HashMap<String, Object>();
+                paramMap.put("couponId", coupon.getCouponId());
+                int deleteCouponSkillCount = baseManager.delete("Coupon.deleteCouponSkill", paramMap);
+                if(deleteCouponSkillCount < 1){
+                    return -1;
+                }
+            }
+            //用户选择的不是清空，则插入表 coupon_skill
+            if(!"clear".equals(skillItemIds)){
+                String[] skillItemIdArr = skillItemIds.split(",");
+                for (String skillItemId : skillItemIdArr) {
+                    coupon.setSkillItemId(skillItemId);
+                    int insertCouponSkillCount = baseManager.insert("Coupon.insertCouponSkill", coupon);
+                    if (insertCouponSkillCount < 1) {
+                        return -1;
+                    }
+                }
+            }
+
         }
 
         return 0;
