@@ -36,15 +36,28 @@
 						</div>
 					</div>
 				</div>
-				
 				<div class="col-md-2">
 					<button type="button" class="btn btn-primary btn-small btn-block"
 						id="query">
 						<i class="glyphicon glyphicon-search"></i> 查询
 					</button>
-				</div>
+				</div>				
 			</div>
 			<div class="row">
+				<div class="col-md-2">
+	                <div class="form-group">
+	                    <div class="input-group">
+	                        <%-- 0=未认证,1=待审核,2=已通过,3=拒绝 --%>
+	                        <div class="input-group-addon">状态</div>
+	                        <select class="form-control" id="handleStatus" name="handleStatus">
+	                            <option value="">全部</option>
+	                            <option value="0">未处理</option>
+	                            <option value="1">已处理</option>
+	                            <%--<option value="0">未认证</option>--%>
+	                        </select>
+	                    </div>
+	                </div>
+	            </div>
                 <div class="col-md-2">
                     <div class="form-group">
                         <div class="input-group">
@@ -139,7 +152,14 @@
 						{
 							"data": "createTime",
 							"sTitle": "提交时间",
-                            'sClass':"text-center"
+                            'sClass':"text-center",
+                            "mRender" : function(data, type,full) {
+								if (data != null) {
+									return Format(new Date(data),"yyyy-MM-dd HH:mm:ss")
+								} else {
+									return '--';
+								}
+							}
 						},
 						{
 							"data": "phone",
@@ -189,6 +209,7 @@
 		                   aoData.push({"name": "phone", "value": $("#phone").val()});
 		                   aoData.push({"name": "startTime", "value": $("#startTime").val()});
 		                   aoData.push({"name": "endTime", "value": $("#endTime").val()});
+		                   aoData.push({"name": "handleStatus", "value": $("#handleStatus").val()});
 	                    },
 	                    aoColumnDefs : [ {
 							"aTargets" : 8,
