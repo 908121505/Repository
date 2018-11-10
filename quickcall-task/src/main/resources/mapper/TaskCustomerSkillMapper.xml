@@ -68,6 +68,7 @@
 			auto_receive_status = #{autoReceiveStatus}
 		AND receive_status = #{recevieStatus}
 		AND start_time_str <![CDATA[ < ]]> #{currTimeStr}
+		AND end_time_str <![CDATA[ > ]]>  #{currTimeStr}
 		<include refid="SKILL_EXIST_CONDITON"></include>
   </update>
 <!-- 根据周索引关闭接单开关 -->
@@ -80,6 +81,7 @@
 			auto_receive_status = #{autoReceiveStatus}
 		AND receive_status = #{recevieStatus}
 		AND end_time_str  <![CDATA[ < ]]>  #{currTimeStr}
+		
 		<include refid="SKILL_EXIST_CONDITON"></include>
   </update>
   
@@ -94,6 +96,7 @@
 			auto_receive_status = #{autoReceiveStatus}
 		AND receive_status = #{recevieStatus}
 		AND  appoint_start_time    <![CDATA[ < ]]> #{currTimeStr}
+		AND  appoint_end_time  <![CDATA[ > ]]> #{currTimeStr}
 		
   </update>
 <!-- 根据当前时间关闭接单开关 -->
