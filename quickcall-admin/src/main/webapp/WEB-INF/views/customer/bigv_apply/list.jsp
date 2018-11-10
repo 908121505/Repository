@@ -4,10 +4,10 @@
 <shiro:hasPermission name="customerApplyBigv:select">
     <div class="content1">
         <div class="header">
-            <h1 class="page-title">声优申请</h1>
+            <h1 class="page-title">声优申请管理</h1>
             <ul class="breadcrumb">
                 <li>用户管理</li>
-                <li class="active">声优申请</li>
+                <li class="active">声优申请管理</li>
             </ul>
         </div>
         <div class="main-content">
