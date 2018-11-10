@@ -312,6 +312,8 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 	
 	
 
+	
+	private static final  Integer  WEEK_INDEX_DEFAULT = 0;
 
 	@Override
 	public CustomerSkillInfoVO querySkillInfoPersonal(Long customerId) {
@@ -326,7 +328,13 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 			resultVO.setReceiveStatus(0);
 			resultVO.setStartServiceTimeStr("00:00");
 			HashMap<String, Integer> weekDataMap = new HashMap<String, Integer>();
-			
+			weekDataMap.put("tuesday", WEEK_INDEX_DEFAULT);
+			weekDataMap.put("monday", WEEK_INDEX_DEFAULT);
+			weekDataMap.put("wednesday", WEEK_INDEX_DEFAULT);
+			weekDataMap.put("thursday", WEEK_INDEX_DEFAULT);
+			weekDataMap.put("friday", WEEK_INDEX_DEFAULT);
+			weekDataMap.put("saturday", WEEK_INDEX_DEFAULT);
+			weekDataMap.put("sunday", WEEK_INDEX_DEFAULT);
 			resultVO.setWeekDataMap(weekDataMap );
 			return resultVO;
 		}
