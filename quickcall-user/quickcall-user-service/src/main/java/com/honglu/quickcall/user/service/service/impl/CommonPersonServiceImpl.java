@@ -93,6 +93,12 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 	 * 中文、英文、数字、下划线校验 4-24位
 	 */
 	private final static Pattern CH_EN_PATTERN = Pattern.compile("^[\\u4e00-\\u9fa5a-z\\d_]{4,24}$");
+	//靓号屏蔽开头
+	private final static String[] startBlackList = {"1","2","0"};
+	//靓号屏蔽中间段
+	private final static String[] middleBlackList = {"000","111","222","333","444","555","666","777","888","999",
+													"01234","12345","23456","34567","45678","56789","67890",
+													"09876","98765","87654","76543","65432","54321","43210"};
 
 	@Override
 	public CommonResponse regUserExist(IsPhoneExistsRequest params) {
@@ -507,14 +513,35 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 	 * @return
 	 */
 	private String randomAppId() {
-		String[] appIdList = { "13140000", "131400000", "1314000000", "52000000", "520000000", "5200000000", "66666666",
-				"666666666", "6666666666", "88888888", "888888888", "8888888888" };
+		
 		String num = getRandomNum(8);
 		// 数据库不存在相同appId 且排除以上靓号
-		while (customerMapper.selectByAppId(num) != null || Arrays.asList(appIdList).contains(num)) {
+		while (!allowToUse(num)) {
 			num = getRandomNum(8);
 		}
 		return num;
+	}
+	
+	/**
+	 * 判断号码能否使用
+	 * @param num 随机号码
+	 * @return 是否可以使用
+	 */
+	private boolean allowToUse(String num){
+		if(customerMapper.selectByAppId(num) != null){
+			return false;
+		} 
+		for (String str : startBlackList) {
+			if(num.startsWith(str)){
+				return false;
+			}
+		}
+		for (String str : middleBlackList) {
+			if(num.contains(str)){
+				return false;
+			}
+		}
+		return true;
 	}
 
 	/**
