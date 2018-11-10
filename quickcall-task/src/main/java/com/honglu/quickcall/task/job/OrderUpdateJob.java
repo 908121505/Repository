@@ -404,7 +404,7 @@ public class OrderUpdateJob {
     		}else if (cancelType == CANCEL_THREE){
     			content =  OrderSkillConstants.IM_MSG_CONTENT_CANCEL_DV_5MINUTE_CONFIRM_TIMEOUT ;
     		}else if(cancelType == CANCEL_FOUR){
-    			content =  OrderSkillConstants.IM_MSG_CONTENT_CUST_NOT_PING_JIA ;
+    			content =  OrderSkillConstants.IM_MSG_CONTENT_CUST_NOT_PING_JIA_TO_DV ;
     		}
     	}else{
     		remarkName = OrderSkillConstants.MSG_CONTENT_C ;
