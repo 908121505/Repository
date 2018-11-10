@@ -128,9 +128,9 @@
   </update> -->
   <select id="queryOpenReceiveByCurrentTime"   resultType="java.lang.Long">
 		SELECT
-			customer_id
-		FROM
 			customer_skill_id
+		FROM
+			customer_skill
 		WHERE
 			auto_receive_status = #{autoReceiveStatus}
 		AND receive_status = #{recevieStatus}
