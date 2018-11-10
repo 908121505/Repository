@@ -37,5 +37,9 @@ public class RedisKeyConstants {
 	public static final String USER_CUSTOMER_INFO = "voice_user:customerinfo:";
 	// 充值回调锁
 	public static final String ACCOUNT_ORDER_NO_NX = "account:orderNo:nx:";
+	
+	
+	// 检查接单开关是否开启
+	public static final String ACCOUNT_RECEIVE_NO_NX = "account:receive:nx:";
 
 }

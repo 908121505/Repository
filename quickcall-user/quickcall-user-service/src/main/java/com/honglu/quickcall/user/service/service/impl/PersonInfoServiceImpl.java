@@ -100,13 +100,17 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 		Pattern pattern = Pattern.compile("[0-9]{8,10}");
 		Long currentCustomer = params.getCustomerId();
 		List<SearchPersonListVO> customerList = null;
+		Integer index = null;
+		if(params.getPageIndex() != null && params.getPageSize() != null){
+			index = params.getPageIndex() * params.getPageSize();
+		}
 		// 匹配搜索关键字是模糊搜索还是精准搜索
 		if (pattern.matcher(keyword).matches()) {
 			// 精准搜索
 			customerList = customerMapper.selectPreciseSearch(keyword, currentCustomer);
 		} else {
 			// 模糊搜索
-			customerList = customerMapper.selectFuzzySearch(keyword, currentCustomer, params.getPageIndex(),
+			customerList = customerMapper.selectFuzzySearch(keyword, currentCustomer, index,
 					params.getPageSize());
 		}
 

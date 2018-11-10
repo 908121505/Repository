@@ -816,13 +816,11 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 		String rongyunToken = RongYunUtil.getToken(String.valueOf(request.getCustomerId()), request.getNickName(),
 				request.getPhoto());
 		Customer customer = new Customer();
+		Customer cus = new Customer();
 		customer.setCustomerId(request.getCustomerId());
-		customer.setHeadPortraitUrl(request.getPhoto());
-		customer.setNickName(request.getNickName());
 		customer.setTokenCode(rongyunToken);
-		customer.setAppId(request.getAppId());
-		int row = customerMapper.insertSelective(customer);
-		return ResultUtils.resultSuccess();
+		int row = customerMapper.updateByPrimaryKeySelective(customer);
+		return ResultUtils.resultSuccess(rongyunToken);
 
 	}
 

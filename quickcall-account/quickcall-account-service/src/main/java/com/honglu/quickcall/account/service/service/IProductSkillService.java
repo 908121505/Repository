@@ -55,6 +55,20 @@ public interface IProductSkillService {
 	 * @param request
 	 */
 	void updateSkillInfoPersonal(SkillUpdateRequest request);
+
+	/**
+	 * 检查开关是否开启
+	 * 返回值：2多次请求   1：开启  0 ：未开启
+	 * @param customerId
+	 * @return
+	 */
+	Integer checkReceiveSwitch(Long customerId);
+
+	/**
+	 * 开启接单开关
+	 * @param customerId
+	 */
+	void openReceiveSwitch(Long customerId);
 	
 	
 	

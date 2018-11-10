@@ -12,7 +12,10 @@ import com.honglu.quickcall.activity.service.dao.CustomerCouponMapper;
 import com.honglu.quickcall.activity.service.service.ActivityCouponService;
 import com.honglu.quickcall.common.api.exchange.CommonResponse;
 import com.honglu.quickcall.common.api.exchange.ResultUtils;
+import com.honglu.quickcall.common.core.util.UUIDUtils;
 import com.honglu.quickcall.common.third.rongyun.util.RongYunUtil;
+import com.honglu.quickcall.user.facade.entity.Message;
+import com.honglu.quickcall.user.facade.entity.MessageCustomer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -93,7 +96,24 @@ public class ActivityCouponServiceImpl implements ActivityCouponService {
             builder.append(mapA.get("couponName"));
             builder.append("”，可在下单时直接抵扣。");
             //"您有新的抵扣券可用----恭喜您在【XXX】活动中获得了“情感咨询1588抵用券”，可在下单时直接抵扣。";
-            RongYunUtil.sendSystemMessage(Long.valueOf(request.getCustomerId()),builder.toString());
+            RongYunUtil.sendActivityMessage(Long.valueOf(request.getCustomerId()),builder.toString());
+            //插入消息数据
+            String phone = customerCouponMapper.selectPhoneByCustomerId(request.getCustomerId());
+            Message m = new Message();
+            Long mid = UUIDUtils.getId();
+            m.setMessageId(mid);
+            m.setMessageContent(builder.toString());
+            m.setTitle("活动获取优惠券");
+            m.setType(Byte.parseByte("1"));//0=系统通知,1=活动通知,2=通知消息
+            customerCouponMapper.insertSelectiveMessage(m);
+
+            MessageCustomer mc = new MessageCustomer();
+            Long mcid = UUIDUtils.getId();
+            mc.setId(mcid);
+            mc.setPhone(Long.valueOf(phone));
+            mc.setReceiverId(Long.valueOf(request.getCustomerId()));
+            mc.setMessageId(mid);
+            customerCouponMapper.insertSelectiveMessageCustomer(mc);
         }else{
             remap.put("code","1");
             remap.put("msg","领取失败，已经领取过了");

@@ -495,6 +495,78 @@
   
   
   
+   <!-- 订单消息 -->
+  <select id="queryMsgOrderList" resultType="com.honglu.quickcall.account.facade.vo.OrderMsgOrderListVO"  >
+	SELECT
+			unionTb.orderId,
+			unionTb.modifyTime,
+			unionTb.customerFlag ,
+			unionTb.nickName,
+			unionTb.customerId,
+			unionTb.serviceId,
+			unionTb.headPortraitUrl,
+			unionTb.vStatus,
+			unionTb.servicePrice,
+			unionTb.serviceUnit,
+			unionTb.orderNum,
+			unionTb.orderAmount,
+			unionTb.orderStatus,
+			unionTb.skillItemName,
+			unionTb.icon
+FROM
+	(
+		SELECT
+			od.order_id AS orderId,
+			od.modify_time AS modifyTime,
+			'V' AS customerFlag,
+			ct.nick_name AS nickName,
+			od.customer_id AS customerId,
+			od.service_id AS serviceId,
+			ct.head_portrait_url AS headPortraitUrl,
+			ct.v_status  AS  vStatus,
+			od.service_price AS servicePrice,
+			od.service_unit AS serviceUnit,
+			od.order_num AS orderNum,
+			od.order_amounts AS orderAmount,
+			od.order_status AS orderStatus,
+			cs.skill_name AS skillItemName,
+			st.unlock_icon AS icon
+			
+		FROM
+			orders od
+		LEFT JOIN customer_skill cs ON od.customer_skill_id = cs.customer_skill_id
+		LEFT JOIN skill_item st ON cs.skill_item_id = st.id
+		INNER JOIN customer ct ON od.customer_id = ct.customer_id
+		WHERE
+			od.service_id = #{customerId}
+		UNION
+			SELECT
+				od.modify_time AS modifyTime,
+				od.order_id AS orderId,
+				'C' AS customerFlag,
+				ct.nick_name AS nickName,
+				od.customer_id AS customerId,
+				od.service_id AS serviceId,
+				ct.head_portrait_url AS headPortraitUrl,
+				ct.v_status  AS  vStatus,
+				od.service_price AS servicePrice,
+				od.service_unit AS serviceUnit,
+				od.order_num AS orderNum,
+				od.order_amounts AS orderAmount,
+				od.order_status AS orderStatus,
+				cs.skill_name AS skillItemName,
+				st.unlock_icon AS icon
+			FROM
+				orders od
+			LEFT JOIN customer_skill cs ON od.customer_skill_id = cs.customer_skill_id
+			LEFT JOIN skill_item st ON cs.skill_item_id = st.id
+			INNER JOIN customer ct ON od.service_id = ct.customer_id
+			WHERE
+				od.customer_id = #{customerId}
+	) unionTb
+ORDER BY
+	unionTb.modifyTime DESC;
+  </select>
    <!-- 查询发出的订单 -->
   <select id="querySendOrderList" resultType="com.honglu.quickcall.account.facade.vo.OrderSendOrderListVO"  >
 	SELECT

@@ -2,7 +2,7 @@
 <%@ taglib prefix="shiro" uri="http://shiro.apache.org/tags" %>
 <div class="content1">
     <div class="header">
-        <h1 class="page-title">用户管理</h1>
+        <h1 class="page-title">用户管理后台</h1>
         <ul class="breadcrumb">
             <li>用户管理</li>
             <li class="active">用户管理后台</li>
@@ -267,6 +267,7 @@
                         "mRender": function (
                             data, type,
                             full) {
+                            //console.log(data);
                             if (data != null) {
                                 return Format(
                                     new Date(
