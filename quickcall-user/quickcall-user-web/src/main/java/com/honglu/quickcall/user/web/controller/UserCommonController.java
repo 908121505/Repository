@@ -386,14 +386,14 @@ public class UserCommonController {
 	}
 
 	/**
-	 * 绑定微信或者QQ
+	 * 修补融云code
 	 * 
 	 * @param params
 	 * @return
 	 */
-	@RequestMapping(value = "/addSystemUser", method = RequestMethod.POST)
+	@RequestMapping(value = "/repairCode", method = RequestMethod.POST)
 	@ResponseBody
-	public WebResponseModel addSystemUser(AddSystemUserRequest params) {
+	public WebResponseModel repairCode(AddSystemUserRequest params) {
 
 		logger.info("userWeb.user.addSystemUser.request.data : " + JSONObject.toJSONString(params));
 		WebResponseModel response = new WebResponseModel();
