@@ -91,7 +91,11 @@ public class AccountDubboBusinessImpl implements AccountDubboBusiness {
 			case OrderRequestType.ORDER_SAVE:
 				response = orderService.saveOrder((OrderSaveRequest) request);
 				break;
-			/** 收到的订单 */
+			/** 订单消息 */
+			case OrderRequestType.MSG_ORDER_LIST:
+				response = orderService.queryMsgOrderList((MsgOrderListRequest) request);
+				break;
+				/** 收到的订单 */
 			case OrderRequestType.ORDER_RECEIVE_ORDER_LIST:
 				response = orderService.queryReceiveOrderList((OrderReceiveOrderListRequest) request);
 				break;
