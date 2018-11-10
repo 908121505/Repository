@@ -1,12 +1,14 @@
 package com.honglu.quickcall.task.job;
 
 import java.util.Date;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 
 import com.honglu.quickcall.account.facade.constants.OrderSkillConstants;
 import com.honglu.quickcall.common.api.util.DateUtils;
@@ -65,7 +67,14 @@ public class CustomerSkillUpdateJob {
     		Integer  receiveStatus =  OrderSkillConstants.RECEIVE_CLOSE;
     		//当前时间字符串
     		String  currTimeStr = DateUtils.formatDateHHMM(new Date());
-    		taskCustomerSkillMapper.openReceiveByWeek(autoReceiveStatus, receiveStatus, updateStatus, weekIndex, currTimeStr);
+    		List<Long>   skillIdList = taskCustomerSkillMapper.queryOpenReceiveByWeek(autoReceiveStatus, receiveStatus, updateStatus, weekIndex, currTimeStr);
+    	
+    		if(CollectionUtils.isEmpty(skillIdList)){
+    			return  ;
+    		}
+    		LOGGER.info("============= week_close自动任务================="+skillIdList.toString());
+    		taskCustomerSkillMapper.updateCustomerSkill(updateStatus, skillIdList,new Date());
+    		
     	} catch (Exception e) {
     		LOGGER.error("week_close自动任务关发生异常，异常信息：", e);
     	}
@@ -87,7 +96,13 @@ public class CustomerSkillUpdateJob {
     		Integer  receiveStatus =  OrderSkillConstants.RECEIVE_CLOSE;
     		//当前时间
     		Date  currTime = new Date();
-    		taskCustomerSkillMapper.openReceiveByCurrentTime(autoReceiveStatus, receiveStatus, updateStatus, currTime);
+    		List<Long>   skillIdList = taskCustomerSkillMapper.queryOpenReceiveByCurrentTime(autoReceiveStatus, receiveStatus, updateStatus, currTime);
+    		
+    		if(CollectionUtils.isEmpty(skillIdList)){
+    			return  ;
+    		}
+    		LOGGER.info("============= curr_open自动任务================="+skillIdList.toString());
+    		taskCustomerSkillMapper.updateCustomerSkill(updateStatus, skillIdList,new Date());
     	} catch (Exception e) {
     		LOGGER.error("curr_open自动任务发生异常，异常信息：", e);
     	}
@@ -109,7 +124,12 @@ public class CustomerSkillUpdateJob {
     		Integer  receiveStatus =  OrderSkillConstants.RECEIVE_OPEN;
     		//当前时间字符串
     		String  currTimeStr = DateUtils.formatDateHHMM(new Date());
-    		taskCustomerSkillMapper.closeReceiveByWeek(autoReceiveStatus, receiveStatus, updateStatus, weekIndex, currTimeStr);
+    		List<Long>   skillIdList = taskCustomerSkillMapper.queryCloseReceiveByWeek(autoReceiveStatus, receiveStatus, updateStatus, weekIndex, currTimeStr);
+    		if(CollectionUtils.isEmpty(skillIdList)){
+    			return  ;
+    		}
+    		LOGGER.info("============= week_close自动任务================="+skillIdList.toString());
+    		taskCustomerSkillMapper.updateCustomerSkill(updateStatus, skillIdList,new Date());
     	} catch (Exception e) {
     		LOGGER.error("week_close自动任务发生异常，异常信息：", e);
     	}
@@ -131,7 +151,13 @@ public class CustomerSkillUpdateJob {
     		Integer  receiveStatus =  OrderSkillConstants.RECEIVE_OPEN;
     		//当前时间
     		Date  currTime = new Date();
-    		taskCustomerSkillMapper.closeReceiveByCurrentTime(autoReceiveStatus, receiveStatus, updateStatus, currTime);
+    		List<Long>   skillIdList = taskCustomerSkillMapper.queryCloseReceiveByCurrentTime(autoReceiveStatus, receiveStatus, updateStatus, currTime);
+    	
+    		if(CollectionUtils.isEmpty(skillIdList)){
+    			return  ;
+    		}
+    		LOGGER.info("============= curr_close自动任务结束================="+skillIdList.toString());
+    		taskCustomerSkillMapper.updateCustomerSkill(updateStatus, skillIdList,new Date());
     	} catch (Exception e) {
     		LOGGER.error("curr_close自动任务发生异常，异常信息：", e);
     	}

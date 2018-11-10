@@ -21,7 +21,8 @@
 		UPDATE 
 			customer_skill
 		SET 
-			receive_status = #{updateStatus}
+			receive_status = #{updateStatus},
+			modify_time = #{modifyTime}
 		WHERE
 			customer_skill_id   IN 
 			<foreach collection="list" item="customerSkillId"    open="("  close=")"  separator=",">
@@ -59,7 +60,7 @@
   
   
 <!-- 根据周索引开启接单开关 -->
-  <update id="openReceiveByWeek"  >
+ <!--  <update id="openReceiveByWeek"  >
 		UPDATE 
 			customer_skill
 		SET 
@@ -70,9 +71,25 @@
 		AND start_time_str <![CDATA[ <= ]]> #{currTimeStr}
 		AND end_time_str <![CDATA[ > ]]>  #{currTimeStr}
 		<include refid="SKILL_EXIST_CONDITON"></include>
-  </update>
+  </update> -->
+  <select id="queryOpenReceiveByWeek"  resultType="java.lang.Long">
+		SELECT
+			customer_id
+		FROM
+			customer_skill
+		WHERE
+			auto_receive_status = #{autoReceiveStatus}
+		AND receive_status = #{recevieStatus}
+		AND start_time_str <![CDATA[ <= ]]> #{currTimeStr}
+		<include refid="SKILL_EXIST_CONDITON"></include>
+  </select>
+  
+  
+  
+  
+  
 <!-- 根据周索引关闭接单开关 -->
-  <update id="closeReceiveByWeek"  >
+<!--   <update id="closeReceiveByWeek"  >
 		UPDATE 
 			customer_skill
 		SET 
@@ -83,11 +100,23 @@
 		AND end_time_str  <![CDATA[ <= ]]>  #{currTimeStr}
 		
 		<include refid="SKILL_EXIST_CONDITON"></include>
-  </update>
+  </update> -->
+  <select id="queryCloseReceiveByWeek"  >
+		SELECT
+			customer_id
+		FROM
+			customer_skill
+		WHERE
+			auto_receive_status = #{autoReceiveStatus}
+		AND receive_status = #{recevieStatus}
+		AND end_time_str  <![CDATA[ <= ]]>  #{currTimeStr}
+		
+		<include refid="SKILL_EXIST_CONDITON"></include>
+  </select>
   
   
 <!-- 根据当前时间开启接单开关 -->
-  <update id="openReceiveByCurrentTime"  >
+<!--   <update id="openReceiveByCurrentTime"  >
 		UPDATE 
 			customer_skill
 		SET 
@@ -96,11 +125,19 @@
 			auto_receive_status = #{autoReceiveStatus}
 		AND receive_status = #{recevieStatus}
 		AND  appoint_start_time    <![CDATA[ <= ]]> #{currTimeStr}
-		AND  appoint_end_time  <![CDATA[ > ]]> #{currTimeStr}
-		
-  </update>
+  </update> -->
+  <select id="queryOpenReceiveByCurrentTime"  >
+		SELECT
+			customer_id
+		FROM
+			customer_skill
+		WHERE
+			auto_receive_status = #{autoReceiveStatus}
+		AND receive_status = #{recevieStatus}
+		AND  appoint_start_time    <![CDATA[ <= ]]> #{currTimeStr}
+  </select>
 <!-- 根据当前时间关闭接单开关 -->
-  <update id="closeReceiveByCurrentTime"  >
+<!--   <update id="closeReceiveByCurrentTime"  >
 		UPDATE 
 			customer_skill
 		SET 
@@ -109,7 +146,17 @@
 			auto_receive_status = #{autoReceiveStatus}
 		AND receive_status = #{recevieStatus}
 		AND appoint_end_time  <![CDATA[ <= ]]>  #{currTimeStr}
-  </update>
+  </update> -->
+  <select id="queryCloseReceiveByCurrentTime"  >
+		SELECT
+			customer_id
+		FROM
+			customer_skill
+		WHERE
+			auto_receive_status = #{autoReceiveStatus}
+		AND receive_status = #{recevieStatus}
+		AND appoint_end_time  <![CDATA[ <= ]]>  #{currTimeStr}
+  </select>
 
 
 
