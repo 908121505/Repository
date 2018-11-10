@@ -1,6 +1,10 @@
 package com.honglu.quickcall.activity.service.business;
 
 import com.honglu.quickcall.activity.facade.vo.CouponOrderVo;
+import com.honglu.quickcall.common.core.util.UUIDUtils;
+import com.honglu.quickcall.common.third.rongyun.util.RongYunUtil;
+import com.honglu.quickcall.user.facade.entity.Message;
+import com.honglu.quickcall.user.facade.entity.MessageCustomer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -9,9 +13,13 @@ import com.honglu.quickcall.activity.facade.entity.Coupon;
 import com.honglu.quickcall.activity.facade.entity.CustomerCoupon;
 import com.honglu.quickcall.activity.service.service.CouponDubboService;
 import org.apache.commons.lang3.StringUtils;
-
+import org.springframework.transaction.annotation.Transactional;
+//import org.apache.shiro.SecurityUtils;
+//import org.apache.shiro.subject.Subject;
+//import javax.security.auth.Subject;
+import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
+//import java.util.List;
 import java.util.Map;
 
 @Service("Activity.CouponDubboBusiness")
@@ -144,19 +152,32 @@ public class CouponDubboBusinessImpl implements CouponDubboBusiness{
 	 *
 	 */
 	@Override
+	@Transactional
 	public int getCouponInOrder(String skillItemId, String customerId){
 		int num = 0;
-		/*CouponOrderVo cvo = getShowTipForActivity(skillItemId, customerId);
+		CouponOrderVo cvo = getShowTipForActivity(skillItemId, customerId);
 		int tip = cvo.getShowTip();
 		if(tip==1){
+			//查出券所有信息
 			CouponOrderVo vo = couponDubboService.showActivityCouponForOrder(skillItemId,customerId);//customerId这里暂时不用
-			//String couponId = couponDubboService.getCouponIdBySkillItemId(skillItemId);
 			String couponId = "";
 			if(vo!=null && vo.getCouponId()!=null){
 				couponId = vo.getCouponId();
+
+				CustomerCoupon cc = new CustomerCoupon();
+				cc.setCouponId(Long.parseLong(couponId));
+				cc.setCustomerId(Long.parseLong(customerId));
+				//Subject currentUser = SecurityUtils.getSubject();
+				//cc.setCreateMan(currentUser.getPrincipal().toString());
+				cc.setCreateMan("admin");
+				cc.setCreateTime(new Date());
+				num = couponDubboService.insertCustomerCoupon(cc);
+				if(num > 0){
+					//插入消息记录
+					couponDubboService.sendActivityMessage(couponId,customerId);
+				}
 			}
-			//num = insert(customerCoupon);
-		}*/
+		}
 		return num;
 	}
 
