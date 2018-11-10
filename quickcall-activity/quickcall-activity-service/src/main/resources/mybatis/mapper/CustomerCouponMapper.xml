@@ -265,7 +265,9 @@
         LEFT JOIN activity a ON a.activity_id = c.activity_id
         where
         cs.skill_item_id = #{skillItemId}
-         and ( NOW() BETWEEN a.start_time AND a.end_time)
+        and cs.status = 1
+        and ( NOW() BETWEEN a.start_time AND a.end_time)
+        order by c.coupon_price desc
         LIMIT 1
   </select>
 
