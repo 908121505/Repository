@@ -74,7 +74,7 @@ public class CommonServiceImpl implements CommonService {
 	public OrderTempResponseVO getCountDownSeconds(Integer   oldOrderStatus ,Date  orderTime,Date  receiveOrderTime,Date startServiceTime,Date  expectEndTime,Date  appointTime) {
 		OrderTempResponseVO  tempVO = new OrderTempResponseVO();
 		Date  currTime = new Date();
-		Long  countDownSeconds = null ;
+		Long  countDownSeconds = 0L ;
 		Date  endTime = null ;
 		tempVO.setOrderStatus(oldOrderStatus);
 		//需要调整用户5分钟未同意大V立即服务倒计时时间
