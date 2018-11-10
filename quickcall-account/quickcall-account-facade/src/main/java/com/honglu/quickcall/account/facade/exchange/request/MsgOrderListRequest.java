@@ -13,9 +13,11 @@ import com.honglu.quickcall.common.api.exchange.AbstractRequest;
  */
 public class MsgOrderListRequest extends AbstractRequest {
     
-	private static final long serialVersionUID = -5486191671076025320L;
+	private static final long serialVersionUID = 751855671487087996L;
 	/**客户编号*/
 	private Long  customerId;
+	/**当前页*/
+	private Integer  pageIndex;
 	
 
 	public Long getCustomerId() {
@@ -27,8 +29,17 @@ public class MsgOrderListRequest extends AbstractRequest {
 	}
 	
 	
+	
 
 
+
+	public Integer getPageIndex() {
+		return pageIndex;
+	}
+
+	public void setPageIndex(Integer pageIndex) {
+		this.pageIndex = pageIndex;
+	}
 
 	@Override
 	public String getBizCode() {
@@ -37,8 +48,11 @@ public class MsgOrderListRequest extends AbstractRequest {
 
 	@Override
 	public String toString() {
-		return "OrderReceiveOrderListRequest [customerId=" + customerId + "]";
+		return "MsgOrderListRequest [customerId=" + customerId + ", pageIndex=" + pageIndex + "]";
 	}
+
+	
+	
 
 
 
