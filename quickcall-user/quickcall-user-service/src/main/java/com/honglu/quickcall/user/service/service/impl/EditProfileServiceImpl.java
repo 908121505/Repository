@@ -227,7 +227,7 @@ public class EditProfileServiceImpl implements EditProfileService {
 			throw new BizException(UserBizReturnCode.paramError, "customerId不能为空");
 		}
 		if (StringUtil.isBlank(params.getInterestId())) {
-			throw new BizException(UserBizReturnCode.paramError, "interestId不能为空");
+			return ResultUtils.resultSuccess();
 		}
 
 		Customer customer = customerMapper.selectByPrimaryKey(params.getCustomerId());
