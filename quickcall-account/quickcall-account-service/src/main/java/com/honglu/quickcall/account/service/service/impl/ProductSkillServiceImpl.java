@@ -320,6 +320,14 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 		// 获取用户技能列表信息
 		List<CustomerSkill> custSkillList = customerSkillMapper.querySkillInfoPersonal(customerId);
 		if (CollectionUtils.isEmpty(custSkillList)) {
+			resultVO.setAutoReceiveStatus(0);
+			resultVO.setCustomerSkillList(null);
+			resultVO.setEndServiceTimeStr("23:59");
+			resultVO.setReceiveStatus(0);
+			resultVO.setStartServiceTimeStr("00:00");
+			HashMap<String, Integer> weekDataMap = new HashMap<String, Integer>();
+			
+			resultVO.setWeekDataMap(weekDataMap );
 			return resultVO;
 		}
 		
