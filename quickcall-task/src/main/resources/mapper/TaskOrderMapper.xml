@@ -99,7 +99,7 @@
 		   orders
 		WHERE
 			order_status = #{queryStatus}
-		AND expect_service_time <![CDATA[ < ]]> #{currTime}
+		AND expect_end_time <![CDATA[ < ]]> #{currTime}
   </select>
   
   <!-- ///////////////////////////////////////////////////////////////////-->
