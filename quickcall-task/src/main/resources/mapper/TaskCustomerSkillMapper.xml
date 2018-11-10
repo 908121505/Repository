@@ -101,7 +101,7 @@
 		
 		<include refid="SKILL_EXIST_CONDITON"></include>
   </update> -->
-  <select id="queryCloseReceiveByWeek"  >
+  <select id="queryCloseReceiveByWeek"   resultType="java.lang.Long">
 		SELECT
 			customer_id
 		FROM
@@ -126,7 +126,7 @@
 		AND receive_status = #{recevieStatus}
 		AND  appoint_start_time    <![CDATA[ <= ]]> #{currTimeStr}
   </update> -->
-  <select id="queryOpenReceiveByCurrentTime"  >
+  <select id="queryOpenReceiveByCurrentTime"   resultType="java.lang.Long">
 		SELECT
 			customer_id
 		FROM
@@ -147,7 +147,7 @@
 		AND receive_status = #{recevieStatus}
 		AND appoint_end_time  <![CDATA[ <= ]]>  #{currTimeStr}
   </update> -->
-  <select id="queryCloseReceiveByCurrentTime"  >
+  <select id="queryCloseReceiveByCurrentTime"   resultType="java.lang.Long">
 		SELECT
 			customer_id
 		FROM
