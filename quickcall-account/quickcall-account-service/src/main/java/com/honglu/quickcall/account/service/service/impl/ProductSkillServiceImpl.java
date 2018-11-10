@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import com.honglu.quickcall.account.facade.constants.OrderSkillConstants;
 import com.honglu.quickcall.account.facade.entity.CustomerSkill;
 import com.honglu.quickcall.account.facade.entity.SkillItem;
 import com.honglu.quickcall.account.facade.entity.SkillItemExt;
@@ -32,6 +33,8 @@ import com.honglu.quickcall.account.service.dao.SkillItemExtMapper;
 import com.honglu.quickcall.account.service.dao.SkillItemMapper;
 import com.honglu.quickcall.account.service.service.IProductSkillService;
 import com.honglu.quickcall.common.api.util.DateUtils;
+import com.honglu.quickcall.common.api.util.JedisUtil;
+import com.honglu.quickcall.common.api.util.RedisKeyConstants;
 import com.honglu.quickcall.producer.facade.business.DataDuriedPointBusiness;
 import com.honglu.quickcall.producer.facade.req.databury.DataBuriedPointOrderButtonReq;
 
@@ -309,6 +312,8 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 	
 	
 
+	
+	private static final  Integer  WEEK_INDEX_DEFAULT = 0;
 
 	@Override
 	public CustomerSkillInfoVO querySkillInfoPersonal(Long customerId) {
@@ -317,6 +322,20 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 		// 获取用户技能列表信息
 		List<CustomerSkill> custSkillList = customerSkillMapper.querySkillInfoPersonal(customerId);
 		if (CollectionUtils.isEmpty(custSkillList)) {
+			resultVO.setAutoReceiveStatus(0);
+			resultVO.setCustomerSkillList(null);
+			resultVO.setEndServiceTimeStr("23:59");
+			resultVO.setReceiveStatus(0);
+			resultVO.setStartServiceTimeStr("00:00");
+			HashMap<String, Integer> weekDataMap = new HashMap<String, Integer>();
+			weekDataMap.put("tuesday", WEEK_INDEX_DEFAULT);
+			weekDataMap.put("monday", WEEK_INDEX_DEFAULT);
+			weekDataMap.put("wednesday", WEEK_INDEX_DEFAULT);
+			weekDataMap.put("thursday", WEEK_INDEX_DEFAULT);
+			weekDataMap.put("friday", WEEK_INDEX_DEFAULT);
+			weekDataMap.put("saturday", WEEK_INDEX_DEFAULT);
+			weekDataMap.put("sunday", WEEK_INDEX_DEFAULT);
+			resultVO.setWeekDataMap(weekDataMap );
 			return resultVO;
 		}
 		
@@ -615,6 +634,40 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 //		}
 		
 
+	}
+
+	/**默认超时时间为25小时*/
+	private static  final  int   TIMEOUT_SECONDS = 90000;
+	
+	@Override
+	public Integer checkReceiveSwitch(Long customerId) {
+		String  currTimeStr = DateUtils.formatDateReachDate(new Date());
+		
+		String key = RedisKeyConstants.ACCOUNT_RECEIVE_NO_NX  + currTimeStr+customerId ;
+		//首先判断当天是否有过请求
+		long  result = JedisUtil.setnx(key , "1", TIMEOUT_SECONDS);
+		//result 返回1表示第一次请求
+		if(result == 1){
+			//其次判断接单开关是否开启
+			Integer  receiveStatus = customerSkillMapper.queryReceiveStatusByCustomerId(customerId);
+			return receiveStatus;
+		}
+		return 2;
+		
+		
+	}
+
+	@Override
+	public void openReceiveSwitch(Long customerId) {
+		//开启开关
+		Integer  receiveStatus = customerSkillMapper.queryReceiveStatusByCustomerId(customerId);
+		if(receiveStatus != null){
+			if(OrderSkillConstants.RECEIVE_CLOSE == receiveStatus){
+				customerSkillMapper.openReceiveSwitch(customerId,OrderSkillConstants.RECEIVE_OPEN);
+			}
+		}
+		
+		
 	}
 
 }

@@ -95,13 +95,13 @@ public class UserCommonController {
 			if (StringUtils.isBlank(
 					JedisUtil.get(RedisKeyConstants.USER_VERIFYCODE + params.getTel() + params.getCodeType()))) {
 				response.setCode(BizCode.CustomerSmsError.getCode());
-				response.setMsg("验证码失效请重新获取");
+				response.setMsg("验证码失效");
 				return response;
 			}
 			if (!params.getVerifyCode().equals(
 					JedisUtil.get(RedisKeyConstants.USER_VERIFYCODE + params.getTel() + params.getCodeType()))) {
 				response.setCode(BizCode.CustomerSmsError.getCode());
-				response.setMsg("验证码输入不正确");
+				response.setMsg("验证码错误");
 				return response;
 			}
 		}
@@ -133,13 +133,13 @@ public class UserCommonController {
 			if (StringUtils.isBlank(
 					JedisUtil.get(RedisKeyConstants.USER_VERIFYCODE + params.getTel() + params.getCodeType()))) {
 				response.setCode(BizCode.CustomerSmsError.getCode());
-				response.setMsg("验证码失效请重新获取");
+				response.setMsg("验证码失效");
 				return response;
 			}
 			if (!params.getVerifyCode().equals(
 					JedisUtil.get(RedisKeyConstants.USER_VERIFYCODE + params.getTel() + params.getCodeType()))) {
 				response.setCode(BizCode.CustomerSmsError.getCode());
-				response.setMsg("验证码输入不正确");
+				response.setMsg("验证码错误");
 				return response;
 			}
 		}
@@ -170,13 +170,13 @@ public class UserCommonController {
 			if (StringUtils.isBlank(
 					JedisUtil.get(RedisKeyConstants.USER_VERIFYCODE + params.getTel() + params.getCodeType()))) {
 				response.setCode(BizCode.CustomerSmsError.getCode());
-				response.setMsg("验证码失效请重新获取");
+				response.setMsg("验证码失效");
 				return response;
 			}
 			if (!params.getVerifyCode().equals(
 					JedisUtil.get(RedisKeyConstants.USER_VERIFYCODE + params.getTel() + params.getCodeType()))) {
 				response.setCode(BizCode.CustomerSmsError.getCode());
-				response.setMsg("验证码输入不正确");
+				response.setMsg("验证码错误");
 				return response;
 			}
 		}
@@ -386,14 +386,14 @@ public class UserCommonController {
 	}
 
 	/**
-	 * 绑定微信或者QQ
+	 * 修补融云code
 	 * 
 	 * @param params
 	 * @return
 	 */
-	@RequestMapping(value = "/addSystemUser", method = RequestMethod.POST)
+	@RequestMapping(value = "/repairCode", method = RequestMethod.POST)
 	@ResponseBody
-	public WebResponseModel addSystemUser(AddSystemUserRequest params) {
+	public WebResponseModel repairCode(AddSystemUserRequest params) {
 
 		logger.info("userWeb.user.addSystemUser.request.data : " + JSONObject.toJSONString(params));
 		WebResponseModel response = new WebResponseModel();
@@ -424,14 +424,14 @@ public class UserCommonController {
 				&& !"".equals(params.getCodeType())) {
 			if (StringUtils.isBlank(
 					JedisUtil.get(RedisKeyConstants.USER_VERIFYCODE + params.getTel() + params.getCodeType()))) {
-				response.setCode(UserBizReturnCode.paramError.code());
-				response.setMsg("验证码失效请重新获取");
+				response.setCode(BizCode.CustomerSmsError.code());
+				response.setMsg("验证码失效");
 				return response;
 			}
 			if (!params.getVerifyCode().equals(
 					JedisUtil.get(RedisKeyConstants.USER_VERIFYCODE + params.getTel() + params.getCodeType()))) {
-				response.setCode(UserBizReturnCode.paramError.code());
-				response.setMsg("验证码输入不正确");
+				response.setCode(BizCode.CustomerSmsError.code());
+				response.setMsg("验证码错误");
 				return response;
 			}
 		}

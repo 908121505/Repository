@@ -8,6 +8,7 @@ import com.honglu.quickcall.account.facade.entity.EvaluationLabel;
 import com.honglu.quickcall.account.facade.entity.Order;
 import com.honglu.quickcall.account.facade.vo.OrderDaVSkillVO;
 import com.honglu.quickcall.account.facade.vo.OrderDetailVO;
+import com.honglu.quickcall.account.facade.vo.OrderMsgOrderListVO;
 import com.honglu.quickcall.account.facade.vo.OrderReceiveOrderListVO;
 import com.honglu.quickcall.account.facade.vo.OrderSendOrderListVO;
 
@@ -160,6 +161,14 @@ public interface OrderMapper {
 	int insertOrderServicerFans(@Param("id") Long id,
 								@Param("serviceId") Long serviceId,
 								@Param("customerId") Long customerId);
+
+
+	/**
+	 * 根据用户ID获取订单消息列表
+	 * @param customerId
+	 * @return
+	 */
+	List<OrderMsgOrderListVO> queryMsgOrderList(@Param("customerId")Long customerId);
 
 
 

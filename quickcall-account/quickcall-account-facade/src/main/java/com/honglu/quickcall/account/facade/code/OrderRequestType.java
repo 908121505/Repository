@@ -22,6 +22,10 @@ public interface OrderRequestType {
     public static final  String  QUERY_SKILL_NAME_FOR_FIRST_PAGE = "19004";
     /**首页分类下的大V列表*/
     public static final  String  QUERY_DV_LIST_BY_TYPE = "19005";
+    /**检查声优技能开关*/
+    public static final  String  CHECK_RECEIVE_SWITCH = "19006";
+    /**开启接单开关*/
+    public static final  String  OPEN_RECEIVE_SWITCH = "19007";
     
     
     
@@ -36,6 +40,8 @@ public interface OrderRequestType {
     public static final  String  ORDER_RECEIVE_ORDER_LIST = "19021";
     /**查询发起的订单*/
     public static final  String  ORDER_SEND_ORDER_LIST = "19022";
+    /**查询订单消息*/
+    public static final  String  MSG_ORDER_LIST = "19023";
     
     
     

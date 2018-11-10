@@ -2,6 +2,8 @@ package com.honglu.quickcall.activity.service.dao;
 
 import com.honglu.quickcall.activity.facade.entity.CustomerCoupon;
 import com.honglu.quickcall.activity.facade.vo.CouponOrderVo;
+import com.honglu.quickcall.user.facade.entity.Message;
+import com.honglu.quickcall.user.facade.entity.MessageCustomer;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -117,5 +119,26 @@ public interface CustomerCouponMapper {
      * @param map
      */
     CouponOrderVo getDeductCoupon(Map<String,String> map);
+
+    /**
+     * 插入信息Message
+     * @param record
+     * @mbggenerated
+     */
+    int insertSelectiveMessage(Message record);
+
+    /**
+     * 插入信息MessageCustomer
+     * @param record
+     * @mbggenerated
+     */
+    int insertSelectiveMessageCustomer(MessageCustomer record);
+
+    /**
+     * 根据客户ID查询电话
+     * @param customerId
+     * @mbggenerated
+     */
+    String selectPhoneByCustomerId(String customerId);
 
 }

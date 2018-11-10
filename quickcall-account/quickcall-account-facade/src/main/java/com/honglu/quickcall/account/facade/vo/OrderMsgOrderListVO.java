@@ -7,20 +7,30 @@ import java.util.Date;
 /**   
  * Copyright © 2018 www.xiaoniu.com All rights reserved.
  * 
- * 功能描述：用户接收到的订单详情
+ * 功能描述：
  * @Package: com.honglu.quickcall.account.facade.vo 
  * @author: chenliuguang   
  * @date: 2018年9月24日 下午1:18:42 
  */
-public class OrderReceiveOrderListVO implements  Serializable{
+public class OrderMsgOrderListVO implements  Serializable{
 
-	private static final long serialVersionUID = 9932873120044243L;
+	
+	private static final long serialVersionUID = 2165524818869032094L;
 	/**主播ID*/
 	private Long  orderId;
+	/**更改时间*/
+	private Date  modifyTime;
+	/**消息提醒*/
+	private String  msgContent;
+	/**订单标识 C:用户是下单人  V：用户是接单人*/
+	private String  customerFlag;
 	/**主播昵称*/
 	private String  nickName;
 	/**下单人iD*/
 	private Long  customerId;
+	/**接单人iD*/
+	private Long  serviceId;
+	
 	/**主播头像*/
 	private String  headPortraitUrl;
 	/**产品价格*/
@@ -43,80 +53,40 @@ public class OrderReceiveOrderListVO implements  Serializable{
 	private String skillItemName ;
 	/**技能ICON*/
 	private String  icon;
+	/**声优标识*/
+	private Integer  vStatus;
 	
-	/**倒计时秒数*/
-	private Long  countDownSeconds;
-	
-	/**下单时间*/
-	private Date  orderTime ;
-	/**接单时间*/
-	private Date  receiveOrderTime ;
-	
-	/**客户技能ID*/
-	private Long  customerSkillId;
-	/**技能开关：1=开启,0=关闭*/
-	private Integer  switchStatus;
-	/**开始服务时间*/
-	private Date  startServiceTime;
-	/**订单预计结束时间*/
-	private Date  expectEndTime;
-	/**券标识*/
-	private Integer  couponFlag;
-	/**预约时间*/
-	private Date  appointTime;
-	
-	
-	
-	public Date getAppointTime() {
-		return appointTime;
+	public Integer getvStatus() {
+		return vStatus;
 	}
-	public void setAppointTime(Date appointTime) {
-		this.appointTime = appointTime;
+	public void setvStatus(Integer vStatus) {
+		this.vStatus = vStatus;
 	}
-	public Date getExpectEndTime() {
-		return expectEndTime;
+	public Long getServiceId() {
+		return serviceId;
 	}
-	public void setExpectEndTime(Date expectEndTime) {
-		this.expectEndTime = expectEndTime;
+	public void setServiceId(Long serviceId) {
+		this.serviceId = serviceId;
 	}
-	public Date getStartServiceTime() {
-		return startServiceTime;
+	public Date getModifyTime() {
+		return modifyTime;
 	}
-	public void setStartServiceTime(Date startServiceTime) {
-		this.startServiceTime = startServiceTime;
-		
-	}
-	public Integer getCouponFlag() {
-		return couponFlag;
-	}
-	public void setCouponFlag(Integer couponFlag) {
-		this.couponFlag = couponFlag;
-	}
-	public Integer getSwitchStatus() {
-		return switchStatus;
-	}
-	public void setSwitchStatus(Integer switchStatus) {
-		this.switchStatus = switchStatus;
-	}
-	public Long getCustomerSkillId() {
-		return customerSkillId;
-	}
-	public void setCustomerSkillId(Long customerSkillId) {
-		this.customerSkillId = customerSkillId;
-	}
-	public Date getOrderTime() {
-		return orderTime;
-	}
-	public void setOrderTime(Date orderTime) {
-		this.orderTime = orderTime;
-	}
-	public Date getReceiveOrderTime() {
-		return receiveOrderTime;
-	}
-	public void setReceiveOrderTime(Date receiveOrderTime) {
-		this.receiveOrderTime = receiveOrderTime;
+	public void setModifyTime(Date modifyTime) {
+		this.modifyTime = modifyTime;
 	}
 	
+	public String getMsgContent() {
+		return msgContent;
+	}
+	public void setMsgContent(String msgContent) {
+		this.msgContent = msgContent;
+	}
+	public String getCustomerFlag() {
+		return customerFlag;
+	}
+	public void setCustomerFlag(String customerFlag) {
+		this.customerFlag = customerFlag;
+	}
 	public Long getOrderId() {
 		return orderId;
 	}
@@ -182,11 +152,5 @@ public class OrderReceiveOrderListVO implements  Serializable{
 	}
 	public void setIcon(String icon) {
 		this.icon = icon;
-	}
-	public Long getCountDownSeconds() {
-		return countDownSeconds;
-	}
-	public void setCountDownSeconds(Long countDownSeconds) {
-		this.countDownSeconds = countDownSeconds;
 	}
 }

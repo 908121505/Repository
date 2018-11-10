@@ -495,6 +495,78 @@
   
   
   
+   <!-- 订单消息 -->
+  <select id="queryMsgOrderList" resultType="com.honglu.quickcall.account.facade.vo.OrderMsgOrderListVO"  >
+	SELECT
+			unionTb.orderId,
+			unionTb.modifyTime,
+			unionTb.customerFlag ,
+			unionTb.nickName,
+			unionTb.customerId,
+			unionTb.serviceId,
+			unionTb.headPortraitUrl,
+			unionTb.vStatus,
+			unionTb.servicePrice,
+			unionTb.serviceUnit,
+			unionTb.orderNum,
+			unionTb.orderAmount,
+			unionTb.orderStatus,
+			unionTb.skillItemName,
+			unionTb.icon
+FROM
+	(
+		SELECT
+			od.order_id AS orderId,
+			od.modify_time AS modifyTime,
+			'V' AS customerFlag,
+			ct.nick_name AS nickName,
+			od.customer_id AS customerId,
+			od.service_id AS serviceId,
+			ct.head_portrait_url AS headPortraitUrl,
+			ct.v_status  AS  vStatus,
+			od.service_price AS servicePrice,
+			od.service_unit AS serviceUnit,
+			od.order_num AS orderNum,
+			od.order_amounts AS orderAmount,
+			od.order_status AS orderStatus,
+			cs.skill_name AS skillItemName,
+			st.unlock_icon AS icon
+			
+		FROM
+			orders od
+		LEFT JOIN customer_skill cs ON od.customer_skill_id = cs.customer_skill_id
+		LEFT JOIN skill_item st ON cs.skill_item_id = st.id
+		INNER JOIN customer ct ON od.customer_id = ct.customer_id
+		WHERE
+			od.service_id = #{customerId}
+		UNION
+			SELECT
+				od.modify_time AS modifyTime,
+				od.order_id AS orderId,
+				'C' AS customerFlag,
+				ct.nick_name AS nickName,
+				od.customer_id AS customerId,
+				od.service_id AS serviceId,
+				ct.head_portrait_url AS headPortraitUrl,
+				ct.v_status  AS  vStatus,
+				od.service_price AS servicePrice,
+				od.service_unit AS serviceUnit,
+				od.order_num AS orderNum,
+				od.order_amounts AS orderAmount,
+				od.order_status AS orderStatus,
+				cs.skill_name AS skillItemName,
+				st.unlock_icon AS icon
+			FROM
+				orders od
+			LEFT JOIN customer_skill cs ON od.customer_skill_id = cs.customer_skill_id
+			LEFT JOIN skill_item st ON cs.skill_item_id = st.id
+			INNER JOIN customer ct ON od.service_id = ct.customer_id
+			WHERE
+				od.customer_id = #{customerId}
+	) unionTb
+ORDER BY
+	unionTb.modifyTime DESC;
+  </select>
    <!-- 查询发出的订单 -->
   <select id="querySendOrderList" resultType="com.honglu.quickcall.account.facade.vo.OrderSendOrderListVO"  >
 	SELECT
@@ -512,7 +584,8 @@
 	      od.order_time  AS  orderTime,
 	      od.receive_order_time  AS receiveOrderTime,
 	      od.customer_skill_id AS customerSkillId,
-		  cs.switch_status AS switchStatus
+		  cs.switch_status AS switchStatus,
+		  od.appoint_time  AS  appointTime
 	FROM
 		orders od LEFT JOIN   customer_skill  cs  ON  od.customer_skill_id  = cs.customer_skill_id
 	        LEFT JOIN   skill_item   st ON  cs.skill_item_id  =  st.id
@@ -547,7 +620,8 @@
 		od.receive_order_time AS receiveOrderTime,
 		od.customer_skill_id AS customerSkillId,
 		cs.switch_status AS switchStatus,
-		od.coupon_flag  AS  couponFlag
+		od.coupon_flag  AS  couponFlag,
+		od.appoint_time  AS  appointTime
 	FROM
 		orders od
 	LEFT JOIN customer_skill cs ON od.customer_skill_id = cs.customer_skill_id
@@ -793,5 +867,15 @@
     </foreach>
   </update>
 
+  <!-- 查询声优是否被客户关注 -->
+  <select id="findServicerIsAttentioned" resultType="integer">
+    SELECT COUNT(1) FROM `fans` WHERE anchor_id=#{serviceId} AND fans_id=#{customerId} AND attention_state = 1;
+  </select>
 
+  <!-- 插入订单服务者的粉丝 -->
+  <insert id="insertOrderServicerFans">
+    INSERT INTO fans (id, anchor_id, fans_id, attention_state)
+    VALUES(#{id}, #{serviceId}, #{customerId}, 1)
+    ON DUPLICATE KEY UPDATE attention_state = 1
+  </insert>
 </mapper>

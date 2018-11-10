@@ -1,8 +1,10 @@
 package com.honglu.quickcall.account.service.bussService;
 
+import com.honglu.quickcall.account.facade.exchange.request.CheckReceiveSwitchRequest;
 import com.honglu.quickcall.account.facade.exchange.request.DaVListBySkillItemIdRequest;
 import com.honglu.quickcall.account.facade.exchange.request.FirstPageDaVinfoRequest;
 import com.honglu.quickcall.account.facade.exchange.request.FirstPageSkillinfoRequest;
+import com.honglu.quickcall.account.facade.exchange.request.OpenReceiveSwitchRequest;
 import com.honglu.quickcall.account.facade.exchange.request.SkillInfoRequest;
 import com.honglu.quickcall.account.facade.exchange.request.SkillUpdateRequest;
 import com.honglu.quickcall.common.api.exchange.CommonResponse;
@@ -46,4 +48,16 @@ public interface ISkillBussService {
 	 * @return
 	 */
 	public CommonResponse getDaVListBySkillItemId(DaVListBySkillItemIdRequest request);
+	/**
+	 * 检查声优接单开关是否开启
+	 * @param request
+	 * @return
+	 */
+	public CommonResponse checkReceiveSwitch(CheckReceiveSwitchRequest request);
+	/**
+	 * 开启声优接单开关
+	 * @param request
+	 * @return
+	 */
+	public CommonResponse openReceiveSwitch(OpenReceiveSwitchRequest request);
 }

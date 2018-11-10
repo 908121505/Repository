@@ -48,6 +48,15 @@
                         </select>
                     </div>
                 </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">领取方式<font color="red">&nbsp;*</font></label>
+                    <div class="col-sm-10">
+                        <select class="form-control" id="getWay" name="getWay">
+                            <option value="0" ${entity.getWay=='0'?'selected':''}>直接领取</option>
+                            <option value="1" ${entity.getWay=='1'?'selected':''}>下单领取</option>
+                        </select>
+                    </div>
+                </div>
                 <%--<div class="form-group">
                     <label class="col-sm-2 control-label">券码<font color="red">&nbsp;*</font></label>
                     <div class="col-sm-10">
@@ -83,7 +92,7 @@
                     <label class="col-sm-2 control-label">选择活动<font color="red">&nbsp;*</font></label>
                     <div class="col-sm-10">
                         <select  class="form-control" id="activitySelect" name="activityId">
-                            <option value="0">请选择</option>
+                            <option value="">请选择</option>
                             <c:if test="${not empty activityList}">
                                 <c:forEach items="${activityList}" var="activity">
                                     <option value=${activity.activityId}>名称：${activity.activityName}       编码：${activity.activityCode}</option>
@@ -111,6 +120,31 @@
                     </div>
                 </c:if>
 
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">选择品类</label>
+                    <div class="col-sm-10">
+                        <select  class="form-control selectpicker" id="skillItemSelect" name="skillItemIdList" multiple>
+                            <option value='clear'>清空当前所属品类</option>
+                            <c:if test="${not empty skillItemList}">
+                                <c:forEach items="${skillItemList}" var="skillItem">
+                                    <option value=${skillItem.skillItemId}>${skillItem.skillItemName}</option>
+                                </c:forEach>
+                            </c:if>
+                            <%--<option value="1">1.0</option>
+                            <option value="2">2.0</option>--%>
+                        </select>
+
+                    </div>
+                </div>
+                <c:if test="${not empty entity}">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">当前所属品类<font color="red">&nbsp;*</font></label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control required" id="skillItemName" name="skillItemName" value="${entity.skillItemName }" readonly="readonly"/>
+                        </div>
+                    </div>
+                </c:if>
+
 
                 <span id="tip" style="color: red;font-size: 14px;margin-left:20px; "></span>
             </form>
@@ -129,6 +163,15 @@
 
 <script type="text/javascript">
     function check_fun() {
+
+        var skillItemSelectValue = $("#skillItemSelect").val();
+        if(skillItemSelectValue != null){
+            var skillItemSelectValueStr = skillItemSelectValue.toString();
+            if(skillItemSelectValueStr.indexOf("clear") != -1 && skillItemSelectValueStr != "clear"){
+                $("#tip").html("清空当前所属品类选项不能与其他选项同时选择！");
+                return false;
+            }
+        }
 
         var couponName = $("#couponName").val();
         if(couponName == null || couponName.trim() == ''){
@@ -153,6 +196,13 @@
             return false;
         }
 
+        var getWay = $("#getWay").val();
+
+        if(getWay != 0 && getWay != 1){
+            $("#tip").html("请选择领取方式");
+            return false;
+        }
+
         var couponType = $("#couponType").val();
         if(couponType != 0 && couponType != 1){
             $("#tip").html("请选择券类型");
@@ -160,13 +210,11 @@
         }
 
         var activitySelect = $("#activitySelect").val();
-        alert(activitySelect);
 
         if(('${entity.activityId}' == '') && (activitySelect == null || activitySelect  == '')){
             $("#tip").html("请选择活动");
             return false;
         }
-
 
 
         var startTime = $("#banner_startTime").val();
@@ -187,38 +235,12 @@
         return true;
     }
 
-    <%--$(document).ready(function () {--%>
+    $(document).ready(function () {
 
-        <%--$.ajax({--%>
-            <%--type: "POST",--%>
-            <%--url: "coupon/getActivityList",--%>
-            <%--dataType: "json",--%>
-            <%--async: false,--%>
-            <%--success: function (data) {--%>
+        //多选
+        $('#skillItemSelect').selectpicker();
 
-                <%--if(data.length > 0){--%>
-                    <%--&lt;%&ndash;if (${not empty entity}) {&ndash;%&gt;--%>
-                        <%--&lt;%&ndash;$('#appVersionSelect').append("<option value='clear'></option>")&ndash;%&gt;--%>
-                    <%--&lt;%&ndash;}&ndash;%&gt;--%>
-                    <%--$('#activitySelect').append("<option value=''>请选择</option>");--%>
-                    <%--var i;--%>
-                    <%--for (i = 0; i < data.length; i++) {--%>
-                        <%--alert(data[i].activityId);--%>
-                        <%--$('#activitySelect').append("<option value="+data[i].activityId+">"+"名称："+data[i].activityName+"，       编码："+data[i].activityCode+"</option>");--%>
-                    <%--}--%>
-                <%--}--%>
-
-<%--//                $('#appVersionSelect').selectpicker();--%>
-            <%--},--%>
-            <%--error: function () {--%>
-                <%--$("#tip").html("未知错误");--%>
-                <%--b = false;--%>
-                <%--return--%>
-            <%--}--%>
-        <%--});--%>
-
-
-    <%--});--%>
+    });
 
 
 </script>

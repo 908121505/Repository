@@ -2,7 +2,7 @@
 <%@ taglib prefix="shiro" uri="http://shiro.apache.org/tags" %>
 <div class="content1">
     <div class="header">
-        <h1 class="page-title">订单管理</h1>
+        <h1 class="page-title">折扣管理</h1>
         <ul class="breadcrumb">
             <li>订单管理</li>
             <li class="active">折扣管理</li>
@@ -13,6 +13,7 @@
             <div class="col-md-2">
                 <div class="form-group">
                     <div class="input-group">
+                        <div class="input-group-addon">技能</div>
                         <select class="form-control" id="skillTypeQuery">
                             <option value="">--请选择--</option>
                         </select>
@@ -23,6 +24,7 @@
             <div class="col-md-2">
                 <div class="form-group">
                     <div class="input-group">
+                        <div class="input-group-addon">状态</div>
                         <select class="form-control" id="skillStatusQuery">
                             <option value="">--请选择--</option>
                             <option value="0">关闭</option>

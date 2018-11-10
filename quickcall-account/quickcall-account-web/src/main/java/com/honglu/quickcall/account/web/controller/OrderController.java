@@ -49,6 +49,17 @@ public class OrderController {
     
     
     /**
+     * 订单消息
+     * @param params
+     * @return
+     */
+    @RequestMapping(value = "/msgOrderList", method = RequestMethod.POST)
+    @ResponseBody
+    public WebResponseModel queryMsgOrderList( /* @RequestBody */ MsgOrderListRequest params) {
+    	WebResponseModel response = orderInfoService.execute(params);
+    	return response;
+    }
+    /**
      * 收到的订单
      * @param params
      * @return

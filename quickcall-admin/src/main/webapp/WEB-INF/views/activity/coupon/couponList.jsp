@@ -27,6 +27,22 @@
                     </div>
                 </div>
             </div>
+            <div class="col-md-2">
+                <div class="form-group">
+                    <div class="input-group">
+                        <div class="input-group-addon">活动名称</div>
+                        <input class="form-control" type="text" id="activityNameQuery">
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="form-group">
+                    <div class="input-group">
+                        <div class="input-group-addon">活动编码</div>
+                        <input class="form-control" type="text" id="activityCodeQuery">
+                    </div>
+                </div>
+            </div>
             <%--<div class="col-md-2">
                 <div class="form-group">
                     <div class="input-group">
@@ -40,22 +56,9 @@
                     </div>
                 </div>
             </div>--%>
-
-            <div class="col-md-2">
-                <button type="button" class="btn btn-primary btn-small btn-block" id="query">
-                    <i class="glyphicon glyphicon-search"></i> 查询
-                </button>
-            </div>
-
-            <div class="col-md-2">
-                <button type="button" class="btn btn-info btn-small btn-block"
-                        onclick="addAndUpdateRow(0)">
-                    <i class="glyphicon glyphicon-plus"></i> 新增
-                </button>
-            </div>
-
+        </div>
             <div class="row">
-                <div class="col-md-2">
+                <div class="col-md-2"  style="width:550px">
                     <div class="form-group">
                         <div class="input-group">
                             <div class="input-group-addon">有效时间</div>
@@ -65,10 +68,22 @@
                         </div>
                     </div>
                 </div>
-            </div>
-            <table id="example" class="table"></table>
+                <div class="col-md-2">
+                    <button type="button" class="btn btn-primary btn-small btn-block" id="query">
+                        <i class="glyphicon glyphicon-search"></i> 查询
+                    </button>
+                </div>
 
-        </div>
+                <div class="col-md-2">
+                    <button type="button" class="btn btn-info btn-small btn-block"
+                            onclick="addAndUpdateRow(0)">
+                        <i class="glyphicon glyphicon-plus"></i> 新增
+                    </button>
+                </div>
+
+            </div>
+
+            <table id="example" class="table"></table>
 
         <script>
             //表格的初始化
@@ -79,6 +94,8 @@
                         aoData.push({"name": "couponName", "value": $("#couponNameQuery").val().trim()});
                         aoData.push({"name": "startTime", "value": $("#sTime").val()});
                         aoData.push({"name": "endTime", "value": $("#eTime").val()});
+                        aoData.push({"name": "activityName", "value": $("#activityNameQuery").val()});
+                        aoData.push({"name": "activityCode", "value": $("#activityCodeQuery").val()});
                     },
                     aoColumnDefs: [{}],
                     aoColumns: [
@@ -125,6 +142,18 @@
                                 }
                             }
                         },
+                        {
+                            "data": "getWay",
+                            "sTitle": "领取方式",
+                            'sClass': "text-center",
+                            "mRender": function (data, type, full) {
+                                if (data == 0) {
+                                    return "直接领取";
+                                } else if (data == 1) {
+                                    return '下单领取';
+                                }
+                            }
+                        },
                        /* {
                             "data": "couponCode",
                             "sTitle": "券码",
@@ -155,6 +184,11 @@
                         {
                             "data": "activityCode",
                             "sTitle": "活动编码",
+                            'sClass': "text-center",
+                        },
+                        {
+                            "data": "skillItemName",
+                            "sTitle": "所属品类",
                             'sClass': "text-center",
                         },
                         /*{
@@ -203,12 +237,12 @@
                             "sTitle":"修改人",
                             'sClass':"text-center",
                         },*/
-                        {
+                        /*{
                             "data": "modifyTime",
                             "sTitle": "修改时间",
                             'sClass': "text-center",
 
-                        },
+                        },*/
 
                         {
                             //"data" : "id",

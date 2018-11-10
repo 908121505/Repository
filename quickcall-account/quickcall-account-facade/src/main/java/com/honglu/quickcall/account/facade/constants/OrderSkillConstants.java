@@ -66,24 +66,54 @@ public interface OrderSkillConstants {
 	
 	
 	////////////////////////IM消息内容//////////////////////////
-	public  static final  String  IM_MSG_CONTENT_RECEIVE_ORDER = "您有新的订单，请及时查看";
+	//接单
+	public  static final  String  IM_MSG_CONTENT_RECEIVE_ORDER_TO_DV = "您有新的订单，请及时查看";
+	public  static final  String  IM_MSG_CONTENT_RECEIVE_ORDER_TO_CUST = "TODO待定";
+	
+	//订单取消
 	public  static final  String  IM_MSG_CONTENT_CANCEL_ORDER_TO_DV = "用户取消订单，赶快去了解原因吧~";
 	public  static final  String  IM_MSG_CONTENT_CANCEL_ORDER_TO_CUST = "您已取消订单，音符已退还至您的账户";
 //	public  static final  String  IM_MSG_CONTENT_USER_CONFIRM_FINISH= "订单完成啦";
+	
+	//用户同意声优立即服务
 	public  static final  String  IM_MSG_CONTENT_USER_CONFIRM_START_SERVICE_TO_DAV = "用户已同意立即服务，请联系用户开始服务吧~";
+	public  static final  String  IM_MSG_CONTENT_USER_CONFIRM_START_SERVICE_TO_CUST = "TODO待定";
 	
-	public  static final  String  IM_MSG_CONTENT_DAV_REFUSE_TO_CUST = "对方已接单，快去找ta沟通开始时间吧~";
-	public  static final  String  IM_MSG_CONTENT_DAV_REFUSE_TO_DV = "您已接单，快去联系用户协商开始时间吧~";
-	public  static final  String  IM_MSG_CONTENT_DAV_CUST_CONFIRM_TO_DV = "对方已同意您的完成服务请求";
+	//拒绝接单
+	public  static final  String  IM_MSG_CONTENT_DAV_REFUSE_TO_CUST = "很抱歉，对方拒绝了您的订单，音符将会返还至您的账户";
+	public  static final  String  IM_MSG_CONTENT_DAV_REFUSE_TO_DV = "您已拒接，订单已取消";
 	
-	public  static final  String  IM_MSG_CONTENT_DAV_CONFIRM_TO_CUST = "很抱歉，对方拒绝了您的订单，音符将会返还至您的账户";
-	public  static final  String  IM_MSG_CONTENT_DAV_CONFIRM_TO_DAV = "您已拒接，订单已取消";
+	
+	//同意接单
+	public  static final  String  IM_MSG_CONTENT_DAV_CONFIRM_TO_CUST = "对方已接单，快去找ta沟通开始时间吧~";
+	public  static final  String  IM_MSG_CONTENT_DAV_CONFIRM_TO_DAV = "您已接单，快去联系用户协商开始时间吧~";
+	
+	//声优发起立即服务
 	public  static final  String  IM_MSG_CONTENT_DAV_START_SERVICE_TO_CUST = "对方发起立即服务，请在5分钟内确认，超时未响应订单将失效";
 	public  static final  String  IM_MSG_CONTENT_DAV_START_SERVICE_TO_DAV = "您已发起立即服务，请提醒用户5分钟内响应，超时订单将失效";
-	public  static final  String  IM_MSG_CONTENT_CUST_FINISH = "对方申请完成订单，快去看看吧！";
+	
+	
+	
+	//声优在服务时间内发起完成服务
+	public  static final  String  IM_MSG_CONTENT_CUST_FINISH_TO_DAV = "对方申请完成订单，快去看看吧！";
+	public  static final  String  IM_MSG_CONTENT_CUST_FINISH_TO_CUST = "TODO待定";
+	
+	
+	//声优在服务时间之外发起完成服务
+	public  static final  String  IM_MSG_CONTENT_CUST_NOT_PING_JIA_TO_DV = "订单已完成，快让用户对您本次服务进行评价吧~";
+	public  static final  String  IM_MSG_CONTENT_CUST_NOT_PING_JIA_TO_CUST = "TODO待定";
+	
+	//用户同意声优服务完成
+	public  static final  String  IM_MSG_CONTENT_DAV_CUST_CONFIRM_TO_DV = "对方已同意您的完成服务请求";
+	public  static final  String  IM_MSG_CONTENT_DAV_CUST_CONFIRM_TO_CUST = "TODO待定";
+	
+
+	
+	
 	public  static final  String  IM_MSG_CONTENT_PING_JIA_FINISH_TO_CUST = "评价成功";
 	public  static final  String  IM_MSG_CONTENT_PING_JIA_FINISH_TO_DV = "对方已经完成评价";
-	public  static final  String  IM_MSG_CONTENT_CUST_NOT_PING_JIA = "订单已完成，快让用户对您本次服务进行评价吧~";
+	
+	
 //	public  static final  String  IM_MSG_CONTENT_DAV_FINISH = "大V完成服务啦";
 	
 	

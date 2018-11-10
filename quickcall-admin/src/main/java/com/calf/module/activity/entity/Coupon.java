@@ -117,6 +117,46 @@ public class Coupon {
     private String activityName;
     private String activityCode;
 
+    private Integer getWay;
+
+    private String skillItemName;
+
+    private String skillItemIdList;
+
+    private String skillItemId;
+
+    public String getSkillItemId() {
+        return skillItemId;
+    }
+
+    public void setSkillItemId(String skillItemId) {
+        this.skillItemId = skillItemId;
+    }
+
+    public String getSkillItemIdList() {
+        return skillItemIdList;
+    }
+
+    public void setSkillItemIdList(String skillItemIdList) {
+        this.skillItemIdList = skillItemIdList;
+    }
+
+    public String getSkillItemName() {
+        return skillItemName;
+    }
+
+    public void setSkillItemName(String skillItemName) {
+        this.skillItemName = skillItemName;
+    }
+
+    public Integer getGetWay() {
+        return getWay;
+    }
+
+    public void setGetWay(Integer getWay) {
+        this.getWay = getWay;
+    }
+
     public String getActivityName() {
         return activityName;
     }

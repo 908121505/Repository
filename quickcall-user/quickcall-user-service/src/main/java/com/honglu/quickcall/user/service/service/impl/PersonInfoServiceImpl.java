@@ -100,13 +100,17 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 		Pattern pattern = Pattern.compile("[0-9]{8,10}");
 		Long currentCustomer = params.getCustomerId();
 		List<SearchPersonListVO> customerList = null;
+		Integer index = null;
+		if(params.getPageIndex() != null && params.getPageSize() != null){
+			index = params.getPageIndex() * params.getPageSize();
+		}
 		// 匹配搜索关键字是模糊搜索还是精准搜索
 		if (pattern.matcher(keyword).matches()) {
 			// 精准搜索
 			customerList = customerMapper.selectPreciseSearch(keyword, currentCustomer);
 		} else {
 			// 模糊搜索
-			customerList = customerMapper.selectFuzzySearch(keyword, currentCustomer, params.getPageIndex(),
+			customerList = customerMapper.selectFuzzySearch(keyword, currentCustomer, index,
 					params.getPageSize());
 		}
 
@@ -723,6 +727,10 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 		customerCenterVO.setIdentityStatus(customer.getIdentityStatus());
 		customerCenterVO.setvStatus(customer.getvStatus());
 
+		// 不是大V -- 查询是否申请过声优
+		if(!Objects.equals(customer.getvStatus(), 2)){
+			customerCenterVO.setApplyBigvStatus(customerMapper.getCustomerIfAppliedBigv(request.getCustomerId()));
+		}
 		// 查询关注数
 		customerCenterVO.setAttentionNum(fansMapper.queryAttentionNumByCustomerId(request.getCustomerId()));
 
@@ -738,6 +746,7 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 			customerCenterVO.setRechargeAmounts(customerMoney.get("rechargeAmounts"));
 			customerCenterVO.setWithdrawAmounts(customerMoney.get("withdrawAmounts"));
 		}
+
 		return ResultUtils.resultSuccess(customerCenterVO);
 	}
 
