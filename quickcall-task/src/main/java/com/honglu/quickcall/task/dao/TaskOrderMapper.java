@@ -17,7 +17,7 @@ public interface TaskOrderMapper {
 	 * @param statusList
 	 * @return
 	 */
-	void  waittingReceiveOrderOverTime(@Param("currTime")Date  currTime,@Param("endTime")Date  endTime,@Param("queryStatus")Integer queryStatus ,@Param("updateStatus")Integer  updateStatus,@Param("skillType")Integer  skillType);
+	void  waittingReceiveOrderOverTime(@Param("currTime")Date  currTime,@Param("endTime")Date  endTime,@Param("queryStatus")Integer queryStatus ,@Param("updateStatus")Integer  updateStatus,@Param("skillType")Integer  skillType,@Param("modifyTime")Date  modifyTime);
 	/**
 	 * 接单超时查询
 	 * @param currTime
@@ -32,7 +32,7 @@ public interface TaskOrderMapper {
 	 * @param statusList
 	 * @return
 	 */
-	void  startOrderOverTime(@Param("currTime")Date  currTime,@Param("endTime")Date  endTime,@Param("queryStatus")Integer queryStatus ,@Param("updateStatus")Integer  updateStatus,@Param("skillType")Integer  skillType);
+	void  startOrderOverTime(@Param("currTime")Date  currTime,@Param("endTime")Date  endTime,@Param("queryStatus")Integer queryStatus ,@Param("updateStatus")Integer  updateStatus,@Param("skillType")Integer  skillType,@Param("modifyTime")Date  modifyTime);
 	/**
 	 * 大V未发起立即服务超时  查询
 	 * @param currTime
@@ -57,7 +57,7 @@ public interface TaskOrderMapper {
 	 * @param updateStatus
 	 * @param skillType
 	 */
-	void updateOrderStatusAfter12HourCust(@Param("currTime")Date  currTime,@Param("endTime")Date  endTime,@Param("queryStatus")Integer queryStatus ,@Param("updateStatus")Integer  updateStatus,@Param("skillType")Integer  skillType);
+	void updateOrderStatusAfter12HourCust(@Param("currTime")Date  currTime,@Param("endTime")Date  endTime,@Param("queryStatus")Integer queryStatus ,@Param("updateStatus")Integer  updateStatus,@Param("skillType")Integer  skillType,@Param("modifyTime")Date  modifyTime);
 	/**
 	 *用户12小时未响应大V结束服务
 	 * @param currTime
@@ -82,7 +82,7 @@ public interface TaskOrderMapper {
 	 * @param updateStatus
 	 * @param skillType
 	 */
-	void updateOrderStatusAfter12HourBoth(@Param("currTime")Date  currTime,@Param("endTime")Date  endTime,@Param("queryStatus")Integer queryStatus ,@Param("updateStatus")Integer  updateStatus,@Param("skillType")Integer  skillType,@Param("queryEndTime")Date  queryEndTime);
+	void updateOrderStatusAfter12HourBoth(@Param("currTime")Date  currTime,@Param("endTime")Date  endTime,@Param("queryStatus")Integer queryStatus ,@Param("updateStatus")Integer  updateStatus,@Param("skillType")Integer  skillType,@Param("queryEndTime")Date  queryEndTime,@Param("modifyTime")Date  modifyTime);
 	/**
 	 *双方都没有主动结束：12小时未响应超时查询
 	 * @param currTime
@@ -104,7 +104,7 @@ public interface TaskOrderMapper {
 	 * @param updateStatus
 	 * @param skillType
 	 */
-	void appointOrderGoing(@Param("currTime")Date  currTime,@Param("endTime")Date  endTime,@Param("queryStatus")Integer queryStatus ,@Param("updateStatus")Integer  updateStatus,@Param("skillType")Integer  skillType,@Param("queryEndTime")Date  queryEndTime);
+	void appointOrderGoing(@Param("currTime")Date  currTime,@Param("endTime")Date  endTime,@Param("queryStatus")Integer queryStatus ,@Param("updateStatus")Integer  updateStatus,@Param("skillType")Integer  skillType,@Param("queryEndTime")Date  queryEndTime,@Param("modifyTime")Date  modifyTime);
 	/**
 	 * 叫醒自动转为进行中
 	 * @param endTime
@@ -117,7 +117,7 @@ public interface TaskOrderMapper {
 	/**
 	 * 叫醒自动结束
 	 */
-	void appointOrderFinish(@Param("currTime")Date  currTime,@Param("endTime")Date  endTime,@Param("queryStatus")Integer queryStatus ,@Param("updateStatus")Integer  updateStatus,@Param("skillType")Integer  skillType);
+	void appointOrderFinish(@Param("currTime")Date  currTime,@Param("endTime")Date  endTime,@Param("queryStatus")Integer queryStatus ,@Param("updateStatus")Integer  updateStatus,@Param("skillType")Integer  skillType,@Param("modifyTime")Date  modifyTime);
 	/**
 	 * 叫醒自动结束--查询
 	 */
@@ -131,13 +131,13 @@ public interface TaskOrderMapper {
 	 * @param updateStatus
 	 * @param statusList
 	 */
-	void  updateOrderStatus(@Param("updateStatus")Integer  updateStatus,@Param("list")List<Long>  orderIdList,@Param("cancelTime")Date  cancelTime,@Param("couponFlag")Integer  couponFlag);
+	void  updateOrderStatus(@Param("updateStatus")Integer  updateStatus,@Param("list")List<Long>  orderIdList,@Param("cancelTime")Date  cancelTime,@Param("couponFlag")Integer  couponFlag,@Param("modifyTime")Date  modifyTime);
 	/**
 	 * 根据订单ID列表更新订单状态
 	 * @param updateStatus
 	 * @param statusList
 	 */
-	void  updateOrderStatusForFinish(@Param("updateStatus")Integer  updateStatus,@Param("list")List<Long>  orderIdList,@Param("finishTime")Date  finishTime);
+	void  updateOrderStatusForFinish(@Param("updateStatus")Integer  updateStatus,@Param("list")List<Long>  orderIdList,@Param("finishTime")Date  finishTime,@Param("modifyTime")Date  modifyTime);
 	
 	
 	/**

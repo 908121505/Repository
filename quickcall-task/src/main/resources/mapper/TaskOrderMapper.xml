@@ -10,7 +10,8 @@
 			orders
 		SET 
 			system_cancel_time = #{currTime},
-		 	order_status = #{updateStatus}
+		 	order_status = #{updateStatus},
+		 	modify_time = #{modifyTime}
 		WHERE
 			order_status = #{queryStatus}
 			<!-- 下单时间在截止时间之后 -->
@@ -43,7 +44,8 @@
 			orders
 		SET 
 			system_cancel_time = #{currTime},
-		 	order_status = #{updateStatus}
+		 	order_status = #{updateStatus},
+		 	modify_time = #{modifyTime}
 		WHERE
 			order_status = #{queryStatus}
 		AND receive_order_time <![CDATA[ < ]]> #{endTime}
@@ -111,7 +113,8 @@
 			orders
 		SET 
 			system_cancel_time = #{currTime},
-		 	order_status = #{updateStatus}
+		 	order_status = #{updateStatus},
+		 	modify_time = #{modifyTime}
 		WHERE
 			order_status = #{queryStatus}
 		AND appay_end_time <![CDATA[ < ]]> #{endTime}
@@ -152,7 +155,8 @@
 			orders
 		SET 
 			system_cancel_time = #{currTime},
-		 	order_status = #{updateStatus}
+		 	order_status = #{updateStatus},
+		 	modify_time = #{modifyTime}
 		WHERE
 			order_status = #{queryStatus}
 		AND expect_end_time <![CDATA[ < ]]> #{endTime}
@@ -183,7 +187,8 @@
 		UPDATE 
 			orders
 		SET 
-		 	order_status = #{updateStatus}
+		 	order_status = #{updateStatus},
+		 	modify_time = #{modifyTime}
 		WHERE
 			order_status = #{queryStatus}
 		AND appoint_time <![CDATA[ < ]]> #{endTime}
@@ -217,7 +222,8 @@
 			orders
 		SET 
 			end_time = #{currTime},
-		 	order_status = #{updateStatus}
+		 	order_status = #{updateStatus},
+		 	modify_time = #{modifyTime}
 		WHERE
 			order_status = #{queryStatus}
 		AND expect_end_time <![CDATA[ < ]]> #{endTime}
@@ -253,7 +259,8 @@
 		SET 
 			system_cancel_time = #{cancelTime},
 		 	order_status = #{updateStatus},
-		 	coupon_flag = #{couponFlag}
+		 	coupon_flag = #{couponFlag},
+		 	modify_time = #{modifyTime}
 		WHERE
 			order_id  IN 
 			<foreach collection="list" item="orderId"    open="("  close=")"  separator=",">
@@ -267,7 +274,8 @@
 			orders
 		SET 
 			end_time = #{finishTime},
-		 	order_status = #{updateStatus}
+		 	order_status = #{updateStatus},
+		 	modify_time = #{modifyTime}
 		WHERE
 			order_id  IN 
 			<foreach collection="list" item="orderId"    open="("  close=")"  separator=",">
