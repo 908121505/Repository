@@ -13,6 +13,7 @@ import com.honglu.quickcall.account.facade.exchange.request.CheckReceiveSwitchRe
 import com.honglu.quickcall.account.facade.exchange.request.DaVListBySkillItemIdRequest;
 import com.honglu.quickcall.account.facade.exchange.request.FirstPageDaVinfoRequest;
 import com.honglu.quickcall.account.facade.exchange.request.FirstPageSkillinfoRequest;
+import com.honglu.quickcall.account.facade.exchange.request.OpenReceiveSwitchRequest;
 import com.honglu.quickcall.account.facade.exchange.request.SkillInfoRequest;
 import com.honglu.quickcall.account.facade.exchange.request.SkillUpdateRequest;
 import com.honglu.quickcall.account.facade.vo.CustomerSkillInfoVO;
@@ -152,7 +153,7 @@ public class SkillBussServiceImpl implements ISkillBussService {
 
 
 	@Override
-	public CommonResponse openReceiveSwitch(CheckReceiveSwitchRequest request) {
+	public CommonResponse openReceiveSwitch(OpenReceiveSwitchRequest request) {
 		if (request == null ) {
 			throw new BizException(AccountBizReturnCode.paramError, "开启声优接单开关参数异常");
 		}

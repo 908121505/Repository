@@ -12,6 +12,7 @@ import com.honglu.quickcall.account.facade.exchange.request.CheckReceiveSwitchRe
 import com.honglu.quickcall.account.facade.exchange.request.DaVListBySkillItemIdRequest;
 import com.honglu.quickcall.account.facade.exchange.request.FirstPageDaVinfoRequest;
 import com.honglu.quickcall.account.facade.exchange.request.FirstPageSkillinfoRequest;
+import com.honglu.quickcall.account.facade.exchange.request.OpenReceiveSwitchRequest;
 import com.honglu.quickcall.account.facade.exchange.request.SkillInfoRequest;
 import com.honglu.quickcall.account.facade.exchange.request.SkillUpdateRequest;
 import com.honglu.quickcall.account.web.service.IOrderInfoService;
@@ -110,7 +111,7 @@ public class SkillInfoController {
      */
     @RequestMapping(value = "/openReceiveSwitch", method = RequestMethod.POST)
     @ResponseBody
-    public WebResponseModel openReceiveSwitch(CheckReceiveSwitchRequest params) {
+    public WebResponseModel openReceiveSwitch(OpenReceiveSwitchRequest params) {
     	WebResponseModel response = orderInfoService.execute(params);
     	return response;
     }
