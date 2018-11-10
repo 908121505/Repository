@@ -67,7 +67,7 @@
 		WHERE
 			auto_receive_status = #{autoReceiveStatus}
 		AND receive_status = #{recevieStatus}
-		AND start_time_str <![CDATA[ < ]]> #{currTimeStr}
+		AND start_time_str <![CDATA[ <= ]]> #{currTimeStr}
 		AND end_time_str <![CDATA[ > ]]>  #{currTimeStr}
 		<include refid="SKILL_EXIST_CONDITON"></include>
   </update>
@@ -80,7 +80,7 @@
 		WHERE
 			auto_receive_status = #{autoReceiveStatus}
 		AND receive_status = #{recevieStatus}
-		AND end_time_str  <![CDATA[ < ]]>  #{currTimeStr}
+		AND end_time_str  <![CDATA[ <= ]]>  #{currTimeStr}
 		
 		<include refid="SKILL_EXIST_CONDITON"></include>
   </update>
@@ -95,7 +95,7 @@
 		WHERE
 			auto_receive_status = #{autoReceiveStatus}
 		AND receive_status = #{recevieStatus}
-		AND  appoint_start_time    <![CDATA[ < ]]> #{currTimeStr}
+		AND  appoint_start_time    <![CDATA[ <= ]]> #{currTimeStr}
 		AND  appoint_end_time  <![CDATA[ > ]]> #{currTimeStr}
 		
   </update>
@@ -108,7 +108,7 @@
 		WHERE
 			auto_receive_status = #{autoReceiveStatus}
 		AND receive_status = #{recevieStatus}
-		AND appoint_end_time  <![CDATA[ < ]]>  #{currTimeStr}
+		AND appoint_end_time  <![CDATA[ <= ]]>  #{currTimeStr}
   </update>
 
 
