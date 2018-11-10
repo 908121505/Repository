@@ -33,7 +33,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label class="col-sm-4 control-label">折扣<!-- <font color="red">&nbsp;*</font> --></label>
+                    <label class="col-sm-4 control-label">折扣<font color="red">&nbsp;*</font></label>
                     <div class="col-sm-8">
                         <input type="text" id="discount" class="form-control" name="discount"
                                value="${entity.discount}">
@@ -366,9 +366,33 @@
 
     function check_fun() {
 
-        var b = true;
+        //var b = true;
 
-        var name = $("#skillItemName").val();
+        //var name = $("#skillItemName").val();
+
+        var skillItemId = $("#skillItemId").val();
+        if(skillItemId == null  || skillItemId.trim() == ''){
+            $("#tip").text("请选择技能");
+            return  false;
+        }
+
+        var discount = $("#discount").val();
+        if(discount == null  || discount.trim() == ''){
+            $("#tip").text("请输入折扣");
+            return  false;
+        }
+        var reg = /^(?:[1-9]?\d|100)$/;
+        if(!reg.test(discount)){
+            $("#tip").text("请输入正确的折扣数字:0-100");
+            return  false;
+        }
+
+        var skillExtStatus = $('input:radio[name="skillExtStatus"]:checked').val();
+        if(skillExtStatus==null || skillExtStatus.trim() == ''){
+            $("#tip").text("请选择状态");
+            return false;
+        }
+
         /* if(name == null  || name.trim() == ''){
              $("#tip").text("请输入技能名称");
              return  false;
@@ -390,7 +414,8 @@
         }*/
 
 
-        return b;
+        //return b;
+        return true;
     }
 
 

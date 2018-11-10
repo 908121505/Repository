@@ -74,19 +74,21 @@ public class CommonServiceImpl implements CommonService {
 	public OrderTempResponseVO getCountDownSeconds(Integer   oldOrderStatus ,Date  orderTime,Date  receiveOrderTime,Date startServiceTime,Date  expectEndTime,Date  appointTime) {
 		OrderTempResponseVO  tempVO = new OrderTempResponseVO();
 		Date  currTime = new Date();
-		Long  countDownSeconds = null ;
+		Long  countDownSeconds = 0L ;
 		Date  endTime = null ;
 		tempVO.setOrderStatus(oldOrderStatus);
 		//需要调整用户5分钟未同意大V立即服务倒计时时间
 		//待接单计算倒计时
 		if(oldOrderStatus == OrderSkillConstants.ORDER_STATUS_WAITING_RECEIVE){
-			Calendar  cal =  Calendar.getInstance();
-			cal.setTime(orderTime);
-			cal.add(Calendar.MINUTE, OrderSkillConstants.RECEIVE_ORDER_OVER_TIME);
-			endTime = cal.getTime();
-			countDownSeconds =  DateUtils.getDiffSeconds(currTime, endTime);
+			if(orderTime != null){
+				Calendar  cal =  Calendar.getInstance();
+				cal.setTime(orderTime);
+				cal.add(Calendar.MINUTE, OrderSkillConstants.RECEIVE_ORDER_OVER_TIME);
+				endTime = cal.getTime();
+				countDownSeconds =  DateUtils.getDiffSeconds(currTime, endTime);
+			}
 			//大于0说明正在倒计时，状态不变
-			if(countDownSeconds > 0){
+			if(countDownSeconds >= 0){
 				tempVO.setOrderStatus(oldOrderStatus);
 				tempVO.setCountDownSeconds(countDownSeconds);
 			}else{
@@ -94,13 +96,16 @@ public class CommonServiceImpl implements CommonService {
 			}
 			//大V未发起服务或者已经发起服务，用户未应答
 		}else if(oldOrderStatus == OrderSkillConstants.ORDER_STATUS_WAITING_START ){
-			Calendar  cal =  Calendar.getInstance();
-			cal.setTime(receiveOrderTime);
-			cal.add(Calendar.MINUTE, OrderSkillConstants.START_SERVICE_OVER_TIME_DAV);//TODO 定义常量
-			endTime = cal.getTime();
-			countDownSeconds =  DateUtils.getDiffSeconds(currTime, endTime);
+			if(receiveOrderTime != null){
+				Calendar  cal =  Calendar.getInstance();
+				cal.setTime(receiveOrderTime);
+				cal.add(Calendar.MINUTE, OrderSkillConstants.START_SERVICE_OVER_TIME_DAV);//TODO 定义常量
+				endTime = cal.getTime();
+				countDownSeconds =  DateUtils.getDiffSeconds(currTime, endTime);
+			}
+			
 			//大于0说明正在倒计时，状态不变
-			if(countDownSeconds > 0){
+			if(countDownSeconds >= 0){
 				tempVO.setOrderStatus(oldOrderStatus);
 				tempVO.setCountDownSeconds(countDownSeconds);
 			}else{
@@ -110,14 +115,17 @@ public class CommonServiceImpl implements CommonService {
 			}
 			//用户5分钟未同意大V立即服务
 		}else if(oldOrderStatus == OrderSkillConstants.ORDER_STATUS_WAITING_START_DA_APPAY_START_SERVICE){
-			Calendar  cal =  Calendar.getInstance();
-			//开始时间取声优发起立即服务这一刻
-			cal.setTime(startServiceTime);
-			cal.add(Calendar.MINUTE, OrderSkillConstants.START_SERVICE_OVER_TIME_DAV);//TODO 定义常量
-			endTime = cal.getTime();
-			countDownSeconds =  DateUtils.getDiffSeconds(currTime, endTime);
+		
+			if(startServiceTime != null){
+				Calendar  cal =  Calendar.getInstance();
+				//开始时间取声优发起立即服务这一刻
+				cal.setTime(startServiceTime);
+				cal.add(Calendar.MINUTE, OrderSkillConstants.START_SERVICE_OVER_TIME_DAV);//TODO 定义常量
+				endTime = cal.getTime();
+				countDownSeconds =  DateUtils.getDiffSeconds(currTime, endTime);
+			}
 			//大于0说明正在倒计时，状态不变
-			if(countDownSeconds > 0){
+			if(countDownSeconds >= 0){
 				tempVO.setOrderStatus(oldOrderStatus);
 				tempVO.setCountDownSeconds(countDownSeconds);
 			}else{
@@ -128,10 +136,12 @@ public class CommonServiceImpl implements CommonService {
 			//进行中倒计时计算，不同状态逻辑不同 ，需要重新梳理一下    TODO
 		}else if(oldOrderStatus == OrderSkillConstants.ORDER_STATUS_GOING_USER_ACCEPCT   || oldOrderStatus == OrderSkillConstants.ORDER_STATUS_GOING_DAV_APPAY_FINISH){
 			//TODO  如果订单已经过了预计结束时间，则需要变更订单状态为已完成
-			endTime =  expectEndTime;
-			countDownSeconds =  DateUtils.getDiffSeconds(currTime, endTime);
+			if(expectEndTime != null){
+				endTime =  expectEndTime;
+				countDownSeconds =  DateUtils.getDiffSeconds(currTime, endTime);
+			}
 			//大于0说明正在倒计时，状态不变  小于0的逻辑暂时不考虑
-			if(countDownSeconds <= 0){
+			if(countDownSeconds >= 0){
 				tempVO.setOrderStatus(oldOrderStatus);
 			}else{
 				tempVO.setOrderStatus(OrderSkillConstants.ORDER_STATUS_FINISH_DAV_FINISH_AFTER_SERVICE_TIME);
@@ -139,14 +149,16 @@ public class CommonServiceImpl implements CommonService {
 			tempVO.setCountDownSeconds(countDownSeconds);
 		//叫醒的24状态需要单独处理
 		}else if(oldOrderStatus ==OrderSkillConstants.ORDER_STATUS_GOING_WAITING_START){
-			//时间接单从当前时间到预约开始时间
-			endTime = appointTime;
-			countDownSeconds =  DateUtils.getDiffSeconds(currTime, endTime);
+			if(appointTime != null){
+				//时间接单从当前时间到预约开始时间
+				endTime = appointTime;
+				countDownSeconds =  DateUtils.getDiffSeconds(currTime, endTime);
+			}
 			//大于0说明正在倒计时，状态不变  小于0的逻辑暂时不考虑
 			tempVO.setOrderStatus(oldOrderStatus);
-			if(countDownSeconds <= 0){
+			if(countDownSeconds < 0){
 				//小于0说明已经到了进行中状态
-//				tempVO.setOrderStatus(OrderSkillConstants.ORDER_STATUS_GOING_USER_ACCEPCT);
+				tempVO.setOrderStatus(OrderSkillConstants.ORDER_STATUS_GOING_USER_ACCEPCT);
 			}
 			tempVO.setCountDownSeconds(countDownSeconds);
 			

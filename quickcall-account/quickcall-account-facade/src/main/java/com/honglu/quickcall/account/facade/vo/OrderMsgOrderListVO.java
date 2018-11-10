@@ -53,9 +53,15 @@ public class OrderMsgOrderListVO implements  Serializable{
 	private String skillItemName ;
 	/**技能ICON*/
 	private String  icon;
+	/**声优标识*/
+	private Integer  vStatus;
 	
-	
-	
+	public Integer getvStatus() {
+		return vStatus;
+	}
+	public void setvStatus(Integer vStatus) {
+		this.vStatus = vStatus;
+	}
 	public Long getServiceId() {
 		return serviceId;
 	}

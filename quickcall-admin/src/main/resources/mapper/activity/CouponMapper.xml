@@ -329,7 +329,8 @@
           c.remark AS remark,
           c.get_way as getWay,
           a.activity_name AS activityName,
-          a.activity_code AS activityCode
+          a.activity_code AS activityCode,
+          GROUP_CONCAT(i.skill_item_name SEPARATOR ' / ') AS skillItemName
 
     </sql>
 
@@ -340,10 +341,17 @@
         coupon c
         LEFT JOIN activity a
         ON c.activity_id = a.activity_id
-        where 1=1
+        LEFT JOIN(SELECT id,coupon_id,skill_item_id,STATUS FROM coupon_skill WHERE STATUS = 1 ) s
+        ON c.coupon_id = s.coupon_id
+        LEFT JOIN(SELECT id,skill_item_name,skill_status FROM skill_item WHERE skill_status = 1) i
+        ON s.skill_item_id = i.id
+        WHERE 1 = 1
         <if test="couponName !=null and couponName!=''">and c.coupon_name like concat('%',#{couponName},'%')</if>
+        <if test="activityName !=null and activityName!=''">and a.activity_name like concat('%',#{activityName},'%')</if>
+        <if test="activityCode !=null and activityCode!=''">and a.activity_code like concat('%',#{activityCode},'%')</if>
         <if test="startTime !=null and startTime!=''">and c.start_time <![CDATA[  >= ]]> #{startTime}</if>
         <if test="endTime !=null and endTime!=''">and c.end_time <![CDATA[  <= ]]> #{endTime}</if>
+        GROUP BY c.coupon_id
         LIMIT ${iDisplayStart},${iDisplayLength}
     </select>
     <select id="selectCount" resultType="java.lang.Integer" >
@@ -355,10 +363,17 @@
         coupon c
         LEFT JOIN activity a
         ON c.activity_id = a.activity_id
-        where 1=1
+        LEFT JOIN(SELECT id,coupon_id,skill_item_id,STATUS FROM coupon_skill WHERE STATUS = 1 ) s
+        ON c.coupon_id = s.coupon_id
+        LEFT JOIN(SELECT id,skill_item_name,skill_status FROM skill_item WHERE skill_status = 1) i
+        ON s.skill_item_id = i.id
+        WHERE 1 = 1
         <if test="couponName !=null and couponName!=''">and c.coupon_name like concat('%',#{couponName},'%')</if>
+        <if test="activityName !=null and activityName!=''">and a.activity_name like concat('%',#{activityName},'%')</if>
+        <if test="activityCode !=null and activityCode!=''">and a.activity_code like concat('%',#{activityCode},'%')</if>
         <if test="startTime !=null and startTime!=''">and c.start_time <![CDATA[  >= ]]> #{startTime}</if>
         <if test="endTime !=null and endTime!=''">and c.end_time <![CDATA[  <= ]]> #{endTime}</if>
+        GROUP BY c.coupon_id
         ) a
 
     </select>
@@ -370,6 +385,10 @@
         coupon c
         LEFT JOIN activity a
         ON c.activity_id = a.activity_id
+        LEFT JOIN(SELECT id,coupon_id,skill_item_id,STATUS FROM coupon_skill WHERE STATUS = 1 ) s
+        ON c.coupon_id = s.coupon_id
+        LEFT JOIN(SELECT id,skill_item_name,skill_status FROM skill_item WHERE skill_status = 1) i
+        ON s.skill_item_id = i.id
         WHERE c.coupon_id = #{couponId}
     </select>
 
@@ -382,7 +401,27 @@
         activity
     </select>
 
+    <select id="selectSkillItemList" resultType="java.util.Map" parameterType="map" >
+        SELECT
+        id as skillItemId,
+        skill_item_name AS skillItemName
+        FROM
+        skill_item
+        where skill_status = 1
+    </select>
+
     <delete id="delete" parameterType="map">
         DELETE FROM coupon WHERE coupon_id = #{arg0}
     </delete>
+
+    <insert id="insertCouponSkill" parameterType="com.calf.module.activity.entity.Coupon" >
+        insert into coupon_skill ( coupon_id, skill_item_id,status, create_time)
+        values ( #{couponId}, #{skillItemId},1, now())
+    </insert>
+
+    <update id="deleteCouponSkill" parameterType="map" >
+
+        update coupon_skill
+        set status = 0 where coupon_id = #{couponId}
+    </update>
 </mapper>

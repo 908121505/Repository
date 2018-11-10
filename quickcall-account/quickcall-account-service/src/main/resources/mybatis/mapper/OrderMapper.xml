@@ -505,6 +505,7 @@
 			unionTb.customerId,
 			unionTb.serviceId,
 			unionTb.headPortraitUrl,
+			unionTb.vStatus,
 			unionTb.servicePrice,
 			unionTb.serviceUnit,
 			unionTb.orderNum,
@@ -522,6 +523,7 @@ FROM
 			od.customer_id AS customerId,
 			od.service_id AS serviceId,
 			ct.head_portrait_url AS headPortraitUrl,
+			ct.v_status  AS  vStatus,
 			od.service_price AS servicePrice,
 			od.service_unit AS serviceUnit,
 			od.order_num AS orderNum,
@@ -529,6 +531,7 @@ FROM
 			od.order_status AS orderStatus,
 			cs.skill_name AS skillItemName,
 			st.unlock_icon AS icon
+			
 		FROM
 			orders od
 		LEFT JOIN customer_skill cs ON od.customer_skill_id = cs.customer_skill_id
@@ -545,6 +548,7 @@ FROM
 				od.customer_id AS customerId,
 				od.service_id AS serviceId,
 				ct.head_portrait_url AS headPortraitUrl,
+				ct.v_status  AS  vStatus,
 				od.service_price AS servicePrice,
 				od.service_unit AS serviceUnit,
 				od.order_num AS orderNum,

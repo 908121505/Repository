@@ -197,30 +197,30 @@ public class OrderUpdateJob {
     }
     
     
-    /**叫醒服务达到预约时间自动转为进行中*/
-    @Scheduled(cron = "0 * * * * ?")
-    public void updateOrderStatusAppointGoing() {
-    	LOGGER.info("=============叫醒服务达到预约时间自动转为进行中自动任务开始=================");
-    	try {
-    		Date  currTime = new Date();
-    		//叫醒自动转换为进行中状态
-    		Calendar  cal = Calendar.getInstance();
-    		cal.setTime(currTime);
-    		//预约时间去当前时间
-    		Date  endTime =  cal.getTime();
-    		//用户未接立即服务超时
-    		Integer  queryStatus = OrderSkillConstants.ORDER_STATUS_GOING_WAITING_START;
-    		Integer  updateStatus = OrderSkillConstants.ORDER_STATUS_GOING_USER_ACCEPCT;
-    		Integer  skillType = OrderSkillConstants.SKILL_TYPE_NO;
-    		Date  queryEndTime =  getEndTimeByAddDays(-10);
-    		List<TaskOrder>  orderList = taskOrderMapper.queryAppointOrderGoing(currTime,endTime, queryStatus, updateStatus, skillType,queryEndTime);
-    		updateOrderStatusByOrderListForCancel(orderList, updateStatus);
-//    		taskOrderMapper.appointOrderGoing(currTime,endTime, queryStatus, updateStatus, skillType,queryEndTime);
-    	} catch (Exception e) {
-    		LOGGER.error("叫醒服务达到预约时间自动转为进行中job执行发生异常，异常信息：", e);
-    	}
-    	LOGGER.info("=============叫醒服务达到预约时间自动转为进行中自动任务结束=================");
-    }
+//    /**叫醒服务达到预约时间自动转为进行中*/
+//    @Scheduled(cron = "0 * * * * ?")
+//    public void updateOrderStatusAppointGoing() {
+//    	LOGGER.info("=============叫醒服务达到预约时间自动转为进行中自动任务开始=================");
+//    	try {
+//    		Date  currTime = new Date();
+//    		//叫醒自动转换为进行中状态
+//    		Calendar  cal = Calendar.getInstance();
+//    		cal.setTime(currTime);
+//    		//预约时间去当前时间
+//    		Date  endTime =  cal.getTime();
+//    		//用户未接立即服务超时
+//    		Integer  queryStatus = OrderSkillConstants.ORDER_STATUS_GOING_WAITING_START;
+//    		Integer  updateStatus = OrderSkillConstants.ORDER_STATUS_GOING_USER_ACCEPCT;
+//    		Integer  skillType = OrderSkillConstants.SKILL_TYPE_NO;
+//    		Date  queryEndTime =  getEndTimeByAddDays(-10);
+//    		List<TaskOrder>  orderList = taskOrderMapper.queryAppointOrderGoing(currTime,endTime, queryStatus, updateStatus, skillType,queryEndTime);
+//    		updateOrderStatusByOrderListForCancel(orderList, updateStatus);
+////    		taskOrderMapper.appointOrderGoing(currTime,endTime, queryStatus, updateStatus, skillType,queryEndTime);
+//    	} catch (Exception e) {
+//    		LOGGER.error("叫醒服务达到预约时间自动转为进行中job执行发生异常，异常信息：", e);
+//    	}
+//    	LOGGER.info("=============叫醒服务达到预约时间自动转为进行中自动任务结束=================");
+//    }
     
     
     

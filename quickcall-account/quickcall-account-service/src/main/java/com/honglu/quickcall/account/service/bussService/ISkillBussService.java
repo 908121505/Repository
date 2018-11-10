@@ -4,6 +4,7 @@ import com.honglu.quickcall.account.facade.exchange.request.CheckReceiveSwitchRe
 import com.honglu.quickcall.account.facade.exchange.request.DaVListBySkillItemIdRequest;
 import com.honglu.quickcall.account.facade.exchange.request.FirstPageDaVinfoRequest;
 import com.honglu.quickcall.account.facade.exchange.request.FirstPageSkillinfoRequest;
+import com.honglu.quickcall.account.facade.exchange.request.OpenReceiveSwitchRequest;
 import com.honglu.quickcall.account.facade.exchange.request.SkillInfoRequest;
 import com.honglu.quickcall.account.facade.exchange.request.SkillUpdateRequest;
 import com.honglu.quickcall.common.api.exchange.CommonResponse;
@@ -58,5 +59,5 @@ public interface ISkillBussService {
 	 * @param request
 	 * @return
 	 */
-	public CommonResponse openReceiveSwitch(CheckReceiveSwitchRequest request);
+	public CommonResponse openReceiveSwitch(OpenReceiveSwitchRequest request);
 }
