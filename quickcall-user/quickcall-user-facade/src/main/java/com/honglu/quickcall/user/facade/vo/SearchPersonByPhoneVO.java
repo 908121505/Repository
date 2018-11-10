@@ -15,7 +15,7 @@ public class SearchPersonByPhoneVO implements  Serializable{
 	/**
 	 * 主播编号
 	 */
-	private Long customerId;
+	private String customerId;
 	
 	/**
 	 * 头像地址
@@ -32,11 +32,11 @@ public class SearchPersonByPhoneVO implements  Serializable{
 		this.nickName = nickName;
 	}
 
-	public Long getCustomerId() {
+	public String getCustomerId() {
 		return customerId;
 	}
 
-	public void setCustomerId(Long customerId) {
+	public void setCustomerId(String customerId) {
 		this.customerId = customerId;
 	}
 
