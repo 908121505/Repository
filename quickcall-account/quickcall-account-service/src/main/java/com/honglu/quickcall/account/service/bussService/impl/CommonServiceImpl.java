@@ -1,5 +1,16 @@
 package com.honglu.quickcall.account.service.bussService.impl;
 
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.alibaba.fastjson.JSON;
 import com.honglu.quickcall.account.facade.constants.OrderSkillConstants;
 import com.honglu.quickcall.account.facade.entity.Order;
@@ -12,16 +23,6 @@ import com.honglu.quickcall.common.api.util.DateUtils;
 import com.honglu.quickcall.common.api.util.JedisUtil;
 import com.honglu.quickcall.common.api.util.RedisKeyConstants;
 import com.honglu.quickcall.user.facade.entity.Customer;
-import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
 
 
 @Service("commonService")
@@ -385,6 +386,77 @@ public class CommonServiceImpl implements CommonService {
 		//修改订单状态为：已支付
 		orderMapper.updateByPrimaryKeySelective(record);
 		
+	}
+
+	@Override
+	public String getMsgContent(String customerFlag, Integer orderStatus) {
+		String  result =  null;
+		if(OrderSkillConstants.MSG_CONTENT_DAV.equals(customerFlag)){
+			//通知声优消息
+			if(OrderSkillConstants.ORDER_STATUS_WAITING_RECEIVE ==  orderStatus){
+				result =   OrderSkillConstants.GT_MSG_CONTENT_START_SERVICE_TO_DAV;
+			//声优拒绝接单
+			}else if (OrderSkillConstants.ORDER_STATUS_DAV_REFUSED_RECEIVE ==  orderStatus){
+				result =  OrderSkillConstants.IM_MSG_CONTENT_DAV_REFUSE_TO_DV;
+			//声优接单	
+			}else if (OrderSkillConstants.ORDER_STATUS_WAITING_START ==  orderStatus){
+				result =   OrderSkillConstants.IM_MSG_CONTENT_DAV_CONFIRM_TO_DAV;
+			//用户取消订单
+			}else if(OrderSkillConstants.ORDER_STATUS_CANCEL_BEFORE_RECEIVE== orderStatus || orderStatus == OrderSkillConstants.ORDER_STATUS_CANCEL_BEFORE_DAV_START
+					||orderStatus == OrderSkillConstants.ORDER_STATUS_CANCLE_USER_SELF_BEFORE_SERVICE
+					||orderStatus == OrderSkillConstants.ORDER_STATUS_CANCEL_BEFORE_APPOINT_TIME){
+				result =   OrderSkillConstants.IM_MSG_CONTENT_CANCEL_ORDER_TO_DV;
+			//声优发起立即服务
+			}else if(OrderSkillConstants.ORDER_STATUS_WAITING_START_DA_APPAY_START_SERVICE == orderStatus ){
+				result =  OrderSkillConstants.IM_MSG_CONTENT_DAV_START_SERVICE_TO_DAV;
+			//用户同意声优立即服务
+			}else if(OrderSkillConstants.ORDER_STATUS_GOING_USER_ACCEPCT == orderStatus || OrderSkillConstants.ORDER_STATUS_GOING_WAITING_START == orderStatus){
+				result =   OrderSkillConstants.IM_MSG_CONTENT_USER_CONFIRM_START_SERVICE_TO_DAV;
+			//声优在服务时间内发起完成服务
+			}else if(OrderSkillConstants.ORDER_STATUS_GOING_DAV_APPAY_FINISH == orderStatus){
+				result =   OrderSkillConstants.IM_MSG_CONTENT_CUST_FINISH_TO_DAV;
+			//声优在服务时间之外发起完成服务
+			}else if (OrderSkillConstants.ORDER_STATUS_FINISH_DAV_FINISH_AFTER_SERVICE_TIME == orderStatus){
+				result =   OrderSkillConstants.IM_MSG_CONTENT_CUST_NOT_PING_JIA_TO_DV;
+			//用户同意声优服务完成
+			}else if(OrderSkillConstants.ORDER_STATUS_FINISHED_USER_ACCEPCT == orderStatus){
+				result =   OrderSkillConstants.IM_MSG_CONTENT_DAV_CUST_CONFIRM_TO_DV;
+			}
+			
+		}else{
+			//通知用户消息
+			if(OrderSkillConstants.ORDER_STATUS_WAITING_RECEIVE ==  orderStatus){
+				result =  OrderSkillConstants.GT_MSG_CONTENT_START_SERVICE_TO_CUST;
+			//声优拒绝接单
+			}else if (OrderSkillConstants.ORDER_STATUS_DAV_REFUSED_RECEIVE ==  orderStatus){
+				result =  OrderSkillConstants.IM_MSG_CONTENT_DAV_REFUSE_TO_CUST;
+			//声优接单	
+			}else if (OrderSkillConstants.ORDER_STATUS_WAITING_START ==  orderStatus){
+				result =  OrderSkillConstants.IM_MSG_CONTENT_DAV_CONFIRM_TO_CUST;
+			//用户取消订单
+			}else if(OrderSkillConstants.ORDER_STATUS_CANCEL_BEFORE_RECEIVE== orderStatus || orderStatus == OrderSkillConstants.ORDER_STATUS_CANCEL_BEFORE_DAV_START
+					||orderStatus == OrderSkillConstants.ORDER_STATUS_CANCLE_USER_SELF_BEFORE_SERVICE
+					||orderStatus == OrderSkillConstants.ORDER_STATUS_CANCEL_BEFORE_APPOINT_TIME){
+				result =   OrderSkillConstants.IM_MSG_CONTENT_CANCEL_ORDER_TO_CUST;
+			//声优发起立即服务
+			}else if(OrderSkillConstants.ORDER_STATUS_WAITING_START_DA_APPAY_START_SERVICE == orderStatus ){
+				result =   OrderSkillConstants.IM_MSG_CONTENT_DAV_START_SERVICE_TO_CUST;
+			//用户同意声优立即服务
+			}else if(OrderSkillConstants.ORDER_STATUS_GOING_USER_ACCEPCT == orderStatus || OrderSkillConstants.ORDER_STATUS_GOING_WAITING_START == orderStatus){
+				result =  OrderSkillConstants.IM_MSG_CONTENT_USER_CONFIRM_START_SERVICE_TO_CUST;
+			//声优在服务时间内发起完成服务
+			}else if(OrderSkillConstants.ORDER_STATUS_GOING_DAV_APPAY_FINISH == orderStatus){
+				result =  OrderSkillConstants.IM_MSG_CONTENT_CUST_FINISH_TO_CUST;
+			//声优在服务时间之外发起完成服务
+			}else if (OrderSkillConstants.ORDER_STATUS_FINISH_DAV_FINISH_AFTER_SERVICE_TIME == orderStatus){
+				result =  OrderSkillConstants.IM_MSG_CONTENT_CUST_NOT_PING_JIA_TO_CUST;
+			//用户同意声优服务完成	
+			}else if(OrderSkillConstants.ORDER_STATUS_FINISHED_USER_ACCEPCT == orderStatus){
+				result =   OrderSkillConstants.IM_MSG_CONTENT_DAV_CUST_CONFIRM_TO_CUST;
+			}
+		}
+		
+		return result;
 	}
 
 }

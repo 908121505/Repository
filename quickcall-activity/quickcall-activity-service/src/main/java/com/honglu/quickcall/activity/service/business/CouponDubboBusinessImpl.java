@@ -152,7 +152,7 @@ public class CouponDubboBusinessImpl implements CouponDubboBusiness{
 	 *
 	 */
 	@Override
-	@Transactional
+	@Transactional(rollbackFor = Exception.class)
 	public int getCouponInOrder(String skillItemId, String customerId){
 		int num = 0;
 		CouponOrderVo cvo = getShowTipForActivity(skillItemId, customerId);

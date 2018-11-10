@@ -29,6 +29,11 @@ public interface IOrderService {
 	 * 收到的订单
 	 * @param request
 	 */
+	public CommonResponse  queryMsgOrderList(MsgOrderListRequest  request);
+	/**
+	 * 收到的订单
+	 * @param request
+	 */
 	public CommonResponse  queryReceiveOrderList(OrderReceiveOrderListRequest  request);
 	
 	

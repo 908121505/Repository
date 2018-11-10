@@ -56,30 +56,6 @@
   
   
 
-<!-- 根据周索引开启接单开关 -->
-  <update id="openReceiveByWeek"  >
-		UPDATE 
-			customer_skill
-		SET 
-			receive_status = #{updateStatus}
-		WHERE
-			auto_receive_status = #{autoReceiveStatus}
-		AND receive_status = #{recevieStatus}
-		AND start_time_str <![CDATA[ > ]]> #{currTimeStr}
-		<include refid="SKILL_EXIST_CONDITON"></include>
-  </update>
-<!-- 根据周索引关闭接单开关 -->
-  <update id="closeReceiveByWeek"  >
-		UPDATE 
-			customer_skill
-		SET 
-			receive_status = #{updateStatus}
-		WHERE
-			auto_receive_status = #{autoReceiveStatus}
-		AND receive_status = #{recevieStatus}
-		AND end_time_str  <![CDATA[ < ]]>  #{currTimeStr}
-		<include refid="SKILL_EXIST_CONDITON"></include>
-  </update>
   
   
 <!-- 根据周索引开启接单开关 -->
@@ -117,7 +93,7 @@
 		WHERE
 			auto_receive_status = #{autoReceiveStatus}
 		AND receive_status = #{recevieStatus}
-		AND  appoint_start_time    <![CDATA[ < ]]> #{currTime}
+		AND  appoint_start_time    <![CDATA[ < ]]> #{currTimeStr}
 		
   </update>
 <!-- 根据当前时间关闭接单开关 -->
@@ -129,7 +105,7 @@
 		WHERE
 			auto_receive_status = #{autoReceiveStatus}
 		AND receive_status = #{recevieStatus}
-		AND appoint_end_time  <![CDATA[ > ]]>  #{currTime}
+		AND appoint_end_time  <![CDATA[ > ]]>  #{currTimeStr}
   </update>
 
 

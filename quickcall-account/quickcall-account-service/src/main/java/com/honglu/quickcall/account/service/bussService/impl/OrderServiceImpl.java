@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-import com.honglu.quickcall.activity.facade.vo.CouponOrderVo;
 //import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -35,6 +34,7 @@ import com.honglu.quickcall.account.facade.exchange.request.DetailOrderRequest;
 import com.honglu.quickcall.account.facade.exchange.request.DvReceiveOrderRequest;
 import com.honglu.quickcall.account.facade.exchange.request.DvStartServiceRequest;
 import com.honglu.quickcall.account.facade.exchange.request.FinishOrderRequest;
+import com.honglu.quickcall.account.facade.exchange.request.MsgOrderListRequest;
 import com.honglu.quickcall.account.facade.exchange.request.OrderDaVSkillRequest;
 import com.honglu.quickcall.account.facade.exchange.request.OrderEvaluationRequest;
 import com.honglu.quickcall.account.facade.exchange.request.OrderEvaluationSubmitRequest;
@@ -48,6 +48,7 @@ import com.honglu.quickcall.account.facade.vo.OrderDetailForIMVO;
 import com.honglu.quickcall.account.facade.vo.OrderDetailVO;
 import com.honglu.quickcall.account.facade.vo.OrderEvaluationVo;
 import com.honglu.quickcall.account.facade.vo.OrderIMVO;
+import com.honglu.quickcall.account.facade.vo.OrderMsgOrderListVO;
 import com.honglu.quickcall.account.facade.vo.OrderReceiveOrderListVO;
 import com.honglu.quickcall.account.facade.vo.OrderSendOrderListVO;
 import com.honglu.quickcall.account.facade.vo.OrderSkillItemVO;
@@ -61,13 +62,11 @@ import com.honglu.quickcall.account.service.dao.OrderMapper;
 import com.honglu.quickcall.account.service.dao.SkillItemMapper;
 import com.honglu.quickcall.activity.facade.business.CouponDubboBusiness;
 import com.honglu.quickcall.activity.facade.entity.CustomerCoupon;
-import com.honglu.quickcall.common.api.code.BizCode;
+import com.honglu.quickcall.activity.facade.vo.CouponOrderVo;
 import com.honglu.quickcall.common.api.exception.BizException;
 import com.honglu.quickcall.common.api.exchange.CommonResponse;
 import com.honglu.quickcall.common.api.exchange.ResultUtils;
 import com.honglu.quickcall.common.api.util.DateUtils;
-import com.honglu.quickcall.common.api.util.JedisUtil;
-import com.honglu.quickcall.common.api.util.RedisKeyConstants;
 import com.honglu.quickcall.common.core.util.UUIDUtils;
 import com.honglu.quickcall.common.third.AliyunSms.utils.SendSmsUtil;
 import com.honglu.quickcall.common.third.push.GtPushUtil;
@@ -356,8 +355,8 @@ public class OrderServiceImpl implements IOrderService {
 				}
 			}
 			// 下单成功后推送IM消息
-			RongYunUtil.sendOrderMessage(serviceId, OrderSkillConstants.IM_MSG_CONTENT_RECEIVE_ORDER,
-					OrderSkillConstants.MSG_CONTENT_DAV);
+			RongYunUtil.sendOrderMessage(serviceId, OrderSkillConstants.IM_MSG_CONTENT_RECEIVE_ORDER_TO_DV,OrderSkillConstants.MSG_CONTENT_DAV);
+			RongYunUtil.sendOrderMessage(customerId, OrderSkillConstants.IM_MSG_CONTENT_RECEIVE_ORDER_TO_CUST,OrderSkillConstants.MSG_CONTENT_C);
 			LOGGER.info("======>>>>>用户编号为：" + request.getCustomerId() + "下单成功");
 
 			// 下单触发埋点
@@ -380,6 +379,36 @@ public class OrderServiceImpl implements IOrderService {
 		return commonResponse;
 	}
 
+	@Override
+	public CommonResponse queryMsgOrderList(MsgOrderListRequest request) {
+		if (request == null || request.getCustomerId() == null) {
+			throw new BizException(AccountBizReturnCode.paramError, "查询接收订单参数异常");
+		}
+		LOGGER.info("======>>>>>queryMsgOrderList()入参：" + request.toString());
+		Long customerId = request.getCustomerId();
+//		String customerJson = JedisUtil.get(RedisKeyConstants.USER_CUSTOMER_INFO + customerId);
+//		if (StringUtils.isEmpty(customerJson)) {
+//			return ResultUtils.result(BizCode.CustomerNotExist);
+//		}
+
+		List<OrderMsgOrderListVO> queryList = orderMapper.queryMsgOrderList(customerId);
+		List<OrderMsgOrderListVO> resultList  = new ArrayList<OrderMsgOrderListVO>() ;
+		if (!CollectionUtils.isEmpty(queryList)) {
+			for (OrderMsgOrderListVO order : queryList) {
+				String  msgContent = commonService.getMsgContent(order.getCustomerFlag(), order.getOrderStatus());
+				order.setMsgContent(msgContent);
+				resultList.add(order);
+			}
+		}
+
+		CommonResponse commonResponse = commonService.getCommonResponse();
+		commonResponse.setData(resultList);
+		LOGGER.info("======>>>>>查询收到的订单，用户编号为：" + request.getCustomerId() + "查询成功");
+		return commonResponse;
+	}
+	
+	
+	
 	/**
 	 * 已收到的订单只能是已支付状态
 	 */
@@ -986,14 +1015,12 @@ public class OrderServiceImpl implements IOrderService {
 					accountService.inAccount(order.getServiceId(), order.getOrderAmounts(), TransferTypeEnum.FROZEN,
 							AccountBusinessTypeEnum.FroZen, orderId);
 					// 用户未评价
-					RongYunUtil.sendOrderMessage(serviceId, OrderSkillConstants.IM_MSG_CONTENT_CUST_NOT_PING_JIA,
-							OrderSkillConstants.MSG_CONTENT_DAV);
+					RongYunUtil.sendOrderMessage(serviceId, OrderSkillConstants.IM_MSG_CONTENT_CUST_NOT_PING_JIA_TO_DV,OrderSkillConstants.MSG_CONTENT_DAV);
 					sendMsgIndex = 1;
 				} else {
 					// 大V在服务时间内发起完成服务
 					newOrderStatus = OrderSkillConstants.ORDER_STATUS_GOING_DAV_APPAY_FINISH;
-					RongYunUtil.sendOrderMessage(customerId, OrderSkillConstants.IM_MSG_CONTENT_CUST_FINISH,
-							OrderSkillConstants.MSG_CONTENT_C);
+					RongYunUtil.sendOrderMessage(customerId, OrderSkillConstants.IM_MSG_CONTENT_CUST_FINISH_TO_DAV,OrderSkillConstants.MSG_CONTENT_C);
 				}
 			} else {
 				// 用户发起完成服务
@@ -1004,8 +1031,7 @@ public class OrderServiceImpl implements IOrderService {
 						+ order.getOrderAmounts());
 				accountService.inAccount(order.getServiceId(), order.getOrderAmounts(), TransferTypeEnum.FROZEN,
 						AccountBusinessTypeEnum.FroZen, orderId);
-				RongYunUtil.sendOrderMessage(serviceId, OrderSkillConstants.IM_MSG_CONTENT_CUST_NOT_PING_JIA,
-						OrderSkillConstants.MSG_CONTENT_DAV);
+				RongYunUtil.sendOrderMessage(serviceId, OrderSkillConstants.IM_MSG_CONTENT_CUST_NOT_PING_JIA_TO_DV,OrderSkillConstants.MSG_CONTENT_DAV);
 			}
 
 			// 设置请求结束时间
@@ -1145,5 +1171,7 @@ public class OrderServiceImpl implements IOrderService {
 
 		return ResultUtils.resultSuccess();
 	}
+
+
 
 }

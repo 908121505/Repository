@@ -40,6 +40,8 @@ public interface OrderRequestType {
     public static final  String  ORDER_RECEIVE_ORDER_LIST = "19021";
     /**查询发起的订单*/
     public static final  String  ORDER_SEND_ORDER_LIST = "19022";
+    /**查询订单消息*/
+    public static final  String  MSG_ORDER_LIST = "19023";
     
     
     

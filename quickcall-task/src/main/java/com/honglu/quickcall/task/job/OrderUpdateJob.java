@@ -311,7 +311,7 @@ public class OrderUpdateJob {
     			}
     		}
     		//TODO  
-    		taskOrderMapper.updateOrderStatus(updateOrderStatus, orderIdList,new Date(),null);
+    		taskOrderMapper.updateOrderStatus(updateOrderStatus, orderIdList,new Date(),null,new Date());
     		//用户所得券返回给用户
     		try {
 				taskCustomerCouponMapper.batchUpdateCustomerCoupon(orderIdCouponList, OrderSkillConstants.ORDER_COUPON_FLAG_CANCEL);
@@ -334,7 +334,7 @@ public class OrderUpdateJob {
     		for (TaskOrder order : orderList) {
     			orderIdList.add(order.getOrderId());
     		}
-    		taskOrderMapper.updateOrderStatusForFinish(updateOrderStatus, orderIdList,new Date());
+    		taskOrderMapper.updateOrderStatusForFinish(updateOrderStatus, orderIdList,new Date(),new Date());
     	}
     }
     
@@ -404,7 +404,7 @@ public class OrderUpdateJob {
     		}else if (cancelType == CANCEL_THREE){
     			content =  OrderSkillConstants.IM_MSG_CONTENT_CANCEL_DV_5MINUTE_CONFIRM_TIMEOUT ;
     		}else if(cancelType == CANCEL_FOUR){
-    			content =  OrderSkillConstants.IM_MSG_CONTENT_CUST_NOT_PING_JIA ;
+    			content =  OrderSkillConstants.IM_MSG_CONTENT_CUST_NOT_PING_JIA_TO_DV ;
     		}
     	}else{
     		remarkName = OrderSkillConstants.MSG_CONTENT_C ;

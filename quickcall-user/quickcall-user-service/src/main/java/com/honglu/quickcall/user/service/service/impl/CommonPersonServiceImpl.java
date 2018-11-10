@@ -820,7 +820,7 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 		customer.setCustomerId(request.getCustomerId());
 		customer.setTokenCode(rongyunToken);
 		int row = customerMapper.updateByPrimaryKeySelective(customer);
-		return ResultUtils.resultSuccess();
+		return ResultUtils.resultSuccess(rongyunToken);
 
 	}
 
