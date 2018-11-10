@@ -530,18 +530,29 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 	private boolean allowToUse(String num){
 		if(customerMapper.selectByAppId(num) != null){
 			return false;
-		} 
-		for (String str : startBlackList) {
-			if(num.startsWith(str)){
-				return false;
-			}
 		}
 		for (String str : middleBlackList) {
 			if(num.contains(str)){
 				return false;
 			}
 		}
+		for(int i=1;i<10;i++){
+			if(appearNumber(num,i+"")>5){
+				return false;
+			}
+		}
 		return true;
+	}
+	
+	//判断字符串出现次数
+	private int appearNumber(String srcText, String findText) {
+	    int count = 0;
+	    Pattern p = Pattern.compile(findText);
+	    Matcher m = p.matcher(srcText);
+	    while (m.find()) {
+	        count++;
+	    }
+	    return count;
 	}
 
 	/**
@@ -554,7 +565,7 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 		String base = "0123456789";
 		Random random = new Random();
 		StringBuffer sb = new StringBuffer();
-		sb.append(random.nextInt(9) + 1);
+		sb.append(random.nextInt(7) + 3);
 		for (int i = 0; i < length - 1; i++) {
 			int number = random.nextInt(base.length());
 			sb.append(base.charAt(number));
