@@ -74,7 +74,7 @@
   </update> -->
   <select id="queryOpenReceiveByWeek"  resultType="java.lang.Long">
 		SELECT
-			customer_id
+			customer_skill_id
 		FROM
 			customer_skill
 		WHERE
@@ -103,7 +103,7 @@
   </update> -->
   <select id="queryCloseReceiveByWeek"   resultType="java.lang.Long">
 		SELECT
-			customer_id
+			customer_skill_id
 		FROM
 			customer_skill
 		WHERE
@@ -130,7 +130,7 @@
 		SELECT
 			customer_id
 		FROM
-			customer_skill
+			customer_skill_id
 		WHERE
 			auto_receive_status = #{autoReceiveStatus}
 		AND receive_status = #{recevieStatus}
@@ -149,7 +149,7 @@
   </update> -->
   <select id="queryCloseReceiveByCurrentTime"   resultType="java.lang.Long">
 		SELECT
-			customer_id
+			customer_skill_id
 		FROM
 			customer_skill
 		WHERE
