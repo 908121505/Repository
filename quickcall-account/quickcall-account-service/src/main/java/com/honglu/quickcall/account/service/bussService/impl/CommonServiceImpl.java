@@ -22,6 +22,7 @@ import com.honglu.quickcall.common.api.exchange.CommonResponse;
 import com.honglu.quickcall.common.api.util.DateUtils;
 import com.honglu.quickcall.common.api.util.JedisUtil;
 import com.honglu.quickcall.common.api.util.RedisKeyConstants;
+import com.honglu.quickcall.common.third.rongyun.util.RongYunUtil;
 import com.honglu.quickcall.user.facade.entity.Customer;
 
 
@@ -340,6 +341,7 @@ public class CommonServiceImpl implements CommonService {
 			retList.add(OrderSkillConstants.ORDER_STATUS_CANCLE_USER_SELF_BEFORE_SERVICE);
 			retList.add(OrderSkillConstants.ORDER_STATUS_CANCEL_USER_NOT_ACCEPCT);
 			retList.add(OrderSkillConstants.ORDER_STATUS_CANCEL_BEFORE_APPOINT_TIME);
+			retList.add(OrderSkillConstants.ORDER_STATUS_CANCEL_FORCE);
 			
 		}else if(OrderSkillConstants.ORDER_STATUS_PARAM_PING_JIA == orderStatusParam){
 			retList.add(999);
@@ -483,6 +485,27 @@ public class CommonServiceImpl implements CommonService {
 		}
 		
 		return result;
+	}
+
+	
+	
+	
+	@Override
+	public void sendOrderMsg(Long  customerId,Long  serviceId,Long  orderId,String  orderDesc) {
+		//customer  ---->>>  serviceId
+		String  custStr = JedisUtil.get(RedisKeyConstants.USER_CUSTOMER_INFO+customerId) ;
+		if(StringUtils.isNotBlank(custStr)){
+			try {
+				Customer customer = JSON.parseObject(custStr,  Customer.class);
+				RongYunUtil.sendOrderIMMessage(customerId, serviceId, "", orderId, orderDesc, customer.getHeadPortraitUrl());
+			} catch (Exception e) {
+				LOGGER.error("从Redis中获取客户信息发生异常，异常信息：",e);
+			}
+		}
+		
+		
+				
+		
 	}
 
 }

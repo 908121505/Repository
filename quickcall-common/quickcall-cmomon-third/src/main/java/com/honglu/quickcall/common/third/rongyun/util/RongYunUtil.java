@@ -1,9 +1,12 @@
 package com.honglu.quickcall.common.third.rongyun.util;
 
+import java.util.Date;
 import java.util.ResourceBundle;
 
 import com.alibaba.fastjson.JSON;
+import com.honglu.quickcall.common.third.rongyun.MsgContent;
 import com.honglu.quickcall.common.third.rongyun.RongCloud;
+import com.honglu.quickcall.common.third.rongyun.RongYunOrderMsgPushBean;
 import com.honglu.quickcall.common.third.rongyun.RongYunPushBean;
 import com.honglu.quickcall.common.third.rongyun.SendUser;
 import com.honglu.quickcall.common.third.rongyun.messages.BaseMessage;
@@ -228,6 +231,20 @@ public class RongYunUtil {
 		String imageUrl = "http://wdgj.oss-cn-shanghai.aliyuncs.com/voice/user/headimg/dd85f3b6b42e441eb48f2839752474cc.jpg";
 		sendMessage("订单消息", fromUserId, toCustomerId, content, 1, imageUrl, 10, remarkName);
 	}
+	
+	
+	/**
+	 * 推送订单IM消息
+	 * @param toCustomerId
+	 * @param remarkName
+	 * @param orderId
+	 * @param orderDesc
+	 * @param imageUrl
+	 */
+	public static void sendOrderIMMessage(Long  fromUserId ,Long toCustomerId, String remarkName,Long  orderId,String  orderDesc,String imageUrl) {
+		Integer  type =  21 ;
+		sendMessageIm("订单IM消息", fromUserId, toCustomerId,  1, imageUrl, type, remarkName,orderId,orderDesc);
+	}
 
 	public static void sendBespokeMessage(Long toCustomerId, String content) {
 		Long fromUserId = Long.parseLong(BESPOKE_COSTOMER_ID);
@@ -290,8 +307,27 @@ public class RongYunUtil {
 				null, null, null);
 		System.out.println(code);
 	}
+	@SuppressWarnings("unused")
+	private static void sendMessageIm(String nickName, Long fromUserId, Long toCustomerId,  Integer sex,
+			String headPortraitUrl, Integer type, String remarkName,Long  orderId,String  orderDesc) {
+		
+		Long otherId = toCustomerId;
+		SendUser sendUser = new SendUser(nickName, headPortraitUrl, sex, fromUserId, remarkName);
+		MsgContent msgContent = new MsgContent(orderId, orderDesc, 41);
+		RongYunOrderMsgPushBean rongYunPushBean = new RongYunOrderMsgPushBean(1, msgContent , 1, 0, 10, new Date().getTime(), sendUser, fromUserId, toCustomerId, 21);
+		String jsonString = JSON.toJSONString(rongYunPushBean);
+		TxtMessage txtMessage = new TxtMessage(jsonString, "");
+		String[] otherIds = new String[1];
+		otherIds[0] = String.valueOf(otherId);
+		Integer code = RongYunUtil.publishPrivate(String.valueOf(fromUserId), otherIds, txtMessage, null, null, null,
+				null, null, null);
+		System.out.println(code);
+	}
 
 	public static void main(String[] args) {
+		
+		
+		sendMessageIm("安定的", 1811051157595003350L, 1810161659557030302L, 1, "http://wdgj.oss-cn-shanghai.aliyuncs.com/voice/user/headimg/524a6d229baf46efa95037f5c469eb51.jpg", 21, "", 1L, "DDD");
 		// sendUser();
 		/*
 		 * Long fromUserId = 1810161814552346784L; String nickName = "Aaaa"; String
@@ -307,13 +343,13 @@ public class RongYunUtil {
 		 * RongYunUtil.publishPrivate(String.valueOf(fromUserId), otherIds, txtMessage,
 		 * null, null, null, null, null, null); System.out.println(code);
 		 */
-		Long toCustomerId = 1810161659557030302L;
-		// sendSystemMessage(toCustomerId, "我喜欢亚波1");
-		// sendOrderMessage(toCustomerId, "你有一条新的订单哦1");
-		// sendActivityMessage(toCustomerId, "红包1");
-		for (int i = 0; i < 99; i++) {
-			System.out.println(getToken("1", "1", "1"));
-		}
+//		Long toCustomerId = 1810161659557030302L;
+//		// sendSystemMessage(toCustomerId, "我喜欢亚波1");
+//		// sendOrderMessage(toCustomerId, "你有一条新的订单哦1");
+//		// sendActivityMessage(toCustomerId, "红包1");
+//		for (int i = 0; i < 99; i++) {
+//			System.out.println(getToken("1", "1", "1"));
+//		}
 
 		/*
 		 * sendFansMessage(1810241141388482637L, "轻音_3575",

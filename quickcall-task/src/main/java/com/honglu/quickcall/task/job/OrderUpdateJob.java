@@ -375,6 +375,10 @@ public class OrderUpdateJob {
     				
     				sendOrderMessage(customerId, cancelType, false);
     				sendOrderMessage(order.getServiceId(), cancelType, true);
+    				
+    				
+    				
+    				
     			}
     		} catch (Exception e) {
     			LOGGER.error("用户退款发生异常，异常信息",e);
