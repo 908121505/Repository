@@ -627,6 +627,8 @@ public class OrderServiceImpl implements IOrderService {
 		statusList.add(OrderSkillConstants.ORDER_STATUS_GOING_WAITING_START);// 进行中（大V发起完成服务）
 		statusList.add(OrderSkillConstants.ORDER_STATUS_GOING_USER_ACCEPCT);// 进行中
 		statusList.add(OrderSkillConstants.ORDER_STATUS_GOING_DAV_APPAY_FINISH);// 进行中（大V发起完成服务）
+		getFinishStatusList(statusList);
+		
 		// 判断双方有没有订单关系
 		Order order = orderMapper.queryOrderByCustomerIdAndServiceId(customerId, serviceId, statusList);
 
@@ -634,26 +636,82 @@ public class OrderServiceImpl implements IOrderService {
 			order = orderMapper.queryOrderByCustomerIdAndServiceId(serviceId, customerId, statusList);
 		}
 
+		Integer  newOrderStatus =  null;
 		/**** 1.必须首先判断双方存在订单关系 */
 		if (order != null) {
-			orderDetailForIMVO.setRetCode(OrderSkillConstants.IM_RETCODE_ORDER_EXIST);// 不可下单
-			OrderIMVO orderIMVO = new OrderIMVO();
-			Long customerSkillId = order.getCustomerSkillId();
-			orderIMVO = customerSkillMapper.selectCustSkillItem(customerSkillId);
-			orderIMVO.setOrderId(order.getOrderId());
-			orderIMVO.setServicePrice(order.getServicePrice());
-			orderIMVO.setServiceUnit(order.getServiceUnit());
+			Integer  orderStatus =  order.getOrderStatus();
+			List<Integer>   finishOrderStatusList = new ArrayList<Integer>();
+			getFinishStatusList(finishOrderStatusList);
+			if(finishOrderStatusList.contains(orderStatus)){
+				Long  orderCustomerId = order.getCustomerId();
+				if(orderCustomerId == customerId){
+					//返回订单信息
+					orderDetailForIMVO.setRetCode(OrderSkillConstants.IM_RETCODE_ORDER_EXIST);// 不可下单
+					OrderIMVO orderIMVO = new OrderIMVO();
+					Long customerSkillId = order.getCustomerSkillId();
+					orderIMVO = customerSkillMapper.selectCustSkillItem(customerSkillId);
+					orderIMVO.setOrderId(order.getOrderId());
+					orderIMVO.setServicePrice(order.getServicePrice());
+					orderIMVO.setServiceUnit(order.getServiceUnit());
+					
+					//订单倒计时计算
+					OrderTempResponseVO responseVO = commonService.getCountDownSeconds(order.getOrderStatus(),order.getOrderTime(), order.getReceiveOrderTime(), order.getStartServiceTime(),order.getExpectEndTime(),order.getAppointTime());
+					orderIMVO.setCountDownSeconds(0L);
+					orderIMVO.setOrderStatus(responseVO.getOrderStatus());
+					orderDetailForIMVO.setServiceId(order.getServiceId());
+					orderDetailForIMVO.setCustomerId(order.getCustomerId());
+					orderDetailForIMVO.setOrderIMVO(orderIMVO);
+					newOrderStatus =  responseVO.getOrderStatus();
+				}else{
+					//不存在订单关系
+					orderDetailForIMVO.setRetCode(OrderSkillConstants.IM_RETCODE_CAN_ORDER);// 不存在的订单关系
+				}
+				
+			}else{
+				//返回订单信息
+				orderDetailForIMVO.setRetCode(OrderSkillConstants.IM_RETCODE_ORDER_EXIST);// 不可下单
+				OrderIMVO orderIMVO = new OrderIMVO();
+				Long customerSkillId = order.getCustomerSkillId();
+				orderIMVO = customerSkillMapper.selectCustSkillItem(customerSkillId);
+				orderIMVO.setOrderId(order.getOrderId());
+				orderIMVO.setServicePrice(order.getServicePrice());
+				orderIMVO.setServiceUnit(order.getServiceUnit());
+				
+				//订单倒计时计算
+				OrderTempResponseVO responseVO = commonService.getCountDownSeconds(order.getOrderStatus(),order.getOrderTime(), order.getReceiveOrderTime(), order.getStartServiceTime(),order.getExpectEndTime(),order.getAppointTime());
+				orderIMVO.setCountDownSeconds(responseVO.getCountDownSeconds());
+				orderIMVO.setOrderStatus(responseVO.getOrderStatus());
+				orderDetailForIMVO.setServiceId(order.getServiceId());
+				orderDetailForIMVO.setCustomerId(order.getCustomerId());
+				orderDetailForIMVO.setOrderIMVO(orderIMVO);
+				newOrderStatus =  responseVO.getOrderStatus();
+			}
 			
-			//订单倒计时计算
-			OrderTempResponseVO responseVO = commonService.getCountDownSeconds(order.getOrderStatus(),order.getOrderTime(), order.getReceiveOrderTime(), order.getStartServiceTime(),order.getExpectEndTime(),order.getAppointTime());
-			orderIMVO.setCountDownSeconds(responseVO.getCountDownSeconds());
-			orderIMVO.setOrderStatus(responseVO.getOrderStatus());
-			orderDetailForIMVO.setServiceId(order.getServiceId());
-			orderDetailForIMVO.setCustomerId(order.getCustomerId());
-			orderDetailForIMVO.setOrderIMVO(orderIMVO);
+			
+			
+			
+			
+			
+			
+			
+//			orderDetailForIMVO.setRetCode(OrderSkillConstants.IM_RETCODE_ORDER_EXIST);// 不可下单
+//			OrderIMVO orderIMVO = new OrderIMVO();
+//			Long customerSkillId = order.getCustomerSkillId();
+//			orderIMVO = customerSkillMapper.selectCustSkillItem(customerSkillId);
+//			orderIMVO.setOrderId(order.getOrderId());
+//			orderIMVO.setServicePrice(order.getServicePrice());
+//			orderIMVO.setServiceUnit(order.getServiceUnit());
+//			
+//			//订单倒计时计算
+//			OrderTempResponseVO responseVO = commonService.getCountDownSeconds(order.getOrderStatus(),order.getOrderTime(), order.getReceiveOrderTime(), order.getStartServiceTime(),order.getExpectEndTime(),order.getAppointTime());
+//			orderIMVO.setCountDownSeconds(responseVO.getCountDownSeconds());
+//			orderIMVO.setOrderStatus(responseVO.getOrderStatus());
+//			orderDetailForIMVO.setServiceId(order.getServiceId());
+//			orderDetailForIMVO.setCustomerId(order.getCustomerId());
+//			orderDetailForIMVO.setOrderIMVO(orderIMVO);
 			
 			commonResponse.setData(orderDetailForIMVO);
-			Integer  newOrderStatus =  responseVO.getOrderStatus();
+//			Integer  newOrderStatus =  responseVO.getOrderStatus();
 			if(OrderSkillConstants.ORDER_STATUS_FINISHED_USER_ACCEPCT == newOrderStatus || OrderSkillConstants.ORDER_STATUS_FINISH_DV_FINISH == newOrderStatus 
 					|| OrderSkillConstants.ORDER_STATUS_FINISH_DV_RELEASE == newOrderStatus
 					|| OrderSkillConstants.ORDER_STATUS_GOING_USRE_APPAY_FINISH == newOrderStatus
@@ -716,6 +774,16 @@ public class OrderServiceImpl implements IOrderService {
 		commonResponse.setData(orderDetailForIMVO);
 		LOGGER.info("======>>>>>查询发送的订单，用户编号为：" + customerId + "查询成功");
 		return commonResponse;
+	}
+	
+	
+	public void  getFinishStatusList(List<Integer>  list){
+		list.add(OrderSkillConstants.ORDER_STATUS_FINISHED_USER_ACCEPCT);
+		list.add(OrderSkillConstants.ORDER_STATUS_FINISH_DV_FINISH);
+		list.add(OrderSkillConstants.ORDER_STATUS_FINISH_DV_RELEASE);
+		list.add(OrderSkillConstants.ORDER_STATUS_GOING_USRE_APPAY_FINISH);
+		list.add(OrderSkillConstants.ORDER_STATUS_FINISH_DAV_FINISH_AFTER_SERVICE_TIME);
+		list.add(OrderSkillConstants.ORDER_STATUS_FINISH_BOTH_NO_OPERATE);
 	}
 
 	@Override
