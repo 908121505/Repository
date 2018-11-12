@@ -1125,7 +1125,11 @@ public class OrderServiceImpl implements IOrderService {
 					accountService.inAccount(order.getServiceId(), order.getOrderAmounts(), TransferTypeEnum.FROZEN,
 							AccountBusinessTypeEnum.FroZen, orderId);
 					//结束后用户获得券
-					couponDubboBusiness.getCouponInOrder(order.getSkillItemId(), customerId);
+					try {
+						couponDubboBusiness.getCouponInOrder(order.getSkillItemId(), customerId);
+					} catch (Exception e) {
+						LOGGER.info("订单结束后用户推送券，异常信息：",e);
+					}
 					// 用户未评价
 					RongYunUtil.sendOrderMessage(serviceId, OrderSkillConstants.IM_MSG_CONTENT_CUST_NOT_PING_JIA_TO_DV,OrderSkillConstants.MSG_CONTENT_DAV);
 					sendMsgIndex = 1;
@@ -1144,7 +1148,11 @@ public class OrderServiceImpl implements IOrderService {
 						+ order.getOrderAmounts());
 				accountService.inAccount(order.getServiceId(), order.getOrderAmounts(), TransferTypeEnum.FROZEN,AccountBusinessTypeEnum.FroZen, orderId);
 				//结束后用户获得券
-				couponDubboBusiness.getCouponInOrder(order.getSkillItemId(), customerId);
+				try {
+					couponDubboBusiness.getCouponInOrder(order.getSkillItemId(), customerId);
+				} catch (Exception e) {
+					LOGGER.info("订单结束后用户推送券，异常信息：",e);
+				}
 				RongYunUtil.sendOrderMessage(customerId, OrderSkillConstants.IM_MSG_CONTENT_CUST_NOT_PING_JIA_TO_CUST,OrderSkillConstants.MSG_CONTENT_C);
 			}
 
