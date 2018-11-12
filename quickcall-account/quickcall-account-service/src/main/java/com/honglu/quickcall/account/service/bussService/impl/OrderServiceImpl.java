@@ -1336,8 +1336,8 @@ public class OrderServiceImpl implements IOrderService {
 			RongYunUtil.sendOrderMessage(customerId,OrderSkillConstants.IM_MSG_CONTENT_PING_JIA_FINISH_TO_CUST, OrderSkillConstants.MSG_CONTENT_C);
 			
 			//推动订单IM消息
-			commonService.sendOrderMsg(customerId, serviceId, orderId, OrderSkillConstants.IM_MSG_CONTENT_CUST_FINISH_TO_DAV);
-			commonService.sendOrderMsg(serviceId, customerId,orderId, OrderSkillConstants.IM_MSG_CONTENT_SYSTEM_FINISH_TIMEOUT_TO_CUST);
+			commonService.sendOrderMsg(customerId, serviceId, orderId, OrderSkillConstants.IM_MSG_CONTENT_PING_JIA_FINISH_TO_DV);
+			commonService.sendOrderMsg(serviceId, customerId,orderId, OrderSkillConstants.IM_MSG_CONTENT_PING_JIA_FINISH_TO_CUST);
 			
 			
 		}
