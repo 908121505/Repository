@@ -758,7 +758,7 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 		}
 		Customer viewCustomer = customerMapper.selectByPrimaryKey(request.getViewCustomerId());
 		if (viewCustomer == null) {
-			return ResultUtils.result(BizCode.ParamNull, "当前关注用户不存在!");
+			return ResultUtils.result(BizCode.ParamNull, "该账号不存在!");
 		}
 		
 		CustomerHomeVO customerHomeVO = new CustomerHomeVO();
