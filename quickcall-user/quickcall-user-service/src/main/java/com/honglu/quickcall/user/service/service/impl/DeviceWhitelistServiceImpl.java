@@ -1,9 +1,12 @@
 package com.honglu.quickcall.user.service.service.impl;
 
+import com.honglu.quickcall.common.api.code.BizCode;
 import com.honglu.quickcall.common.api.exception.BizException;
 import com.honglu.quickcall.common.api.exchange.CommonResponse;
+import com.honglu.quickcall.common.api.exchange.ResultUtils;
 import com.honglu.quickcall.common.core.util.UUIDUtils;
 import com.honglu.quickcall.user.facade.code.UserBizReturnCode;
+import com.honglu.quickcall.user.facade.entity.Customer;
 import com.honglu.quickcall.user.facade.entity.CustomerDeviceWhitelist;
 import com.honglu.quickcall.user.facade.exchange.request.editprofile.QueryDeviceWhitelistReq;
 import com.honglu.quickcall.user.facade.exchange.request.editprofile.SaveDeviceWhitelistReq;
@@ -17,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Description: 设备白名单
@@ -31,16 +35,28 @@ public class DeviceWhitelistServiceImpl implements DeviceWhitelistService{
     @Autowired
     private CustomerDeviceWhitelistMapper customerDeviceWhitelistMapper;
 
-    /*@Override
+    @Override
     public CommonResponse queryDeviceWhitelist(QueryDeviceWhitelistReq params) {
         CommonResponse commonResponse = new CommonResponse();
-        if (params.getCustomerId() == null) {
+        Long customerId = params.getCustomerId();
+        String deviceId = params.getDeviceId();
+        if (customerId == null || "".equals(customerId)) {
             throw new BizException(UserBizReturnCode.paramError, "customerId不能为空");
         }
+        if (deviceId == null || "".equals(deviceId)) {
+            throw new BizException(UserBizReturnCode.paramError, "deviceId不能为空");
+        }
 
-        List<CustomerDeviceWhitelistVO> customerDeviceWhitelist = customerDeviceWhitelistMapper.selectListByCustomerId(params.getCustomerId());
+        //查询数据库中是否已存在
+        int count = customerDeviceWhitelistMapper.selectCountByCusIdAndDeviceId(customerId, deviceId);
+        if(count > 0){
+            //存在 不需要短验
+            commonResponse.setData(true);
+        }else{
+            //不存在 需要短验
+            commonResponse.setData(false);
+        }
 
-        commonResponse.setData(customerDeviceWhitelist);
         commonResponse.setCode(UserBizReturnCode.Success);
         commonResponse.setMessage(UserBizReturnCode.Success.desc());
         return commonResponse;
@@ -48,6 +64,9 @@ public class DeviceWhitelistServiceImpl implements DeviceWhitelistService{
 
     @Override
     public CommonResponse saveDeviceWhitelist(SaveDeviceWhitelistReq params) {
+    	if(params.getCustomerId() == null){
+			return ResultUtils.result(BizCode.CustomerNotExist);
+		}
         CommonResponse commonResponse = new CommonResponse();
         if (params.getCustomerId() == null) {
             throw new BizException(UserBizReturnCode.paramError, "customerId不能为空");
@@ -79,5 +98,5 @@ public class DeviceWhitelistServiceImpl implements DeviceWhitelistService{
             logger.error("添加设备白名单 异常");
             throw new BizException(UserBizReturnCode.jdbcError, "操作数据库异常");
         }
-    }*/
+    }
 }

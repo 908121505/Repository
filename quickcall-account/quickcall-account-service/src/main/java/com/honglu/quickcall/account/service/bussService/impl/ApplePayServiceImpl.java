@@ -31,6 +31,8 @@ import com.honglu.quickcall.common.api.code.BizCode;
 import com.honglu.quickcall.common.api.exception.BizException;
 import com.honglu.quickcall.common.api.exchange.CommonResponse;
 import com.honglu.quickcall.common.api.exchange.ResultUtils;
+import com.honglu.quickcall.common.api.util.JedisUtil;
+import com.honglu.quickcall.common.api.util.RedisKeyConstants;
 import com.honglu.quickcall.common.core.util.UUIDUtils;
 
 /**
@@ -112,8 +114,12 @@ public class ApplePayServiceImpl implements ApplePayService {
 			// RuntimeException("appId为"+appleOrderRequest.getAppId()+"，未能查询到appKey");
 			// }
 			// String appKey = String.valueOf(mAppVo.getAppKey());
-
 			// 创建充值订单
+			
+			String customerJson = JedisUtil.get(RedisKeyConstants.USER_CUSTOMER_INFO+applePayRequest.getCustomerId());
+			if(StringUtils.isEmpty(customerJson)){
+				return ResultUtils.result(BizCode.CustomerNotExist);
+			}
 			String rechargeOrderId = createReChargeOrder(applePayRequest.getCustomerId(), applePayRequest.getAmount());
 			resMap.put("rechargeOrderId", rechargeOrderId);
 

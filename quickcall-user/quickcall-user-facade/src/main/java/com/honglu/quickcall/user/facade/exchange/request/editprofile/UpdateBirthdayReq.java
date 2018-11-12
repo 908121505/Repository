@@ -14,7 +14,7 @@ import java.util.Date;
  */
 public class UpdateBirthdayReq extends UserCenterRequest{
 	private Long customerId;
-	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	@DateTimeFormat(pattern = "yyyy/MM/dd")
 	private Date birthday;
 
 	public Long getCustomerId() {

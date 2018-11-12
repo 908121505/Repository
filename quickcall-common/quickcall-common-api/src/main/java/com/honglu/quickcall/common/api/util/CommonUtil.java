@@ -18,7 +18,7 @@ public class CommonUtil {
     /**
      * 字符不包括中文
      */
-    private final static Pattern EN_COUNT_PATTERN = Pattern.compile("[a-zA-Z\\d~`!@#$%^&*()+=|{}':;',\\[\\].<>/?~！@#￥%……&*（）——+|{}【】‘；：”“’。，、？_]*");
+    private final static Pattern EN_PATTERN = Pattern.compile("[a-zA-Z\\d~`!@#$%^&*()+=|{}':;',\\[\\].<>/?~！@#￥%……&*（）——+|{}【】‘；：”“’。，、？_]*");
     /**
      * 字符包括中文
      */
@@ -35,6 +35,31 @@ public class CommonUtil {
     public static Boolean checkNickName(String nickName) {
         Boolean ifPass = false;
         try {
+            Matcher m = CH_EN_PATTERN.matcher(nickName);
+            if (!m.matches()) {
+                return ifPass;
+            }
+            int actLength = nickName.length();
+            if (actLength < 2 || actLength > 10) {
+                return ifPass;
+            }
+
+        } catch (Exception e) {
+            logger.error("用户昵称格式校验异常！异常信息:{}", e.getMessage(), e);
+            e.printStackTrace();
+            return ifPass;
+        }
+
+        ifPass = true;
+        return ifPass;
+    }
+
+    /**
+     * 汉字算俩位，普通字符算一位
+     */
+    /*public static Boolean checkNickName(String nickName) {
+        Boolean ifPass = false;
+        try {
             //包含中文个数
             int count = 0;
             char[] c = nickName.toCharArray();
@@ -46,7 +71,7 @@ public class CommonUtil {
                 }
             }
             if (count == 0) {
-                Matcher m = EN_COUNT_PATTERN.matcher(nickName);
+                Matcher m = EN_PATTERN.matcher(nickName);
                 if (!m.matches()) {
                     return ifPass;
                 }
@@ -73,12 +98,37 @@ public class CommonUtil {
 
         ifPass = true;
         return ifPass;
-    }
+    }*/
 
     /**
      * 个性签名字符格式规则校验
      */
     public static Boolean checkSignName(String signName) {
+        Boolean ifPass = false;
+        try {
+            Matcher m = CH_EN_PATTERN.matcher(signName);
+            if (!m.matches()) {
+                return ifPass;
+            }
+            int actLength = signName.length();
+            if (actLength > 20) {
+                return ifPass;
+            }
+
+        } catch (Exception e) {
+            logger.error("个性签名字符格式校验异常！异常信息:{}", e.getMessage(), e);
+            e.printStackTrace();
+            return ifPass;
+        }
+
+        ifPass = true;
+        return ifPass;
+    }
+
+    /**
+     * 汉字算俩位，普通字符算一位
+     */
+    /*public static Boolean checkSignName(String signName) {
         Boolean ifPass = false;
         try {
             int count = 0;
@@ -91,7 +141,7 @@ public class CommonUtil {
                 }
             }
             if (count == 0) {
-                Matcher m = EN_COUNT_PATTERN.matcher(signName);
+                Matcher m = EN_PATTERN.matcher(signName);
                 if (!m.matches()) {
                     return ifPass;
                 }
@@ -118,6 +168,6 @@ public class CommonUtil {
 
         ifPass = true;
         return ifPass;
-    }
+    }*/
 
 }

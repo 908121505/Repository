@@ -1,9 +1,13 @@
 package com.honglu.quickcall.user.service.service.impl;
 
+import com.honglu.quickcall.common.api.code.BizCode;
 import com.honglu.quickcall.common.api.exchange.CommonResponse;
+import com.honglu.quickcall.common.api.exchange.ResultUtils;
 import com.honglu.quickcall.user.facade.code.UserBizReturnCode;
+import com.honglu.quickcall.user.facade.entity.Customer;
 import com.honglu.quickcall.user.facade.exchange.request.InternalMessageRequest;
 import com.honglu.quickcall.user.facade.vo.MessageCustomerVO;
+import com.honglu.quickcall.user.service.dao.CustomerMapper;
 import com.honglu.quickcall.user.service.dao.MessageCustomerMapper;
 import com.honglu.quickcall.user.service.service.InternalMessageService;
 import org.slf4j.Logger;
@@ -25,6 +29,8 @@ public class InternalMessageServiceImpl implements InternalMessageService {
     @Autowired
     private MessageCustomerMapper messageCustomerMapper;
 
+    @Autowired
+    private CustomerMapper customerMapper;
     /**
      * 查询所有的站内消息
      *
@@ -35,6 +41,10 @@ public class InternalMessageServiceImpl implements InternalMessageService {
     public CommonResponse queryMessages(InternalMessageRequest internalMessageRequest) {
         Integer messageType = internalMessageRequest.getMessageType();
         Long customerId = internalMessageRequest.getCustomerId();
+        Customer customer = customerMapper.selectByPrimaryKey(customerId);
+		if(customer == null){
+			return ResultUtils.result(BizCode.CustomerNotExist);
+		}
         int count = messageCustomerMapper.updateByMessageType(messageType, customerId);
         LOGGER.info("查询站内消息，消息类型：{}，本次获取新的消息数量：{}", messageType, count);
         List<MessageCustomerVO> list = messageCustomerMapper.selectByMessageType(messageType, customerId);

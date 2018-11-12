@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.honglu.quickcall.task.dao.TaskCustomerCouponMapper" >
+
+
+<!-- 根据订单ID列表更新用户券状态 -->
+  <update id="batchUpdateCustomerCoupon"  >
+		UPDATE 
+			customer_coupon
+		SET 
+			is_used = #{couponFlag}
+		WHERE
+			order_id  IN 
+		<foreach collection="list" item="orderId"    open="("  close=")"  separator=",">
+			#{orderId}
+		</foreach>
+  </update>
+
+
+</mapper>

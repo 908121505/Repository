@@ -1,9 +1,12 @@
 package com.honglu.quickcall.user.service.service.impl;
 
+import com.honglu.quickcall.common.api.code.BizCode;
 import com.honglu.quickcall.common.api.exchange.CommonResponse;
 import com.honglu.quickcall.common.api.exchange.ResultUtils;
 import com.honglu.quickcall.common.api.util.JedisUtil;
+import com.honglu.quickcall.common.core.util.UUIDUtils;
 import com.honglu.quickcall.common.third.rongyun.util.RongYunUtil;
+import com.honglu.quickcall.user.facade.code.UserBizReturnCode;
 import com.honglu.quickcall.user.facade.entity.*;
 import com.honglu.quickcall.user.facade.exchange.request.BookingMessageQueryRequest;
 import com.honglu.quickcall.user.facade.exchange.request.BookingMessageSaveRequest;
@@ -91,7 +94,9 @@ public class UserMessageServiceImpl implements UserMessageService {
             mc.setCreateMan("admin");
             mc.setModifyMan("admin");
             if (customer!=null){
-                mc.setPhone(Long.parseLong(customer.getPhone()));
+            	if(customer.getPhone() != null){
+            		mc.setPhone(Long.parseLong(customer.getPhone()));
+            	}
             }
             mc.setReceiverId(params.getReceiverId());
             int insertMc = messageCustomerMapper.insertMessage(mc);
@@ -116,6 +121,10 @@ public class UserMessageServiceImpl implements UserMessageService {
     @Override
     public CommonResponse queryBookingMessage(BookingMessageQueryRequest params) {
         List<MessageReservation> messageReservationList = messageReservationMapper.queryBookingMessage(params.getCustomerId());
+        Customer cus = customerMapper.selectByPrimaryKey(params.getCustomerId());
+		if(cus == null){
+			return ResultUtils.result(BizCode.CustomerNotExist);
+		}
         List<MessageReservationVO> mrsList = new ArrayList<>();
         for (MessageReservation mr: messageReservationList){
             Customer customer = customerMapper.selectByPrimaryKey(mr.getCustomerId());
@@ -151,6 +160,10 @@ public class UserMessageServiceImpl implements UserMessageService {
 
 	@Override
 	public CommonResponse queryCustomerMessageSetting(CustomerMessageSettingQueryRequest params) {
+		Customer customer = customerMapper.selectByPrimaryKey(params.getCustomerId());
+		if(customer == null){
+			return ResultUtils.result(BizCode.CustomerNotExist);
+		}
 		List<CustomerMsgSetting> customerMsgSettingList = customerMsgSettingMapper.selectByPrimaryKey(params.getCustomerId());
 		CustomerMsgSetting customerMsgSetting = new CustomerMsgSetting();
 		if(customerMsgSettingList.size() < 1){
@@ -168,14 +181,34 @@ public class UserMessageServiceImpl implements UserMessageService {
 	@Override
 	@Transactional(rollbackFor = Exception.class)
 	public CommonResponse saveCustomerMessageSetting(CustomerMsgSettingRequest params) {
+		Customer customer = customerMapper.selectByPrimaryKey(params.getCustomerId());
+		if(customer == null){
+			return ResultUtils.result(BizCode.CustomerNotExist);
+		}
 		CustomerMsgSetting customerMsgSetting = new CustomerMsgSetting();
 		customerMsgSetting.setModifyTime(new Date());
+		customerMsgSetting.setId(params.getId());
+		customerMsgSetting.setCustomerId(params.getCustomerId());
+		customerMsgSetting.setReceiveStatus(params.getReceiveStatus());
+		customerMsgSetting.setReceiveType(params.getReceiveType());
+		customerMsgSetting.setRangeMinLimit(params.getRangeMinLimit());
+		customerMsgSetting.setRemark(null);
 		int num = 0;
 		if(params.getId() == null){
+			List<CustomerMsgSetting> customerMsgSettingList = customerMsgSettingMapper.selectByPrimaryKey(params.getCustomerId());
+			if(customerMsgSettingList.size() > 0){
+				CommonResponse response = new CommonResponse();
+				response.setCode(UserBizReturnCode.paramError);
+				response.setMessage(UserBizReturnCode.paramError.desc());;
+				return response;
+			}
 			customerMsgSetting.setCreateTime(new Date());
+			customerMsgSetting.setId(UUIDUtils.getId());
+			customerMsgSetting.setCreateMan(null);
 			num = customerMsgSettingMapper.insertSelective(customerMsgSetting);
 		}else{
-			num = customerMsgSettingMapper.updateByPrimaryKey(customerMsgSetting);
+			customerMsgSetting.setModifyMan(null);
+			num = customerMsgSettingMapper.updateByPrimaryKeySelective(customerMsgSetting);
 		}
 		return ResultUtils.resultSuccess(num);
 	}

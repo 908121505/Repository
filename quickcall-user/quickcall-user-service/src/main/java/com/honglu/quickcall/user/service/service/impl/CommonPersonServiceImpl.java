@@ -1,9 +1,24 @@
 package com.honglu.quickcall.user.service.service.impl;
 
+import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+import java.util.Objects;
+import java.util.Random;
+import java.util.ResourceBundle;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.alibaba.fastjson.JSON;
 import com.honglu.quickcall.common.api.code.BizCode;
 import com.honglu.quickcall.common.api.exception.BizException;
-import com.honglu.quickcall.common.api.exception.RemoteException;
 import com.honglu.quickcall.common.api.exchange.CommonResponse;
 import com.honglu.quickcall.common.api.exchange.ResultUtils;
 import com.honglu.quickcall.common.api.util.CommonUtil;
@@ -21,28 +36,29 @@ import com.honglu.quickcall.producer.facade.req.databury.DataBuriedPointGetCodeR
 import com.honglu.quickcall.producer.facade.req.databury.DataBuriedPointLoginReq;
 import com.honglu.quickcall.producer.facade.req.databury.DataBuriedPointRegistReq;
 import com.honglu.quickcall.producer.facade.req.databury.UserBean;
-import com.honglu.quickcall.user.facade.code.UserBizReturnCode;
 import com.honglu.quickcall.user.facade.constants.UserBizConstants;
 import com.honglu.quickcall.user.facade.entity.Customer;
 import com.honglu.quickcall.user.facade.entity.SensitivityWord;
 import com.honglu.quickcall.user.facade.enums.CustomerCusStateEnum;
-import com.honglu.quickcall.user.facade.exchange.request.*;
+import com.honglu.quickcall.user.facade.exchange.request.AddSystemUserRequest;
+import com.honglu.quickcall.user.facade.exchange.request.BindVXorQQRequest;
+import com.honglu.quickcall.user.facade.exchange.request.GetSmsCodeRequest;
+import com.honglu.quickcall.user.facade.exchange.request.IsPhoneExistsRequest;
+import com.honglu.quickcall.user.facade.exchange.request.LoginOutRequest;
+import com.honglu.quickcall.user.facade.exchange.request.SaveCertificationRequest;
+import com.honglu.quickcall.user.facade.exchange.request.SaveDvVoiceRequest;
+import com.honglu.quickcall.user.facade.exchange.request.SearchPersonByPhoneRequest;
+import com.honglu.quickcall.user.facade.exchange.request.SetHeardUrlRequest;
+import com.honglu.quickcall.user.facade.exchange.request.SetPwdRequest;
+import com.honglu.quickcall.user.facade.exchange.request.UserIdCardInfoRequest;
+import com.honglu.quickcall.user.facade.exchange.request.UserLoginRequest;
+import com.honglu.quickcall.user.facade.exchange.request.UserRegisterRequest;
 import com.honglu.quickcall.user.facade.vo.SearchPersonByPhoneVO;
 import com.honglu.quickcall.user.service.dao.BigvPhoneMapper;
 import com.honglu.quickcall.user.service.dao.CustomerMapper;
 import com.honglu.quickcall.user.service.dao.SensitivityWordMapper;
 import com.honglu.quickcall.user.service.integration.AccountDubboIntegrationService;
 import com.honglu.quickcall.user.service.service.CommonPersonService;
-import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import java.text.SimpleDateFormat;
-import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Created by len.song on 2017-12-07.
@@ -64,9 +80,9 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 	private SensitivityWordMapper sensitivityWordMapper;
 
 	@Autowired
-	private BigvPhoneMapper bigvPhoneMapper;
-	@Autowired
 	private DataDuriedPointBusiness dataDuriedPointBusiness;
+	@Autowired
+	private BigvPhoneMapper bigvPhoneMapper;
 
 	private static String resendexpire = ResourceBundle.getBundle("thirdconfig").getString("resend.expire");
 	private static String resendexpirehour = ResourceBundle.getBundle("thirdconfig").getString("resend.expire.hour");
@@ -77,6 +93,10 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 	 * 中文、英文、数字、下划线校验 4-24位
 	 */
 	private final static Pattern CH_EN_PATTERN = Pattern.compile("^[\\u4e00-\\u9fa5a-z\\d_]{4,24}$");
+	//靓号屏蔽中间段
+	private final static String[] middleBlackList = {"000","111","222","333","444","555","666","777","888","999",
+													"01234","12345","23456","34567","45678","56789","67890",
+													"09876","98765","87654","76543","65432","54321","43210"};
 
 	@Override
 	public CommonResponse regUserExist(IsPhoneExistsRequest params) {
@@ -126,7 +146,10 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 			Pattern p = Pattern.compile("^((1[0-9]))\\d{9}$");
 			Matcher m = p.matcher(params.getTel());
 			if (!m.matches()) {
-				throw new BizException(BizCode.ParamError, "手机号格式不正确");
+				// throw new BizException(BizCode.ParamError, "手机号格式不正确");
+				response.setCode(BizCode.CustomerError);
+				response.setMessage("手机号格式不正确");
+				return response;
 			}
 			param.setPhone(params.getTel());
 			req.setLoginmethod("手机号");
@@ -150,12 +173,16 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 		customer = customerMapper.login(param);
 		if (customer == null) {
 			logger.info("用户不存在");
-			throw new BizException(BizCode.ParamError, "用户不存在");
+			response.setCode(BizCode.CustomerError);
+			response.setMessage("用户不存在");
+			return response;
 		} else {
 			if (StringUtils.isNotBlank(params.getPassWord())) {
 				if (!MD5.md5(params.getPassWord()).equals(customer.getCustPassword())) {
 					logger.info("密码错误");
-					throw new BizException(BizCode.ParamError, "密码错误");
+					response.setCode(BizCode.CustomerPwdError);
+					response.setMessage("密码错误");
+					return response;
 				}
 			}
 		}
@@ -183,15 +210,19 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 					}
 					SimpleDateFormat df = new SimpleDateFormat("yyyy年MM月dd日 HH时mm分");
 					Date date = customer.getBlockEndTime();
-					throw new BizException(BizCode.ParamError,
-							"因您违反平台规则，您的账号在" + df.format(date) + "前限制登陆，如有疑问，请拨打客服电话：400-156-0606进行咨询。");
+					response.setCode(BizCode.CustomerClosure);
+					response.setMessage(df.format(date));
+					return response;
+
 				}
 			}
 		}
 
 		// 账户被封
 		if (isBlock) {
-			throw new BizException(BizCode.ParamError, "因违反平台规则，您的账号被永久限制登陆，如有疑问，请拨打客服电话：400-156-0606进行咨询");
+			response.setCode(BizCode.CustomerClosureNx);
+			response.setMessage("永久封禁");
+			return response;
 		}
 
 		// 更新登录信息
@@ -215,8 +246,9 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 		userBean.setPhoneNumber(customer.getPhone());
 		userBean.setYearOfBirth(customer.getBirthday());
 		req.setUserBean(userBean);
+		req.setVirUserId(params.getFictitiousId());
 
-		logger.info("===============开始登陆数据埋点==============userBean:"+req.getUserBean());
+		logger.info("===============开始登陆数据埋点==============userBean:" + req.getUserBean());
 		dataDuriedPointBusiness.buryUserIdLoginResultData(req);
 		return ResultUtils.resultSuccess(customer);
 	}
@@ -226,14 +258,20 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 		CommonResponse response = new CommonResponse();
 		int row = customerMapper.customerSetPwd(params.getTel(), MD5.md5(params.getPassWord()));// MD5加密);
 		if (row <= 0) {
-			throw new BizException(BizCode.ParamError, "设置密码失败");
+			response.setCode(BizCode.CustomerError);
+			response.setMessage("设置密码失败");
+			return response;
 		}
 		return ResultUtils.resultSuccess();
 	}
 
 	@Override
 	public CommonResponse setHeardUrl(SetHeardUrlRequest params) {
-		// TODO Auto-generated method stub
+		Customer customer = customerMapper.selectByPrimaryKey(params.getCustomerId());
+		if (customer == null) {
+			return ResultUtils.result(BizCode.CustomerNotExist);
+		}
+		CommonResponse response = new CommonResponse();
 		String rongyunToken = null;
 		String img = params.getHeadPortraitUrl();
 		if (StringUtils.isNotBlank(params.getNickName()) && params.getCustomerId() != null) {
@@ -248,7 +286,10 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 			// 字符格式校验
 			Boolean formatCheckResult = CommonUtil.checkNickName(params.getNickName());
 			if (!formatCheckResult) {
-				throw new RemoteException(UserBizReturnCode.paramError, "用户名不符合规则");
+				response.setCode(BizCode.CustomerError);
+				response.setMessage("用户名不符合规则");
+				return response;
+
 			}
 			// 敏感词校验
 			List<SensitivityWord> sensitivityList = sensitivityWordMapper.querySensitiveName();
@@ -256,7 +297,9 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 				for (SensitivityWord obj : sensitivityList) {
 					if (params.getNickName().contains(obj.getContent())) {
 						logger.info("昵称包含敏感词！");
-						throw new RemoteException(UserBizReturnCode.nickNameSensitive, "您输入的昵称包含敏感字，请重新输入！");
+						response.setCode(BizCode.CustomerError);
+						response.setMessage("您输入的昵称包含敏感字，请重新输入!");
+						return response;
 					}
 				}
 			}
@@ -264,7 +307,9 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 			int ifRepeat = customerMapper.selectCountByNickNameAndId(params.getNickName(),
 					params.getCustomerId().toString());
 			if (ifRepeat > 0) {
-				throw new RemoteException(UserBizReturnCode.paramError, "您输入的昵称已存在，请重新输入！");
+				response.setCode(BizCode.CustomerError);
+				response.setMessage("您输入的昵称已存在，请重新输入!");
+				return response;
 			}
 
 			/*
@@ -287,7 +332,9 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 
 		int row = customerMapper.customerSetHeardUrl(params.getTel(), img, params.getNickName(), params.getSex());
 		if (row <= 0) {
-			throw new BizException(BizCode.ParamError, "设置昵称头像失败");
+			response.setCode(BizCode.CustomerError);
+			response.setMessage("设置失败");
+			return response;
 		}
 		return ResultUtils.resultSuccess();
 	}
@@ -328,8 +375,18 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 	@Override
 	public CommonResponse register(UserRegisterRequest request) {
 		// TODO Auto-generated method stub
-		Customer customer = saveUser(request);
-		return ResultUtils.resultSuccess(customer);
+		CommonResponse response = new CommonResponse();
+		if (StringUtils.isNotBlank(request.getTel())) {
+			Pattern p = Pattern.compile("^((1[0-9]))\\d{9}$");
+			Matcher m = p.matcher(request.getTel());
+			if (!m.matches()) {
+				logger.info("手机号格式不正确");
+				response.setCode(BizCode.CustomerError);
+				response.setMessage("手机号格式不正确");
+				return response;
+			}
+		}
+		return saveUser(request);
 	}
 
 	/**
@@ -338,16 +395,12 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 	 * @param request
 	 * @return
 	 */
-	private Customer saveUser(UserRegisterRequest request) {
+	private CommonResponse saveUser(UserRegisterRequest request) {
+		CommonResponse response = new CommonResponse();
 		Customer param = new Customer();
 		Customer customer = new Customer();
 		// 手机号登录 验证码登录
 		if (StringUtils.isNotBlank(request.getTel())) {
-			Pattern p = Pattern.compile("^((1[0-9]))\\d{9}$");
-			Matcher m = p.matcher(request.getTel());
-			if (!m.matches()) {
-				throw new BizException(BizCode.ParamError, "手机号格式不正确");
-			}
 			param.setPhone(request.getTel());
 		} // 手机号 密码登录
 			// 微博登录
@@ -364,13 +417,17 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 		customer = customerMapper.login(param);
 		if (customer != null) {
 			logger.info("用户已存在");
-			throw new BizException(BizCode.ParamError, "用户已存在");
+			response.setCode(BizCode.CustomerError);
+			response.setMessage("用户已存在");
+			return response;
 		}
 		customer = new Customer();
 		customer.setAppChannelName(request.getAppChannelName());
 		customer.setDeviceId(request.getDeviceNo());
 		customer.setCustomerId(UUIDUtils.getId());
-		customer.setAppId(randomAppId());
+		String appidAndUid = randomAppId();
+		customer.setAppId(appidAndUid);
+		customer.setUid(appidAndUid);
 		customer.setCreateTime(new Date());
 		customer.setGtClientId(request.getGtClientId());
 		customer.setMicroblogOpenId(request.getMicroblogOpenId());
@@ -409,7 +466,9 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 
 		int row = customerMapper.insertSelective(customer);
 		if (row <= 0) {
-			throw new BizException(UserBizReturnCode.exceedError, "用户未注冊");
+			response.setCode(BizCode.CustomerError);
+			response.setMessage("注册失败");
+			return response;
 		}
 
 		DataBuriedPointRegistReq req = new DataBuriedPointRegistReq();
@@ -418,13 +477,13 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 		req.setRegistSource(request.getAppChannelName());
 		req.setUser_id(customer.getCustomerId() + "");
 
-
 		userBean.setNick(customer.getNickName());
 		userBean.setRegistDate(new Date());
 		userBean.setRegistSource(request.getAppChannelName());
 		userBean.setPhoneNumber(request.getTel());
 
 		req.setUserBean(userBean);
+		req.setVirUserId(request.getFictitiousId());
 
 		dataDuriedPointBusiness.burySignUpResultData(req);
 		// 创建账户
@@ -432,7 +491,7 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 		customer = customerMapper.selectByPrimaryKey(customer.getCustomerId());
 		JedisUtil.set(RedisKeyConstants.USER_CUSTOMER_INFO + customer.getCustomerId(),
 				customer == null ? "" : JSON.toJSONString(customer));
-		return customer;
+		return ResultUtils.resultSuccess(customer);
 	}
 
 	/**
@@ -452,20 +511,70 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 	 * @return
 	 */
 	private String randomAppId() {
-		String[] appIdList = { "13140000", "131400000", "1314000000", "52000000", "520000000", "5200000000", "66666666",
-				"666666666", "6666666666", "88888888", "888888888", "8888888888" };
-		Random rand = new Random();
-		String num = rand.nextInt(999000000) + 1000000 + (rand.nextInt(10) + "");
+		
+		String num = getRandomNum(8);
 		// 数据库不存在相同appId 且排除以上靓号
-		while (customerMapper.selectByAppId(num) != null || Arrays.asList(appIdList).contains(num)) {
-			num = rand.nextInt(999000000) + 1000000 + (rand.nextInt(10) + "");
+		while (!allowToUse(num)) {
+			num = getRandomNum(8);
 		}
 		return num;
+	}
+	
+	/**
+	 * 判断号码能否使用
+	 * @param num 随机号码
+	 * @return 是否可以使用
+	 */
+	private boolean allowToUse(String num){
+		if(customerMapper.selectByAppId(num) != null){
+			return false;
+		}
+		for (String str : middleBlackList) {
+			if(num.contains(str)){
+				return false;
+			}
+		}
+		for(int i=1;i<10;i++){
+			if(appearNumber(num,i+"")>4){
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	//判断字符串出现次数
+	private int appearNumber(String srcText, String findText) {
+	    int count = 0;
+	    Pattern p = Pattern.compile(findText);
+	    Matcher m = p.matcher(srcText);
+	    while (m.find()) {
+	        count++;
+	    }
+	    return count;
+	}
+
+	/**
+	 * 数字随机数
+	 * 
+	 * @param length
+	 * @return
+	 */
+	public static String getRandomNum(int length) {
+		String base = "0123456789";
+		Random random = new Random();
+		StringBuffer sb = new StringBuffer();
+		sb.append(random.nextInt(7) + 3);
+		for (int i = 0; i < length - 1; i++) {
+			int number = random.nextInt(base.length());
+			sb.append(base.charAt(number));
+		}
+		return sb.toString();
 	}
 
 	@Override
 	public CommonResponse getSmsCode(GetSmsCodeRequest params) {
 		// TODO Auto-generated method stub
+		CommonResponse response = new CommonResponse();
 		Customer customer = null;
 		Customer param = new Customer();
 		if (StringUtils.isNotBlank(params.getTel())) {
@@ -473,17 +582,23 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 			Pattern p = Pattern.compile("^((1[0-9]))\\d{9}$");
 			Matcher m = p.matcher(params.getTel());
 			if (!m.matches()) {
-				throw new BizException(BizCode.ParamError, "手机号格式不正确");
+				response.setCode(BizCode.CustomerError);
+				response.setMessage("手机号格式不正确");
+				return response;
 			}
 		}
 		customer = customerMapper.login(param);
 		if (customer == null) {
 			if (!"2".equals(params.getCodeType())) {
-				throw new BizException(UserBizReturnCode.exceedError, "用户未注册");
+				response.setCode(BizCode.CustomerError);
+				response.setMessage("用户未注册");
+				return response;
 			}
 		} else {
 			if ("2".equals(params.getCodeType())) {
-				throw new BizException(UserBizReturnCode.exceedError, "用户已注册");
+				response.setCode(BizCode.CustomerError);
+				response.setMessage("用户已注册");
+				return response;
 			}
 		}
 		// 四位随机数
@@ -499,7 +614,9 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 		if (JedisUtil.get(RedisKeyConstants.USER_VERIFYCODE_M + phoneNum) == null) {
 			JedisUtil.set(RedisKeyConstants.USER_VERIFYCODE_M + phoneNum, "1", Integer.parseInt(resendexpire));
 		} else {
-			throw new BizException(UserBizReturnCode.exceedError, "请勿重复发送验证码");
+			response.setCode(BizCode.CustomerSmsError);
+			response.setMessage("请勿重复发送验证码");
+			return response;
 		}
 
 		// 查一小时
@@ -508,7 +625,9 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 		} else {
 			String count = JedisUtil.get(RedisKeyConstants.USER_VERIFYCODE_H + phoneNum);
 			if (Integer.parseInt(count) >= Integer.parseInt(onehourfreq)) {
-				throw new BizException(UserBizReturnCode.exceedError, "验证码每小时只能获取五次");
+				response.setCode(BizCode.CustomerSmsError);
+				response.setMessage("验证码每小时只能获取五次");
+				return response;
 			}
 			String total = String.valueOf(Integer.parseInt(count) + 1);
 			JedisUtil.set(RedisKeyConstants.USER_VERIFYCODE_H + phoneNum, total,
@@ -521,7 +640,9 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 		} else {
 			String count = JedisUtil.get(RedisKeyConstants.USER_VERIFYCODE_D + phoneNum);
 			if (Integer.parseInt(count) >= Integer.parseInt(onedayfreq)) {
-				throw new BizException(UserBizReturnCode.exceedError, "验证码日发送次数已达到上限");
+				response.setCode(BizCode.CustomerSmsError);
+				response.setMessage("验证码日发送次数已达到上限");
+				return response;
 			}
 			String total = String.valueOf(Integer.parseInt(count) + 1);
 			JedisUtil.set(RedisKeyConstants.USER_VERIFYCODE_D + phoneNum, total,
@@ -542,9 +663,10 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 			req.setSuccess(false);
 
 		}
+		logger.info("手机号:" + phoneNum + "发送状态:" + smsStr);
 		// 埋点
 		dataDuriedPointBusiness.buryGetCodeData(req);
-		logger.info("手机号:" + phoneNum + "发送状态:" + smsStr);
+
 		return ResultUtils.resultSuccess(smsStr);
 
 		/*
@@ -580,7 +702,7 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 	public CommonResponse queryUserIdCardCertificationInfo(UserIdCardInfoRequest request) {
 		Customer customer = customerMapper.queryUserIdCardCertificationInfo(request.getCustomerId());
 		if (customer == null) {
-			return ResultUtils.resultDataNotExist("用户数据不存在");
+			return ResultUtils.result(BizCode.CustomerNotExist);
 		}
 
 		if (customer.getIdentityStatus() == null) {
@@ -610,7 +732,7 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 	public CommonResponse saveUserCertificationInfo(SaveCertificationRequest request) {
 		Customer customer = customerMapper.selectByPrimaryKey(request.getCustomerId());
 		if (customer == null) {
-			return ResultUtils.resultDataNotExist("用户数据不存在");
+			return ResultUtils.result(BizCode.CustomerNotExist);
 		}
 
 		Customer certifyCustomer = new Customer();
@@ -673,7 +795,7 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 		Long customerId = request.getCustomerId();
 		Customer customer = customerMapper.selectByPrimaryKey(customerId);
 		if (customer == null) {
-			return ResultUtils.resultDataNotExist("用户数据不存在");
+			return ResultUtils.result(BizCode.CustomerNotExist);
 		}
 		Customer record = new Customer();
 		record.setCustomerId(customerId);
@@ -686,10 +808,12 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 
 	@Override
 	public CommonResponse bindVXorQQ(BindVXorQQRequest request) {
-
 		Customer param = new Customer();
 		Customer customer = new Customer();
-
+		Customer customers = customerMapper.selectByPrimaryKey(request.getCustomerId());
+		if (customers == null) {
+			return ResultUtils.result(BizCode.CustomerNotExist);
+		}
 		// QQ判断
 		if (StringUtils.isNotBlank(request.getQqOpenId())) {
 			param.setQqOpenId(request.getQqOpenId());
@@ -714,7 +838,7 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 		Long customerId = request.getCustomerId();
 		Customer customer = customerMapper.selectByPrimaryKey(customerId);
 		if (customer == null) {
-			return ResultUtils.resultDataNotExist("用户数据不存在");
+			return ResultUtils.result(BizCode.CustomerNotExist);
 		}
 		Customer cus = new Customer();
 		cus.setCustomerId(customerId);
@@ -728,22 +852,20 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 		String rongyunToken = RongYunUtil.getToken(String.valueOf(request.getCustomerId()), request.getNickName(),
 				request.getPhoto());
 		Customer customer = new Customer();
+		Customer cus = new Customer();
 		customer.setCustomerId(request.getCustomerId());
-		customer.setHeadPortraitUrl(request.getPhoto());
-		customer.setNickName(request.getNickName());
 		customer.setTokenCode(rongyunToken);
-		customer.setAppId(request.getAppId());
-		int row = customerMapper.insertSelective(customer);
-		return ResultUtils.resultSuccess();
+		int row = customerMapper.updateByPrimaryKeySelective(customer);
+		return ResultUtils.resultSuccess(rongyunToken);
 
 	}
-	
+
 	@Override
 	public CommonResponse searchPersonByPhone(SearchPersonByPhoneRequest request) {
 		Long phone = request.getPhone();
 		List<SearchPersonByPhoneVO> list = customerMapper.queryPersonByPhone(phone);
 		SearchPersonByPhoneVO customer = new SearchPersonByPhoneVO();
-		if(list.size() > 0){
+		if (list.size() > 0) {
 			customer = list.get(0);
 		}
 		return ResultUtils.resultSuccess(customer);

@@ -27,6 +27,10 @@ public class DaVListController {
     @RequestMapping(value = "/getDaVListByType", method = RequestMethod.POST)
     @ResponseBody
     public WebResponseModel getDaVListBySkillId(DaVListBySkillItemIdRequest params) {
+    	//如果技能项编号为100则设为空
+    	if(params.getSkillItemId() != null && params.getSkillItemId() == 100l){
+    		params.setSkillItemId(null);
+    	}
     	WebResponseModel response = userCenterService.execute(params);
     	return response;
     }

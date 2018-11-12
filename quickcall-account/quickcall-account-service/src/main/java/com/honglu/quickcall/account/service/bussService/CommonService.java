@@ -2,6 +2,7 @@ package com.honglu.quickcall.account.service.bussService;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import com.honglu.quickcall.account.facade.entity.Order;
 import com.honglu.quickcall.account.facade.vo.OrderTempResponseVO;
@@ -45,7 +46,7 @@ public interface CommonService {
 	 * @param orderId
 	 * @param orderStatus
 	 */
-	public void cancelUpdateOrder(Long orderId, Integer orderStatus,Date cancelTime,String  selectReason,String   remarkReason);
+	public void cancelUpdateOrder(Long orderId, Integer orderStatus,Date cancelTime,String  selectReason,String   remarkReason,Integer  couponFlag);
 	
 	/**
 	 * 根据订单ID更新订单状态
@@ -87,13 +88,16 @@ public interface CommonService {
 	
 	
 	/**
-	 * 获取新的数据
-	 * @param oldOrderStatus  订单状态
-	 * @param orderTime  下单时间
-	 * @param receiveOrderTime  接单时间
+	 * 获取新的数据，获取实时数据
+	 * @param oldOrderStatus
+	 * @param orderTime
+	 * @param receiveOrderTime
+	 * @param startServiceTime
+	 * @param expectEndTime
+	 * @param appointTime
 	 * @return
 	 */
-	public OrderTempResponseVO  getCountDownSeconds(Integer   oldOrderStatus ,Date  orderTime,Date  receiveOrderTime);
+	public OrderTempResponseVO  getCountDownSeconds(Integer   oldOrderStatus ,Date  orderTime,Date  receiveOrderTime,Date startServiceTime,Date expectEndTime,Date  appointTime);
 	
 	
 	
@@ -130,6 +134,12 @@ public interface CommonService {
 
 	public void finishUpdateOrder(Long orderId, Integer orderStatus, Date cancelTime,Integer  sendMsgIndex);
 	
-	
+	/**
+	 * 根据用户标识+订单状态获取消息提醒
+	 * @param customerFlag
+	 * @param orderStatus
+	 * @return
+	 */
+	public String   getMsgContent(String  customerFlag ,Integer  orderStatus);
    
 }

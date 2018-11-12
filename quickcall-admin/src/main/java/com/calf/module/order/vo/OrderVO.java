@@ -46,6 +46,16 @@ public class OrderVO {
 	private Long   servicePhone;
 	/**下单方手机号码*/
 	private Long   customerPhone;
+	
+	private String compulsionReason;
+
+	public String getCompulsionReason() {
+		return compulsionReason;
+	}
+
+	public void setCompulsionReason(String compulsionReason) {
+		this.compulsionReason = compulsionReason;
+	}
 
 	public Long getServicePhone() {
 		return servicePhone;

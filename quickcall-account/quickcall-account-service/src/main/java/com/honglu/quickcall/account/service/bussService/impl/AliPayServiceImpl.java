@@ -62,15 +62,15 @@ public class AliPayServiceImpl implements AliPayService {
 	@Override
 	public CommonResponse recharge(RechargeRequest packet) {
 		CommonResponse response = new CommonResponse();
+		String customerJson = JedisUtil.get(RedisKeyConstants.USER_CUSTOMER_INFO + packet.getCustomerId());
+		if (StringUtils.isEmpty(customerJson)) {
+			return ResultUtils.result(BizCode.CustomerNotExist);
+		}
 		String params = "";
 		String orderNo = UUIDUtils.getUUID();// 订单
 		String orderDesc = "";
 		if (packet.getPayType() == 1) {
 			orderDesc = "支付宝充值";
-			response.setCode(BizCode.ParamError);
-			response.setData("11");
-			response.setMessage("维护中,请使用微信支付.带来不便,敬请谅解.");
-			return response;
 		} else {
 			orderDesc = "微信充值";
 		}
@@ -115,7 +115,10 @@ public class AliPayServiceImpl implements AliPayService {
 
 	@Override
 	public CommonResponse whthdraw(WhthdrawRequest params) {
-
+		String customerJson = JedisUtil.get(RedisKeyConstants.USER_CUSTOMER_INFO + params.getCustomerId());
+		if (StringUtils.isEmpty(customerJson)) {
+			return ResultUtils.result(BizCode.CustomerNotExist);
+		}
 		Account account = accountMapper.queryAccount(params.getCustomerId());
 		String errorMsg = null;
 		if (account.getRemainderAmounts().compareTo(params.getAmount()) == -1) {
@@ -170,6 +173,10 @@ public class AliPayServiceImpl implements AliPayService {
 
 	@Override
 	public CommonResponse bindAliaccount(BindAliaccountRequest params) {
+		String customerJson = JedisUtil.get(RedisKeyConstants.USER_CUSTOMER_INFO + params.getCustomerId());
+		if (StringUtils.isEmpty(customerJson)) {
+			return ResultUtils.result(BizCode.CustomerNotExist);
+		}
 		Aliacount acliacount = aliacountMapper.selectByPrimaryKey(params.getCustomerId());
 		if (params.getEtype() != null && params.getEtype() == 1) {
 			return ResultUtils.resultSuccess(acliacount);

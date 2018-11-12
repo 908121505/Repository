@@ -1,5 +1,6 @@
 package com.honglu.quickcall.user.service.service.impl;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import com.alibaba.fastjson.JSON;
@@ -9,9 +10,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.honglu.quickcall.common.api.code.BizCode;
 import com.honglu.quickcall.common.api.exception.BizException;
 import com.honglu.quickcall.common.api.exception.RemoteException;
 import com.honglu.quickcall.common.api.exchange.CommonResponse;
+import com.honglu.quickcall.common.api.exchange.ResultUtils;
 import com.honglu.quickcall.common.api.util.CommonUtil;
 import com.honglu.quickcall.common.api.util.DateUtils;
 import com.honglu.quickcall.common.api.util.JedisUtil;
@@ -89,7 +92,7 @@ public class EditProfileServiceImpl implements EditProfileService {
 
 		Customer customer = customerMapper.selectByPrimaryKey(params.getCustomerId());
 		if (customer == null) {
-			throw new BizException(UserBizReturnCode.paramError, "参数错误，customerId不存在");
+			return ResultUtils.result(BizCode.CustomerNotExist);
 		}
 		String newNickname = params.getNickName();
 		customer.setNickName(newNickname);
@@ -151,7 +154,7 @@ public class EditProfileServiceImpl implements EditProfileService {
 
 		Customer customer = customerMapper.selectByPrimaryKey(params.getCustomerId());
 		if (customer == null) {
-			throw new BizException(UserBizReturnCode.paramError, "参数错误，customerId不存在");
+			return ResultUtils.result(BizCode.CustomerNotExist);
 		}
 
 		String newSign = params.getSignName();
@@ -197,7 +200,7 @@ public class EditProfileServiceImpl implements EditProfileService {
 
 		Customer customer = customerMapper.selectByPrimaryKey(params.getCustomerId());
 		if (customer == null) {
-			throw new BizException(UserBizReturnCode.paramError, "参数错误，customerId不存在");
+			return ResultUtils.result(BizCode.CustomerNotExist);
 		}
 		String newStarSign = params.getStarSign();
 		customer.setStarSign(newStarSign);
@@ -224,12 +227,12 @@ public class EditProfileServiceImpl implements EditProfileService {
 			throw new BizException(UserBizReturnCode.paramError, "customerId不能为空");
 		}
 		if (StringUtil.isBlank(params.getInterestId())) {
-			throw new BizException(UserBizReturnCode.paramError, "interestId不能为空");
+			return ResultUtils.resultSuccess();
 		}
 
 		Customer customer = customerMapper.selectByPrimaryKey(params.getCustomerId());
 		if (customer == null) {
-			throw new BizException(UserBizReturnCode.paramError, "参数错误，customerId不存在");
+			return ResultUtils.result(BizCode.CustomerNotExist);
 		}
 
 		CustomerInterest customerInterest = new CustomerInterest();
@@ -262,7 +265,7 @@ public class EditProfileServiceImpl implements EditProfileService {
 		}
 		Customer customer = customerMapper.selectByPrimaryKey(params.getCustomerId());
 		if (customer == null) {
-			throw new BizException(UserBizReturnCode.paramError, "参数错误，customerId不存在");
+			return ResultUtils.result(BizCode.CustomerNotExist);
 		}
 
 		// 先判断表中是否存在这个用户头像记录 存在则更新，不存在则插入
@@ -331,7 +334,12 @@ public class EditProfileServiceImpl implements EditProfileService {
 		}
 		Customer customer = customerMapper.selectByPrimaryKey(params.getCustomerId());
 		if (customer == null) {
-			throw new BizException(UserBizReturnCode.paramError, "参数错误，customerId不存在");
+			return ResultUtils.result(BizCode.CustomerNotExist);
+		}
+
+		int appearanceCount = customerAppearanceMapper.queryAppearanceCountByCustomerId(params.getCustomerId());
+		if(appearanceCount >= 2){
+			throw new BizException(UserBizReturnCode.paramError, "形象照最多只能传2张");
 		}
 
 		CustomerAppearance customerAppearance = new CustomerAppearance();
@@ -386,7 +394,7 @@ public class EditProfileServiceImpl implements EditProfileService {
 		}
 		Customer customer = customerMapper.selectByPrimaryKey(params.getCustomerId());
 		if (customer == null) {
-			throw new BizException(UserBizReturnCode.paramError, "参数错误，customerId不存在");
+			return ResultUtils.result(BizCode.CustomerNotExist);
 		}
 
 		// 先判断表中是否存在这个用户声鉴卡记录，存在则更新，不存在则插入
@@ -473,7 +481,10 @@ public class EditProfileServiceImpl implements EditProfileService {
 
 		Customer customer = customerMapper.selectByPrimaryKey(params.getCustomerId());
 		if (customer == null) {
-			throw new BizException(UserBizReturnCode.paramError, "参数错误，customerId不存在");
+			return ResultUtils.result(BizCode.CustomerNotExist);
+		}
+		if (customer.getIdentityStatus() == 2) {
+			throw new BizException(UserBizReturnCode.certification, "您已完成实名认证，不能更改该信息");
 		}
 
 		customer.setSex(newGender);
@@ -505,7 +516,7 @@ public class EditProfileServiceImpl implements EditProfileService {
 
 		Customer customer = customerMapper.selectByPrimaryKey(params.getCustomerId());
 		if (customer == null) {
-			throw new BizException(UserBizReturnCode.paramError, "参数错误，customerId不存在");
+			return ResultUtils.result(BizCode.CustomerNotExist);
 		}
 
 		customer.setBirthday(params.getBirthday());
@@ -535,28 +546,36 @@ public class EditProfileServiceImpl implements EditProfileService {
 			UserEditInfoVO userEditInfoVO = customerMapper.queryUserEditInfo(params.getCustomerId());
 
 			if (userEditInfoVO == null) {
-				commonResponse.setCode(UserBizReturnCode.paramError);
-				commonResponse.setMessage("参数错误，用户数据不存在");
-				return commonResponse;
+				return ResultUtils.result(BizCode.CustomerNotExist);
 			}
 
 			// 此处根据年份来计算年龄
-			userEditInfoVO.setAge(DateUtils.getAgeByBirthYear(userEditInfoVO.getBirthday()));
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
+			String birthday = userEditInfoVO.getBirthday();
+			if("".equals(birthday) || null == birthday){
+				userEditInfoVO.setAge(0);
+			}else {
+				userEditInfoVO.setAge(DateUtils.getAgeByBirthYear(sdf.parse(birthday)));
+			}
+
 
 			List<InterestVO> interestList = interestMapper.selectInterestListByCustomerId(params.getCustomerId());
 			userEditInfoVO.setInterestList(interestList);
 
-			List<AppearanceVO> headPortrait = customerAppearanceMapper
-					.selectAppearanceVOByCustomerIdAndType(params.getCustomerId(), 1);
+			//现在头像不用审核，是直接保存到用户表中的，就不从这里取了
+			/*List<AppearanceVO> headPortrait = customerAppearanceMapper
+					.selectAppearanceVOByCustomerIdAndType(params.getCustomerId(), 1);*/
+			//查询形象照
 			List<AppearanceVO> appearanceList = customerAppearanceMapper
-					.selectAppearanceVOByCustomerIdAndType(params.getCustomerId(), 0);
+					.selectAppearanceVOByCustomerId(params.getCustomerId());
+			//查询声鉴卡
 			List<AppearanceVO> viceCard = customerAppearanceMapper
 					.selectAppearanceVOByCustomerIdAndType(params.getCustomerId(), 2);
-			if (headPortrait.size() == 0) {
+			/*if (headPortrait.size() == 0) {
 				userEditInfoVO.setHeadPortrait(new AppearanceVO(null, null, "", "", null, null));
 			} else {
 				userEditInfoVO.setHeadPortrait(headPortrait.get(0));
-			}
+			}*/
 
 			userEditInfoVO.setAppearanceList(appearanceList);
 

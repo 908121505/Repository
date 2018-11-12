@@ -222,7 +222,6 @@ public interface UserFunctionType {
 	 */
 	String saveDeviceWhitelist = "0011202";
 
-
 	/**
 	 * 查询我的站内信消息
 	 */
@@ -234,6 +233,20 @@ public interface UserFunctionType {
 	String CANCEL_ATTENTION = "003232";
 
 	/**
+	 * 最近来访列表
+	 */
+	String Recent_Visit_List = "0011301";
+
+	/**
+	 * 设置来访已读
+	 */
+	String Set_Visit_Read = "0011302";
+	/**
+	 * 客户申请成为大V
+	 */
+	String CUSTOMER_APPLY_BIGV = "0011303";
+
+	/**
 	 * 初始化大V评分排名数据
 	 */
 	String INIT_BIGV_SCORE_RANK_DATA = "003233";
@@ -242,10 +255,14 @@ public interface UserFunctionType {
 	 */
 	String searchPersonByPhone = "0011138";
 
-
 	/**
 	 * 未读消息数量查询
 	 */
 	String WEIXIN = "0022210";
+	/**
+	 * 微信
+	 *//*
+		 * String WEIXIN = "0022001";
+		 */
 
 }
