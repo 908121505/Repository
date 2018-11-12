@@ -322,12 +322,14 @@ public class OrderServiceImpl implements IOrderService {
 			record.setRemark(request.getRemark());
 			orderMapper.insert(record);
 			
-			CustomerCoupon customerCoupon = new CustomerCoupon();
-			customerCoupon.setId(customerCouponId);
-			try {
-				couponDubboBusiness.updateCustomerCouponById(customerCoupon );
-			} catch (Exception e1) {
-				LOGGER.warn("======>>>>>saveOrder()消费券发生异常：",e1);
+			if(customerCouponId != null){
+				CustomerCoupon customerCoupon = new CustomerCoupon();
+				customerCoupon.setId(customerCouponId);
+				try {
+					couponDubboBusiness.updateCustomerCouponById(customerCoupon );
+				} catch (Exception e1) {
+					LOGGER.warn("======>>>>>saveOrder()消费券发生异常：",e1);
+				}
 			}
 			resultMap.put("retCode", OrderSkillConstants.RET_CODE_SUCCESS);
 			resultMap.put("orderId", orderId + "");
