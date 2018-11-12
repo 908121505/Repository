@@ -241,9 +241,9 @@ public class RongYunUtil {
 	 * @param orderDesc
 	 * @param imageUrl
 	 */
-	public static void sendOrderIMMessage(Long  fromUserId ,Long toCustomerId, String remarkName,Long  orderId,String  orderDesc,String imageUrl) {
+	public static void sendOrderIMMessage(String  userName,Long  fromUserId ,Long toCustomerId, String remarkName,Long  orderId,String  orderDesc,String imageUrl) {
 		Integer  type =  21 ;
-		sendMessageIm("订单IM消息", fromUserId, toCustomerId,  1, imageUrl, type, remarkName,orderId,orderDesc);
+		sendMessageIm(userName, fromUserId, toCustomerId,  1, imageUrl, type, remarkName,orderId,orderDesc);
 	}
 
 	public static void sendBespokeMessage(Long toCustomerId, String content) {

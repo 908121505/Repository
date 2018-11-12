@@ -497,7 +497,7 @@ public class CommonServiceImpl implements CommonService {
 		if(StringUtils.isNotBlank(custStr)){
 			try {
 				Customer customer = JSON.parseObject(custStr,  Customer.class);
-				RongYunUtil.sendOrderIMMessage(customerId, serviceId, "", orderId, orderDesc, customer.getHeadPortraitUrl());
+				RongYunUtil.sendOrderIMMessage(customer.getNickName(),customerId, serviceId, "", orderId, orderDesc, customer.getHeadPortraitUrl());
 			} catch (Exception e) {
 				LOGGER.error("从Redis中获取客户信息发生异常，异常信息：",e);
 			}
