@@ -636,7 +636,7 @@ public class OrderServiceImpl implements IOrderService {
 			order = orderMapper.queryOrderByCustomerIdAndServiceId(serviceId, customerId, statusList);
 		}
 
-		Integer  newOrderStatus =  null;
+//		Integer  newOrderStatus =  null;
 		/**** 1.必须首先判断双方存在订单关系 */
 		if (order != null) {
 			Integer  orderStatus =  order.getOrderStatus();
@@ -644,7 +644,7 @@ public class OrderServiceImpl implements IOrderService {
 			getFinishStatusList(finishOrderStatusList);
 			if(finishOrderStatusList.contains(orderStatus)){
 				Long  orderCustomerId = order.getCustomerId();
-				if(orderCustomerId == customerId){
+				if(orderCustomerId.equals(customerId)){
 					//返回订单信息
 					orderDetailForIMVO.setRetCode(OrderSkillConstants.IM_RETCODE_ORDER_EXIST);// 不可下单
 					OrderIMVO orderIMVO = new OrderIMVO();
@@ -661,7 +661,15 @@ public class OrderServiceImpl implements IOrderService {
 					orderDetailForIMVO.setServiceId(order.getServiceId());
 					orderDetailForIMVO.setCustomerId(order.getCustomerId());
 					orderDetailForIMVO.setOrderIMVO(orderIMVO);
-					newOrderStatus =  responseVO.getOrderStatus();
+//					newOrderStatus =  responseVO.getOrderStatus();
+					//修改状态
+					List<Long> orderIdList = new ArrayList<Long>();
+					orderIdList.add(order.getOrderId());
+					//更改订单状态为31
+					try {
+						orderMapper.updateOrderReceiveOrder(orderIdList , OrderSkillConstants.ORDER_STATUS_GOING_USER_NOT_PING_JIA);
+					} catch (Exception e) {
+					}
 				}else{
 					//不存在订单关系
 					orderDetailForIMVO.setRetCode(OrderSkillConstants.IM_RETCODE_CAN_ORDER);// 不存在的订单关系
@@ -684,7 +692,7 @@ public class OrderServiceImpl implements IOrderService {
 				orderDetailForIMVO.setServiceId(order.getServiceId());
 				orderDetailForIMVO.setCustomerId(order.getCustomerId());
 				orderDetailForIMVO.setOrderIMVO(orderIMVO);
-				newOrderStatus =  responseVO.getOrderStatus();
+//				newOrderStatus =  responseVO.getOrderStatus();
 			}
 			
 			
@@ -712,18 +720,18 @@ public class OrderServiceImpl implements IOrderService {
 			
 			commonResponse.setData(orderDetailForIMVO);
 //			Integer  newOrderStatus =  responseVO.getOrderStatus();
-			if(OrderSkillConstants.ORDER_STATUS_FINISHED_USER_ACCEPCT == newOrderStatus || OrderSkillConstants.ORDER_STATUS_FINISH_DV_FINISH == newOrderStatus 
-					|| OrderSkillConstants.ORDER_STATUS_FINISH_DV_RELEASE == newOrderStatus
-					|| OrderSkillConstants.ORDER_STATUS_GOING_USRE_APPAY_FINISH == newOrderStatus
-					|| OrderSkillConstants.ORDER_STATUS_FINISH_DAV_FINISH_AFTER_SERVICE_TIME == newOrderStatus
-					|| OrderSkillConstants.ORDER_STATUS_FINISH_BOTH_NO_OPERATE == newOrderStatus
-					
-					){
-				List<Long> orderIdList = new ArrayList<Long>();
-				orderIdList.add(order.getOrderId());
-				//更改订单状态为31
-				orderMapper.updateOrderReceiveOrder(orderIdList , OrderSkillConstants.ORDER_STATUS_GOING_USER_NOT_PING_JIA);
-			}
+//			if(OrderSkillConstants.ORDER_STATUS_FINISHED_USER_ACCEPCT == newOrderStatus || OrderSkillConstants.ORDER_STATUS_FINISH_DV_FINISH == newOrderStatus 
+//					|| OrderSkillConstants.ORDER_STATUS_FINISH_DV_RELEASE == newOrderStatus
+//					|| OrderSkillConstants.ORDER_STATUS_GOING_USRE_APPAY_FINISH == newOrderStatus
+//					|| OrderSkillConstants.ORDER_STATUS_FINISH_DAV_FINISH_AFTER_SERVICE_TIME == newOrderStatus
+//					|| OrderSkillConstants.ORDER_STATUS_FINISH_BOTH_NO_OPERATE == newOrderStatus
+//					
+//					){
+//				List<Long> orderIdList = new ArrayList<Long>();
+//				orderIdList.add(order.getOrderId());
+//				//更改订单状态为31
+//				orderMapper.updateOrderReceiveOrder(orderIdList , OrderSkillConstants.ORDER_STATUS_GOING_USER_NOT_PING_JIA);
+//			}
 			
 			
 			// 需要计算倒计时时间
