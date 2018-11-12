@@ -461,12 +461,9 @@
      <if test="serviceType != null" >
        AND  skill.skill_item_id = #{serviceType}
      </if>
-<<<<<<< HEAD
-=======
      <!-- <if test="orderStatus != null" >
        AND order_status in (#{orderStatus})
      </if> -->
->>>>>>> refs/remotes/origin/master_tag(2018/11/08)
      <if test="orderStatus != null and orderStatus.size()>0" >
        AND
        <foreach collection="orderStatus" item="item" open="(" separator="or" close=")">
@@ -522,12 +519,9 @@
     <if test="serviceType != null" >
       AND  skill.skill_item_id = #{serviceType}
     </if>
-<<<<<<< HEAD
-=======
     <!-- <if test="orderStatus != null" >
       AND order_status in (#{orderStatus})
     </if> -->
->>>>>>> refs/remotes/origin/master_tag(2018/11/08)
     <if test="orderStatus != null and orderStatus.size()>0" >
        AND
        <foreach collection="orderStatus" item="item" open="(" separator="or" close=")">
