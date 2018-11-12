@@ -656,6 +656,7 @@ public class OrderServiceImpl implements IOrderService {
 					|| OrderSkillConstants.ORDER_STATUS_FINISH_DV_RELEASE == newOrderStatus
 					|| OrderSkillConstants.ORDER_STATUS_GOING_USRE_APPAY_FINISH == newOrderStatus
 					|| OrderSkillConstants.ORDER_STATUS_FINISH_DAV_FINISH_AFTER_SERVICE_TIME == newOrderStatus
+					|| OrderSkillConstants.ORDER_STATUS_FINISH_BOTH_NO_OPERATE == newOrderStatus
 					
 					){
 				List<Long> orderIdList = new ArrayList<Long>();
