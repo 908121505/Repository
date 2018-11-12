@@ -694,7 +694,13 @@ public class OrderServiceImpl implements IOrderService {
 			
 			commonResponse.setData(orderDetailForIMVO);
 			Integer  newOrderStatus =  responseVO.getOrderStatus();
-			if(OrderSkillConstants.ORDER_STATUS_GOING_USER_ACCEPCT == newOrderStatus || OrderSkillConstants.ORDER_STATUS_GOING_DAV_APPAY_FINISH == newOrderStatus ){
+			if(OrderSkillConstants.ORDER_STATUS_FINISHED_USER_ACCEPCT == newOrderStatus || OrderSkillConstants.ORDER_STATUS_FINISH_DV_FINISH == newOrderStatus 
+					|| OrderSkillConstants.ORDER_STATUS_FINISH_DV_RELEASE == newOrderStatus
+					|| OrderSkillConstants.ORDER_STATUS_GOING_USRE_APPAY_FINISH == newOrderStatus
+					|| OrderSkillConstants.ORDER_STATUS_FINISH_DAV_FINISH_AFTER_SERVICE_TIME == newOrderStatus
+					|| OrderSkillConstants.ORDER_STATUS_FINISH_BOTH_NO_OPERATE == newOrderStatus
+					
+					){
 				List<Long> orderIdList = new ArrayList<Long>();
 				orderIdList.add(order.getOrderId());
 				//更改订单状态为31

@@ -435,7 +435,7 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 	
 	
 
-	public   Map<String, Date>   getAppointEndTime(String  startTimeStr,String  endTimeStr){
+	public   /*static*/ Map<String, Date>   getAppointEndTime(String  startTimeStr,String  endTimeStr){
 
 		//
 		Map<String, Date>  resultMap = new HashMap<String,Date>();
@@ -447,9 +447,70 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 		}
 		
 		
-		
-		Integer  startTimeIndex =  Integer.valueOf(startTimeStr);
-		
+//		getConfirmDate(startTimeStr);
+//		Integer  startTimeIndex =  Integer.valueOf(startTimeStr);
+//		
+//		//当前时间
+//		Calendar  cal =  Calendar.getInstance();
+//		Integer  currHour= cal.get(Calendar.HOUR_OF_DAY);
+//		Integer  currMinute = cal.get(Calendar.MINUTE);
+//		
+//		String  currTimeStr =  (currHour < 10 ? "0"+currHour :currHour+"")+ (currMinute < 10  ? "0"+currMinute :currMinute +"" );
+//		Integer  currTimeIndex =  Integer.valueOf(currTimeStr);
+//		
+//		Integer   selectHourIndex = Integer.valueOf(startTimeStr.substring(0, 2));
+//		Integer   selectMinuteIndex = Integer.valueOf(startTimeStr.substring(2, 4));
+//		
+//		
+//		Date  appointEndTime = null ;//预约结束时间
+//		Date  appointStartTime = null ;//预约开始时间
+//		
+//		//选中的结束时间在当前时间之后
+//		if(startTimeIndex >=  currTimeIndex ){
+//			cal.set(Calendar.HOUR_OF_DAY, selectHourIndex);
+//			cal.set(Calendar.MINUTE, selectMinuteIndex);
+//			cal.set(Calendar.SECOND, 0);
+//			cal.set(Calendar.MILLISECOND, 0);
+//			appointStartTime = cal.getTime();
+//		}else{
+//			//选中的结束时间在当前时间只前
+//			//结束时间向后推1天
+//			cal.add(Calendar.DAY_OF_YEAR, 1);
+//			cal.set(Calendar.HOUR_OF_DAY, selectHourIndex);
+//			cal.set(Calendar.MINUTE, selectMinuteIndex);
+//			cal.set(Calendar.SECOND, 0);
+//			cal.set(Calendar.MILLISECOND, 0);
+//			//计算结束时间
+//			appointStartTime =cal.getTime(); 
+//		}
+//		
+//		if(StringUtils.isBlank(endTimeStr)){
+//			appointEndTime = DateUtils.getDayEndTime(appointStartTime);
+//		}else{
+//			//结束字符串不为空，则需要根究结束字符串进行计算
+//			Integer   endTimeHour = Integer.valueOf(endTimeStr.substring(0, 2));//结束时间小时
+//			Integer   endTimeMinute = Integer.valueOf(endTimeStr.substring(2, 4));//结束时间分钟
+//			
+//			cal =  Calendar.getInstance();
+//			cal.setTime(appointStartTime);
+//			cal.set(Calendar.HOUR_OF_DAY, endTimeHour);
+//			cal.set(Calendar.MINUTE, endTimeMinute);
+//			cal.set(Calendar.SECOND, 59);
+//			cal.set(Calendar.MILLISECOND, 0);
+//			appointEndTime =  cal.getTime();
+//		}
+		resultMap.put(START_TIME_KEY, getConfirmDate(startTimeStr));
+		resultMap.put(END_TIME_KEY, getConfirmDate(endTimeStr));
+		return resultMap;
+	}
+	
+	
+//	public static void main(String[] args) {
+//		getAppointEndTime("1100", "1500");
+//	}
+	
+	public /*static */Date  getConfirmDate(String  timeStr ){
+		Integer  timeStrIndex =  Integer.valueOf(timeStr);
 		//当前时间
 		Calendar  cal =  Calendar.getInstance();
 		Integer  currHour= cal.get(Calendar.HOUR_OF_DAY);
@@ -458,20 +519,16 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 		String  currTimeStr =  (currHour < 10 ? "0"+currHour :currHour+"")+ (currMinute < 10  ? "0"+currMinute :currMinute +"" );
 		Integer  currTimeIndex =  Integer.valueOf(currTimeStr);
 		
-		Integer   selectHourIndex = Integer.valueOf(startTimeStr.substring(0, 2));
-		Integer   selectMinuteIndex = Integer.valueOf(startTimeStr.substring(2, 4));
-		
-		
-		Date  appointEndTime = null ;//预约结束时间
-		Date  appointStartTime = null ;//预约开始时间
-		
+		Integer   selectHourIndex = Integer.valueOf(timeStr.substring(0, 2));
+		Integer   selectMinuteIndex = Integer.valueOf(timeStr.substring(2, 4));
+		Date  resultTime = null ;//预约开始时间
 		//选中的结束时间在当前时间之后
-		if(startTimeIndex >=  currTimeIndex ){
+		if(timeStrIndex >=  currTimeIndex ){
 			cal.set(Calendar.HOUR_OF_DAY, selectHourIndex);
 			cal.set(Calendar.MINUTE, selectMinuteIndex);
 			cal.set(Calendar.SECOND, 0);
 			cal.set(Calendar.MILLISECOND, 0);
-			appointStartTime = cal.getTime();
+			resultTime = cal.getTime();
 		}else{
 			//选中的结束时间在当前时间只前
 			//结束时间向后推1天
@@ -481,27 +538,10 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 			cal.set(Calendar.SECOND, 0);
 			cal.set(Calendar.MILLISECOND, 0);
 			//计算结束时间
-			appointStartTime =cal.getTime(); 
+			resultTime =cal.getTime(); 
 		}
 		
-		if(StringUtils.isBlank(endTimeStr)){
-			appointEndTime = DateUtils.getDayEndTime(appointStartTime);
-		}else{
-			//结束字符串不为空，则需要根究结束字符串进行计算
-			Integer   endTimeHour = Integer.valueOf(endTimeStr.substring(0, 2));//结束时间小时
-			Integer   endTimeMinute = Integer.valueOf(endTimeStr.substring(2, 4));//结束时间分钟
-			
-			cal =  Calendar.getInstance();
-			cal.setTime(appointStartTime);
-			cal.set(Calendar.HOUR_OF_DAY, endTimeHour);
-			cal.set(Calendar.MINUTE, endTimeMinute);
-			cal.set(Calendar.SECOND, 59);
-			cal.set(Calendar.MILLISECOND, 0);
-			appointEndTime =  cal.getTime();
-		}
-		resultMap.put(START_TIME_KEY, appointStartTime);
-		resultMap.put(END_TIME_KEY, appointEndTime);
-		return resultMap;
+		return resultTime ;
 	}
 	
 	
