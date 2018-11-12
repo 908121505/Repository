@@ -49,7 +49,7 @@
     from customer_apply_bigv apply
     INNER JOIN customer cus ON apply.customer_id=cus.customer_id
     where 1=1
-    <if test="name !=null and name != ''"> and (cus.customer_id like concat('%',#{name},'%') or cus.nick_name like concat('%',#{name},'%') )</if>
+    <if test="name !=null and name != ''"> and (cus.customer_id = #{name} or cus.nick_name like concat('%',#{name},'%') )</if>
     <if test="handleStatus !=null"> and apply.handle_status = #{handleStatus}</if>
     <if test="startTime !=null"> and apply.apply_time <![CDATA[ >= ]]> #{startTime}</if>
     <if test="endTime !=null"> and apply.apply_time <![CDATA[ <= ]]> #{endTime}</if>
