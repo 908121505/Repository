@@ -70,6 +70,7 @@ public class AliPayServiceImpl implements AliPayService {
 		String orderDesc = "";
 		if (packet.getPayType() == 1) {
 			orderDesc = "支付宝充值";
+			
 		} else {
 			orderDesc = "微信充值";
 		}

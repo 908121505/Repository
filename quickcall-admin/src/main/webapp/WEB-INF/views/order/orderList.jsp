@@ -297,7 +297,7 @@
                     },
                     {
                         "data": "orderAmount",
-                        "sTitle":"订单金额(单位:元)",
+                        "sTitle":"订单金额(单位:音符)",
                         'sClass':"text-center", "sortable": false
                     },
                     {

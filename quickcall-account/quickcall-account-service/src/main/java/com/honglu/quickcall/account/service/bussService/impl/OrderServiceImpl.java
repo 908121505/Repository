@@ -384,6 +384,7 @@ public class OrderServiceImpl implements IOrderService {
 		if (request == null || request.getCustomerId() == null) {
 			throw new BizException(AccountBizReturnCode.paramError, "查询接收订单参数异常");
 		}
+<<<<<<< HEAD
 		LOGGER.info("======>>>>>queryMsgOrderList()入参：" + request.toString());
 		Long customerId = request.getCustomerId();
 //		String customerJson = JedisUtil.get(RedisKeyConstants.USER_CUSTOMER_INFO + customerId);
@@ -398,6 +399,27 @@ public class OrderServiceImpl implements IOrderService {
 				String  msgContent = commonService.getMsgContent(order.getCustomerFlag(), order.getOrderStatus());
 				order.setMsgContent(msgContent);
 				resultList.add(order);
+=======
+		LOGGER.info("======>>>>>queryReceiveOrderList()入参："+request.toString());
+		Long  customerId =  request.getCustomerId();
+		
+		Integer orderStatusParam = request.getOrderStatus();
+		List<Integer>  statusList = commonService.getReceiveOrderStatusList(orderStatusParam );
+		
+		List<OrderReceiveOrderListVO>  resultList =  orderMapper.queryReceiveOrderList(customerId,statusList);
+		
+		if(!CollectionUtils.isEmpty(resultList)){
+			for (OrderReceiveOrderListVO info : resultList) {
+				OrderTempResponseVO  responseVO = commonService.getCountDownSeconds(info.getOrderStatus(), info.getOrderTime(), info.getReceiveOrderTime());
+				info.setCountDownSeconds(responseVO.getCountDownSeconds());
+				//TODO 兼容测试，需回滚
+				info.setOrderStatus(setOrderStatus(responseVO.getOrderStatus()));
+				//TODO 兼容安卓版本   7号需要回滚
+				if(info.getReceiveOrderTime() == null){
+					info.setReceiveOrderTime(info.getOrderTime());
+				}
+				
+>>>>>>> refs/remotes/origin/master_tag(2018/11/08)
 			}
 		}
 
@@ -467,7 +489,16 @@ public class OrderServiceImpl implements IOrderService {
 						info.getOrderTime(), info.getReceiveOrderTime(), info.getStartServiceTime(),
 						info.getExpectEndTime(),info.getAppointTime());
 				info.setCountDownSeconds(responseVO.getCountDownSeconds());
+<<<<<<< HEAD
 				info.setOrderStatus(responseVO.getOrderStatus());
+=======
+				//TODO 兼容测试，需回滚
+				info.setOrderStatus(setOrderStatus(responseVO.getOrderStatus()));
+				//TODO 兼容安卓版本   7号需要回滚
+				if(info.getReceiveOrderTime() == null){
+					info.setReceiveOrderTime(info.getOrderTime());
+				}
+>>>>>>> refs/remotes/origin/master_tag(2018/11/08)
 			}
 		}
 
@@ -578,6 +609,7 @@ public class OrderServiceImpl implements IOrderService {
 					orderDetail.getOrderTime(), orderDetail.getReceiveOrderTime(), orderDetail.getStartServiceTime(),
 					orderDetail.getExpectEndTime(),orderDetail.getAppointTime());
 			orderDetail.setCountDownSeconds(responseVO.getCountDownSeconds());
+<<<<<<< HEAD
 			orderDetail.setOrderStatus(responseVO.getOrderStatus());
 
 			// 根据订单ID查询客户优惠券
@@ -592,6 +624,11 @@ public class OrderServiceImpl implements IOrderService {
 				orderDetail.setCouponPrice(map.get("couponPrice") == null ? null : new BigDecimal(map.get("couponPrice")));
 			}
 
+=======
+			//TODO 11111
+			//TODO 兼容测试，需回滚
+			orderDetail.setOrderStatus(setOrderStatus(responseVO.getOrderStatus()));
+>>>>>>> refs/remotes/origin/master_tag(2018/11/08)
 		}
 
 		CommonResponse commonResponse = commonService.getCommonResponse();
@@ -638,6 +675,11 @@ public class OrderServiceImpl implements IOrderService {
 			OrderIMVO orderIMVO = new OrderIMVO();
 			Long customerSkillId = order.getCustomerSkillId();
 			orderIMVO = customerSkillMapper.selectCustSkillItem(customerSkillId);
+<<<<<<< HEAD
+=======
+			//TODO 兼容测试，需回滚
+			orderIMVO.setOrderStatus(setOrderStatus(order.getOrderStatus()));
+>>>>>>> refs/remotes/origin/master_tag(2018/11/08)
 			orderIMVO.setOrderId(order.getOrderId());
 			orderIMVO.setServicePrice(order.getServicePrice());
 			orderIMVO.setServiceUnit(order.getServiceUnit());
@@ -1198,9 +1240,27 @@ public class OrderServiceImpl implements IOrderService {
 		// ADUAN -- 用户评价，计算主播评分排名，发送MQ消息
 		userCenterSendMqMessageService.sendEvaluationOrderMqMessage(request.getOrderId());
 
+<<<<<<< HEAD
 		return ResultUtils.resultSuccess();
 	}
 
 
 
+=======
+        return ResultUtils.resultSuccess();
+    }
+    /**
+     * temp方法 兼容测试
+     * @param status
+     * @return
+     */
+    private Integer setOrderStatus(Integer status){
+    	if(status.equals(OrderSkillConstants.ORDER_STATUS_FINISHED_FORCE)){
+    		return OrderSkillConstants.ORDER_STATUS_FINISHED_AND_PINGJIA;
+    	}else if(status.equals(OrderSkillConstants.ORDER_STATUS_CANCEL_FORCE)){
+    		return OrderSkillConstants.ORDER_STATUS_CANCEL_USER_NOT_ACCEPCT;
+    	}
+    	return status;
+    }
+>>>>>>> refs/remotes/origin/master_tag(2018/11/08)
 }

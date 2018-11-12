@@ -103,7 +103,7 @@
                 <div class="form-group" id="remarkReasonDev">
                     <label class="col-sm-3 control-label">原因<font color="red">&nbsp;*</font></label>
                     <div class="col-sm-6">
-                        <input type="text" placeholder="如果状态选取消，请写上取消原因" id="remarkReason" class="form-control"  name="remarkReason" value="${entity.remarkReason}">
+                        <input type="text" placeholder="如果状态选取消，请写上取消原因" id="remarkReason" class="form-control"  name="compulsionReason" value="${entity.compulsionReason}">
                     </div>
                 </div>
             </form>
@@ -118,7 +118,11 @@
 
 <script type="text/javascript">
     $(function (){
-
+    	debugger;
+        let order_status_flag = "${selectFlag}";
+        if(order_status_flag == 3){
+        	$(".modal-footer .btn-primary").attr("disabled","disbaled");
+        }
     });
     function check_fun(){
         $("#tip").html("");

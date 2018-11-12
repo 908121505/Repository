@@ -256,10 +256,17 @@ public interface UserFunctionType {
 	 */
 	String searchPersonByPhone = "0011138";
 
+<<<<<<< HEAD
 
 	/**
 	 * 未读消息数量查询
 	 */
 	String WEIXIN = "0022210";
+=======
+	/**
+	 * 微信
+	 */
+	String WEIXIN = "0022001";
+>>>>>>> refs/remotes/origin/master_tag(2018/11/08)
 
 }

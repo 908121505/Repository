@@ -65,9 +65,10 @@ public class AccountCenterServiceImpl implements AccountCenterService {
 		try {
 			CommonResponse $response = accountDubboBusiness.excute(request);
 			logger.info("功能编码为" + request.getBizCode() + "接收响应：{}", $response);
-			if (!$response.isSuccess()) {
-				throw new RemoteException($response.getCode(), $response.getMessage());
-			}
+			/*
+			 * if (!$response.isSuccess()) { throw new RemoteException($response.getCode(),
+			 * $response.getMessage()); }
+			 */
 
 			response.setCode($response.getCode().code());
 			response.setMsg($response.getMessage());
