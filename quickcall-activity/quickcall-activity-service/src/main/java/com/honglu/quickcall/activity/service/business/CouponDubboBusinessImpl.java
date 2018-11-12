@@ -153,20 +153,20 @@ public class CouponDubboBusinessImpl implements CouponDubboBusiness{
 	 */
 	@Override
 	@Transactional(rollbackFor = Exception.class)
-	public int getCouponInOrder(String skillItemId, String customerId){
+	public int getCouponInOrder(Long skillItemId, Long customerId){
 		int num = 0;
-		CouponOrderVo cvo = getShowTipForActivity(skillItemId, customerId);
+		CouponOrderVo cvo = getShowTipForActivity(skillItemId.toString(), customerId.toString());
 		int tip = cvo.getShowTip();
 		if(tip==1){
 			//查出券所有信息
-			CouponOrderVo vo = couponDubboService.showActivityCouponForOrder(skillItemId,customerId);//customerId这里暂时不用
+			CouponOrderVo vo = couponDubboService.showActivityCouponForOrder(skillItemId.toString(),customerId.toString());//customerId这里暂时不用
 			String couponId = "";
 			if(vo!=null && vo.getCouponId()!=null){
 				couponId = vo.getCouponId();
 
 				CustomerCoupon cc = new CustomerCoupon();
 				cc.setCouponId(Long.parseLong(couponId));
-				cc.setCustomerId(Long.parseLong(customerId));
+				cc.setCustomerId(customerId);
 				//Subject currentUser = SecurityUtils.getSubject();
 				//cc.setCreateMan(currentUser.getPrincipal().toString());
 				cc.setCreateMan("admin");
@@ -174,7 +174,7 @@ public class CouponDubboBusinessImpl implements CouponDubboBusiness{
 				num = couponDubboService.insertCustomerCoupon(cc);
 				if(num > 0){
 					//插入消息记录
-					couponDubboService.sendActivityMessage(couponId,customerId);
+					couponDubboService.sendActivityMessage(couponId,customerId.toString());
 				}
 			}
 		}
