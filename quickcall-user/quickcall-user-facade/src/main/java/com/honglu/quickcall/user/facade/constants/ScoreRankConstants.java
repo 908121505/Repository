@@ -91,7 +91,7 @@ public class ScoreRankConstants {
             return "0";
         }
         if(score.compareTo(new BigDecimal(10000)) < 0){
-            return String.valueOf(score);
+            return String.valueOf(score.setScale(0, BigDecimal.ROUND_DOWN));
         }
         int index = 0;
         do {
@@ -104,6 +104,7 @@ public class ScoreRankConstants {
     }
 
     public static void main(String[] args) {
+        System.out.println(formatSkillScore(new BigDecimal(0.54)));
         System.out.println(formatSkillScore(new BigDecimal(9999)));
         System.out.println(formatSkillScore(new BigDecimal(10000)));
         System.out.println(formatSkillScore(new BigDecimal("1000000000000")));

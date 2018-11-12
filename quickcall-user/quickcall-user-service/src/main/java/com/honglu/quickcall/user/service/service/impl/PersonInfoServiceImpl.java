@@ -848,8 +848,8 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 				if (Objects.equals(request.getLoginCustomerId(), request.getViewCustomerId())) {
 					customerSkill.setCanOrder(0); // 自己看自己的个人主页时 -- 直接返回 0=不可接单
 				} else {
-					customerSkill.setCanOrder(
-							accountOrderService.checkReceiveOrderByCustomerSkillId(bean.getCustomerSkillId()));
+//					customerSkill.setCanOrder(accountOrderService.checkReceiveOrderByCustomerSkillId(bean.getCustomerSkillId()));
+					customerSkill.setCanOrder(1);// 查看别人的，全部可下单 -- 到下单的时候再判断
 				}
 				// 查询技能订单数-wq
 				customerSkill.setSkillOrderNo(customerSkillMapper.selectSkillOrderNo(bean.getCustomerSkillId()));
