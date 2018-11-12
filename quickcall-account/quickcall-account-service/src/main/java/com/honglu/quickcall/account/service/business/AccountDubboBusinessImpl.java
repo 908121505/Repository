@@ -15,6 +15,7 @@ import com.honglu.quickcall.account.facade.exchange.request.BarrageMessageReques
 import com.honglu.quickcall.account.facade.exchange.request.BarrageMessageV2Request;
 import com.honglu.quickcall.account.facade.exchange.request.BindAliaccountRequest;
 import com.honglu.quickcall.account.facade.exchange.request.CancelOrderRequest;
+import com.honglu.quickcall.account.facade.exchange.request.ChannelSwitchRequest;
 import com.honglu.quickcall.account.facade.exchange.request.CheckReceiveSwitchRequest;
 import com.honglu.quickcall.account.facade.exchange.request.ConfirmOrderRequest;
 import com.honglu.quickcall.account.facade.exchange.request.CreateUserAccountRequest;
@@ -106,15 +107,15 @@ public class AccountDubboBusinessImpl implements AccountDubboBusiness {
 			case OrderRequestType.QUERY_SKILL_NAME_FOR_FIRST_PAGE:
 				response = skillService.getFirstPageSkillItemInfo((FirstPageSkillinfoRequest) request);
 				break;
-				/** 首页技能种类展示 */
+			/** 首页技能种类展示 */
 			case OrderRequestType.QUERY_DV_LIST_BY_TYPE:
 				response = skillService.getDaVListBySkillItemId((DaVListBySkillItemIdRequest) request);
 				break;
-				/** 首页技能种类展示 */
+			/** 首页技能种类展示 */
 			case OrderRequestType.CHECK_RECEIVE_SWITCH:
 				response = skillService.checkReceiveSwitch((CheckReceiveSwitchRequest) request);
 				break;
-				/** 开启接单开关 */
+			/** 开启接单开关 */
 			case OrderRequestType.OPEN_RECEIVE_SWITCH:
 				response = skillService.openReceiveSwitch((OpenReceiveSwitchRequest) request);
 				break;
@@ -131,7 +132,7 @@ public class AccountDubboBusinessImpl implements AccountDubboBusiness {
 			case OrderRequestType.MSG_ORDER_LIST:
 				response = orderService.queryMsgOrderList((MsgOrderListRequest) request);
 				break;
-				/** 收到的订单 */
+			/** 收到的订单 */
 			case OrderRequestType.ORDER_RECEIVE_ORDER_LIST:
 				response = orderService.queryReceiveOrderList((OrderReceiveOrderListRequest) request);
 				break;
@@ -145,18 +146,18 @@ public class AccountDubboBusinessImpl implements AccountDubboBusiness {
 			case OrderRequestType.CANCEL_ORDER:
 				response = orderService.cancelOrder((CancelOrderRequest) request);
 				break;
-				/** 订单详情 */
+			/** 订单详情 */
 			case OrderRequestType.DETAIL_ORDER:
 				response = orderService.detailOrder((DetailOrderRequest) request);
 				break;
-				/** IM订单详情 */
+			/** IM订单详情 */
 			case OrderRequestType.DETAIL_ORDER_FOR_IM:
 				response = orderService.detailOrderForIM((DetailOrderForIMRequest) request);
 				break;
 			/** 发起的订单页--去支付 */
-//			case OrderRequestType.CUST_PAY_ORDER:
-//				response = orderService.payOrder((PayOrderRequest) request);
-//				break;
+			// case OrderRequestType.CUST_PAY_ORDER:
+			// response = orderService.payOrder((PayOrderRequest) request);
+			// break;
 			/** 发起的订单页--申请退款/完成 */
 			case OrderRequestType.CUST_CONFIRM_FINISH_REFUND:
 				response = orderService.custConfirmFinish((CustConfirmFinishRequest) request);
@@ -179,14 +180,15 @@ public class AccountDubboBusinessImpl implements AccountDubboBusiness {
 				response = orderService.finishOrder((FinishOrderRequest) request);
 				break;
 			///////////////////////////
-				/** 查询进行中订单数量 */
+			/** 查询进行中订单数量 */
 			case OrderRequestType.QUERY_ING_ORDER_COUNT:
 				response = orderService.queryIngOrderCount((QueryIngOrderCountRequest) request);
 				break;
-				/**查询退款理由 */
-//			case OrderRequestType.QUERY_REFUND_REASON:
-//				response = orderService.queryRefundReason((QueryRefundReasonRequest) request);
-//				break;
+			/** 查询退款理由 */
+			// case OrderRequestType.QUERY_REFUND_REASON:
+			// response = orderService.queryRefundReason((QueryRefundReasonRequest)
+			// request);
+			// break;
 			/** 订单评价页面 **/
 			case OrderRequestType.ORDER_EVALUATION:
 				response = orderService.orderEvaluation((OrderEvaluationRequest) request);
@@ -196,18 +198,18 @@ public class AccountDubboBusinessImpl implements AccountDubboBusiness {
 				response = orderService.submitOrderEvaluation((OrderEvaluationSubmitRequest) request);
 				break;
 
-		    /////////////////////////////////订单相关结束///////////////////////////////////
+			///////////////////////////////// 订单相关结束///////////////////////////////////
 
-			/////////////////////////////////充值相关结束///////////////////////////////////
+			///////////////////////////////// 充值相关结束///////////////////////////////////
 			case AccountFunctionType.APPLY_PAY_RECHARGE:
-				//苹果内购充值
+				// 苹果内购充值
 				response = applePayService.createOrder((ApplePayRequest) request);
 				break;
 			case AccountFunctionType.APPLY_PAY_NOTIFY:
-				//苹果内购回调验证
+				// 苹果内购回调验证
 				response = applePayService.applePurchase((ApplePurchaseRequest) request);
 				break;
-			/////////////////////////////////充值相关结束///////////////////////////////////
+			///////////////////////////////// 充值相关结束///////////////////////////////////
 
 			case AccountFunctionType.CreateUserAccount:
 				// 创建账户
@@ -241,9 +243,9 @@ public class AccountDubboBusinessImpl implements AccountDubboBusiness {
 				break;
 			case AccountFunctionType.FirstOnceWindowEverthDay:
 				response = barrageMessageService.popWindowOnce((FirstBarrageRequest) request);
-					break;
+				break;
 			case AccountFunctionType.CHANNEL_SWITCH_STATUS:
-				response = channelSwitchService.getChannelSwitchStatus((ChannelSwitchRequest)request);
+				response = channelSwitchService.getChannelSwitchStatus((ChannelSwitchRequest) request);
 				break;
 			default:
 
