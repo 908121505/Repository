@@ -222,7 +222,6 @@ public interface UserFunctionType {
 	 */
 	String saveDeviceWhitelist = "0011202";
 
-
 	/**
 	 * 查询我的站内信消息
 	 */
@@ -232,12 +231,12 @@ public interface UserFunctionType {
 	 * 技能项分类点击列表
 	 */
 	String CANCEL_ATTENTION = "003232";
-	
+
 	/**
 	 * 最近来访列表
 	 */
 	String Recent_Visit_List = "0011301";
-	
+
 	/**
 	 * 设置来访已读
 	 */
@@ -256,17 +255,14 @@ public interface UserFunctionType {
 	 */
 	String searchPersonByPhone = "0011138";
 
-<<<<<<< HEAD
-
 	/**
 	 * 未读消息数量查询
 	 */
 	String WEIXIN = "0022210";
-=======
 	/**
 	 * 微信
-	 */
-	String WEIXIN = "0022001";
->>>>>>> refs/remotes/origin/master_tag(2018/11/08)
+	 *//*
+		 * String WEIXIN = "0022001";
+		 */
 
 }

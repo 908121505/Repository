@@ -91,9 +91,13 @@ public class Order {
 
 	    private String compulsionReason;
 	    
+
+	   
+
 	    public String getCompulsionReason() {
 			return compulsionReason;
 		}
+
 
 
 		public void setCompulsionReason(String compulsionReason) {
