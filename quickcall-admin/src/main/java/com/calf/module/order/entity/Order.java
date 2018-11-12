@@ -89,8 +89,20 @@ public class Order {
 
 	    private String remark;
 
+	    private String compulsionReason;
+	    
 
-	    public Long getOrderId() {
+	    public String getCompulsionReason() {
+			return compulsionReason;
+		}
+
+
+		public void setCompulsionReason(String compulsionReason) {
+			this.compulsionReason = compulsionReason;
+		}
+
+
+		public Long getOrderId() {
 	        return orderId;
 	    }
 
