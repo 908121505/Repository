@@ -75,7 +75,7 @@ public class OrderUpdateJob {
     
     
     
-    
+    /**15分钟超时未接*/
     private  final static Integer  CANCEL_ONE =  1 ;
     private  final static Integer  CANCEL_TWO =  2 ;
     private  final static Integer  CANCEL_THREE = 3 ;
@@ -404,7 +404,7 @@ public class OrderUpdateJob {
     		}else if (cancelType == CANCEL_THREE){
     			content =  OrderSkillConstants.IM_MSG_CONTENT_CANCEL_DV_5MINUTE_CONFIRM_TIMEOUT ;
     		}else if(cancelType == CANCEL_FOUR){
-    			content =  OrderSkillConstants.IM_MSG_CONTENT_CUST_NOT_PING_JIA_TO_DV ;
+    			content =  OrderSkillConstants.IM_MSG_CONTENT_SYSTEM_FINISH_TIMEOUT_TO_DAV ;
     		}
     	}else{
     		remarkName = OrderSkillConstants.MSG_CONTENT_C ;
@@ -415,7 +415,7 @@ public class OrderUpdateJob {
     		}else if (cancelType == CANCEL_THREE){
     			content =  OrderSkillConstants.IM_MSG_CONTENT_CANCEL_CUST_5MINUTE_CONFIRM_TIMEOUT ;
     		}else if(cancelType == CANCEL_FOUR){
-//    			content =  OrderSkillConstants.IM_MSG_CONTENT_CANCEL_CUST_FINISH ;
+    			content =  OrderSkillConstants.IM_MSG_CONTENT_SYSTEM_FINISH_TIMEOUT_TO_CUST ;
     		}
     	}
     	

@@ -728,12 +728,14 @@ public class OrderServiceImpl implements IOrderService {
 					+ order.getOrderAmounts());
 			accountService.inAccount(order.getServiceId(), order.getOrderAmounts(), TransferTypeEnum.FROZEN,
 					AccountBusinessTypeEnum.FroZen, orderId);
+			
+			//结束后用户获得券
+			couponDubboBusiness.getCouponInOrder(order.getSkillItemId(), order.getCustomerId());
 			// ADUAN 订单服务完成推送MQ消息
 			userCenterSendMqMessageService.sendOrderCostMqMessage(orderId);
 
 			// 大V接受订单通知大V
-			RongYunUtil.sendOrderMessage(order.getServiceId(),
-					OrderSkillConstants.IM_MSG_CONTENT_DAV_CUST_CONFIRM_TO_DV, OrderSkillConstants.MSG_CONTENT_DAV);
+			RongYunUtil.sendOrderMessage(order.getServiceId(),OrderSkillConstants.IM_MSG_CONTENT_DAV_CUST_CONFIRM_TO_DV, OrderSkillConstants.MSG_CONTENT_DAV);
 
 		} else {
 			// 订单不存在
@@ -812,6 +814,8 @@ public class OrderServiceImpl implements IOrderService {
 		Long serviceId = order.getServiceId();
 		RongYunUtil.sendOrderMessage(serviceId, OrderSkillConstants.IM_MSG_CONTENT_USER_CONFIRM_START_SERVICE_TO_DAV,
 				OrderSkillConstants.MSG_CONTENT_DAV);
+		RongYunUtil.sendOrderMessage(order.getCustomerId(), OrderSkillConstants.IM_MSG_CONTENT_USER_CONFIRM_START_SERVICE_TO_CUST,
+				OrderSkillConstants.MSG_CONTENT_C);
 
 		CommonResponse commonResponse = commonService.getCommonResponse();
 		commonResponse.setData(newOrderStatus);
@@ -866,21 +870,33 @@ public class OrderServiceImpl implements IOrderService {
 								accountService.inAccount(od.getCustomerId(), od.getOrderAmounts(),
 										TransferTypeEnum.RECHARGE, AccountBusinessTypeEnum.OrderRefund,
 										od.getOrderId());
+								RongYunUtil.sendOrderMessage(od.getCustomerId(), OrderSkillConstants.IM_MSG_CONTENT_DAV_CONFIRM_OTHER_CANCEL_TO_CUST,OrderSkillConstants.MSG_CONTENT_C);
+								RongYunUtil.sendOrderMessage(od.getServiceId(), OrderSkillConstants.IM_MSG_CONTENT_DAV_CONFIRM_OTHER_CANCEL_TO_DAV,OrderSkillConstants.MSG_CONTENT_DAV);
 							} catch (Exception e) {
 								LOGGER.error("用户退款异常异常信息：", e);
 							}
+							
 						}
-						commonService.updateOrderReceiveOrder(orderIdList,
-								OrderSkillConstants.ORDER_STATUS_CANCEL_DAV_START_ONE_ORDER);
+						commonService.updateOrderReceiveOrder(orderIdList,OrderSkillConstants.ORDER_STATUS_CANCEL_DAV_START_ONE_ORDER);
 
 					}
 				}
+				
+				
 
-				// 大V接受订单通知用户
-				RongYunUtil.sendOrderMessage(customerId, OrderSkillConstants.IM_MSG_CONTENT_DAV_REFUSE_TO_CUST,
-						OrderSkillConstants.MSG_CONTENT_C);
+				if(OrderSkillConstants.SKILL_TYPE_YES == skillType){
+					// 大V接受订单通知用户
+					RongYunUtil.sendOrderMessage(customerId, OrderSkillConstants.IM_MSG_CONTENT_DAV_CONFIRM_TO_CUST,
+							OrderSkillConstants.MSG_CONTENT_C);
+				}else {
+					// 大V接受订单通知用户
+					RongYunUtil.sendOrderMessage(customerId, OrderSkillConstants.IM_MSG_CONTENT_DAV_CONFIRM_TO_CUST_JIAO_XING,
+							OrderSkillConstants.MSG_CONTENT_C);
+				}
+				
+				
 				// 大V接受订单通知大V
-				RongYunUtil.sendOrderMessage(serviceId, OrderSkillConstants.IM_MSG_CONTENT_DAV_REFUSE_TO_DV,
+				RongYunUtil.sendOrderMessage(serviceId, OrderSkillConstants.IM_MSG_CONTENT_DAV_CONFIRM_TO_DAV,
 						OrderSkillConstants.MSG_CONTENT_DAV);
 
 				// 大V不同意，状态为大V拒绝，退款给购买者
@@ -894,9 +910,9 @@ public class OrderServiceImpl implements IOrderService {
 				commonService.updateOrder(orderId, newOrderStatus);
 
 				// 大V拒绝订单通知用户
-				RongYunUtil.sendOrderMessage(customerId, OrderSkillConstants.IM_MSG_CONTENT_DAV_CONFIRM_TO_CUST,
+				RongYunUtil.sendOrderMessage(customerId, OrderSkillConstants.IM_MSG_CONTENT_DAV_REFUSE_TO_CUST,
 						OrderSkillConstants.MSG_CONTENT_C);
-				RongYunUtil.sendOrderMessage(serviceId, OrderSkillConstants.IM_MSG_CONTENT_DAV_CONFIRM_TO_DAV,
+				RongYunUtil.sendOrderMessage(serviceId, OrderSkillConstants.IM_MSG_CONTENT_DAV_REFUSE_TO_DV,
 						OrderSkillConstants.MSG_CONTENT_DAV);
 			}
 		} else {
@@ -1014,13 +1030,16 @@ public class OrderServiceImpl implements IOrderService {
 							+ order.getOrderAmounts());
 					accountService.inAccount(order.getServiceId(), order.getOrderAmounts(), TransferTypeEnum.FROZEN,
 							AccountBusinessTypeEnum.FroZen, orderId);
+					//结束后用户获得券
+					couponDubboBusiness.getCouponInOrder(order.getSkillItemId(), customerId);
 					// 用户未评价
 					RongYunUtil.sendOrderMessage(serviceId, OrderSkillConstants.IM_MSG_CONTENT_CUST_NOT_PING_JIA_TO_DV,OrderSkillConstants.MSG_CONTENT_DAV);
 					sendMsgIndex = 1;
 				} else {
 					// 大V在服务时间内发起完成服务
 					newOrderStatus = OrderSkillConstants.ORDER_STATUS_GOING_DAV_APPAY_FINISH;
-					RongYunUtil.sendOrderMessage(customerId, OrderSkillConstants.IM_MSG_CONTENT_CUST_FINISH_TO_DAV,OrderSkillConstants.MSG_CONTENT_C);
+					RongYunUtil.sendOrderMessage(serviceId, OrderSkillConstants.IM_MSG_CONTENT_CUST_FINISH_TO_DAV,OrderSkillConstants.MSG_CONTENT_DAV);
+					RongYunUtil.sendOrderMessage(customerId, OrderSkillConstants.IM_MSG_CONTENT_CUST_FINISH_TO_CUST,OrderSkillConstants.MSG_CONTENT_C);
 				}
 			} else {
 				// 用户发起完成服务
@@ -1029,9 +1048,10 @@ public class OrderServiceImpl implements IOrderService {
 				// 冻结大V金额
 				LOGGER.info("---------finishOrder--cust：serviceId=" + order.getServiceId() + ";orderAmounts="
 						+ order.getOrderAmounts());
-				accountService.inAccount(order.getServiceId(), order.getOrderAmounts(), TransferTypeEnum.FROZEN,
-						AccountBusinessTypeEnum.FroZen, orderId);
-				RongYunUtil.sendOrderMessage(serviceId, OrderSkillConstants.IM_MSG_CONTENT_CUST_NOT_PING_JIA_TO_DV,OrderSkillConstants.MSG_CONTENT_DAV);
+				accountService.inAccount(order.getServiceId(), order.getOrderAmounts(), TransferTypeEnum.FROZEN,AccountBusinessTypeEnum.FroZen, orderId);
+				//结束后用户获得券
+				couponDubboBusiness.getCouponInOrder(order.getSkillItemId(), customerId);
+				RongYunUtil.sendOrderMessage(customerId, OrderSkillConstants.IM_MSG_CONTENT_CUST_NOT_PING_JIA_TO_CUST,OrderSkillConstants.MSG_CONTENT_C);
 			}
 
 			// 设置请求结束时间
