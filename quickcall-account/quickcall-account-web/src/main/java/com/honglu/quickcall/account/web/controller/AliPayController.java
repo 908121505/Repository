@@ -46,6 +46,7 @@ public class AliPayController extends BaseController {
 			return response;
 		}
 		params.setRemoteIp(this.getRemoteHost(request));
+		logger.info("---------------------ip:" + this.getRemoteHost(request));
 		response = accountCenterService.executeWhite(params);
 
 		logger.info("accountWeb.pay.recharge.resonse.data : " + JSONObject.toJSONString(response));
