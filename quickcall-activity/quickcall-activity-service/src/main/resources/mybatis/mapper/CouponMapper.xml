@@ -239,7 +239,7 @@
       LEFT JOIN skill_item sit ON sit.id = cs.skill_item_id and sit.skill_status = 1
       where t.activity_id = #{activityId,jdbcType=VARCHAR}
       <if test="customerId != null" >
-        and ct.customer_id = 1810241825465521229
+        and ct.customer_id = #{customerId,jdbcType=VARCHAR}
         and ct.is_used = 0
       </if>
       group by couponId
