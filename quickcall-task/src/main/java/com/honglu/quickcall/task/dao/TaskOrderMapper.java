@@ -66,7 +66,7 @@ public interface TaskOrderMapper {
 	 * @param updateStatus
 	 * @param skillType
 	 */
-	List<TaskOrder>  queryOrderStatusAfter12HourCust(@Param("endTime")Date  endTime,@Param("queryStatus")Integer queryStatus ,@Param("updateStatus")Integer  updateStatus,@Param("queryEndTime")Date  queryEndTime,@Param("queryStatusExt")Integer  queryStatusExt);
+	List<TaskOrder>  queryOrderStatusAfter12HourCust(@Param("endTime")Date  endTime,@Param("queryStatus")Integer queryStatus ,@Param("updateStatus")Integer  updateStatus,@Param("queryEndTime")Date  queryEndTime,@Param("queryStatusExt")Integer  queryStatusExt,@Param("currTime")Date  currTime);
 	
 	
 	

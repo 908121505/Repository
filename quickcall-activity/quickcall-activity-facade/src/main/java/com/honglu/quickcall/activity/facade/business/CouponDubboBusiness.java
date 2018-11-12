@@ -62,6 +62,6 @@ public interface CouponDubboBusiness {
 	 * @return 0=不成功，1=成功
 	 *
 	 */
-	int getCouponInOrder(String skillItemId, String customerId);
+	int getCouponInOrder(Long skillItemId, Long customerId);
 
 }
