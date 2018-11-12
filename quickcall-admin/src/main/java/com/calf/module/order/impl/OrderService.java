@@ -312,6 +312,7 @@ public class OrderService {
 			update = compulsoryCancellation(orderId,orderAmount);
 			// 退款给用户
 		} else if (OrderSkillConstants.ORDER_STATUS_FINISHED_FORCE == orderStatus) { // 给大V冻结金额
+			paramMap.put("orderStatus", orderStatus);
 			update = compulsoryCompletion(orderId, orderAmount);
 		}
 
