@@ -136,6 +136,7 @@
 			order_status in ( #{queryStatus}  ,#{queryStatusExt})
 		AND appay_end_time <![CDATA[ < ]]> #{endTime}
 		AND create_time <![CDATA[ > ]]>  #{queryEndTime}
+		AND expect_end_time <![CDATA[ < ]]> #{currTime}
   </select>
   
   
