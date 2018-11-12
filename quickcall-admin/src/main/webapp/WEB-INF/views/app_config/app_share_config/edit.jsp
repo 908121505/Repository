@@ -89,13 +89,24 @@
 <script type="text/javascript">
     function check_fun() {
         $("#tip").html("");
-        var b = true;
         var title = $('input[name="title"]').val();
         if (title == null || title.trim() == '') {
             $("#tip").html("请输入分享标题");
-            b = false;
+            return false;
         }
-        return b;
+
+        var content = $('input[name="content"]').val();
+        if (content == null || content.trim() == '') {
+            $("#tip").html("请输入分享内容");
+            return false;
+        }
+
+        var linkUrl = $('input[name="linkUrl"]').val();
+        if (linkUrl == null || linkUrl.trim() == '') {
+            $("#tip").html("请输入分享链接");
+            return false;
+        }
+        return true;
     }
 
     $(function() {
