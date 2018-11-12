@@ -66,7 +66,14 @@
                         {
                             "data": "type",
                             "sTitle": "分享类型",
-                            'sClass': "text-center"
+                            'sClass': "text-center",
+                            "mRender": function (data, type, full) {
+                                if (data == "1") {
+                                    return "个人主页分享";
+                                } else {
+                                    return data;
+                                }
+                            }
                         },
                         {"data": "iconUrl", "sTitle": "分享图标", 'sClass': "text-center",
                             "mRender": function (data, type, full) {
