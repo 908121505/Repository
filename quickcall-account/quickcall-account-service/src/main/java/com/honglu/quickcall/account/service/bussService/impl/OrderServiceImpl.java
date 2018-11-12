@@ -627,8 +627,8 @@ public class OrderServiceImpl implements IOrderService {
 		statusList.add(OrderSkillConstants.ORDER_STATUS_GOING_WAITING_START);// 进行中（大V发起完成服务）
 		statusList.add(OrderSkillConstants.ORDER_STATUS_GOING_USER_ACCEPCT);// 进行中
 		statusList.add(OrderSkillConstants.ORDER_STATUS_GOING_DAV_APPAY_FINISH);// 进行中（大V发起完成服务）
-		getFinishStatusList(statusList);
 		
+		getFinishStatusList(statusList);
 		// 判断双方有没有订单关系
 		Order order = orderMapper.queryOrderByCustomerIdAndServiceId(customerId, serviceId, statusList);
 
@@ -668,11 +668,12 @@ public class OrderServiceImpl implements IOrderService {
 					//更改订单状态为31
 					try {
 						orderMapper.updateOrderReceiveOrder(orderIdList , OrderSkillConstants.ORDER_STATUS_GOING_USER_NOT_PING_JIA);
+						LOGGER.info("更新状态为31");
 					} catch (Exception e) {
 					}
 				}else{
 					//不存在订单关系
-					orderDetailForIMVO.setRetCode(OrderSkillConstants.IM_RETCODE_CAN_ORDER);// 不存在的订单关系
+					orderDetailForIMVO.setRetCode(OrderSkillConstants.IM_RETCODE_ORDER_COUND_ORDER);// 不存在的订单关系
 				}
 				
 			}else{
