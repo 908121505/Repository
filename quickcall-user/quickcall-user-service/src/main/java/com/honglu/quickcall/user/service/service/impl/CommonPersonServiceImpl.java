@@ -93,8 +93,6 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 	 * 中文、英文、数字、下划线校验 4-24位
 	 */
 	private final static Pattern CH_EN_PATTERN = Pattern.compile("^[\\u4e00-\\u9fa5a-z\\d_]{4,24}$");
-	//靓号屏蔽开头
-	private final static String[] startBlackList = {"1","2","0"};
 	//靓号屏蔽中间段
 	private final static String[] middleBlackList = {"000","111","222","333","444","555","666","777","888","999",
 													"01234","12345","23456","34567","45678","56789","67890",
@@ -537,7 +535,7 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 			}
 		}
 		for(int i=1;i<10;i++){
-			if(appearNumber(num,i+"")>5){
+			if(appearNumber(num,i+"")>4){
 				return false;
 			}
 		}
