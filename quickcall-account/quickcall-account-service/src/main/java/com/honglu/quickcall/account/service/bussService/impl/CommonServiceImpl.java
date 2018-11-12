@@ -414,8 +414,13 @@ public class CommonServiceImpl implements CommonService {
 			}else if (OrderSkillConstants.ORDER_STATUS_WAITING_START ==  orderStatus){
 				result =   OrderSkillConstants.IM_MSG_CONTENT_DAV_CONFIRM_TO_DAV;
 			//用户取消订单
-			}else if(OrderSkillConstants.ORDER_STATUS_CANCEL_BEFORE_RECEIVE== orderStatus || orderStatus == OrderSkillConstants.ORDER_STATUS_CANCEL_BEFORE_DAV_START
+			}else if(OrderSkillConstants.ORDER_STATUS_CANCEL_BEFORE_RECEIVE== orderStatus 
+					||orderStatus == OrderSkillConstants.ORDER_STATUS_CANCEL_SYSTEM_NOT_RECEIVE
+					||orderStatus == OrderSkillConstants.ORDER_STATUS_CANCEL_DAV_START_ONE_ORDER
+					||orderStatus == OrderSkillConstants.ORDER_STATUS_CANCEL_NOT_START
+					||orderStatus == OrderSkillConstants.ORDER_STATUS_CANCEL_BEFORE_DAV_START
 					||orderStatus == OrderSkillConstants.ORDER_STATUS_CANCLE_USER_SELF_BEFORE_SERVICE
+					||orderStatus == OrderSkillConstants.ORDER_STATUS_CANCEL_USER_NOT_ACCEPCT
 					||orderStatus == OrderSkillConstants.ORDER_STATUS_CANCEL_BEFORE_APPOINT_TIME){
 				result =   OrderSkillConstants.IM_MSG_CONTENT_CANCEL_ORDER_TO_DV;
 			//声优发起立即服务
@@ -435,7 +440,6 @@ public class CommonServiceImpl implements CommonService {
 				result =   OrderSkillConstants.IM_MSG_CONTENT_DAV_CUST_CONFIRM_TO_DV;
 			}else if(OrderSkillConstants.ORDER_STATUS_FINISH_DV_FINISH == orderStatus || OrderSkillConstants.ORDER_STATUS_FINISH_BOTH_NO_OPERATE == orderStatus){
 			    result = OrderSkillConstants.IM_MSG_CONTENT_SYSTEM_FINISH_TIMEOUT_TO_DAV;
-			    		
 			}
 			
 		}else{
@@ -449,8 +453,13 @@ public class CommonServiceImpl implements CommonService {
 			}else if (OrderSkillConstants.ORDER_STATUS_WAITING_START ==  orderStatus){
 				result =  OrderSkillConstants.IM_MSG_CONTENT_DAV_CONFIRM_TO_CUST;
 			//用户取消订单
-			}else if(OrderSkillConstants.ORDER_STATUS_CANCEL_BEFORE_RECEIVE== orderStatus || orderStatus == OrderSkillConstants.ORDER_STATUS_CANCEL_BEFORE_DAV_START
+			}else if(OrderSkillConstants.ORDER_STATUS_CANCEL_BEFORE_RECEIVE== orderStatus 
+					||orderStatus == OrderSkillConstants.ORDER_STATUS_CANCEL_SYSTEM_NOT_RECEIVE
+					||orderStatus == OrderSkillConstants.ORDER_STATUS_CANCEL_DAV_START_ONE_ORDER
+					||orderStatus == OrderSkillConstants.ORDER_STATUS_CANCEL_NOT_START
+					||orderStatus == OrderSkillConstants.ORDER_STATUS_CANCEL_BEFORE_DAV_START
 					||orderStatus == OrderSkillConstants.ORDER_STATUS_CANCLE_USER_SELF_BEFORE_SERVICE
+					||orderStatus == OrderSkillConstants.ORDER_STATUS_CANCEL_USER_NOT_ACCEPCT
 					||orderStatus == OrderSkillConstants.ORDER_STATUS_CANCEL_BEFORE_APPOINT_TIME){
 				result =   OrderSkillConstants.IM_MSG_CONTENT_CANCEL_ORDER_TO_CUST;
 			//声优发起立即服务
