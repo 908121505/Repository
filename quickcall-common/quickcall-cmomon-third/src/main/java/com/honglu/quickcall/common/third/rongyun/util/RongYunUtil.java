@@ -101,7 +101,6 @@ public class RongYunUtil {
 			messageBroadcastResult = rongCloud.message.broadcast("170", messageBroadcastTxtMessage, "thisisapush",
 					"{\"pushData\":\"hello\"}", "iOS");
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		System.out.println("broadcast:  " + messageBroadcastResult.toString());
@@ -290,7 +289,6 @@ public class RongYunUtil {
 		System.out.println(code);
 	}
 
-	@SuppressWarnings("unused")
 	private static void sendMessage(String nickName, Long fromUserId, Long toCustomerId, String content, Integer sex,
 			String headPortraitUrl, Integer type, String remarkName) {
 
@@ -307,7 +305,6 @@ public class RongYunUtil {
 				null, null, null);
 		System.out.println(code);
 	}
-	@SuppressWarnings("unused")
 	private static void sendMessageIm(String nickName, Long fromUserId, Long toCustomerId,  Integer sex,
 			String headPortraitUrl, Integer type, String remarkName,Long  orderId,String  orderDesc) {
 		
@@ -327,7 +324,8 @@ public class RongYunUtil {
 	public static void main(String[] args) {
 		
 		
-		sendMessageIm("安定的", 1811051157595003350L, 1810161659557030302L, 1, "http://wdgj.oss-cn-shanghai.aliyuncs.com/voice/user/headimg/524a6d229baf46efa95037f5c469eb51.jpg", 21, "", 1L, "DDD");
+		sendOrderIMMessage("安亚波001", 1810161659557030302L, 1811021053487214824L, null, 1000L, "DDDDDDD", "http://wdgj.oss-cn-shanghai.aliyuncs.com/voice/user/headimg/09cc194662fc4284982014dd785f112a.jpg");
+//		sendMessageIm("安定的", 1811051157595003350L, 1810161659557030302L, 1, "http://wdgj.oss-cn-shanghai.aliyuncs.com/voice/user/headimg/524a6d229baf46efa95037f5c469eb51.jpg", 21, "", 1L, "DDD");
 		// sendUser();
 		/*
 		 * Long fromUserId = 1810161814552346784L; String nickName = "Aaaa"; String

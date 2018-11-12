@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 import java.util.ResourceBundle;
@@ -51,6 +52,28 @@ import com.honglu.quickcall.user.facade.entity.Customer;
 public class OrderUpdateJob {
 
     public static final Logger LOGGER = LoggerFactory.getLogger(OrderUpdateJob.class);
+    /**15分钟超时未接*/
+    private  final static Integer  CANCEL_ONE =  1 ;
+    private  final static Integer  CANCEL_TWO =  2 ;
+    private  final static Integer  CANCEL_THREE = 3 ;
+    private  final static Integer  CANCEL_FOUR =  4 ;
+    
+    public static final  HashMap<Integer, String>   CUST_MAP = new HashMap<Integer, String>();
+    public static final  HashMap<Integer, String>   dvMap = new HashMap<Integer, String>();
+    
+    static{
+    	//用户提示内容
+    	CUST_MAP.put(CANCEL_ONE, OrderSkillConstants.IM_MSG_CONTENT_CANCEL_CUST_15MINUTE_TIMEOUT);
+    	CUST_MAP.put(CANCEL_TWO, OrderSkillConstants.IM_MSG_CONTENT_CANCEL_CUST_5MINUTE_START_TIMEOUT);
+    	CUST_MAP.put(CANCEL_THREE, OrderSkillConstants.IM_MSG_CONTENT_CANCEL_CUST_15MINUTE_TIMEOUT);
+    	CUST_MAP.put(CANCEL_FOUR, OrderSkillConstants.IM_MSG_CONTENT_SYSTEM_FINISH_TIMEOUT_TO_CUST);
+    	//声优提示内容
+    	dvMap.put(CANCEL_ONE, OrderSkillConstants.IM_MSG_CONTENT_CANCEL_DV_15MINUTE_TIMEOUT);
+    	dvMap.put(CANCEL_TWO, OrderSkillConstants.IM_MSG_CONTENT_CANCEL_DV_5MINUTE_START_TIMEOUT);
+    	dvMap.put(CANCEL_THREE, OrderSkillConstants.IM_MSG_CONTENT_CANCEL_CUST_5MINUTE_CONFIRM_TIMEOUT);
+    	dvMap.put(CANCEL_FOUR, OrderSkillConstants.IM_MSG_CONTENT_SYSTEM_FINISH_TIMEOUT_TO_DAV);
+
+    }
 
 
     @Autowired
@@ -75,11 +98,6 @@ public class OrderUpdateJob {
     
     
     
-    /**15分钟超时未接*/
-    private  final static Integer  CANCEL_ONE =  1 ;
-    private  final static Integer  CANCEL_TWO =  2 ;
-    private  final static Integer  CANCEL_THREE = 3 ;
-    private  final static Integer  CANCEL_FOUR =  4 ;
 
     
     //接单设置
@@ -388,6 +406,57 @@ public class OrderUpdateJob {
     
     
     
+    
+    
+    
+    
+    
+    /***
+     * 消息推送
+     * @param customerId
+     * @param serviceId
+     * @param cancelType 1:15分钟未接受订单   2:大V5分钟未发起立即服务   3：用户未接受大V立即服务   4：订单自动完成
+     * @param msgContent
+     */
+    public synchronized  void   sendOrderIMMessage(String  userName,Long  fromUserId,Long  toCustomerId,Long  orderId ,Integer  cancelType,boolean  dvFlag,String  imageUrl){
+    	
+    	String  content =  null ;
+    	String  remarkName = null ;
+    	if(dvFlag){
+    		remarkName = OrderSkillConstants.MSG_CONTENT_DAV ;
+    		if(cancelType == CANCEL_ONE){
+    			content =  OrderSkillConstants.IM_MSG_CONTENT_CANCEL_DV_15MINUTE_TIMEOUT ;
+    		}else if (cancelType == CANCEL_TWO){
+    			content =  OrderSkillConstants.IM_MSG_CONTENT_CANCEL_DV_5MINUTE_START_TIMEOUT ;
+    		}else if (cancelType == CANCEL_THREE){
+    			content =  OrderSkillConstants.IM_MSG_CONTENT_CANCEL_DV_5MINUTE_CONFIRM_TIMEOUT ;
+    		}else if(cancelType == CANCEL_FOUR){
+    			content =  OrderSkillConstants.IM_MSG_CONTENT_SYSTEM_FINISH_TIMEOUT_TO_DAV ;
+    		}
+    	}else{
+    		remarkName = OrderSkillConstants.MSG_CONTENT_C ;
+    		if(cancelType == CANCEL_ONE){
+    			content =  OrderSkillConstants.IM_MSG_CONTENT_CANCEL_CUST_15MINUTE_TIMEOUT ;
+    		}else if (cancelType == CANCEL_TWO){
+    			content =  OrderSkillConstants.IM_MSG_CONTENT_CANCEL_CUST_5MINUTE_START_TIMEOUT ;
+    		}else if (cancelType == CANCEL_THREE){
+    			content =  OrderSkillConstants.IM_MSG_CONTENT_CANCEL_CUST_5MINUTE_CONFIRM_TIMEOUT ;
+    		}else if(cancelType == CANCEL_FOUR){
+    			content =  OrderSkillConstants.IM_MSG_CONTENT_SYSTEM_FINISH_TIMEOUT_TO_CUST ;
+    		}
+    	}
+    	
+    	LOGGER.info("----------------给customerId"+toCustomerId+"推送消息："+content);
+    	if(StringUtils.isNotBlank(content)){
+    		LOGGER.info("给customerId"+toCustomerId+"推送消息："+content);
+    		//下单成功后推送IM消息
+    		RongYunUtil.sendOrderIMMessage(userName, fromUserId, toCustomerId, remarkName, orderId, content, imageUrl);
+    	}
+    	
+    	
+    	
+    	
+    }
     /***
      * 消息推送
      * @param customerId
@@ -430,6 +499,10 @@ public class OrderUpdateJob {
     		//下单成功后推送IM消息
     		RongYunUtil.sendOrderMessage(customerId, content,remarkName);
     	}
+    	
+    	
+    	
+    	
     }
     
     

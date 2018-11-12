@@ -669,7 +669,8 @@ ORDER BY
 	  		od.remark as  remark,
 	  		od.discount_rate  as discountRate,
 	  		od.coupon_price  as  couponPrice,
-	  		od.appoint_time  as  appointTime
+	  		od.appoint_time  as  appointTime,
+	  		od.skill_type  as  skillType
 			
 		FROM
 			orders od
@@ -706,7 +707,8 @@ ORDER BY
 		od.remark as  remark,
 		od.discount_rate  as discountRate,
 		od.coupon_price  as  couponPrice,
-		od.appoint_time  as  appointTime
+		od.appoint_time  as  appointTime,
+		od.skill_type  as  skillType
 	FROM
 		orders od
 	INNER JOIN customer ct ON ct.customer_id = od.service_id
