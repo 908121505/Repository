@@ -655,7 +655,7 @@ public class OrderServiceImpl implements IOrderService {
 			if(OrderSkillConstants.ORDER_STATUS_GOING_USER_ACCEPCT == newOrderStatus || OrderSkillConstants.ORDER_STATUS_GOING_DAV_APPAY_FINISH == newOrderStatus ){
 				List<Long> orderIdList = new ArrayList<Long>();
 				orderIdList.add(order.getOrderId());
-				//更改订单状态为27
+				//更改订单状态为31
 				orderMapper.updateOrderReceiveOrder(orderIdList , OrderSkillConstants.ORDER_STATUS_GOING_USER_NOT_PING_JIA);
 			}
 			
