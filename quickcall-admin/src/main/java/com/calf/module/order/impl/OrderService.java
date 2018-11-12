@@ -304,6 +304,7 @@ public class OrderService {
 		paramMap.put("orderId", entity.getOrderId());
 		paramMap.put("compulsion_reason", entity.getCompulsionReason());
 		Integer orderStatus = Integer.valueOf(entity.getOrderStatus());
+		
 		BigDecimal orderAmount = new BigDecimal(entity.getOrderAmount());
 		Long orderId = Long.valueOf(entity.getOrderId());
 		int update = 0;
@@ -312,6 +313,7 @@ public class OrderService {
 			update = compulsoryCancellation(orderId,orderAmount);
 			// 退款给用户
 		} else if (OrderSkillConstants.ORDER_STATUS_FINISHED_FORCE == orderStatus) { // 给大V冻结金额
+			paramMap.put("orderStatus", orderStatus);
 			update = compulsoryCompletion(orderId, orderAmount);
 		}
 
