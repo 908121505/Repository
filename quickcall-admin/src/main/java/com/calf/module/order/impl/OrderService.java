@@ -317,7 +317,9 @@ public class OrderService {
 			update = compulsoryCompletion(orderId, orderAmount);
 		}
 
-		update = baseManager.update("Order.updateOrder", paramMap);
+		if(update == 1){
+			update = baseManager.update("Order.updateOrder", paramMap);
+		}
 
 		return update;
 	}
