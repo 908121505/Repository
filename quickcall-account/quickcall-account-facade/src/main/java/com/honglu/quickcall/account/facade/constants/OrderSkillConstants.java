@@ -287,6 +287,8 @@ public interface OrderSkillConstants {
 	public static final Integer  ORDER_STATUS_GOING_WAITING_START = 24 ;
 	/**订单状态26.进行中（大V发起开始服务用户5分钟内同意）;*/
 	public static final Integer  ORDER_STATUS_GOING_USER_ACCEPCT = 26 ;
+	/**订单状态27.进行中（用户已经查看该订单）;*/
+	public static final Integer  ORDER_STATUS_GOING_USER_NOT_PING_JIA = 27 ;
 	/**订单状态28.进行中（大V发起完成服务）*/
 	public static final Integer  ORDER_STATUS_GOING_DAV_APPAY_FINISH = 28 ;
 	/**订单状态29.已取消（强制取消）*/
