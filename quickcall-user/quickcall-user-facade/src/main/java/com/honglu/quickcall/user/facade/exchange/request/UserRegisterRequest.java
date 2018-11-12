@@ -24,6 +24,20 @@ public class UserRegisterRequest extends UserCenterRequest {
 	private String appChannelName;
 	private String gtClientId;// 个推用户端Id
 
+	private String fictitiousId;// 神策虚拟Id
+
+	public String getFictitiousId() {
+		return fictitiousId;
+	}
+
+	public void setFictitiousId(String fictitiousId) {
+		this.fictitiousId = fictitiousId;
+	}
+
+	public void setDeviceNo(String deviceNo) {
+		this.deviceNo = deviceNo;
+	}
+
 	public String getGtClientId() {
 		return gtClientId;
 	}

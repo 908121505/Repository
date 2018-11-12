@@ -81,6 +81,8 @@ public class Order {
 
     
     private Integer orderStatus;
+    /**券使用状态0：不适用券  1：使用券  2：使用券订单取消*/
+    private Integer couponFlag;
 
    
     private Date paymentTime;
@@ -122,11 +124,25 @@ public class Order {
     private String selectReason;
     private String remarkReason;
     
+    private BigDecimal  couponPrice;
+    
+    
+    
     
     
 
     
-    public Long getSkillItemId() {
+    public BigDecimal getCouponPrice() {
+		return couponPrice;
+	}
+
+
+	public void setCouponPrice(BigDecimal couponPrice) {
+		this.couponPrice = couponPrice;
+	}
+
+
+	public Long getSkillItemId() {
 		return skillItemId;
 	}
 
@@ -511,4 +527,17 @@ public class Order {
     public void setValueScore(BigDecimal valueScore) {
         this.valueScore = valueScore;
     }
+
+
+	public Integer getCouponFlag() {
+		return couponFlag;
+	}
+
+
+	public void setCouponFlag(Integer couponFlag) {
+		this.couponFlag = couponFlag;
+	}
+    
+    
+    
 }

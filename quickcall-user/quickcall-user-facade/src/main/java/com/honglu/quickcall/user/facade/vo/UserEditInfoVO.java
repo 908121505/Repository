@@ -20,7 +20,7 @@ public class UserEditInfoVO {
 
     private String starSign;
 
-    private Date birthday;
+    private String birthday;
 
     private Integer identityStatus;
 
@@ -101,11 +101,11 @@ public class UserEditInfoVO {
         this.starSign = starSign;
     }
 
-    public Date getBirthday() {
+    public String getBirthday() {
         return birthday;
     }
 
-    public void setBirthday(Date birthday) {
+    public void setBirthday(String birthday) {
         this.birthday = birthday;
     }
 

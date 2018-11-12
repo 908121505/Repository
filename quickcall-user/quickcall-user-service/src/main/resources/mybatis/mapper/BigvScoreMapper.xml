@@ -79,14 +79,14 @@
       (
         SELECT COUNT(t2.order_id) FROM orders t2
         WHERE t2.service_id = t.service_id AND t2.skill_item_id = t.skill_item_id
-        AND t2.order_status IN (30, 32, 34, 36, 38, 40) AND t2.order_id <![CDATA[  < ]]> t.order_id
+        AND t2.order_status IN (30, 31, 32, 33, 33, 34, 36, 38, 40) AND t2.order_id <![CDATA[  < ]]> t.order_id
       ) AS paymentType <!-- 订单累计数，暂时用字段 paymentType 接收 -->
     FROM `orders` t
     WHERE 1 = 1
       <if test="customerSkillId != null">
         AND t.customer_skill_id = #{customerSkillId}
       </if>
-    AND	t.order_status IN (30, 32, 34, 36, 38, 40)
+    AND	t.order_status IN (30, 31, 32, 33, 33, 34, 36, 38, 40)
     ORDER BY t.service_id ASC, t.skill_item_id ASC, t.create_time ASC
   </select>
 

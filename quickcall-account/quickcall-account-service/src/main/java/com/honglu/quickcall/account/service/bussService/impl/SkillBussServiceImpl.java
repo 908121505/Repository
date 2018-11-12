@@ -3,16 +3,17 @@ package com.honglu.quickcall.account.service.bussService.impl;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.honglu.quickcall.common.api.exchange.ResultUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.honglu.quickcall.account.facade.code.AccountBizReturnCode;
+import com.honglu.quickcall.account.facade.exchange.request.CheckReceiveSwitchRequest;
 import com.honglu.quickcall.account.facade.exchange.request.DaVListBySkillItemIdRequest;
 import com.honglu.quickcall.account.facade.exchange.request.FirstPageDaVinfoRequest;
 import com.honglu.quickcall.account.facade.exchange.request.FirstPageSkillinfoRequest;
+import com.honglu.quickcall.account.facade.exchange.request.OpenReceiveSwitchRequest;
 import com.honglu.quickcall.account.facade.exchange.request.SkillInfoRequest;
 import com.honglu.quickcall.account.facade.exchange.request.SkillUpdateRequest;
 import com.honglu.quickcall.account.facade.vo.CustomerSkillInfoVO;
@@ -25,6 +26,7 @@ import com.honglu.quickcall.account.service.service.IProductSkillService;
 import com.honglu.quickcall.common.api.code.BizCode;
 import com.honglu.quickcall.common.api.exception.BizException;
 import com.honglu.quickcall.common.api.exchange.CommonResponse;
+import com.honglu.quickcall.common.api.exchange.ResultUtils;
 
 /**
  * 
@@ -51,7 +53,10 @@ public class SkillBussServiceImpl implements ISkillBussService {
 			throw new BizException(AccountBizReturnCode.paramError, "查询技能信息参数异常");
 		}
 		Long  customerId =  request.getCustomerId();
-		
+//		String customerJson = JedisUtil.get(RedisKeyConstants.USER_CUSTOMER_INFO+request.getCustomerId());
+//		if(StringUtils.isEmpty(customerJson)){
+//			return ResultUtils.result(BizCode.CustomerNotExist);
+//		}
 		//
 		CustomerSkillInfoVO   resultVO =  productSkillService.querySkillInfoPersonal(customerId);
 		CommonResponse commonResponse = new CommonResponse();
@@ -69,6 +74,10 @@ public class SkillBussServiceImpl implements ISkillBussService {
 		if (request == null ) {
 			throw new BizException(AccountBizReturnCode.paramError, "更改技能参数异常");
 		}
+//		String customerJson = JedisUtil.get(RedisKeyConstants.USER_CUSTOMER_INFO+request.getCustomerId());
+//		if(StringUtils.isEmpty(customerJson)){
+//			return ResultUtils.result(BizCode.CustomerNotExist);
+//		}
 		productSkillService.updateSkillInfoPersonal(request);
 		CommonResponse commonResponse = new CommonResponse();
 		commonResponse.setCode(BizCode.Success);
@@ -122,6 +131,36 @@ public class SkillBussServiceImpl implements ISkillBussService {
 		List<DaVinfoVO>    resultList = productSkillService.getDaVListBySkillId(skillItemId);
 		CommonResponse commonResponse = commonService.getCommonResponse();
 		commonResponse.setData(resultList);
+		LOGGER.info("用户编号为：" + request.getCustomerId() + "查询成功");
+		return commonResponse;
+	}
+
+
+
+	@Override
+	public CommonResponse checkReceiveSwitch(CheckReceiveSwitchRequest request) {
+		if (request == null ) {
+			throw new BizException(AccountBizReturnCode.paramError, "检查声优接单开关是否开启参数异常");
+		}
+		Long  customerId = request.getCustomerId();
+		Integer     retType = productSkillService.checkReceiveSwitch(customerId);
+		CommonResponse commonResponse = commonService.getCommonResponse();
+		commonResponse.setData(retType);
+		LOGGER.info("用户编号为：" + request.getCustomerId() + "查询成功");
+		return commonResponse;
+	}
+
+
+
+	@Override
+	public CommonResponse openReceiveSwitch(OpenReceiveSwitchRequest request) {
+		if (request == null ) {
+			throw new BizException(AccountBizReturnCode.paramError, "开启声优接单开关参数异常");
+		}
+		Long  customerId = request.getCustomerId();
+		productSkillService.openReceiveSwitch(customerId);
+		CommonResponse commonResponse = commonService.getCommonResponse();
+		commonResponse.setData("");
 		LOGGER.info("用户编号为：" + request.getCustomerId() + "查询成功");
 		return commonResponse;
 	}

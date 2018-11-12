@@ -11,6 +11,7 @@ import com.honglu.quickcall.user.facade.exchange.UserCenterRequest;
  */
 public class QueryDeviceWhitelistReq extends UserCenterRequest {
     private Long customerId;
+    private String deviceId;
 
     public Long getCustomerId() {
         return customerId;
@@ -20,10 +21,19 @@ public class QueryDeviceWhitelistReq extends UserCenterRequest {
         this.customerId = customerId;
     }
 
+    public String getDeviceId() {
+        return deviceId;
+    }
+
+    public void setDeviceId(String deviceId) {
+        this.deviceId = deviceId;
+    }
+
     @Override
     public String toString() {
         return "QueryDeviceWhitelistReq{" +
-                "customerId=" + customerId +
+                "customerId='" + customerId + '\'' +
+                ", deviceId='" + deviceId + '\'' +
                 '}';
     }
 

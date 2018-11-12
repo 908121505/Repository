@@ -54,6 +54,8 @@ public class UserBizReturnCode extends BizCode {
     public static final BizCode BizFunctionTypeNotMatch=new UserBizReturnCode("BizFunctionTypeNotMatch","998",MyServiceCode.USER,"接口功能编码不匹配");
     public static final BizCode Unknown = new UserBizReturnCode("Unknown","999", MyServiceCode.USER,"未知异常");
 
+    public static final BizCode certification = new UserBizReturnCode("certification","113", MyServiceCode.USER,"您已完成实名认证，不能更改该信息！");
+
 
 
     public UserBizReturnCode() {

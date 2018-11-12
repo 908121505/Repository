@@ -18,6 +18,7 @@ import com.honglu.quickcall.common.core.util.UUIDUtils;
 import com.honglu.quickcall.common.third.rongyun.models.CodeSuccessReslut;
 import com.honglu.quickcall.common.third.rongyun.util.RongYunUtil;
 import com.honglu.quickcall.user.facade.code.UserBizReturnCode;
+import com.honglu.quickcall.user.facade.constants.ScoreRankConstants;
 import com.honglu.quickcall.user.facade.constants.UserBizConstants;
 import com.honglu.quickcall.user.facade.entity.*;
 import com.honglu.quickcall.user.facade.entity.example.AppShareConfigExample;
@@ -70,6 +71,10 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 	@Autowired
 	private AppShareConfigMapper appShareConfigMapper;
 	@Autowired
+	private BlacklistMapper blacklistMapper;
+	@Autowired
+	private CustomerVisitMapper customerVisitMapper;
+	@Autowired
 	private BigvSkillScoreMapper bigvSkillScoreMapper;
 
 	/**
@@ -77,9 +82,6 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 	 */
 	private final static Pattern CH_EN_PATTERN = Pattern.compile("^[\\u4e00-\\u9fa5a-z\\d_]{4,24}$");
 	private static final Logger logger = LoggerFactory.getLogger(PersonInfoServiceImpl.class);
-
-	// private static String CUSTOMER_HOME_SHARE_H5_URL =
-	// ResourceBundle.getBundle("thirdconfig").getString("CUSTOMER_HOME_SHARE_H5_URL");
 
 	/**
 	 * 首页搜索用户
@@ -94,16 +96,21 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 		if (StringUtil.isBlank(keyword)) {
 			throw new BizException(UserBizReturnCode.paramError, "搜索关键字不能为空");
 		}
-		Pattern pattern = Pattern.compile("[0-9]{4,10}");
+		keyword = keyword.replaceAll("%","\\\\%");
+		Pattern pattern = Pattern.compile("[0-9]{8,10}");
 		Long currentCustomer = params.getCustomerId();
 		List<SearchPersonListVO> customerList = null;
+		Integer index = null;
+		if(params.getPageIndex() != null && params.getPageSize() != null){
+			index = params.getPageIndex() * params.getPageSize();
+		}
 		// 匹配搜索关键字是模糊搜索还是精准搜索
 		if (pattern.matcher(keyword).matches()) {
 			// 精准搜索
 			customerList = customerMapper.selectPreciseSearch(keyword, currentCustomer);
 		} else {
 			// 模糊搜索
-			customerList = customerMapper.selectFuzzySearch(keyword, currentCustomer, params.getPageIndex(),
+			customerList = customerMapper.selectFuzzySearch(keyword, currentCustomer, index,
 					params.getPageSize());
 		}
 
@@ -126,6 +133,9 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 		Customer customer = customerMapper.selectByPrimaryKey(params.getCustomerId());
 		String newNickname = params.getNickName();
 
+		if(customer == null){
+			return ResultUtils.result(BizCode.CustomerNotExist);
+		}
 		if (StringUtils.isNotEmpty(newNickname)) {
 			if (newNickname.length() > 24) {
 				throw new RemoteException(UserBizReturnCode.paramError, "您的昵称超出长度！");
@@ -218,6 +228,9 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 		CommonResponse commonResponse = new CommonResponse();
 		// 取账号信息并存redis
 		Customer customer = customerRedisManagement.getCustomer(params.getCustomerId());
+		if(customer == null){
+			return ResultUtils.result(BizCode.CustomerNotExist);
+		}
 		Integer newGender = params.getGender();
 		// 如果newGender 为空或者不等于 0、1 则返回错误
 		if (null != newGender && newGender != 0 && newGender != 1) {
@@ -244,9 +257,11 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 	 */
 	@Override
 	public CommonResponse saveSignName(SaveSignNameRequest params) {
-
 		CommonResponse commonResponse = new CommonResponse();
 		Customer customer = customerMapper.selectByPrimaryKey(params.getCustomerId());
+		if(customer == null){
+			return ResultUtils.result(BizCode.CustomerNotExist);
+		}
 		// 获取新签名
 		String newSign = params.getSignName();
 		// if (StringUtils.isNotEmpty(newSign)) {
@@ -292,6 +307,9 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 	public CommonResponse saveBirthday(SaveBirthRequest params) {
 		CommonResponse commonResponse = new CommonResponse();
 		Customer customer = customerRedisManagement.getCustomer(params.getCustomerId());
+		if(customer == null){
+			return ResultUtils.result(BizCode.CustomerNotExist);
+		}
 		customer.setBirthday(params.getBirthday());// 生日
 		customer.setStarSign(params.getStarSign());// 星座
 		try {
@@ -326,6 +344,9 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 		customerInterest.setCustomerId(params.getCustomerId());
 
 		Customer customer = customerRedisManagement.getCustomer(params.getCustomerId());
+		if(customer == null){
+			return ResultUtils.result(BizCode.CustomerNotExist);
+		}
 		// 获取兴趣,截取
 		String interests = params.getInterestId();
 		String[] interest = interests.split(",");
@@ -367,7 +388,6 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 	 */
 	@Override
 	public CommonResponse saveOccupation(SaveOccupationRequest params) {
-
 		CommonResponse commonResponse = new CommonResponse();
 		CustomerOccupation customerOccupation = new CustomerOccupation();
 		// 先存入用户id
@@ -407,7 +427,7 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 			}
 			return commonResponse;
 		} else {
-			throw new BizException(AccountBizReturnCode.JdbcError, "操作数据库异常");
+			return ResultUtils.result(BizCode.CustomerNotExist);
 		}
 
 	}
@@ -446,12 +466,15 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 
 	@Override
 	public CommonResponse queryAttentionFansList(QueryAttentionFansListRequest request) {
-
 		CommonResponse commonResponse = new CommonResponse();
 		try {
 			List<AttentionFansVO> resultList = new ArrayList<AttentionFansVO>();
 
 			Long customerId = request.getCustomerId();
+			Customer customer = customerMapper.selectByPrimaryKey(customerId);
+			if(customer == null){
+				return ResultUtils.result(BizCode.CustomerNotExist);
+			}
 			Integer type = request.getType();
 			if (UserBizConstants.QUERY_ATTENTION_LIST_TYPE == type) {
 				// 查询关注列表
@@ -543,6 +566,10 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 
 	@Override
 	public CommonResponse checkEachAttention(CheckEachAttentionRequest request) {
+		Customer customer = customerMapper.selectByPrimaryKey(request.getAttendedId());
+		if(customer == null){
+			return ResultUtils.result(BizCode.CustomerNotExist);
+		}
 		// 查询关注状态
 		int n = fansMapper.queryIsFollow(request.getFansId(), request.getAttendedId());
 		int n1 = fansMapper.queryIsFollow(request.getAttendedId(), request.getFansId());
@@ -558,7 +585,10 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 
 	@Override
 	public CommonResponse readAttention(ReadAttentionRequest params) {
-
+		Customer customer = customerMapper.selectByPrimaryKey(params.getCustomerId());
+		if(customer == null){
+			return ResultUtils.result(BizCode.CustomerNotExist);
+		}
 		if (params.getCustomerId() == null) {
 			throw new BizException(BizCode.ParamError, "用戶Id 不能为空");
 		}
@@ -570,6 +600,10 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 	public CommonResponse queryMySkill(queryMyskillRequest params) {
 		if (params.getCustomerId() == null) {
 			throw new BizException(BizCode.ParamError, "用戶Id 不能为空");
+		}
+		Customer customer = customerMapper.selectByPrimaryKey(params.getCustomerId());
+		if(customer == null){
+			return ResultUtils.result(BizCode.CustomerNotExist);
 		}
 		CommonResponse commonResponse = new CommonResponse();
 		List<SkillItem> skillList = skillItemMapper.selectAllSkill();
@@ -600,6 +634,13 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 							mySkillVO.setSkillVoiceUrl(skillReview.getSkillVoiceUrl());
 							mySkillVO.setSkillVoiceTime(
 									skillReview.getSkillVoiceTime().setScale(0, BigDecimal.ROUND_UP).intValue());
+							mySkillVO.setBackColor(skill.getBackColor());
+							mySkillVO.setSkillFontColor(skill.getFontColor());
+							//获取客户技能
+							CustomerSkill cs = customerSkillMapper.queryCustomerSkillByCertifyId(skillReview.getCertifyId());
+							mySkillVO.setPrice(cs.getDiscountPrice());
+							mySkillVO.setUnit(cs.getServiceUnit());
+							mySkillVO.setSkillVolume(cs.getSkillVolume()==null?new BigDecimal(0):cs.getSkillVolume());
 						}
 						haveSkill.add(mySkillVO);
 						flag = false;
@@ -626,6 +667,10 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 	@Override
 	public CommonResponse saveCustomerSkillCertify(SaveSkillAuditRequest params) {
 		CommonResponse commonResponse = new CommonResponse();
+		Customer customer = customerMapper.selectByPrimaryKey(params.getCustomerId());
+		if(customer == null){
+			return ResultUtils.result(BizCode.CustomerNotExist);
+		}
 		CustomerSkillCertify certifyNow = customerSkillCertifyMapper.selectSkillCertifyId(params.getCustomerId(),
 				params.getSkillItemId());
 
@@ -666,7 +711,7 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 	public CommonResponse queryCustomerCenter(CustomerCenterRequest request) {
 		Customer customer = customerMapper.selectByPrimaryKey(request.getCustomerId());
 		if (customer == null) {
-			return ResultUtils.resultDataNotExist("用户数据不存在");
+			return ResultUtils.result(BizCode.CustomerNotExist);
 		}
 		CustomerCenterVO customerCenterVO = new CustomerCenterVO();
 		customerCenterVO.setCustomerId(request.getCustomerId());
@@ -682,11 +727,18 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 		customerCenterVO.setIdentityStatus(customer.getIdentityStatus());
 		customerCenterVO.setvStatus(customer.getvStatus());
 
+		// 不是大V -- 查询是否申请过声优
+		if(!Objects.equals(customer.getvStatus(), 2)){
+			customerCenterVO.setApplyBigvStatus(customerMapper.getCustomerIfAppliedBigv(request.getCustomerId()));
+		}
 		// 查询关注数
 		customerCenterVO.setAttentionNum(fansMapper.queryAttentionNumByCustomerId(request.getCustomerId()));
 
 		// 查询粉丝数
-		customerCenterVO.setFansNum(fansMapper.queryFansNumByCustomerId(request.getCustomerId()).intValue());
+		customerCenterVO.setFansNum(fansMapper.queryFansNumByCustomerId(request.getCustomerId()));
+		
+		// 查询被访问数量
+		customerCenterVO.setVisitNum(customerVisitMapper.selectUnreadCountByCustomerId(request.getCustomerId()));
 
 		// 查询充值、提现金额
 		Map<String, BigDecimal> customerMoney = customerMapper.queryCustomerAccountMoney(request.getCustomerId());
@@ -694,6 +746,7 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 			customerCenterVO.setRechargeAmounts(customerMoney.get("rechargeAmounts"));
 			customerCenterVO.setWithdrawAmounts(customerMoney.get("withdrawAmounts"));
 		}
+
 		return ResultUtils.resultSuccess(customerCenterVO);
 	}
 
@@ -701,7 +754,7 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 	public CommonResponse queryCustomerHome(CustomerHomeRequest request) {
 		Customer viewCustomer = customerMapper.selectByPrimaryKey(request.getViewCustomerId());
 		if (viewCustomer == null) {
-			return ResultUtils.resultDataNotExist("用户数据不存在");
+			return ResultUtils.result(BizCode.CustomerNotExist);
 		}
 
 		CustomerHomeVO customerHomeVO = new CustomerHomeVO();
@@ -728,7 +781,7 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 		}
 
 		// 查询粉丝数
-		customerHomeVO.setFansNum(fansMapper.queryFansNumByCustomerId(request.getViewCustomerId()).intValue());
+		customerHomeVO.setFansNum(fansMapper.queryFansNumByCustomerId(request.getViewCustomerId()));
 
 		// 查看自己的标志
 		boolean viewMyselfFlag = Objects.equals(request.getLoginCustomerId(), request.getViewCustomerId());
@@ -789,14 +842,14 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 						.selectCustomerSkillHotLabel(request.getViewCustomerId(), bean.getSkillItemId()));
 
 				// 查询技能声量
-				customerSkill.setSkillVolume(bigvSkillScoreMapper.selectBigvScoreValue(bean.getCustomerSkillId()));
+				customerSkill.setSkillVolume(ScoreRankConstants.formatSkillScore(bigvSkillScoreMapper.selectBigvScoreValue(bean.getCustomerSkillId())));
 
 				// 判断是否可下单
 				if (Objects.equals(request.getLoginCustomerId(), request.getViewCustomerId())) {
 					customerSkill.setCanOrder(0); // 自己看自己的个人主页时 -- 直接返回 0=不可接单
 				} else {
-					customerSkill.setCanOrder(
-							accountOrderService.checkReceiveOrderByCustomerSkillId(bean.getCustomerSkillId()));
+//					customerSkill.setCanOrder(accountOrderService.checkReceiveOrderByCustomerSkillId(bean.getCustomerSkillId()));
+					customerSkill.setCanOrder(1);// 查看别人的，全部可下单 -- 到下单的时候再判断
 				}
 				// 查询技能订单数-wq
 				customerSkill.setSkillOrderNo(customerSkillMapper.selectSkillOrderNo(bean.getCustomerSkillId()));
@@ -805,6 +858,12 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 		}
 		customerHomeVO.setSkillList(skillList);
 
+		// 黑名单状态
+		if (request.getLoginCustomerId() != null){
+			customerHomeVO.setBackStatus(blacklistMapper.judgeCustomerIfBacked(
+					request.getLoginCustomerId(), request.getViewCustomerId()));
+		}
+
 		return ResultUtils.resultSuccess(customerHomeVO);
 	}
 
@@ -812,7 +871,7 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 	public CommonResponse queryCustomerLevel(CustomerLevelRequest request) {
 		Customer customer = customerMapper.selectByPrimaryKey(request.getCustomerId());
 		if (customer == null) {
-			return ResultUtils.resultDataNotExist("用户数据不存在");
+			return ResultUtils.result(BizCode.CustomerNotExist);
 		}
 		CustomerLevelVO customerLevelVO = new CustomerLevelVO();
 		customerLevelVO.setCustomerId(request.getCustomerId());
@@ -847,18 +906,44 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 		if (params.getCustomerId() == null) {
 			throw new BizException(BizCode.ParamError, "用戶Id 不能为空");
 		}
+		Customer customer = customerMapper.selectByPrimaryKey(params.getCustomerId());
+		if(customer == null){
+			return ResultUtils.result(BizCode.CustomerNotExist);
+		}
 		int row = fansMapper.queryNoReadFansNumByCustomerId(params.getCustomerId());
 		return ResultUtils.resultSuccess(row);
 	}
 
 	@Override
 	public CommonResponse isBigVidentity(IsBigVidentityRequest request) {
-
 		Customer customer = customerMapper.selectByPrimaryKey(request.getCustomerId());
+		if(customer == null){
+			return ResultUtils.result(BizCode.CustomerNotExist);
+		}
 		if (customer != null && customer.getvStatus() == 2 && customer.getIdentityStatus() == 2) {
 			return ResultUtils.resultSuccess(1);
 		}
 
 		return ResultUtils.resultSuccess(0);
+	}
+
+	@Override
+	public CommonResponse submitCustomerApplyBigv(CustomerApplyBigvRequest request) {
+		Customer customer = customerMapper.selectByPrimaryKey(request.getCustomerId());
+		if (customer == null) {
+			return ResultUtils.result(BizCode.CustomerNotExist);
+		}
+		if(Objects.equals(customer.getvStatus(), 2)){
+			return ResultUtils.resultDataStateError("您已经是声优了，不需要申请哟");
+		}
+		CustomerApplyBigv applyBigv = new CustomerApplyBigv();
+		applyBigv.setApplyId(UUIDUtils.getId());
+		applyBigv.setCustomerId(request.getCustomerId());
+		applyBigv.setApplyTime(new Date());
+
+		if(customerMapper.insertApplyBigvData(applyBigv) == 0){
+			return ResultUtils.resultDuplicateOperation("您已申请过，请勿重复提交");
+		}
+		return ResultUtils.resultSuccess();
 	}
 }

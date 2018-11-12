@@ -77,6 +77,7 @@ certify_id,	customer_id,	skill_item_id,	audit_status,	skill_voice_url,	skill_voi
 				and csc.audit_status = #{auditStatus}
 			</if>
 		</where>
+		order by csc.modify_time desc
 		limit ${iDisplayStart},${iDisplayLength}
 		
 	</select>

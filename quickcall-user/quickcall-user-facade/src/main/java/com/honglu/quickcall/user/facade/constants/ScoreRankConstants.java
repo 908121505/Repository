@@ -1,5 +1,6 @@
 package com.honglu.quickcall.user.facade.constants;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -64,11 +65,48 @@ public class ScoreRankConstants {
     public static Double getSingleOrderNumWeight(Integer orderNo) {
         Integer index = 1;
         for (Integer key : SINGLE_ORDER_NUM_WEIGHT_MAP.keySet()) {
-            if(key <= orderNo){
+            if (key <= orderNo) {
                 index = key;
             }
         }
         return SINGLE_ORDER_NUM_WEIGHT_MAP.get(index);
     }
 
+    /**
+     * 声量格式化的单位
+     */
+    private static final String[] unit = {"k", "m", "b"};
+    /**
+     * 声量格式化的分界线
+     */
+    private static final BigDecimal ONE_THOUSAND = new BigDecimal(1000);
+    /**
+     * 格式化技能声量
+     *
+     * @param score
+     * @return
+     */
+    public static String formatSkillScore(BigDecimal score) {
+        if (score == null) {
+            return "0";
+        }
+        if(score.compareTo(new BigDecimal(10000)) < 0){
+            return String.valueOf(score.setScale(0, BigDecimal.ROUND_DOWN));
+        }
+        int index = 0;
+        do {
+            score = score.divide(ONE_THOUSAND);
+            index++;
+        }while (score.compareTo(ONE_THOUSAND) >= 0 && index <= 2);
+        index--;
+        score = score.setScale(2, BigDecimal.ROUND_DOWN);
+        return score + unit[index];
+    }
+
+    public static void main(String[] args) {
+        System.out.println(formatSkillScore(new BigDecimal(0.54)));
+        System.out.println(formatSkillScore(new BigDecimal(9999)));
+        System.out.println(formatSkillScore(new BigDecimal(10000)));
+        System.out.println(formatSkillScore(new BigDecimal("1000000000000")));
+    }
 }

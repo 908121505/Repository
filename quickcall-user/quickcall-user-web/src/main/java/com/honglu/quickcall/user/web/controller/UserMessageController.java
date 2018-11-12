@@ -98,7 +98,7 @@ public class UserMessageController {
     @RequestMapping(value = "/saveCustomerMessageSetting", method = RequestMethod.POST)
     @ResponseBody
     public WebResponseModel saveCustomerMessageSetting(CustomerMsgSettingRequest request) {
-        if (StringUtils.isBlank(String.valueOf(request.getCustomerId()))) {
+        if (null == request.getCustomerId()) {
             WebResponseModel response = new WebResponseModel();
             response.setCode(UserBizReturnCode.paramError.code());
             response.setMsg(UserBizReturnCode.paramError.desc());

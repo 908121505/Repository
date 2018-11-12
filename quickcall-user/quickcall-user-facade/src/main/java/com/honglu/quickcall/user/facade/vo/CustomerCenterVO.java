@@ -2,7 +2,6 @@ package com.honglu.quickcall.user.facade.vo;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.List;
 
 /**
  * 个人中心返回数据 -- 页面对象
@@ -12,7 +11,7 @@ import java.util.List;
  */
 public class CustomerCenterVO implements Serializable {
 
-    private static final long serialVersionUID = -1209835663261243685L;
+    private static final long serialVersionUID = 8320850440223728219L;
     /**
      * 客户ID
      */
@@ -54,6 +53,10 @@ public class CustomerCenterVO implements Serializable {
      */
     private Integer vStatus;
     /**
+     * 申请大V状态：0=未申请,1=已申请
+     */
+    private Integer applyBigvStatus;
+    /**
      * 关注数
      */
     private Integer attentionNum;
@@ -61,6 +64,10 @@ public class CustomerCenterVO implements Serializable {
      * 用户粉丝数
      */
     private Integer fansNum;
+    /**
+     * 用户访问数
+     */
+    private Integer visitNum;
     /**
      * 充值金额
      */
@@ -150,6 +157,14 @@ public class CustomerCenterVO implements Serializable {
         this.vStatus = vStatus;
     }
 
+    public Integer getApplyBigvStatus() {
+        return applyBigvStatus;
+    }
+
+    public void setApplyBigvStatus(Integer applyBigvStatus) {
+        this.applyBigvStatus = applyBigvStatus;
+    }
+
     public Integer getAttentionNum() {
         return attentionNum;
     }
@@ -166,7 +181,15 @@ public class CustomerCenterVO implements Serializable {
         this.fansNum = fansNum;
     }
 
-    public BigDecimal getRechargeAmounts() {
+    public Integer getVisitNum() {
+		return visitNum;
+	}
+
+	public void setVisitNum(Integer visitNum) {
+		this.visitNum = visitNum;
+	}
+
+	public BigDecimal getRechargeAmounts() {
         return rechargeAmounts;
     }
 
@@ -195,6 +218,7 @@ public class CustomerCenterVO implements Serializable {
                 ", signName='" + signName + '\'' +
                 ", identityStatus=" + identityStatus +
                 ", vStatus=" + vStatus +
+                ", applyBigvStatus=" + applyBigvStatus +
                 ", attentionNum=" + attentionNum +
                 ", fansNum=" + fansNum +
                 ", rechargeAmounts=" + rechargeAmounts +

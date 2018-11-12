@@ -79,6 +79,8 @@ public class CustomerSkill {
     private String skillFontColor;
     private String skillVoiceUrl;
     private BigDecimal skillVoiceTime;
+    //声量
+    private BigDecimal skillVolume;
 
     public Long getCustomerSkillId() {
         return customerSkillId;
@@ -388,4 +390,12 @@ public class CustomerSkill {
     public void setSkillHomeBackColor(String skillHomeBackColor) {
         this.skillHomeBackColor = skillHomeBackColor;
     }
+
+	public BigDecimal getSkillVolume() {
+		return skillVolume;
+	}
+
+	public void setSkillVolume(BigDecimal skillVolume) {
+		this.skillVolume = skillVolume;
+	}
 }

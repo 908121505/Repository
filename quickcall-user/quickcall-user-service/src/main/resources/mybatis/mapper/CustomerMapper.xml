@@ -54,6 +54,7 @@
     <result column="login_time" property="loginTime" jdbcType="TIMESTAMP" />
     <result column="block_start_time" property="blockStartTime" jdbcType="TIMESTAMP" />
     <result column="block_end_time" property="blockEndTime" jdbcType="TIMESTAMP" />
+    <result column="uid" property="uid" jdbcType="VARCHAR" />
   </resultMap>
  <sql id="Base_Column_List" >
         customer_id,app_id, phone, real_name, sex, nick_name, type, credentials_type, credentials_num, 
@@ -62,13 +63,13 @@
     star_sign, birthday, voice_url, voice_time, v_voice_url, v_voice_url_tmp, v_voice_time_tmp, 
     v_voice_status, v_voice_time, v_status, identity_status, token_code, other_relation, 
     create_time, modify_time, create_man, modify_man, remark, app_channel_name,cumulate_experience,
-    customer_level, device_id, login_time,gt_client_id,block_start_time,block_end_time,cust_state
+    customer_level, device_id, login_time,gt_client_id,block_start_time,block_end_time,cust_state,uid
   </sql>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
     from customer
-    where customer_id = #{customerId,jdbcType=BIGINT}
+    where customer_id = #{customerId}
   </select>
   
   <select id="selectFuzzySearch" resultType="com.honglu.quickcall.user.facade.vo.SearchPersonListVO" >
@@ -150,6 +151,9 @@
       </if>
       <if test="appId != null and appId!=''" >
         app_id,
+      </if>
+      <if test="uid != null and uid!=''" >
+        uid,
       </if>
       <if test="phone != null" >
         phone,
@@ -278,6 +282,9 @@
       </if>
       <if test="appId != null and appId!=''" >
         #{appId,jdbcType=VARCHAR},
+      </if>
+      <if test="uid != null and uid!=''" >
+        #{uid,jdbcType=VARCHAR},
       </if>
       <if test="phone != null" >
         #{phone,jdbcType=BIGINT},
@@ -616,7 +623,8 @@
       service_price as servicePrice,
       order_num as orderNum,
       evaluate_start as evaluateStart,
-      value_score as valueScore
+      value_score as valueScore,
+      coupon_flag as couponFlag
     from orders where order_id = #{orderId}
   </select>
 
@@ -645,7 +653,7 @@
     nick_name AS nickName,
     sign_name AS signName,
     star_sign AS starSign,
-    birthday,
+    IFNULL(DATE_FORMAT(birthday, '%Y/%m/%d' ),"") AS birthday,
     identity_status as identityStatus,
     head_portrait_url as defaultHeadPortrait
   FROM
@@ -659,6 +667,18 @@
   customer
   where customer_id = #{customerId}
   </select>
+
+  <!-- 获取客户是否申请过成为大V -->
+  <select id="getCustomerIfAppliedBigv" resultType="integer">
+    SELECT COUNT(1) FROM customer_apply_bigv WHERE customer_id=#{customerId}
+  </select>
+
+  <!-- 保存客户提交申请大V的数据 -->
+  <insert id="insertApplyBigvData" parameterType="com.honglu.quickcall.user.facade.entity.CustomerApplyBigv">
+    insert into customer_apply_bigv (apply_id, customer_id, apply_time)
+    SELECT #{applyId}, #{customerId}, #{applyTime}
+    FROM DUAL WHERE NOT EXISTS (SELECT customer_id FROM customer_apply_bigv WHERE customer_id = #{customerId})
+  </insert>
 
   <!-- 判断客户是否为声优 -->
   <select id="judgeCustomerIsBigv" resultType="int">

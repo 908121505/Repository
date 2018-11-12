@@ -8,11 +8,11 @@ import org.apache.commons.lang3.StringUtils;
  */
 public enum OrderStatusEnums {
     Waiting_List("1","待接单","2"),
-    Waiting_Start("2","待开始","18,10"),
+    Waiting_Start("2","待开始","18,10,24"),
     Processing("3","进行中","26,28"),
     Complete("4","已完成","30,32,34,36,38,40,42"),
     Refused("5","已拒绝","8,29"),
-    Cancel("6","已取消","12,14,16"),
+    Cancel("6","已取消","4,6,12,14,16,20,22,23,29"),
 
     ;
 

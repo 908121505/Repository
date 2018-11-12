@@ -232,6 +232,20 @@ public interface UserFunctionType {
 	 * 技能项分类点击列表
 	 */
 	String CANCEL_ATTENTION = "003232";
+	
+	/**
+	 * 最近来访列表
+	 */
+	String Recent_Visit_List = "0011301";
+	
+	/**
+	 * 设置来访已读
+	 */
+	String Set_Visit_Read = "0011302";
+	/**
+	 * 客户申请成为大V
+	 */
+	String CUSTOMER_APPLY_BIGV = "0011303";
 
 	/**
 	 * 初始化大V评分排名数据

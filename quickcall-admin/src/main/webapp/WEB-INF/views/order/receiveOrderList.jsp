@@ -11,7 +11,8 @@
 		</div>
 		<div class="main-content">
 			<div class="row">
-				<div class="col-md-2">
+
+				<%--<div class="col-md-2">
 					<div class="form-group">
 						<div class="input-group">
 							<div class="input-group-addon">创建时间</div>
@@ -27,7 +28,7 @@
 							<input class="form-control" type="text" value="${showCurTime}" id="modify_time" onfocus="WdatePicker({skin:'default',dateFmt:'yyyy-MM-dd HH:mm:ss',minDate:'1950-01-01'})">
 						</div>
 					</div>
-				</div>
+				</div>--%>
 
 				<div class="col-md-2">
 					<div class="form-group">
@@ -46,8 +47,6 @@
 						</div>
 					</div>
 				</div>
-			</div>
-			<div class="row">
 				<div class="col-md-2">
 					<div class="form-group">
 						<div class="input-group">
@@ -81,12 +80,39 @@
 						</div>
 					</div>
 				</div>
-				<div class="col-md-2">
+
+			</div>
+
+			<div class="row">
+				<div class="col-md-2" style="width:550px">
+					<div class="form-group">
+						<div class="input-group" >
+							<div class="input-group-addon">创建时间</div>
+							<input class="form-control" style="width:200px" type="text" id="createSTime" onfocus="WdatePicker({skin:'whyGreen',dateFmt:'yyyy-MM-dd HH:mm:ss',minDate:'1950-01-01'})">
+							<div class="input-group-addon">到</div>
+							<input class="form-control"  style="width:200px"  type="text" id="createETime" onfocus="WdatePicker({skin:'whyGreen',dateFmt:'yyyy-MM-dd HH:mm:ss',minDate:'1950-01-01'})">
+						</div>
+					</div>
+				</div>
+
+				<div class="col-md-2" style="width:550px">
+					<div class="form-group">
+						<div class="input-group">
+							<div class="input-group-addon">修改时间</div>
+							<input class="form-control" style="width:200px" type="text" id="modifySTime" onfocus="WdatePicker({skin:'whyGreen',dateFmt:'yyyy-MM-dd HH:mm:ss',minDate:'1950-01-01'})">
+							<div class="input-group-addon">到</div>
+							<input class="form-control"  style="width:200px"  type="text" id="modifyETime" onfocus="WdatePicker({skin:'whyGreen',dateFmt:'yyyy-MM-dd HH:mm:ss',minDate:'1950-01-01'})">
+						</div>
+					</div>
+				</div>
+
+				<div class="col-md-2"style="width:200px">
 					<button type="button" class="btn btn-primary btn-small btn-block"
 							id="query">
 						<i class="glyphicon glyphicon-search"></i> 查询
 					</button>
 				</div>
+
 			</div>
 			<table id="example" class="table"></table>
 		</div>
@@ -227,12 +253,17 @@
 		         fnServerParams: function (aoData) {  //查询条件
 				    aoData.push({"name":"userId","value":$("#user_id").val()});
 				    aoData.push({"name":"userNickName","value":$("#user_nick_name").val()});
-				    aoData.push({"name":"createTime","value":$("#create_time").val()});
-				    aoData.push({"name":"modifyTime","value":$("#modify_time").val()});
+//				    aoData.push({"name":"createTime","value":$("#create_time").val()});
+//				    aoData.push({"name":"modifyTime","value":$("#modify_time").val()});
 				    aoData.push({"name":"placeOrderUserNickName","value":$("#place_order_user_nick_name").val()});
 				    aoData.push({"name":"receiveOrderUserNickName","value":$("#receive_order_user_nick_name").val()});
 				    aoData.push({"name":"serviceType","value":$("#service_type").val()});
 				    aoData.push({"name":"discountTypeVal","value":$("#discount_type_val").val()});
+
+				    aoData.push({"name":"createSTime","value":$("#createSTime").val()});
+				    aoData.push({"name":"createETime","value":$("#createETime").val()});
+				    aoData.push({"name":"modifySTime","value":$("#modifySTime").val()});
+				    aoData.push({"name":"modifyETime","value":$("#modifyETime").val()});
 
                     } ,
                  aoColumnDefs : [ {

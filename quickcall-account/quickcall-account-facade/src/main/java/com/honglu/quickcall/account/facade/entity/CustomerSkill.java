@@ -37,6 +37,9 @@ public class CustomerSkill {
     private Integer switchStatus;
 
     private Integer receiveStatus;
+    
+    
+    private Integer autoReceiveStatus;
 
     private BigDecimal discountRate;
 
@@ -57,6 +60,9 @@ public class CustomerSkill {
     private Integer sunday;
 
     private String endTimeStr;
+
+    /**接单开关开启时间*/
+    private String startTimeStr;
     
     /**预约接单开始时间*/
     private Date  appointStartTime;
@@ -74,13 +80,40 @@ public class CustomerSkill {
     private String modifyMan;
 
     private String remark;
+    
+    private  Integer  skillType;
+    
+    
+    
 
     
     
     
-    
-    
-    public Date getAppointStartTime() {
+    public Integer getSkillType() {
+		return skillType;
+	}
+
+	public void setSkillType(Integer skillType) {
+		this.skillType = skillType;
+	}
+
+	public String getStartTimeStr() {
+		return startTimeStr;
+	}
+
+	public void setStartTimeStr(String startTimeStr) {
+		this.startTimeStr = startTimeStr;
+	}
+
+	public Integer getAutoReceiveStatus() {
+		return autoReceiveStatus;
+	}
+
+	public void setAutoReceiveStatus(Integer autoReceiveStatus) {
+		this.autoReceiveStatus = autoReceiveStatus;
+	}
+
+	public Date getAppointStartTime() {
 		return appointStartTime;
 	}
 

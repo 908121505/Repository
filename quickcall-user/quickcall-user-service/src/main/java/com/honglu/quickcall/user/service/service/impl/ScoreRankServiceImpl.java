@@ -128,6 +128,11 @@ public class ScoreRankServiceImpl implements ScoreRankService {
         // 计算总得分
         BigDecimal valueScore = orderTotalScore.add(servicePriceScore).multiply(calculateEvaluateScore(evaluateStars, order.getOrderNum()));
 
+        // 有抵扣券参与的订单时，在计算此次订单价值时需要额外*40，以此来提高免费服务声优的技能升级速度和平台资源位露出机会.
+        if(Objects.equals(order.getCouponFlag(), 1)){
+            valueScore = valueScore.multiply(new BigDecimal(40));
+        }
+
         // 四舍五入取整
         return valueScore.setScale(0, BigDecimal.ROUND_HALF_UP);
     }

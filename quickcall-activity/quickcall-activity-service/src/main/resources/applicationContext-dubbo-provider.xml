@@ -14,5 +14,6 @@
 
     <!-- 注册服务端 -->
     <dubbo:service group="activityCenter" interface="com.honglu.quickcall.activity.facade.business.ActivityDubboBusiness" ref="Activity.ActivityDubboBusiness" timeout="30000" retries="0" version="0.0.1"/>
-
+	<dubbo:service group="activityCenter" interface="com.honglu.quickcall.activity.facade.business.CouponDubboBusiness" ref="Activity.CouponDubboBusiness" timeout="30000" retries="0" version="0.0.1"/>
+	
 </beans>

@@ -34,6 +34,8 @@ public class Message {
 
     private String remark;
 
+    private String title;
+
     public Long getMessageId() {
         return messageId;
     }
@@ -128,5 +130,13 @@ public class Message {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 }

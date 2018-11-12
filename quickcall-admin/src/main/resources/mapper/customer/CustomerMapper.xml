@@ -208,7 +208,10 @@
 
 
     <select id="selectCustomVo" parameterType="map" resultMap="BaseVOResultMap">
-      select customer_id,app_id,nick_name,phone,front_portrait_url,block_end_time,block_start_time,cust_status
+      select customer_id,app_id,nick_name,phone,front_portrait_url,
+        IF(cust_status=1,'',block_end_time) as block_end_time,
+        IF(cust_status=1,'',block_start_time) as block_start_time,
+        cust_status
       from customer
       where (1=1
         <if test="nickName !=null and nickName != ''">and nick_name like concat('%',#{nickName},'%')</if>
@@ -317,12 +320,17 @@
         <if test="userNickName != null" >
             AND  cust.nick_name = #{userNickName}
         </if>
-        <if test="createTime != null" >
-            AND  skill.create_time &gt;= #{createTime}
-        </if>
-        <if test="modifyTime != null" >
-            AND  skill.modify_time &gt;= #{modifyTime}
-        </if>
+        <!--<if test="createTime != null" >-->
+            <!--AND  skill.create_time &gt;= #{createTime}-->
+        <!--</if>-->
+        <!--<if test="modifyTime != null" >-->
+            <!--AND  skill.modify_time &gt;= #{modifyTime}-->
+        <!--</if>-->
+        <if test="createSTime !=null and createSTime!=''">and skill.create_time <![CDATA[  >= ]]> #{createSTime}</if>
+        <if test="createETime !=null and createETime!=''">and skill.create_time <![CDATA[  <= ]]> #{createETime}</if>
+        <if test="modifySTime !=null and modifySTime!=''">and skill.modify_time <![CDATA[  >= ]]> #{modifySTime}</if>
+        <if test="modifyETime !=null and modifyETime!=''">and skill.modify_time <![CDATA[  <= ]]> #{modifyETime}</if>
+
         <if test="serviceType != null" >
             AND  skill.skill_item_id = #{serviceType}
         </if>

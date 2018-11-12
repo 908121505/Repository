@@ -20,6 +20,16 @@ public class UserLoginRequest extends UserCenterRequest {
 
 	private String gtClientId;// 个推用户端Id
 
+	private String fictitiousId;// 神策虚拟Id
+
+	public String getFictitiousId() {
+		return fictitiousId;
+	}
+
+	public void setFictitiousId(String fictitiousId) {
+		this.fictitiousId = fictitiousId;
+	}
+
 	public String getGtClientId() {
 		return gtClientId;
 	}

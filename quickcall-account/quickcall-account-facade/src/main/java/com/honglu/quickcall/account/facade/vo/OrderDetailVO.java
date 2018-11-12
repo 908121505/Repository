@@ -14,7 +14,7 @@ import java.util.Date;
  */
 public class OrderDetailVO implements  Serializable{
 
-	private static final long serialVersionUID = -3999247576164334939L;
+	private static final long serialVersionUID = 2191262960016676469L;
 	/**订单ID*/
 	private Long  orderId;
 	/**服务方编号*/
@@ -70,11 +70,50 @@ public class OrderDetailVO implements  Serializable{
 	private Date  receiveOrderTime ;
 	
     private BigDecimal discountRate;
+
     
+    /**服务开始时间*/
+    private Date  startServiceTime;
+    /**预计结束时间*/
+    private Date  expectEndTime;
     
+    /**技能类型*/
+    private Integer  skillType;
+    /**券金额*/
+    private BigDecimal  couponPrice;
+    /**预约开始时间*/
+    private  Date   appointTime;
+
+	private String couponName;//客户订单优惠券的名称'
+
+
+	
+	public Integer getSkillType() {
+		return skillType;
+	}
+	public void setSkillType(Integer skillType) {
+		this.skillType = skillType;
+	}
 	
 	
-	
+	public Date getAppointTime() {
+		return appointTime;
+	}
+	public void setAppointTime(Date appointTime) {
+		this.appointTime = appointTime;
+	}
+	public Date getStartServiceTime() {
+		return startServiceTime;
+	}
+	public void setStartServiceTime(Date startServiceTime) {
+		this.startServiceTime = startServiceTime;
+	}
+	public Date getExpectEndTime() {
+		return expectEndTime;
+	}
+	public void setExpectEndTime(Date expectEndTime) {
+		this.expectEndTime = expectEndTime;
+	}
 	public BigDecimal getDiscountRate() {
 		return discountRate;
 	}
@@ -229,5 +268,21 @@ public class OrderDetailVO implements  Serializable{
 
 	public void setCustomerIsEvaluate(Long customerIsEvaluate) {
 		this.customerIsEvaluate = customerIsEvaluate;
+	}
+
+	public String getCouponName() {
+		return couponName;
+	}
+
+	public void setCouponName(String couponName) {
+		this.couponName = couponName;
+	}
+
+	public BigDecimal getCouponPrice() {
+		return couponPrice;
+	}
+
+	public void setCouponPrice(BigDecimal couponPrice) {
+		this.couponPrice = couponPrice;
 	}
 }

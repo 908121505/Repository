@@ -120,4 +120,17 @@ public class ResultUtils {
         commonResponse.setMessage(msg);
         return commonResponse;
     }
+
+    /**
+     * 数据状态异常
+     *
+     * @param msg -- 错误信息
+     * @return
+     */
+    public static CommonResponse resultDataStateError(String msg) {
+        CommonResponse commonResponse = new CommonResponse();
+        commonResponse.setCode(BizCode.DataStateError);
+        commonResponse.setMessage(msg);
+        return commonResponse;
+    }
 }

@@ -12,7 +12,7 @@ import java.util.List;
  */
 public class CustomerHomeVO implements Serializable {
 
-    private static final long serialVersionUID = -960460053239452425L;
+    private static final long serialVersionUID = -976366791856814868L;
     /**
      * 登录客户ID
      */
@@ -66,6 +66,10 @@ public class CustomerHomeVO implements Serializable {
      */
     private Integer attentionStatus = 0;
     /**
+     * 客户黑名单状态：0=未拉黑，1=已拉黑，空=游客登录
+     */
+    private Integer backStatus;
+    /**
      * 用户粉丝数
      */
     private Integer fansNum;
@@ -108,8 +112,8 @@ public class CustomerHomeVO implements Serializable {
      * 用户技能对象
      */
     public class CustomerSkill implements Serializable{
-        private static final long serialVersionUID = 2871296634994569921L;
 
+        private static final long serialVersionUID = 6933499103108177213L;
         /**
          * 客户技能ID
          */
@@ -153,7 +157,7 @@ public class CustomerHomeVO implements Serializable {
         /**
          * 声量：该技能的综合表现维度
          */
-        private Integer skillVolume;
+        private String skillVolume;
         /**
          * 用户标签 -- 最多的3个标签
          */
@@ -243,11 +247,11 @@ public class CustomerHomeVO implements Serializable {
             this.serviceUnit = serviceUnit;
         }
 
-        public Integer getSkillVolume() {
+        public String getSkillVolume() {
             return skillVolume;
         }
 
-        public void setSkillVolume(Integer skillVolume) {
+        public void setSkillVolume(String skillVolume) {
             this.skillVolume = skillVolume;
         }
 
@@ -397,6 +401,14 @@ public class CustomerHomeVO implements Serializable {
         this.attentionStatus = attentionStatus;
     }
 
+    public Integer getBackStatus() {
+        return backStatus;
+    }
+
+    public void setBackStatus(Integer backStatus) {
+        this.backStatus = backStatus;
+    }
+
     public Integer getFansNum() {
         return fansNum;
     }
@@ -477,6 +489,7 @@ public class CustomerHomeVO implements Serializable {
                 ", identityStatus=" + identityStatus +
                 ", vStatus=" + vStatus +
                 ", attentionStatus=" + attentionStatus +
+                ", backStatus=" + backStatus +
                 ", fansNum=" + fansNum +
                 ", soundGuideCard='" + soundGuideCard + '\'' +
                 ", appearanceUrlList=" + appearanceUrlList +
