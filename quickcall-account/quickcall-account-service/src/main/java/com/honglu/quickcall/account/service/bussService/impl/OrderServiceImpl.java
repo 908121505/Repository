@@ -185,49 +185,10 @@ public class OrderServiceImpl implements IOrderService {
 		resultMap.put("orderId", OrderSkillConstants.DEFAULT_NULL_STR);
 
 		try {
-			Date currTime = new Date();
-			// 1.首先判断大V是否可以接单
-			Long customerId = request.getCustomerId();
-			Long serviceId = request.getServiceId();
-
-			List<Integer> statusList = new ArrayList<Integer>();
-			statusList.add(OrderSkillConstants.ORDER_STATUS_WAITING_START);// 待开始
-			statusList.add(OrderSkillConstants.ORDER_STATUS_WAITING_START_DA_APPAY_START_SERVICE);// 大V发起开始服务
-			statusList.add(OrderSkillConstants.ORDER_STATUS_GOING_USER_ACCEPCT);// 进行中
-			statusList.add(OrderSkillConstants.ORDER_STATUS_GOING_DAV_APPAY_FINISH);// 进行中（大V发起完成服务）
-
-			List<Order> gongIngOrderList = orderMapper.selectGongIngOrderListByCustomerId(serviceId,
-					OrderSkillConstants.SKILL_TYPE_YES, statusList);
-			if (!CollectionUtils.isEmpty(gongIngOrderList)) {
-				// 记录不为空说明大V正在接单，不能下单
-				Order order = gongIngOrderList.get(0);
-				// 订单预计结束时间
-				Date expectEndTime = order.getExpectEndTime();
-
-				if (expectEndTime != null) {
-					// 当前时间和截止时间的间隔秒数
-					Long remainStr = DateUtils.getDiffSeconds(currTime, expectEndTime);
-				/*	String downLoadStr = null;
-					if (remainStr != null && remainStr > 0) {
-						downLoadStr = DateUtils.getDiffSeconds(remainStr);
-					}*/
-					resultMap.put("downLoadStr", remainStr);
-				}
-				resultMap.put("retCode", OrderSkillConstants.RET_CODE_DV_BUSY);
-				commonResponse.setData(resultMap);
-				// 返回大V正忙，以及结束时间
-				return commonResponse;
-
-			}
-			DataBuriedPointSubmitOrderReq req = new DataBuriedPointSubmitOrderReq();
-
-			Long customerSkillId = request.getCustomerSkillId();
-
+			
 			Integer weekIndex = DateUtils.getDayOfWeek();
 			Integer skillSwitch = 1;
-			// String endTimeStr = DateUtils.formatDateHHSS(new Date()).replaceAll(":", "")
-			// ;
-
+			Long customerSkillId = request.getCustomerSkillId();
 			// 根据技能ID 获取等级获取价格信息
 			CustomerSkill customerSkill = customerSkillMapper.selectByPrimaryKeyExt(customerSkillId, weekIndex,
 					skillSwitch, new Date());
@@ -238,6 +199,49 @@ public class OrderServiceImpl implements IOrderService {
 				// 返回大V正忙，以及结束时间
 				return commonResponse;
 			}
+			
+			Long skillItemId = customerSkill.getSkillItemId();
+			SkillItem skillItem = skillItemMapper.selectByPrimaryKey(skillItemId);
+			Integer skillType = skillItem.getSkillType();
+			
+			
+			Date currTime = new Date();
+			// 1.首先判断大V是否可以接单
+			Long customerId = request.getCustomerId();
+			Long serviceId = request.getServiceId();
+
+			if(OrderSkillConstants.SKILL_TYPE_YES == skillType){
+				
+				List<Integer> statusList = new ArrayList<Integer>();
+				statusList.add(OrderSkillConstants.ORDER_STATUS_WAITING_START);// 待开始
+				statusList.add(OrderSkillConstants.ORDER_STATUS_WAITING_START_DA_APPAY_START_SERVICE);// 大V发起开始服务
+				statusList.add(OrderSkillConstants.ORDER_STATUS_GOING_USER_ACCEPCT);// 进行中
+				statusList.add(OrderSkillConstants.ORDER_STATUS_GOING_DAV_APPAY_FINISH);// 进行中（大V发起完成服务）
+				
+				List<Order> gongIngOrderList = orderMapper.selectGongIngOrderListByCustomerId(serviceId,
+						OrderSkillConstants.SKILL_TYPE_YES, statusList);
+				if (!CollectionUtils.isEmpty(gongIngOrderList)) {
+					// 记录不为空说明大V正在接单，不能下单
+					Order order = gongIngOrderList.get(0);
+					// 订单预计结束时间
+					Date expectEndTime = order.getExpectEndTime();
+					
+					if (expectEndTime != null) {
+						// 当前时间和截止时间的间隔秒数
+						Long remainStr = DateUtils.getDiffSeconds(currTime, expectEndTime);
+						resultMap.put("downLoadStr", remainStr);
+					}
+					resultMap.put("retCode", OrderSkillConstants.RET_CODE_DV_BUSY);
+					commonResponse.setData(resultMap);
+					// 返回大V正忙，以及结束时间
+					return commonResponse;
+					
+				}
+			}
+			DataBuriedPointSubmitOrderReq req = new DataBuriedPointSubmitOrderReq();
+
+
+
 			Long orderId = UUIDUtils.getId();
 			Integer orderNum = request.getOrderNum();
 			BigDecimal price = customerSkill.getDiscountPrice();
@@ -288,18 +292,10 @@ public class OrderServiceImpl implements IOrderService {
 			// 创建订单
 			Order record = new Order();
 
-			Long skillItemId = customerSkill.getSkillItemId();
-			SkillItem skillItem = skillItemMapper.selectByPrimaryKey(skillItemId);
-			Integer skillType = skillItem.getSkillType();
 			record.setSkillType(skillType);
 			if (OrderSkillConstants.SKILL_TYPE_NO == skillType) {
 				Date appointTime = DateUtils.formatDate(request.getAppointTimeStr());
-				// Calendar cal = Calendar.getInstance();
-				// cal.setTime(appointTime);
-				// cal.add(Calendar.MINUTE, 5);
-				// Date expectEndTime = cal.getTime();
 				record.setAppointTime(appointTime);
-				// record.setExpectEndTime(expectEndTime);
 			}
 
 			record.setServiceUnit(customerSkill.getServiceUnit());

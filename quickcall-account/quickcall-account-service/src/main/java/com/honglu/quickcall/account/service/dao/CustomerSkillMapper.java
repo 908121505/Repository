@@ -68,4 +68,13 @@ public interface CustomerSkillMapper {
 	 * @param customerId
 	 */
 	void openReceiveSwitch(@Param("customerId")Long customerId,@Param("receiveStatus")Integer  receiveStatus);
+	
+	
+	/**
+	 * 根据用户技能Id获取技能	
+	 * @param customerSkillId
+	 * @return
+	 */
+	Integer   getSkillTypeByCustomerSkillId(Long  customerSkillId);
+	
 }
