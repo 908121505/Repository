@@ -63,13 +63,10 @@ import com.honglu.quickcall.account.service.dao.SkillItemMapper;
 import com.honglu.quickcall.activity.facade.business.CouponDubboBusiness;
 import com.honglu.quickcall.activity.facade.entity.CustomerCoupon;
 import com.honglu.quickcall.activity.facade.vo.CouponOrderVo;
-import com.honglu.quickcall.common.api.code.BizCode;
 import com.honglu.quickcall.common.api.exception.BizException;
 import com.honglu.quickcall.common.api.exchange.CommonResponse;
 import com.honglu.quickcall.common.api.exchange.ResultUtils;
 import com.honglu.quickcall.common.api.util.DateUtils;
-import com.honglu.quickcall.common.api.util.JedisUtil;
-import com.honglu.quickcall.common.api.util.RedisKeyConstants;
 import com.honglu.quickcall.common.core.util.UUIDUtils;
 import com.honglu.quickcall.common.third.AliyunSms.utils.SendSmsUtil;
 import com.honglu.quickcall.common.third.push.GtPushUtil;
@@ -391,27 +388,49 @@ public class OrderServiceImpl implements IOrderService {
 		if (request == null || request.getCustomerId() == null) {
 			throw new BizException(AccountBizReturnCode.paramError, "查询接收订单参数异常");
 		}
+<<<<<<< HEAD
 		LOGGER.info("======>>>>>queryMsgOrderList()入参：" + request.toString());
 		Long customerId = request.getCustomerId();
-		String customerJson = JedisUtil.get(RedisKeyConstants.USER_CUSTOMER_INFO + customerId);
-		if (StringUtils.isEmpty(customerJson)) {
-			return ResultUtils.result(BizCode.CustomerNotExist);
-		}
+//		String customerJson = JedisUtil.get(RedisKeyConstants.USER_CUSTOMER_INFO + customerId);
+//		if (StringUtils.isEmpty(customerJson)) {
+//			return ResultUtils.result(BizCode.CustomerNotExist);
+//		}
 
 		List<OrderMsgOrderListVO> queryList = orderMapper.queryMsgOrderList(customerId);
-		List<OrderMsgOrderListVO> resultList = new ArrayList<OrderMsgOrderListVO>();
+		List<OrderMsgOrderListVO> resultList  = new ArrayList<OrderMsgOrderListVO>() ;
 		if (!CollectionUtils.isEmpty(queryList)) {
 			for (OrderMsgOrderListVO order : queryList) {
-				String msgContent = commonService.getMsgContent(order.getCustomerFlag(), order.getOrderStatus());
+				String  msgContent = commonService.getMsgContent(order.getCustomerFlag(), order.getOrderStatus());
 				order.setMsgContent(msgContent);
 				resultList.add(order);
-				CommonResponse commonResponse = commonService.getCommonResponse();
-				commonResponse.setData(resultList);
-				LOGGER.info("======>>>>>查询收到的订单，用户编号为：" + request.getCustomerId() + "查询成功");
-				return commonResponse;
+=======
+		LOGGER.info("======>>>>>queryReceiveOrderList()入参："+request.toString());
+		Long  customerId =  request.getCustomerId();
+		
+		Integer orderStatusParam = request.getOrderStatus();
+		List<Integer>  statusList = commonService.getReceiveOrderStatusList(orderStatusParam );
+		
+		List<OrderReceiveOrderListVO>  resultList =  orderMapper.queryReceiveOrderList(customerId,statusList);
+		
+		if(!CollectionUtils.isEmpty(resultList)){
+			for (OrderReceiveOrderListVO info : resultList) {
+				OrderTempResponseVO  responseVO = commonService.getCountDownSeconds(info.getOrderStatus(), info.getOrderTime(), info.getReceiveOrderTime());
+				info.setCountDownSeconds(responseVO.getCountDownSeconds());
+				//TODO 兼容测试，需回滚
+				info.setOrderStatus(setOrderStatus(responseVO.getOrderStatus()));
+				//TODO 兼容安卓版本   7号需要回滚
+				if(info.getReceiveOrderTime() == null){
+					info.setReceiveOrderTime(info.getOrderTime());
+				}
+				
+>>>>>>> refs/remotes/origin/master_tag(2018/11/08)
 			}
 		}
-		return null;
+
+		CommonResponse commonResponse = commonService.getCommonResponse();
+		commonResponse.setData(resultList);
+		LOGGER.info("======>>>>>查询收到的订单，用户编号为：" + request.getCustomerId() + "查询成功");
+		return commonResponse;
 	}
 
 	/**
@@ -458,11 +477,10 @@ public class OrderServiceImpl implements IOrderService {
 		if (request == null || request.getCustomerId() == null || request.getOrderStatus() == null) {
 			throw new BizException(AccountBizReturnCode.paramError, "查询发起订单参数异常");
 		}
-		// String customerJson = JedisUtil.get(RedisKeyConstants.USER_CUSTOMER_INFO +
-		// request.getCustomerId());
-		// if (StringUtils.isEmpty(customerJson)) {
-		// return ResultUtils.result(BizCode.CustomerNotExist);
-		// }
+//		String customerJson = JedisUtil.get(RedisKeyConstants.USER_CUSTOMER_INFO + request.getCustomerId());
+//		if (StringUtils.isEmpty(customerJson)) {
+//			return ResultUtils.result(BizCode.CustomerNotExist);
+//		}
 		LOGGER.info("======>>>>>querySendOrderList()入参：" + request.toString());
 		Long customerId = request.getCustomerId();
 		Integer orderStatusParam = request.getOrderStatus();
@@ -472,11 +490,18 @@ public class OrderServiceImpl implements IOrderService {
 			for (OrderSendOrderListVO info : resultList) {
 				OrderTempResponseVO responseVO = commonService.getCountDownSeconds(info.getOrderStatus(),
 						info.getOrderTime(), info.getReceiveOrderTime(), info.getStartServiceTime(),
-						info.getExpectEndTime(), info.getAppointTime());
+						info.getExpectEndTime(),info.getAppointTime());
 				info.setCountDownSeconds(responseVO.getCountDownSeconds());
-
+<<<<<<< HEAD
 				info.setOrderStatus(responseVO.getOrderStatus());
-
+=======
+				//TODO 兼容测试，需回滚
+				info.setOrderStatus(setOrderStatus(responseVO.getOrderStatus()));
+				//TODO 兼容安卓版本   7号需要回滚
+				if(info.getReceiveOrderTime() == null){
+					info.setReceiveOrderTime(info.getOrderTime());
+				}
+>>>>>>> refs/remotes/origin/master_tag(2018/11/08)
 			}
 		}
 
@@ -585,8 +610,9 @@ public class OrderServiceImpl implements IOrderService {
 			orderDetail.setAge(age);
 			OrderTempResponseVO responseVO = commonService.getCountDownSeconds(orderDetail.getOrderStatus(),
 					orderDetail.getOrderTime(), orderDetail.getReceiveOrderTime(), orderDetail.getStartServiceTime(),
-					orderDetail.getExpectEndTime(), orderDetail.getAppointTime());
+					orderDetail.getExpectEndTime(),orderDetail.getAppointTime());
 			orderDetail.setCountDownSeconds(responseVO.getCountDownSeconds());
+<<<<<<< HEAD
 			orderDetail.setOrderStatus(responseVO.getOrderStatus());
 
 			// 根据订单ID查询客户优惠券
@@ -594,14 +620,18 @@ public class OrderServiceImpl implements IOrderService {
 			try {
 				map = couponDubboBusiness.getCustomerCouponByOrderId(orderId);
 			} catch (Exception e) {
-				LOGGER.warn("获取券信息发生异常,异常信息：", e);
+				LOGGER.warn("获取券信息发生异常,异常信息：",e);
 			}
-			if (map != null) {
+			if(map != null){
 				orderDetail.setCouponName(map.get("couponName") == null ? "" : map.get("couponName"));
-				orderDetail
-						.setCouponPrice(map.get("couponPrice") == null ? null : new BigDecimal(map.get("couponPrice")));
+				orderDetail.setCouponPrice(map.get("couponPrice") == null ? null : new BigDecimal(map.get("couponPrice")));
 			}
 
+=======
+			//TODO 11111
+			//TODO 兼容测试，需回滚
+			orderDetail.setOrderStatus(setOrderStatus(responseVO.getOrderStatus()));
+>>>>>>> refs/remotes/origin/master_tag(2018/11/08)
 		}
 
 		CommonResponse commonResponse = commonService.getCommonResponse();
@@ -665,8 +695,14 @@ public class OrderServiceImpl implements IOrderService {
 
 			commonResponse.setData(orderDetailForIMVO);
 			Integer newOrderStatus = responseVO.getOrderStatus();
-			if (OrderSkillConstants.ORDER_STATUS_GOING_USER_ACCEPCT == newOrderStatus
-					|| OrderSkillConstants.ORDER_STATUS_GOING_DAV_APPAY_FINISH == newOrderStatus) {
+			if (OrderSkillConstants.ORDER_STATUS_FINISHED_USER_ACCEPCT == newOrderStatus
+					|| OrderSkillConstants.ORDER_STATUS_FINISH_DV_FINISH == newOrderStatus
+					|| OrderSkillConstants.ORDER_STATUS_FINISH_DV_RELEASE == newOrderStatus
+					|| OrderSkillConstants.ORDER_STATUS_GOING_USRE_APPAY_FINISH == newOrderStatus
+					|| OrderSkillConstants.ORDER_STATUS_FINISH_DAV_FINISH_AFTER_SERVICE_TIME == newOrderStatus
+					|| OrderSkillConstants.ORDER_STATUS_FINISH_BOTH_NO_OPERATE == newOrderStatus
+
+			) {
 				List<Long> orderIdList = new ArrayList<Long>();
 				orderIdList.add(order.getOrderId());
 				// 更改订单状态为31
@@ -1223,21 +1259,22 @@ public class OrderServiceImpl implements IOrderService {
 		userCenterSendMqMessageService.sendEvaluationOrderMqMessage(request.getOrderId());
 
 		return ResultUtils.resultSuccess();
-
 	}
+
+
 
 	/**
-	 * temp方法 兼容测试
-	 * 
-	 * @param status
-	 * @return
-	 */
-	private Integer setOrderStatus(Integer status) {
-		if (status.equals(OrderSkillConstants.ORDER_STATUS_FINISHED_FORCE)) {
-			return OrderSkillConstants.ORDER_STATUS_FINISHED_AND_PINGJIA;
-		} else if (status.equals(OrderSkillConstants.ORDER_STATUS_CANCEL_FORCE)) {
-			return OrderSkillConstants.ORDER_STATUS_CANCEL_USER_NOT_ACCEPCT;
-		}
-		return status;
-	}
+     * temp方法 兼容测试
+     * @param status
+     * @return
+     */
+    private Integer setOrderStatus(Integer status){
+    	if(status.equals(OrderSkillConstants.ORDER_STATUS_FINISHED_FORCE)){
+    		return OrderSkillConstants.ORDER_STATUS_FINISHED_AND_PINGJIA;
+    	}else if(status.equals(OrderSkillConstants.ORDER_STATUS_CANCEL_FORCE)){
+    		return OrderSkillConstants.ORDER_STATUS_CANCEL_USER_NOT_ACCEPCT;
+    	}
+    	return status;
+    }
+    
 }

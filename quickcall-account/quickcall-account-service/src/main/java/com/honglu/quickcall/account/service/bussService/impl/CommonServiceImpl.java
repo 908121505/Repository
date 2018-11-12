@@ -433,6 +433,9 @@ public class CommonServiceImpl implements CommonService {
 			//用户同意声优服务完成
 			}else if(OrderSkillConstants.ORDER_STATUS_FINISHED_USER_ACCEPCT == orderStatus){
 				result =   OrderSkillConstants.IM_MSG_CONTENT_DAV_CUST_CONFIRM_TO_DV;
+			}else if(OrderSkillConstants.ORDER_STATUS_FINISH_DV_FINISH == orderStatus || OrderSkillConstants.ORDER_STATUS_FINISH_BOTH_NO_OPERATE == orderStatus){
+			    result = OrderSkillConstants.IM_MSG_CONTENT_SYSTEM_FINISH_TIMEOUT_TO_DAV;
+			    		
 			}
 			
 		}else{
@@ -465,6 +468,8 @@ public class CommonServiceImpl implements CommonService {
 			//用户同意声优服务完成	
 			}else if(OrderSkillConstants.ORDER_STATUS_FINISHED_USER_ACCEPCT == orderStatus){
 				result =   OrderSkillConstants.IM_MSG_CONTENT_DAV_CUST_CONFIRM_TO_CUST;
+			}else if(OrderSkillConstants.ORDER_STATUS_FINISH_DV_FINISH == orderStatus || OrderSkillConstants.ORDER_STATUS_FINISH_BOTH_NO_OPERATE == orderStatus){
+			    result = OrderSkillConstants.IM_MSG_CONTENT_SYSTEM_FINISH_TIMEOUT_TO_CUST;
 			}
 		}
 		

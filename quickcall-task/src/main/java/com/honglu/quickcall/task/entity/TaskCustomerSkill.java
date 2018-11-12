@@ -1,66 +1,73 @@
 package com.honglu.quickcall.task.entity;
 
-import java.math.BigDecimal;
+import java.util.Date;
 
 /**
  * 
  * Copyright © 2018 www.xiaoniu.com All rights reserved.
  * 
- * 功能描述：订单信息
+ * 功能描述：接单设置相关
  * @Package: com.honglu.quickcall.task.entity 
  * @author: chenliuguang   
  * @date: 2018年10月23日 下午5:24:48
  */
 public class TaskCustomerSkill {
    
-    private  Long  orderId;
+    private  Long  customerSkillId;
     
-    private Long customerId;
+    private String  startTimeStr  ;
     
-    private Long  serviceId;
+    private String  endTimeStr;
 
-    private BigDecimal orderAmounts;
+    private Date  appointStartTime;
+    
+    private Date  appointEndTime;
 
-	public Long getCustomerId() {
-		return customerId;
+	public Long getCustomerSkillId() {
+		return customerSkillId;
 	}
 
-	public void setCustomerId(Long customerId) {
-		this.customerId = customerId;
+	public void setCustomerSkillId(Long customerSkillId) {
+		this.customerSkillId = customerSkillId;
 	}
 
-	public Long getServiceId() {
-		return serviceId;
+	public String getStartTimeStr() {
+		return startTimeStr;
 	}
 
-	public void setServiceId(Long serviceId) {
-		this.serviceId = serviceId;
+	public void setStartTimeStr(String startTimeStr) {
+		this.startTimeStr = startTimeStr;
 	}
 
-	public BigDecimal getOrderAmounts() {
-		return orderAmounts;
+	public String getEndTimeStr() {
+		return endTimeStr;
 	}
 
-	public void setOrderAmounts(BigDecimal orderAmounts) {
-		this.orderAmounts = orderAmounts;
+	public void setEndTimeStr(String endTimeStr) {
+		this.endTimeStr = endTimeStr;
 	}
 
-	public Long getOrderId() {
-		return orderId;
+	public Date getAppointStartTime() {
+		return appointStartTime;
 	}
 
-	public void setOrderId(Long orderId) {
-		this.orderId = orderId;
+	public void setAppointStartTime(Date appointStartTime) {
+		this.appointStartTime = appointStartTime;
+	}
+
+	public Date getAppointEndTime() {
+		return appointEndTime;
+	}
+
+	public void setAppointEndTime(Date appointEndTime) {
+		this.appointEndTime = appointEndTime;
 	}
 
 	@Override
 	public String toString() {
-		return "TaskOrder [orderId=" + orderId + ", customerId=" + customerId + ", serviceId=" + serviceId
-				+ ", orderAmounts=" + orderAmounts + "]";
+		return "TaskCustomerSkill [customerSkillId=" + customerSkillId + ", startTimeStr=" + startTimeStr
+				+ ", endTimeStr=" + endTimeStr + ", appointStartTime=" + appointStartTime + ", appointEndTime="
+				+ appointEndTime + "]";
 	}
-
-	
-	
-   
 
 }
