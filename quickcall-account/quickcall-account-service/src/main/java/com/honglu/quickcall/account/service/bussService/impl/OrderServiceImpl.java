@@ -1132,6 +1132,7 @@ public class OrderServiceImpl implements IOrderService {
 					}
 					// 用户未评价
 					RongYunUtil.sendOrderMessage(serviceId, OrderSkillConstants.IM_MSG_CONTENT_CUST_NOT_PING_JIA_TO_DV,OrderSkillConstants.MSG_CONTENT_DAV);
+					RongYunUtil.sendOrderMessage(customerId, "TODO",OrderSkillConstants.MSG_CONTENT_C);
 					sendMsgIndex = 1;
 				} else {
 					// 大V在服务时间内发起完成服务
@@ -1153,7 +1154,8 @@ public class OrderServiceImpl implements IOrderService {
 				} catch (Exception e) {
 					LOGGER.info("订单结束后用户推送券，异常信息：",e);
 				}
-				RongYunUtil.sendOrderMessage(customerId, OrderSkillConstants.IM_MSG_CONTENT_CUST_NOT_PING_JIA_TO_CUST,OrderSkillConstants.MSG_CONTENT_C);
+				RongYunUtil.sendOrderMessage(customerId, OrderSkillConstants.IM_MSG_CONTENT_SYSTEM_FINISH_TIMEOUT_TO_CUST,OrderSkillConstants.MSG_CONTENT_C);
+				RongYunUtil.sendOrderMessage(serviceId, "TODO",OrderSkillConstants.MSG_CONTENT_DAV);
 			}
 
 			// 设置请求结束时间
