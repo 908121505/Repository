@@ -752,11 +752,15 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 
 	@Override
 	public CommonResponse queryCustomerHome(CustomerHomeRequest request) {
-		Customer viewCustomer = customerMapper.selectByPrimaryKey(request.getViewCustomerId());
-		if (viewCustomer == null) {
+		Customer loginCustomer = customerMapper.selectByPrimaryKey(request.getLoginCustomerId());
+		if (loginCustomer == null) {
 			return ResultUtils.result(BizCode.CustomerNotExist);
 		}
-
+		Customer viewCustomer = customerMapper.selectByPrimaryKey(request.getViewCustomerId());
+		if (viewCustomer == null) {
+			return ResultUtils.result(BizCode.ParamNull, "当前关注用户不存在!");
+		}
+		
 		CustomerHomeVO customerHomeVO = new CustomerHomeVO();
 		customerHomeVO.setLoginCustomerId(request.getLoginCustomerId());
 		customerHomeVO.setViewCustomerId(request.getViewCustomerId());
