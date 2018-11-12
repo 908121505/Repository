@@ -113,13 +113,13 @@ public class OrderService {
 		if (serviceType != null && (!serviceType.equals("-1"))) {
 			paramMap.put("serviceType", parameters.get("serviceType"));
 		}
-		if (orderStatus !=null && (!orderStatus.equals("-1"))){
+		if (orderStatus != null && (!orderStatus.equals("-1"))) {
 			OrderStatusEnums order = OrderStatusEnums.getOrderStautsEnums(orderStatus);
 			String smallOrderItem = order.getSubset();
 			String[] items = smallOrderItem.split(",");
-			paramMap.put("orderStatus",Arrays.asList(items));
+			paramMap.put("orderStatus", Arrays.asList(items));
 		}
-				
+
 		if (discountType != null && (!discountType.equals("-1"))) {
 			String[] discountTypes = discountType.split("-");
 			paramMap.put("discountTypeMin", discountTypes[0]);
@@ -297,27 +297,27 @@ public class OrderService {
 	@Transactional
 	public int updateOrder(OrderVO entity) {
 
-		if(entity == null){
+		if (entity == null) {
 			return 0;
 		}
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		paramMap.put("orderId", entity.getOrderId());
 		paramMap.put("compulsion_reason", entity.getCompulsionReason());
 		Integer orderStatus = Integer.valueOf(entity.getOrderStatus());
-		
+
 		BigDecimal orderAmount = new BigDecimal(entity.getOrderAmount());
 		Long orderId = Long.valueOf(entity.getOrderId());
 		int update = 0;
 		if (OrderSkillConstants.ORDER_STATUS_CANCEL_FORCE == orderStatus) {
 			paramMap.put("orderStatus", orderStatus);
-			update = compulsoryCancellation(orderId,orderAmount);
+			update = compulsoryCancellation(orderId, orderAmount);
 			// 退款给用户
 		} else if (OrderSkillConstants.ORDER_STATUS_FINISHED_FORCE == orderStatus) { // 给大V冻结金额
 			paramMap.put("orderStatus", orderStatus);
 			update = compulsoryCompletion(orderId, orderAmount);
 		}
 
-		if(update == 1){
+		if (update == 1) {
 			update = baseManager.update("Order.updateOrder", paramMap);
 		}
 
@@ -378,25 +378,23 @@ public class OrderService {
 		}
 
 		// 冻结流水正常 开始强制完成逻辑
-		if (flag) {
-			// 入账
-			Map<String, Object> pram = new HashMap<String, Object>();
-			pram.put("type", 3);
-			pram.put("amount", amount);
-			pram.put("userId", order.getServiceId());
-			baseManager.update("Account.outAccount", pram);
-			// 记录流水
-			tradeDetail = new TradeDetail();
-			tradeDetail.setTradeId(UUIDUtils.getId());
-			tradeDetail.setOrderNo(order.getOrderNo());
-			tradeDetail.setCustomerId(order.getServiceId());
-			tradeDetail.setCreateTime(new Date());
-			tradeDetail.setType(8);
-			tradeDetail.setInPrice(amount);
-			baseManager.insert("TradeDetail.insertSelective", tradeDetail);
-			return 1;
-		}
-		return 0;
+
+		// 入账
+		Map<String, Object> pram = new HashMap<String, Object>();
+		pram.put("type", 3);
+		pram.put("amount", amount);
+		pram.put("userId", order.getServiceId());
+		baseManager.update("Account.outAccount", pram);
+		// 记录流水
+		tradeDetail = new TradeDetail();
+		tradeDetail.setTradeId(UUIDUtils.getId());
+		tradeDetail.setOrderNo(order.getOrderNo());
+		tradeDetail.setCustomerId(order.getServiceId());
+		tradeDetail.setCreateTime(new Date());
+		tradeDetail.setType(8);
+		tradeDetail.setInPrice(amount);
+		baseManager.insert("TradeDetail.insertSelective", tradeDetail);
+		return 1;
 
 	}
 
@@ -465,25 +463,23 @@ public class OrderService {
 		}
 
 		// 冻结流水正常 开始强制完成逻辑
-		if (flag) {
-			// 入账
-			Map<String, Object> pram = new HashMap<String, Object>();
-			pram.put("type", 1);
-			pram.put("amount", amount);
-			pram.put("userId", order.getCustomerId());
-			baseManager.update("Account.inAccount", pram);
-			// 记录流水
-			tradeDetail = new TradeDetail();
-			tradeDetail.setTradeId(UUIDUtils.getId());
-			tradeDetail.setOrderNo(order.getOrderNo());
-			tradeDetail.setCustomerId(order.getServiceId());
-			tradeDetail.setCreateTime(new Date());
-			tradeDetail.setType(5);
-			tradeDetail.setInPrice(amount);
-			baseManager.insert("TradeDetail.insertSelective", tradeDetail);
-			return 1;
-		}
-		return 0;
+		// 入账
+		Map<String, Object> pram = new HashMap<String, Object>();
+		pram.put("type", 1);
+		pram.put("amount", amount);
+		pram.put("userId", order.getCustomerId());
+		baseManager.update("Account.inAccount", pram);
+		// 记录流水
+		tradeDetail = new TradeDetail();
+		tradeDetail.setTradeId(UUIDUtils.getId());
+		tradeDetail.setOrderNo(order.getOrderNo());
+		tradeDetail.setCustomerId(order.getServiceId());
+		tradeDetail.setCreateTime(new Date());
+		tradeDetail.setType(5);
+		tradeDetail.setInPrice(amount);
+		baseManager.insert("TradeDetail.insertSelective", tradeDetail);
+		return 1;
+
 	}
 
 }
