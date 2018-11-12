@@ -140,5 +140,15 @@ public interface CommonService {
 	 * @return
 	 */
 	public String   getMsgContent(String  customerFlag ,Integer  orderStatus);
+	
+	
+	/**
+	 *  推送IM订单消息
+	 * @param customerId
+	 * @param serviceId
+	 * @param orderId
+	 * @param orderDesc
+	 */
+	public void  sendOrderMsg(Long  customerId,Long  serviceId,Long  orderId,String  orderDesc);
    
 }

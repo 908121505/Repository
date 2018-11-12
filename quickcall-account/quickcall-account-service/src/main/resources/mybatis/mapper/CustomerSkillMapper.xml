@@ -50,6 +50,7 @@
     from customer_skill
     where customer_skill_id = #{customerSkillId,jdbcType=BIGINT}
   </select>
+  
   <select id="selectByPrimaryKeyExt" resultMap="BaseResultMap" >
     select 
     <include refid="Base_Column_List" />
@@ -609,6 +610,18 @@
 	WHERE
 		customer_id = #{customerId}
 	</update>
+	
+	
+	
+	<select id="getSkillTypeByCustomerSkillId" resultType="java.lang.Integer" parameterType="java.lang.Long" >
+			SELECT
+				st.skill_type 
+			FROM
+				skill_item st
+			LEFT JOIN customer_skill cs ON st.id = cs.skill_item_id
+			WHERE
+				cs.customer_skill_id = #{customerSkillId,jdbcType=BIGINT}
+  </select>
   
 
 </mapper>
