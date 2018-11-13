@@ -9,7 +9,6 @@ import com.honglu.quickcall.common.third.rongyun.SendUser;
 import com.honglu.quickcall.common.third.rongyun.messages.BaseMessage;
 import com.honglu.quickcall.common.third.rongyun.messages.TxtMessage;
 import com.honglu.quickcall.common.third.rongyun.models.CodeSuccessReslut;
-import com.honglu.quickcall.common.third.rongyun.models.TokenReslut;
 
 /**
  * 操作融云的工具类
@@ -39,26 +38,17 @@ public class RongYunUtil {
 	 * @param imageUrl
 	 *            用户头像
 	 * @return
-	 */
-	public static String getToken(String id, String username, String imageUrl) {
-		// 实例化
-		RongCloud rongCloud = RongCloud.getInstance(APPKEY, APPSECRET);
-		//
-		TokenReslut userGetTokenResult = null;
-		try {
-			userGetTokenResult = rongCloud.user.getToken(id, username, imageUrl);
-			if (userGetTokenResult == null) {
-				userGetTokenResult = rongCloud.user.getToken(id, username, imageUrl);
-			}
-			if (userGetTokenResult == null) {
-				userGetTokenResult = rongCloud.user.getToken(id, username, imageUrl);
-			}
-			return userGetTokenResult.getToken();
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		}
-	}
+	 *//*
+		 * public static String getToken(String id, String username, String imageUrl) {
+		 * // 实例化 RongCloud rongCloud = RongCloud.getInstance(APPKEY, APPSECRET); //
+		 * TokenReslut userGetTokenResult = null; try { userGetTokenResult =
+		 * rongCloud.user.getToken(id, username, imageUrl); if (userGetTokenResult ==
+		 * null) { userGetTokenResult = rongCloud.user.getToken(id, username, imageUrl);
+		 * } if (userGetTokenResult == null) { userGetTokenResult =
+		 * rongCloud.user.getToken(id, username, imageUrl); } return
+		 * userGetTokenResult.getToken(); } catch (Exception e) { e.printStackTrace();
+		 * return null; } }
+		 */
 
 	/**
 	 * 刷新用户信息
@@ -312,7 +302,7 @@ public class RongYunUtil {
 		// sendOrderMessage(toCustomerId, "你有一条新的订单哦1");
 		// sendActivityMessage(toCustomerId, "红包1");
 		for (int i = 0; i < 99; i++) {
-			System.out.println(getToken("1", "1", "1"));
+			// System.out.println(getToken("1", "1", "1"));
 		}
 
 		/*

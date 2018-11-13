@@ -10,7 +10,7 @@ import com.honglu.quickcall.common.third.newrongyun.io.rong.models.response.Resp
 import com.honglu.quickcall.common.third.newrongyun.io.rong.models.response.TokenResult;
 import com.honglu.quickcall.common.third.newrongyun.io.rong.models.user.UserModel;
 
-public class RongyunUtil {
+public class RongYunUtil {
 	// private static String APPKEY =
 	// ResourceBundle.getBundle("thirdconfig").getString("appkey");
 	// private static String APPSECRET =

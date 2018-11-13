@@ -1,5 +1,21 @@
 package com.honglu.quickcall.user.service.service.impl;
 
+import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+import java.util.Objects;
+import java.util.Random;
+import java.util.ResourceBundle;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.alibaba.fastjson.JSON;
 import com.honglu.quickcall.common.api.code.BizCode;
 import com.honglu.quickcall.common.api.exception.BizException;
@@ -14,8 +30,7 @@ import com.honglu.quickcall.common.core.util.Detect;
 import com.honglu.quickcall.common.core.util.MD5;
 import com.honglu.quickcall.common.core.util.UUIDUtils;
 import com.honglu.quickcall.common.third.AliyunSms.utils.SendSmsUtil;
-import com.honglu.quickcall.common.third.rongyun.models.CodeSuccessReslut;
-import com.honglu.quickcall.common.third.rongyun.util.RongYunUtil;
+import com.honglu.quickcall.common.third.newrongyun.RongYunUtil;
 import com.honglu.quickcall.producer.facade.business.DataDuriedPointBusiness;
 import com.honglu.quickcall.producer.facade.req.databury.DataBuriedPointGetCodeReq;
 import com.honglu.quickcall.producer.facade.req.databury.DataBuriedPointLoginReq;
@@ -26,23 +41,25 @@ import com.honglu.quickcall.user.facade.constants.UserBizConstants;
 import com.honglu.quickcall.user.facade.entity.Customer;
 import com.honglu.quickcall.user.facade.entity.SensitivityWord;
 import com.honglu.quickcall.user.facade.enums.CustomerCusStateEnum;
-import com.honglu.quickcall.user.facade.exchange.request.*;
+import com.honglu.quickcall.user.facade.exchange.request.AddSystemUserRequest;
+import com.honglu.quickcall.user.facade.exchange.request.BindVXorQQRequest;
+import com.honglu.quickcall.user.facade.exchange.request.GetSmsCodeRequest;
+import com.honglu.quickcall.user.facade.exchange.request.IsPhoneExistsRequest;
+import com.honglu.quickcall.user.facade.exchange.request.LoginOutRequest;
+import com.honglu.quickcall.user.facade.exchange.request.SaveCertificationRequest;
+import com.honglu.quickcall.user.facade.exchange.request.SaveDvVoiceRequest;
+import com.honglu.quickcall.user.facade.exchange.request.SearchPersonByPhoneRequest;
+import com.honglu.quickcall.user.facade.exchange.request.SetHeardUrlRequest;
+import com.honglu.quickcall.user.facade.exchange.request.SetPwdRequest;
+import com.honglu.quickcall.user.facade.exchange.request.UserIdCardInfoRequest;
+import com.honglu.quickcall.user.facade.exchange.request.UserLoginRequest;
+import com.honglu.quickcall.user.facade.exchange.request.UserRegisterRequest;
 import com.honglu.quickcall.user.facade.vo.SearchPersonByPhoneVO;
 import com.honglu.quickcall.user.service.dao.BigvPhoneMapper;
 import com.honglu.quickcall.user.service.dao.CustomerMapper;
 import com.honglu.quickcall.user.service.dao.SensitivityWordMapper;
 import com.honglu.quickcall.user.service.integration.AccountDubboIntegrationService;
 import com.honglu.quickcall.user.service.service.CommonPersonService;
-import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import java.text.SimpleDateFormat;
-import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Created by len.song on 2017-12-07.
@@ -216,7 +233,7 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 		userBean.setYearOfBirth(customer.getBirthday());
 		req.setUserBean(userBean);
 
-		logger.info("===============开始登陆数据埋点==============userBean:"+req.getUserBean());
+		logger.info("===============开始登陆数据埋点==============userBean:" + req.getUserBean());
 		dataDuriedPointBusiness.buryUserIdLoginResultData(req);
 		return ResultUtils.resultSuccess(customer);
 	}
@@ -274,8 +291,7 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 			 * params.getCustomerId()); }
 			 */
 			// 刷新融云用户信息
-			CodeSuccessReslut reslut = RongYunUtil.refreshUser(String.valueOf(params.getCustomerId()),
-					params.getNickName(), img);
+			RongYunUtil.refreshUser(String.valueOf(params.getCustomerId()), params.getNickName(), img);
 			// 刷新失败
 			// if (reslut.getCode() != 200) {
 			// logger.error("刷新融云用户信息失败，用户id为：" + String.valueOf(params.getCustomerId()));
@@ -417,7 +433,6 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 		req.setRegistDate(new Date());
 		req.setRegistSource(request.getAppChannelName());
 		req.setUser_id(customer.getCustomerId() + "");
-
 
 		userBean.setNick(customer.getNickName());
 		userBean.setRegistDate(new Date());
@@ -737,13 +752,13 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 		return ResultUtils.resultSuccess();
 
 	}
-	
+
 	@Override
 	public CommonResponse searchPersonByPhone(SearchPersonByPhoneRequest request) {
 		Long phone = request.getPhone();
 		List<SearchPersonByPhoneVO> list = customerMapper.queryPersonByPhone(phone);
 		SearchPersonByPhoneVO customer = new SearchPersonByPhoneVO();
-		if(list.size() > 0){
+		if (list.size() > 0) {
 			customer = list.get(0);
 		}
 		return ResultUtils.resultSuccess(customer);
