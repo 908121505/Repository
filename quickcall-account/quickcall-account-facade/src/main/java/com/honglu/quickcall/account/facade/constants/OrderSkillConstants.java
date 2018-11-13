@@ -174,6 +174,8 @@ public interface OrderSkillConstants {
 	public static final String  RET_CODE_DV_NOT_ACCEPTE_ORDER = "5";
 	/**下单返回结果：6 预约时间不正确*/
 	public static final String  RET_CODE_APPOINT_TIME_ERROR = "6";
+	/**下单返回结果：6 预约时间不正确*/
+	public static final String  RET_CODE_APPOINT_TIME_ERROR_MSG = "下单时间必须大于预约时间30分钟";
 	
 	/**默认空字符串*/
 	public static final Integer  DEFAULT_NULL_STR = 0;

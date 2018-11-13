@@ -181,6 +181,7 @@ public class OrderServiceImpl implements IOrderService {
 		CommonResponse commonResponse = commonService.getCommonResponse();
 		HashMap<String, Object> resultMap = new HashMap<>();
 		resultMap.put("retCode", OrderSkillConstants.DEFAULT_NULL_STR);
+		resultMap.put("msg", OrderSkillConstants.DEFAULT_NULL_STR);
 		resultMap.put("downLoadStr", OrderSkillConstants.DEFAULT_NULL_STR);
 		resultMap.put("orderId", OrderSkillConstants.DEFAULT_NULL_STR);
 		Date appointTime = null;
@@ -196,6 +197,7 @@ public class OrderServiceImpl implements IOrderService {
 				//没有在当前时间半小时之后
 				if(endTime.after(appointTime)){
 					resultMap.put("retCode", OrderSkillConstants.RET_CODE_APPOINT_TIME_ERROR);
+					resultMap.put("msg", OrderSkillConstants.RET_CODE_APPOINT_TIME_ERROR_MSG);
 					commonResponse.setData(resultMap);
 					// 返回大V正忙，以及结束时间
 					return commonResponse;
