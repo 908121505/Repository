@@ -1167,12 +1167,12 @@ public class OrderServiceImpl implements IOrderService {
 						LOGGER.info("订单结束后用户推送券，异常信息：",e);
 					}
 					// 用户未评价
-					RongYunUtil.sendOrderMessage(serviceId, OrderSkillConstants.IM_MSG_CONTENT_CUST_NOT_PING_JIA_TO_DV,OrderSkillConstants.MSG_CONTENT_DAV);
-					RongYunUtil.sendOrderMessage(customerId, "TODO",OrderSkillConstants.MSG_CONTENT_C);
+					RongYunUtil.sendOrderMessage(serviceId, OrderSkillConstants.IM_MSG_CONTENT_DAV_CUST_CONFIRM_TO_DV,OrderSkillConstants.MSG_CONTENT_DAV);
+					RongYunUtil.sendOrderMessage(customerId, OrderSkillConstants.IM_MSG_CONTENT_DAV_CUST_CONFIRM_TO_CUST,OrderSkillConstants.MSG_CONTENT_C);
 					
 					//推动订单IM消息
-					commonService.sendOrderMsg(customerId, serviceId, orderId, OrderSkillConstants.IM_MSG_CONTENT_CUST_NOT_PING_JIA_TO_DV);
-//					commonService.sendOrderMsg(serviceId, customerId,orderId, OrderSkillConstants.IM_MSG_CONTENT_DAV_START_SERVICE_TO_CUST);
+					commonService.sendOrderMsg(customerId, serviceId, orderId, OrderSkillConstants.IM_MSG_CONTENT_DAV_CUST_CONFIRM_TO_DV);
+					commonService.sendOrderMsg(serviceId, customerId,orderId, OrderSkillConstants.IM_MSG_CONTENT_DAV_CUST_CONFIRM_TO_CUST);
 					
 					
 					sendMsgIndex = 1;
@@ -1202,11 +1202,11 @@ public class OrderServiceImpl implements IOrderService {
 					LOGGER.info("订单结束后用户推送券，异常信息：",e);
 				}
 				RongYunUtil.sendOrderMessage(customerId, OrderSkillConstants.IM_MSG_CONTENT_SYSTEM_FINISH_TIMEOUT_TO_CUST,OrderSkillConstants.MSG_CONTENT_C);
-				RongYunUtil.sendOrderMessage(serviceId, "TODO",OrderSkillConstants.MSG_CONTENT_DAV);
+				RongYunUtil.sendOrderMessage(serviceId, OrderSkillConstants.IM_MSG_CONTENT_SYSTEM_FINISH_TIMEOUT_TO_DAV,OrderSkillConstants.MSG_CONTENT_DAV);
 				
 				
 				//推动订单IM消息
-//				commonService.sendOrderMsg(customerId, serviceId, orderId, OrderSkillConstants.IM_MSG_CONTENT_CUST_FINISH_TO_DAV);
+				commonService.sendOrderMsg(customerId, serviceId, orderId, OrderSkillConstants.IM_MSG_CONTENT_SYSTEM_FINISH_TIMEOUT_TO_DAV);
 				commonService.sendOrderMsg(serviceId, customerId,orderId, OrderSkillConstants.IM_MSG_CONTENT_SYSTEM_FINISH_TIMEOUT_TO_CUST);
 			}
 

@@ -3,6 +3,8 @@ package com.honglu.quickcall.user.facade.entity;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import com.alibaba.fastjson.annotation.JSONField;
+
 public class Customer {
 	private Long customerId;
 
@@ -48,6 +50,7 @@ public class Customer {
 
 	private String starSign;
 
+	@JSONField(format="yyyy-MM-dd HH:mm:ss")
 	private Date birthday;
 
 	private String voiceUrl;
@@ -59,9 +62,9 @@ public class Customer {
 	private String tokenCode;
 
 	private String otherRelation;
-
+	@JSONField(format="yyyy-MM-dd HH:mm:ss")
 	private Date createTime;
-
+	@JSONField(format="yyyy-MM-dd HH:mm:ss")
 	private Date modifyTime;
 
 	private String createMan;
@@ -77,7 +80,7 @@ public class Customer {
 	private Integer customerLevel;
 
 	private String deviceId;
-
+	@JSONField(format="yyyy-MM-dd HH:mm:ss")
 	private Date loginTime;
 	/** 大V认证声音时长 */
 	private BigDecimal voiceTime;
@@ -92,7 +95,9 @@ public class Customer {
 	/** 大V声音审核状态1：待审核（审核中） 2：审核拒绝 3.审核通过 4.修改之后待审核 5.修改之后审核拒绝 6.修改之后审核通过 */
 	private Integer voiceStatus;
 	private String gtClientId;// 个推用户端Id
+	@JSONField(format="yyyy-MM-dd HH:mm:ss")
 	private Date blockStartTime;
+	@JSONField(format="yyyy-MM-dd HH:mm:ss")
 	private Date blockEndTime;
 
 	private String uid;

@@ -72,7 +72,7 @@ public interface OrderSkillConstants {
 	
 	//订单取消
 	public  static final  String  IM_MSG_CONTENT_CANCEL_ORDER_TO_DV = "用户取消了您的订单，再接再厉哦~";
-	public  static final  String  IM_MSG_CONTENT_CANCEL_ORDER_TO_CUST = "您取消了一个订单，费用已退回轻音账户";
+	public  static final  String  IM_MSG_CONTENT_CANCEL_ORDER_TO_CUST = "您取消了一个订单，音符已退回轻音账户";
 //	public  static final  String  IM_MSG_CONTENT_USER_CONFIRM_FINISH= "订单完成啦";
 	
 	//用户同意声优立即服务
@@ -80,7 +80,7 @@ public interface OrderSkillConstants {
 	public  static final  String  IM_MSG_CONTENT_USER_CONFIRM_START_SERVICE_TO_CUST = "您已同意立即服务";
 	
 	//拒绝接单
-	public  static final  String  IM_MSG_CONTENT_DAV_REFUSE_TO_CUST = "声优未接单，费用已退回轻音账户";
+	public  static final  String  IM_MSG_CONTENT_DAV_REFUSE_TO_CUST = "声优未接单，音符已退回轻音账户";
 	public  static final  String  IM_MSG_CONTENT_DAV_REFUSE_TO_DV = "您已拒接，订单已取消~";
 	
 	
@@ -89,7 +89,7 @@ public interface OrderSkillConstants {
 	public  static final  String  IM_MSG_CONTENT_DAV_CONFIRM_TO_CUST_JIAO_XING = "声优已接单，正在记录中..";
 	public  static final  String  IM_MSG_CONTENT_DAV_CONFIRM_TO_DAV = "您已接单，请在5分钟内申请立即服务，超时订单将取消~";
 	
-	public  static final  String  IM_MSG_CONTENT_DAV_CONFIRM_OTHER_CANCEL_TO_CUST = "声优未接单，费用已退回轻音账户";
+	public  static final  String  IM_MSG_CONTENT_DAV_CONFIRM_OTHER_CANCEL_TO_CUST = "声优未接单，音符已退回轻音账户";
 	public  static final  String  IM_MSG_CONTENT_DAV_CONFIRM_OTHER_CANCEL_TO_DAV = "您已选择其他订单，该订单已取消";
 	
 	
@@ -110,7 +110,7 @@ public interface OrderSkillConstants {
 	
 	//用户同意声优服务完成
 	public  static final  String  IM_MSG_CONTENT_DAV_CUST_CONFIRM_TO_DV = "订单已完成，赫兹进入轻音账户。";
-	public  static final  String  IM_MSG_CONTENT_DAV_CUST_CONFIRM_TO_CUST = "TODO待定";
+	public  static final  String  IM_MSG_CONTENT_DAV_CUST_CONFIRM_TO_CUST = "订单已完成，给个评价吧";
 	
 
 	
@@ -124,7 +124,7 @@ public interface OrderSkillConstants {
 	
 	
 	public  static final  String  IM_MSG_CONTENT_CANCEL_DV_15MINUTE_TIMEOUT = "您因超时未接单，订单已取消";
-	public  static final  String  IM_MSG_CONTENT_CANCEL_CUST_15MINUTE_TIMEOUT = "声优未接单，费用已退回轻音账户";
+	public  static final  String  IM_MSG_CONTENT_CANCEL_CUST_15MINUTE_TIMEOUT = "声优未接单，音符已退回轻音账户";
 	
 //	/**大V5分钟未发起服务*/
 	public  static final  String  IM_MSG_CONTENT_CANCEL_CUST_5MINUTE_START_TIMEOUT = "声优未发起立即服务，订单已取消~";
@@ -164,10 +164,12 @@ public interface OrderSkillConstants {
 	public static final String  RET_CODE_BALANCE_NOT_ENOUTH = "2";
 	/**下单返回结果：3 大V正忙*/
 	public static final String  RET_CODE_DV_BUSY = "3";
-	/**下单返回结果：3 大V正忙*/
-	public static final String  RET_CODE_DV_NOT_ACCEPTE_ORDER = "5";
 	/**下单返回结果：4 系统错误*/
 	public static final String  RET_CODE_SYSTEM_ERROR = "4";
+	/**下单返回结果：5 大V正忙*/
+	public static final String  RET_CODE_DV_NOT_ACCEPTE_ORDER = "5";
+	/**下单返回结果：6 系统错误*/
+//	public static final String  RET_CODE_SYSTEM_ERROR = "6";
 	
 	/**默认空字符串*/
 	public static final Integer  DEFAULT_NULL_STR = 0;
