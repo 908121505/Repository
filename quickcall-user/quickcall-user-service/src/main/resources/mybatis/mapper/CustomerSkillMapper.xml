@@ -419,7 +419,7 @@
     INNER JOIN skill_item si ON si.id = cs.skill_item_id AND si.skill_status = 1
     LEFT JOIN customer_skill_certify csc ON csc.certify_id = cs.certify_id
     WHERE cs.customer_id = #{customerId}
-    AND cs.skill_status = 1
+    AND cs.skill_status = 1 AND cs.switch_status = 1 AND cs.receive_status =1
     ORDER BY cs.create_time ASC
   </select>
 
