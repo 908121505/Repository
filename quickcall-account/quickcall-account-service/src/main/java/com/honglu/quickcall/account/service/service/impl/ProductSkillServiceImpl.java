@@ -580,7 +580,7 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 		Date  appointStartTime =  null;
 		Date  appointEndTime = null ;
 		
-		/*if(autoReceiveStatus == 1){
+		if(autoReceiveStatus == 1){
 			String  startTimeStr = request.getStartServiceTimeStr();
 			String  endTimeStr = request.getEndServiceTimeStr();
 			//根据结束时间获取预约结束时间
@@ -588,7 +588,7 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 			Map<String, Date>  dateMap = getAppointEndTime(startTimeStr,endTimeStr);
 			appointStartTime = dateMap.get(START_TIME_KEY);
 			appointEndTime =dateMap.get(END_TIME_KEY);
-		}*/
+		}
 		
 		
 		Integer  receiveStatus = request.getReceiveStatus();
@@ -657,18 +657,16 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 //			custSkill.setEndTimeStr(endTimeStr);
 			custSkill.setStartTimeStr(startTimeStrUpdate);
 			custSkill.setEndTimeStr(endTimeStrUpdate);
-			if(sumIndex > 0){
-				custSkill.setIfRepeat(1);
-				custSkill.setRepeatNum(0);
-			}else{
-				custSkill.setIfRepeat(0);
-				custSkill.setRepeatNum(2);
-			}
-			/*if(sumIndex > 0){
-				//大于0说明选择了重复选项
+			if(sumIndex == 0){
+				/*//大于0说明选择了重复选项
 				custSkill.setStartTimeStr(startTimeStrUpdate);
-				custSkill.setEndTimeStr(endTimeStrUpdate);
-			}else{
+				custSkill.setEndTimeStr(endTimeStrUpdate);*/
+				//==0说明没有选择重复选项
+				//设置开始时间和结束时间
+				custSkill.setAppointStartTime(appointStartTime);
+				custSkill.setAppointEndTime(appointEndTime);
+			}
+			/*else{
 				//==0说明没有选择重复选项
 				//设置开始时间和结束时间
 				custSkill.setAppointStartTime(appointStartTime);
