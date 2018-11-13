@@ -124,7 +124,11 @@
                     <label class="col-sm-2 control-label">选择品类</label>
                     <div class="col-sm-10">
                         <select  class="form-control selectpicker" id="skillItemSelect" name="skillItemIdList" multiple>
-                            <option value='clear'>清空当前所属品类</option>
+
+                            <c:if test="${not empty entity}">
+                                <option value='clear'>清空当前所属品类</option>
+                            </c:if>
+
                             <c:if test="${not empty skillItemList}">
                                 <c:forEach items="${skillItemList}" var="skillItem">
                                     <option value=${skillItem.skillItemId}>${skillItem.skillItemName}</option>
