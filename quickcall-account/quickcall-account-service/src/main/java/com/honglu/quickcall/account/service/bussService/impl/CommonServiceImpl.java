@@ -162,9 +162,12 @@ public class CommonServiceImpl implements CommonService {
 //				tempVO.setOrderStatus(OrderSkillConstants.ORDER_STATUS_GOING_USER_ACCEPCT);
 //			}
 			tempVO.setCountDownSeconds(0L);
-			
-			
 		}
+		
+		if(countDownSeconds < 0){
+			countDownSeconds = 0L;
+		}
+		
 		return tempVO ;
 	}
 
