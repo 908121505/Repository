@@ -81,7 +81,11 @@ public interface OrderSkillConstants {
 	
 	//用户同意声优立即服务
 	public  static final  String  IM_MSG_CONTENT_USER_CONFIRM_START_SERVICE_TO_DAV = "用户已同意立即服务，赶快聊聊吧";
-	public  static final  String  IM_MSG_CONTENT_USER_CONFIRM_START_SERVICE_TO_CUST = "您已接单，请在5分钟内申请立即服务";
+	public  static final  String  IM_MSG_CONTENT_USER_CONFIRM_START_SERVICE_TO_CUST = "您已同意立即服务";
+	
+	
+	public  static final  String  IM_MSG_CONTENT_USER_CONFIRM_START_SERVICE_JX_TO_DAV = "用户已经同意，请准时提供服务哦~";
+	public  static final  String  IM_MSG_CONTENT_USER_CONFIRM_START_SERVICE_JX_TO_CUST = "TODO待定";
 	
 	//拒绝接单
 	public  static final  String  IM_MSG_CONTENT_DAV_REFUSE_TO_CUST = "声优未接单，音符已退回轻音账户";
@@ -113,7 +117,7 @@ public interface OrderSkillConstants {
 	public  static final  String  IM_MSG_CONTENT_CUST_NOT_PING_JIA_TO_CUST = "订单已完成，给个评价吧";
 	
 	//用户同意声优服务完成
-	public  static final  String  IM_MSG_CONTENT_DAV_CUST_CONFIRM_TO_DV = "订单已完成，赫兹进入轻音账户。";
+	public  static final  String  IM_MSG_CONTENT_DAV_CUST_CONFIRM_TO_DV = "订单已完成，赫兹进入轻音账户";
 	public  static final  String  IM_MSG_CONTENT_DAV_CUST_CONFIRM_TO_CUST = "订单已完成，给个评价吧";
 	
 

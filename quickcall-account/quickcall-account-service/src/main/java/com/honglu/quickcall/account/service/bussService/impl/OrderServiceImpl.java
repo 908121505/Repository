@@ -806,7 +806,7 @@ public class OrderServiceImpl implements IOrderService {
 			throw new BizException(AccountBizReturnCode.paramError, "用户同意大V服务完成参数异常");
 		}
 
-		LOGGER.info("======>>>>>applayRefund()入参：" + request.toString());
+		LOGGER.info("======>>>>>custConfirmFinish()入参：" + request.toString());
 		Long orderId = request.getOrderId();
 
 		Integer newOrderStatus = null;
@@ -919,14 +919,27 @@ public class OrderServiceImpl implements IOrderService {
 		// 用户同意大V服务完成，通知大V查单订单状态
 		Long serviceId = order.getServiceId();
 		Long customerId =  order.getCustomerId();
-		RongYunUtil.sendOrderMessage(serviceId, OrderSkillConstants.IM_MSG_CONTENT_USER_CONFIRM_START_SERVICE_TO_DAV,
-				OrderSkillConstants.MSG_CONTENT_DAV);
-		RongYunUtil.sendOrderMessage(customerId, OrderSkillConstants.IM_MSG_CONTENT_USER_CONFIRM_START_SERVICE_TO_CUST,
-				OrderSkillConstants.MSG_CONTENT_C);
 		
-		//推动订单IM消息
-		commonService.sendOrderMsg(customerId, serviceId, orderId, OrderSkillConstants.IM_MSG_CONTENT_USER_CONFIRM_START_SERVICE_TO_DAV);
-		commonService.sendOrderMsg(serviceId, customerId,orderId, OrderSkillConstants.IM_MSG_CONTENT_USER_CONFIRM_START_SERVICE_TO_CUST);
+		//状态为26是推送消息
+		if(newOrderStatus == OrderSkillConstants.ORDER_STATUS_GOING_USER_ACCEPCT){
+			
+			RongYunUtil.sendOrderMessage(serviceId, OrderSkillConstants.IM_MSG_CONTENT_USER_CONFIRM_START_SERVICE_TO_DAV,OrderSkillConstants.MSG_CONTENT_DAV);
+			RongYunUtil.sendOrderMessage(customerId, OrderSkillConstants.IM_MSG_CONTENT_USER_CONFIRM_START_SERVICE_TO_CUST,OrderSkillConstants.MSG_CONTENT_C);
+			
+			//推动订单IM消息
+			commonService.sendOrderMsg(customerId, serviceId, orderId, OrderSkillConstants.IM_MSG_CONTENT_USER_CONFIRM_START_SERVICE_TO_DAV);
+			commonService.sendOrderMsg(serviceId, customerId,orderId, OrderSkillConstants.IM_MSG_CONTENT_USER_CONFIRM_START_SERVICE_TO_CUST);
+		
+			//叫醒特享
+		}else if(newOrderStatus == OrderSkillConstants.ORDER_STATUS_GOING_WAITING_START){
+			RongYunUtil.sendOrderMessage(serviceId, OrderSkillConstants.IM_MSG_CONTENT_USER_CONFIRM_START_SERVICE_JX_TO_DAV,OrderSkillConstants.MSG_CONTENT_DAV);
+			RongYunUtil.sendOrderMessage(customerId, OrderSkillConstants.IM_MSG_CONTENT_USER_CONFIRM_START_SERVICE_JX_TO_CUST,OrderSkillConstants.MSG_CONTENT_C);
+			//推动订单IM消息
+			commonService.sendOrderMsg(customerId, serviceId, orderId, OrderSkillConstants.IM_MSG_CONTENT_USER_CONFIRM_START_SERVICE_JX_TO_DAV);
+			commonService.sendOrderMsg(serviceId, customerId,orderId, OrderSkillConstants.IM_MSG_CONTENT_USER_CONFIRM_START_SERVICE_JX_TO_CUST);
+			
+		}
+		
 
 		CommonResponse commonResponse = commonService.getCommonResponse();
 		commonResponse.setData(newOrderStatus);

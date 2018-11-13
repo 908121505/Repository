@@ -142,11 +142,12 @@ public class CommonServiceImpl implements CommonService {
 				countDownSeconds =  DateUtils.getDiffSeconds(currTime, endTime);
 			}
 			//大于0说明正在倒计时，状态不变  小于0的逻辑暂时不考虑
-			if(countDownSeconds >= 0){
-				tempVO.setOrderStatus(oldOrderStatus);
-			}else{
-				tempVO.setOrderStatus(OrderSkillConstants.ORDER_STATUS_FINISH_DAV_FINISH_AFTER_SERVICE_TIME);
-			}
+			tempVO.setOrderStatus(oldOrderStatus);
+//			if(countDownSeconds >= 0){
+//				tempVO.setOrderStatus(oldOrderStatus);
+//			}else{
+//				tempVO.setOrderStatus(OrderSkillConstants.ORDER_STATUS_FINISH_DAV_FINISH_AFTER_SERVICE_TIME);
+//			}
 			tempVO.setCountDownSeconds(countDownSeconds);
 		//叫醒的24状态需要单独处理
 		}else if(oldOrderStatus ==OrderSkillConstants.ORDER_STATUS_GOING_WAITING_START){
@@ -166,6 +167,7 @@ public class CommonServiceImpl implements CommonService {
 		
 		if(countDownSeconds < 0){
 			countDownSeconds = 0L;
+			tempVO.setCountDownSeconds(countDownSeconds);
 		}
 		
 		return tempVO ;
