@@ -232,11 +232,7 @@
 		</dependency>
 		
 		
-		 <dependency>
-           <groupId>commons-lang</groupId>
-           <artifactId>commons-lang</artifactId>
-           <version>3.6</version>
-        </dependency>
+		 
         <dependency>
          <groupId>xpp3</groupId>
            <artifactId>xpp3_min</artifactId>
