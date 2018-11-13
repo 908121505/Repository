@@ -22,7 +22,12 @@
 			customer_skill
 		SET 
 			receive_status = #{updateStatus},
-			modify_time = #{modifyTime}
+			modify_time = #{modifyTime} ,
+			repeat_num = 
+			case WHEN if_repeat = 0
+			THEN
+			 repeat_num - 1
+			else repeat_num end 
 		WHERE
 			customer_skill_id   IN 
 			<foreach collection="list" item="customerSkillId"    open="("  close=")"  separator=",">
@@ -80,7 +85,9 @@
 		WHERE
 			auto_receive_status = #{autoReceiveStatus}
 		AND receive_status = #{recevieStatus}
-		AND start_time_str <![CDATA[ <= ]]> #{currTimeStr}
+		<!-- AND start_time_str <![CDATA[ <= ]]> #{currTimeStr} -->
+		AND start_time_str = #{currTimeStr}
+		AND if_repeat = 1
 		<include refid="SKILL_EXIST_CONDITON"></include>
   </select>
   
@@ -109,7 +116,9 @@
 		WHERE
 			auto_receive_status = #{autoReceiveStatus}
 		AND receive_status = #{recevieStatus}
-		AND end_time_str  <![CDATA[ <= ]]>  #{currTimeStr}
+		<!-- AND end_time_str  <![CDATA[ <= ]]>  #{currTimeStr} -->
+		AND end_time_str  =  #{currTimeStr}
+		AND if_repeat = 1
 		
 		<include refid="SKILL_EXIST_CONDITON"></include>
   </select>
@@ -134,8 +143,24 @@
 		WHERE
 			auto_receive_status = #{autoReceiveStatus}
 		AND receive_status = #{recevieStatus}
-		AND  appoint_start_time    <![CDATA[ <= ]]> #{currTimeStr}
+		<!-- AND  appoint_start_time    <![CDATA[ <= ]]> #{currTimeStr} -->
+		AND  appoint_start_time    = #{currTimeStr}
   </select>
+  
+  <select id="qeryOpenReceiveByCurrentTimeUpdate"   resultType="java.lang.Long">
+		SELECT
+			customer_skill_id
+		FROM
+			customer_skill
+		WHERE
+			auto_receive_status = #{autoReceiveStatus}
+		AND receive_status = #{recevieStatus}
+		<!-- AND  appoint_start_time    <![CDATA[ <= ]]> #{currTimeStr} -->
+		AND  start_time_str = #{currTimeStr}
+		AND if_repeat = 0
+		AND repeat_num != 0
+  </select>
+  
 <!-- 根据当前时间关闭接单开关 -->
 <!--   <update id="closeReceiveByCurrentTime"  >
 		UPDATE 
@@ -155,9 +180,23 @@
 		WHERE
 			auto_receive_status = #{autoReceiveStatus}
 		AND receive_status = #{recevieStatus}
-		AND appoint_end_time  <![CDATA[ <= ]]>  #{currTimeStr}
+		<!-- AND appoint_end_time  <![CDATA[ <= ]]>  #{currTimeStr} -->
+		AND appoint_end_time  =  #{currTimeStr}
   </select>
-
+  
+  <select id="qeryCloseReceiveByCurrentTimeUpdate"   resultType="java.lang.Long">
+		SELECT
+			customer_skill_id
+		FROM
+			customer_skill
+		WHERE
+			auto_receive_status = #{autoReceiveStatus}
+		AND receive_status = #{recevieStatus}
+		<!-- AND appoint_end_time  <![CDATA[ <= ]]>  #{currTimeStr} -->
+		AND  end_time_str = #{currTimeStr}
+		AND if_repeat = 0
+		AND repeat_num != 0 
+  </select>
 
 
   

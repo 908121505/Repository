@@ -64,6 +64,22 @@ public interface TaskCustomerSkillMapper {
 	 */
 //	void  closeReceiveByCurrentTime(@Param("autoReceiveStatus")Integer autoReceiveStatus ,@Param("recevieStatus")Integer receiveStatus ,@Param("updateStatus")Integer  updateStatus,@Param("currTimeStr")Date  currTime);
 	List<Long>  queryCloseReceiveByCurrentTime(@Param("autoReceiveStatus")Integer autoReceiveStatus ,@Param("recevieStatus")Integer receiveStatus ,@Param("currTimeStr")Date  currTime);
+	/**
+	 * 根据当前时间开启接单开关
+	 * @param queryStatus
+	 * @param recevieStatus
+	 * @param updateStatus
+	 * @param currTime
+	 */
+	List<Long> qeryOpenReceiveByCurrentTimeUpdate(@Param("autoReceiveStatus")Integer autoReceiveStatus ,@Param("recevieStatus")Integer receiveStatus ,@Param("currTimeStr")String  currTimeStr);
+	/**
+	 * 根据当前时间关闭接单开关
+	 * @param queryStatus
+	 * @param recevieStatus
+	 * @param updateStatus
+	 * @param currTime
+	 */
+	List<Long> qeryCloseReceiveByCurrentTimeUpdate(@Param("autoReceiveStatus")Integer autoReceiveStatus ,@Param("recevieStatus")Integer receiveStatus ,@Param("currTimeStr")String  currTimeStr);
 	
 
 }

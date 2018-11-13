@@ -566,7 +566,7 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 
 	@Override
 	public CommonResponse checkEachAttention(CheckEachAttentionRequest request) {
-		Customer customer = customerMapper.selectByPrimaryKey(request.getAttendedId());
+		Customer customer = customerMapper.selectByPrimaryKey(request.getFansId());
 		if(customer == null){
 			return ResultUtils.result(BizCode.CustomerNotExist);
 		}
