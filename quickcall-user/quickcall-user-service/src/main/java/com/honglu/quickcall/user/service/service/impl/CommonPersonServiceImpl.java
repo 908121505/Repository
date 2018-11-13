@@ -29,8 +29,7 @@ import com.honglu.quickcall.common.core.util.Detect;
 import com.honglu.quickcall.common.core.util.MD5;
 import com.honglu.quickcall.common.core.util.UUIDUtils;
 import com.honglu.quickcall.common.third.AliyunSms.utils.SendSmsUtil;
-import com.honglu.quickcall.common.third.rongyun.models.CodeSuccessReslut;
-import com.honglu.quickcall.common.third.rongyun.util.RongYunUtil;
+import com.honglu.quickcall.common.third.newrongyun.RongYunUtil;
 import com.honglu.quickcall.producer.facade.business.DataDuriedPointBusiness;
 import com.honglu.quickcall.producer.facade.req.databury.DataBuriedPointGetCodeReq;
 import com.honglu.quickcall.producer.facade.req.databury.DataBuriedPointLoginReq;
@@ -319,8 +318,7 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 			 * params.getCustomerId()); }
 			 */
 			// 刷新融云用户信息
-			CodeSuccessReslut reslut = RongYunUtil.refreshUser(String.valueOf(params.getCustomerId()),
-					params.getNickName(), img);
+			RongYunUtil.refreshUser(String.valueOf(params.getCustomerId()), params.getNickName(), img);
 			// 刷新失败
 			// if (reslut.getCode() != 200) {
 			// logger.error("刷新融云用户信息失败，用户id为：" + String.valueOf(params.getCustomerId()));
