@@ -85,11 +85,11 @@ public interface OrderSkillConstants {
 	
 	
 	public  static final  String  IM_MSG_CONTENT_USER_CONFIRM_START_SERVICE_JX_TO_DAV = "用户已经同意，请准时提供服务哦~";
-	public  static final  String  IM_MSG_CONTENT_USER_CONFIRM_START_SERVICE_JX_TO_CUST = "TODO待定";
+	public  static final  String  IM_MSG_CONTENT_USER_CONFIRM_START_SERVICE_JX_TO_CUST = "您已同意，准时为您服务!";
 	
 	//拒绝接单
 	public  static final  String  IM_MSG_CONTENT_DAV_REFUSE_TO_CUST = "声优未接单，音符已退回轻音账户";
-	public  static final  String  IM_MSG_CONTENT_DAV_REFUSE_TO_DV = "您已拒接，订单已取消~";
+	public  static final  String  IM_MSG_CONTENT_DAV_REFUSE_TO_DV = "您已拒接接单，订单已取消~";
 	
 	
 	//同意接单
