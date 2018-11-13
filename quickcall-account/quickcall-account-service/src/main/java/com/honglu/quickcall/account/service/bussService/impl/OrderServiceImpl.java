@@ -177,6 +177,13 @@ public class OrderServiceImpl implements IOrderService {
 //			return ResultUtils.result(BizCode.CustomerNotExist);
 //		}
 		LOGGER.info("======>>>>>saveOrder()入参：" + request.toString());
+		
+		String  appointTimeStr = request.getAppointTimeStr();
+		if(StringUtils.isNotBlank(appointTimeStr)){
+			
+		}
+		
+		
 
 		CommonResponse commonResponse = commonService.getCommonResponse();
 		HashMap<String, Object> resultMap = new HashMap<>();
@@ -1135,7 +1142,7 @@ public class OrderServiceImpl implements IOrderService {
 			throw new BizException(AccountBizReturnCode.paramError, "用户/大V完成服务参数异常");
 		}
 
-		LOGGER.info("======>>>>>dvConfirmRefund()入参：" + request.toString());
+		LOGGER.info("======>>>>>finishOrder()入参：" + request.toString());
 		Long orderId = request.getOrderId();
 		Integer type = request.getType();
 
