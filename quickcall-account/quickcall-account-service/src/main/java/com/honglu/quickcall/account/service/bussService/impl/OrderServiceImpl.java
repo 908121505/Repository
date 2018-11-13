@@ -679,6 +679,7 @@ public class OrderServiceImpl implements IOrderService {
 			order = orderMapper.queryOrderByCustomerIdAndServiceId(serviceId, customerId, statusList);
 		}
 
+//		boolean  checkFlag = false;
 //		Integer  newOrderStatus =  null;
 		/**** 1.必须首先判断双方存在订单关系 */
 		if (order != null) {
@@ -715,8 +716,10 @@ public class OrderServiceImpl implements IOrderService {
 					} catch (Exception e) {
 					}
 				}else{
+//					checkFlag = true ;
 					//不存在订单关系
-					orderDetailForIMVO.setRetCode(OrderSkillConstants.IM_RETCODE_ORDER_COUND_ORDER);// 不存在的订单关系
+					//需要判断是否可以下单，也就是说serviceId方是否有技能
+//					orderDetailForIMVO.setRetCode(OrderSkillConstants.IM_RETCODE_ORDER_COUND_ORDER);// 不存在的订单关系
 				}
 				
 			}else{
@@ -736,50 +739,9 @@ public class OrderServiceImpl implements IOrderService {
 				orderDetailForIMVO.setServiceId(order.getServiceId());
 				orderDetailForIMVO.setCustomerId(order.getCustomerId());
 				orderDetailForIMVO.setOrderIMVO(orderIMVO);
-//				newOrderStatus =  responseVO.getOrderStatus();
 			}
-			
-			
-			
-			
-			
-			
-			
-			
-//			orderDetailForIMVO.setRetCode(OrderSkillConstants.IM_RETCODE_ORDER_EXIST);// 不可下单
-//			OrderIMVO orderIMVO = new OrderIMVO();
-//			Long customerSkillId = order.getCustomerSkillId();
-//			orderIMVO = customerSkillMapper.selectCustSkillItem(customerSkillId);
-//			orderIMVO.setOrderId(order.getOrderId());
-//			orderIMVO.setServicePrice(order.getServicePrice());
-//			orderIMVO.setServiceUnit(order.getServiceUnit());
-//			
-//			//订单倒计时计算
-//			OrderTempResponseVO responseVO = commonService.getCountDownSeconds(order.getOrderStatus(),order.getOrderTime(), order.getReceiveOrderTime(), order.getStartServiceTime(),order.getExpectEndTime(),order.getAppointTime());
-//			orderIMVO.setCountDownSeconds(responseVO.getCountDownSeconds());
-//			orderIMVO.setOrderStatus(responseVO.getOrderStatus());
-//			orderDetailForIMVO.setServiceId(order.getServiceId());
-//			orderDetailForIMVO.setCustomerId(order.getCustomerId());
-//			orderDetailForIMVO.setOrderIMVO(orderIMVO);
-			
 			commonResponse.setData(orderDetailForIMVO);
-//			Integer  newOrderStatus =  responseVO.getOrderStatus();
-//			if(OrderSkillConstants.ORDER_STATUS_FINISHED_USER_ACCEPCT == newOrderStatus || OrderSkillConstants.ORDER_STATUS_FINISH_DV_FINISH == newOrderStatus 
-//					|| OrderSkillConstants.ORDER_STATUS_FINISH_DV_RELEASE == newOrderStatus
-//					|| OrderSkillConstants.ORDER_STATUS_GOING_USRE_APPAY_FINISH == newOrderStatus
-//					|| OrderSkillConstants.ORDER_STATUS_FINISH_DAV_FINISH_AFTER_SERVICE_TIME == newOrderStatus
-//					|| OrderSkillConstants.ORDER_STATUS_FINISH_BOTH_NO_OPERATE == newOrderStatus
-//					
-//					){
-//				List<Long> orderIdList = new ArrayList<Long>();
-//				orderIdList.add(order.getOrderId());
-//				//更改订单状态为31
-//				orderMapper.updateOrderReceiveOrder(orderIdList , OrderSkillConstants.ORDER_STATUS_GOING_USER_NOT_PING_JIA);
-//			}
-			
-			
 			// 需要计算倒计时时间
-
 			return commonResponse;
 		}
 
@@ -866,10 +828,10 @@ public class OrderServiceImpl implements IOrderService {
 			accountService.inAccount(order.getServiceId(), order.getOrderAmounts(), TransferTypeEnum.FROZEN,
 					AccountBusinessTypeEnum.FroZen, orderId);
 			
-			//结束后用户获得券
-			couponDubboBusiness.getCouponInOrder(order.getSkillItemId(), order.getCustomerId());
-			// ADUAN 订单服务完成推送MQ消息
-			userCenterSendMqMessageService.sendOrderCostMqMessage(orderId);
+//			//结束后用户获得券
+//			couponDubboBusiness.getCouponInOrder(order.getSkillItemId(), order.getCustomerId());
+//			// ADUAN 订单服务完成推送MQ消息
+//			userCenterSendMqMessageService.sendOrderCostMqMessage(orderId);
 
 			Long  customerId =  order.getCustomerId();
 			Long  serviceId = order.getServiceId();
