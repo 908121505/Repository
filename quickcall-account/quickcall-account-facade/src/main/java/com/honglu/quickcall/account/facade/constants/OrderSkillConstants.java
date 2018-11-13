@@ -172,8 +172,8 @@ public interface OrderSkillConstants {
 	public static final String  RET_CODE_SYSTEM_ERROR = "4";
 	/**下单返回结果：5 大V正忙*/
 	public static final String  RET_CODE_DV_NOT_ACCEPTE_ORDER = "5";
-	/**下单返回结果：6 系统错误*/
-//	public static final String  RET_CODE_SYSTEM_ERROR = "6";
+	/**下单返回结果：6 预约时间不正确*/
+	public static final String  RET_CODE_APPOINT_TIME_ERROR = "6";
 	
 	/**默认空字符串*/
 	public static final Integer  DEFAULT_NULL_STR = 0;

@@ -1,6 +1,7 @@
 package com.honglu.quickcall.account.service.bussService.impl;
 
 import java.math.BigDecimal;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -177,19 +178,37 @@ public class OrderServiceImpl implements IOrderService {
 //			return ResultUtils.result(BizCode.CustomerNotExist);
 //		}
 		LOGGER.info("======>>>>>saveOrder()入参：" + request.toString());
-		
-		String  appointTimeStr = request.getAppointTimeStr();
-		if(StringUtils.isNotBlank(appointTimeStr)){
-			
-		}
-		
-		
-
 		CommonResponse commonResponse = commonService.getCommonResponse();
 		HashMap<String, Object> resultMap = new HashMap<>();
 		resultMap.put("retCode", OrderSkillConstants.DEFAULT_NULL_STR);
 		resultMap.put("downLoadStr", OrderSkillConstants.DEFAULT_NULL_STR);
 		resultMap.put("orderId", OrderSkillConstants.DEFAULT_NULL_STR);
+		Date appointTime = null;
+		String  appointTimeStr = request.getAppointTimeStr();
+		if(StringUtils.isNotBlank(appointTimeStr)){
+			try {
+				appointTime = DateUtils.formatDate(appointTimeStr);
+				Date  currTime = new Date();
+			    Calendar  cal = Calendar.getInstance();
+			    cal.setTime(currTime);
+			    cal.add(Calendar.MINUTE, 30);
+				Date  endTime = cal.getTime();
+				//没有在当前时间半小时之后
+				if(endTime.after(appointTime)){
+					resultMap.put("retCode", OrderSkillConstants.RET_CODE_APPOINT_TIME_ERROR);
+					commonResponse.setData(resultMap);
+					// 返回大V正忙，以及结束时间
+					return commonResponse;
+				}
+				
+			} catch (ParseException e) {
+				
+			}
+		}
+		
+		
+
+		
 
 		try {
 			
@@ -301,7 +320,6 @@ public class OrderServiceImpl implements IOrderService {
 
 			record.setSkillType(skillType);
 			if (OrderSkillConstants.SKILL_TYPE_NO == skillType) {
-				Date appointTime = DateUtils.formatDate(request.getAppointTimeStr());
 				record.setAppointTime(appointTime);
 			}
 
