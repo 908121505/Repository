@@ -652,7 +652,7 @@ ORDER BY
 			ct.sex AS sex,
 			ct.birthday AS birthday,
 			ct.identity_status AS identityStatus,
-			cs.skill_name AS skillName,
+			st.skill_item_name AS skillName,
 			od.service_price AS servicePrice,
 			od.service_unit AS serviceUnit,
 			od.order_num AS orderNum,
@@ -676,6 +676,7 @@ ORDER BY
 			orders od
 		INNER JOIN customer ct ON ct.customer_id = od.customer_id
 		LEFT JOIN customer_skill cs ON od.customer_skill_id = cs.customer_skill_id
+		LEFT JOIN  skill_item  st  ON  cs.skill_item_id  = st.id 
 
 	WHERE
 		od.order_id =  #{orderId}
@@ -691,7 +692,7 @@ ORDER BY
 		ct.sex AS sex,
 		ct.birthday AS birthday,
 		ct.identity_status AS identityStatus,
-		cs.skill_name AS skillName,
+		st.skill_item_name AS skillName,
 		od.service_price AS servicePrice,
 		od.service_unit AS serviceUnit,
 		od.order_num AS orderNum,
@@ -713,6 +714,7 @@ ORDER BY
 		orders od
 	INNER JOIN customer ct ON ct.customer_id = od.service_id
 	LEFT JOIN customer_skill cs ON od.customer_skill_id = cs.customer_skill_id
+    LEFT JOIN  skill_item  st  ON  cs.skill_item_id  = st.id 
 	WHERE
 		od.order_id =  #{orderId}
   </select>
