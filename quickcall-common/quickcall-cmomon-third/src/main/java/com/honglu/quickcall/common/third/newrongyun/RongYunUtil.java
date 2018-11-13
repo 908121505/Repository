@@ -1,5 +1,7 @@
 package com.honglu.quickcall.common.third.newrongyun;
 
+import java.util.ResourceBundle;
+
 import com.alibaba.fastjson.JSON;
 import com.honglu.quickcall.common.third.newrongyun.io.rong.RongCloud;
 import com.honglu.quickcall.common.third.newrongyun.io.rong.messages.BaseMessage;
@@ -15,13 +17,11 @@ import com.honglu.quickcall.common.third.rongyun.RongYunPushBean;
 import com.honglu.quickcall.common.third.rongyun.SendUser;
 
 public class RongYunUtil {
-	// private static String APPKEY =
-	// ResourceBundle.getBundle("thirdconfig").getString("appkey");
-	// private static String APPSECRET =
-	// ResourceBundle.getBundle("thirdconfig").getString("appsecret");
+	private static String APPKEY = ResourceBundle.getBundle("thirdconfig").getString("appkey");
+	private static String APPSECRET = ResourceBundle.getBundle("thirdconfig").getString("appsecret");
 
-	private static String APPKEY = "tdrvipkstxe05";
-	private static String APPSECRET = "aEwhqSySuNPhFo";
+	// private static String APPKEY = "tdrvipkstxe05";
+	// private static String APPSECRET = "aEwhqSySuNPhFo";
 
 	// 系统用户Id
 	public static String SYSTEM_COSTOMER_ID = "1810201521499459795";
@@ -244,7 +244,7 @@ public class RongYunUtil {
 	}
 
 	public static void main(String[] args) {
-		Long toCustomerId = 1811131520196475332L;
+		Long toCustomerId = 1811131717216601479L;
 		sendSystemMessage(toCustomerId, "你好帅");
 		sendActivityMessage(toCustomerId, "你好帅");
 		sendOrderMessage(toCustomerId, "你好帅");
