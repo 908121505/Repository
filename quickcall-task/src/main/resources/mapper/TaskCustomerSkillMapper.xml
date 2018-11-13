@@ -22,12 +22,7 @@
 			customer_skill
 		SET 
 			receive_status = #{updateStatus},
-			modify_time = #{modifyTime} ,
-			repeat_num = 
-			case WHEN if_repeat = 0
-			THEN
-			 repeat_num - 1
-			else repeat_num end 
+			modify_time = #{modifyTime} 
 		WHERE
 			customer_skill_id   IN 
 			<foreach collection="list" item="customerSkillId"    open="("  close=")"  separator=",">
@@ -61,7 +56,9 @@
   </sql>
   
   
-
+  <sql id="ISVALID_EXIST_CONDITON">
+      AND  monday+tuesday+wednesday+thursday+friday+saturday+sunday = 0
+  </sql>
   
   
 <!-- 根据周索引开启接单开关 -->
@@ -87,7 +84,6 @@
 		AND receive_status = #{recevieStatus}
 		<!-- AND start_time_str <![CDATA[ <= ]]> #{currTimeStr} -->
 		AND start_time_str = #{currTimeStr}
-		AND if_repeat = 1
 		<include refid="SKILL_EXIST_CONDITON"></include>
   </select>
   
@@ -118,7 +114,6 @@
 		AND receive_status = #{recevieStatus}
 		<!-- AND end_time_str  <![CDATA[ <= ]]>  #{currTimeStr} -->
 		AND end_time_str  =  #{currTimeStr}
-		AND if_repeat = 1
 		
 		<include refid="SKILL_EXIST_CONDITON"></include>
   </select>
@@ -157,8 +152,7 @@
 		AND receive_status = #{recevieStatus}
 		<!-- AND  appoint_start_time    <![CDATA[ <= ]]> #{currTimeStr} -->
 		AND  start_time_str = #{currTimeStr}
-		AND if_repeat = 0
-		AND repeat_num != 0
+		<include refid="ISVALID_EXIST_CONDITON"></include>
   </select>
   
 <!-- 根据当前时间关闭接单开关 -->
@@ -194,8 +188,7 @@
 		AND receive_status = #{recevieStatus}
 		<!-- AND appoint_end_time  <![CDATA[ <= ]]>  #{currTimeStr} -->
 		AND  end_time_str = #{currTimeStr}
-		AND if_repeat = 0
-		AND repeat_num != 0 
+		<include refid="ISVALID_EXIST_CONDITON"></include>
   </select>
 
 

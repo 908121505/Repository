@@ -83,28 +83,6 @@ public class CustomerSkill {
     
     private  Integer  skillType;
     
-    private Integer ifRepeat;
-    
-    private Integer repeatNum;
-
-    
-    
-    
-    public Integer getRepeatNum() {
-		return repeatNum;
-	}
-
-	public void setRepeatNum(Integer repeatNum) {
-		this.repeatNum = repeatNum;
-	}
-
-	public Integer getIfRepeat() {
-		return ifRepeat;
-	}
-
-	public void setIfRepeat(Integer ifRepeat) {
-		this.ifRepeat = ifRepeat;
-	}
 
 	public Integer getSkillType() {
 		return skillType;

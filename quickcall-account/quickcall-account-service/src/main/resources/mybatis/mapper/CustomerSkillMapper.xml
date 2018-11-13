@@ -34,7 +34,6 @@
     <result column="create_man" property="createMan" jdbcType="VARCHAR" />
     <result column="modify_man" property="modifyMan" jdbcType="VARCHAR" />
     <result column="remark" property="remark" jdbcType="VARCHAR" />
-    <result column="if_repeat" property="ifRepeat" jdbcType="TINYINT"/>
   </resultMap>
   
   <sql id="Base_Column_List" >
@@ -497,9 +496,7 @@
       start_time_str = #{skill.startTimeStr,jdbcType=VARCHAR},
       appoint_start_time = #{skill.appointStartTime,jdbcType=TIMESTAMP},
       appoint_end_time = #{skill.appointEndTime,jdbcType=TIMESTAMP},
-      modify_time = #{skill.modifyTime,jdbcType=TIMESTAMP},
-      if_repeat = #{skill.ifRepeat,jdbcType=TINYINT},
-      repeat_num = #{skill.repeatNum,jdbcType=TINYINT}
+      modify_time = #{skill.modifyTime,jdbcType=TIMESTAMP}
     where 
     	customer_skill_id = #{skill.customerSkillId,jdbcType=BIGINT};
 		</foreach>
