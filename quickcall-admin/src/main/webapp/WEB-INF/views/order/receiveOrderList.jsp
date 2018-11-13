@@ -191,8 +191,9 @@
                         "data": "receiveStatus",
                         "sTitle":"接单状态",
                         'sClass':"text-center",
-                    },
-					/*{
+                    }
+                    /*,
+					{
 						"data" : "endTime",
 						"sTitle" : "结束时间",
 						'sClass' : "text-center",
