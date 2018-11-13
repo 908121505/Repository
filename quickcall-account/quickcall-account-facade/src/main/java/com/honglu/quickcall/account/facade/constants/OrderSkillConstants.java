@@ -12,6 +12,10 @@ package com.honglu.quickcall.account.facade.constants;
 public interface OrderSkillConstants {
 	
 	
+	/**订单消息页每页显示条数*/
+	public static  final  Integer  ORDER_MSG_DEFAULT_PAGE_SIZE =  20 ;
+	
+	
 	/**自动接单开关1：开启*/
 	public  static final  Integer  AUTO_RECEIVE_OPEN =  1 ;
 	/**自动接单开关0：关闭*/

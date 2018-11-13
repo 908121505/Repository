@@ -166,9 +166,11 @@ public interface OrderMapper {
 	/**
 	 * 根据用户ID获取订单消息列表
 	 * @param customerId
+	 * @param pageStart
+	 * @param pageEnd
 	 * @return
 	 */
-	List<OrderMsgOrderListVO> queryMsgOrderList(@Param("customerId")Long customerId);
+	List<OrderMsgOrderListVO> queryMsgOrderList(@Param("customerId")Long customerId,@Param("pageStart")Integer pageStart,@Param("pageEnd")Integer pageEnd);
 
 
 

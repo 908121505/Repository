@@ -393,8 +393,18 @@ public class OrderServiceImpl implements IOrderService {
 //		if (StringUtils.isEmpty(customerJson)) {
 //			return ResultUtils.result(BizCode.CustomerNotExist);
 //		}
+		
+		Integer  pageIndex = request.getPageIndex();
+		if(pageIndex == null ){
+			pageIndex = 0 ;
+		}
+		
+		Integer  pageStart =  pageIndex * OrderSkillConstants.ORDER_MSG_DEFAULT_PAGE_SIZE ;
+		Integer  pageEnd =  (pageIndex + 1) *  OrderSkillConstants.ORDER_MSG_DEFAULT_PAGE_SIZE;
+		
 
-		List<OrderMsgOrderListVO> queryList = orderMapper.queryMsgOrderList(customerId);
+		
+		List<OrderMsgOrderListVO> queryList = orderMapper.queryMsgOrderList(customerId,pageStart,pageEnd);
 		List<OrderMsgOrderListVO> resultList  = new ArrayList<OrderMsgOrderListVO>() ;
 		if (!CollectionUtils.isEmpty(queryList)) {
 			for (OrderMsgOrderListVO order : queryList) {

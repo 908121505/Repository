@@ -565,7 +565,8 @@ FROM
 				od.customer_id = #{customerId}
 	) unionTb
 ORDER BY
-	unionTb.modifyTime DESC;
+	unionTb.modifyTime DESC
+	limit  #{pageStart},#{pageEnd}
   </select>
    <!-- 查询发出的订单 -->
   <select id="querySendOrderList" resultType="com.honglu.quickcall.account.facade.vo.OrderSendOrderListVO"  >
