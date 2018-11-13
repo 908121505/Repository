@@ -585,7 +585,8 @@ ORDER BY
 	      od.receive_order_time  AS receiveOrderTime,
 	      od.customer_skill_id AS customerSkillId,
 		  cs.switch_status AS switchStatus,
-		  od.appoint_time  AS  appointTime
+		  od.appoint_time  AS  appointTime,
+		  od.skill_type  AS  skillType
 	FROM
 		orders od LEFT JOIN   customer_skill  cs  ON  od.customer_skill_id  = cs.customer_skill_id
 	        LEFT JOIN   skill_item   st ON  cs.skill_item_id  =  st.id
@@ -621,7 +622,8 @@ ORDER BY
 		od.customer_skill_id AS customerSkillId,
 		cs.switch_status AS switchStatus,
 		od.coupon_flag  AS  couponFlag,
-		od.appoint_time  AS  appointTime
+		od.appoint_time  AS  appointTime,
+		od.skill_type  AS  skillType
 	FROM
 		orders od
 	LEFT JOIN customer_skill cs ON od.customer_skill_id = cs.customer_skill_id
@@ -667,7 +669,8 @@ ORDER BY
 	  		od.remark as  remark,
 	  		od.discount_rate  as discountRate,
 	  		od.coupon_price  as  couponPrice,
-	  		od.appoint_time  as  appointTime
+	  		od.appoint_time  as  appointTime,
+	  		od.skill_type  as  skillType
 			
 		FROM
 			orders od
@@ -704,7 +707,8 @@ ORDER BY
 		od.remark as  remark,
 		od.discount_rate  as discountRate,
 		od.coupon_price  as  couponPrice,
-		od.appoint_time  as  appointTime
+		od.appoint_time  as  appointTime,
+		od.skill_type  as  skillType
 	FROM
 		orders od
 	INNER JOIN customer ct ON ct.customer_id = od.service_id

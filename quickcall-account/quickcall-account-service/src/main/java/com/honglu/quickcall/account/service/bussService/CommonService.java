@@ -2,7 +2,6 @@ package com.honglu.quickcall.account.service.bussService;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 import com.honglu.quickcall.account.facade.entity.Order;
 import com.honglu.quickcall.account.facade.vo.OrderTempResponseVO;
@@ -141,5 +140,15 @@ public interface CommonService {
 	 * @return
 	 */
 	public String   getMsgContent(String  customerFlag ,Integer  orderStatus);
+	
+	
+	/**
+	 *  推送IM订单消息
+	 * @param customerId
+	 * @param serviceId
+	 * @param orderId
+	 * @param orderDesc
+	 */
+	public void  sendOrderMsg(Long  customerId,Long  serviceId,Long  orderId,String  orderDesc);
    
 }

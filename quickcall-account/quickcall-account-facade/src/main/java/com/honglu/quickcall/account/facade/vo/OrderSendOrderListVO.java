@@ -64,6 +64,7 @@ public class OrderSendOrderListVO implements  Serializable{
 	
 	private Date  appointTime;
 	
+	private Integer  skillType;
 	
 	
 	
@@ -75,6 +76,13 @@ public class OrderSendOrderListVO implements  Serializable{
 	
 	
 	
+	
+	public Integer getSkillType() {
+		return skillType;
+	}
+	public void setSkillType(Integer skillType) {
+		this.skillType = skillType;
+	}
 	public Date getAppointTime() {
 		return appointTime;
 	}
