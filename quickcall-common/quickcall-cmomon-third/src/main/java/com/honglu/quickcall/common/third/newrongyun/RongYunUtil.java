@@ -1,7 +1,9 @@
 package com.honglu.quickcall.common.third.newrongyun;
 
+import com.alibaba.fastjson.JSON;
 import com.honglu.quickcall.common.third.newrongyun.io.rong.RongCloud;
 import com.honglu.quickcall.common.third.newrongyun.io.rong.messages.BaseMessage;
+import com.honglu.quickcall.common.third.newrongyun.io.rong.messages.TxtMessage;
 import com.honglu.quickcall.common.third.newrongyun.io.rong.methods.message._private.Private;
 import com.honglu.quickcall.common.third.newrongyun.io.rong.methods.user.User;
 import com.honglu.quickcall.common.third.newrongyun.io.rong.models.Result;
@@ -9,6 +11,8 @@ import com.honglu.quickcall.common.third.newrongyun.io.rong.models.message.Priva
 import com.honglu.quickcall.common.third.newrongyun.io.rong.models.response.ResponseResult;
 import com.honglu.quickcall.common.third.newrongyun.io.rong.models.response.TokenResult;
 import com.honglu.quickcall.common.third.newrongyun.io.rong.models.user.UserModel;
+import com.honglu.quickcall.common.third.rongyun.RongYunPushBean;
+import com.honglu.quickcall.common.third.rongyun.SendUser;
 
 public class RongYunUtil {
 	// private static String APPKEY =
@@ -219,6 +223,18 @@ public class RongYunUtil {
 	private static void sendMessage(String nickName, Long fromUserId, Long toCustomerId, String content, Integer sex,
 			String headPortraitUrl, Integer type) {
 
+		Long otherId = toCustomerId;
+		// refreshUser(fromUserId + "", nickName, headPortraitUrl);
+		SendUser sendUser = new SendUser(nickName, headPortraitUrl, sex, fromUserId);
+		RongYunPushBean rongYunPushBean = new RongYunPushBean(1, content, 1, 0, type, fromUserId, otherId, 1, sendUser,
+				System.currentTimeMillis());
+		String jsonString = JSON.toJSONString(rongYunPushBean);
+
+		BaseMessage baseMessage = new TxtMessage(jsonString, "");
+		String[] otherIds = new String[1];
+		otherIds[0] = String.valueOf(otherId);
+		publishPrivate(String.valueOf(fromUserId), otherIds, baseMessage);
+
 	}
 
 	@SuppressWarnings("unused")
@@ -228,8 +244,11 @@ public class RongYunUtil {
 	}
 
 	public static void main(String[] args) {
-
-		// publishPrivate(fromUserId, "1809282012383576606", message)
+		Long toCustomerId = 1811131520196475332L;
+		sendSystemMessage(toCustomerId, "你好帅");
+		sendActivityMessage(toCustomerId, "你好帅");
+		sendOrderMessage(toCustomerId, "你好帅");
+		sendBespokeMessage(toCustomerId, "你好帅");
 
 	}
 
