@@ -77,17 +77,20 @@ public class CouponDubboBusinessImpl implements CouponDubboBusiness{
      */
     public CouponOrderVo getShowTipForActivity(String skillItemId, String customerId){
         CouponOrderVo cov = new CouponOrderVo();
-		int showTip = 0;//0=不展示，1=展示
+		//0=不展示，1=展示
+        int showTip = 0;
 		int activityNum = couponDubboService.getActivityNum();
-		if(activityNum > 0){//现在存在活动
-		    //查出该券所有信息
-            CouponOrderVo vo = couponDubboService.showActivityCouponForOrder(skillItemId,customerId);//customerId这里暂时不用
+		//现在存在活动
+		if(activityNum > 0){
+		    //查出该券所有信息-customerId这里暂时不用
+			cov = couponDubboService.showActivityCouponForOrder(skillItemId,customerId);
 			//String couponId = couponDubboService.getCouponIdBySkillItemId(skillItemId);
             String couponId = "";
-            if(vo!=null && vo.getCouponId()!=null){
-                couponId = vo.getCouponId();
+            if(cov!=null && cov.getCouponId()!=null){
+                couponId = cov.getCouponId();
             }
-			if(StringUtils.isBlank(couponId)){//没查到，不显示
+			//空-没查到，不显示
+			if(StringUtils.isBlank(couponId)){
 				showTip = 0;
 			}else{
 				Map<String,String> map = new HashMap<String,String>();
@@ -96,9 +99,10 @@ public class CouponDubboBusinessImpl implements CouponDubboBusiness{
 				//查出用户与券的关系信息
 				//int num = couponDubboService.getCountByCustomerIdAndCouponId(map);
                 CustomerCoupon cc = couponDubboService.getCountByCustomerIdAndCouponId(map);
-				if(cc == null){ //customer_coupon没查到,显示
+				//customer_coupon没查到,显示
+				if(cc == null){
 					showTip = 1;
-                    cov.setCouponPrice(vo.getCouponPrice());
+                    //cov.setCouponPrice(vo.getCouponPrice());
 				}
 			}
 		}
@@ -137,8 +141,8 @@ public class CouponDubboBusinessImpl implements CouponDubboBusiness{
         CouponOrderVo dvo = getDeductCoupon(skillItemId, customerId);
         if(dvo != null){
             vo.setCustomerCouponId(dvo.getCustomerCouponId());
-            vo.setCouponId(dvo.getCouponId());
-            vo.setCouponName(dvo.getCouponName());
+            //vo.setCouponId(dvo.getCouponId());
+            //vo.setCouponName(dvo.getCouponName());
             vo.setCouponDeductPrice(dvo.getCouponDeductPrice());
         }
 		return vo;
@@ -154,31 +158,36 @@ public class CouponDubboBusinessImpl implements CouponDubboBusiness{
 	@Override
 	@Transactional(rollbackFor = Exception.class)
 	public int getCouponInOrder(Long skillItemId, Long customerId){
-		int num = 0;
-		CouponOrderVo cvo = getShowTipForActivity(skillItemId.toString(), customerId.toString());
-		int tip = cvo.getShowTip();
-		if(tip==1){
-			//查出券所有信息
-			CouponOrderVo vo = couponDubboService.showActivityCouponForOrder(skillItemId.toString(),customerId.toString());//customerId这里暂时不用
-			String couponId = "";
-			if(vo!=null && vo.getCouponId()!=null){
-				couponId = vo.getCouponId();
+		try {
+			int num = 0;
+			CouponOrderVo cvo = getShowTipForActivity(skillItemId.toString(), customerId.toString());
+			int tip = cvo.getShowTip();
+			if(tip==1){
+				//查出券所有信息
+				CouponOrderVo vo = couponDubboService.showActivityCouponForOrder(skillItemId.toString(),customerId.toString());//customerId这里暂时不用
+				String couponId = "";
+				if(vo!=null && vo.getCouponId()!=null){
+					couponId = vo.getCouponId();
 
-				CustomerCoupon cc = new CustomerCoupon();
-				cc.setCouponId(Long.parseLong(couponId));
-				cc.setCustomerId(customerId);
-				//Subject currentUser = SecurityUtils.getSubject();
-				//cc.setCreateMan(currentUser.getPrincipal().toString());
-				cc.setCreateMan("admin");
-				cc.setCreateTime(new Date());
-				num = couponDubboService.insertCustomerCoupon(cc);
-				if(num > 0){
-					//插入消息记录
-					couponDubboService.sendActivityMessage(couponId,customerId.toString());
+					CustomerCoupon cc = new CustomerCoupon();
+					cc.setCouponId(Long.parseLong(couponId));
+					cc.setCustomerId(customerId);
+					//Subject currentUser = SecurityUtils.getSubject();
+					//cc.setCreateMan(currentUser.getPrincipal().toString());
+					cc.setCreateMan("admin");
+					cc.setCreateTime(new Date());
+					num = couponDubboService.insertCustomerCoupon(cc);
+					if(num > 0){
+						//插入消息记录
+						couponDubboService.sendActivityMessage(couponId,customerId.toString());
+					}
 				}
 			}
+			return num;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return 0;
 		}
-		return num;
 	}
 
 }
