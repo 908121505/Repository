@@ -566,13 +566,13 @@ public class OrderServiceImpl implements IOrderService {
 			}
 			// ----start---chenpeng 2018.11.1 取消订单时，查询是否使用优惠券，如果有则退回优惠券
 			// 查询用户此订单是否使用优惠券
-//			CustomerCoupon customerCoupon = couponDubboBusiness.queryCustomerCouponByCustomerIdAndOrderId(customerId,
-//					orderId);
-//			if (customerCoupon != null) {
-//				int cancelUpdateCustomerCouponCount = couponDubboBusiness
-//						.cancelUpdateCustomerCoupon(customerCoupon.getId());
-//				LOGGER.info("取消订单 退回优惠券 id：" + customerCoupon.getId() + "更新数量：" + cancelUpdateCustomerCouponCount);
-//			}
+			CustomerCoupon customerCoupon = couponDubboBusiness.queryCustomerCouponByCustomerIdAndOrderId(customerId,
+					orderId);
+			if (customerCoupon != null) {
+				int cancelUpdateCustomerCouponCount = couponDubboBusiness
+						.cancelUpdateCustomerCoupon(customerCoupon.getId());
+				LOGGER.info("取消订单 退回优惠券 id：" + customerCoupon.getId() + "更新数量：" + cancelUpdateCustomerCouponCount);
+			}
 			// -----end---chenpeng 2018.11.1
 		}
 
