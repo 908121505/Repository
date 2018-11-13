@@ -150,18 +150,18 @@ public class CommonServiceImpl implements CommonService {
 			tempVO.setCountDownSeconds(countDownSeconds);
 		//叫醒的24状态需要单独处理
 		}else if(oldOrderStatus ==OrderSkillConstants.ORDER_STATUS_GOING_WAITING_START){
-			if(appointTime != null){
-				//时间接单从当前时间到预约开始时间
-				endTime = appointTime;
-				countDownSeconds =  DateUtils.getDiffSeconds(currTime, endTime);
-			}
+//			if(appointTime != null){
+//				//时间接单从当前时间到预约开始时间
+//				endTime = appointTime;
+//				countDownSeconds =  DateUtils.getDiffSeconds(currTime, endTime);
+//			}
 			//大于0说明正在倒计时，状态不变  小于0的逻辑暂时不考虑
 			tempVO.setOrderStatus(oldOrderStatus);
-			if(countDownSeconds < 0){
-				//小于0说明已经到了进行中状态
-				tempVO.setOrderStatus(OrderSkillConstants.ORDER_STATUS_GOING_USER_ACCEPCT);
-			}
-			tempVO.setCountDownSeconds(countDownSeconds);
+//			if(countDownSeconds < 0){
+//				//小于0说明已经到了进行中状态
+//				tempVO.setOrderStatus(OrderSkillConstants.ORDER_STATUS_GOING_USER_ACCEPCT);
+//			}
+			tempVO.setCountDownSeconds(0L);
 			
 			
 		}
