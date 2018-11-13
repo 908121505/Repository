@@ -66,7 +66,7 @@
                 </if>
                 <!-- 排除下单被占用的客户技能 -->
                 <if test="skillOrdered == 0">
-                    AND (SELECT count(o.order_id) FROM orders o WHERE o.customer_skill_id = bss.customer_skill_id
+                    AND (SELECT count(o.order_id) FROM orders o WHERE o.service_id = bss.customer_id
                     AND o.skill_type = (select si.skill_type from skill_item si where si.id = bss.skill_item_id)
                     AND o.order_status IN (10, 18, 26, 28)) = 0
                 </if>
@@ -108,7 +108,7 @@
                 </if>
                 <!-- 排除下单被占用的客户技能 -->
                 <if test="skillOrdered == 0">
-                    AND (SELECT count(o.order_id) FROM orders o WHERE o.customer_skill_id = bss.customer_skill_id
+                    AND (SELECT count(o.order_id) FROM orders o WHERE o.service_id = bss.customer_id
                     AND o.skill_type = (select si.skill_type from skill_item si where si.id = bss.skill_item_id)
                     AND o.order_status IN (10, 18, 26, 28)) = 0
                 </if>
@@ -156,7 +156,7 @@
           AND pc.`status` = 1
           <!-- 排除下单被占用的客户技能 -->
           <if test="skillOrdered == 0">
-              AND (SELECT count(o.order_id) FROM orders o WHERE o.customer_skill_id = csk.customer_skill_id
+              AND (SELECT count(o.order_id) FROM orders o WHERE o.service_id = csk.customer_id
               AND o.skill_type = (select si.skill_type from skill_item si where si.id = csk.skill_item_id)
               AND o.order_status IN (10, 18, 26, 28)) = 0
           </if>
@@ -196,7 +196,7 @@
             <if test="skillItemId == null">
                 GROUP BY bss.customer_id 
             </if>
-            ORDER BY (SELECT count(o.order_id) FROM orders o WHERE o.customer_skill_id = bss.customer_skill_id
+            ORDER BY (SELECT count(o.order_id) FROM orders o WHERE o.service_id = bss.customer_id
             AND o.skill_type = (select si.skill_type from skill_item si where si.id = bss.skill_item_id)
             AND o.order_status IN (10, 18, 26, 28)) ASC , bss.score_total DESC
         ) tt
