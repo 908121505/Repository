@@ -278,6 +278,7 @@ public class UserDubboBusinessImpl implements UserDubboBusiness {
 				break;
 			case UserFunctionType.CUSTOMER_APPLY_BIGV:
 				response = personInfoService.submitCustomerApplyBigv((CustomerApplyBigvRequest)request);
+				break;
 			case UserFunctionType.WEIXIN:
 				response = weiXinService.getOpenId((WeiXinRequest) request);
 				break;
