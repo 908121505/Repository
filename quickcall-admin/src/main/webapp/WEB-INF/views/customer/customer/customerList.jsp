@@ -331,7 +331,9 @@
             });
 
             $('#query').click(function () {
-                $('#example').dataTable().fnDraw();
+                if(check_fun()){
+                    $('#example').dataTable().fnDraw();
+                }
             });
 
         });
@@ -343,7 +345,7 @@
 
 
         function customerStatusOnChange(){
-           var status = $('#customerStatusQuery').val();
+            var status = $('#customerStatusQuery').val();
             if(status == 2){
                 //$('#closureStatusQuery').removeAttr("disabled");
                 $('#closureStatusQuery').attr("disabled",false);
@@ -359,6 +361,25 @@
 
             }
 
+        }
+
+        //校验方法
+        function check_fun() {
+            //状态选择2为封禁，要再选择封禁的类型
+            var status = $('#customerStatusQuery').val();
+            /*if(status == null  || status.trim() == ''){
+                $("#tip").text("请选择用户状态");
+                return  false;
+            }*/
+            if(status == 2){//封禁
+                var closureStatus = $("#closureStatusQuery").val()
+                if(closureStatus == null || closureStatus == ""){
+                    alert("请选择封禁类型");
+                    return  false;
+                }
+            }
+
+            return true;
         }
 
     </script>
