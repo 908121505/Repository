@@ -53,4 +53,8 @@ public interface AccountFunctionType {
     
     /**查询渠道开关**/
     String  CHANNEL_SWITCH_STATUS = "002307";
+    /**
+     * 查询是否是第一次充值
+     */
+    String  ISFIRSTRECHARGE = "002308";
 }

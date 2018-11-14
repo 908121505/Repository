@@ -29,6 +29,7 @@ import com.honglu.quickcall.account.facade.exchange.request.FinishOrderRequest;
 import com.honglu.quickcall.account.facade.exchange.request.FirstBarrageRequest;
 import com.honglu.quickcall.account.facade.exchange.request.FirstPageDaVinfoRequest;
 import com.honglu.quickcall.account.facade.exchange.request.FirstPageSkillinfoRequest;
+import com.honglu.quickcall.account.facade.exchange.request.IsFirstechargeRequest;
 import com.honglu.quickcall.account.facade.exchange.request.MsgOrderListRequest;
 import com.honglu.quickcall.account.facade.exchange.request.OpenReceiveSwitchRequest;
 import com.honglu.quickcall.account.facade.exchange.request.OrderDaVSkillRequest;
@@ -247,6 +248,8 @@ public class AccountDubboBusinessImpl implements AccountDubboBusiness {
 			case AccountFunctionType.CHANNEL_SWITCH_STATUS:
 				response = channelSwitchService.getChannelSwitchStatus((ChannelSwitchRequest) request);
 				break;
+			case AccountFunctionType.ISFIRSTRECHARGE:
+				response = aliPayService.isFirstecharge((IsFirstechargeRequest)request);
 			default:
 
 			}

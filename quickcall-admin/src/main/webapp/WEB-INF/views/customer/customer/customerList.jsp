@@ -35,6 +35,7 @@
             <div class="col-md-2">
                 <div class="form-group">
                     <div class="input-group">
+                        <div class="input-group-addon">用户类型</div>
                         <select class="form-control" id="customTypeQuery">
                             <option value="">--请选择--</option>
                             <option value="0">普通用户</option>
@@ -46,6 +47,7 @@
             <div class="col-md-2">
                 <div class="form-group">
                     <div class="input-group">
+                        <div class="input-group-addon">用户状态</div>
                         <select class="form-control" id="customerStatusQuery" onchange="customerStatusOnChange()">
                             <option value="">--请选择--</option>
                             <option value="1">正常</option>
@@ -58,6 +60,7 @@
             <div class="col-md-2">
                 <div class="form-group">
                     <div class="input-group">
+                        <div class="input-group-addon">封禁类型</div>
                         <select class="form-control" id="closureStatusQuery" disabled="disabled">
                             <option value="">--请选择--</option>
                             <option value="4">已封禁-无法接单</option>
@@ -328,7 +331,9 @@
             });
 
             $('#query').click(function () {
-                $('#example').dataTable().fnDraw();
+                if(check_fun()){
+                    $('#example').dataTable().fnDraw();
+                }
             });
 
         });
@@ -340,13 +345,41 @@
 
 
         function customerStatusOnChange(){
-           var status = $('#customerStatusQuery').val();
+            var status = $('#customerStatusQuery').val();
             if(status == 2){
-                $('#closureStatusQuery').removeAttr("disabled");
-            }else{
-                $('#closureStatusQuery').attr("disabled","disabled");
+                //$('#closureStatusQuery').removeAttr("disabled");
+                $('#closureStatusQuery').attr("disabled",false);
+            }else {
+                /*if($('#closureStatusQuery').attr("disabled")==true){
+                    $('#closureStatusQuery').removeAttr("disabled");
+                }*/
+
+                // $('#closureStatusQuery').attr("disabled",false);
+                //$("#closureStatusQuery option:first").attr('selected', true);
+                // $('#closureStatusQuery').attr("disabled",true);
+                $('#closureStatusQuery').val('').prop('disabled', true);
+
             }
 
+        }
+
+        //校验方法
+        function check_fun() {
+            //状态选择2为封禁，要再选择封禁的类型
+            var status = $('#customerStatusQuery').val();
+            /*if(status == null  || status.trim() == ''){
+                $("#tip").text("请选择用户状态");
+                return  false;
+            }*/
+            if(status == 2){//封禁
+                var closureStatus = $("#closureStatusQuery").val()
+                if(closureStatus == null || closureStatus == ""){
+                    alert("请选择封禁类型");
+                    return  false;
+                }
+            }
+
+            return true;
         }
 
     </script>

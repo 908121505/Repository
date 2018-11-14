@@ -207,6 +207,11 @@
     where ordersn = #{ordersn,jdbcType=VARCHAR}
   </select>
 
-
+  <select id="selectByCustomerId" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+	    select
+	    <include refid="Base_Column_List" />
+		from recharge
+		where customer_id = #{customerId,jdbcType=BIGINT} limit 1
+  </select>
 
 </mapper>

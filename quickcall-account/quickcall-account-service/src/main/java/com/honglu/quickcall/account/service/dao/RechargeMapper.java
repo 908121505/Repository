@@ -1,5 +1,7 @@
 package com.honglu.quickcall.account.service.dao;
 
+import java.util.List;
+
 import com.honglu.quickcall.account.facade.entity.Recharge;
 
 public interface RechargeMapper {
@@ -18,5 +20,7 @@ public interface RechargeMapper {
     int updateByOrderNo(Recharge record);
 
     Recharge selectByOrderNo(String orderNo);
+
+	List<Recharge> selectByCustomerId(Long customerId);
 
 }

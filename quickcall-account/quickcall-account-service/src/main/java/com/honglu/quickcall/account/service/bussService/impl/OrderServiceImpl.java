@@ -448,6 +448,10 @@ public class OrderServiceImpl implements IOrderService {
 			for (OrderMsgOrderListVO order : queryList) {
 				String  msgContent = commonService.getMsgContent(order.getCustomerFlag(), order.getOrderStatus(),order.getSkillType());
 				order.setMsgContent(msgContent);
+				Date  modifyTime = order.getModifyTime();
+				if(modifyTime == null){
+					order.setModifyTime(order.getOrderTime());
+				}
 				resultList.add(order);
 			}
 		}
