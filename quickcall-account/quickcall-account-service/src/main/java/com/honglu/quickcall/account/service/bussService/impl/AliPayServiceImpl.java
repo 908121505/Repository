@@ -232,6 +232,7 @@ public class AliPayServiceImpl implements AliPayService {
 
 	@Override
 	public CommonResponse isFirstecharge(IsFirstechargeRequest request) {
+	
 		List<Recharge> list= rechargeMapper.selectByCustomerId(request.getCustomerId());
 		if(list!=null&&list.size()>0){
 			return ResultUtils.resultSuccess(0);

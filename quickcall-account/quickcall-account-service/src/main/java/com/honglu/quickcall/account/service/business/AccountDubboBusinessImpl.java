@@ -249,7 +249,7 @@ public class AccountDubboBusinessImpl implements AccountDubboBusiness {
 				response = channelSwitchService.getChannelSwitchStatus((ChannelSwitchRequest) request);
 				break;
 			case AccountFunctionType.ISFIRSTRECHARGE:
-				response = aliPayService.isFirstecharge((IsFirstechargeRequest)request);
+				response = aliPayService.isFirstecharge((IsFirstechargeRequest) request);
 				break;
 			default:
 
