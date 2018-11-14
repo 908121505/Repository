@@ -87,15 +87,18 @@
 	                        	<c:if test="${selectFlag == 1 }">
 	                            	<option value="29">强制取消</option>
 	                            </c:if>
-	                        	<c:if test="${selectFlag == 2 }">
+	                        	<%-- <c:if test="${selectFlag == 2 }">
 	                            	<option value="42">强制完成</option>
-	                            </c:if>
+	                            </c:if> --%>
+	                            <c:if test="${selectFlag == 2 }">
+                        	      <option value="29">强制取消</option>
+                        	      <option value="42">强制完成</option>
+                               </c:if>
 	                        </select>
                         </c:if>
                         <c:if test="${selectFlag == 3 }">
 	                        <input type="text" class="form-control"   readonly="readonly" value="${orderStatusDesc}">    	
 	                     </c:if>
-                        
                         
                         
                     </div>
