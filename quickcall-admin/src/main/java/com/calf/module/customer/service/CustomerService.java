@@ -2,8 +2,11 @@ package com.calf.module.customer.service;
 
 import com.calf.cn.service.BaseManager;
 import com.calf.module.customer.entity.CustomerVo;
+import com.calf.module.internal.entity.Message;
+import com.calf.module.internal.entity.MessageCustomer;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import com.honglu.quickcall.common.core.util.UUIDUtils;
 import com.honglu.quickcall.common.third.rongyun.util.RongYunUtil;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,10 +65,28 @@ public class CustomerService {
         String operate = customerVo.getOperate();
         boolean isForever = false;
         LocalDateTime blockEndTime = null;
+
+        //插入消息数据库
+        Message msg = new Message();
+        MessageCustomer mc = new MessageCustomer();
+        Long messageId = UUIDUtils.getId();
+        msg.setMessageId(messageId.toString());
+        msg.setTitle("封禁解禁");
+        mc.setPhone(Long.valueOf(customerVo.getPhone()));
+        mc.setId(UUIDUtils.getId().toString());
+        mc.setMessageId(messageId);
+        mc.setReceiverId(Long.parseLong(customerVo.getCustomerId()));
+        String content = "";
+
         if (OPERATE_UNLOCK.equals(operate)) {
             Map<String, Object> params = new HashMap<>();
             params.put("id", customerVo.getCustomerId());
             baseManager.update("Customer.unlockCustomers", params);
+            //插入消息数据库
+            content = UNLOCK_SYSMSG;
+            msg.setMessageContent(content);
+            baseManager.insert("MessageMapper.insertSelective",msg);
+            baseManager.insert("MessageCustomerMapper.insertSelective",mc);
             RongYunUtil.sendSystemMessage(Long.valueOf(customerVo.getCustomerId()), UNLOCK_SYSMSG);
         } else if (OPERATE_LOCK.equals(operate)) {
             Long addDays = Long.valueOf(customerVo.getClosureDate());
@@ -108,10 +129,22 @@ public class CustomerService {
                     String format = String.format(builder.append(RETURN_FOREVER_REASON.get(customerVo.getCustStatus())).toString(), skillBuilder.toString());
                     logger.info(format);
 
+                    //插入消息数据库
+                    content = format;
+                    msg.setMessageContent(content);
+                    baseManager.insert("MessageMapper.insertSelective",msg);
+                    baseManager.insert("MessageCustomerMapper.insertSelective",mc);
+
                     RongYunUtil.sendSystemMessage(Long.valueOf(customerVo.getCustomerId()), format, LOCK_REMARK);
                 } else {
                     builder.append(RETURN_FOREVER_REASON.get(customerVo.getCustStatus()));
                     logger.info(builder.toString());
+
+                    //插入消息数据库
+                    content = builder.toString();
+                    msg.setMessageContent(content);
+                    baseManager.insert("MessageMapper.insertSelective",msg);
+                    baseManager.insert("MessageCustomerMapper.insertSelective",mc);
                     RongYunUtil.sendSystemMessage(Long.valueOf(customerVo.getCustomerId()),builder.toString(),LOCK_REMARK);
                 }
             } else {
@@ -125,14 +158,30 @@ public class CustomerService {
                     builder.append(RETURN_DATE_REASON.get(customerVo.getCustStatus()));
                     String format = String.format(builder.toString(), skillBuilder.toString(), blockEndTime.getYear(), blockEndTime.getMonth().getValue(), blockEndTime.getDayOfMonth(), blockEndTime.getHour(), blockEndTime.getMinute());
                     logger.info(format);
+
+                    //插入消息数据库
+                    content = format;
+                    msg.setMessageContent(content);
+                    baseManager.insert("MessageMapper.insertSelective",msg);
+                    baseManager.insert("MessageCustomerMapper.insertSelective",mc);
                     RongYunUtil.sendSystemMessage(Long.valueOf(customerVo.getCustomerId()),format);
                 }else{
                     builder.append(RETURN_DATE_REASON.get(customerVo.getCustStatus()));
                     String format = String.format(builder.toString(), blockEndTime.getYear(), blockEndTime.getMonth().getValue(), blockEndTime.getDayOfMonth(), blockEndTime.getHour(), blockEndTime.getMinute());
                     logger.info(format);
                     if(LOCK_LOGIN_ID.contains(customerVo.getCustStatus())){
+                        //插入消息数据库
+                        content = format;
+                        msg.setMessageContent(content);
+                        baseManager.insert("MessageMapper.insertSelective",msg);
+                        baseManager.insert("MessageCustomerMapper.insertSelective",mc);
                         RongYunUtil.sendSystemMessage(Long.valueOf(customerVo.getCustomerId()),format,LOCK_REMARK);
                     }else{
+                        //插入消息数据库
+                        content = format;
+                        msg.setMessageContent(content);
+                        baseManager.insert("MessageMapper.insertSelective",msg);
+                        baseManager.insert("MessageCustomerMapper.insertSelective",mc);
                         RongYunUtil.sendSystemMessage(Long.valueOf(customerVo.getCustomerId()),format);
                     }
                 }
