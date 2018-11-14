@@ -13,6 +13,7 @@ public class DateUtils {
     static SimpleDateFormat dateFormat = null;
 
     static final String date_format = "yyyy-MM-dd HH:mm:ss";
+    static final String DATE_FORMAT_EXT = "yyyy-MM-dd HH:mm:ss";
     
     static final String DATE_FORMAT_HH_MM = "HH:mm";
     
@@ -77,6 +78,10 @@ public class DateUtils {
     public static String formatDate(Date date) {
         dateFormat = new SimpleDateFormat(date_format);
         return dateFormat.format(date);
+    }
+    public static String formatDateExt(Date date) {
+    	dateFormat = new SimpleDateFormat(DATE_FORMAT_EXT);
+    	return dateFormat.format(date);
     }
     
     /**

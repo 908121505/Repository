@@ -541,8 +541,8 @@ FROM
 			od.service_id = #{customerId}
 		UNION
 			SELECT
-				od.modify_time AS modifyTime,
 				od.order_id AS orderId,
+				od.modify_time AS modifyTime,
 				'C' AS customerFlag,
 				ct.nick_name AS nickName,
 				od.customer_id AS customerId,

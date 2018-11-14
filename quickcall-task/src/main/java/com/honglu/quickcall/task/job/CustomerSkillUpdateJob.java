@@ -96,8 +96,7 @@ public class CustomerSkillUpdateJob {
     		Integer  receiveStatus =  OrderSkillConstants.RECEIVE_CLOSE;
     		//当前时间
     		Date  currTime = new Date();
-    		String currTimeStr = DateUtils.formatDateHHMM(currTime);
-    		/*List<Long>   skillIdList = taskCustomerSkillMapper.queryOpenReceiveByCurrentTime(autoReceiveStatus, receiveStatus, currTime);*/
+    		String currTimeStr = DateUtils.formatDateExt(currTime);
     		List<Long> skillIdList = taskCustomerSkillMapper.qeryOpenReceiveByCurrentTimeUpdate(autoReceiveStatus, receiveStatus, currTimeStr);
     		if(CollectionUtils.isEmpty(skillIdList)){
     			return  ;
@@ -152,8 +151,7 @@ public class CustomerSkillUpdateJob {
     		Integer  receiveStatus =  OrderSkillConstants.RECEIVE_OPEN;
     		//当前时间
     		Date  currTime = new Date();
-    		String  currTimeStr = DateUtils.formatDateHHMM(currTime);
-    		/*List<Long>   skillIdList = taskCustomerSkillMapper.queryCloseReceiveByCurrentTime(autoReceiveStatus, receiveStatus,  currTime);*/
+    		String  currTimeStr = DateUtils.formatDateExt(currTime);
     		List<Long> skillIdList = taskCustomerSkillMapper.qeryCloseReceiveByCurrentTimeUpdate(autoReceiveStatus, receiveStatus, currTimeStr);
     		if(CollectionUtils.isEmpty(skillIdList)){
     			return  ;
