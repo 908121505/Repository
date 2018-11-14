@@ -731,6 +731,43 @@ public class OrderServiceImpl implements IOrderService {
 					//不存在订单关系，存在完成订单
 					//需要判断是否可以下单，也就是说serviceId方是否有技能
 					orderDetailForIMVO.setRetCode(OrderSkillConstants.IM_RETCODE_CAN_ORDER);// 不存在的订单关系
+					//判断serviceId是否可下单
+					
+					
+					Integer weekIndex = DateUtils.getDayOfWeek();
+					Integer skillSwitch = 1;
+
+					orderDetailForIMVO.setServiceId(serviceId);
+					orderDetailForIMVO.setCustomerId(customerId);
+					// 根据技能ID 获取等级获取价格信息
+					CustomerSkillIMVO customerSkillIMVO = customerSkillMapper.selectCustomerSkillByCustomerId(serviceId, weekIndex,
+							skillSwitch, new Date());
+
+					// 服务方当天技能不存在，则关注对方
+					if (customerSkillIMVO == null) {
+						orderDetailForIMVO.setRetCode(OrderSkillConstants.IM_RETCODE_ORDER_COUND_ORDER);// 不可下单
+						commonResponse.setData(orderDetailForIMVO);
+						return commonResponse;
+					}
+
+					// 用户技能存在，则返回技能相关信息
+					// 双方不存在订单关系，判断大V是否在忙
+					statusList = new ArrayList<Integer>();
+					statusList.add(OrderSkillConstants.ORDER_STATUS_WAITING_START);// 待开始
+					statusList.add(OrderSkillConstants.ORDER_STATUS_WAITING_START_DA_APPAY_START_SERVICE);// 大V发起开始服务
+					statusList.add(OrderSkillConstants.ORDER_STATUS_GOING_USER_ACCEPCT);// 进行中
+					statusList.add(OrderSkillConstants.ORDER_STATUS_GOING_DAV_APPAY_FINISH);// 进行中（大V发起完成服务）
+					List<Order> gongIngOrderList = orderMapper.selectGongIngOrderListByCustomerId(serviceId,
+							OrderSkillConstants.SKILL_TYPE_YES, statusList);
+					// 不管大V是否在忙，都展示大V技能信息
+					orderDetailForIMVO.setSkillIMVO(customerSkillIMVO);
+					if (!CollectionUtils.isEmpty(gongIngOrderList)) {
+						// 用户存在进行中或者即将进行中订单，说明大V正忙
+						orderDetailForIMVO.setRetCode(OrderSkillConstants.IM_RETCODE_DV_BUSY);
+						commonResponse.setData(orderDetailForIMVO);
+						return commonResponse;
+					}
+					
 				}
 				
 			}else{
