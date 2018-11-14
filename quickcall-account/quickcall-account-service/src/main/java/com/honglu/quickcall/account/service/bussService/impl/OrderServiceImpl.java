@@ -705,7 +705,9 @@ public class OrderServiceImpl implements IOrderService {
 			List<Integer>   finishOrderStatusList = new ArrayList<Integer>();
 			getFinishStatusList(finishOrderStatusList);
 			if(finishOrderStatusList.contains(orderStatus)){
+				LOGGER.info("================"+orderStatus);
 				Long  orderCustomerId = order.getCustomerId();
+				LOGGER.info("orderCustomerId:"+orderCustomerId +",customerId:"+customerId);
 				if(orderCustomerId.equals(customerId)){
 					//返回订单信息
 					orderDetailForIMVO.setRetCode(OrderSkillConstants.IM_RETCODE_ORDER_EXIST);// 不可下单
