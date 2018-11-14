@@ -321,8 +321,10 @@ public class OrderService {
 
 		if (update == 1) {
 			update = baseManager.update("Order.updateOrder", paramMap);
+		}else{
+			update = -1;
 		}
-
+		
 		return update;
 	}
 

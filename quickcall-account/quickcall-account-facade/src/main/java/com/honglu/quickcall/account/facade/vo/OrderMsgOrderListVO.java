@@ -56,6 +56,15 @@ public class OrderMsgOrderListVO implements  Serializable{
 	/**声优标识*/
 	private Integer  vStatus;
 	
+	private Integer  skillType;
+	
+	
+	public Integer getSkillType() {
+		return skillType;
+	}
+	public void setSkillType(Integer skillType) {
+		this.skillType = skillType;
+	}
 	public Integer getvStatus() {
 		return vStatus;
 	}

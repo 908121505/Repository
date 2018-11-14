@@ -45,8 +45,8 @@ public class AppearanceServiceImpl implements AppearanceService{
         paramMap.put("customerId", parameters.get("customerId"));
         paramMap.put("nickName", parameters.get("nickName"));
         paramMap.put("auditStatus", parameters.get("auditStatus"));
-
-        paramMap.put("type", request.getAttribute("type"));
+        paramMap.put("phone", parameters.get("phone"));
+        paramMap.put("type", parameters.get("type"));
 
         List<CustomerAppearance> appearanceList = baseManager.query("Appearance.selectAppearancePageList", paramMap);
         String sEcho = (String) parameters.get("sEcho");
