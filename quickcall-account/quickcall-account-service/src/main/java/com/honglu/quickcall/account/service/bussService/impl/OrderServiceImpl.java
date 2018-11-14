@@ -900,6 +900,12 @@ public class OrderServiceImpl implements IOrderService {
 			commonService.sendOrderMsg(customerId, serviceId, orderId, OrderSkillConstants.IM_MSG_CONTENT_DAV_CUST_CONFIRM_TO_DV);
 			commonService.sendOrderMsg(serviceId, customerId,orderId, OrderSkillConstants.IM_MSG_CONTENT_DAV_CUST_CONFIRM_TO_CUST);
 
+			// ADUAN 订单服务完成推送MQ消息
+			try {
+				userCenterSendMqMessageService.sendOrderCostMqMessage(orderId);
+			} catch (Exception e) {
+				LOGGER.info("推送消息发生异常，异常信息：",e);
+			}
 		} else {
 			// 订单不存在
 			throw new BizException(AccountBizReturnCode.ORDER_NOT_EXIST, "订单不存在，无法对订单操作");
