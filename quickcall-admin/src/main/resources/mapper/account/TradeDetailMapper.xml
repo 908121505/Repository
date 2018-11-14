@@ -108,12 +108,20 @@
   
   <!-- 根据订单号 查询最新冻结状态的流水 -->
   <select id="selectFrozenByOrderNo" parameterType="Map" resultMap="BaseResultMap">
-  
   SELECT <include refid="Base_Column_List"/> from trade_detail 
   where    order_no=#{orderNo} and type=7
    ORDER BY create_time DESC LIMIT 1
+  </select>
   
   
+  <!-- 查询该订单 用户有无最新下单流水 -->
+  <select id="queryCountByOrderNoAndCustomerId" parameterType="Map" resultMap="BaseResultMap">
+    
+    select <include refid="Base_Column_List"/> from  trade_detail
+    where order_no=#{orderNo} and 
+    customer_id=#{customerId}
+    order by create_time desc 
+    limit 1
   </select>
   
   

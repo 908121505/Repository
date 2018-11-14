@@ -333,10 +333,6 @@ public class OrderService {
 		return 0;
 	}
 
-	public void inAccount() {
-
-	}
-
 	/**
 	 * 强制完成
 	 * 
@@ -346,6 +342,7 @@ public class OrderService {
 	@Transactional
 	public int compulsoryCompletion(Long orderId, BigDecimal amount) {
 		boolean flag = false;
+		int row = 0;
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("orderId", orderId);
 		Orders order = baseManager.get("Orders.selectByPrimaryKey", map);
@@ -376,25 +373,31 @@ public class OrderService {
 				}
 			}
 		}
-
-		// 冻结流水正常 开始强制完成逻辑
-
-		// 入账
-		Map<String, Object> pram = new HashMap<String, Object>();
-		pram.put("type", 3);
-		pram.put("amount", amount);
-		pram.put("userId", order.getServiceId());
-		baseManager.update("Account.outAccount", pram);
-		// 记录流水
-		tradeDetail = new TradeDetail();
-		tradeDetail.setTradeId(UUIDUtils.getId());
-		tradeDetail.setOrderNo(order.getOrderNo());
-		tradeDetail.setCustomerId(order.getServiceId());
-		tradeDetail.setCreateTime(new Date());
-		tradeDetail.setType(8);
-		tradeDetail.setInPrice(amount);
-		baseManager.insert("TradeDetail.insertSelective", tradeDetail);
-		return 1;
+		map.put("customerId", order.getServiceId());
+		tradeDetail = baseManager.get("TradeDetail.queryCountByOrderNoAndCustomerId", map);
+		// 声优无流水，或者 有流水，且只有冻结流水
+		if (tradeDetail == null || tradeDetail.getType() == 7) {
+			// 入账
+			Map<String, Object> pram = new HashMap<String, Object>();
+			if (flag) {// 有冻结流水
+				pram.put("type", 3);
+			} else {// 无冻结流水
+				pram.put("type", 2);
+			}
+			pram.put("amount", amount);
+			pram.put("userId", order.getServiceId());
+			baseManager.update("Account.outAccount", pram);
+			// 记录流水
+			tradeDetail = new TradeDetail();
+			tradeDetail.setTradeId(UUIDUtils.getId());
+			tradeDetail.setOrderNo(order.getOrderNo());
+			tradeDetail.setCustomerId(order.getServiceId());
+			tradeDetail.setCreateTime(new Date());
+			tradeDetail.setType(11);
+			tradeDetail.setInPrice(amount);
+			row = baseManager.insert("TradeDetail.insertSelective", tradeDetail);
+		}
+		return row;
 
 	}
 
@@ -431,15 +434,14 @@ public class OrderService {
 	@Transactional
 	public int compulsoryCancellation(Long orderId, BigDecimal amount) {
 		boolean flag = false;
+		int row = 0;
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("orderId", orderId);
 		Orders order = baseManager.get("Orders.selectByPrimaryKey", map);
 
 		map.put("userId", order.getServiceId());
 		Account account = baseManager.get("Account.queryAccount", map);
-		if (account.getFrozenAmounts().compareTo(amount) == -1) {
-			return -1;
-		}
+
 		map.put("orderNo", order.getOrderNo());
 		TradeDetail tradeDetail = baseManager.get("TradeDetail.selectFrozenByOrderNo", map);
 
@@ -449,7 +451,7 @@ public class OrderService {
 		String userFrozenValue = JedisUtil.get(userFrozenkey);
 		if (StringUtils.isNotBlank(userFrozenValue) && StringUtils.isNotBlank(steamFrozenValue)) {
 			if (userFrozenValue.contains(steamFrozenValue)) {
-				flag = true;
+				flag = true;// 有冻结流水
 				JedisUtil.del(steamFrozenKey);
 				String[] arys = userFrozenValue.split(",");
 				arys = remove(arys, tradeDetail.getTradeId() + "");
@@ -461,24 +463,52 @@ public class OrderService {
 				}
 			}
 		}
+		map.put("customerId", order.getCustomerId());
+		// 检查用户 该订单是否有下单流水
+		tradeDetail = baseManager.get("TradeDetail.queryCountByOrderNoAndCustomerId", map);
+		if (tradeDetail != null && tradeDetail.getType() == 3) {
+			// 用户强制取消金额 回账
+			Map<String, Object> pram = new HashMap<String, Object>();
+			pram.put("type", 1);
+			pram.put("amount", amount);
+			pram.put("userId", order.getCustomerId());
+			baseManager.update("Account.inAccount", pram);
+			// 记录流水
+			tradeDetail = new TradeDetail();
+			tradeDetail.setTradeId(UUIDUtils.getId());
+			tradeDetail.setOrderNo(order.getOrderNo());
+			tradeDetail.setCustomerId(order.getCustomerId());
+			tradeDetail.setCreateTime(new Date());
+			tradeDetail.setType(10);
+			tradeDetail.setInPrice(amount);
+			row = baseManager.insert("TradeDetail.insertSelective", tradeDetail);
 
-		// 冻结流水正常 开始强制完成逻辑
-		// 入账
-		Map<String, Object> pram = new HashMap<String, Object>();
-		pram.put("type", 1);
-		pram.put("amount", amount);
-		pram.put("userId", order.getCustomerId());
-		baseManager.update("Account.inAccount", pram);
-		// 记录流水
-		tradeDetail = new TradeDetail();
-		tradeDetail.setTradeId(UUIDUtils.getId());
-		tradeDetail.setOrderNo(order.getOrderNo());
-		tradeDetail.setCustomerId(order.getServiceId());
-		tradeDetail.setCreateTime(new Date());
-		tradeDetail.setType(5);
-		tradeDetail.setInPrice(amount);
-		baseManager.insert("TradeDetail.insertSelective", tradeDetail);
-		return 1;
+		}
+		// 判断该订单状态是否完成并且到冻结状态
+		if (flag) {
+			// 冻结的钱比实际操作的要少
+			if (account.getFrozenAmounts().compareTo(amount) == -1) {
+				return -1;
+			}
+
+			// 声优冻结金额 去除
+			Map<String, Object> pram = new HashMap<String, Object>();
+			pram.put("type", 4);
+			pram.put("amount", amount);
+			pram.put("userId", order.getServiceId());
+			baseManager.update("Account.outAccount", pram);
+			// 记录流水
+			tradeDetail = new TradeDetail();
+			tradeDetail.setTradeId(UUIDUtils.getId());
+			tradeDetail.setOrderNo(order.getOrderNo());
+			tradeDetail.setCustomerId(order.getServiceId());
+			tradeDetail.setCreateTime(new Date());
+			tradeDetail.setType(10);
+			tradeDetail.setOutPrice(amount);
+			row = baseManager.insert("TradeDetail.insertSelective", tradeDetail);
+		}
+
+		return row;
 
 	}
 
