@@ -121,7 +121,6 @@
 
 <script type="text/javascript">
     $(function (){
-    	debugger;
         let order_status_flag = "${selectFlag}";
         if(order_status_flag == 3){
         	$(".modal-footer .btn-primary").attr("disabled","disbaled");
