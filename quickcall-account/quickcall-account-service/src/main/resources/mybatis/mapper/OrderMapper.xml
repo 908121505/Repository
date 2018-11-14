@@ -530,7 +530,7 @@ FROM
 			od.order_num AS orderNum,
 			od.order_amounts AS orderAmount,
 			od.order_status AS orderStatus,
-			cs.skill_name AS skillItemName,
+			st.skill_item_name AS skillItemName,
 			st.unlock_icon AS icon,
 			od.skill_type  AS skillType
 			
@@ -556,7 +556,7 @@ FROM
 				od.order_num AS orderNum,
 				od.order_amounts AS orderAmount,
 				od.order_status AS orderStatus,
-				cs.skill_name AS skillItemName,
+				st.skill_item_name AS skillItemName,
 				st.unlock_icon AS icon,
 				od.skill_type  AS skillType
 			FROM
