@@ -2,10 +2,13 @@ package com.calf.module.customer.service;
 
 import com.calf.cn.service.BaseManager;
 import com.calf.module.customer.entity.CustomerVo;
+import com.calf.module.order.entity.CustomerSkill;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.honglu.quickcall.common.third.rongyun.util.RongYunUtil;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.log4j.Logger;
+import org.apache.poi.hmef.attribute.MAPIAttribute;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,6 +18,7 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -66,6 +70,9 @@ public class CustomerService {
             Map<String, Object> params = new HashMap<>();
             params.put("id", customerVo.getCustomerId());
             baseManager.update("Customer.unlockCustomers", params);
+            if(customerVo.getCustStatusDispalyId() == LOCK_SKILL){
+                baseManager.update("Customer.unlockSkill", params);
+            }
             RongYunUtil.sendSystemMessage(Long.valueOf(customerVo.getCustomerId()), UNLOCK_SYSMSG);
         } else if (OPERATE_LOCK.equals(operate)) {
             Long addDays = Long.valueOf(customerVo.getClosureDate());

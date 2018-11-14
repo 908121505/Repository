@@ -17,6 +17,8 @@ public class CustomerAppearance {
 	private String customerId;
 
 	private String nickName;
+	/**手机号**/
+	private String phone;
 
 	/**待审核照片**/
 	private String auditAppearance;
@@ -54,7 +56,7 @@ public class CustomerAppearance {
 	public CustomerAppearance() {
 	}
 
-	public CustomerAppearance(String id, String customerId, String nickName, String auditAppearance, String appearance, Integer type, Integer auditStatus, Integer sort, Integer status, Date createTime, Date modifyTime, String createMan, String modifyMan, String remark) {
+	public CustomerAppearance(String id, String customerId, String nickName, String auditAppearance, String appearance, Integer type, Integer auditStatus, Integer sort, Integer status, Date createTime, Date modifyTime, String createMan, String modifyMan, String remark,String phone) {
 		this.id = id;
 		this.customerId = customerId;
 		this.nickName = nickName;
@@ -69,6 +71,7 @@ public class CustomerAppearance {
 		this.createMan = createMan;
 		this.modifyMan = modifyMan;
 		this.remark = remark;
+		this.phone = phone;
 	}
 
 	public String getId() {
@@ -183,5 +186,11 @@ public class CustomerAppearance {
 		this.remark = remark;
 	}
 
+	public String getPhone() {
+		return phone;
+	}
 
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
 }
