@@ -60,7 +60,7 @@ public interface CouponDubboBusiness {
 	 * @param skillItemId 技能ID
 	 * @param customerId 客户ID
 	 * @return 0=不成功，1=成功
-	 *
+	 * 修改接口时通知陈留光，代码要同步到task项目中
 	 */
 	int getCouponInOrder(Long skillItemId, Long customerId);
 

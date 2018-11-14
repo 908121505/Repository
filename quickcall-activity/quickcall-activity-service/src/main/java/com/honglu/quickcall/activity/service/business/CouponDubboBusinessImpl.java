@@ -153,7 +153,7 @@ public class CouponDubboBusinessImpl implements CouponDubboBusiness{
 	 * @param skillItemId 技能ID
 	 * @param customerId 客户ID
 	 * @return0=不成功，1=成功
-	 *
+	 * 修改接口时通知陈留光，代码要同步到task项目中
 	 */
 	@Override
 	@Transactional(rollbackFor = Exception.class)
