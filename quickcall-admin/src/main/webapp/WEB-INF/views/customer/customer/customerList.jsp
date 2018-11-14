@@ -19,6 +19,14 @@
                 </div>
             </div>
             <div class="col-md-2">
+                <div class="form-group">
+                    <div class="input-group">
+                        <div class="input-group-addon">手机号</div>
+                        <input class="form-control" type="text" id="phoneQuery">
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2">
                 <button type="button" class="btn btn-primary btn-small btn-block"
                         id="query">
                     <i class="glyphicon glyphicon-search"></i> 查询
@@ -213,11 +221,13 @@
                             } else if(data == 4){
                                 return "<font color='red'>已封禁-无法接单</font>";
                             } else if(data == 6){
-                                return "<font color='red'>已封禁-无法接指定技能</font>";
+                                return "<font color='red'>已封禁-声优技能</font>";
                             } else if(data == 8){
                                 return "<font color='red'>已封禁-账户登录权限</font>";
                             } else if(data == 10){
                                 return "<font color='red'>已封禁-设备登录权限</font>";
+                            } else if(data == 12){
+                                return "<font color='red'>已封禁-声优资格</font>";
                             }else{
                                 return "<font color='red'>永久封禁</font>";
                             }
@@ -300,6 +310,7 @@
                     aoData.push({"name": "nickName", "value": $("#nameQuery").val().replace(new RegExp(" ", "g"), "")});
                     aoData.push({"name": "vStatus", "value": $("#customTypeQuery").val()});
                     aoData.push({"name": "appId", "value": $("#nameQuery").val().replace(new RegExp(" ", "g"), "")});
+                    aoData.push({"name": "phone", "value": $("#phoneQuery").val().replace(new RegExp(" ", "g"), "")});
                     var status = $('#customerStatusQuery').val();
                     if(status == 1){
                         aoData.push({"name": "custStatus", "value": 1});

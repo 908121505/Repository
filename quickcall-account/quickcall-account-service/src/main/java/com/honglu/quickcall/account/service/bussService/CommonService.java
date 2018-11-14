@@ -139,7 +139,7 @@ public interface CommonService {
 	 * @param orderStatus
 	 * @return
 	 */
-	public String   getMsgContent(String  customerFlag ,Integer  orderStatus);
+	public String   getMsgContent(String  customerFlag ,Integer  orderStatus,Integer  skillType);
 	
 	
 	/**

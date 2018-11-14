@@ -60,9 +60,10 @@
 					<div class="col-sm-8">
 						<input type="text" id="custStatusDispaly" class="form-control"
 							   name="custStatusDispaly" value="${entity.custStatus == 1?'正常': entity.custStatus == 4 ?
-							    '已封禁-无法接单':entity.custStatus==6?'已封禁-无法接指定技能':
+							    '已封禁-无法接单':entity.custStatus==6?'已封禁-声优技能':
 							    entity.custStatus == 8 ?'已封禁-账户登录权限': entity.custStatus == 10?'已封禁-设备登录权限':'未知状态'}"
 							   readonly="readonly">
+						<input type="hidden" id="custStatusDispalyId" class="form-control"  name="custStatusDispalyId" value="${entity.custStatus}" >
 
 					</div>
 				</div>
@@ -88,16 +89,17 @@
 						<select class="form-control" id="custStatus" name="custStatus" onchange="onCustStatusChange()">
 						<%--	<option value="4">已封禁-无法接单</option>--%>
 
-						<%--	<c:if test="${entity.customerSkills != null && fn:length(entity.customerSkills) > 0}">
-								<option value="6">已封禁-无法接指定技能</option>
-							</c:if>--%>
+							<c:if test="${entity.customerSkills != null && fn:length(entity.customerSkills) > 0}">
+								<option value="6">已封禁-声优技能</option>
+							</c:if>
 							<option value="8">已封禁-账户登录权限</option>
 							<%--<option value="10">已封禁-设备登录权限</option>--%>
+							<option value="12">已封禁-声优资格</option>
 						</select>
 					</div>
 
 					<div class="col-sm-10" >
-						<select class="form-control" id="customerSkills" name="customerSkills" multiple="multiple">
+						<select class="form-control" id="customerSkills" name="customerSkills">
 								<c:forEach items="${entity.customerSkills}" var="skill" >
 										<option>${skill}</option>
 								</c:forEach>

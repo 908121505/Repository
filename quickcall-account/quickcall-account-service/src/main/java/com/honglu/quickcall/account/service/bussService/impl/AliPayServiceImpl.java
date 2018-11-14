@@ -3,6 +3,7 @@ package com.honglu.quickcall.account.service.bussService.impl;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 
@@ -22,6 +23,7 @@ import com.honglu.quickcall.account.facade.enums.TradeTypeEnum;
 import com.honglu.quickcall.account.facade.enums.TransferTypeEnum;
 import com.honglu.quickcall.account.facade.exchange.request.AlipayNotifyRequest;
 import com.honglu.quickcall.account.facade.exchange.request.BindAliaccountRequest;
+import com.honglu.quickcall.account.facade.exchange.request.IsFirstechargeRequest;
 import com.honglu.quickcall.account.facade.exchange.request.RechargeRequest;
 import com.honglu.quickcall.account.facade.exchange.request.WhthdrawRequest;
 import com.honglu.quickcall.account.service.bussService.AccountService;
@@ -226,6 +228,18 @@ public class AliPayServiceImpl implements AliPayService {
 			rechargeMapper.updateByOrderNo(recharge);
 		}
 		return ResultUtils.resultSuccess();
+	}
+
+	@Override
+	public CommonResponse isFirstecharge(IsFirstechargeRequest request) {
+		CommonResponse commonResponse  = new CommonResponse();
+		List<Recharge> list= rechargeMapper.selectByCustomerId(request.getCustomerId());
+		if(list!=null&&list.size()>0){
+			commonResponse.setData("0");
+		}else{
+			commonResponse.setData("1");
+		}
+		return commonResponse;
 	}
 
 }

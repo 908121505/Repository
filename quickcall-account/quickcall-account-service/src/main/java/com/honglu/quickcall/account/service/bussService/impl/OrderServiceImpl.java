@@ -446,7 +446,7 @@ public class OrderServiceImpl implements IOrderService {
 		List<OrderMsgOrderListVO> resultList  = new ArrayList<OrderMsgOrderListVO>() ;
 		if (!CollectionUtils.isEmpty(queryList)) {
 			for (OrderMsgOrderListVO order : queryList) {
-				String  msgContent = commonService.getMsgContent(order.getCustomerFlag(), order.getOrderStatus());
+				String  msgContent = commonService.getMsgContent(order.getCustomerFlag(), order.getOrderStatus(),order.getSkillType());
 				order.setMsgContent(msgContent);
 				resultList.add(order);
 			}
@@ -1070,12 +1070,15 @@ public class OrderServiceImpl implements IOrderService {
 				LOGGER.info("===================skillType============="+skillType);
 				if(OrderSkillConstants.SKILL_TYPE_YES == skillType){
 					// 大V接受订单通知用户
+					LOGGER.info("========提示内容============="+OrderSkillConstants.IM_MSG_CONTENT_DAV_CONFIRM_TO_CUST);
 					RongYunUtil.sendOrderMessage(customerId, OrderSkillConstants.IM_MSG_CONTENT_DAV_CONFIRM_TO_CUST,OrderSkillConstants.MSG_CONTENT_C);
 					commonService.sendOrderMsg(serviceId, customerId, orderId, OrderSkillConstants.IM_MSG_CONTENT_DAV_CONFIRM_TO_CUST);
 				}else if(OrderSkillConstants.SKILL_TYPE_NO == skillType){
+					
+					LOGGER.info("========提示内容============="+OrderSkillConstants.IM_MSG_CONTENT_DAV_CONFIRM_TO_CUST_JIAO_XING);
 					// 大V接受订单通知用户  叫醒
 					RongYunUtil.sendOrderMessage(customerId, OrderSkillConstants.IM_MSG_CONTENT_DAV_CONFIRM_TO_CUST_JIAO_XING,OrderSkillConstants.MSG_CONTENT_C);
-					commonService.sendOrderMsg(serviceId, customerId, orderId, OrderSkillConstants.IM_MSG_CONTENT_DAV_CONFIRM_TO_CUST);
+					commonService.sendOrderMsg(serviceId, customerId, orderId, OrderSkillConstants.IM_MSG_CONTENT_DAV_CONFIRM_TO_CUST_JIAO_XING);
 				}
 				
 				
