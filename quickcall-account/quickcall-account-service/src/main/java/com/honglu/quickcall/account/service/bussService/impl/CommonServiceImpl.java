@@ -302,7 +302,7 @@ public class CommonServiceImpl implements CommonService {
 			retList.add(OrderSkillConstants.ORDER_STATUS_GOING_USRE_APPAY_FINISH);
 			retList.add(OrderSkillConstants.ORDER_STATUS_FINISH_DAV_FINISH_AFTER_SERVICE_TIME);
 			retList.add(OrderSkillConstants.ORDER_STATUS_FINISH_BOTH_NO_OPERATE);
-			retList.add(OrderSkillConstants.ORDER_STATUS_FINISHED_FORCE);
+//			retList.add(OrderSkillConstants.ORDER_STATUS_FINISHED_FORCE);
 		}
 		
 		return retList;
