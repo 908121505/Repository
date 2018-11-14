@@ -102,7 +102,7 @@ public interface OrderSkillConstants {
 	
 	
 	//声优发起立即服务
-	public  static final  String  IM_MSG_CONTENT_DAV_START_SERVICE_TO_CUST = "声优申请立即服务，等待用户同意";
+	public  static final  String  IM_MSG_CONTENT_DAV_START_SERVICE_TO_CUST = "声优申请立即服务，请您确认~";
 	public  static final  String  IM_MSG_CONTENT_DAV_START_SERVICE_TO_DAV = "您已申请立即服务，等待用户同意";
 	
 	
