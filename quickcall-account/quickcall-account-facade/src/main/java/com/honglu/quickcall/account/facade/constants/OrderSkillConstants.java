@@ -89,7 +89,7 @@ public interface OrderSkillConstants {
 	
 	//拒绝接单
 	public  static final  String  IM_MSG_CONTENT_DAV_REFUSE_TO_CUST = "声优未接单，音符已退回轻音账户";
-	public  static final  String  IM_MSG_CONTENT_DAV_REFUSE_TO_DV = "您已拒接接单，订单已取消~";
+	public  static final  String  IM_MSG_CONTENT_DAV_REFUSE_TO_DV = "您已拒绝，订单已取消~";
 	
 	
 	//同意接单
@@ -102,7 +102,7 @@ public interface OrderSkillConstants {
 	
 	
 	//声优发起立即服务
-	public  static final  String  IM_MSG_CONTENT_DAV_START_SERVICE_TO_CUST = "声优申请立即服务，等待用户同意";
+	public  static final  String  IM_MSG_CONTENT_DAV_START_SERVICE_TO_CUST = "声优申请立即服务，请您确认~";
 	public  static final  String  IM_MSG_CONTENT_DAV_START_SERVICE_TO_DAV = "您已申请立即服务，等待用户同意";
 	
 	
@@ -123,8 +123,8 @@ public interface OrderSkillConstants {
 
 	
 	
-	public  static final  String  IM_MSG_CONTENT_PING_JIA_FINISH_TO_CUST = "评价成功";
-	public  static final  String  IM_MSG_CONTENT_PING_JIA_FINISH_TO_DV = "对方已经完成评价";
+	public  static final  String  IM_MSG_CONTENT_PING_JIA_FINISH_TO_CUST = "评级已完成，感谢您对我们的支持！";
+	public  static final  String  IM_MSG_CONTENT_PING_JIA_FINISH_TO_DV = "用户已完成评价，再接再厉哦~";
 	
 	
 //	public  static final  String  IM_MSG_CONTENT_DAV_FINISH = "大V完成服务啦";

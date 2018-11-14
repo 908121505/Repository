@@ -41,5 +41,9 @@ public class RedisKeyConstants {
 	
 	// 检查接单开关是否开启
 	public static final String ACCOUNT_RECEIVE_NO_NX = "account:receive:nx:";
+	
+	// 用户短信次数
+	public static final String PHONE_SMS_COUNT = "sms:send:count:";
+		
 
 }
