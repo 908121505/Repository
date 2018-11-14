@@ -86,9 +86,17 @@
 				        			 hideAfter: 2,
 				        			 hideOnNavigate: true
 				        		 });
+				        	 }else if(data == -1){
+				        		 $.globalMessenger().post({
+				        			 message: '操作未完成！',
+				        			 type: 'error',
+				        			 id: "Only-one-message",
+				        			 hideAfter: 2,
+				        			 hideOnNavigate: true
+				        		 });
 				        	 }
 				        	 
-				        	 else{
+				        	  else{
 				        		 $.globalMessenger().post({
 				        			 message: '错误：'+data,
 				        			 type: 'error',
