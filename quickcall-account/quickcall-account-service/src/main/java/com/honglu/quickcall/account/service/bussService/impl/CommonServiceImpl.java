@@ -411,12 +411,12 @@ public class CommonServiceImpl implements CommonService {
 	}
 
 	@Override
-	public String getMsgContent(String customerFlag, Integer orderStatus) {
+	public String getMsgContent(String customerFlag, Integer orderStatus,Integer  skillType) {
 		String  result =  null;
 		if(OrderSkillConstants.MSG_CONTENT_DAV.equals(customerFlag)){
 			//通知声优消息
 			if(OrderSkillConstants.ORDER_STATUS_WAITING_RECEIVE ==  orderStatus){
-				result =   OrderSkillConstants.GT_MSG_CONTENT_START_SERVICE_TO_DAV;
+				result =   OrderSkillConstants.IM_MSG_CONTENT_RECEIVE_ORDER_TO_DV;
 			//声优拒绝接单
 			}else if (OrderSkillConstants.ORDER_STATUS_DAV_REFUSED_RECEIVE ==  orderStatus){
 				result =  OrderSkillConstants.IM_MSG_CONTENT_DAV_REFUSE_TO_DV;
@@ -427,8 +427,8 @@ public class CommonServiceImpl implements CommonService {
 			}else if(OrderSkillConstants.ORDER_STATUS_CANCEL_BEFORE_RECEIVE== orderStatus 
 					||orderStatus == OrderSkillConstants.ORDER_STATUS_CANCEL_SYSTEM_NOT_RECEIVE
 					||orderStatus == OrderSkillConstants.ORDER_STATUS_CANCEL_DAV_START_ONE_ORDER
-					||orderStatus == OrderSkillConstants.ORDER_STATUS_CANCEL_NOT_START
 					||orderStatus == OrderSkillConstants.ORDER_STATUS_CANCEL_BEFORE_DAV_START
+					||orderStatus == OrderSkillConstants.ORDER_STATUS_CANCEL_NOT_START
 					||orderStatus == OrderSkillConstants.ORDER_STATUS_CANCLE_USER_SELF_BEFORE_SERVICE
 					||orderStatus == OrderSkillConstants.ORDER_STATUS_CANCEL_USER_NOT_ACCEPCT
 					||orderStatus == OrderSkillConstants.ORDER_STATUS_CANCEL_BEFORE_APPOINT_TIME){
@@ -442,32 +442,43 @@ public class CommonServiceImpl implements CommonService {
 			//声优在服务时间内发起完成服务
 			}else if(OrderSkillConstants.ORDER_STATUS_GOING_DAV_APPAY_FINISH == orderStatus){
 				result =   OrderSkillConstants.IM_MSG_CONTENT_CUST_FINISH_TO_DAV;
+			//强制取消
+			}else if(OrderSkillConstants.ORDER_STATUS_CANCEL_FORCE == orderStatus){
+				result =   OrderSkillConstants.IM_MSG_CONTENT_CANCEL_FORCE_ORDER_TO_DV;
 			//声优在服务时间之外发起完成服务
-			}else if (OrderSkillConstants.ORDER_STATUS_FINISH_DAV_FINISH_AFTER_SERVICE_TIME == orderStatus){
-				result =   OrderSkillConstants.IM_MSG_CONTENT_CUST_NOT_PING_JIA_TO_DV;
-			//用户同意声优服务完成
-			}else if(OrderSkillConstants.ORDER_STATUS_FINISHED_USER_ACCEPCT == orderStatus){
+			}else if(OrderSkillConstants.ORDER_STATUS_FINISHED_USER_ACCEPCT == orderStatus
+					||OrderSkillConstants.ORDER_STATUS_GOING_USER_NOT_PING_JIA == orderStatus 
+					||OrderSkillConstants.ORDER_STATUS_FINISH_DV_FINISH == orderStatus 
+					||OrderSkillConstants.ORDER_STATUS_FINISH_DV_RELEASE == orderStatus 
+					||OrderSkillConstants.ORDER_STATUS_GOING_USRE_APPAY_FINISH == orderStatus 
+					||OrderSkillConstants.ORDER_STATUS_FINISH_DAV_FINISH_AFTER_SERVICE_TIME == orderStatus 
+					||OrderSkillConstants.ORDER_STATUS_FINISH_BOTH_NO_OPERATE == orderStatus 
+					|| OrderSkillConstants.ORDER_STATUS_FINISHED_FORCE == orderStatus){
 				result =   OrderSkillConstants.IM_MSG_CONTENT_DAV_CUST_CONFIRM_TO_DV;
-			}else if(OrderSkillConstants.ORDER_STATUS_FINISH_DV_FINISH == orderStatus || OrderSkillConstants.ORDER_STATUS_FINISH_BOTH_NO_OPERATE == orderStatus){
-			    result = OrderSkillConstants.IM_MSG_CONTENT_SYSTEM_FINISH_TIMEOUT_TO_DAV;
+			}else if(OrderSkillConstants.ORDER_STATUS_FINISHED_AND_PINGJIA == orderStatus ){
+			    result = OrderSkillConstants.IM_MSG_CONTENT_PING_JIA_FINISH_TO_DV;
 			}
 			
 		}else{
 			//通知用户消息
 			if(OrderSkillConstants.ORDER_STATUS_WAITING_RECEIVE ==  orderStatus){
-				result =  OrderSkillConstants.GT_MSG_CONTENT_START_SERVICE_TO_CUST;
+				result =  OrderSkillConstants.IM_MSG_CONTENT_RECEIVE_ORDER_TO_CUST;
 			//声优拒绝接单
 			}else if (OrderSkillConstants.ORDER_STATUS_DAV_REFUSED_RECEIVE ==  orderStatus){
 				result =  OrderSkillConstants.IM_MSG_CONTENT_DAV_REFUSE_TO_CUST;
 			//声优接单	
 			}else if (OrderSkillConstants.ORDER_STATUS_WAITING_START ==  orderStatus){
-				result =  OrderSkillConstants.IM_MSG_CONTENT_DAV_CONFIRM_TO_CUST;
+				if(OrderSkillConstants.SKILL_TYPE_YES == skillType){
+					result =  OrderSkillConstants.IM_MSG_CONTENT_DAV_CONFIRM_TO_CUST;
+				}else{
+					result =  OrderSkillConstants.IM_MSG_CONTENT_DAV_CONFIRM_TO_CUST_JIAO_XING;
+				}
 			//用户取消订单
 			}else if(OrderSkillConstants.ORDER_STATUS_CANCEL_BEFORE_RECEIVE== orderStatus 
 					||orderStatus == OrderSkillConstants.ORDER_STATUS_CANCEL_SYSTEM_NOT_RECEIVE
 					||orderStatus == OrderSkillConstants.ORDER_STATUS_CANCEL_DAV_START_ONE_ORDER
-					||orderStatus == OrderSkillConstants.ORDER_STATUS_CANCEL_NOT_START
 					||orderStatus == OrderSkillConstants.ORDER_STATUS_CANCEL_BEFORE_DAV_START
+					||orderStatus == OrderSkillConstants.ORDER_STATUS_CANCEL_NOT_START
 					||orderStatus == OrderSkillConstants.ORDER_STATUS_CANCLE_USER_SELF_BEFORE_SERVICE
 					||orderStatus == OrderSkillConstants.ORDER_STATUS_CANCEL_USER_NOT_ACCEPCT
 					||orderStatus == OrderSkillConstants.ORDER_STATUS_CANCEL_BEFORE_APPOINT_TIME){
@@ -481,14 +492,21 @@ public class CommonServiceImpl implements CommonService {
 			//声优在服务时间内发起完成服务
 			}else if(OrderSkillConstants.ORDER_STATUS_GOING_DAV_APPAY_FINISH == orderStatus){
 				result =  OrderSkillConstants.IM_MSG_CONTENT_CUST_FINISH_TO_CUST;
-			//声优在服务时间之外发起完成服务
-			}else if (OrderSkillConstants.ORDER_STATUS_FINISH_DAV_FINISH_AFTER_SERVICE_TIME == orderStatus){
-				result =  OrderSkillConstants.IM_MSG_CONTENT_CUST_NOT_PING_JIA_TO_CUST;
-			//用户同意声优服务完成	
-			}else if(OrderSkillConstants.ORDER_STATUS_FINISHED_USER_ACCEPCT == orderStatus){
+			//强制取消
+			}else if(OrderSkillConstants.ORDER_STATUS_CANCEL_FORCE == orderStatus){
+				result =   OrderSkillConstants.IM_MSG_CONTENT_CANCEL_FORCE_ORDER_TO_CUST;
+				//声优在服务时间之外发起完成服务
+			}else if(OrderSkillConstants.ORDER_STATUS_FINISHED_USER_ACCEPCT == orderStatus
+					||OrderSkillConstants.ORDER_STATUS_GOING_USER_NOT_PING_JIA == orderStatus 
+					||OrderSkillConstants.ORDER_STATUS_FINISH_DV_FINISH == orderStatus 
+					||OrderSkillConstants.ORDER_STATUS_FINISH_DV_RELEASE == orderStatus 
+					||OrderSkillConstants.ORDER_STATUS_GOING_USRE_APPAY_FINISH == orderStatus 
+					||OrderSkillConstants.ORDER_STATUS_FINISH_DAV_FINISH_AFTER_SERVICE_TIME == orderStatus 
+					||OrderSkillConstants.ORDER_STATUS_FINISH_BOTH_NO_OPERATE == orderStatus 
+					|| OrderSkillConstants.ORDER_STATUS_FINISHED_FORCE == orderStatus){
 				result =   OrderSkillConstants.IM_MSG_CONTENT_DAV_CUST_CONFIRM_TO_CUST;
-			}else if(OrderSkillConstants.ORDER_STATUS_FINISH_DV_FINISH == orderStatus || OrderSkillConstants.ORDER_STATUS_FINISH_BOTH_NO_OPERATE == orderStatus){
-			    result = OrderSkillConstants.IM_MSG_CONTENT_SYSTEM_FINISH_TIMEOUT_TO_CUST;
+			}else if(OrderSkillConstants.ORDER_STATUS_FINISHED_AND_PINGJIA == orderStatus ){
+			    result = OrderSkillConstants.IM_MSG_CONTENT_PING_JIA_FINISH_TO_CUST;
 			}
 		}
 		
