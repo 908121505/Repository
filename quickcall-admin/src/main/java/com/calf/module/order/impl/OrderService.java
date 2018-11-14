@@ -354,25 +354,27 @@ public class OrderService {
 		}
 		map.put("orderNo", order.getOrderNo());
 		TradeDetail tradeDetail = baseManager.get("TradeDetail.selectFrozenByOrderNo", map);
-
-		String userFrozenkey = RedisKeyConstants.ACCOUNT_USERFROZEN_USER + order.getServiceId();
-		String steamFrozenKey = RedisKeyConstants.ACCOUNT_USERFROZEN_STREAM + tradeDetail.getTradeId();
-		String steamFrozenValue = JedisUtil.get(steamFrozenKey);
-		String userFrozenValue = JedisUtil.get(userFrozenkey);
-		if (StringUtils.isNotBlank(userFrozenValue) && StringUtils.isNotBlank(steamFrozenValue)) {
-			if (userFrozenValue.contains(steamFrozenValue)) {
-				flag = true;
-				JedisUtil.del(steamFrozenKey);
-				String[] arys = userFrozenValue.split(",");
-				arys = remove(arys, tradeDetail.getTradeId() + "");
-				userFrozenValue = StringUtils.join(arys, ",");
-				if (userFrozenValue.length() > 0) {
-					JedisUtil.set(userFrozenkey, userFrozenValue);
-				} else {
-					JedisUtil.del(userFrozenkey);
+		if (tradeDetail != null) {
+			String userFrozenkey = RedisKeyConstants.ACCOUNT_USERFROZEN_USER + order.getServiceId();
+			String steamFrozenKey = RedisKeyConstants.ACCOUNT_USERFROZEN_STREAM + tradeDetail.getTradeId();
+			String steamFrozenValue = JedisUtil.get(steamFrozenKey);
+			String userFrozenValue = JedisUtil.get(userFrozenkey);
+			if (StringUtils.isNotBlank(userFrozenValue) && StringUtils.isNotBlank(steamFrozenValue)) {
+				if (userFrozenValue.contains(steamFrozenValue)) {
+					flag = true;
+					JedisUtil.del(steamFrozenKey);
+					String[] arys = userFrozenValue.split(",");
+					arys = remove(arys, tradeDetail.getTradeId() + "");
+					userFrozenValue = StringUtils.join(arys, ",");
+					if (userFrozenValue.length() > 0) {
+						JedisUtil.set(userFrozenkey, userFrozenValue);
+					} else {
+						JedisUtil.del(userFrozenkey);
+					}
 				}
 			}
 		}
+		map.put("orderNo", order.getOrderNo());
 		map.put("customerId", order.getServiceId());
 		tradeDetail = baseManager.get("TradeDetail.queryCountByOrderNoAndCustomerId", map);
 		// 声优无流水，或者 有流水，且只有冻结流水
@@ -444,26 +446,28 @@ public class OrderService {
 
 		map.put("orderNo", order.getOrderNo());
 		TradeDetail tradeDetail = baseManager.get("TradeDetail.selectFrozenByOrderNo", map);
-
-		String userFrozenkey = RedisKeyConstants.ACCOUNT_USERFROZEN_USER + order.getServiceId();
-		String steamFrozenKey = RedisKeyConstants.ACCOUNT_USERFROZEN_STREAM + tradeDetail.getTradeId();
-		String steamFrozenValue = JedisUtil.get(steamFrozenKey);
-		String userFrozenValue = JedisUtil.get(userFrozenkey);
-		if (StringUtils.isNotBlank(userFrozenValue) && StringUtils.isNotBlank(steamFrozenValue)) {
-			if (userFrozenValue.contains(steamFrozenValue)) {
-				flag = true;// 有冻结流水
-				JedisUtil.del(steamFrozenKey);
-				String[] arys = userFrozenValue.split(",");
-				arys = remove(arys, tradeDetail.getTradeId() + "");
-				userFrozenValue = StringUtils.join(arys, ",");
-				if (userFrozenValue.length() > 0) {
-					JedisUtil.set(userFrozenkey, userFrozenValue);
-				} else {
-					JedisUtil.del(userFrozenkey);
+		if (tradeDetail != null) {
+			String userFrozenkey = RedisKeyConstants.ACCOUNT_USERFROZEN_USER + order.getServiceId();
+			String steamFrozenKey = RedisKeyConstants.ACCOUNT_USERFROZEN_STREAM + tradeDetail.getTradeId();
+			String steamFrozenValue = JedisUtil.get(steamFrozenKey);
+			String userFrozenValue = JedisUtil.get(userFrozenkey);
+			if (StringUtils.isNotBlank(userFrozenValue) && StringUtils.isNotBlank(steamFrozenValue)) {
+				if (userFrozenValue.contains(steamFrozenValue)) {
+					flag = true;// 有冻结流水
+					JedisUtil.del(steamFrozenKey);
+					String[] arys = userFrozenValue.split(",");
+					arys = remove(arys, tradeDetail.getTradeId() + "");
+					userFrozenValue = StringUtils.join(arys, ",");
+					if (userFrozenValue.length() > 0) {
+						JedisUtil.set(userFrozenkey, userFrozenValue);
+					} else {
+						JedisUtil.del(userFrozenkey);
+					}
 				}
 			}
 		}
 		map.put("customerId", order.getCustomerId());
+		map.put("orderNo", order.getOrderNo());
 		// 检查用户 该订单是否有下单流水
 		tradeDetail = baseManager.get("TradeDetail.queryCountByOrderNoAndCustomerId", map);
 		if (tradeDetail != null && tradeDetail.getType() == 3) {
