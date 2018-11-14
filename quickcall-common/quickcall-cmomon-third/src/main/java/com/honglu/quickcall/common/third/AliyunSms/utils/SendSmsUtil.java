@@ -28,10 +28,10 @@ public class SendSmsUtil {
 
 	public static String send_msg_url = ResourceBundle.getBundle("thirdconfig").getString("send_msg_url");
 	
-	//管理员的手机号
-	private static String adminPhone = "13057035325";
+	public static String threshold = ResourceBundle.getBundle("thirdconfig").getString("warning_msg_threshold");
 	
-	private static Integer threshold = 100;
+	//管理员的手机号
+	private static String[] adminPhone = ResourceBundle.getBundle("thirdconfig").getString("warning_msg_phone").split(",");
 	
 
 	/**
@@ -89,19 +89,21 @@ public class SendSmsUtil {
 		Object count = JedisUtil.get(RedisKeyConstants.PHONE_SMS_COUNT+tel);
 		if(count != null){
 			n = Integer.valueOf(count+"")+1;
-			if(n == threshold){
+			if(n == Integer.valueOf(threshold)){
 				HashMap<String, Object> warningParam = new HashMap<>();
 				HashMap<String, Object> warningParam1 = new HashMap<>();
 				warningParam1.put("mobile", tel);
-				warningParam.put("requestId", getUUID());
 				warningParam.put("templateId", notifyTemplateCode);
 				warningParam.put("appNum", 10);// 4:惠花花，5:秒购 10：轻音
 				warningParam.put("signName", singName);
-				warningParam.put("phone", adminPhone);
 				warningParam.put("templateType", 1);// 1:即时 2:系统 3:市场
 				warningParam.put("codeParams", warningParam1);
-				String json = JSON.toJSONString(warningParam, true);
-				String res = HttpClientUtils.doPost(send_msg_url, json);
+				for(String phone:adminPhone){
+					warningParam.put("phone", phone);
+					warningParam.put("requestId", getUUID());
+					String json = JSON.toJSONString(warningParam, true);
+					HttpClientUtils.doPost(send_msg_url, json);
+				}
 			}
 		}
 		JedisUtil.set(RedisKeyConstants.PHONE_SMS_COUNT+tel, n+"",DateUtils.getZeroTimestamp());
@@ -114,7 +116,6 @@ public class SendSmsUtil {
     } 
 
 	public static void main(String[] args) {
-//		JedisUtil.set(RedisKeyConstants.PHONE_SMS_COUNT+"13057035325", "99",DateUtils.getZeroTimestamp());
 		notifyAdmin("13057035325");
 		
 //		sendSms("11244111411", "18217583747", 2, "小花");
