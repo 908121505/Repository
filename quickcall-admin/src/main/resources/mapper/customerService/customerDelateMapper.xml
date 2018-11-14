@@ -24,6 +24,7 @@
 		<id property="id" column="id" javaType="java.lang.Integer"></id>
 		<result property="customerId" column="customer_id" javaType="java.lang.String"></result>
 		<result property="nickName" column="nick_name" javaType="java.lang.String"></result>
+		<result property="delateNickName" column="delate_nick_name" javaType="java.lang.String"></result>
 		<result property="phone" column="phone" javaType="java.lang.String"></result>
 		<result property="delateCustId" column="delate_cust_id" javaType="java.lang.String"></result>
 		<result property="delateId" column="delate_id" javaType="java.lang.Integer"></result>
@@ -48,18 +49,21 @@ id,	customer_id,	delate_cust_id,	delate_id,	delate_content,	handle_status,	handl
 	
 	<select id="queryCustomerDelateList" resultMap="customerDelateVOMap">
 		select 
-		cus.nick_name,cus.phone,cd.id,cd.customer_id,cd.delate_cust_id,del.name as delateName,
+		cus.nick_name,cus.phone,cd.id,cd.customer_id,cd.delate_cust_id,cus1.nick_name as delate_nick_name,cd.delate_cust_id,del.name as delateName,
 		cd.delate_id,cd.delate_content,cd.handle_status,cd.handle_result,
 		cd.create_time,cd.modify_time,cd.handle_time,cd.create_man,cd.modify_man,
 		cd.handle_user,cd.remark
 		from customer_delate cd
 		left join customer cus on cus.customer_id = cd.customer_id
+	  	left join customer cus1 on cus1.customer_id = cd.delate_cust_id
 		left join delate del on del.id = cd.delate_id 
 		<where>
+			<if test="customerId !=null and customerId!='' ">and cus.customer_id like concat('%',#{customerId},'%')</if>
 			<if test="nickName != null">and  cus.nick_name like concat('%',#{nickName},'%')</if>
 			<if test="delateName != null">and  del.name like concat('%',#{delateName},'%')</if>
+			<if test="delateCustId != null">and  cd.delate_cust_id like concat('%',#{delateCustId},'%')</if>
 			<if test="handleStatus != null">and  cd.handle_status = #{handleStatus}</if>
-			<if test="phone != null">and  cus.phone = #{phone}</if>
+			<if test="phone !=null and phone!='' ">and cus.phone like concat('%',#{phone},'%')</if>
 			<if test="startTime !=null and startTime!=''">and cd.create_time <![CDATA[  >= ]]> #{startTime}</if>
         	<if test="endTime !=null and endTime!=''">and cd.create_time <![CDATA[  <= ]]> #{endTime}</if>
 		</where>
@@ -83,11 +87,17 @@ id,	customer_id,	delate_cust_id,	delate_id,	delate_content,	handle_status,	handl
 		select count(*)
 		from customer_delate cd
 		left join customer cus on cus.customer_id = cd.customer_id
+		left join customer cus1 on cus1.customer_id = cd.delate_cust_id
+		left join delate del on del.id = cd.delate_id
 		<where>
+			<if test="customerId !=null and customerId!='' ">and cus.customer_id like concat('%',#{customerId},'%')</if>
 			<if test="nickName != null">and  cus.nick_name like concat('%',#{nickName},'%')</if>
-			<if test="phone != null">and  cus.phone = #{phone}</if>
+			<if test="delateName != null">and  del.name like concat('%',#{delateName},'%')</if>
+			<if test="delateCustId != null">and  cd.delate_cust_id like concat('%',#{delateCustId},'%')</if>
+			<if test="handleStatus != null">and  cd.handle_status = #{handleStatus}</if>
+			<if test="phone !=null and phone!='' ">and cus.phone like concat('%',#{phone},'%')</if>
 			<if test="startTime !=null and startTime!=''">and cd.create_time <![CDATA[  >= ]]> #{startTime}</if>
-        	<if test="endTime !=null and endTime!=''">and cd.create_time <![CDATA[  <= ]]> #{endTime}</if>
+			<if test="endTime !=null and endTime!=''">and cd.create_time <![CDATA[  <= ]]> #{endTime}</if>
 		</where>
 	</select>
 

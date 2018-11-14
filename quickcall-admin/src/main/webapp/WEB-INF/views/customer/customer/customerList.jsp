@@ -218,11 +218,13 @@
                             } else if(data == 4){
                                 return "<font color='red'>已封禁-无法接单</font>";
                             } else if(data == 6){
-                                return "<font color='red'>已封禁-无法接指定技能</font>";
+                                return "<font color='red'>已封禁-声优技能</font>";
                             } else if(data == 8){
                                 return "<font color='red'>已封禁-账户登录权限</font>";
                             } else if(data == 10){
                                 return "<font color='red'>已封禁-设备登录权限</font>";
+                            } else if(data == 12){
+                                return "<font color='red'>已封禁-声优资格</font>";
                             }else{
                                 return "<font color='red'>永久封禁</font>";
                             }

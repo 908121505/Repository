@@ -30,6 +30,14 @@
             <div class="col-md-2">
                 <div class="form-group">
                     <div class="input-group">
+                        <div class="input-group-addon">手机号</div>
+                        <input class="form-control" type="text" id="phone">
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="form-group">
+                    <div class="input-group">
                         <div class="input-group-addon">审核状态</div>
                         <select class="form-control" id="auditStatus">
                             <option value="">--请选择--</option>
@@ -63,6 +71,7 @@
                         aoData.push({"name": "customerId", "value": $("#customerId").val().trim()});
                         aoData.push({"name": "nickName", "value": $("#nickName").val().trim()});
                         aoData.push({"name": "auditStatus", "value": $("#auditStatus").val().trim()});
+                        aoData.push({"name": "phone", "value": $("#phone").val().trim()});
 //                        aoData.push({"name": "startTime", "value": $("#sTime").val()});
 //                        aoData.push({"name": "endTime", "value": $("#eTime").val()});
                     },
@@ -90,6 +99,11 @@
                         {
                             "data": "nickName",
                             "sTitle": "用户昵称",
+                            'sClass': "text-center",
+                        },
+                        {
+                            "data": "phone",
+                            "sTitle": "手机号",
                             'sClass': "text-center",
                         },
                         {

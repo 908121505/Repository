@@ -20,6 +20,8 @@ public class CustomerDelateVO {
 
 	/**举报人ID**/
 	private String delateCustId;
+	//举报人名称
+	private String delateNickName;
 
 	/**举报内容ID**/
 	private Integer delateId;
@@ -193,4 +195,11 @@ public class CustomerDelateVO {
 		this.delateName = delateName;
 	}
 
+	public String getDelateNickName() {
+		return delateNickName;
+	}
+
+	public void setDelateNickName(String delateNickName) {
+		this.delateNickName = delateNickName;
+	}
 }
