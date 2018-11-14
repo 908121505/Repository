@@ -135,9 +135,10 @@ public class AliPayController extends BaseController {
 	 * @return
 	 * @author baoguochuan
 	 */
-	@RequestMapping(value = "/isFristecharge")
+	@RequestMapping(value = "/isFristRecharge")
 	@ResponseBody
 	public WebResponseModel isFirstecharge(IsFirstechargeRequest params) {
+		System.out.println("11111111");
 		WebResponseModel response = new WebResponseModel();
 		if (params.getCustomerId()==null) {
 			response.setCode(AccountBizReturnCode.paramError.code());
