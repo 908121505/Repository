@@ -302,7 +302,7 @@ public class CommonServiceImpl implements CommonService {
 			retList.add(OrderSkillConstants.ORDER_STATUS_GOING_USRE_APPAY_FINISH);
 			retList.add(OrderSkillConstants.ORDER_STATUS_FINISH_DAV_FINISH_AFTER_SERVICE_TIME);
 			retList.add(OrderSkillConstants.ORDER_STATUS_FINISH_BOTH_NO_OPERATE);
-//			retList.add(OrderSkillConstants.ORDER_STATUS_FINISHED_FORCE);
+			retList.add(OrderSkillConstants.ORDER_STATUS_FINISHED_FORCE);
 		}
 		
 		return retList;
@@ -330,11 +330,14 @@ public class CommonServiceImpl implements CommonService {
 		}else if(OrderSkillConstants.ORDER_STATUS_PARAM_FINISHED == orderStatusParam){
 			
 			retList.add(OrderSkillConstants.ORDER_STATUS_FINISHED_USER_ACCEPCT);
+			retList.add(OrderSkillConstants.ORDER_STATUS_GOING_USER_NOT_PING_JIA);
 			retList.add(OrderSkillConstants.ORDER_STATUS_FINISH_DV_FINISH);
-			retList.add(OrderSkillConstants.ORDER_STATUS_FINISHED_AND_PINGJIA);
+			retList.add(OrderSkillConstants.ORDER_STATUS_FINISH_DV_RELEASE);
 			retList.add(OrderSkillConstants.ORDER_STATUS_GOING_USRE_APPAY_FINISH);
 			retList.add(OrderSkillConstants.ORDER_STATUS_FINISH_DAV_FINISH_AFTER_SERVICE_TIME);
 			retList.add(OrderSkillConstants.ORDER_STATUS_FINISH_BOTH_NO_OPERATE);
+			retList.add(OrderSkillConstants.ORDER_STATUS_FINISHED_AND_PINGJIA);
+			retList.add(OrderSkillConstants.ORDER_STATUS_FINISHED_FORCE);
 			
 		}else if(OrderSkillConstants.ORDER_STATUS_PARAM_REFUSED == orderStatusParam){
 			
