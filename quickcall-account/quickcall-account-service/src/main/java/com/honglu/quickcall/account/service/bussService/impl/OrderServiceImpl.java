@@ -1019,12 +1019,13 @@ public class OrderServiceImpl implements IOrderService {
 				
 				
 
+				LOGGER.info("===================skillType============="+skillType);
 				if(OrderSkillConstants.SKILL_TYPE_YES == skillType){
 					// 大V接受订单通知用户
 					RongYunUtil.sendOrderMessage(customerId, OrderSkillConstants.IM_MSG_CONTENT_DAV_CONFIRM_TO_CUST,OrderSkillConstants.MSG_CONTENT_C);
 					commonService.sendOrderMsg(serviceId, customerId, orderId, OrderSkillConstants.IM_MSG_CONTENT_DAV_CONFIRM_TO_CUST);
-				}else {
-					// 大V接受订单通知用户
+				}else if(OrderSkillConstants.SKILL_TYPE_NO == skillType){
+					// 大V接受订单通知用户  叫醒
 					RongYunUtil.sendOrderMessage(customerId, OrderSkillConstants.IM_MSG_CONTENT_DAV_CONFIRM_TO_CUST_JIAO_XING,OrderSkillConstants.MSG_CONTENT_C);
 					commonService.sendOrderMsg(serviceId, customerId, orderId, OrderSkillConstants.IM_MSG_CONTENT_DAV_CONFIRM_TO_CUST);
 				}

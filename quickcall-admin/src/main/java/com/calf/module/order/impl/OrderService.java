@@ -24,6 +24,7 @@ import com.calf.cn.utils.RadomUtil;
 import com.calf.cn.utils.SearchUtil;
 import com.calf.module.common.impl.CommonUtilService;
 import com.calf.module.customer.entity.Customer;
+import com.calf.module.enums.CompulsionOrderStatusEnums;
 import com.calf.module.enums.OrderStatusEnums;
 import com.calf.module.enums.SmallOrderStatusEnums;
 import com.calf.module.order.entity.Account;
@@ -204,18 +205,19 @@ public class OrderService {
 		}
 
 		Integer orderStatus = Integer.valueOf(order.getOrderStatus());
-
 		Integer selectFlag = null;
-		if (orderStatus < 29) {
+		if (CompulsionOrderStatusEnums.isContainSubset(OrderSkillConstants.ORDER_STATUS_CANCEL_FORCE, String.valueOf(orderStatus))) {
 			// 可以强制取消
 			selectFlag = 1;
-		} else if (orderStatus == OrderSkillConstants.ORDER_STATUS_CANCEL_FORCE
+		} /*else if (orderStatus == OrderSkillConstants.ORDER_STATUS_CANCEL_FORCE
 				|| orderStatus == OrderSkillConstants.ORDER_STATUS_FINISHED_FORCE) {
 			// 已经强制取消或者强制完成
 			selectFlag = 3;
-		} else {
+		} */else if(CompulsionOrderStatusEnums.isContainSubset(OrderSkillConstants.ORDER_STATUS_FINISHED_FORCE, String.valueOf(orderStatus))) {
 			// 可以强制完成
 			selectFlag = 2;
+		}else{
+			selectFlag = 3;
 		}
 
 		model.addAttribute("selectFlag", selectFlag);

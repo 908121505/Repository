@@ -220,7 +220,7 @@
   </select>
 
   <select id="selectActivityNameAndCouponName" parameterType="Long" resultType="map">
-    select c.coupon_name,a.activity_name from coupon c ,activity a
+    select c.coupon_name as couponName ,a.activity_name as activityName from coupon c ,activity a
     where c.activity_id = a.activity_id
     and c.coupon_id = #{couponId}
   </select>
