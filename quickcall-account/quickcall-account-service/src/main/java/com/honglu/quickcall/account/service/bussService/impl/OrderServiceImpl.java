@@ -717,9 +717,9 @@ public class OrderServiceImpl implements IOrderService {
 					}
 				}else{
 //					checkFlag = true ;
-					//不存在订单关系
+					//不存在订单关系，存在完成订单
 					//需要判断是否可以下单，也就是说serviceId方是否有技能
-//					orderDetailForIMVO.setRetCode(OrderSkillConstants.IM_RETCODE_ORDER_COUND_ORDER);// 不存在的订单关系
+					orderDetailForIMVO.setRetCode(OrderSkillConstants.IM_RETCODE_CAN_ORDER);// 不存在的订单关系
 				}
 				
 			}else{
