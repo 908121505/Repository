@@ -36,6 +36,11 @@ public class Message {
 
     private String title;
 
+    /**
+     * H5链接
+     */
+    private String h5Url;
+
     public Long getMessageId() {
         return messageId;
     }
@@ -139,4 +144,13 @@ public class Message {
     public void setTitle(String title) {
         this.title = title;
     }
+
+    public String getH5Url() {
+        return h5Url;
+    }
+
+    public void setH5Url(String h5Url) {
+        this.h5Url = h5Url;
+    }
+
 }
