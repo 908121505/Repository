@@ -64,10 +64,13 @@ import com.honglu.quickcall.account.service.dao.SkillItemMapper;
 import com.honglu.quickcall.activity.facade.business.CouponDubboBusiness;
 import com.honglu.quickcall.activity.facade.entity.CustomerCoupon;
 import com.honglu.quickcall.activity.facade.vo.CouponOrderVo;
+import com.honglu.quickcall.common.api.code.BizCode;
 import com.honglu.quickcall.common.api.exception.BizException;
 import com.honglu.quickcall.common.api.exchange.CommonResponse;
 import com.honglu.quickcall.common.api.exchange.ResultUtils;
 import com.honglu.quickcall.common.api.util.DateUtils;
+import com.honglu.quickcall.common.api.util.JedisUtil;
+import com.honglu.quickcall.common.api.util.RedisKeyConstants;
 import com.honglu.quickcall.common.core.util.UUIDUtils;
 import com.honglu.quickcall.common.third.AliyunSms.utils.SendSmsUtil;
 import com.honglu.quickcall.common.third.push.GtPushUtil;
@@ -115,10 +118,10 @@ public class OrderServiceImpl implements IOrderService {
 		if (request == null || request.getCustomerId() == null) {
 			throw new BizException(AccountBizReturnCode.paramError, "查询技能信息参数异常");
 		}
-//		String customerJson = JedisUtil.get(RedisKeyConstants.USER_CUSTOMER_INFO + request.getCustomerId());
-//		if (StringUtils.isEmpty(customerJson)) {
-//			return ResultUtils.result(BizCode.CustomerNotExist);
-//		}
+		String customerJson = JedisUtil.get(RedisKeyConstants.USER_CUSTOMER_INFO + request.getCustomerId());
+		if (StringUtils.isEmpty(customerJson)) {
+			return ResultUtils.result(BizCode.CustomerNotExist);
+		}
 		LOGGER.info("======>>>>>queryDaVSkill()入参：" + request.toString());
 
 		Long customerId = request.getCustomerId();
@@ -173,10 +176,10 @@ public class OrderServiceImpl implements IOrderService {
 		if (request == null || request.getCustomerId() == null || request.getCustomerSkillId() == null) {
 			throw new BizException(AccountBizReturnCode.paramError, "下单参数异常");
 		}
-//		String customerJson = JedisUtil.get(RedisKeyConstants.USER_CUSTOMER_INFO + request.getCustomerId());
-//		if (StringUtils.isEmpty(customerJson)) {
-//			return ResultUtils.result(BizCode.CustomerNotExist);
-//		}
+		String customerJson = JedisUtil.get(RedisKeyConstants.USER_CUSTOMER_INFO + request.getCustomerId());
+		if (StringUtils.isEmpty(customerJson)) {
+			return ResultUtils.result(BizCode.CustomerNotExist);
+		}
 		LOGGER.info("======>>>>>saveOrder()入参：" + request.toString());
 		CommonResponse commonResponse = commonService.getCommonResponse();
 		HashMap<String, Object> resultMap = new HashMap<>();
@@ -427,10 +430,10 @@ public class OrderServiceImpl implements IOrderService {
 		}
 		LOGGER.info("======>>>>>queryMsgOrderList()入参：" + request.toString());
 		Long customerId = request.getCustomerId();
-//		String customerJson = JedisUtil.get(RedisKeyConstants.USER_CUSTOMER_INFO + customerId);
-//		if (StringUtils.isEmpty(customerJson)) {
-//			return ResultUtils.result(BizCode.CustomerNotExist);
-//		}
+		String customerJson = JedisUtil.get(RedisKeyConstants.USER_CUSTOMER_INFO + customerId);
+		if (StringUtils.isEmpty(customerJson)) {
+			return ResultUtils.result(BizCode.CustomerNotExist);
+		}
 		
 		Integer  pageIndex = request.getPageIndex();
 		if(pageIndex == null ){
@@ -448,6 +451,10 @@ public class OrderServiceImpl implements IOrderService {
 			for (OrderMsgOrderListVO order : queryList) {
 				String  msgContent = commonService.getMsgContent(order.getCustomerFlag(), order.getOrderStatus(),order.getSkillType());
 				order.setMsgContent(msgContent);
+				Date  modifyTime = order.getModifyTime();
+				if(modifyTime == null){
+					order.setModifyTime(order.getOrderTime());
+				}
 				resultList.add(order);
 			}
 		}
@@ -470,10 +477,10 @@ public class OrderServiceImpl implements IOrderService {
 		}
 		LOGGER.info("======>>>>>queryReceiveOrderList()入参：" + request.toString());
 		Long customerId = request.getCustomerId();
-//		String customerJson = JedisUtil.get(RedisKeyConstants.USER_CUSTOMER_INFO + customerId);
-//		if (StringUtils.isEmpty(customerJson)) {
-//			return ResultUtils.result(BizCode.CustomerNotExist);
-//		}
+		String customerJson = JedisUtil.get(RedisKeyConstants.USER_CUSTOMER_INFO + customerId);
+		if (StringUtils.isEmpty(customerJson)) {
+			return ResultUtils.result(BizCode.CustomerNotExist);
+		}
 		Integer orderStatusParam = request.getOrderStatus();
 		List<Integer> statusList = commonService.getReceiveOrderStatusList(orderStatusParam);
 
@@ -503,10 +510,10 @@ public class OrderServiceImpl implements IOrderService {
 		if (request == null || request.getCustomerId() == null || request.getOrderStatus() == null) {
 			throw new BizException(AccountBizReturnCode.paramError, "查询发起订单参数异常");
 		}
-//		String customerJson = JedisUtil.get(RedisKeyConstants.USER_CUSTOMER_INFO + request.getCustomerId());
-//		if (StringUtils.isEmpty(customerJson)) {
-//			return ResultUtils.result(BizCode.CustomerNotExist);
-//		}
+		String customerJson = JedisUtil.get(RedisKeyConstants.USER_CUSTOMER_INFO + request.getCustomerId());
+		if (StringUtils.isEmpty(customerJson)) {
+			return ResultUtils.result(BizCode.CustomerNotExist);
+		}
 		LOGGER.info("======>>>>>querySendOrderList()入参：" + request.toString());
 		Long customerId = request.getCustomerId();
 		Integer orderStatusParam = request.getOrderStatus();
