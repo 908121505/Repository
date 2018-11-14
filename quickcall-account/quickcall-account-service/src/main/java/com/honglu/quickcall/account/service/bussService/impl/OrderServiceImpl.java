@@ -394,7 +394,18 @@ public class OrderServiceImpl implements IOrderService {
 			req.setOrder_amount(orderAmounts.doubleValue());
 			req.setOrder_id(orderId + "");
 			req.setOrder_quantity(Double.valueOf(orderNum + ""));
-			req.setOrder_type(skillItem.getSkillItemName());
+			String  skillItemName = skillItem.getSkillItemName(); 
+			
+			String orderType = null;
+//			1.哄睡、2.叫醒 、3.情感咨询
+			if("哄睡".equals(skillItemName)){
+				orderType = 1 +"";
+			}else if ("叫醒".equals(skillItemName)){
+				orderType = 2 +"";
+			}else if("情感咨询".equals(skillItemName)){
+				orderType = 3 +"";
+			}
+			req.setOrder_type(orderType );
 			req.setUser_id(customerId + "");
 			try {
 				dataDuriedPointBusiness.burySubmitOrderData(req);
