@@ -512,7 +512,8 @@
 			unionTb.orderAmount,
 			unionTb.orderStatus,
 			unionTb.skillItemName,
-			unionTb.icon
+			unionTb.icon,
+			unionTb.skillType
 FROM
 	(
 		SELECT
@@ -530,7 +531,8 @@ FROM
 			od.order_amounts AS orderAmount,
 			od.order_status AS orderStatus,
 			cs.skill_name AS skillItemName,
-			st.unlock_icon AS icon
+			st.unlock_icon AS icon,
+			od.skill_type  AS skillType
 			
 		FROM
 			orders od
@@ -555,7 +557,8 @@ FROM
 				od.order_amounts AS orderAmount,
 				od.order_status AS orderStatus,
 				cs.skill_name AS skillItemName,
-				st.unlock_icon AS icon
+				st.unlock_icon AS icon,
+				od.skill_type  AS skillType
 			FROM
 				orders od
 			LEFT JOIN customer_skill cs ON od.customer_skill_id = cs.customer_skill_id

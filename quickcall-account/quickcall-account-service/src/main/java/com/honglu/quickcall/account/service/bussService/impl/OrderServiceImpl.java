@@ -446,7 +446,7 @@ public class OrderServiceImpl implements IOrderService {
 		List<OrderMsgOrderListVO> resultList  = new ArrayList<OrderMsgOrderListVO>() ;
 		if (!CollectionUtils.isEmpty(queryList)) {
 			for (OrderMsgOrderListVO order : queryList) {
-				String  msgContent = commonService.getMsgContent(order.getCustomerFlag(), order.getOrderStatus());
+				String  msgContent = commonService.getMsgContent(order.getCustomerFlag(), order.getOrderStatus(),order.getSkillType());
 				order.setMsgContent(msgContent);
 				resultList.add(order);
 			}
