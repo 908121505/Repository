@@ -59,6 +59,17 @@ public class OrderMsgOrderListVO implements  Serializable{
 	private Integer  skillType;
 	
 	
+	private Date   orderTime;
+	
+	
+	
+	
+	public Date getOrderTime() {
+		return orderTime;
+	}
+	public void setOrderTime(Date orderTime) {
+		this.orderTime = orderTime;
+	}
 	public Integer getSkillType() {
 		return skillType;
 	}
