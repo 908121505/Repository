@@ -16,6 +16,7 @@ import com.honglu.quickcall.common.core.util.UUIDUtils;
 import com.honglu.quickcall.common.third.rongyun.util.RongYunUtil;
 import com.honglu.quickcall.user.facade.entity.Message;
 import com.honglu.quickcall.user.facade.entity.MessageCustomer;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -110,7 +111,9 @@ public class ActivityCouponServiceImpl implements ActivityCouponService {
             MessageCustomer mc = new MessageCustomer();
             Long mcid = UUIDUtils.getId();
             mc.setId(mcid);
-            mc.setPhone(Long.valueOf(phone));
+            if(StringUtils.isNotBlank(phone)){
+                mc.setPhone(Long.valueOf(phone));
+            }
             mc.setReceiverId(Long.valueOf(request.getCustomerId()));
             mc.setMessageId(mid);
             customerCouponMapper.insertSelectiveMessageCustomer(mc);

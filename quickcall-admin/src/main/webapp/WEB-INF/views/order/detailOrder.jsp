@@ -92,8 +92,8 @@
 		</div>
 		<div class="modal-footer">
 			<span id="tip" style="color: red; font-size: 16px; margin-left: 20px;float:left;"></span>
-			<button class="btn btn-default" data-dismiss="modal" aria-hidden="true" >取消</button>
-			<button class="btn btn-primary" data-dismiss="modal" >保存</button>
+			<button class="btn btn-default" data-dismiss="modal" aria-hidden="true" >关闭</button>
+			<!-- <button class="btn btn-primary" data-dismiss="modal" >保存</button> -->
 		</div>
 	</div>
 </div>

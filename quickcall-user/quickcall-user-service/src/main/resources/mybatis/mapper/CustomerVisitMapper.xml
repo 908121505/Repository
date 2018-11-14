@@ -45,6 +45,7 @@
   <select id="queryCustomerVisitList" resultType="map">
   	SELECT
 	DATE_FORMAT( cv.create_time, '%Y-%m-%d %H:%i' ) AS visitTime,
+	cv.visitor_id AS customerId,
 	cus.nick_name AS nickName,
 	cus.sex AS sex,
 	cus.customer_level AS customerLevel,

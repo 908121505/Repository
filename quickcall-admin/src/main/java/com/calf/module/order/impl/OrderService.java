@@ -24,6 +24,7 @@ import com.calf.cn.utils.RadomUtil;
 import com.calf.cn.utils.SearchUtil;
 import com.calf.module.common.impl.CommonUtilService;
 import com.calf.module.customer.entity.Customer;
+import com.calf.module.enums.CompulsionOrderStatusEnums;
 import com.calf.module.enums.OrderStatusEnums;
 import com.calf.module.enums.SmallOrderStatusEnums;
 import com.calf.module.order.entity.Account;
@@ -204,18 +205,19 @@ public class OrderService {
 		}
 
 		Integer orderStatus = Integer.valueOf(order.getOrderStatus());
-
 		Integer selectFlag = null;
-		if (orderStatus < 29) {
+		if (CompulsionOrderStatusEnums.isContainSubset(OrderSkillConstants.ORDER_STATUS_CANCEL_FORCE, String.valueOf(orderStatus))) {
 			// 可以强制取消
 			selectFlag = 1;
-		} else if (orderStatus == OrderSkillConstants.ORDER_STATUS_CANCEL_FORCE
+		} /*else if (orderStatus == OrderSkillConstants.ORDER_STATUS_CANCEL_FORCE
 				|| orderStatus == OrderSkillConstants.ORDER_STATUS_FINISHED_FORCE) {
 			// 已经强制取消或者强制完成
 			selectFlag = 3;
-		} else {
+		} */else if(CompulsionOrderStatusEnums.isContainSubset(OrderSkillConstants.ORDER_STATUS_FINISHED_FORCE, String.valueOf(orderStatus))) {
 			// 可以强制完成
 			selectFlag = 2;
+		}else{
+			selectFlag = 3;
 		}
 
 		model.addAttribute("selectFlag", selectFlag);
@@ -319,8 +321,10 @@ public class OrderService {
 
 		if (update == 1) {
 			update = baseManager.update("Order.updateOrder", paramMap);
+		}else{
+			update = -1;
 		}
-
+		
 		return update;
 	}
 
@@ -354,25 +358,27 @@ public class OrderService {
 		}
 		map.put("orderNo", order.getOrderNo());
 		TradeDetail tradeDetail = baseManager.get("TradeDetail.selectFrozenByOrderNo", map);
-
-		String userFrozenkey = RedisKeyConstants.ACCOUNT_USERFROZEN_USER + order.getServiceId();
-		String steamFrozenKey = RedisKeyConstants.ACCOUNT_USERFROZEN_STREAM + tradeDetail.getTradeId();
-		String steamFrozenValue = JedisUtil.get(steamFrozenKey);
-		String userFrozenValue = JedisUtil.get(userFrozenkey);
-		if (StringUtils.isNotBlank(userFrozenValue) && StringUtils.isNotBlank(steamFrozenValue)) {
-			if (userFrozenValue.contains(steamFrozenValue)) {
-				flag = true;
-				JedisUtil.del(steamFrozenKey);
-				String[] arys = userFrozenValue.split(",");
-				arys = remove(arys, tradeDetail.getTradeId() + "");
-				userFrozenValue = StringUtils.join(arys, ",");
-				if (userFrozenValue.length() > 0) {
-					JedisUtil.set(userFrozenkey, userFrozenValue);
-				} else {
-					JedisUtil.del(userFrozenkey);
+		if (tradeDetail != null) {
+			String userFrozenkey = RedisKeyConstants.ACCOUNT_USERFROZEN_USER + order.getServiceId();
+			String steamFrozenKey = RedisKeyConstants.ACCOUNT_USERFROZEN_STREAM + tradeDetail.getTradeId();
+			String steamFrozenValue = JedisUtil.get(steamFrozenKey);
+			String userFrozenValue = JedisUtil.get(userFrozenkey);
+			if (StringUtils.isNotBlank(userFrozenValue) && StringUtils.isNotBlank(steamFrozenValue)) {
+				if (userFrozenValue.contains(steamFrozenValue)) {
+					flag = true;
+					JedisUtil.del(steamFrozenKey);
+					String[] arys = userFrozenValue.split(",");
+					arys = remove(arys, tradeDetail.getTradeId() + "");
+					userFrozenValue = StringUtils.join(arys, ",");
+					if (userFrozenValue.length() > 0) {
+						JedisUtil.set(userFrozenkey, userFrozenValue);
+					} else {
+						JedisUtil.del(userFrozenkey);
+					}
 				}
 			}
 		}
+		map.put("orderNo", order.getOrderNo());
 		map.put("customerId", order.getServiceId());
 		tradeDetail = baseManager.get("TradeDetail.queryCountByOrderNoAndCustomerId", map);
 		// 声优无流水，或者 有流水，且只有冻结流水
@@ -444,26 +450,28 @@ public class OrderService {
 
 		map.put("orderNo", order.getOrderNo());
 		TradeDetail tradeDetail = baseManager.get("TradeDetail.selectFrozenByOrderNo", map);
-
-		String userFrozenkey = RedisKeyConstants.ACCOUNT_USERFROZEN_USER + order.getServiceId();
-		String steamFrozenKey = RedisKeyConstants.ACCOUNT_USERFROZEN_STREAM + tradeDetail.getTradeId();
-		String steamFrozenValue = JedisUtil.get(steamFrozenKey);
-		String userFrozenValue = JedisUtil.get(userFrozenkey);
-		if (StringUtils.isNotBlank(userFrozenValue) && StringUtils.isNotBlank(steamFrozenValue)) {
-			if (userFrozenValue.contains(steamFrozenValue)) {
-				flag = true;// 有冻结流水
-				JedisUtil.del(steamFrozenKey);
-				String[] arys = userFrozenValue.split(",");
-				arys = remove(arys, tradeDetail.getTradeId() + "");
-				userFrozenValue = StringUtils.join(arys, ",");
-				if (userFrozenValue.length() > 0) {
-					JedisUtil.set(userFrozenkey, userFrozenValue);
-				} else {
-					JedisUtil.del(userFrozenkey);
+		if (tradeDetail != null) {
+			String userFrozenkey = RedisKeyConstants.ACCOUNT_USERFROZEN_USER + order.getServiceId();
+			String steamFrozenKey = RedisKeyConstants.ACCOUNT_USERFROZEN_STREAM + tradeDetail.getTradeId();
+			String steamFrozenValue = JedisUtil.get(steamFrozenKey);
+			String userFrozenValue = JedisUtil.get(userFrozenkey);
+			if (StringUtils.isNotBlank(userFrozenValue) && StringUtils.isNotBlank(steamFrozenValue)) {
+				if (userFrozenValue.contains(steamFrozenValue)) {
+					flag = true;// 有冻结流水
+					JedisUtil.del(steamFrozenKey);
+					String[] arys = userFrozenValue.split(",");
+					arys = remove(arys, tradeDetail.getTradeId() + "");
+					userFrozenValue = StringUtils.join(arys, ",");
+					if (userFrozenValue.length() > 0) {
+						JedisUtil.set(userFrozenkey, userFrozenValue);
+					} else {
+						JedisUtil.del(userFrozenkey);
+					}
 				}
 			}
 		}
 		map.put("customerId", order.getCustomerId());
+		map.put("orderNo", order.getOrderNo());
 		// 检查用户 该订单是否有下单流水
 		tradeDetail = baseManager.get("TradeDetail.queryCountByOrderNoAndCustomerId", map);
 		if (tradeDetail != null && tradeDetail.getType() == 3) {

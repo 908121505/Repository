@@ -51,7 +51,6 @@
         <result column="cust_status" property="custStatus" />
         <result column="v_status" property="vStatus"/>
         <collection property="customerSkills" column="customer_id" select="Customer.selectCustomerSkills">
-
         </collection>
     </resultMap>
     
@@ -215,6 +214,9 @@
       from customer
       where (1=1
         <if test="nickName !=null and nickName != ''">and nick_name like concat('%',#{nickName},'%')</if>
+        <if test="phone !=null and phone != ''">
+            and phone like concat('%',#{phone},'%')
+        </if>
         <if test="vStatus !=null and vStatus != '' and vStatus ==2">
             and v_status = #{vStatus}
         </if>
@@ -224,6 +226,9 @@
         <if test="custStatus !=null and custStatus != ''">and cust_status=#{custStatus}</if>
         ) or (1=1
         <if test="appId !=null and appId != ''">and app_id like concat('%',#{appId},'%')</if>
+        <if test="phone !=null and phone != ''">
+            and phone like concat('%',#{phone},'%')
+        </if>
         <if test="vStatus !=null and vStatus != '' and vStatus ==2">
             and v_status = #{vStatus}
         </if>
@@ -238,6 +243,9 @@
     <select id="queryCountVo" resultType="int" parameterType="map" >
         select count(*) from customer where (1=1
         <if test="nickName !=null and nickName != ''">and nick_name like concat('%',#{nickName},'%')</if>
+        <if test="phone !=null and phone != ''">
+            and phone like concat('%',#{phone},'%')
+        </if>
         <if test="vStatus !=null and vStatus != '' and vStatus ==2">
                 and v_status = #{vStatus}
         </if>
@@ -247,6 +255,9 @@
         <if test="custStatus !=null and custStatus != ''">and cust_status=#{custStatus}</if>
         ) or (1=1
         <if test="appId !=null and appId != ''">and app_id like concat('%',#{appId},'%')</if>
+        <if test="phone !=null and phone != ''">
+            and phone like concat('%',#{phone},'%')
+        </if>
         <if test="vStatus !=null and vStatus != '' and vStatus ==2">
             and v_status = #{vStatus}
         </if>
@@ -273,12 +284,17 @@
 
     </update>
 
+
     <update id="lockForever" parameterType="map">
         update customer set cust_status = -1,block_start_time = #{blockStartTime} ,block_end_time=null where customer_id = #{id}
     </update>
 
     <update id="lockSkill" parameterType="map">
         update customer_skill set skill_status = 2 where customer_id =#{id} and skill_name = #{skillName}
+    </update>
+
+    <update id="unlockSkill" parameterType="map">
+        update customer_skill set skill_status = 1 where customer_id =#{id}  and skill_status =2
     </update>
 
     <select id="selectCustomerIdByPhone" resultType="java.lang.String" parameterType="java.lang.String">
