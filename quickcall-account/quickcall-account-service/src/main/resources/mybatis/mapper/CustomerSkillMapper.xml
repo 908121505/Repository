@@ -465,7 +465,7 @@
      cs.sunday, cs.end_time_str  AS endTimeStr,cs.start_time_str  AS  startTimeStr,cs.appoint_start_time  AS  appointStartTime,cs.appoint_end_time  AS  appointEndTime,st.skill_type  AS  skillType
     FROM customer_skill  cs  LEFT JOIN  skill_item   st  ON  cs.skill_item_id  = st.id
     where customer_id = #{customerId,jdbcType=BIGINT}
-    AND  st.skill_status = 1  AND  cs.receive_status = 1  AND  cs.switch_status = 1  
+    AND  st.skill_status = 1    
   </select>
 
   
