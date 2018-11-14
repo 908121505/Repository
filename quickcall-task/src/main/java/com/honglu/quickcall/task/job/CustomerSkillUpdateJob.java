@@ -42,7 +42,7 @@ public class CustomerSkillUpdateJob {
     
     
     /***根据周索引开启接单开关*/
-    @Scheduled(cron = "0 * * * * ?")
+    @Scheduled(cron = "15 * * * * ?")
     public void openCloseReceiveSwitch() {
     	openReceiveByWeek();
     	openReceiveByCurrTime();
@@ -53,7 +53,7 @@ public class CustomerSkillUpdateJob {
     }
     /***根据周索引开启接单开关*/
 //    @Scheduled(cron = "55 * * * * ?")
-    public void openReceiveByWeek() {
+    public synchronized void openReceiveByWeek() {
     	LOGGER.info("=============week_close自动任务开始=================");
     	try {
     		
@@ -84,7 +84,7 @@ public class CustomerSkillUpdateJob {
     
     /*** 根据当前时间开启接单开关*/
 //    @Scheduled(cron = "50 * * * * ?")
-    public void openReceiveByCurrTime() {
+    public synchronized  void openReceiveByCurrTime() {
     	LOGGER.info("============= curr_open自动任务开始=================");
     	try {
     		
@@ -96,8 +96,7 @@ public class CustomerSkillUpdateJob {
     		Integer  receiveStatus =  OrderSkillConstants.RECEIVE_CLOSE;
     		//当前时间
     		Date  currTime = new Date();
-    		String currTimeStr = DateUtils.formatDateHHMM(currTime);
-    		/*List<Long>   skillIdList = taskCustomerSkillMapper.queryOpenReceiveByCurrentTime(autoReceiveStatus, receiveStatus, currTime);*/
+    		String currTimeStr = DateUtils.formatDateExt(currTime);
     		List<Long> skillIdList = taskCustomerSkillMapper.qeryOpenReceiveByCurrentTimeUpdate(autoReceiveStatus, receiveStatus, currTimeStr);
     		if(CollectionUtils.isEmpty(skillIdList)){
     			return  ;
@@ -111,7 +110,7 @@ public class CustomerSkillUpdateJob {
     }
     /***根据周索引关闭接单开关*/
 //    @Scheduled(cron = "45 * * * * ?")
-    public void closeReceiveByWeek() {
+    public synchronized  void closeReceiveByWeek() {
     	LOGGER.info("=============week_close自动任务开始=================");
     	try {
     		
@@ -140,7 +139,7 @@ public class CustomerSkillUpdateJob {
     
     /***根据当前时间关闭接单开关*/
 //    @Scheduled(cron = "40 * * * * ?")
-    public void closeReceiveByCurrTime() {
+    public synchronized  void closeReceiveByCurrTime() {
     	LOGGER.info("============= curr_close自动任务开始=================");
     	try {
     		
@@ -152,8 +151,7 @@ public class CustomerSkillUpdateJob {
     		Integer  receiveStatus =  OrderSkillConstants.RECEIVE_OPEN;
     		//当前时间
     		Date  currTime = new Date();
-    		String  currTimeStr = DateUtils.formatDateHHMM(currTime);
-    		/*List<Long>   skillIdList = taskCustomerSkillMapper.queryCloseReceiveByCurrentTime(autoReceiveStatus, receiveStatus,  currTime);*/
+    		String  currTimeStr = DateUtils.formatDateExt(currTime);
     		List<Long> skillIdList = taskCustomerSkillMapper.qeryCloseReceiveByCurrentTimeUpdate(autoReceiveStatus, receiveStatus, currTimeStr);
     		if(CollectionUtils.isEmpty(skillIdList)){
     			return  ;
