@@ -250,6 +250,7 @@ public class AccountDubboBusinessImpl implements AccountDubboBusiness {
 				break;
 			case AccountFunctionType.ISFIRSTRECHARGE:
 				response = aliPayService.isFirstecharge((IsFirstechargeRequest)request);
+				break;
 			default:
 
 			}
