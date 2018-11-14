@@ -566,7 +566,7 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 
 	@Override
 	public CommonResponse checkEachAttention(CheckEachAttentionRequest request) {
-		Customer customer = customerMapper.selectByPrimaryKey(request.getAttendedId());
+		Customer customer = customerMapper.selectByPrimaryKey(request.getFansId());
 		if(customer == null){
 			return ResultUtils.result(BizCode.CustomerNotExist);
 		}
@@ -752,7 +752,7 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 
 	@Override
 	public CommonResponse queryCustomerHome(CustomerHomeRequest request) {
-		if(request.getLoginCustomerId() != null) {
+		if(request.getViewCustomerId().equals(request.getLoginCustomerId()) ) {
 			Customer loginCustomer = customerMapper.selectByPrimaryKey(request.getLoginCustomerId());
 			if (loginCustomer == null) {
 				return ResultUtils.result(BizCode.CustomerNotExist);

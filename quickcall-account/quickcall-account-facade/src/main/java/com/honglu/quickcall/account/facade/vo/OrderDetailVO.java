@@ -85,9 +85,25 @@ public class OrderDetailVO implements  Serializable{
     private  Date   appointTime;
 
 	private String couponName;//客户订单优惠券的名称'
-
+	
+	/**声优标识*/
+	private Integer  vStatus ;
+	/**用户等级*/
+	private Integer  customerLevel;
 
 	
+	public Integer getvStatus() {
+		return vStatus;
+	}
+	public void setvStatus(Integer vStatus) {
+		this.vStatus = vStatus;
+	}
+	public Integer getCustomerLevel() {
+		return customerLevel;
+	}
+	public void setCustomerLevel(Integer customerLevel) {
+		this.customerLevel = customerLevel;
+	}
 	public Integer getSkillType() {
 		return skillType;
 	}

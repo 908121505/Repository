@@ -35,6 +35,7 @@ import com.honglu.quickcall.task.dao.TaskOrderMapper;
 import com.honglu.quickcall.task.dao.TradeDetailMapper;
 import com.honglu.quickcall.task.entity.TaskOrder;
 import com.honglu.quickcall.task.entity.TradeDetail;
+import com.honglu.quickcall.task.job.service.CouponService;
 import com.honglu.quickcall.user.facade.constants.ScoreRankConstants;
 import com.honglu.quickcall.user.facade.entity.BigvScore;
 import com.honglu.quickcall.user.facade.entity.BigvSkillScore;
@@ -88,6 +89,8 @@ public class OrderUpdateJob {
     @Autowired
     private TaskCustomerCouponMapper taskCustomerCouponMapper ;
     
+    @Autowired
+    private CouponService  couponService;
     
     
     /**默认超时小时数      扣减12小时*/
@@ -301,6 +304,8 @@ public class OrderUpdateJob {
     		updateOrderStatusByOrderListForFinish(orderList, updateStatus);
     		sendMsgByOrderList(orderList, CANCEL_FOUR);
     		
+    		
+    		
     	} catch (Exception e) {
     		LOGGER.error("客户大V双方未响应大V结束服务12小时超时job执行发生异常，异常信息：", e);
     	}
@@ -377,6 +382,12 @@ public class OrderUpdateJob {
 					//推送订单消息
     				sendOrderIMMessage(customerId, serviceId, orderId, cancelType, true);
     				sendOrderIMMessage(serviceId, customerId, orderId, cancelType, false);
+    				
+    				try {
+						couponService.getCouponInOrder(order.getSkillItemId(), customerId);
+					} catch (Exception e) {
+						LOGGER.info("下单完成给用户下单发生异常，异常信息：",e);
+					}
 				}
 			} catch (Exception e) {
 				LOGGER.error("用户退款发生异常，异常信息",e);
@@ -572,7 +583,8 @@ public class OrderUpdateJob {
 			// 缓存24小时
 			JedisUtil.set(frozenTimeKey, "1", Integer.parseInt(froZenTime));
 			// 流水对应的订单Id
-			JedisUtil.set(RedisKeyConstants.ACCOUNT_USERFROZEN_ORDER_NO, orderNo + "");
+			JedisUtil.set(RedisKeyConstants.ACCOUNT_USERFROZEN_ORDER_NO + tradeDetail.getTradeId(), orderNo + "");
+//			JedisUtil.set(RedisKeyConstants.ACCOUNT_USERFROZEN_ORDER_NO, orderNo + "");
 
 		}
 

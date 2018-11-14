@@ -83,13 +83,8 @@ public class CustomerSkill {
     
     private  Integer  skillType;
     
-    
-    
 
-    
-    
-    
-    public Integer getSkillType() {
+	public Integer getSkillType() {
 		return skillType;
 	}
 

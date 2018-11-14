@@ -81,11 +81,15 @@ public interface OrderSkillConstants {
 	
 	//用户同意声优立即服务
 	public  static final  String  IM_MSG_CONTENT_USER_CONFIRM_START_SERVICE_TO_DAV = "用户已同意立即服务，赶快聊聊吧";
-	public  static final  String  IM_MSG_CONTENT_USER_CONFIRM_START_SERVICE_TO_CUST = "您已接单，请在5分钟内申请立即服务";
+	public  static final  String  IM_MSG_CONTENT_USER_CONFIRM_START_SERVICE_TO_CUST = "您已同意立即服务";
+	
+	
+	public  static final  String  IM_MSG_CONTENT_USER_CONFIRM_START_SERVICE_JX_TO_DAV = "用户已经同意，请准时提供服务哦~";
+	public  static final  String  IM_MSG_CONTENT_USER_CONFIRM_START_SERVICE_JX_TO_CUST = "您已同意，准时为您服务!";
 	
 	//拒绝接单
 	public  static final  String  IM_MSG_CONTENT_DAV_REFUSE_TO_CUST = "声优未接单，音符已退回轻音账户";
-	public  static final  String  IM_MSG_CONTENT_DAV_REFUSE_TO_DV = "您已拒接，订单已取消~";
+	public  static final  String  IM_MSG_CONTENT_DAV_REFUSE_TO_DV = "您已拒接接单，订单已取消~";
 	
 	
 	//同意接单
@@ -98,7 +102,7 @@ public interface OrderSkillConstants {
 	
 	
 	//声优发起立即服务
-	public  static final  String  IM_MSG_CONTENT_DAV_START_SERVICE_TO_CUST = "声优申请立即服务，等待用户同意";
+	public  static final  String  IM_MSG_CONTENT_DAV_START_SERVICE_TO_CUST = "声优申请立即服务，请您确认~";
 	public  static final  String  IM_MSG_CONTENT_DAV_START_SERVICE_TO_DAV = "您已申请立即服务，等待用户同意";
 	
 	
@@ -113,7 +117,7 @@ public interface OrderSkillConstants {
 	public  static final  String  IM_MSG_CONTENT_CUST_NOT_PING_JIA_TO_CUST = "订单已完成，给个评价吧";
 	
 	//用户同意声优服务完成
-	public  static final  String  IM_MSG_CONTENT_DAV_CUST_CONFIRM_TO_DV = "订单已完成，赫兹进入轻音账户。";
+	public  static final  String  IM_MSG_CONTENT_DAV_CUST_CONFIRM_TO_DV = "订单已完成，赫兹进入轻音账户";
 	public  static final  String  IM_MSG_CONTENT_DAV_CUST_CONFIRM_TO_CUST = "订单已完成，给个评价吧";
 	
 
@@ -172,8 +176,10 @@ public interface OrderSkillConstants {
 	public static final String  RET_CODE_SYSTEM_ERROR = "4";
 	/**下单返回结果：5 大V正忙*/
 	public static final String  RET_CODE_DV_NOT_ACCEPTE_ORDER = "5";
-	/**下单返回结果：6 系统错误*/
-//	public static final String  RET_CODE_SYSTEM_ERROR = "6";
+	/**下单返回结果：6 预约时间不正确*/
+	public static final String  RET_CODE_APPOINT_TIME_ERROR = "6";
+	/**下单返回结果：6 预约时间不正确*/
+	public static final String  RET_CODE_APPOINT_TIME_ERROR_MSG = "下单时间必须大于预约时间30分钟";
 	
 	/**默认空字符串*/
 	public static final Integer  DEFAULT_NULL_STR = 0;

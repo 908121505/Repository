@@ -499,8 +499,8 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 //			cal.set(Calendar.MILLISECOND, 0);
 //			appointEndTime =  cal.getTime();
 //		}
-		resultMap.put(START_TIME_KEY, getConfirmDate(startTimeStr));
-		resultMap.put(END_TIME_KEY, getConfirmDate(endTimeStr));
+		resultMap.put(START_TIME_KEY, getConfirmDate(startTimeStr,startTimeStr));
+		resultMap.put(END_TIME_KEY, getConfirmDate(endTimeStr,startTimeStr));
 		return resultMap;
 	}
 	
@@ -509,8 +509,9 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 //		getAppointEndTime("1100", "1500");
 //	}
 	
-	public /*static */Date  getConfirmDate(String  timeStr ){
+	public /*static */Date  getConfirmDate(String  timeStr,String tempStartTimeStr ){
 		Integer  timeStrIndex =  Integer.valueOf(timeStr);
+		Integer tempStartTimeStrIndex = Integer.valueOf(tempStartTimeStr);
 		//当前时间
 		Calendar  cal =  Calendar.getInstance();
 		Integer  currHour= cal.get(Calendar.HOUR_OF_DAY);
@@ -524,14 +525,24 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 		Date  resultTime = null ;//预约开始时间
 		//选中的结束时间在当前时间之后
 		if(timeStrIndex >=  currTimeIndex ){
+			/*if(timeStrIndex < tempStartTimeStrIndex || tempStartTimeStrIndex < currTimeIndex){
+				cal.add(Calendar.DAY_OF_YEAR, 1);
+			}*/
 			cal.set(Calendar.HOUR_OF_DAY, selectHourIndex);
 			cal.set(Calendar.MINUTE, selectMinuteIndex);
 			cal.set(Calendar.SECOND, 0);
 			cal.set(Calendar.MILLISECOND, 0);
 			resultTime = cal.getTime();
 		}else{
-			//选中的结束时间在当前时间只前
-			//结束时间向后推1天
+			//选中的结束时间在当前时间只前且开始时间也在当前时间之前并且结束时间小于开始时间
+			//结束时间向后推2天
+			/*if( timeStrIndex < tempStartTimeStrIndex && tempStartTimeStrIndex < currTimeIndex){
+				cal.add(Calendar.DAY_OF_YEAR, 2);
+			}else{
+				//选中的结束时间在当前时间只前
+				//结束时间向后推1天
+				cal.add(Calendar.DAY_OF_YEAR, 1);
+			}*/
 			cal.add(Calendar.DAY_OF_YEAR, 1);
 			cal.set(Calendar.HOUR_OF_DAY, selectHourIndex);
 			cal.set(Calendar.MINUTE, selectMinuteIndex);
@@ -591,9 +602,9 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 		//首先判断是否选中了重复选项
 		Integer  sumIndex = sunday+saturday+tuesday+wednesday+thursday +friday +monday;
 		//sumIndex  > 0 说明选择了重复
-		String startTimeStrUpdate = null ;
-		String endTimeStrUpdate = null ;
-		if(sumIndex > 0){
+		String startTimeStrUpdate = request.getStartServiceTimeStr();
+		String endTimeStrUpdate = request.getEndServiceTimeStr();
+		/*if(sumIndex > 0){
 			//根据开始时间计算开始结束字符串
 			if(appointStartTime != null){
 				startTimeStrUpdate = DateUtils.formatDateHHMM(appointStartTime);
@@ -601,7 +612,7 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 			if(appointEndTime != null){
 				endTimeStrUpdate = DateUtils.formatDateHHMM(appointEndTime);
 			}
-		}
+		}*/
 		Long  customerId = request.getCustomerId();
 		List<CustomerSkill>   updateList = new ArrayList<>();
 		Date  currTime = new Date();
@@ -644,17 +655,23 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 			custSkill.setReceiveStatus(receiveStatus);
 			custSkill.setAutoReceiveStatus(request.getAutoReceiveStatus());
 //			custSkill.setEndTimeStr(endTimeStr);
-			
-			if(sumIndex > 0){
-				//大于0说明选择了重复选项
+			custSkill.setStartTimeStr(startTimeStrUpdate);
+			custSkill.setEndTimeStr(endTimeStrUpdate);
+			if(sumIndex == 0){
+				/*//大于0说明选择了重复选项
 				custSkill.setStartTimeStr(startTimeStrUpdate);
-				custSkill.setEndTimeStr(endTimeStrUpdate);
-			}else{
+				custSkill.setEndTimeStr(endTimeStrUpdate);*/
 				//==0说明没有选择重复选项
 				//设置开始时间和结束时间
 				custSkill.setAppointStartTime(appointStartTime);
 				custSkill.setAppointEndTime(appointEndTime);
 			}
+			/*else{
+				//==0说明没有选择重复选项
+				//设置开始时间和结束时间
+				custSkill.setAppointStartTime(appointStartTime);
+				custSkill.setAppointEndTime(appointEndTime);
+			}*/
 			
 			updateList.add(custSkill);
 		}

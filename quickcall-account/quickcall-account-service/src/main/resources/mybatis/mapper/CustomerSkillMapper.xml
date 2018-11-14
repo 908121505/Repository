@@ -498,7 +498,7 @@
       appoint_end_time = #{skill.appointEndTime,jdbcType=TIMESTAMP},
       modify_time = #{skill.modifyTime,jdbcType=TIMESTAMP}
     where 
-    	customer_skill_id = #{skill.customerSkillId,jdbcType=BIGINT} ;
+    	customer_skill_id = #{skill.customerSkillId,jdbcType=BIGINT};
 		</foreach>
 	</update>
 
