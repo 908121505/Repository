@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 
+import com.alibaba.fastjson.JSON;
 import com.calf.cn.entity.DataTables;
 import com.calf.cn.service.BaseManager;
 import com.calf.cn.utils.DateUtil;
@@ -41,6 +42,7 @@ import com.honglu.quickcall.account.facade.constants.OrderSkillConstants;
 import com.honglu.quickcall.common.api.util.JedisUtil;
 import com.honglu.quickcall.common.api.util.RedisKeyConstants;
 import com.honglu.quickcall.common.core.util.UUIDUtils;
+import com.honglu.quickcall.common.third.rongyun.util.RongYunUtil;
 
 @Service("orderService")
 public class OrderService {
@@ -321,6 +323,24 @@ public class OrderService {
 
 		if (update == 1) {
 			update = baseManager.update("Order.updateOrder", paramMap);
+			if(update > 0 && OrderSkillConstants.ORDER_STATUS_CANCEL_FORCE == orderStatus){
+				RongYunUtil.sendOrderMessage(Long.valueOf(entity.getReceivedOrderId()), OrderSkillConstants.IM_MSG_CONTENT_CANCEL_FORCE_ORDER_TO_DV,OrderSkillConstants.MSG_CONTENT_DAV);
+				RongYunUtil.sendOrderMessage(Long.valueOf(entity.getPlaceOrderId()), OrderSkillConstants.IM_MSG_CONTENT_CANCEL_FORCE_ORDER_TO_CUST,OrderSkillConstants.MSG_CONTENT_C);
+				
+				//推动订单IM消息
+				sendOrderMsg(Long.valueOf(entity.getPlaceOrderId()), Long.valueOf(entity.getReceivedOrderId()), orderId, OrderSkillConstants.IM_MSG_CONTENT_CANCEL_FORCE_ORDER_TO_DV);
+				sendOrderMsg(Long.valueOf(entity.getReceivedOrderId()), Long.valueOf(entity.getPlaceOrderId()),orderId, OrderSkillConstants.IM_MSG_CONTENT_CANCEL_FORCE_ORDER_TO_CUST);
+			}else if (OrderSkillConstants.ORDER_STATUS_FINISHED_FORCE == orderStatus){
+				RongYunUtil.sendOrderMessage(Long.valueOf(entity.getReceivedOrderId()), OrderSkillConstants.IM_MSG_CONTENT_DAV_CUST_CONFIRM_TO_DV,OrderSkillConstants.MSG_CONTENT_DAV);
+				RongYunUtil.sendOrderMessage(Long.valueOf(entity.getPlaceOrderId()), OrderSkillConstants.IM_MSG_CONTENT_DAV_CUST_CONFIRM_TO_CUST,OrderSkillConstants.MSG_CONTENT_C);
+				
+				//推动订单IM消息
+				sendOrderMsg(Long.valueOf(entity.getPlaceOrderId()), Long.valueOf(entity.getReceivedOrderId()),orderId, OrderSkillConstants.IM_MSG_CONTENT_DAV_CUST_CONFIRM_TO_DV);
+				sendOrderMsg(Long.valueOf(entity.getReceivedOrderId()), Long.valueOf(entity.getPlaceOrderId()),orderId, OrderSkillConstants.IM_MSG_CONTENT_DAV_CUST_CONFIRM_TO_CUST);
+
+			}
+			
+			
 		}else{
 			update = -1;
 		}
@@ -518,6 +538,19 @@ public class OrderService {
 
 		return row;
 
+	}
+	
+	private void sendOrderMsg(Long  customerId,Long  serviceId,Long  orderId,String  orderDesc) {
+		//customer  ---->>>  serviceId
+		String  custStr = JedisUtil.get(RedisKeyConstants.USER_CUSTOMER_INFO+customerId) ;
+		if(StringUtils.isNotBlank(custStr)){
+			try {
+				Customer customer = JSON.parseObject(custStr,  Customer.class);
+				RongYunUtil.sendOrderIMMessage(customer.getNickName(),customerId, serviceId, "", orderId, orderDesc, customer.getHeadPortraitUrl());
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
 }
