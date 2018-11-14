@@ -1034,7 +1034,7 @@ public class OrderServiceImpl implements IOrderService {
 				RongYunUtil.sendOrderMessage(serviceId, OrderSkillConstants.IM_MSG_CONTENT_DAV_CONFIRM_TO_DAV,OrderSkillConstants.MSG_CONTENT_DAV);
 				
 				//推送订单IM消息
-				commonService.sendOrderMsg(customerId, serviceId,orderId, OrderSkillConstants.IM_MSG_CONTENT_USER_CONFIRM_START_SERVICE_TO_CUST);
+				commonService.sendOrderMsg(customerId, serviceId,orderId, OrderSkillConstants.IM_MSG_CONTENT_DAV_CONFIRM_TO_DAV);
 
 				// 大V不同意，状态为大V拒绝，退款给购买者
 			} else {
