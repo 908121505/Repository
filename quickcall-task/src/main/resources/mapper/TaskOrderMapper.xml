@@ -128,7 +128,8 @@
 			customer_id AS customerId,
 			service_id AS serviceId,
 			order_amounts AS orderAmounts,
-			coupon_flag AS couponFlag
+			coupon_flag AS couponFlag,
+			skill_item_id  AS  skillItemId
 			
 		FROM  
 		   orders
@@ -171,7 +172,8 @@
 			customer_id AS customerId,
 			service_id AS serviceId,
 			order_amounts AS orderAmounts,
-			coupon_flag AS couponFlag
+			coupon_flag AS couponFlag,
+			skill_item_id  AS  skillItemId
 		FROM  
 		   orders
 		WHERE
