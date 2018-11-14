@@ -1078,7 +1078,7 @@ public class OrderServiceImpl implements IOrderService {
 					LOGGER.info("========提示内容============="+OrderSkillConstants.IM_MSG_CONTENT_DAV_CONFIRM_TO_CUST_JIAO_XING);
 					// 大V接受订单通知用户  叫醒
 					RongYunUtil.sendOrderMessage(customerId, OrderSkillConstants.IM_MSG_CONTENT_DAV_CONFIRM_TO_CUST_JIAO_XING,OrderSkillConstants.MSG_CONTENT_C);
-					commonService.sendOrderMsg(serviceId, customerId, orderId, OrderSkillConstants.IM_MSG_CONTENT_DAV_CONFIRM_TO_CUST);
+					commonService.sendOrderMsg(serviceId, customerId, orderId, OrderSkillConstants.IM_MSG_CONTENT_DAV_CONFIRM_TO_CUST_JIAO_XING);
 				}
 				
 				
