@@ -476,7 +476,7 @@
      <if test="discountTypeMax != null" >
        AND ext.skill_ext_discont &lt; #{discountTypeMax}
      </if>
-      LIMIT ${iDisplayStart},${iDisplayLength}
+      order by od.create_time desc,od.order_id desc LIMIT ${iDisplayStart},${iDisplayLength}
   </select>
 
   <select id="selectCount" resultType="java.lang.Integer" parameterType="map" >
