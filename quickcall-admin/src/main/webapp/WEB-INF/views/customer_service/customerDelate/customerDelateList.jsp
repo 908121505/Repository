@@ -31,6 +31,14 @@
 				<div class="col-md-2">
 					<div class="form-group">
 						<div class="input-group">
+							<div class="input-group-addon">举报人id</div>
+							<input class="form-control" type="text" id="delateCustId">
+						</div>
+					</div>
+				</div>
+				<div class="col-md-2">
+					<div class="form-group">
+						<div class="input-group">
 							<div class="input-group-addon">用户手机号</div>
 							<input class="form-control" type="text" id="phone">
 						</div>
@@ -149,6 +157,16 @@
                           		}
                           	}
 			            },
+                        {
+                            "data": "delateCustId",
+                            "sTitle":"举报人id",
+                            'sClass':"text-center"
+                        },
+                        {
+                            "data": "delateNickName",
+                            "sTitle":"举报人昵称",
+                            'sClass':"text-center"
+                        },
 						{
 							"data": "createTime",
 							"sTitle": "提交时间",
@@ -207,6 +225,7 @@
 	                       aoData.push({ "name": "nickName", "value": $("#nickName").val().replace(new RegExp(" ","g"),"") } );
 	                       aoData.push({ "name": "delateName", "value": $("#delateName").val().replace(new RegExp(" ","g"),"") } );
 		                   aoData.push({"name": "phone", "value": $("#phone").val()});
+						   aoData.push({"name": "delateCustId", "value": $("#delateCustId").val()});
 		                   aoData.push({"name": "startTime", "value": $("#startTime").val()});
 		                   aoData.push({"name": "endTime", "value": $("#endTime").val()});
 		                   aoData.push({"name": "handleStatus", "value": $("#handleStatus").val()});

@@ -30,6 +30,8 @@ public class CustomerSkill {
 
     private BigDecimal skillPrice;
 
+    private BigDecimal skillStatus;
+
     private Integer auditStatus;
 
     private Integer switchStatus;
@@ -313,5 +315,13 @@ public class CustomerSkill {
    
     public void setRemark(String remark) {
         this.remark = remark == null ? null : remark.trim();
+    }
+
+    public BigDecimal getSkillStatus() {
+        return skillStatus;
+    }
+
+    public void setSkillStatus(BigDecimal skillStatus) {
+        this.skillStatus = skillStatus;
     }
 }

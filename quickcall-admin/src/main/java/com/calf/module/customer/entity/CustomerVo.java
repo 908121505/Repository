@@ -25,6 +25,8 @@ public class CustomerVo {
     private Date blockEndTime;  //封禁结束时间
 
     private String formatString;
+    //用户状态
+    private Integer custStatusDispalyId;
 
     private String operate; //0 解禁 1 分禁
 
@@ -153,4 +155,11 @@ public class CustomerVo {
         this.customerSkills = customerSkills;
     }
 
+    public Integer getCustStatusDispalyId() {
+        return custStatusDispalyId;
+    }
+
+    public void setCustStatusDispalyId(Integer custStatusDispalyId) {
+        this.custStatusDispalyId = custStatusDispalyId;
+    }
 }
