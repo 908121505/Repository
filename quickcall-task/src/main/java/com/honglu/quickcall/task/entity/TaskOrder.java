@@ -22,7 +22,19 @@ public class TaskOrder {
     private BigDecimal orderAmounts;
     /**用券状态*/
     private Integer  couponFlag;
+    /**技能项ID*/
+    private Long  skillItemId;
     
+    
+    
+	public Long getSkillItemId() {
+		return skillItemId;
+	}
+
+	public void setSkillItemId(Long skillItemId) {
+		this.skillItemId = skillItemId;
+	}
+
 	public Integer getCouponFlag() {
 		return couponFlag;
 	}
