@@ -480,26 +480,28 @@ public class OrderUpdateJob {
     	String  remarkName = null ;
     	if(dvFlag){
     		remarkName = OrderSkillConstants.MSG_CONTENT_DAV ;
-    		if(cancelType == CANCEL_ONE){
-    			content =  OrderSkillConstants.IM_MSG_CONTENT_CANCEL_DV_15MINUTE_TIMEOUT ;
-    		}else if (cancelType == CANCEL_TWO){
-    			content =  OrderSkillConstants.IM_MSG_CONTENT_CANCEL_DV_5MINUTE_START_TIMEOUT ;
-    		}else if (cancelType == CANCEL_THREE){
-    			content =  OrderSkillConstants.IM_MSG_CONTENT_CANCEL_DV_5MINUTE_CONFIRM_TIMEOUT ;
-    		}else if(cancelType == CANCEL_FOUR){
-    			content =  OrderSkillConstants.IM_MSG_CONTENT_SYSTEM_FINISH_TIMEOUT_TO_DAV ;
-    		}
+    		content =  DV_MAP.get(cancelType);
+//    		if(cancelType == CANCEL_ONE){
+//    			content =  OrderSkillConstants.IM_MSG_CONTENT_CANCEL_DV_15MINUTE_TIMEOUT ;
+//    		}else if (cancelType == CANCEL_TWO){
+//    			content =  OrderSkillConstants.IM_MSG_CONTENT_CANCEL_DV_5MINUTE_START_TIMEOUT ;
+//    		}else if (cancelType == CANCEL_THREE){
+//    			content =  OrderSkillConstants.IM_MSG_CONTENT_CANCEL_DV_5MINUTE_CONFIRM_TIMEOUT ;
+//    		}else if(cancelType == CANCEL_FOUR){
+//    			content =  OrderSkillConstants.IM_MSG_CONTENT_SYSTEM_FINISH_TIMEOUT_TO_DAV ;
+//    		}
     	}else{
     		remarkName = OrderSkillConstants.MSG_CONTENT_C ;
-    		if(cancelType == CANCEL_ONE){
-    			content =  OrderSkillConstants.IM_MSG_CONTENT_CANCEL_CUST_15MINUTE_TIMEOUT ;
-    		}else if (cancelType == CANCEL_TWO){
-    			content =  OrderSkillConstants.IM_MSG_CONTENT_CANCEL_CUST_5MINUTE_START_TIMEOUT ;
-    		}else if (cancelType == CANCEL_THREE){
-    			content =  OrderSkillConstants.IM_MSG_CONTENT_CANCEL_CUST_5MINUTE_CONFIRM_TIMEOUT ;
-    		}else if(cancelType == CANCEL_FOUR){
-    			content =  OrderSkillConstants.IM_MSG_CONTENT_SYSTEM_FINISH_TIMEOUT_TO_CUST ;
-    		}
+    		content =  CUST_MAP.get(cancelType);
+//    		if(cancelType == CANCEL_ONE){
+//    			content =  OrderSkillConstants.IM_MSG_CONTENT_CANCEL_CUST_15MINUTE_TIMEOUT ;
+//    		}else if (cancelType == CANCEL_TWO){
+//    			content =  OrderSkillConstants.IM_MSG_CONTENT_CANCEL_CUST_5MINUTE_START_TIMEOUT ;
+//    		}else if (cancelType == CANCEL_THREE){
+//    			content =  OrderSkillConstants.IM_MSG_CONTENT_CANCEL_CUST_5MINUTE_CONFIRM_TIMEOUT ;
+//    		}else if(cancelType == CANCEL_FOUR){
+//    			content =  OrderSkillConstants.IM_MSG_CONTENT_SYSTEM_FINISH_TIMEOUT_TO_CUST ;
+//    		}
     	}
     	
     	LOGGER.info("----------------给customerId"+customerId+"推送消息："+content);

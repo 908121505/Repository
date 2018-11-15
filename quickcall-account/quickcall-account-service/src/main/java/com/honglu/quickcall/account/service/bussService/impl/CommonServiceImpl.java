@@ -421,6 +421,9 @@ public class CommonServiceImpl implements CommonService {
 			if(OrderSkillConstants.ORDER_STATUS_WAITING_RECEIVE ==  orderStatus){
 				result =   OrderSkillConstants.IM_MSG_CONTENT_RECEIVE_ORDER_TO_DV;
 			//声优拒绝接单
+			}else if (OrderSkillConstants.ORDER_STATUS_CANCEL_SYSTEM_NOT_RECEIVE ==  orderStatus){
+				result =  OrderSkillConstants.IM_MSG_CONTENT_CANCEL_DV_15MINUTE_TIMEOUT;
+			//声优接单	
 			}else if (OrderSkillConstants.ORDER_STATUS_DAV_REFUSED_RECEIVE ==  orderStatus){
 				result =  OrderSkillConstants.IM_MSG_CONTENT_DAV_REFUSE_TO_DV;
 			//声优接单	
@@ -428,7 +431,6 @@ public class CommonServiceImpl implements CommonService {
 				result =   OrderSkillConstants.IM_MSG_CONTENT_DAV_CONFIRM_TO_DAV;
 			//用户取消订单
 			}else if(OrderSkillConstants.ORDER_STATUS_CANCEL_BEFORE_RECEIVE== orderStatus 
-					||orderStatus == OrderSkillConstants.ORDER_STATUS_CANCEL_SYSTEM_NOT_RECEIVE
 					||orderStatus == OrderSkillConstants.ORDER_STATUS_CANCEL_DAV_START_ONE_ORDER
 					||orderStatus == OrderSkillConstants.ORDER_STATUS_CANCEL_BEFORE_DAV_START
 					||orderStatus == OrderSkillConstants.ORDER_STATUS_CANCEL_NOT_START
@@ -467,6 +469,9 @@ public class CommonServiceImpl implements CommonService {
 			if(OrderSkillConstants.ORDER_STATUS_WAITING_RECEIVE ==  orderStatus){
 				result =  OrderSkillConstants.IM_MSG_CONTENT_RECEIVE_ORDER_TO_CUST;
 			//声优拒绝接单
+			}else if (OrderSkillConstants.ORDER_STATUS_CANCEL_SYSTEM_NOT_RECEIVE ==  orderStatus){
+				result =  OrderSkillConstants.IM_MSG_CONTENT_CANCEL_CUST_15MINUTE_TIMEOUT;
+			//声优接单	
 			}else if (OrderSkillConstants.ORDER_STATUS_DAV_REFUSED_RECEIVE ==  orderStatus){
 				result =  OrderSkillConstants.IM_MSG_CONTENT_DAV_REFUSE_TO_CUST;
 			//声优接单	
@@ -478,7 +483,6 @@ public class CommonServiceImpl implements CommonService {
 				}
 			//用户取消订单
 			}else if(OrderSkillConstants.ORDER_STATUS_CANCEL_BEFORE_RECEIVE== orderStatus 
-					||orderStatus == OrderSkillConstants.ORDER_STATUS_CANCEL_SYSTEM_NOT_RECEIVE
 					||orderStatus == OrderSkillConstants.ORDER_STATUS_CANCEL_DAV_START_ONE_ORDER
 					||orderStatus == OrderSkillConstants.ORDER_STATUS_CANCEL_BEFORE_DAV_START
 					||orderStatus == OrderSkillConstants.ORDER_STATUS_CANCEL_NOT_START
