@@ -531,12 +531,6 @@ public class OrderUpdateJob {
 					//大V冻结
 					inAccount(order.getServiceId(), order.getOrderAmounts(), TransferTypeEnum.FROZEN, AccountBusinessTypeEnum.FroZen,order.getOrderId());
 					LOGGER.info("SY_ID："+serviceId +"资金流水冻结，冻结金额"+payAmount);
-					//TODO  给用户发券
-					//推送消息
-					
-					
-				
-				
 				}
 			} catch (Exception e) {
 				LOGGER.error("大V账户冻结发生异常，异常信息",e);
@@ -632,6 +626,7 @@ public class OrderUpdateJob {
      * @param orderId
      */
     private void doOrderCastJingYan(Long  orderId) {
+    	LOGGER.info(".............订单ID:"+orderId +"+经验开始.............");
         // 查询客户下的订单
         Order order = customerMapper.selectCustomerOrder(orderId);
         if (order == null) {
@@ -651,6 +646,7 @@ public class OrderUpdateJob {
         LOGGER.info("客户下单获取经验值--客户ID：" + customer.getCustomerId() + " ， 增加经验值：" + experience);
         // 更新用户经验值和等级
         customerMapper.updateCustomerExperienceAndLevel(customer.getCustomerId(), experience);
+        LOGGER.info("-------------订单ID:"+orderId +"+经验结束-------------");
     }
     
     /**
@@ -658,7 +654,7 @@ public class OrderUpdateJob {
      * @param orderId
      */
     private void doOrderCastRank(Long  orderId) {
-        LOGGER.info("客户下单消费 -- 更新主播评分排名表：" + orderId);
+        LOGGER.info("客户下单消费 -- 更新主播评分排名表，订单编号：" + orderId +"---开始----");
 
         // 查询客户下的订单
         Order order = customerMapper.selectCustomerOrder(orderId);
@@ -681,6 +677,7 @@ public class OrderUpdateJob {
         // 更新评分到大V技能评分表和总评分排名表
         updateToBigvScore(order.getServiceId(), order.getSkillItemId(), order.getCustomerSkillId(), score);
 
+        LOGGER.info("客户下单消费 -- 更新主播评分排名表，订单编号：" + orderId +"....结束....");
     }
     
     
