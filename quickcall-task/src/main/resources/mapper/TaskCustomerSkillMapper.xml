@@ -105,7 +105,7 @@
 		WHERE
 			auto_receive_status = #{autoReceiveStatus}
 		AND receive_status = #{recevieStatus}
-		AND  DATE_FORMAT(appoint_start_time ,'%Y-%c-%d %h:%i')  = #{currTimeStr}
+		AND  DATE_FORMAT(appoint_start_time ,'%Y-%c-%d %H:%i')  = #{currTimeStr}
   </select>
   
 <!-- 根据当前时间关闭接单开关 -->
@@ -117,7 +117,7 @@
 		WHERE
 			auto_receive_status = #{autoReceiveStatus}
 		AND receive_status = #{recevieStatus}
-		AND  DATE_FORMAT(appoint_end_time ,'%Y-%c-%d %h:%i')  = #{currTimeStr}
+		AND  DATE_FORMAT(appoint_end_time ,'%Y-%c-%d %H:%i')  = #{currTimeStr}
   </select>
 
 

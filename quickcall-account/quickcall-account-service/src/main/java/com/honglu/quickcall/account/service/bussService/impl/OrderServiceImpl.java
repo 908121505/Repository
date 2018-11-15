@@ -78,7 +78,7 @@ import com.honglu.quickcall.common.third.AliyunSms.utils.SendSmsUtil;
 import com.honglu.quickcall.common.third.push.GtPushUtil;
 import com.honglu.quickcall.common.third.rongyun.util.RongYunUtil;
 import com.honglu.quickcall.producer.facade.business.DataDuriedPointBusiness;
-import com.honglu.quickcall.producer.facade.req.databury.DataBuriedPointSubmitOrderReq;
+import com.honglu.quickcall.producer.facade.req.databury.BuryMakeOrderReq;
 import com.honglu.quickcall.user.facade.business.UserCenterSendMqMessageService;
 import com.honglu.quickcall.user.facade.entity.Customer;
 
@@ -266,12 +266,13 @@ public class OrderServiceImpl implements IOrderService {
 					}
 					resultMap.put("retCode", OrderSkillConstants.RET_CODE_DV_BUSY);
 					commonResponse.setData(resultMap);
+					addDuriedPoint(skillItem, customerId, serviceId, request.getVirUserId(), false);
 					// 返回大V正忙，以及结束时间
 					return commonResponse;
 					
 				}
 			}
-			DataBuriedPointSubmitOrderReq req = new DataBuriedPointSubmitOrderReq();
+			
 
 
 
@@ -380,7 +381,7 @@ public class OrderServiceImpl implements IOrderService {
 				if (StringUtils.isNotBlank(gtId)) {
 					// 用户下单需要使用个推推送消息
 					GtPushUtil.sendNotificationTemplateToList(gtId, OrderSkillConstants.GT_MSG_ORDER_TITLE,
-							OrderSkillConstants.GT_MSG_CONTENT_RECEIVE_ORDER,
+							OrderSkillConstants.IM_MSG_CONTENT_RECEIVE_ORDER_TO_DV,
 							OrderSkillConstants.GT_MSG_CONTENT_RECEIVE_ORDER_URL);
 				}
 			}
@@ -394,35 +395,62 @@ public class OrderServiceImpl implements IOrderService {
 			commonService.sendOrderMsg(customerId, serviceId, orderId, OrderSkillConstants.IM_MSG_CONTENT_RECEIVE_ORDER_TO_DV);
 			commonService.sendOrderMsg(serviceId, customerId, orderId, OrderSkillConstants.IM_MSG_CONTENT_RECEIVE_ORDER_TO_CUST);
 			
-			// 下单触发埋点
-			req.setActual_payment_amount(orderAmounts.doubleValue());
-			req.setOrder_amount(orderAmounts.doubleValue());
-			req.setOrder_id(orderId + "");
-			req.setOrder_quantity(Double.valueOf(orderNum + ""));
-			String  skillItemName = skillItem.getSkillItemName(); 
-			
-			String orderType = null;
-//			1.哄睡、2.叫醒 、3.情感咨询
-			if("哄睡".equals(skillItemName)){
-				orderType = 1 +"";
-			}else if ("叫醒".equals(skillItemName)){
-				orderType = 2 +"";
-			}else if("情感咨询".equals(skillItemName)){
-				orderType = 3 +"";
-			}
-			req.setOrder_type(orderType );
-			req.setUser_id(customerId + "");
-			try {
-				dataDuriedPointBusiness.burySubmitOrderData(req);
-			} catch (Exception e) {
-				LOGGER.error("下单埋点发生异常，异常信息：", e);
-			}
+//			BuryMakeOrderReq req = new BuryMakeOrderReq();
+//			// 下单触发埋点
+//			req.setDoesSucceed(true);
+//			req.setSkillId(skillItem.getId());
+//			req.setSkillName(skillItem.getSkillItemName());
+//			req.setVcOwnerUserId("");
+//			//用户ID
+//			req.setVcUserId(customerId+"");
+//			Customer  customer = commonService.getPhoneByCustomerId(customerId);
+//			if(customer != null){
+//				req.setVcUserPhoneNum(customer.getPhone());
+//			}
+//			req.setVirUserId(request.getVirUserId());
+//			try {
+//				dataDuriedPointBusiness.buryMakeOrderData(req);
+//			} catch (Exception e) {
+//				LOGGER.error("下单埋点发生异常，异常信息：", e);
+//			}
+			addDuriedPoint(skillItem, customerId, serviceId, request.getVirUserId(), true);
 		} catch (Exception e) {
 			e.printStackTrace();
 			resultMap.put("retCode", OrderSkillConstants.RET_CODE_SYSTEM_ERROR);
 		}
 		commonResponse.setData(resultMap);
 		return commonResponse;
+	}
+	
+	
+	
+	/***
+	 * 添加埋点
+	 * @param skillItem
+	 * @param customerId
+	 * @param serviceId
+	 * @param virUserId
+	 * @param flag
+	 */
+	public void addDuriedPoint(SkillItem  skillItem,Long  customerId,Long  serviceId,String  virUserId,boolean flag){
+		BuryMakeOrderReq req = new BuryMakeOrderReq();
+		// 下单触发埋点
+		req.setDoesSucceed(flag);
+		req.setSkillId(skillItem.getId());
+		req.setSkillName(skillItem.getSkillItemName());
+		req.setVcOwnerUserId("");
+		//用户ID
+		req.setVcUserId(customerId+"");
+		Customer  customer = commonService.getPhoneByCustomerId(customerId);
+		if(customer != null){
+			req.setVcUserPhoneNum(customer.getPhone());
+		}
+		req.setVirUserId(virUserId);
+		try {
+			dataDuriedPointBusiness.buryMakeOrderData(req);
+		} catch (Exception e) {
+			LOGGER.error("下单埋点发生异常，异常信息：", e);
+		}
 	}
 
 	@Override
@@ -598,10 +626,8 @@ public class OrderServiceImpl implements IOrderService {
 
 		Long serviceId = order.getServiceId();
 		// 用户取消订单通知大V查看详情
-		RongYunUtil.sendOrderMessage(serviceId, OrderSkillConstants.IM_MSG_CONTENT_CANCEL_ORDER_TO_DV,
-				OrderSkillConstants.MSG_CONTENT_DAV);
-		RongYunUtil.sendOrderMessage(customerId, OrderSkillConstants.IM_MSG_CONTENT_CANCEL_ORDER_TO_CUST,
-				OrderSkillConstants.MSG_CONTENT_C);
+		RongYunUtil.sendOrderMessage(serviceId, OrderSkillConstants.IM_MSG_CONTENT_CANCEL_ORDER_TO_DV,OrderSkillConstants.MSG_CONTENT_DAV);
+		RongYunUtil.sendOrderMessage(customerId, OrderSkillConstants.IM_MSG_CONTENT_CANCEL_ORDER_TO_CUST,OrderSkillConstants.MSG_CONTENT_C);
 		
 		
 		//推送订单消息
@@ -1060,6 +1086,7 @@ public class OrderServiceImpl implements IOrderService {
 							OrderSkillConstants.ORDER_STATUS_WAITING_RECEIVE, OrderSkillConstants.SKILL_TYPE_YES);
 					if (!CollectionUtils.isEmpty(orderList)) {
 						List<Long> orderIdList = new ArrayList<Long>();
+						//声优接单，其它订单取消
 						for (Order od : orderList) {
 							orderIdList.add(od.getOrderId());
 							try {
@@ -1174,7 +1201,7 @@ public class OrderServiceImpl implements IOrderService {
 				LOGGER.info("大V发起服务，大V个推ID" + gtId);
 				if (StringUtils.isNotBlank(gtId)) {
 					GtPushUtil.sendNotificationTemplateToList(gtId, OrderSkillConstants.GT_MSG_ORDER_TITLE,
-							OrderSkillConstants.GT_MSG_CONTENT_START_SERVICE_TO_DAV,
+							OrderSkillConstants.IM_MSG_CONTENT_DAV_START_SERVICE_TO_DAV,
 							OrderSkillConstants.GT_MSG_CONTENT_START_SERVICE_TO_DAV_URL);
 				}
 			}
@@ -1187,7 +1214,7 @@ public class OrderServiceImpl implements IOrderService {
 				if (StringUtils.isNotBlank(gtId)) {
 					// 用户下单需要使用个推推送消息
 					GtPushUtil.sendNotificationTemplateToList(gtId, OrderSkillConstants.GT_MSG_ORDER_TITLE,
-							OrderSkillConstants.GT_MSG_CONTENT_START_SERVICE_TO_CUST,
+							OrderSkillConstants.IM_MSG_CONTENT_DAV_START_SERVICE_TO_CUST,
 							OrderSkillConstants.GT_MSG_CONTENT_START_SERVICE_TO_CUST_URL);
 				}
 			}
@@ -1303,13 +1330,13 @@ public class OrderServiceImpl implements IOrderService {
 				} catch (Exception e) {
 					LOGGER.info("订单结束后用户推送券，异常信息：",e);
 				}
-				RongYunUtil.sendOrderMessage(customerId, OrderSkillConstants.IM_MSG_CONTENT_SYSTEM_FINISH_TIMEOUT_TO_CUST,OrderSkillConstants.MSG_CONTENT_C);
-				RongYunUtil.sendOrderMessage(serviceId, OrderSkillConstants.IM_MSG_CONTENT_SYSTEM_FINISH_TIMEOUT_TO_DAV,OrderSkillConstants.MSG_CONTENT_DAV);
+				RongYunUtil.sendOrderMessage(customerId, OrderSkillConstants.IM_MSG_CONTENT_DAV_CUST_CONFIRM_TO_CUST,OrderSkillConstants.MSG_CONTENT_C);
+				RongYunUtil.sendOrderMessage(serviceId, OrderSkillConstants.IM_MSG_CONTENT_DAV_CUST_CONFIRM_TO_DV,OrderSkillConstants.MSG_CONTENT_DAV);
 				
 				
 				//推动订单IM消息
-				commonService.sendOrderMsg(customerId, serviceId, orderId, OrderSkillConstants.IM_MSG_CONTENT_SYSTEM_FINISH_TIMEOUT_TO_DAV);
-				commonService.sendOrderMsg(serviceId, customerId,orderId, OrderSkillConstants.IM_MSG_CONTENT_SYSTEM_FINISH_TIMEOUT_TO_CUST);
+				commonService.sendOrderMsg(customerId, serviceId, orderId, OrderSkillConstants.IM_MSG_CONTENT_DAV_CUST_CONFIRM_TO_DV);
+				commonService.sendOrderMsg(serviceId, customerId,orderId, OrderSkillConstants.IM_MSG_CONTENT_DAV_CUST_CONFIRM_TO_CUST);
 			}
 
 			// 设置请求结束时间

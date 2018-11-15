@@ -9,9 +9,17 @@ import java.util.List;
 import java.util.Map;
 
 public interface CouponDubboBusiness {
-	//根据用户优惠券ID查到优惠券信息
+
+	/**
+	 * 根据用户优惠券ID查到优惠券信息
+	 */
 	Coupon getCouponByCustomerCouponId(int id);
-	//根据ID来修改优惠券状态和订单
+
+	/**
+	 * 根据ID来修改优惠券状态和订单
+	 * @param customerCoupon
+	 * @return
+	 */
 	int updateCustomerCouponById(CustomerCoupon customerCoupon);
 
 	/**
@@ -60,7 +68,7 @@ public interface CouponDubboBusiness {
 	 * @param skillItemId 技能ID
 	 * @param customerId 客户ID
 	 * @return 0=不成功，1=成功
-	 * 修改接口时通知陈留光，代码要同步到task项目中
+	 * 修改接口时通知陈留光，代码要同步到task项目中;admin也要改
 	 */
 	int getCouponInOrder(Long skillItemId, Long customerId);
 

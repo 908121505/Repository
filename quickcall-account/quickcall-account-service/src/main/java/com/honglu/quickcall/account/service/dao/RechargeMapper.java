@@ -21,6 +21,6 @@ public interface RechargeMapper {
 
     Recharge selectByOrderNo(String orderNo);
 
-	List<Recharge> selectByCustomerId(Long customerId);
+	List<Recharge> selectByCustomerIdAndState(Long customerId);
 
 }
