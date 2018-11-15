@@ -410,7 +410,7 @@ public class OrderService {
 		// 声优无流水，或者 有流水，且只有冻结流水
 		if (tradeDetail == null || tradeDetail.getType() == 7) {
 			// 声优 有流水，且排除解冻流水 和强制完成流水
-			if (tradeDetail != null && tradeDetail.getType() != 8 && tradeDetail.getType() != 11) {
+			if (tradeDetail.getType() != 8 && tradeDetail.getType() != 11) {
 				Map<String, Object> pram = new HashMap<String, Object>();
 				pram.put("amount", amount);
 				pram.put("userId", order.getServiceId());
@@ -509,7 +509,7 @@ public class OrderService {
 			map.put("customerId", order.getServiceId());
 			map.put("orderNo", order.getOrderNo());
 			tradeDetail = baseManager.get("TradeDetail.queryCountByOrderNoAndCustomerId", map);
-			if (tradeDetail != null && tradeDetail.getType() != 8) {
+			if (tradeDetail == null || tradeDetail.getType() != 8) {
 				Map<String, Object> pram = new HashMap<String, Object>();
 				pram.put("type", 1);
 				pram.put("amount", amount);
