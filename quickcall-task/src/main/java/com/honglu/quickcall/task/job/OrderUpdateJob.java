@@ -127,7 +127,7 @@ public class OrderUpdateJob {
     		//大V未接单返回给账户金额  先退款，再更新状态
     		List<TaskOrder>  orderList = taskOrderMapper.queryReceiveOrderOverTime(currTime, endTime, queryStatus, updateStatus, skillType,queryEndTime);
     		refundToCustomer(orderList,CANCEL_ONE);
-    		updateOrderStatusByOrderListForCancel(orderList, updateStatus);
+    		updateOrderStatusByOrderListForCancel(orderList, updateStatus,true);
 //    		taskOrderMapper.waittingReceiveOrderOverTime(currTime, endTime, queryStatus, updateStatus, skillType);
 			
     	} catch (Exception e) {
@@ -158,7 +158,7 @@ public class OrderUpdateJob {
     		Date  queryEndTime =  getEndTimeByAddHours(-10);
     		List<TaskOrder>  orderList = taskOrderMapper.queryStartOrderOverTime(currTime, endTime, queryStatus, updateStatus, skillType,queryEndTime);
     		refundToCustomer(orderList,CANCEL_TWO);
-    		updateOrderStatusByOrderListForCancel(orderList, updateStatus);
+    		updateOrderStatusByOrderListForCancel(orderList, updateStatus,true);
 //    		taskOrderMapper.startOrderOverTime(currTime, endTime, queryStatus, updateStatus, skillType);
     		
     	} catch (Exception e) {
@@ -188,7 +188,7 @@ public class OrderUpdateJob {
     		Date  queryEndTime =  getEndTimeByAddHours(-10);
     		List<TaskOrder>  orderList = taskOrderMapper.queryStartOrderOverTimeCust(currTime, endTime, queryStatus, updateStatus, skillType,queryEndTime);
     		refundToCustomer(orderList,CANCEL_THREE);
-    		updateOrderStatusByOrderListForCancel(orderList, updateStatus);
+    		updateOrderStatusByOrderListForCancel(orderList, updateStatus,true);
 //    		taskOrderMapper.startOrderOverTime(currTime, endTime, queryStatus, updateStatus, skillType);
     	} catch (Exception e) {
     		LOGGER.error("用户5分钟未响应大V发起立即服务超时job执行发生异常，异常信息：", e);
@@ -210,7 +210,7 @@ public class OrderUpdateJob {
     		//大V服务时间内发起结束服务，到预期结束时间，释放大V，使大V可以继续接单
     		List<TaskOrder>  orderList = taskOrderMapper.queryReleaseDaV(currTime, queryStatus);
 //    		refundToCustomer(orderList,CANCEL_THREE);
-    		updateOrderStatusByOrderListForCancel(orderList, updateStatus);
+    		updateOrderStatusByOrderListForCancel(orderList, updateStatus,false);
     	} catch (Exception e) {
     		LOGGER.error("大V服务时间内发起结束服务，到预期结束时间，释放大V定时任务执行发生异常，异常信息：", e);
     	}
@@ -235,7 +235,7 @@ public class OrderUpdateJob {
     		Integer  skillType = OrderSkillConstants.SKILL_TYPE_NO;
     		Date  queryEndTime =  getEndTimeByAddDays(-10);
     		List<TaskOrder>  orderList = taskOrderMapper.queryAppointOrderGoing(currTime,endTime, queryStatus, updateStatus, skillType,queryEndTime);
-    		updateOrderStatusByOrderListForCancel(orderList, updateStatus);
+    		updateOrderStatusByOrderListForCancel(orderList, updateStatus,false);
 //    		taskOrderMapper.appointOrderGoing(currTime,endTime, queryStatus, updateStatus, skillType,queryEndTime);
     	} catch (Exception e) {
     		LOGGER.error("叫醒服务达到预约时间自动转为进行中job执行发生异常，异常信息：", e);
@@ -320,7 +320,7 @@ public class OrderUpdateJob {
      * @param orderList
      * @param updateOrderStatus
      */
-    public  void  updateOrderStatusByOrderListForCancel(List<TaskOrder>  orderList,Integer  updateOrderStatus){
+    public  void  updateOrderStatusByOrderListForCancel(List<TaskOrder>  orderList,Integer  updateOrderStatus,boolean  cancelCouponFlag){
     	
     	if(!CollectionUtils.isEmpty(orderList)){
     		List<Long>  orderIdList =  new ArrayList<Long>();
@@ -336,11 +336,13 @@ public class OrderUpdateJob {
     		
     		taskOrderMapper.updateOrderStatus(updateOrderStatus, orderIdList,new Date(),null,new Date());
     		//用户所得券返回给用户
-    		try {
-				taskCustomerCouponMapper.batchUpdateCustomerCoupon(orderIdCouponList, OrderSkillConstants.ORDER_COUPON_FLAG_CANCEL);
-			} catch (Exception e) {
-				LOGGER.error("用户券返还发生异常，异常信息：",e);
-			}
+    		if(cancelCouponFlag){
+    			try {
+    				taskCustomerCouponMapper.batchUpdateCustomerCoupon(orderIdCouponList, OrderSkillConstants.ORDER_COUPON_FLAG_CANCEL);
+    			} catch (Exception e) {
+    				LOGGER.error("用户券返还发生异常，异常信息：",e);
+    			}
+    		}
     		
     		
     	}
