@@ -338,7 +338,7 @@ public class OrderService {
 						OrderSkillConstants.IM_MSG_CONTENT_CANCEL_FORCE_ORDER_TO_DV);
 				sendOrderMsg(Long.valueOf(entity.getReceivedOrderId()), Long.valueOf(entity.getPlaceOrderId()), orderId,
 						OrderSkillConstants.IM_MSG_CONTENT_CANCEL_FORCE_ORDER_TO_CUST);
-			} else if (OrderSkillConstants.ORDER_STATUS_FINISHED_FORCE == orderStatus) {
+			} else if (update > 0 && OrderSkillConstants.ORDER_STATUS_FINISHED_FORCE == orderStatus) {
 				RongYunUtil.sendOrderMessage(Long.valueOf(entity.getReceivedOrderId()),
 						OrderSkillConstants.IM_MSG_CONTENT_DAV_CUST_CONFIRM_TO_DV, OrderSkillConstants.MSG_CONTENT_DAV);
 				RongYunUtil.sendOrderMessage(Long.valueOf(entity.getPlaceOrderId()),
