@@ -147,6 +147,12 @@ public class OrderService {
 				dis = dis * 10;
 				vo.setDiscountType(dis + "%");
 			}
+			if (StringUtils.isNotBlank(vo.getUnitPrice())) {
+				String unitPrice = vo.getUnitPrice();
+				String serviceUnit = vo.getServiceUnit();
+				String str = unitPrice + (serviceUnit == null ? "" : " 音符/"+serviceUnit);
+				vo.setUnitPrice(str);
+			}
 			SmallOrderStatusEnums status = SmallOrderStatusEnums.getSmallOrderStatusEnums(vo.getOrderStatus());
 			if (status != null) {
 				vo.setOrderStatusVal(status.getDesc());
