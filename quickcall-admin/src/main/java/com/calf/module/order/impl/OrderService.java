@@ -636,8 +636,8 @@ public class OrderService {
 	 * @author duanjun
 	 */
 	private void forceDoneAddBigvScoreAndCustomerExperience(Long orderId, Integer oldOrderStatus) {
-		// 订单状态是已完成状态，就不用再增加了，因为已经发送MQ消息增加相应值了（防止重复增加）
-		if (oldOrderStatus >= 30) {
+		// 订单状态是已完成状态 && 不等于33，就不用再增加了，因为已经发送MQ消息增加相应值了（防止重复增加）（33完成状态 -- 没有发送MQ消息去加声量、加经验）
+		if (oldOrderStatus >= 30 && !Objects.equals(oldOrderStatus, 33)) {
 			return;
 		}
 		com.honglu.quickcall.account.facade.entity.Order order;
@@ -711,8 +711,8 @@ public class OrderService {
 	 * @author duanjun
 	 */
 	private void forceCancelDeductBigvScoreAndCustomerExperience(Long orderId, Integer oldOrderStatus) {
-		// 订单状态是不是已完成状态，就不用扣除，因为还没有增加相应值
-		if (oldOrderStatus < 30) {
+		// 订单状态是不是已完成状态 && 等于33，就不用扣除，因为还没有增加相应值（33完成状态 -- 没有发送MQ消息去加声量、加经验）
+		if (oldOrderStatus < 30 || Objects.equals(oldOrderStatus, 33)) {
 			return;
 		}
 		com.honglu.quickcall.account.facade.entity.Order order;
