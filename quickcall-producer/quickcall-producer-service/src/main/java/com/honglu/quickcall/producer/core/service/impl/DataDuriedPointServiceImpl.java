@@ -79,6 +79,36 @@ public class DataDuriedPointServiceImpl implements DataDuriedPointService {
         sendMessage(JSON.toJSONString(param));
     }
 
+    @Override
+    public void buryMakeOrderData(BuryMakeOrderReq req) {
+        LOGGER.info("======producer:埋点--下单-组装数据");
+        Map<String,Object> param = new HashMap<>();
+        param.put("param",JSON.toJSONString(req));
+        param.put("type", EventEnums.EVENT_Make_Order.getValue());
+        LOGGER.info("------producer:埋点--下单-开始发送mq");
+        sendMessage(JSON.toJSONString(param));
+    }
+
+    @Override
+    public void burySetPwdDurationData(BurySetPwdDurationReq req) {
+        LOGGER.info("======producer:埋点--设置密码页-组装数据");
+        Map<String,Object> param = new HashMap<>();
+        param.put("param",JSON.toJSONString(req));
+        param.put("type", EventEnums.EVENT_Set_Password_Duration.getValue());
+        LOGGER.info("------producer:埋点--设置密码页-开始发送mq");
+        sendMessage(JSON.toJSONString(param));
+    }
+
+    @Override
+    public void buryFirstChargeData(BuryFirstChargeReq req) {
+        LOGGER.info("======producer:埋点--首次充值-组装数据");
+        Map<String,Object> param = new HashMap<>();
+        param.put("param",JSON.toJSONString(req));
+        param.put("type", EventEnums.EVENT_First_Charge.getValue());
+        LOGGER.info("------producer:埋点--首次充值-开始发送mq");
+        sendMessage(JSON.toJSONString(param));
+    }
+
     /**
      * 发送mq
      * @param body
