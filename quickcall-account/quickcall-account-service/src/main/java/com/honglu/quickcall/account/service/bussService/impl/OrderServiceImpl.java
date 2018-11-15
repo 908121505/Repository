@@ -131,7 +131,7 @@ public class OrderServiceImpl implements IOrderService {
 
 		List<OrderSkillItemVO> custSkillList = new ArrayList<>();
 
-		List<CustomerSkill> skillList = customerSkillMapper.querySkillInfoPersonal(customerId);
+		List<CustomerSkill> skillList = customerSkillMapper.querySkillInfoPersonalExt(customerId);
 		if (!CollectionUtils.isEmpty(skillList)) {
 			for (CustomerSkill skill : skillList) {
 				OrderSkillItemVO vo = new OrderSkillItemVO();
