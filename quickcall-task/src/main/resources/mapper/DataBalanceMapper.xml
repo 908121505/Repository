@@ -17,42 +17,93 @@
 	</select>
 	
 	<select id="queryPaidSkillOneNum" resultType="java.lang.Integer">
-		SELECT count( * ) 
+		SELECT
+	count( * ) 
+FROM
+	(
+	SELECT
+		customer_id 
 	FROM
 		(
-		SELECT
-			customer_id 
+		SELECT DISTINCT
+			o.customer_id 
 		FROM
-			( SELECT DISTINCT customer_id FROM orders WHERE order_status > 29 ) tmp 
+			orders o
+			INNER JOIN customer cus ON cus.customer_id = o.customer_id 
 		WHERE
-			( SELECT count( DISTINCT skill_item_id ) FROM orders WHERE customer_id = tmp.customer_id ) = 1 
-		) tmp1;
+			o.order_status > 29 
+		) tmp 
+	WHERE
+		(
+		SELECT
+			count( DISTINCT o.skill_item_id ) 
+		FROM
+			orders o
+			INNER JOIN customer cus ON cus.customer_id = o.customer_id 
+		WHERE
+			o.customer_id = tmp.customer_id 
+		) = 1 
+	) tmp1
 	</select>
 	
 	<select id="queryPaidSkillTwoNum" resultType="java.lang.Integer">
-		SELECT count( * ) 
+		SELECT
+	count( * ) 
+FROM
+	(
+	SELECT
+		customer_id 
 	FROM
 		(
-		SELECT
-			customer_id 
+		SELECT DISTINCT
+			o.customer_id 
 		FROM
-			( SELECT DISTINCT customer_id FROM orders WHERE order_status <![CDATA[>]]> 29 ) tmp 
+			orders o
+			INNER JOIN customer cus ON cus.customer_id = o.customer_id 
 		WHERE
-			( SELECT count( DISTINCT skill_item_id ) FROM orders WHERE customer_id = tmp.customer_id ) = 2 
-		) tmp1;
+			o.order_status > 29 
+		) tmp 
+	WHERE
+		(
+		SELECT
+			count( DISTINCT o.skill_item_id ) 
+		FROM
+			orders o
+			INNER JOIN customer cus ON cus.customer_id = o.customer_id 
+		WHERE
+			o.customer_id = tmp.customer_id 
+		) = 2 
+	) tmp1
 	</select>
 	
 	<select id="queryPaidSkillThreeNum" resultType="java.lang.Integer">
-		SELECT count( * ) 
+		SELECT
+	count( * ) 
+FROM
+	(
+	SELECT
+		customer_id 
 	FROM
 		(
-		SELECT
-			customer_id 
+		SELECT DISTINCT
+			o.customer_id 
 		FROM
-			( SELECT DISTINCT customer_id FROM orders WHERE order_status <![CDATA[>]]> 29 ) tmp 
+			orders o
+			INNER JOIN customer cus ON cus.customer_id = o.customer_id 
 		WHERE
-			( SELECT count( DISTINCT skill_item_id ) FROM orders WHERE customer_id = tmp.customer_id ) = 3 
-		) tmp1;
+			o.order_status > 29 
+		) tmp 
+	WHERE
+		(
+		SELECT
+			count( DISTINCT o.skill_item_id ) 
+		FROM
+			orders o
+			INNER JOIN customer cus ON cus.customer_id = o.customer_id 
+		WHERE
+			o.customer_id = tmp.customer_id 
+		) = 3 
+	) tmp1
 	</select>
 	
 	<select id="queryCouponCirculation" resultType="java.lang.Integer">

@@ -228,7 +228,7 @@ public class OrderUpdateJob {
     		Calendar  cal = Calendar.getInstance();
     		cal.setTime(currTime);
     		//预约时间去当前时间
-    		Date  endTime =  cal.getTime();
+    		Date  endTime =  cal.getTime();	
     		//用户未接立即服务超时
     		Integer  queryStatus = OrderSkillConstants.ORDER_STATUS_GOING_WAITING_START;
     		Integer  updateStatus = OrderSkillConstants.ORDER_STATUS_GOING_USER_ACCEPCT;
