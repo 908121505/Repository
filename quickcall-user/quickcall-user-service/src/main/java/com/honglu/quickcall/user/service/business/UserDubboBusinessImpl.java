@@ -51,6 +51,9 @@ public class UserDubboBusinessImpl implements UserDubboBusiness {
 	@Autowired
 	private ScoreRankService scoreRankService;
 
+	@Autowired
+	private WeiXinService weiXinService;
+
 	@Override
 	public CommonResponse excute(AbstractRequest request) {
 		if (request == null) {
@@ -263,6 +266,9 @@ public class UserDubboBusinessImpl implements UserDubboBusiness {
 				break;*/
 			case UserFunctionType.searchPersonByPhone:
 				response = commonPersonService.searchPersonByPhone((SearchPersonByPhoneRequest) request);
+				break;
+			case UserFunctionType.WEIXIN:
+				response = weiXinService.getOpenId((WeiXinRequest) request);
 				break;
 			default:
 				throw new BizException(UserBizReturnCode.BizFunctionTypeNotMatch,

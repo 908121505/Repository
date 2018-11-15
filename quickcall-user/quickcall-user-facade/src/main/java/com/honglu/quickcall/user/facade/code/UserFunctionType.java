@@ -244,8 +244,8 @@ public interface UserFunctionType {
 
 
 	/**
-	 * 未读消息数量查询
+	 * 微信
 	 */
-	String WEIXIN = "0022210";
+	String WEIXIN = "0022001";
 
 }

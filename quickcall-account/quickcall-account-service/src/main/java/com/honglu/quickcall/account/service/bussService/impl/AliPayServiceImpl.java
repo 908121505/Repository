@@ -65,6 +65,7 @@ public class AliPayServiceImpl implements AliPayService {
 		String params = "";
 		String orderNo = UUIDUtils.getUUID();// 订单
 		String orderDesc = "";
+
 		if (packet.getPayType() == 1) {
 			orderDesc = "支付宝充值";
 

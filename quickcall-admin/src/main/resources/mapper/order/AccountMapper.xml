@@ -1,6 +1,37 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="Account" >
+   <resultMap id="BaseResultMap" type="com.calf.module.order.entity.Account" >
+    <id column="account_id" property="accountId" jdbcType="BIGINT" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="TINYINT" />
+    <result column="account_describe" property="accountDescribe" jdbcType="VARCHAR" />
+    <result column="customer_id" property="customerId" jdbcType="BIGINT" />
+    <result column="recharge_amounts" property="rechargeAmounts" jdbcType="DECIMAL" />
+    <result column="remainder_amounts" property="remainderAmounts" jdbcType="DECIMAL" />
+    <result column="usable_amounts" property="usableAmounts" jdbcType="DECIMAL" />
+    <result column="frozen_amounts" property="frozenAmounts" jdbcType="DECIMAL" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+    <result column="create_man" property="createMan" jdbcType="VARCHAR" />
+    <result column="modify_man" property="modifyMan" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    account_id, name, type, account_describe, customer_id, recharge_amounts, remainder_amounts, 
+    usable_amounts, frozen_amounts, create_time, modify_time, create_man, modify_man, 
+    remark
+  </sql>
+  
+ 
+
+  <!-- 查询账户  -->
+  <select id="queryAccount" parameterType="Map" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from account
+    where customer_id = #{userId}
+  </select>
    <!-- 入账 -->
    <update id="inAccount" parameterType="Map">
     
@@ -33,6 +64,10 @@
     </if>
     where customer_id = #{userId}
    </update>
-  
+    <select id="queryFrozenAccouont" resultMap="BaseResultMap">
+    SELECT 
+    <include refid="Base_Column_List"/>
+    from account where frozen_amounts is not null and frozen_amounts !='0.00'
+    </select>
   
 </mapper>

@@ -111,7 +111,7 @@
 							<select class="form-control" id="order_status">
 								<option value="-1">--请选择--</option>
 								<c:forEach items="${statusList}" var ="orderStatusVO" varStatus="status">
-									<option value="${orderStatusVO.subset}">${orderStatusVO.desc}</option>
+									<option value="${orderStatusVO.value}">${orderStatusVO.desc}</option>
 								</c:forEach>
 							</select>
 						</div>
@@ -297,7 +297,7 @@
                     },
                     {
                         "data": "orderAmount",
-                        "sTitle":"订单金额(单位:元)",
+                        "sTitle":"订单金额(单位:音符)",
                         'sClass':"text-center", "sortable": false
                     },
                     {
