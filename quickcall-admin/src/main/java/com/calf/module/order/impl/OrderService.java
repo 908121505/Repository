@@ -511,21 +511,25 @@ public class OrderService {
 		tradeDetail = baseManager.get("TradeDetail.queryCountByOrderNoAndCustomerId", map);
 		if (tradeDetail != null && tradeDetail.getType() == 3 && tradeDetail.getType() != 10) {
 			// 用户强制取消金额 回账
-			Map<String, Object> pram = new HashMap<String, Object>();
-			pram.put("type", 1);
-			pram.put("amount", amount);
-			pram.put("userId", order.getCustomerId());
-			baseManager.update("Account.inAccount", pram);
-			// 记录流水
-			tradeDetail = new TradeDetail();
-			tradeDetail.setTradeId(UUIDUtils.getId());
-			tradeDetail.setOrderNo(order.getOrderNo());
-			tradeDetail.setCustomerId(order.getCustomerId());
-			tradeDetail.setCreateTime(new Date());
-			tradeDetail.setType(10);
-			tradeDetail.setInPrice(amount);
-			row = baseManager.insert("TradeDetail.insertSelective", tradeDetail);
-
+			map.put("customerId", order.getServiceId());
+			map.put("orderNo", order.getOrderNo());
+			tradeDetail = baseManager.get("TradeDetail.queryCountByOrderNoAndCustomerId", map);
+			if (tradeDetail != null && tradeDetail.getType() != 8) {
+				Map<String, Object> pram = new HashMap<String, Object>();
+				pram.put("type", 1);
+				pram.put("amount", amount);
+				pram.put("userId", order.getCustomerId());
+				baseManager.update("Account.inAccount", pram);
+				// 记录流水
+				tradeDetail = new TradeDetail();
+				tradeDetail.setTradeId(UUIDUtils.getId());
+				tradeDetail.setOrderNo(order.getOrderNo());
+				tradeDetail.setCustomerId(order.getCustomerId());
+				tradeDetail.setCreateTime(new Date());
+				tradeDetail.setType(10);
+				tradeDetail.setInPrice(amount);
+				row = baseManager.insert("TradeDetail.insertSelective", tradeDetail);
+			}
 		}
 		// 判断该订单状态是否完成并且到冻结状态
 		if (flag) {
