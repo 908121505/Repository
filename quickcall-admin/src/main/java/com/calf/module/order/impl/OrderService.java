@@ -381,12 +381,7 @@ public class OrderService {
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("orderId", orderId);
 		Orders order = baseManager.get("Orders.selectByPrimaryKey", map);
-		map.put("userId", order.getServiceId());
-		Account account = baseManager.get("Account.queryAccount", map);
-		if (account.getFrozenAmounts().compareTo(amount) == -1) {
 
-			return -1;
-		}
 		map.put("orderNo", order.getOrderNo());
 		TradeDetail tradeDetail = baseManager.get("TradeDetail.selectFrozenByOrderNo", map);
 		if (tradeDetail != null) {
