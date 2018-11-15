@@ -422,8 +422,8 @@ public class OrderService {
 					flag = true;// 有冻结流水
 					JedisUtil.del(steamFrozenKey);
 					String[] arys = userFrozenValue.split(",");
-					if (userFrozenValue.length() > 0) {
-						if (userFrozenValue.length() == 1) {
+					if (arys.length > 0) {
+						if (arys.length == 1) {
 							JedisUtil.del(userFrozenkey);
 						} else {
 							arys = remove(arys, tradeDetail.getTradeId() + "");
@@ -482,7 +482,7 @@ public class OrderService {
 		boolean hasRemove = false;
 		for (int i = 0; i < arr.length; i++) {
 
-			if (!hasRemove && arr[i] == str) {
+			if (!hasRemove && arr[i].equals(str)) {
 				hasRemove = true;
 				continue;
 			}
@@ -522,8 +522,8 @@ public class OrderService {
 					flag = true;// 有冻结流水
 					JedisUtil.del(steamFrozenKey);
 					String[] arys = userFrozenValue.split(",");
-					if (userFrozenValue.length() > 0) {
-						if (userFrozenValue.length() == 1) {
+					if (arys.length > 0) {
+						if (arys.length == 1) {
 							JedisUtil.del(userFrozenkey);
 						} else {
 							arys = remove(arys, tradeDetail.getTradeId() + "");
