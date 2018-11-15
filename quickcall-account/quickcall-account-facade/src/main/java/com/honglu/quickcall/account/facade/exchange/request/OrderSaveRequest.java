@@ -16,7 +16,10 @@ import com.honglu.quickcall.common.api.exchange.AbstractRequest;
  * @date: 2018年9月22日 下午3:39:53
  */
 public class OrderSaveRequest extends AbstractRequest {
-	private static final long serialVersionUID = -6286505817019573104L;
+	
+	
+	
+	private static final long serialVersionUID = 5532497627462839177L;
 	/** 客户编号 */
 	private Long customerId;
 	/** 大V编号 */
@@ -33,6 +36,19 @@ public class OrderSaveRequest extends AbstractRequest {
 	private Integer customerCouponId;
 	/** 券面值 */
 	private BigDecimal couponPrice;
+	
+	//虚拟ID，埋点使用
+	private String  virUserId ;
+	
+	
+
+	public String getVirUserId() {
+		return virUserId;
+	}
+
+	public void setVirUserId(String virUserId) {
+		this.virUserId = virUserId;
+	}
 
 	public Long getCustomerId() {
 		return customerId;
