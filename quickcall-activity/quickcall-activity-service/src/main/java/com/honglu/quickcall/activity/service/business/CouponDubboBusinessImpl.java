@@ -1,10 +1,10 @@
 package com.honglu.quickcall.activity.service.business;
 
 import com.honglu.quickcall.activity.facade.vo.CouponOrderVo;
-import com.honglu.quickcall.common.core.util.UUIDUtils;
-import com.honglu.quickcall.common.third.rongyun.util.RongYunUtil;
-import com.honglu.quickcall.user.facade.entity.Message;
-import com.honglu.quickcall.user.facade.entity.MessageCustomer;
+//import com.honglu.quickcall.common.core.util.UUIDUtils;
+//import com.honglu.quickcall.common.third.rongyun.util.RongYunUtil;
+//import com.honglu.quickcall.user.facade.entity.Message;
+//import com.honglu.quickcall.user.facade.entity.MessageCustomer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -153,7 +153,7 @@ public class CouponDubboBusinessImpl implements CouponDubboBusiness{
 	 * @param skillItemId 技能ID
 	 * @param customerId 客户ID
 	 * @return0=不成功，1=成功
-	 * 修改接口时通知陈留光，代码要同步到task项目中
+	 * 修改接口时通知陈留光，代码要同步到task项目中;admin也要改
 	 */
 	@Override
 	@Transactional(rollbackFor = Exception.class)
