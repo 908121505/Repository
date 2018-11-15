@@ -36,4 +36,22 @@ public interface DataDuriedPointService {
      * @param req
      */
     void burySubmitOrderData(DataBuriedPointSubmitOrderReq req);
+
+    /**
+     * 下单-数据埋点
+     * @param req
+     */
+    void buryMakeOrderData(BuryMakeOrderReq req);
+
+    /**
+     * 更新密码页面-数据埋点
+     * @param req
+     */
+    void burySetPwdDurationData(BurySetPwdDurationReq req);
+
+    /**
+     * 首次充值-数据埋点
+     * @param req
+     */
+    void buryFirstChargeData(BuryFirstChargeReq req);
 }

@@ -31,6 +31,14 @@ public enum EventEnums {
     /**提交订单**/
     EVENT_submitorder("submitorder","提交订单"),
 
+    /**下单**/
+    EVENT_Make_Order("Make_order","下单"),
+
+    /**首次充值**/
+    EVENT_First_Charge("first_recharge","首次充值"),
+
+    /**设置密码页面**/
+    EVENT_Set_Password_Duration("Set_password_duration","设置密码页面"),
     ;
 
     private final String value;

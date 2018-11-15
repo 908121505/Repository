@@ -33,6 +33,7 @@ public class DataBuriedPointServiceImpl implements DataBuriedPointService{
         DataBuryPointGetCodeReq request = new DataBuryPointGetCodeReq();
         request.setPhone(req.getPhone());
         request.setSuccess(req.isSuccess());
+        request.setVirUserId(req.getVirUserId());
         dataDuryBusiness.saveGetCodeData(request);
     }
 
@@ -45,6 +46,7 @@ public class DataBuriedPointServiceImpl implements DataBuriedPointService{
         request.setRegistDate(req.getRegistDate());
         request.setRegistSource(req.getRegistSource());
         request.setUser_id(req.getUser_id());
+        request.setVirUserId(req.getVirUserId());
         logger.info("===============consumer注册埋点用户数据："+req.getUserBean());
         if (req.getUserBean()!=null){
             UserBean userBean = new UserBean();
@@ -78,6 +80,7 @@ public class DataBuriedPointServiceImpl implements DataBuriedPointService{
         request.setLoginmethod(req.getLoginmethod());
         request.setPhoneNumber(req.getPhoneNumber());
         request.setUser_id(req.getUser_id());
+        request.setVirUserId(req.getVirUserId());
 
         logger.info("===============consumer登陆埋点用户数据："+req.getUserBean());
 
@@ -113,6 +116,7 @@ public class DataBuriedPointServiceImpl implements DataBuriedPointService{
         request.setButtonexecution_time(req.getButtonexecution_time());
         request.setOrderbutton_status(req.getOrderbutton_status());
         request.setUser_id(req.getUser_id());
+        request.setVirUserId(req.getVirUserId());
         dataDuryBusiness.saveOrderButtonData(request);
     }
 
@@ -127,6 +131,45 @@ public class DataBuriedPointServiceImpl implements DataBuriedPointService{
         request.setOrder_quantity(req.getOrder_quantity());
         request.setOrder_type(req.getOrder_type());
         request.setUser_id(req.getUser_id());
+        request.setVirUserId(req.getVirUserId());
         dataDuryBusiness.saveSubmitOrderData(request);
+    }
+
+    @Override
+    public void buryMakeOrderData(Map<String, Object> params) throws DataBuriedPointException {
+        String body = (String)params.get("param");
+        BuryMakeOrderReq req = JSON.parseObject(body,BuryMakeOrderReq.class);
+        DataBuryMakeOrderReq request = new DataBuryMakeOrderReq();
+        request.setDoesSucceed(req.getDoesSucceed());
+        request.setSkillId(req.getSkillId());
+        request.setSkillName(req.getSkillName());
+        request.setVcOwnerUserId(req.getVcOwnerUserId());
+        request.setVcUserId(req.getVcUserId());
+        request.setVcUserPhoneNum(req.getVcUserPhoneNum());
+        request.setVirUserId(req.getVirUserId());
+        dataDuryBusiness.buryMakeOrderData(request);
+    }
+
+    @Override
+    public void burySetPwdDurationData(Map<String, Object> params) throws DataBuriedPointException {
+        String body = (String)params.get("param");
+        BurySetPwdDurationReq req = JSON.parseObject(body,BurySetPwdDurationReq.class);
+        DataBurySetPwdDurationReq request = new DataBurySetPwdDurationReq();
+        request.setVcUserId(req.getVcUserId());
+        request.setDoseSucceed(req.isDoseSucceed());
+        request.setVirUserId(req.getVirUserId());
+        dataDuryBusiness.burySetPwdDurationData(request);
+    }
+
+    @Override
+    public void buryFirstChargeData(Map<String, Object> params) throws DataBuriedPointException {
+        String body = (String)params.get("param");
+        BuryFirstChargeReq req = JSON.parseObject(body,BuryFirstChargeReq.class);
+        DataBuryFirstChargeReq request = new DataBuryFirstChargeReq();
+        request.setFirstTime(req.isFirstTime());
+        request.setVcUserId(req.getVcUserId());
+        request.setVcUserPhoneNum(req.getVcUserPhoneNum());
+        request.setVirUserId(req.getVirUserId());
+        dataDuryBusiness.buryFirstChargeData(request);
     }
 }
