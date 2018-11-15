@@ -26,6 +26,7 @@ import com.calf.cn.service.BaseManager;
 import com.calf.cn.utils.DateUtil;
 import com.calf.cn.utils.RadomUtil;
 import com.calf.cn.utils.SearchUtil;
+import com.calf.module.activity.service.CustomerCouponService;
 import com.calf.module.common.impl.CommonUtilService;
 import com.calf.module.customer.entity.Customer;
 import com.calf.module.enums.CompulsionOrderStatusEnums;
@@ -59,6 +60,8 @@ public class OrderService {
 	@Autowired
 	private CommonUtilService commonUtilService;
 
+	@Autowired
+	private CustomerCouponService customerCouponService;
 	@SuppressWarnings("unchecked")
 	public DataTables<OrderVO> getOrderPageList(HttpServletRequest request) {
 
@@ -360,6 +363,7 @@ public class OrderService {
 			// 强制取消和强制完成账务流水处理完成，更改订单状态
 			LOGGER.info("》》》》》》》》强制取消/完成 订单状态修改开始》》》》》》》》》》》》》");
 			LOGGER.info("》》》》》》》》强制取消/完成 订单状态修改开始：update："+update);
+			paramMap.put("orderId", orderId);
 			update = baseManager.update("Order.updateOrder", paramMap);
 			LOGGER.info("》》》》》》》》强制取消/完成 订单状态修改结束：update："+update);
 			LOGGER.info("》》》》》》》》强制取消/完成 订单状态修改结束》》》》》》》》》》》》》");
@@ -379,6 +383,8 @@ public class OrderService {
 						OrderSkillConstants.IM_MSG_CONTENT_CANCEL_FORCE_ORDER_TO_CUST);
 				//【强制取消】扣除声优技能声量 + 扣除客户经验
 				forceCancelDeductBigvScoreAndCustomerExperience(orderId, Integer.valueOf(order.getOrderStatus()));
+				
+//				customerCouponService.cancelOrderBackCoupon(orderId, Long.valueOf(entity.getPlaceOrderId()));
 				// 强制完成 完成，发送融云消息和im消息
 			} else if (update > 0 && OrderSkillConstants.ORDER_STATUS_FINISHED_FORCE == orderStatus) {
 				RongYunUtil.sendOrderMessage(Long.valueOf(entity.getReceivedOrderId()),
@@ -393,6 +399,8 @@ public class OrderService {
 						OrderSkillConstants.IM_MSG_CONTENT_DAV_CUST_CONFIRM_TO_CUST);
 				//【强制完成】给声优增加技能声量 + 给客户增加经验值
 				forceDoneAddBigvScoreAndCustomerExperience(orderId, Integer.valueOf(order.getOrderStatus()));
+				
+//				customerCouponService.getCouponInOrder(skillItemId, Long.valueOf(entity.getPlaceOrderId()))
 			}
 
 		} else {
