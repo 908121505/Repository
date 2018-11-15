@@ -100,7 +100,7 @@ public interface OrderSkillConstants {
 	//同意接单
 	public  static final  String  IM_MSG_CONTENT_DAV_CONFIRM_TO_CUST = "声优已接单，麦克风调试中~";
 	public  static final  String  IM_MSG_CONTENT_DAV_CONFIRM_TO_CUST_JIAO_XING = "声优已接单，正在记录中..";
-	public  static final  String  IM_MSG_CONTENT_DAV_CONFIRM_TO_DAV = "您已接单，请在5分钟内申请立即服务，超时订单将取消~";
+	public  static final  String  IM_MSG_CONTENT_DAV_CONFIRM_TO_DAV = "您已接单，请在5分钟内申请立即服务";
 	
 	public  static final  String  IM_MSG_CONTENT_DAV_CONFIRM_OTHER_CANCEL_TO_CUST = "声优未接单，音符已退回轻音账户";
 	public  static final  String  IM_MSG_CONTENT_DAV_CONFIRM_OTHER_CANCEL_TO_DAV = "您已选择其他订单，该订单已取消";
