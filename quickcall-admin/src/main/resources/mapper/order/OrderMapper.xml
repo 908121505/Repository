@@ -476,7 +476,7 @@
      <if test="discountTypeMax != null" >
        AND ext.skill_ext_discont &lt; #{discountTypeMax}
      </if>
-      LIMIT ${iDisplayStart},${iDisplayLength}
+      order by od.create_time desc,od.order_id desc LIMIT ${iDisplayStart},${iDisplayLength}
   </select>
 
   <select id="selectCount" resultType="java.lang.Integer" parameterType="map" >
@@ -623,5 +623,31 @@
     </set>
     where order_id = #{orderId,jdbcType=BIGINT}
   </update>
-  
+
+  <!-- 查询订单信息 - 用于计算声优的声量 -->
+  <select id="selectUsedToCalculateBigvScore" parameterType="map"
+          resultType="com.honglu.quickcall.account.facade.entity.Order">
+    select
+      order_id as orderId,
+      service_id as serviceId,
+      customer_id as customerId,
+      customer_skill_id as customerSkillId,
+      order_status as orderStatus,
+      order_amounts as orderAmounts,
+      skill_item_id as skillItemId,
+      service_price as servicePrice,
+      order_num as orderNum,
+      customer_is_evaluate as customerIsEvaluate,
+      evaluate_start as evaluateStart,
+      value_score as valueScore,
+      coupon_flag as couponFlag
+    FROM orders WHERE order_id = #{arg0}
+  </select>
+
+  <!-- 更新默认评价得到到订单表 -->
+  <update id="updateValueScoreToOrder" parameterType="map">
+      UPDATE orders SET value_score = #{valueScore} WHERE order_id = #{orderId}
+  </update>
+
+
 </mapper>

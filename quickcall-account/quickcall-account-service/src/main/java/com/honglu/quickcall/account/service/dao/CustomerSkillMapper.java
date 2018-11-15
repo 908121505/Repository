@@ -31,6 +31,8 @@ public interface CustomerSkillMapper {
     
     /**根据客户编号查询客户所有的技能信息*/
 	List<CustomerSkill> querySkillInfoPersonal(Long customerId);
+	/**根据客户编号查询客户所有的技能信息*/
+	List<CustomerSkill> querySkillInfoPersonalExt(Long customerId);
 
 	/**批量更新数据*/
 	void batchUpdate(@Param("list")  List<CustomerSkill> updateList);

@@ -41,4 +41,18 @@ public class DataDuriedPointBusinessImpl implements DataDuriedPointBusiness {
         dataDuriedPointService.burySubmitOrderData(req);
     }
 
+    @Override
+    public void buryMakeOrderData(BuryMakeOrderReq req) {
+        dataDuriedPointService.buryMakeOrderData(req);
+    }
+
+    @Override
+    public void burySetPwdDurationData(BurySetPwdDurationReq req) {
+        dataDuriedPointService.burySetPwdDurationData(req);
+    }
+
+    @Override
+    public void buryFirstChargeData(BuryFirstChargeReq req) {
+        dataDuriedPointService.buryFirstChargeData(req);
+    }
 }

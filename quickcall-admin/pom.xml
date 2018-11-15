@@ -463,7 +463,11 @@
             <groupId>com.honglu.quickcall</groupId>
             <artifactId>quickcall-activity-facade</artifactId>
         </dependency>
-       
+        <dependency>
+            <groupId>com.honglu.quickcall</groupId>
+            <artifactId>quickcall-user-facade</artifactId>
+        </dependency>
+
 
        <!-- 原管家依赖 -->
        
