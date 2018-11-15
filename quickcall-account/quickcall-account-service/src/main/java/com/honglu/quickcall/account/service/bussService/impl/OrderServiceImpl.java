@@ -380,7 +380,7 @@ public class OrderServiceImpl implements IOrderService {
 				if (StringUtils.isNotBlank(gtId)) {
 					// 用户下单需要使用个推推送消息
 					GtPushUtil.sendNotificationTemplateToList(gtId, OrderSkillConstants.GT_MSG_ORDER_TITLE,
-							OrderSkillConstants.GT_MSG_CONTENT_RECEIVE_ORDER,
+							OrderSkillConstants.IM_MSG_CONTENT_RECEIVE_ORDER_TO_DV,
 							OrderSkillConstants.GT_MSG_CONTENT_RECEIVE_ORDER_URL);
 				}
 			}
@@ -598,10 +598,8 @@ public class OrderServiceImpl implements IOrderService {
 
 		Long serviceId = order.getServiceId();
 		// 用户取消订单通知大V查看详情
-		RongYunUtil.sendOrderMessage(serviceId, OrderSkillConstants.IM_MSG_CONTENT_CANCEL_ORDER_TO_DV,
-				OrderSkillConstants.MSG_CONTENT_DAV);
-		RongYunUtil.sendOrderMessage(customerId, OrderSkillConstants.IM_MSG_CONTENT_CANCEL_ORDER_TO_CUST,
-				OrderSkillConstants.MSG_CONTENT_C);
+		RongYunUtil.sendOrderMessage(serviceId, OrderSkillConstants.IM_MSG_CONTENT_CANCEL_ORDER_TO_DV,OrderSkillConstants.MSG_CONTENT_DAV);
+		RongYunUtil.sendOrderMessage(customerId, OrderSkillConstants.IM_MSG_CONTENT_CANCEL_ORDER_TO_CUST,OrderSkillConstants.MSG_CONTENT_C);
 		
 		
 		//推送订单消息
@@ -1060,6 +1058,7 @@ public class OrderServiceImpl implements IOrderService {
 							OrderSkillConstants.ORDER_STATUS_WAITING_RECEIVE, OrderSkillConstants.SKILL_TYPE_YES);
 					if (!CollectionUtils.isEmpty(orderList)) {
 						List<Long> orderIdList = new ArrayList<Long>();
+						//声优接单，其它订单取消
 						for (Order od : orderList) {
 							orderIdList.add(od.getOrderId());
 							try {
@@ -1174,7 +1173,7 @@ public class OrderServiceImpl implements IOrderService {
 				LOGGER.info("大V发起服务，大V个推ID" + gtId);
 				if (StringUtils.isNotBlank(gtId)) {
 					GtPushUtil.sendNotificationTemplateToList(gtId, OrderSkillConstants.GT_MSG_ORDER_TITLE,
-							OrderSkillConstants.GT_MSG_CONTENT_START_SERVICE_TO_DAV,
+							OrderSkillConstants.IM_MSG_CONTENT_DAV_START_SERVICE_TO_DAV,
 							OrderSkillConstants.GT_MSG_CONTENT_START_SERVICE_TO_DAV_URL);
 				}
 			}
@@ -1187,7 +1186,7 @@ public class OrderServiceImpl implements IOrderService {
 				if (StringUtils.isNotBlank(gtId)) {
 					// 用户下单需要使用个推推送消息
 					GtPushUtil.sendNotificationTemplateToList(gtId, OrderSkillConstants.GT_MSG_ORDER_TITLE,
-							OrderSkillConstants.GT_MSG_CONTENT_START_SERVICE_TO_CUST,
+							OrderSkillConstants.IM_MSG_CONTENT_DAV_START_SERVICE_TO_CUST,
 							OrderSkillConstants.GT_MSG_CONTENT_START_SERVICE_TO_CUST_URL);
 				}
 			}
@@ -1303,13 +1302,13 @@ public class OrderServiceImpl implements IOrderService {
 				} catch (Exception e) {
 					LOGGER.info("订单结束后用户推送券，异常信息：",e);
 				}
-				RongYunUtil.sendOrderMessage(customerId, OrderSkillConstants.IM_MSG_CONTENT_SYSTEM_FINISH_TIMEOUT_TO_CUST,OrderSkillConstants.MSG_CONTENT_C);
-				RongYunUtil.sendOrderMessage(serviceId, OrderSkillConstants.IM_MSG_CONTENT_SYSTEM_FINISH_TIMEOUT_TO_DAV,OrderSkillConstants.MSG_CONTENT_DAV);
+				RongYunUtil.sendOrderMessage(customerId, OrderSkillConstants.IM_MSG_CONTENT_DAV_CUST_CONFIRM_TO_CUST,OrderSkillConstants.MSG_CONTENT_C);
+				RongYunUtil.sendOrderMessage(serviceId, OrderSkillConstants.IM_MSG_CONTENT_DAV_CUST_CONFIRM_TO_DV,OrderSkillConstants.MSG_CONTENT_DAV);
 				
 				
 				//推动订单IM消息
-				commonService.sendOrderMsg(customerId, serviceId, orderId, OrderSkillConstants.IM_MSG_CONTENT_SYSTEM_FINISH_TIMEOUT_TO_DAV);
-				commonService.sendOrderMsg(serviceId, customerId,orderId, OrderSkillConstants.IM_MSG_CONTENT_SYSTEM_FINISH_TIMEOUT_TO_CUST);
+				commonService.sendOrderMsg(customerId, serviceId, orderId, OrderSkillConstants.IM_MSG_CONTENT_DAV_CUST_CONFIRM_TO_DV);
+				commonService.sendOrderMsg(serviceId, customerId,orderId, OrderSkillConstants.IM_MSG_CONTENT_DAV_CUST_CONFIRM_TO_CUST);
 			}
 
 			// 设置请求结束时间
