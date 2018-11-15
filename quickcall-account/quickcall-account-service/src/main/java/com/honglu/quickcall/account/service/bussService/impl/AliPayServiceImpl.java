@@ -28,6 +28,7 @@ import com.honglu.quickcall.account.facade.exchange.request.RechargeRequest;
 import com.honglu.quickcall.account.facade.exchange.request.WhthdrawRequest;
 import com.honglu.quickcall.account.service.bussService.AccountService;
 import com.honglu.quickcall.account.service.bussService.AliPayService;
+import com.honglu.quickcall.account.service.bussService.CommonService;
 import com.honglu.quickcall.account.service.dao.AccountMapper;
 import com.honglu.quickcall.account.service.dao.AliacountMapper;
 import com.honglu.quickcall.account.service.dao.RechargeMapper;
@@ -39,6 +40,9 @@ import com.honglu.quickcall.common.api.util.HttpClientUtils;
 import com.honglu.quickcall.common.api.util.JedisUtil;
 import com.honglu.quickcall.common.api.util.RedisKeyConstants;
 import com.honglu.quickcall.common.core.util.UUIDUtils;
+import com.honglu.quickcall.producer.facade.business.DataDuriedPointBusiness;
+import com.honglu.quickcall.producer.facade.req.databury.BuryFirstChargeReq;
+import com.honglu.quickcall.user.facade.entity.Customer;
 
 import net.sf.json.JSONObject;
 
@@ -55,6 +59,11 @@ public class AliPayServiceImpl implements AliPayService {
 	private RechargeMapper rechargeMapper;
 	@Autowired
 	private AccountService accountService;
+	@Autowired
+	private CommonService commonService;
+
+	@Autowired
+	private DataDuriedPointBusiness dataDuriedPointBusiness;
 
 	private final static Logger logger = LoggerFactory.getLogger(AliPayServiceImpl.class);
 	private static String aliPayUrl = ResourceBundle.getBundle("thirdconfig").getString("ALI_UNIFIED_ORDER_URL");
@@ -111,6 +120,24 @@ public class AliPayServiceImpl implements AliPayService {
 		recharge.setState(1);// 状态。1-申请支付，2-支付成功 3支付失败
 		recharge.setRechargeType(packet.getPayType());// 充值类型。1为支付宝，2为微信 3为苹果内购 5微信公众号
 		rechargeMapper.insertSelective(recharge);
+		BuryFirstChargeReq req = new BuryFirstChargeReq();
+
+		List<Recharge> list = rechargeMapper.selectByCustomerIdAndState(packet.getCustomerId());
+		if (list != null && list.size() > 0) {
+			req.setFirstTime(false);
+		} else {
+			req.setFirstTime(true);
+		}
+		Customer customer = commonService.getPhoneByCustomerId(packet.getCustomerId());
+		if (customer != null) {
+			req.setVcUserPhoneNum(customer.getPhone());
+		}
+		try {
+			dataDuriedPointBusiness.buryFirstChargeData(req);
+		} catch (Exception e) {
+			e.printStackTrace();
+
+		}
 		return ResultUtils.resultSuccess(result);
 
 	}
@@ -232,11 +259,11 @@ public class AliPayServiceImpl implements AliPayService {
 
 	@Override
 	public CommonResponse isFirstecharge(IsFirstechargeRequest request) {
-	
-		List<Recharge> list= rechargeMapper.selectByCustomerIdAndState(request.getCustomerId());
-		if(list!=null&&list.size()>0){
+
+		List<Recharge> list = rechargeMapper.selectByCustomerIdAndState(request.getCustomerId());
+		if (list != null && list.size() > 0) {
 			return ResultUtils.resultSuccess(0);
-		}else{
+		} else {
 			return ResultUtils.resultSuccess(1);
 		}
 	}
