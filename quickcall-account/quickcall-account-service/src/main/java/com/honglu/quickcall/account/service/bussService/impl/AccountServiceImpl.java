@@ -35,8 +35,14 @@ public class AccountServiceImpl implements AccountService {
 
 	@Override
 	public Account queryAccount(Long customerId) {
+		Account account = accountMapper.queryAccount(customerId);
+		if (account == null) {// 如果账户异常，不存在，补账户
+			Account userAccount = new Account(UUIDUtils.getId(), customerId);
+			accountMapper.createUserAccount(userAccount);
+			account = accountMapper.queryAccount(customerId);
+		}
 		// TODO Auto-generated method stub
-		return accountMapper.queryAccount(customerId);
+		return account;
 	}
 
 	@Override
