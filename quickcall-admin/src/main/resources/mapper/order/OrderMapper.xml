@@ -394,7 +394,8 @@
 		od.order_status AS orderStatus,
 		od.create_time AS orderCreateTime,
 		od.remark_reason AS remarkReason,
-		od.order_num AS orderNum
+		od.order_num AS orderNum,
+		skill.skill_item_id AS skillItemId
     from
         orders od
 		LEFT JOIN customer place ON od.customer_id = place.customer_id
@@ -420,7 +421,8 @@
      ext.skill_ext_discont AS discountType,
      od.order_amounts AS orderAmount,
      od.order_status AS orderStatus,
-     od.create_time AS orderCreateTime
+     od.create_time AS orderCreateTime,
+     od.service_unit AS serviceUnit
     from
         orders od
 		LEFT JOIN customer place ON od.customer_id = place.customer_id
