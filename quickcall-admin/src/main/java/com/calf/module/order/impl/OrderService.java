@@ -330,27 +330,39 @@ public class OrderService {
 					String.valueOf(order.getOrderStatus()))
 					|| CompulsionOrderStatusEnums.isContainSubset(OrderSkillConstants.ORDER_STATUS_FINISHED_FORCE,
 							String.valueOf(order.getOrderStatus())))) {
+				LOGGER.info("强制取消订单二次校验失败");
 				return -1;
 			}
 			paramMap.put("orderStatus", orderStatus);
 			// 强制取消账单流水处理
+			LOGGER.info("》》》》》》》》强制取消订单账务处理开始：订单状态："+orderStatus);
 			update = compulsoryCancellation(orderId, orderAmount);
+			LOGGER.info("》》》》》》》》强制取消订单账务处理结束：订单状态："+orderStatus);
 			// 退款给用户
 			// 强制完成
 		} else if (OrderSkillConstants.ORDER_STATUS_FINISHED_FORCE == orderStatus) { // 给大V冻结金额
 			// 二次校验，如果在业务处理之时，防止实时订单状态改变（变为不符合订单强制完成状态）
 			if (!CompulsionOrderStatusEnums.isContainSubset(OrderSkillConstants.ORDER_STATUS_FINISHED_FORCE,
 					String.valueOf(order.getOrderStatus()))) {
+				LOGGER.info("强制完成订单二次校验失败");
 				return -1;
 			}
 			paramMap.put("orderStatus", orderStatus);
 			// 强制完成账单流水处理
+			LOGGER.info("》》》》》》》》强制完成订单账务处理开始：订单状态："+orderStatus);
+			LOGGER.info("》》》》》》》》强制完成订单账务处理开始：update："+update);
 			update = compulsoryCompletion(orderId, orderAmount);
+			LOGGER.info("》》》》》》》》强制完成订单账务处理开始：订单状态："+orderStatus);
+			LOGGER.info("》》》》》》》》强制完成订单账务处理开始：update："+update);
 		}
 
 		if (update == 1) {
 			// 强制取消和强制完成账务流水处理完成，更改订单状态
+			LOGGER.info("》》》》》》》》强制取消/完成 订单状态修改开始》》》》》》》》》》》》》");
+			LOGGER.info("》》》》》》》》强制取消/完成 订单状态修改开始：update："+update);
 			update = baseManager.update("Order.updateOrder", paramMap);
+			LOGGER.info("》》》》》》》》强制取消/完成 订单状态修改结束：update："+update);
+			LOGGER.info("》》》》》》》》强制取消/完成 订单状态修改结束》》》》》》》》》》》》》");
 			// 强制取消完成，发送融云消息和im消息
 			if (update > 0 && OrderSkillConstants.ORDER_STATUS_CANCEL_FORCE == orderStatus) {
 				RongYunUtil.sendOrderMessage(Long.valueOf(entity.getReceivedOrderId()),
