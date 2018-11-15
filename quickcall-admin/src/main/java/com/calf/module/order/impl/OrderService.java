@@ -208,17 +208,19 @@ public class OrderService {
 
 		Integer orderStatus = Integer.valueOf(order.getOrderStatus());
 		Integer selectFlag = null;
-		if (CompulsionOrderStatusEnums.isContainSubset(OrderSkillConstants.ORDER_STATUS_CANCEL_FORCE, String.valueOf(orderStatus))) {
+		if (CompulsionOrderStatusEnums.isContainSubset(OrderSkillConstants.ORDER_STATUS_CANCEL_FORCE,
+				String.valueOf(orderStatus))) {
 			// 可以强制取消
 			selectFlag = 1;
-		} /*else if (orderStatus == OrderSkillConstants.ORDER_STATUS_CANCEL_FORCE
-				|| orderStatus == OrderSkillConstants.ORDER_STATUS_FINISHED_FORCE) {
-			// 已经强制取消或者强制完成
-			selectFlag = 3;
-		} */else if(CompulsionOrderStatusEnums.isContainSubset(OrderSkillConstants.ORDER_STATUS_FINISHED_FORCE, String.valueOf(orderStatus))) {
+		} /*
+			 * else if (orderStatus == OrderSkillConstants.ORDER_STATUS_CANCEL_FORCE ||
+			 * orderStatus == OrderSkillConstants.ORDER_STATUS_FINISHED_FORCE) { //
+			 * 已经强制取消或者强制完成 selectFlag = 3; }
+			 */else if (CompulsionOrderStatusEnums.isContainSubset(OrderSkillConstants.ORDER_STATUS_FINISHED_FORCE,
+				String.valueOf(orderStatus))) {
 			// 可以强制完成
 			selectFlag = 2;
-		}else{
+		} else {
 			selectFlag = 3;
 		}
 
@@ -323,28 +325,37 @@ public class OrderService {
 
 		if (update == 1) {
 			update = baseManager.update("Order.updateOrder", paramMap);
-			if(update > 0 && OrderSkillConstants.ORDER_STATUS_CANCEL_FORCE == orderStatus){
-				RongYunUtil.sendOrderMessage(Long.valueOf(entity.getReceivedOrderId()), OrderSkillConstants.IM_MSG_CONTENT_CANCEL_FORCE_ORDER_TO_DV,OrderSkillConstants.MSG_CONTENT_DAV);
-				RongYunUtil.sendOrderMessage(Long.valueOf(entity.getPlaceOrderId()), OrderSkillConstants.IM_MSG_CONTENT_CANCEL_FORCE_ORDER_TO_CUST,OrderSkillConstants.MSG_CONTENT_C);
-				
-				//推动订单IM消息
-				sendOrderMsg(Long.valueOf(entity.getPlaceOrderId()), Long.valueOf(entity.getReceivedOrderId()), orderId, OrderSkillConstants.IM_MSG_CONTENT_CANCEL_FORCE_ORDER_TO_DV);
-				sendOrderMsg(Long.valueOf(entity.getReceivedOrderId()), Long.valueOf(entity.getPlaceOrderId()),orderId, OrderSkillConstants.IM_MSG_CONTENT_CANCEL_FORCE_ORDER_TO_CUST);
-			}else if (OrderSkillConstants.ORDER_STATUS_FINISHED_FORCE == orderStatus){
-				RongYunUtil.sendOrderMessage(Long.valueOf(entity.getReceivedOrderId()), OrderSkillConstants.IM_MSG_CONTENT_DAV_CUST_CONFIRM_TO_DV,OrderSkillConstants.MSG_CONTENT_DAV);
-				RongYunUtil.sendOrderMessage(Long.valueOf(entity.getPlaceOrderId()), OrderSkillConstants.IM_MSG_CONTENT_DAV_CUST_CONFIRM_TO_CUST,OrderSkillConstants.MSG_CONTENT_C);
-				
-				//推动订单IM消息
-				sendOrderMsg(Long.valueOf(entity.getPlaceOrderId()), Long.valueOf(entity.getReceivedOrderId()),orderId, OrderSkillConstants.IM_MSG_CONTENT_DAV_CUST_CONFIRM_TO_DV);
-				sendOrderMsg(Long.valueOf(entity.getReceivedOrderId()), Long.valueOf(entity.getPlaceOrderId()),orderId, OrderSkillConstants.IM_MSG_CONTENT_DAV_CUST_CONFIRM_TO_CUST);
+			if (update > 0 && OrderSkillConstants.ORDER_STATUS_CANCEL_FORCE == orderStatus) {
+				RongYunUtil.sendOrderMessage(Long.valueOf(entity.getReceivedOrderId()),
+						OrderSkillConstants.IM_MSG_CONTENT_CANCEL_FORCE_ORDER_TO_DV,
+						OrderSkillConstants.MSG_CONTENT_DAV);
+				RongYunUtil.sendOrderMessage(Long.valueOf(entity.getPlaceOrderId()),
+						OrderSkillConstants.IM_MSG_CONTENT_CANCEL_FORCE_ORDER_TO_CUST,
+						OrderSkillConstants.MSG_CONTENT_C);
+
+				// 推动订单IM消息
+				sendOrderMsg(Long.valueOf(entity.getPlaceOrderId()), Long.valueOf(entity.getReceivedOrderId()), orderId,
+						OrderSkillConstants.IM_MSG_CONTENT_CANCEL_FORCE_ORDER_TO_DV);
+				sendOrderMsg(Long.valueOf(entity.getReceivedOrderId()), Long.valueOf(entity.getPlaceOrderId()), orderId,
+						OrderSkillConstants.IM_MSG_CONTENT_CANCEL_FORCE_ORDER_TO_CUST);
+			} else if (OrderSkillConstants.ORDER_STATUS_FINISHED_FORCE == orderStatus) {
+				RongYunUtil.sendOrderMessage(Long.valueOf(entity.getReceivedOrderId()),
+						OrderSkillConstants.IM_MSG_CONTENT_DAV_CUST_CONFIRM_TO_DV, OrderSkillConstants.MSG_CONTENT_DAV);
+				RongYunUtil.sendOrderMessage(Long.valueOf(entity.getPlaceOrderId()),
+						OrderSkillConstants.IM_MSG_CONTENT_DAV_CUST_CONFIRM_TO_CUST, OrderSkillConstants.MSG_CONTENT_C);
+
+				// 推动订单IM消息
+				sendOrderMsg(Long.valueOf(entity.getPlaceOrderId()), Long.valueOf(entity.getReceivedOrderId()), orderId,
+						OrderSkillConstants.IM_MSG_CONTENT_DAV_CUST_CONFIRM_TO_DV);
+				sendOrderMsg(Long.valueOf(entity.getReceivedOrderId()), Long.valueOf(entity.getPlaceOrderId()), orderId,
+						OrderSkillConstants.IM_MSG_CONTENT_DAV_CUST_CONFIRM_TO_CUST);
 
 			}
-			
-			
-		}else{
+
+		} else {
 			update = -1;
 		}
-		
+
 		return update;
 	}
 
@@ -403,25 +414,29 @@ public class OrderService {
 		tradeDetail = baseManager.get("TradeDetail.queryCountByOrderNoAndCustomerId", map);
 		// 声优无流水，或者 有流水，且只有冻结流水
 		if (tradeDetail == null || tradeDetail.getType() == 7) {
-			// 入账
-			Map<String, Object> pram = new HashMap<String, Object>();
-			if (flag) {// 有冻结流水
-				pram.put("type", 3);
-			} else {// 无冻结流水
-				pram.put("type", 2);
+			// 声优 有流水，且排除解冻流水 和强制完成流水
+			if (tradeDetail != null && tradeDetail.getType() != 8 && tradeDetail.getType() != 11) {
+				Map<String, Object> pram = new HashMap<String, Object>();
+				pram.put("amount", amount);
+				pram.put("userId", order.getServiceId());
+				if (flag) {// 有冻结流水
+					pram.put("type", 3);
+					baseManager.update("Account.outAccount", pram);
+				} else {// 无冻结流水
+					pram.put("type", 2);
+					baseManager.update("Account.inAccount", pram);
+				}
+
+				// 记录流水
+				tradeDetail = new TradeDetail();
+				tradeDetail.setTradeId(UUIDUtils.getId());
+				tradeDetail.setOrderNo(order.getOrderNo());
+				tradeDetail.setCustomerId(order.getServiceId());
+				tradeDetail.setCreateTime(new Date());
+				tradeDetail.setType(11);
+				tradeDetail.setInPrice(amount);
+				row = baseManager.insert("TradeDetail.insertSelective", tradeDetail);
 			}
-			pram.put("amount", amount);
-			pram.put("userId", order.getServiceId());
-			baseManager.update("Account.outAccount", pram);
-			// 记录流水
-			tradeDetail = new TradeDetail();
-			tradeDetail.setTradeId(UUIDUtils.getId());
-			tradeDetail.setOrderNo(order.getOrderNo());
-			tradeDetail.setCustomerId(order.getServiceId());
-			tradeDetail.setCreateTime(new Date());
-			tradeDetail.setType(11);
-			tradeDetail.setInPrice(amount);
-			row = baseManager.insert("TradeDetail.insertSelective", tradeDetail);
 		}
 		return row;
 
@@ -492,9 +507,9 @@ public class OrderService {
 		}
 		map.put("customerId", order.getCustomerId());
 		map.put("orderNo", order.getOrderNo());
-		// 检查用户 该订单是否有下单流水
+		// 检查用户 该订单是否有下单流水 并且无强制取消流水
 		tradeDetail = baseManager.get("TradeDetail.queryCountByOrderNoAndCustomerId", map);
-		if (tradeDetail != null && tradeDetail.getType() == 3) {
+		if (tradeDetail != null && tradeDetail.getType() == 3 && tradeDetail.getType() != 10) {
 			// 用户强制取消金额 回账
 			Map<String, Object> pram = new HashMap<String, Object>();
 			pram.put("type", 1);
@@ -539,14 +554,15 @@ public class OrderService {
 		return row;
 
 	}
-	
-	private void sendOrderMsg(Long  customerId,Long  serviceId,Long  orderId,String  orderDesc) {
-		//customer  ---->>>  serviceId
-		String  custStr = JedisUtil.get(RedisKeyConstants.USER_CUSTOMER_INFO+customerId) ;
-		if(StringUtils.isNotBlank(custStr)){
+
+	private void sendOrderMsg(Long customerId, Long serviceId, Long orderId, String orderDesc) {
+		// customer ---->>> serviceId
+		String custStr = JedisUtil.get(RedisKeyConstants.USER_CUSTOMER_INFO + customerId);
+		if (StringUtils.isNotBlank(custStr)) {
 			try {
-				Customer customer = JSON.parseObject(custStr,  Customer.class);
-				RongYunUtil.sendOrderIMMessage(customer.getNickName(),customerId, serviceId, "", orderId, orderDesc, customer.getHeadPortraitUrl());
+				Customer customer = JSON.parseObject(custStr, Customer.class);
+				RongYunUtil.sendOrderIMMessage(customer.getNickName(), customerId, serviceId, "", orderId, orderDesc,
+						customer.getHeadPortraitUrl());
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
