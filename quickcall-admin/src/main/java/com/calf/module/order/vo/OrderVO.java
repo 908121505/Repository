@@ -50,7 +50,18 @@ public class OrderVO {
 	private String compulsionReason;
 	/*技能ID**/
 	private String skillItemId;
+	/*服务单位（小时/半小时/次）**/
+    private String serviceUnit;
+    
+    
 
+	public String getServiceUnit() {
+		return serviceUnit;
+	}
+
+	public void setServiceUnit(String serviceUnit) {
+		this.serviceUnit = serviceUnit;
+	}
 
 	public String getSkillItemId() {
 		return skillItemId;
