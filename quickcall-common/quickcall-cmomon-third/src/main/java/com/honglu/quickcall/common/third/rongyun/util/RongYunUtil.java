@@ -230,7 +230,7 @@ public class RongYunUtil {
 	 * @param orderDesc
 	 * @param imageUrl
 	 */
-	public static void sendOrderIMMessage(String userName, Long fromUserId, Long toCustomerId, String remarkName,
+	public static  void sendOrderIMMessage(String userName, Long fromUserId, Long toCustomerId, String remarkName,
 			Long orderId, String orderDesc, String imageUrl) {
 		Integer type = 21;
 		sendMessageIm(userName, fromUserId, toCustomerId, 1, imageUrl, type, remarkName, orderId, orderDesc);
@@ -280,7 +280,7 @@ public class RongYunUtil {
 		System.out.println(code);
 	}
 
-	private static void sendMessage(String nickName, Long fromUserId, Long toCustomerId, String content, Integer sex,
+	private static  synchronized void sendMessage(String nickName, Long fromUserId, Long toCustomerId, String content, Integer sex,
 			String headPortraitUrl, Integer type, String remarkName) {
 
 		Long otherId = toCustomerId;
@@ -297,7 +297,7 @@ public class RongYunUtil {
 		System.out.println(code);
 	}
 
-	private static void sendMessageIm(String nickName, Long fromUserId, Long toCustomerId, Integer sex,
+	private static  synchronized void sendMessageIm(String nickName, Long fromUserId, Long toCustomerId, Integer sex,
 			String headPortraitUrl, Integer type, String remarkName, Long orderId, String orderDesc) {
 
 		Long otherId = toCustomerId;

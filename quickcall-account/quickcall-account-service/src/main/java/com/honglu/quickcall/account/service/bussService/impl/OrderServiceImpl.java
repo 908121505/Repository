@@ -6,9 +6,11 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 
 //import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -697,19 +699,19 @@ public class OrderServiceImpl implements IOrderService {
 			order = orderMapper.queryOrderByCustomerIdAndServiceId(serviceId, customerId, statusList);
 		}
 
-//		boolean  checkFlag = false;
-//		Integer  newOrderStatus =  null;
 		/**** 1.必须首先判断双方存在订单关系 */
 		if (order != null) {
 			Integer  orderStatus =  order.getOrderStatus();
-			List<Integer>   finishOrderStatusList = new ArrayList<Integer>();
-			getFinishStatusList(finishOrderStatusList);
-			if(finishOrderStatusList.contains(orderStatus)){
+			Set<Integer>   finishOrderStatusSet = new HashSet<Integer>();
+			getFinishStatusSet(finishOrderStatusSet);
+			/**2.判断是否是已完成状态，已完成状态如下*/
+			if(finishOrderStatusSet.contains(orderStatus)){
 				LOGGER.info("================"+orderStatus);
 				Long  orderCustomerId = order.getCustomerId();
 				LOGGER.info("orderCustomerId:"+orderCustomerId +",customerId:"+customerId);
+				/**2.1当前人是下单人**/
 				if(orderCustomerId.equals(customerId)){
-					//返回订单信息
+					//当前用户是下单人
 					orderDetailForIMVO.setRetCode(OrderSkillConstants.IM_RETCODE_ORDER_EXIST);// 不可下单
 					OrderIMVO orderIMVO = new OrderIMVO();
 					Long customerSkillId = order.getCustomerSkillId();
@@ -719,13 +721,12 @@ public class OrderServiceImpl implements IOrderService {
 					orderIMVO.setServiceUnit(order.getServiceUnit());
 					
 					//订单倒计时计算
-					OrderTempResponseVO responseVO = commonService.getCountDownSeconds(order.getOrderStatus(),order.getOrderTime(), order.getReceiveOrderTime(), order.getStartServiceTime(),order.getExpectEndTime(),order.getAppointTime());
+//					OrderTempResponseVO responseVO = commonService.getCountDownSeconds(order.getOrderStatus(),order.getOrderTime(), order.getReceiveOrderTime(), order.getStartServiceTime(),order.getExpectEndTime(),order.getAppointTime());
 					orderIMVO.setCountDownSeconds(0L);
-					orderIMVO.setOrderStatus(responseVO.getOrderStatus());
+					orderIMVO.setOrderStatus(order.getOrderStatus());
 					orderDetailForIMVO.setServiceId(order.getServiceId());
 					orderDetailForIMVO.setCustomerId(order.getCustomerId());
 					orderDetailForIMVO.setOrderIMVO(orderIMVO);
-//					newOrderStatus =  responseVO.getOrderStatus();
 					//修改状态
 					List<Long> orderIdList = new ArrayList<Long>();
 					orderIdList.add(order.getOrderId());
@@ -736,12 +737,10 @@ public class OrderServiceImpl implements IOrderService {
 					} catch (Exception e) {
 					}
 				}else{
-//					checkFlag = true ;
-					//不存在订单关系，存在完成订单
+					/***2.2订单存在，当前用户是声优方，需要判断对方是否可下单*/
 					//需要判断是否可以下单，也就是说serviceId方是否有技能
-					orderDetailForIMVO.setRetCode(OrderSkillConstants.IM_RETCODE_CAN_ORDER);// 不存在的订单关系
+//					orderDetailForIMVO.setRetCode(OrderSkillConstants.IM_RETCODE_CAN_ORDER);// 不存在的订单关系
 					//判断serviceId是否可下单
-					
 					
 					Integer weekIndex = DateUtils.getDayOfWeek();
 					Integer skillSwitch = 1;
@@ -770,17 +769,22 @@ public class OrderServiceImpl implements IOrderService {
 							OrderSkillConstants.SKILL_TYPE_YES, statusList);
 					// 不管大V是否在忙，都展示大V技能信息
 					orderDetailForIMVO.setSkillIMVO(customerSkillIMVO);
+					//对方有进行中订单，提示用户声优正忙
 					if (!CollectionUtils.isEmpty(gongIngOrderList)) {
 						// 用户存在进行中或者即将进行中订单，说明大V正忙
 						orderDetailForIMVO.setRetCode(OrderSkillConstants.IM_RETCODE_DV_BUSY);
 						commonResponse.setData(orderDetailForIMVO);
-						return commonResponse;
+					}else{
+						//对方有技能，但是没有进行中订单，所以此时需要返回可下单
+						orderDetailForIMVO.setRetCode(OrderSkillConstants.IM_RETCODE_CAN_ORDER);
+						commonResponse.setData(orderDetailForIMVO);
 					}
+					return commonResponse;
 					
 				}
 				
 			}else{
-				//返回订单信息
+				/**2.2 双方存在订单关系，但不是已完成的订单*/
 				orderDetailForIMVO.setRetCode(OrderSkillConstants.IM_RETCODE_ORDER_EXIST);// 不可下单
 				OrderIMVO orderIMVO = new OrderIMVO();
 				Long customerSkillId = order.getCustomerSkillId();
@@ -804,8 +808,6 @@ public class OrderServiceImpl implements IOrderService {
 
 		Integer weekIndex = DateUtils.getDayOfWeek();
 		Integer skillSwitch = 1;
-		// String endTimeStr = DateUtils.formatDateHHSS(new Date()).replaceAll(":", "")
-		// ;
 
 		orderDetailForIMVO.setServiceId(serviceId);
 		orderDetailForIMVO.setCustomerId(customerId);
@@ -855,6 +857,15 @@ public class OrderServiceImpl implements IOrderService {
 		list.add(OrderSkillConstants.ORDER_STATUS_GOING_USRE_APPAY_FINISH);
 		list.add(OrderSkillConstants.ORDER_STATUS_FINISH_DAV_FINISH_AFTER_SERVICE_TIME);
 		list.add(OrderSkillConstants.ORDER_STATUS_FINISH_BOTH_NO_OPERATE);
+	}
+	//获取已完成订单set集合
+	public void  getFinishStatusSet(Set<Integer>  set){
+		set.add(OrderSkillConstants.ORDER_STATUS_FINISHED_USER_ACCEPCT);
+		set.add(OrderSkillConstants.ORDER_STATUS_FINISH_DV_FINISH);
+		set.add(OrderSkillConstants.ORDER_STATUS_FINISH_DV_RELEASE);
+		set.add(OrderSkillConstants.ORDER_STATUS_GOING_USRE_APPAY_FINISH);
+		set.add(OrderSkillConstants.ORDER_STATUS_FINISH_DAV_FINISH_AFTER_SERVICE_TIME);
+		set.add(OrderSkillConstants.ORDER_STATUS_FINISH_BOTH_NO_OPERATE);
 	}
 
 	@Override

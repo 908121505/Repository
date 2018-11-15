@@ -56,10 +56,10 @@ public class SkillBussServiceImpl implements ISkillBussService {
 			throw new BizException(AccountBizReturnCode.paramError, "查询技能信息参数异常");
 		}
 		Long  customerId =  request.getCustomerId();
-		String customerJson = JedisUtil.get(RedisKeyConstants.USER_CUSTOMER_INFO+request.getCustomerId());
-		if(StringUtils.isEmpty(customerJson)){
-			return ResultUtils.result(BizCode.CustomerNotExist);
-		}
+//		String customerJson = JedisUtil.get(RedisKeyConstants.USER_CUSTOMER_INFO+request.getCustomerId());
+//		if(StringUtils.isEmpty(customerJson)){
+//			return ResultUtils.result(BizCode.CustomerNotExist);
+//		}
 		//
 		CustomerSkillInfoVO   resultVO =  productSkillService.querySkillInfoPersonal(customerId);
 		CommonResponse commonResponse = new CommonResponse();
