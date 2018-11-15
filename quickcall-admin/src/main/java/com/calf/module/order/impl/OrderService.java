@@ -365,6 +365,8 @@ public class OrderService {
 						OrderSkillConstants.IM_MSG_CONTENT_CANCEL_FORCE_ORDER_TO_DV);
 				sendOrderMsg(Long.valueOf(entity.getReceivedOrderId()), Long.valueOf(entity.getPlaceOrderId()), orderId,
 						OrderSkillConstants.IM_MSG_CONTENT_CANCEL_FORCE_ORDER_TO_CUST);
+				//【强制取消】扣除声优技能声量 + 扣除客户经验
+				forceCancelDeductBigvScoreAndCustomerExperience(orderId, Integer.valueOf(order.getOrderStatus()));
 				// 强制完成 完成，发送融云消息和im消息
 			} else if (update > 0 && OrderSkillConstants.ORDER_STATUS_FINISHED_FORCE == orderStatus) {
 				RongYunUtil.sendOrderMessage(Long.valueOf(entity.getReceivedOrderId()),
@@ -377,7 +379,8 @@ public class OrderService {
 						OrderSkillConstants.IM_MSG_CONTENT_DAV_CUST_CONFIRM_TO_DV);
 				sendOrderMsg(Long.valueOf(entity.getReceivedOrderId()), Long.valueOf(entity.getPlaceOrderId()), orderId,
 						OrderSkillConstants.IM_MSG_CONTENT_DAV_CUST_CONFIRM_TO_CUST);
-
+				//【强制完成】给声优增加技能声量 + 给客户增加经验值
+				forceDoneAddBigvScoreAndCustomerExperience(orderId, Integer.valueOf(order.getOrderStatus()));
 			}
 
 		} else {
