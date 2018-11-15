@@ -1208,6 +1208,9 @@ public class OrderServiceImpl implements IOrderService {
 		LOGGER.info("======>>>>>订单支付，订单编号：" + orderId + "，大V立即开始完成");
 		return commonResponse;
 	}
+	
+	
+	private static final String   FINISH_ORDER_VALUE = "1";
 
 	@Override
 	public CommonResponse finishOrder(FinishOrderRequest request) {
@@ -1218,6 +1221,13 @@ public class OrderServiceImpl implements IOrderService {
 		LOGGER.info("======>>>>>finishOrder()入参：" + request.toString());
 		Long orderId = request.getOrderId();
 		Integer type = request.getType();
+		
+		if(JedisUtil.setnx(RedisKeyConstants.FINISH_ORDER_KEY + orderId, FINISH_ORDER_VALUE, 2) == 0){
+			//说明已经操作，本次不进行操作
+			throw new BizException(AccountBizReturnCode.ORDER_FINISH_ERROR, "请稍后重试");
+		}
+		
+		
 
 		if (type != OrderSkillConstants.REQUEST_DV_FINISH_TYPE
 				&& type != OrderSkillConstants.REQUEST_CUST_FINISH_TYPE) {
