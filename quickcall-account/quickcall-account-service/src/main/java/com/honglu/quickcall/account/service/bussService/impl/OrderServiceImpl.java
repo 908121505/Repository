@@ -321,6 +321,9 @@ public class OrderServiceImpl implements IOrderService {
 
 					}
 				}
+			}else{
+				LOGGER.info("=============用户账户不存在=============");
+				throw new BizException(AccountBizReturnCode.ACCOUNT_NOT_EXIST, "用户/大V完成服务参数异常");
 			}
 
 			// 创建订单
