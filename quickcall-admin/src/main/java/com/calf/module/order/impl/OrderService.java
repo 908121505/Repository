@@ -398,7 +398,7 @@ public class OrderService {
 //				customerCouponService.cancelOrderBackCoupon(orderId, Long.valueOf(entity.getPlaceOrderId()));
 				// 强制完成 完成，发送融云消息和im消息
 			} else if (update > 0 && OrderSkillConstants.ORDER_STATUS_FINISHED_FORCE == orderStatus) {
-				LOGGER.info("-----------------------强制取消成功，发送融云开始------------------------");
+				LOGGER.info("-----------------------强制完成成功，发送融云开始------------------------");
 				RongYunUtil.sendOrderMessage(Long.valueOf(entity.getReceivedOrderId()),
 						OrderSkillConstants.IM_MSG_CONTENT_DAV_CUST_CONFIRM_TO_DV, OrderSkillConstants.MSG_CONTENT_DAV);
 				RongYunUtil.sendOrderMessage(Long.valueOf(entity.getPlaceOrderId()),
