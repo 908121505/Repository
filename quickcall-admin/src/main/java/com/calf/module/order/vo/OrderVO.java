@@ -46,8 +46,19 @@ public class OrderVO {
 	private Long   servicePhone;
 	/**下单方手机号码*/
 	private Long   customerPhone;
-	
+	/*取消或者完成原因**/
 	private String compulsionReason;
+	/*技能ID**/
+	private String skillItemId;
+
+
+	public String getSkillItemId() {
+		return skillItemId;
+	}
+
+	public void setSkillItemId(String skillItemId) {
+		this.skillItemId = skillItemId;
+	}
 
 	public String getCompulsionReason() {
 		return compulsionReason;
