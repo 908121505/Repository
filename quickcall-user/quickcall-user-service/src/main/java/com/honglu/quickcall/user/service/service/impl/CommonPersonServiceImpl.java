@@ -1,7 +1,6 @@
 package com.honglu.quickcall.user.service.service.impl;
 
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -31,6 +30,7 @@ import com.honglu.quickcall.common.core.util.UUIDUtils;
 import com.honglu.quickcall.common.third.AliyunSms.utils.SendSmsUtil;
 import com.honglu.quickcall.common.third.newrongyun.RongYunUtil;
 import com.honglu.quickcall.producer.facade.business.DataDuriedPointBusiness;
+import com.honglu.quickcall.producer.facade.req.databury.BurySetPwdDurationReq;
 import com.honglu.quickcall.producer.facade.req.databury.DataBuriedPointGetCodeReq;
 import com.honglu.quickcall.producer.facade.req.databury.DataBuriedPointLoginReq;
 import com.honglu.quickcall.producer.facade.req.databury.DataBuriedPointRegistReq;
@@ -92,10 +92,10 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 	 * 中文、英文、数字、下划线校验 4-24位
 	 */
 	private final static Pattern CH_EN_PATTERN = Pattern.compile("^[\\u4e00-\\u9fa5a-z\\d_]{4,24}$");
-	//靓号屏蔽中间段
-	private final static String[] middleBlackList = {"000","111","222","333","444","555","666","777","888","999",
-													"01234","12345","23456","34567","45678","56789","67890",
-													"09876","98765","87654","76543","65432","54321","43210"};
+	// 靓号屏蔽中间段
+	private final static String[] middleBlackList = { "000", "111", "222", "333", "444", "555", "666", "777", "888",
+			"999", "01234", "12345", "23456", "34567", "45678", "56789", "67890", "09876", "98765", "87654", "76543",
+			"65432", "54321", "43210" };
 
 	@Override
 	public CommonResponse regUserExist(IsPhoneExistsRequest params) {
@@ -248,7 +248,14 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 		req.setVirUserId(params.getFictitiousId());
 
 		logger.info("===============开始登陆数据埋点==============userBean:" + req.getUserBean());
-		dataDuriedPointBusiness.buryUserIdLoginResultData(req);
+
+		try {
+			// 神策埋点
+			dataDuriedPointBusiness.buryUserIdLoginResultData(req);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
 		return ResultUtils.resultSuccess(customer);
 	}
 
@@ -256,10 +263,22 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 	public CommonResponse setpwd(SetPwdRequest params) {
 		CommonResponse response = new CommonResponse();
 		int row = customerMapper.customerSetPwd(params.getTel(), MD5.md5(params.getPassWord()));// MD5加密);
-		if (row <= 0) {
-			response.setCode(BizCode.CustomerError);
-			response.setMessage("设置密码失败");
-			return response;
+		// 神策埋点
+		BurySetPwdDurationReq req = new BurySetPwdDurationReq();
+		req.setDoseSucceed(true);
+		req.setVcUserId(params.getCustomerId() + "");
+
+		try {
+			if (row <= 0) {
+				req.setDoseSucceed(false);
+				dataDuriedPointBusiness.burySetPwdDurationData(req);
+				response.setCode(BizCode.CustomerError);
+				response.setMessage("设置密码失败");
+				return response;
+			}
+			dataDuriedPointBusiness.burySetPwdDurationData(req);
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		return ResultUtils.resultSuccess();
 	}
@@ -482,8 +501,12 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 
 		req.setUserBean(userBean);
 		req.setVirUserId(request.getFictitiousId());
-
-		dataDuriedPointBusiness.burySignUpResultData(req);
+		try {
+			// 神策埋点
+			dataDuriedPointBusiness.burySignUpResultData(req);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		// 创建账户
 		accountDubboIntegrationService.createAccount(customer.getCustomerId());
 		customer = customerMapper.selectByPrimaryKey(customer.getCustomerId());
@@ -509,7 +532,7 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 	 * @return
 	 */
 	private String randomAppId() {
-		
+
 		String num = getRandomNum(8);
 		// 数据库不存在相同appId 且排除以上靓号
 		while (!allowToUse(num)) {
@@ -517,38 +540,40 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 		}
 		return num;
 	}
-	
+
 	/**
 	 * 判断号码能否使用
-	 * @param num 随机号码
+	 * 
+	 * @param num
+	 *            随机号码
 	 * @return 是否可以使用
 	 */
-	private boolean allowToUse(String num){
-		if(customerMapper.selectByAppId(num) != null){
+	private boolean allowToUse(String num) {
+		if (customerMapper.selectByAppId(num) != null) {
 			return false;
 		}
 		for (String str : middleBlackList) {
-			if(num.contains(str)){
+			if (num.contains(str)) {
 				return false;
 			}
 		}
-		for(int i=1;i<10;i++){
-			if(appearNumber(num,i+"")>4){
+		for (int i = 1; i < 10; i++) {
+			if (appearNumber(num, i + "") > 4) {
 				return false;
 			}
 		}
 		return true;
 	}
-	
-	//判断字符串出现次数
+
+	// 判断字符串出现次数
 	private int appearNumber(String srcText, String findText) {
-	    int count = 0;
-	    Pattern p = Pattern.compile(findText);
-	    Matcher m = p.matcher(srcText);
-	    while (m.find()) {
-	        count++;
-	    }
-	    return count;
+		int count = 0;
+		Pattern p = Pattern.compile(findText);
+		Matcher m = p.matcher(srcText);
+		while (m.find()) {
+			count++;
+		}
+		return count;
 	}
 
 	/**
@@ -663,7 +688,12 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 		}
 		logger.info("手机号:" + phoneNum + "发送状态:" + smsStr);
 		// 埋点
-		dataDuriedPointBusiness.buryGetCodeData(req);
+		try {
+			// 神策埋点
+			dataDuriedPointBusiness.buryGetCodeData(req);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
 		return ResultUtils.resultSuccess(smsStr);
 
