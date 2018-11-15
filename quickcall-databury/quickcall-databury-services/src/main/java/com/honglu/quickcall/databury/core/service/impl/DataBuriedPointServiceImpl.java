@@ -131,6 +131,60 @@ public class DataBuriedPointServiceImpl implements DataBuriedPointService {
         logger.info("----【提交订单--神策埋点】埋点结束");
     }
 
+    @Override
+    public void buryMakeOrderData(DataBuryMakeOrderReq req) throws DataBuriedPointException {
+        logger.info("====【下单--神策埋点】埋点开始--参数为:{}", req);
+        if(req == null){
+            throw new DataBuriedPointException("神策埋点-下单数据-消费的mq参数为空");
+        }
+        Map<String,Object> params = new HashMap<>();
+        params.put("vc_user_id",req.getVcUserId());
+        params.put("vc_user_phone_num",req.getVcUserPhoneNum());
+        params.put("vc_owner_userid",req.getVcOwnerUserId());
+        params.put("does_succeed",req.getDoesSucceed()==true?"成功":"失败");
+        params.put("skill_id",req.getSkillId());
+        params.put("skill_name",req.getSkillName());
+
+        Map<String,Object> event = BuryiedPointDataConvertor.newInstanceEvent(EventEnums.EVENT_Make_Order.getValue(),(String)params.get("vc_user_id"),params);
+
+        buryiedPointUtil.buryData(event);
+        logger.info("----【下单--神策埋点】埋点结束");
+    }
+
+    @Override
+    public void burySetPwdDurationData(DataBurySetPwdDurationReq req) throws DataBuriedPointException {
+        logger.info("====【修改密码页面--神策埋点】埋点开始--参数为:{}", req);
+        if(req == null){
+            throw new DataBuriedPointException("神策埋点-修改密码页面-消费的mq参数为空");
+        }
+        Map<String,Object> params = new HashMap<>();
+        params.put("vc_user_id",req.getVcUserId());
+        params.put("dose_succeed",req.isDoseSucceed()==true?"成功":"失败");
+
+        Map<String,Object> event = BuryiedPointDataConvertor.newInstanceEvent(EventEnums.EVENT_Set_Password_Duration.getValue(),(String)params.get("vc_user_id"),params);
+
+        buryiedPointUtil.buryData(event);
+        logger.info("----【修改密码页面--神策埋点】埋点结束");
+    }
+
+    @Override
+    public void buryFirstChargeData(DataBuryFirstChargeReq req) throws DataBuriedPointException {
+        logger.info("====【首次充值--神策埋点】埋点开始--参数为:{}", req);
+        if(req == null){
+            throw new DataBuriedPointException("神策埋点-首次充值-消费的mq参数为空");
+        }
+        Map<String,Object> params = new HashMap<>();
+        params.put("is_first_time",req.isFirstTime()==true?"是":"不是");
+        params.put("vc_user_id",req.getVcUserId());
+        params.put("vc_user_phone_num",req.getVcUserPhoneNum());
+
+        Map<String,Object> event = BuryiedPointDataConvertor.newInstanceEvent(EventEnums.EVENT_First_Charge.getValue(),(String)params.get("vc_user_id"),params);
+
+        buryiedPointUtil.buryData(event);
+        logger.info("----【首次充值--神策埋点】埋点结束");
+    }
+
+
     /**
      * 组装用户属性
      * @param userBean
