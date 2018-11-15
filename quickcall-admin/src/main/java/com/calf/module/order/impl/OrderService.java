@@ -1,16 +1,16 @@
 package com.calf.module.order.impl;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.honglu.quickcall.user.facade.constants.ScoreRankConstants;
+import com.honglu.quickcall.user.facade.entity.BigvScore;
+import com.honglu.quickcall.user.facade.entity.BigvSkillScore;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -46,6 +46,7 @@ import com.honglu.quickcall.common.third.rongyun.util.RongYunUtil;
 
 @Service("orderService")
 public class OrderService {
+    private static final Logger LOGGER = LoggerFactory.getLogger(OrderService.class);
 
 	@Autowired
 	private BaseManager baseManager;
@@ -304,27 +305,46 @@ public class OrderService {
 	public int updateOrder(OrderVO entity) {
 
 		if (entity == null) {
-			return 0;
+			return -1;
 		}
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		paramMap.put("orderId", entity.getOrderId());
+		//订单状态二次判断是否能进行强制取消或者强制完成
+		Orders order = baseManager.get("Orders.selectByPrimaryKey",paramMap);
 		paramMap.put("compulsion_reason", entity.getCompulsionReason());
 		Integer orderStatus = Integer.valueOf(entity.getOrderStatus());
 
 		BigDecimal orderAmount = new BigDecimal(entity.getOrderAmount());
 		Long orderId = Long.valueOf(entity.getOrderId());
 		int update = 0;
+		//强制取消
 		if (OrderSkillConstants.ORDER_STATUS_CANCEL_FORCE == orderStatus) {
+			//二次校验，如果在业务处理之时，防止实时订单状态改变（变为不符合订单强制取消状态）
+			if(!(CompulsionOrderStatusEnums.isContainSubset(OrderSkillConstants.ORDER_STATUS_CANCEL_FORCE,
+				String.valueOf(order.getOrderStatus())) || CompulsionOrderStatusEnums.isContainSubset(OrderSkillConstants.ORDER_STATUS_FINISHED_FORCE,
+						String.valueOf(order.getOrderStatus())))){
+				return -1;
+			}
 			paramMap.put("orderStatus", orderStatus);
+			//强制取消账单流水处理
 			update = compulsoryCancellation(orderId, orderAmount);
 			// 退款给用户
+			//强制完成
 		} else if (OrderSkillConstants.ORDER_STATUS_FINISHED_FORCE == orderStatus) { // 给大V冻结金额
+			//二次校验，如果在业务处理之时，防止实时订单状态改变（变为不符合订单强制完成状态）
+			if(!CompulsionOrderStatusEnums.isContainSubset(OrderSkillConstants.ORDER_STATUS_FINISHED_FORCE,
+							String.valueOf(order.getOrderStatus()))){
+					return -1;
+				}
 			paramMap.put("orderStatus", orderStatus);
+			//强制完成账单流水处理
 			update = compulsoryCompletion(orderId, orderAmount);
 		}
 
 		if (update == 1) {
+			//强制取消和强制完成账务流水处理完成，更改订单状态
 			update = baseManager.update("Order.updateOrder", paramMap);
+			//强制取消完成，发送融云消息和im消息
 			if (update > 0 && OrderSkillConstants.ORDER_STATUS_CANCEL_FORCE == orderStatus) {
 				RongYunUtil.sendOrderMessage(Long.valueOf(entity.getReceivedOrderId()),
 						OrderSkillConstants.IM_MSG_CONTENT_CANCEL_FORCE_ORDER_TO_DV,
@@ -338,6 +358,7 @@ public class OrderService {
 						OrderSkillConstants.IM_MSG_CONTENT_CANCEL_FORCE_ORDER_TO_DV);
 				sendOrderMsg(Long.valueOf(entity.getReceivedOrderId()), Long.valueOf(entity.getPlaceOrderId()), orderId,
 						OrderSkillConstants.IM_MSG_CONTENT_CANCEL_FORCE_ORDER_TO_CUST);
+				//强制完成 完成，发送融云消息和im消息
 			} else if (update > 0 && OrderSkillConstants.ORDER_STATUS_FINISHED_FORCE == orderStatus) {
 				RongYunUtil.sendOrderMessage(Long.valueOf(entity.getReceivedOrderId()),
 						OrderSkillConstants.IM_MSG_CONTENT_DAV_CUST_CONFIRM_TO_DV, OrderSkillConstants.MSG_CONTENT_DAV);
@@ -390,7 +411,7 @@ public class OrderService {
 			String steamFrozenValue = JedisUtil.get(steamFrozenKey);
 			String userFrozenValue = JedisUtil.get(userFrozenkey);
 			if (StringUtils.isNotBlank(userFrozenValue) && StringUtils.isNotBlank(steamFrozenValue)) {
-				if (userFrozenValue.contains(steamFrozenValue)) {
+				if (userFrozenValue.contains(tradeDetail.getTradeId() + "")) {
 					flag = true;
 					JedisUtil.del(steamFrozenKey);
 					String[] arys = userFrozenValue.split(",");
@@ -410,7 +431,7 @@ public class OrderService {
 		// 声优无流水，或者 有流水，且只有冻结流水
 		if (tradeDetail == null || tradeDetail.getType() == 7) {
 			// 声优 有流水，且排除解冻流水 和强制完成流水
-			if (tradeDetail != null && tradeDetail.getType() != 8 && tradeDetail.getType() != 11) {
+			if (tradeDetail == null || (tradeDetail.getType() != 8 && tradeDetail.getType() != 11)) {
 				Map<String, Object> pram = new HashMap<String, Object>();
 				pram.put("amount", amount);
 				pram.put("userId", order.getServiceId());
@@ -486,7 +507,7 @@ public class OrderService {
 			String steamFrozenValue = JedisUtil.get(steamFrozenKey);
 			String userFrozenValue = JedisUtil.get(userFrozenkey);
 			if (StringUtils.isNotBlank(userFrozenValue) && StringUtils.isNotBlank(steamFrozenValue)) {
-				if (userFrozenValue.contains(steamFrozenValue)) {
+				if (userFrozenValue.contains(tradeDetail.getTradeId() + "")) {
 					flag = true;// 有冻结流水
 					JedisUtil.del(steamFrozenKey);
 					String[] arys = userFrozenValue.split(",");
@@ -509,7 +530,7 @@ public class OrderService {
 			map.put("customerId", order.getServiceId());
 			map.put("orderNo", order.getOrderNo());
 			tradeDetail = baseManager.get("TradeDetail.queryCountByOrderNoAndCustomerId", map);
-			if (tradeDetail != null && tradeDetail.getType() != 8) {
+			if (tradeDetail == null || tradeDetail.getType() != 8) {
 				Map<String, Object> pram = new HashMap<String, Object>();
 				pram.put("type", 1);
 				pram.put("amount", amount);
@@ -568,4 +589,196 @@ public class OrderService {
 		}
 	}
 
+	/**
+	 * 【强制完成】给声优增加技能声量 + 给客户增加经验值
+	 * @param orderId
+	 * @param oldOrderStatus 强制完成前订单状态
+	 * @author duanjun
+	 */
+	private void forceDoneAddBigvScoreAndCustomerExperience(Long orderId, Integer oldOrderStatus){
+		// 订单状态是已完成状态，就不用再增加了，因为已经发送MQ消息增加相应值了（防止重复增加）
+		if(oldOrderStatus >= 30){
+			return;
+		}
+		com.honglu.quickcall.account.facade.entity.Order order;
+		try {
+			// 查询订单数据
+			order = baseManager.get("Order.selectUsedToCalculateBigvScore", new Object[]{orderId});
+			if (order == null) {
+				LOGGER.error("【强制完成】 -- （给声优增加技能声量 + 给客户增加经验值）未查询到订单信息，orderId：" + orderId);
+				return;
+			}
+		}catch (Exception e){
+			LOGGER.error(orderId + "【强制完成】 -- （给声优增加技能声量 + 给客户增加经验值）查询订单信息异常" + orderId, e);
+			return;
+		}
+
+		addBigvScore(order);
+
+		addCustomerExperience(order);
+	}
+
+	private void addCustomerExperience(com.honglu.quickcall.account.facade.entity.Order order) {
+		try {
+			// 计算客户需要获取的经验值
+			Integer experience = order.getOrderAmounts().intValue();
+
+			LOGGER.info("【强制完成】 -- 给客户增加经验值--客户ID：" + order.getCustomerId() + " ， 增加经验值：" + experience);
+			Map<String, Object> paramsMap = new HashMap<>();
+			paramsMap.put("customerId", order.getCustomerId());
+			paramsMap.put("experience", experience);
+			baseManager.update("Customer.updateCustomerExperienceAndLevel", paramsMap);
+		}catch (Exception e){
+			LOGGER.error(order.getOrderId() + "【强制完成】 -- 给客户增加经验值异常：", e);
+		}
+	}
+
+	private void addBigvScore(com.honglu.quickcall.account.facade.entity.Order order) {
+		try {
+			// 计算过评分 || 客户已评价
+			if (order.getValueScore() != null || Objects.equals(order.getCustomerIsEvaluate(), 1)) {
+				LOGGER.info("【强制完成】 -- 给声优添加技能声量 -- 该订单已计算过评分，不再重新添加：" + order.getOrderId());
+				return;
+			}
+
+			// 查询声优技能总订单数
+			Integer orderTotal = baseManager.get(
+					"BigvSkillScore.selectBigvSkillOrderTotal", new Object[]{order.getCustomerSkillId()});
+
+			// 计算该订单对应的技能的评分
+			BigDecimal score = ScoreRankConstants.calculateOrderSkillScore(
+					orderTotal,
+					order.getServicePrice(),
+					order.getOrderNum(),
+					order.getCouponFlag(),
+					ScoreRankConstants.DEFAULT_EVALUATION_LEVEL);
+
+			// 更新订单价值得分
+			Map<String, Object> paramsMap = new HashMap<>();
+			paramsMap.put("orderId", order.getOrderId());
+			paramsMap.put("valueScore", score);
+			baseManager.update("Order.updateValueScoreToOrder", paramsMap);
+
+			// 更新评分到大V技能评分表和总评分排名表
+			updateToBigvScore(order.getServiceId(), order.getSkillItemId(), order.getCustomerSkillId(), score, 1);
+		}catch (Exception e){
+			LOGGER.error(order.getOrderId() + "【强制完成】 -- 给声优增加技能声量异常：", e);
+		}
+	}
+
+	/**
+	 * 【强制取消】扣除声优技能声量 + 扣除客户经验
+	 * @param orderId
+	 * @param oldOrderStatus 强制取消前订单状态
+	 * @author duanjun
+	 */
+	private void forceCancelDeductBigvScoreAndCustomerExperience(Long orderId, Integer oldOrderStatus){
+		// 订单状态是不是已完成状态，就不用扣除，因为还没有增加相应值
+		if(oldOrderStatus < 30){
+			return;
+		}
+		com.honglu.quickcall.account.facade.entity.Order order;
+		try {
+			// 查询订单数据
+			order = baseManager.get("Order.selectUsedToCalculateBigvScore", new Object[]{orderId});
+			if (order == null) {
+				LOGGER.error("【强制取消】 -- （扣除声优技能声量 + 扣除客户经验）未查询到订单信息，orderId：" + orderId);
+				return;
+			}
+		}catch (Exception e){
+			LOGGER.error(orderId + "【强制取消】 -- （扣除声优技能声量 + 扣除客户经验）查询订单信息异常" + orderId, e);
+			return;
+		}
+
+		deductBigvScore(order);
+
+		deductCustomerExperience(order);
+
+	}
+
+	private void deductCustomerExperience(com.honglu.quickcall.account.facade.entity.Order order) {
+		try {
+			// 计算客户需要获取的经验值
+			Integer experience = order.getOrderAmounts().intValue();
+
+			LOGGER.info("【强制取消】 -- 扣除客户经验--客户ID：" + order.getCustomerId() + " ， 扣除客户经验：" + experience);
+			Map<String, Object> paramsMap = new HashMap<>();
+			paramsMap.put("customerId", order.getCustomerId());
+			paramsMap.put("experience", -experience);
+			baseManager.update("Customer.updateCustomerExperienceAndLevel", paramsMap);
+		}catch (Exception e){
+			LOGGER.error(order.getOrderId() + "【强制取消】 -- 扣除客户经验异常：", e);
+		}
+	}
+
+	private void deductBigvScore(com.honglu.quickcall.account.facade.entity.Order order) {
+		try {
+			if (order.getValueScore() == null) {
+				LOGGER.warn("【强制取消】 -- 扣除声优技能声量 -- 该订单还未计算过评分，不用扣减声量：" + order.getOrderId());
+				return;
+			}
+
+			// 扣减声量
+			BigDecimal removeScore = new BigDecimal(0).subtract(order.getValueScore());
+
+			// 更新技能声量表
+			Map<String, Object> bigvSkillScoreMap = new HashMap<>();
+			bigvSkillScoreMap.put("customerSkillId", order.getCustomerSkillId());
+			bigvSkillScoreMap.put("addOrderTotal", -1);
+			bigvSkillScoreMap.put("valueScore", removeScore);
+			baseManager.update("BigvSkillScore.updateBigvSkillScore", bigvSkillScoreMap);
+
+			// 更新总声量表
+			Map<String, Object> bigvSkillMap = new HashMap<>();
+			bigvSkillMap.put("customerId", order.getServiceId());
+			bigvSkillMap.put("addOrderTotal", -1);
+			bigvSkillMap.put("valueScore", removeScore);
+			baseManager.update("BigvScore.updateBigvScore", bigvSkillScoreMap);
+		}catch (Exception e){
+			LOGGER.error(order.getOrderId() + "【强制取消】 -- 扣除声优技能声量异常：", e);
+		}
+	}
+
+	/**
+	 * 更新评分到大V技能评分表和总评分排名表
+	 *
+	 * @param customerId
+	 * @param skillItemId
+	 * @param score
+	 * @param addOrderTotal 累加订单的笔数
+	 * @author duanjun
+	 */
+	private void updateToBigvScore(Long customerId, Long skillItemId, Long customerSkillId, BigDecimal score, Integer addOrderTotal) {
+		// 存入技能排名表
+		Map<String, Object> bigvSkillScoreMap = new HashMap<>();
+		bigvSkillScoreMap.put("customerSkillId", customerSkillId);
+		bigvSkillScoreMap.put("addOrderTotal", addOrderTotal);
+		bigvSkillScoreMap.put("valueScore", score);
+		if (baseManager.update("BigvSkillScore.updateBigvSkillScore", bigvSkillScoreMap) == 0) {
+			// 更新失败则插入
+			BigvSkillScore bigvSkillScore = new BigvSkillScore();
+			bigvSkillScore.setId(UUIDUtils.getId());
+			bigvSkillScore.setCustomerId(customerId);
+			bigvSkillScore.setSkillItemId(skillItemId);
+			bigvSkillScore.setCustomerSkillId(customerSkillId);
+			bigvSkillScore.setOrderTotal(1);
+			bigvSkillScore.setScoreTotal(score);
+			baseManager.insert("BigvSkillScore.insertBigvSkillScore", bigvSkillScore);
+		}
+
+		// 存入大V排名表
+		Map<String, Object> bigvSkillMap = new HashMap<>();
+		bigvSkillMap.put("customerId", customerId);
+		bigvSkillMap.put("addOrderTotal", addOrderTotal);
+		bigvSkillMap.put("valueScore", score);
+		if (baseManager.update("BigvScore.updateBigvScore", bigvSkillMap) == 0) {
+			// 更新失败则插入
+			BigvScore bigvScore = new BigvScore();
+			bigvScore.setId(UUIDUtils.getId());
+			bigvScore.setCustomerId(customerId);
+			bigvScore.setOrderTotal(1);
+			bigvScore.setScoreTotal(score);
+			baseManager.insert("BigvScore.insertBigvScore", bigvScore);
+		}
+	}
 }
