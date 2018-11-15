@@ -1258,7 +1258,9 @@ public class OrderServiceImpl implements IOrderService {
 				} else {
 					// 大V在服务时间内发起完成服务
 					newOrderStatus = OrderSkillConstants.ORDER_STATUS_GOING_DAV_APPAY_FINISH;
+					LOGGER.info("============finishOrder:serviceId:msg:"+OrderSkillConstants.IM_MSG_CONTENT_CUST_FINISH_TO_DAV);
 					RongYunUtil.sendOrderMessage(serviceId, OrderSkillConstants.IM_MSG_CONTENT_CUST_FINISH_TO_DAV,OrderSkillConstants.MSG_CONTENT_DAV);
+					LOGGER.info("============finishOrder:customerIdId:msg:"+OrderSkillConstants.IM_MSG_CONTENT_CUST_FINISH_TO_CUST);
 					RongYunUtil.sendOrderMessage(customerId, OrderSkillConstants.IM_MSG_CONTENT_CUST_FINISH_TO_CUST,OrderSkillConstants.MSG_CONTENT_C);
 					
 					
