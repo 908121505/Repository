@@ -131,6 +131,7 @@ public class AliPayServiceImpl implements AliPayService {
 		Customer customer = commonService.getPhoneByCustomerId(packet.getCustomerId());
 		if (customer != null) {
 			req.setVcUserPhoneNum(customer.getPhone());
+			req.setVcUserId(packet.getCustomerId() + "");
 		}
 		try {
 			dataDuriedPointBusiness.buryFirstChargeData(req);
@@ -229,37 +230,41 @@ public class AliPayServiceImpl implements AliPayService {
 		// TODO Auto-generated method stub
 		logger.info("支付回调参数===========" + JSON.toJSONString(params));
 		// 回调锁
-		String redisLockKey = RedisKeyConstants.ACCOUNT_ORDER_NO_NX + params.getAccountId();// redis 的用户Id 数据锁
-		long redisResult = JedisUtil.setnx(redisLockKey, params.getAccountId() + "", 2);
-		logger.info("支付回调redisResult结果为：" + redisResult);
-		if (redisResult == 0) {
-			return ResultUtils.resultParamEmpty("重复点击");
-		}
-		redisLockKey = RedisKeyConstants.ACCOUNT_ORDER_NO_NX + params.getOrderNo();// redis 的订单Id 数据锁
-		redisResult = JedisUtil.setnx(redisLockKey, params.getOrderNo() + "", 2);
-		logger.info("支付回调redisResult结果为：" + redisResult);
-		if (redisResult == 0) {
-			return ResultUtils.resultParamEmpty("重复点击");
-		}
+		String redisLockKey = RedisKeyConstants.ACCOUNT_ORDER_NO_NX + params.getOrderNo();// redis 的订单Id 数据锁
+		Long resultRedisLock = JedisUtil.setnx(redisLockKey, "1", 60);
 
-		// RMB转换轻音货币 比例1:100
-		BigDecimal amount = params.getAmount().multiply(new BigDecimal("100"));
-		Recharge recharge = new Recharge();
-		recharge.setCustomerId(params.getAccountId());
-		recharge.setFinishDate(new Date());
-		recharge.setOrdersn(params.getOrderNo());
-		if (rechargeMapper.selectByOrderNo(params.getOrderNo()).getState() == 1) {
+		logger.info("支付回调redisLockKey：" + redisLockKey);
+		try {
+			if (!(resultRedisLock == 0)) {
 
-			if (params.getPayState() == 1) {
-				recharge.setState(2);// 状态。1-申请支付，2-支付成功 3支付失败
+				// RMB转换轻音货币 比例1:100
+				BigDecimal amount = params.getAmount().multiply(new BigDecimal("100"));
+				Recharge recharge = new Recharge();
+				recharge.setCustomerId(params.getAccountId());
+				recharge.setFinishDate(new Date());
+				recharge.setOrdersn(params.getOrderNo());
+				if (rechargeMapper.selectByOrderNo(params.getOrderNo()).getState() == 1) {
+					logger.info("-----------------业务开始111111111111111111");
 
-				accountService.inAccount(params.getAccountId(), amount, TransferTypeEnum.RECHARGE,
-						AccountBusinessTypeEnum.Recharge, null);
-			} else if (params.getPayState() == 0) {
-				recharge.setState(3);// 状态。1-申请支付，2-支付成功 3支付失败
+					if (params.getPayState() == 1) {
+						recharge.setState(2);// 状态。1-申请支付，2-支付成功 3支付失败
+
+						accountService.inAccount(params.getAccountId(), amount, TransferTypeEnum.RECHARGE,
+								AccountBusinessTypeEnum.Recharge, null);
+					} else if (params.getPayState() == 0) {
+						recharge.setState(3);// 状态。1-申请支付，2-支付成功 3支付失败
+					}
+					rechargeMapper.updateByOrderNo(recharge);
+					logger.info("-----------------业务结束222222222222222");
+				}
 			}
-			rechargeMapper.updateByOrderNo(recharge);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			return ResultUtils.resultParamEmpty("回调异常");
+		} finally {
+			JedisUtil.del(redisLockKey);
 		}
+
 		return ResultUtils.resultSuccess();
 	}
 
