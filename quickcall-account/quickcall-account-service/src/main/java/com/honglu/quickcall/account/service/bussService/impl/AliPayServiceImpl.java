@@ -39,7 +39,6 @@ import com.honglu.quickcall.common.api.exchange.ResultUtils;
 import com.honglu.quickcall.common.api.util.HttpClientUtils;
 import com.honglu.quickcall.common.api.util.JedisUtil;
 import com.honglu.quickcall.common.api.util.RedisKeyConstants;
-import com.honglu.quickcall.common.api.util.RedisLockUtil;
 import com.honglu.quickcall.common.core.util.UUIDUtils;
 import com.honglu.quickcall.producer.facade.business.DataDuriedPointBusiness;
 import com.honglu.quickcall.producer.facade.req.databury.BuryFirstChargeReq;
@@ -230,12 +229,12 @@ public class AliPayServiceImpl implements AliPayService {
 		// TODO Auto-generated method stub
 		logger.info("支付回调参数===========" + JSON.toJSONString(params));
 		// 回调锁
-		String redisLockKey = RedisKeyConstants.ACCOUNT_ORDER_NO_NX + params.getOrderNo();// redis 的用户Id 数据锁
+		String redisLockKey = RedisKeyConstants.ACCOUNT_ORDER_NO_NX + params.getOrderNo();// redis 的订单Id 数据锁
+		Long resultRedisLock = JedisUtil.setnx(redisLockKey, "1", 60);
 
 		logger.info("支付回调redisLockKey：" + redisLockKey);
-		RedisLockUtil lock = new RedisLockUtil(redisLockKey, 60);
 		try {
-			if (lock.lock()) {
+			if (!(resultRedisLock == 0)) {
 
 				// RMB转换轻音货币 比例1:100
 				BigDecimal amount = params.getAmount().multiply(new BigDecimal("100"));
@@ -258,11 +257,11 @@ public class AliPayServiceImpl implements AliPayService {
 					logger.info("-----------------业务结束222222222222222");
 				}
 			}
-		} catch (InterruptedException e) {
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			return ResultUtils.resultParamEmpty("回调异常");
 		} finally {
-			lock.unlock();
+			JedisUtil.del(redisLockKey);
 		}
 
 		return ResultUtils.resultSuccess();
