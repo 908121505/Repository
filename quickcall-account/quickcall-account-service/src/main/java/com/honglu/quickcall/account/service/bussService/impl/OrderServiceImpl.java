@@ -362,7 +362,7 @@ public class OrderServiceImpl implements IOrderService {
 			record.setRemark(request.getRemark());
 			orderMapper.insert(record);
 			
-			
+			/**8.更新券的使用状态*/
 			if(customerCouponId != null){
 				CustomerCoupon customerCoupon = new CustomerCoupon();
 				customerCoupon.setId(customerCouponId);
@@ -379,6 +379,7 @@ public class OrderServiceImpl implements IOrderService {
 			LOGGER.info("下单成功 -- 发送弹幕消息：", orderId);
 			barrageMessageService.lpushMessage(orderId);
 
+			/**9.下单成功，给声优发送短信*/
 			// 获取声优手机号码
 			Customer service = commonService.getPhoneByCustomerId(serviceId);
 			LOGGER.info("用户下单声优信息：" + service);
@@ -397,7 +398,7 @@ public class OrderServiceImpl implements IOrderService {
 							OrderSkillConstants.GT_MSG_CONTENT_RECEIVE_ORDER_URL);
 				}
 			}
-			// 下单成功后推送IM消息
+			/***10.下单成功后推送IM消息*/
 			RongYunUtil.sendOrderMessage(serviceId, OrderSkillConstants.IM_MSG_CONTENT_RECEIVE_ORDER_TO_DV,OrderSkillConstants.MSG_CONTENT_DAV);
 			RongYunUtil.sendOrderMessage(customerId, OrderSkillConstants.IM_MSG_CONTENT_RECEIVE_ORDER_TO_CUST,OrderSkillConstants.MSG_CONTENT_C);
 			LOGGER.info("======>>>>>用户编号为：" + request.getCustomerId() + "下单成功");
@@ -407,24 +408,7 @@ public class OrderServiceImpl implements IOrderService {
 			commonService.sendOrderMsg(customerId, serviceId, orderId, OrderSkillConstants.IM_MSG_CONTENT_RECEIVE_ORDER_TO_DV);
 			commonService.sendOrderMsg(serviceId, customerId, orderId, OrderSkillConstants.IM_MSG_CONTENT_RECEIVE_ORDER_TO_CUST);
 			
-//			BuryMakeOrderReq req = new BuryMakeOrderReq();
-//			// 下单触发埋点
-//			req.setDoesSucceed(true);
-//			req.setSkillId(skillItem.getId());
-//			req.setSkillName(skillItem.getSkillItemName());
-//			req.setVcOwnerUserId("");
-//			//用户ID
-//			req.setVcUserId(customerId+"");
-//			Customer  customer = commonService.getPhoneByCustomerId(customerId);
-//			if(customer != null){
-//				req.setVcUserPhoneNum(customer.getPhone());
-//			}
-//			req.setVirUserId(request.getVirUserId());
-//			try {
-//				dataDuriedPointBusiness.buryMakeOrderData(req);
-//			} catch (Exception e) {
-//				LOGGER.error("下单埋点发生异常，异常信息：", e);
-//			}
+			/**11.埋点*/
 			addDuriedPoint(skillItem, customerId, serviceId, request.getVirUserId(), true);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -604,7 +588,7 @@ public class OrderServiceImpl implements IOrderService {
 				orderStatus = OrderSkillConstants.ORDER_STATUS_CANCEL_BEFORE_DAV_START;
 				// 声优发起开始服务
 			} else if (OrderSkillConstants.ORDER_STATUS_WAITING_START_DA_APPAY_START_SERVICE == oldOrderStatus) {
-				// 订单状态8.声优接受订单之后开始之前用户自主取消
+				// 订单状态20.声优发起立即服务后用户自主取消
 				orderStatus = OrderSkillConstants.ORDER_STATUS_CANCLE_USER_SELF_BEFORE_SERVICE;
 			} else if (OrderSkillConstants.ORDER_STATUS_GOING_WAITING_START == oldOrderStatus) {
 				// 订单状态23.取消（叫醒预约时间之前取消）
@@ -613,7 +597,7 @@ public class OrderServiceImpl implements IOrderService {
 				throw new BizException(AccountBizReturnCode.ORDER_STATUS_ERROR, "订单状态异常");
 			}
 			BigDecimal payAmount = order.getOrderAmounts();
-			//TODO 需要关注一下订单用券逻辑
+			//订单取消需要将券返还给用户
 			Integer  couponFlag = order.getCouponFlag();
 			commonService.cancelUpdateOrder(orderId, orderStatus, new Date(), request.getSelectReason(),
 					request.getRemarkReason(),couponFlag);
@@ -638,6 +622,7 @@ public class OrderServiceImpl implements IOrderService {
 			// -----end---chenpeng 2018.11.1
 		}
 
+		
 		Long serviceId = order.getServiceId();
 		// 用户取消订单通知声优查看详情
 		RongYunUtil.sendOrderMessage(serviceId, OrderSkillConstants.IM_MSG_CONTENT_CANCEL_ORDER_TO_DV,OrderSkillConstants.MSG_CONTENT_DAV);
@@ -713,7 +698,9 @@ public class OrderServiceImpl implements IOrderService {
 		}
 
 		/**
-		 * 逻辑： 1.判断serviceId是否有技能项（可以进行接单）， 2.判断二者之间有没有订单关系
+		 * 逻辑： 1.判断双方有没有订单关系（已完成+进行中）
+		 * 2.判断当前用户是否是消费方
+		 * 3.
 		 * 
 		 * 
 		 */
@@ -733,24 +720,23 @@ public class OrderServiceImpl implements IOrderService {
 		statusList.add(OrderSkillConstants.ORDER_STATUS_GOING_DAV_APPAY_FINISH);// 进行中（声优发起完成服务）
 		
 		getFinishStatusList(statusList);
-		// 判断双方有没有订单关系
+		// 1.判断双方有没有订单关系
 		Order order = orderMapper.queryOrderByCustomerIdAndServiceId(customerId, serviceId, statusList);
 
 		if (order == null) {
 			order = orderMapper.queryOrderByCustomerIdAndServiceId(serviceId, customerId, statusList);
 		}
 
-		/**** 1.必须首先判断双方存在订单关系 */
 		if (order != null) {
 			Integer  orderStatus =  order.getOrderStatus();
 			Set<Integer>   finishOrderStatusSet = new HashSet<Integer>();
 			getFinishStatusSet(finishOrderStatusSet);
-			/**2.判断是否是已完成状态，已完成状态如下*/
+			/**2.判断订单是否是已完成状态*/
 			if(finishOrderStatusSet.contains(orderStatus)){
 				LOGGER.info("================"+orderStatus);
 				Long  orderCustomerId = order.getCustomerId();
 				LOGGER.info("orderCustomerId:"+orderCustomerId +",customerId:"+customerId);
-				/**2.1当前人是下单人**/
+				/**2.1订单已完成，判断当前人是否是消费方**/
 				if(orderCustomerId.equals(customerId)){
 					//当前用户是下单人
 					orderDetailForIMVO.setRetCode(OrderSkillConstants.IM_RETCODE_ORDER_EXIST);// 不可下单
@@ -778,7 +764,7 @@ public class OrderServiceImpl implements IOrderService {
 					} catch (Exception e) {
 					}
 				}else{
-					/***2.2订单存在，当前用户是声优方，需要判断对方是否可下单*/
+					/***2.2订单存在，且已完成，当前用户是声优方，需要判断对方是否可下单*/
 					//需要判断是否可以下单，也就是说serviceId方是否有技能
 //					orderDetailForIMVO.setRetCode(OrderSkillConstants.IM_RETCODE_CAN_ORDER);// 不存在的订单关系
 					//判断serviceId是否可下单

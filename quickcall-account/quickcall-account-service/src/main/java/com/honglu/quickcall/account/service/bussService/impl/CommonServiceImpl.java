@@ -445,7 +445,10 @@ public class CommonServiceImpl implements CommonService {
 			}else if(OrderSkillConstants.ORDER_STATUS_WAITING_START_DA_APPAY_START_SERVICE == orderStatus ){
 				result =  OrderSkillConstants.IM_MSG_CONTENT_DAV_START_SERVICE_TO_DAV;
 			//用户同意声优立即服务
-			}else if(OrderSkillConstants.ORDER_STATUS_GOING_USER_ACCEPCT == orderStatus || OrderSkillConstants.ORDER_STATUS_GOING_WAITING_START == orderStatus){
+			}else if(OrderSkillConstants.ORDER_STATUS_GOING_WAITING_START == orderStatus){
+				result =   OrderSkillConstants.IM_MSG_CONTENT_USER_CONFIRM_START_SERVICE_JX_TO_DAV;
+			//声优在服务时间内发起完成服务
+			}else if(OrderSkillConstants.ORDER_STATUS_GOING_USER_ACCEPCT == orderStatus ){
 				result =   OrderSkillConstants.IM_MSG_CONTENT_USER_CONFIRM_START_SERVICE_TO_DAV;
 			//声优在服务时间内发起完成服务
 			}else if(OrderSkillConstants.ORDER_STATUS_GOING_DAV_APPAY_FINISH == orderStatus){
@@ -500,7 +503,10 @@ public class CommonServiceImpl implements CommonService {
 			}else if(OrderSkillConstants.ORDER_STATUS_WAITING_START_DA_APPAY_START_SERVICE == orderStatus ){
 				result =   OrderSkillConstants.IM_MSG_CONTENT_DAV_START_SERVICE_TO_CUST;
 			//用户同意声优立即服务
-			}else if(OrderSkillConstants.ORDER_STATUS_GOING_USER_ACCEPCT == orderStatus || OrderSkillConstants.ORDER_STATUS_GOING_WAITING_START == orderStatus){
+			}else if( OrderSkillConstants.ORDER_STATUS_GOING_WAITING_START == orderStatus){
+				result =  OrderSkillConstants.IM_MSG_CONTENT_USER_CONFIRM_START_SERVICE_JX_TO_CUST;
+			//声优在服务时间内发起完成服务
+			}else if(OrderSkillConstants.ORDER_STATUS_GOING_USER_ACCEPCT == orderStatus){
 				result =  OrderSkillConstants.IM_MSG_CONTENT_USER_CONFIRM_START_SERVICE_TO_CUST;
 			//声优在服务时间内发起完成服务
 			}else if(OrderSkillConstants.ORDER_STATUS_GOING_DAV_APPAY_FINISH == orderStatus){
