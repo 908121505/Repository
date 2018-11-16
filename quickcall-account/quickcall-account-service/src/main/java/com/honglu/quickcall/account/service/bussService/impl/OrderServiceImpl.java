@@ -1476,20 +1476,29 @@ public class OrderServiceImpl implements IOrderService {
 				orderMapper.saveEvaluationLabels(list);
 			}
 			
-			Long  serviceId = orderDetailVO.getServiceId();
-			Long  customerId = orderDetailVO.getCustomerId();
-			Long  orderId =orderDetailVO.getOrderId();
-			RongYunUtil.sendOrderMessage(serviceId,OrderSkillConstants.IM_MSG_CONTENT_PING_JIA_FINISH_TO_DV, OrderSkillConstants.MSG_CONTENT_DAV);
-			RongYunUtil.sendOrderMessage(customerId,OrderSkillConstants.IM_MSG_CONTENT_PING_JIA_FINISH_TO_CUST, OrderSkillConstants.MSG_CONTENT_C);
-			
-			//推动订单IM消息
-			commonService.sendOrderMsg(customerId, serviceId, orderId, OrderSkillConstants.IM_MSG_CONTENT_PING_JIA_FINISH_TO_DV);
-			commonService.sendOrderMsg(serviceId, customerId,orderId, OrderSkillConstants.IM_MSG_CONTENT_PING_JIA_FINISH_TO_CUST);
+//			Long  serviceId = orderDetailVO.getServiceId();
+//			Long  customerId = orderDetailVO.getCustomerId();
+//			Long  orderId =orderDetailVO.getOrderId();
+//			RongYunUtil.sendOrderMessage(serviceId,OrderSkillConstants.IM_MSG_CONTENT_PING_JIA_FINISH_TO_DV, OrderSkillConstants.MSG_CONTENT_DAV);
+//			RongYunUtil.sendOrderMessage(customerId,OrderSkillConstants.IM_MSG_CONTENT_PING_JIA_FINISH_TO_CUST, OrderSkillConstants.MSG_CONTENT_C);
+//			
+//			//推动订单IM消息
+//			commonService.sendOrderMsg(customerId, serviceId, orderId, OrderSkillConstants.IM_MSG_CONTENT_PING_JIA_FINISH_TO_DV);
+//			commonService.sendOrderMsg(serviceId, customerId,orderId, OrderSkillConstants.IM_MSG_CONTENT_PING_JIA_FINISH_TO_CUST);
 			
 			
 		}
 
 		commonService.updateOrder(request.getOrderId(), OrderSkillConstants.ORDER_STATUS_FINISHED_AND_PINGJIA);
+		Long  serviceId = orderDetail.getServiceId();
+		Long  customerId = orderDetail.getCustomerId();
+		Long  orderId =orderDetail.getOrderId();
+		RongYunUtil.sendOrderMessage(serviceId,OrderSkillConstants.IM_MSG_CONTENT_PING_JIA_FINISH_TO_DV, OrderSkillConstants.MSG_CONTENT_DAV);
+		RongYunUtil.sendOrderMessage(customerId,OrderSkillConstants.IM_MSG_CONTENT_PING_JIA_FINISH_TO_CUST, OrderSkillConstants.MSG_CONTENT_C);
+		
+		//推动订单IM消息
+		commonService.sendOrderMsg(customerId, serviceId, orderId, OrderSkillConstants.IM_MSG_CONTENT_PING_JIA_FINISH_TO_DV);
+		commonService.sendOrderMsg(serviceId, customerId,orderId, OrderSkillConstants.IM_MSG_CONTENT_PING_JIA_FINISH_TO_CUST);
 
 		// 插入关注
 		if (Objects.equals(request.getAttentionFlag(), 1)) {
