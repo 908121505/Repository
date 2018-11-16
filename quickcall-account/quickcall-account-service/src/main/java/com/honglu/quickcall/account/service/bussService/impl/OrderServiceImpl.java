@@ -1493,12 +1493,15 @@ public class OrderServiceImpl implements IOrderService {
 		Long  serviceId = orderDetail.getServiceId();
 		Long  customerId = orderDetail.getCustomerId();
 		Long  orderId =orderDetail.getOrderId();
+		
+		LOGGER.info("submitOrderEvaluation用户评价完成，推送消息开始------------------");
 		RongYunUtil.sendOrderMessage(serviceId,OrderSkillConstants.IM_MSG_CONTENT_PING_JIA_FINISH_TO_DV, OrderSkillConstants.MSG_CONTENT_DAV);
 		RongYunUtil.sendOrderMessage(customerId,OrderSkillConstants.IM_MSG_CONTENT_PING_JIA_FINISH_TO_CUST, OrderSkillConstants.MSG_CONTENT_C);
 		
 		//推动订单IM消息
 		commonService.sendOrderMsg(customerId, serviceId, orderId, OrderSkillConstants.IM_MSG_CONTENT_PING_JIA_FINISH_TO_DV);
 		commonService.sendOrderMsg(serviceId, customerId,orderId, OrderSkillConstants.IM_MSG_CONTENT_PING_JIA_FINISH_TO_CUST);
+		LOGGER.info("submitOrderEvaluation用户评价完成，推送消息结束------------------");
 
 		// 插入关注
 		if (Objects.equals(request.getAttentionFlag(), 1)) {
