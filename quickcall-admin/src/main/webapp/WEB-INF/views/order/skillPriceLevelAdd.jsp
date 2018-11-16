@@ -83,6 +83,7 @@
 			</form>
 		</div>
 		<div class="modal-footer">
+		<input type="hidden" class="needRefresh" value="1"/>
 		<span id="tip" style="color: red; font-size: 16px; margin-left: 20px;float:left;"></span>
 			<button class="btn btn-default" data-dismiss="modal" aria-hidden="true" >取消</button>
 			<button class="btn btn-primary" data-dismiss="modal" >保存</button>
@@ -104,6 +105,7 @@
 
 	    })
 	});
+	
 	function check_fun(){
 		 $("#tip").html("");
 	     var b = true;
