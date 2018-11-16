@@ -435,18 +435,21 @@ public class CommonServiceImpl implements CommonService {
 			//12 用户取消订单
 			}else if (OrderSkillConstants.ORDER_STATUS_CANCEL_DAV_START_ONE_ORDER ==  orderStatus){
 				result =   OrderSkillConstants.IM_MSG_CONTENT_DAV_CONFIRM_OTHER_CANCEL_TO_DAV;
-			//4     14   20   22  23用户取消订单
+			//4     14   20    23用户取消订单
 			}else if(OrderSkillConstants.ORDER_STATUS_CANCEL_BEFORE_RECEIVE== orderStatus 
-					||orderStatus == OrderSkillConstants.ORDER_STATUS_CANCEL_DAV_START_ONE_ORDER
+					/*||orderStatus == OrderSkillConstants.ORDER_STATUS_CANCEL_DAV_START_ONE_ORDER*/
 					||orderStatus == OrderSkillConstants.ORDER_STATUS_CANCEL_BEFORE_DAV_START
 					/*||orderStatus == OrderSkillConstants.ORDER_STATUS_CANCEL_NOT_START*/
 					||orderStatus == OrderSkillConstants.ORDER_STATUS_CANCLE_USER_SELF_BEFORE_SERVICE
-					||orderStatus == OrderSkillConstants.ORDER_STATUS_CANCEL_USER_NOT_ACCEPCT
+					/*||orderStatus == OrderSkillConstants.ORDER_STATUS_CANCEL_USER_NOT_ACCEPCT*/
 					||orderStatus == OrderSkillConstants.ORDER_STATUS_CANCEL_BEFORE_APPOINT_TIME){
 				result =   OrderSkillConstants.IM_MSG_CONTENT_CANCEL_ORDER_TO_DV;
 			//18 声优发起立即服务
 			}else if(OrderSkillConstants.ORDER_STATUS_WAITING_START_DA_APPAY_START_SERVICE == orderStatus ){
 				result =  OrderSkillConstants.IM_MSG_CONTENT_DAV_START_SERVICE_TO_DAV;
+			//22用户同意声优立即服务
+			}else if(OrderSkillConstants.ORDER_STATUS_CANCEL_USER_NOT_ACCEPCT == orderStatus ){
+				result =  OrderSkillConstants.IM_MSG_CONTENT_CANCEL_DV_5MINUTE_CONFIRM_TIMEOUT;
 			//24用户同意声优立即服务
 			}else if(OrderSkillConstants.ORDER_STATUS_GOING_WAITING_START == orderStatus){
 				result =   OrderSkillConstants.IM_MSG_CONTENT_USER_CONFIRM_START_SERVICE_JX_TO_DAV;
@@ -497,19 +500,22 @@ public class CommonServiceImpl implements CommonService {
 			//12用户取消订单
 			}else if (OrderSkillConstants.ORDER_STATUS_CANCEL_DAV_START_ONE_ORDER ==  orderStatus){
 				result =   OrderSkillConstants.IM_MSG_CONTENT_DAV_CONFIRM_OTHER_CANCEL_TO_CUST;
-			//4     14   20   22  23用户取消订单
+			//4     14   20    23用户取消订单
 			}else if(OrderSkillConstants.ORDER_STATUS_CANCEL_BEFORE_RECEIVE== orderStatus 
 					/*||orderStatus == OrderSkillConstants.ORDER_STATUS_CANCEL_DAV_START_ONE_ORDER*/
 					||orderStatus == OrderSkillConstants.ORDER_STATUS_CANCEL_BEFORE_DAV_START
 					/*||orderStatus == OrderSkillConstants.ORDER_STATUS_CANCEL_NOT_START*/
 					||orderStatus == OrderSkillConstants.ORDER_STATUS_CANCLE_USER_SELF_BEFORE_SERVICE
-					||orderStatus == OrderSkillConstants.ORDER_STATUS_CANCEL_USER_NOT_ACCEPCT
+					/*||orderStatus == OrderSkillConstants.ORDER_STATUS_CANCEL_USER_NOT_ACCEPCT*/
 					||orderStatus == OrderSkillConstants.ORDER_STATUS_CANCEL_BEFORE_APPOINT_TIME){
 				result =   OrderSkillConstants.IM_MSG_CONTENT_CANCEL_ORDER_TO_CUST;
 			//18 声优发起立即服务
 			}else if(OrderSkillConstants.ORDER_STATUS_WAITING_START_DA_APPAY_START_SERVICE == orderStatus ){
 				result =   OrderSkillConstants.IM_MSG_CONTENT_DAV_START_SERVICE_TO_CUST;
-			//24 用户同意声优立即服务
+			//22 用户同意声优立即服务
+			}else if(OrderSkillConstants.ORDER_STATUS_CANCEL_USER_NOT_ACCEPCT == orderStatus ){
+				result =  OrderSkillConstants.IM_MSG_CONTENT_CANCEL_CUST_5MINUTE_CONFIRM_TIMEOUT;
+			//24用户同意声优立即服务
 			}else if( OrderSkillConstants.ORDER_STATUS_GOING_WAITING_START == orderStatus){
 				result =  OrderSkillConstants.IM_MSG_CONTENT_USER_CONFIRM_START_SERVICE_JX_TO_CUST;
 			// 26 声优在服务时间内发起完成服务
