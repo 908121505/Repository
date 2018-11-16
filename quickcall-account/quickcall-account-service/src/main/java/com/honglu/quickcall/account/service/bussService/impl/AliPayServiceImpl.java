@@ -229,8 +229,14 @@ public class AliPayServiceImpl implements AliPayService {
 		// TODO Auto-generated method stub
 		logger.info("支付回调参数===========" + JSON.toJSONString(params));
 		// 回调锁
-		String redisLockKey = RedisKeyConstants.ACCOUNT_ORDER_NO_NX + params.getAccountId();// redis 的open_id 数据锁
+		String redisLockKey = RedisKeyConstants.ACCOUNT_ORDER_NO_NX + params.getAccountId();// redis 的用户Id 数据锁
 		long redisResult = JedisUtil.setnx(redisLockKey, params.getAccountId() + "", 2);
+		logger.info("支付回调redisResult结果为：" + redisResult);
+		if (redisResult == 0) {
+			return ResultUtils.resultParamEmpty("重复点击");
+		}
+		redisLockKey = RedisKeyConstants.ACCOUNT_ORDER_NO_NX + params.getOrderNo();// redis 的订单Id 数据锁
+		redisResult = JedisUtil.setnx(redisLockKey, params.getOrderNo() + "", 2);
 		logger.info("支付回调redisResult结果为：" + redisResult);
 		if (redisResult == 0) {
 			return ResultUtils.resultParamEmpty("重复点击");
