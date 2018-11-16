@@ -30,8 +30,9 @@ public class SkillItemService {
     @Autowired
     private CommonUtilService commonUtilService ;
 
+    @SuppressWarnings("unchecked")
     public DataTables<SkillItemVo> getSkillPageList(HttpServletRequest request) {
-        HashMap<String,Object> parameters = (HashMap<String, Object>) SearchUtil.convertorEntitysToMap(request.getParameterMap());
+		HashMap<String,Object> parameters = (HashMap<String, Object>) SearchUtil.convertorEntitysToMap(request.getParameterMap());
         Map<String, Object> paramMap = new HashMap<String, Object>();
         paramMap.put("name", parameters.get("name"));
         paramMap.put("skillStatus", parameters.get("skillStatus"));
@@ -67,8 +68,15 @@ public class SkillItemService {
         BeanUtils.copyProperties(entity, skillItem);
         skillItem.setModifyMan(commonUtilService.getCurrUser());
         skillItem.setModifyTime(new Date());
-
         baseManager.update("SkillItem.updateByPrimaryKeySelective",object2Map(skillItem));
+        //更新customer_skill表中
+        
+        Map<String, Object> paramMap = new HashMap<String, Object>();
+        paramMap.put("skillName", entity.getSkillItemName());
+        paramMap.put("skillItemId", entity.getId());
+        
+		baseManager.update("CustomerSkill.updateSkillItemNameBySkillItemId",paramMap );
+        
         return 0;
     }
 
