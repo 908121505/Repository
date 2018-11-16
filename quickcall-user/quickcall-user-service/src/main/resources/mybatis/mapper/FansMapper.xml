@@ -184,7 +184,7 @@
 		LEFT JOIN fans fs1 ON fs.anchor_id = fs1.fans_id and fs.fans_id = fs1.anchor_id 
 		WHERE
 			fs.fans_id = #{customerId}  and   fs.attention_state = #{attentionStatus} 
-		ORDER BY eachAttentionStatus desc,fs.modify_time desc
+		ORDER BY eachAttentionStatus desc,fs.modify_time desc,ct.nick_name asc
   </select>
 
   <!-- 查询粉丝列表 -->
@@ -205,7 +205,7 @@
 		LEFT JOIN fans fs1 ON fs.anchor_id = fs1.fans_id and fs.fans_id = fs1.anchor_id 
 		WHERE
 			fs.anchor_id = #{customerId}  and   fs.attention_state = #{attentionStatus} 
-		ORDER BY eachAttentionStatus desc,fs.modify_time desc
+		ORDER BY eachAttentionStatus desc,fs.modify_time desc,ct.nick_name asc
   </select>
   
   
