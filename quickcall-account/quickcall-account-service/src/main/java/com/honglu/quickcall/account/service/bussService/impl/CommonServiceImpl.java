@@ -432,7 +432,10 @@ public class CommonServiceImpl implements CommonService {
 			//16 用户取消订单
 			}else if (OrderSkillConstants.ORDER_STATUS_CANCEL_NOT_START ==  orderStatus){
 				result =   OrderSkillConstants.IM_MSG_CONTENT_CANCEL_DV_5MINUTE_START_TIMEOUT;
-			//4  12   14   20   22  23  用户取消订单
+			//12 用户取消订单
+			}else if (OrderSkillConstants.ORDER_STATUS_CANCEL_DAV_START_ONE_ORDER ==  orderStatus){
+				result =   OrderSkillConstants.IM_MSG_CONTENT_DAV_CONFIRM_OTHER_CANCEL_TO_DAV;
+			//4     14   20   22  23用户取消订单
 			}else if(OrderSkillConstants.ORDER_STATUS_CANCEL_BEFORE_RECEIVE== orderStatus 
 					||orderStatus == OrderSkillConstants.ORDER_STATUS_CANCEL_DAV_START_ONE_ORDER
 					||orderStatus == OrderSkillConstants.ORDER_STATUS_CANCEL_BEFORE_DAV_START
@@ -491,9 +494,12 @@ public class CommonServiceImpl implements CommonService {
 			//16 用户取消订单
 			}else if (OrderSkillConstants.ORDER_STATUS_CANCEL_NOT_START ==  orderStatus){
 				result =   OrderSkillConstants.IM_MSG_CONTENT_CANCEL_CUST_5MINUTE_START_TIMEOUT;
-			//4   12   14   20   22  23用户取消订单
+			//12用户取消订单
+			}else if (OrderSkillConstants.ORDER_STATUS_CANCEL_DAV_START_ONE_ORDER ==  orderStatus){
+				result =   OrderSkillConstants.IM_MSG_CONTENT_DAV_CONFIRM_OTHER_CANCEL_TO_CUST;
+			//4     14   20   22  23用户取消订单
 			}else if(OrderSkillConstants.ORDER_STATUS_CANCEL_BEFORE_RECEIVE== orderStatus 
-					||orderStatus == OrderSkillConstants.ORDER_STATUS_CANCEL_DAV_START_ONE_ORDER
+					/*||orderStatus == OrderSkillConstants.ORDER_STATUS_CANCEL_DAV_START_ONE_ORDER*/
 					||orderStatus == OrderSkillConstants.ORDER_STATUS_CANCEL_BEFORE_DAV_START
 					/*||orderStatus == OrderSkillConstants.ORDER_STATUS_CANCEL_NOT_START*/
 					||orderStatus == OrderSkillConstants.ORDER_STATUS_CANCLE_USER_SELF_BEFORE_SERVICE
