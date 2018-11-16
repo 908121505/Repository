@@ -430,10 +430,13 @@ public class CommonServiceImpl implements CommonService {
 			}else if (OrderSkillConstants.ORDER_STATUS_WAITING_START ==  orderStatus){
 				result =   OrderSkillConstants.IM_MSG_CONTENT_DAV_CONFIRM_TO_DAV;
 			//用户取消订单
+			}else if (OrderSkillConstants.ORDER_STATUS_CANCEL_NOT_START ==  orderStatus){
+				result =   OrderSkillConstants.IM_MSG_CONTENT_CANCEL_DV_5MINUTE_START_TIMEOUT;
+			//用户取消订单
 			}else if(OrderSkillConstants.ORDER_STATUS_CANCEL_BEFORE_RECEIVE== orderStatus 
 					||orderStatus == OrderSkillConstants.ORDER_STATUS_CANCEL_DAV_START_ONE_ORDER
 					||orderStatus == OrderSkillConstants.ORDER_STATUS_CANCEL_BEFORE_DAV_START
-					||orderStatus == OrderSkillConstants.ORDER_STATUS_CANCEL_NOT_START
+					/*||orderStatus == OrderSkillConstants.ORDER_STATUS_CANCEL_NOT_START*/
 					||orderStatus == OrderSkillConstants.ORDER_STATUS_CANCLE_USER_SELF_BEFORE_SERVICE
 					||orderStatus == OrderSkillConstants.ORDER_STATUS_CANCEL_USER_NOT_ACCEPCT
 					||orderStatus == OrderSkillConstants.ORDER_STATUS_CANCEL_BEFORE_APPOINT_TIME){
@@ -482,10 +485,13 @@ public class CommonServiceImpl implements CommonService {
 					result =  OrderSkillConstants.IM_MSG_CONTENT_DAV_CONFIRM_TO_CUST_JIAO_XING;
 				}
 			//用户取消订单
+			}else if (OrderSkillConstants.ORDER_STATUS_CANCEL_NOT_START ==  orderStatus){
+				result =   OrderSkillConstants.IM_MSG_CONTENT_CANCEL_CUST_5MINUTE_START_TIMEOUT;
+			//用户取消订单
 			}else if(OrderSkillConstants.ORDER_STATUS_CANCEL_BEFORE_RECEIVE== orderStatus 
 					||orderStatus == OrderSkillConstants.ORDER_STATUS_CANCEL_DAV_START_ONE_ORDER
 					||orderStatus == OrderSkillConstants.ORDER_STATUS_CANCEL_BEFORE_DAV_START
-					||orderStatus == OrderSkillConstants.ORDER_STATUS_CANCEL_NOT_START
+					/*||orderStatus == OrderSkillConstants.ORDER_STATUS_CANCEL_NOT_START*/
 					||orderStatus == OrderSkillConstants.ORDER_STATUS_CANCLE_USER_SELF_BEFORE_SERVICE
 					||orderStatus == OrderSkillConstants.ORDER_STATUS_CANCEL_USER_NOT_ACCEPCT
 					||orderStatus == OrderSkillConstants.ORDER_STATUS_CANCEL_BEFORE_APPOINT_TIME){
