@@ -62,6 +62,7 @@ public class OrderService {
 
 	@Autowired
 	private CustomerCouponService customerCouponService;
+
 	@SuppressWarnings("unchecked")
 	public DataTables<OrderVO> getOrderPageList(HttpServletRequest request) {
 
@@ -150,7 +151,7 @@ public class OrderService {
 			if (StringUtils.isNotBlank(vo.getUnitPrice())) {
 				String unitPrice = vo.getUnitPrice();
 				String serviceUnit = vo.getServiceUnit();
-				String str = unitPrice + (serviceUnit == null ? "" : " 音符/"+serviceUnit);
+				String str = unitPrice + (serviceUnit == null ? "" : " 音符/" + serviceUnit);
 				vo.setUnitPrice(str);
 			}
 			SmallOrderStatusEnums status = SmallOrderStatusEnums.getSmallOrderStatusEnums(vo.getOrderStatus());
@@ -344,9 +345,9 @@ public class OrderService {
 			}
 			paramMap.put("orderStatus", orderStatus);
 			// 强制取消账单流水处理
-			LOGGER.info("------------------强制取消订单账务处理开始：订单状态："+orderStatus+"------------------------");
+			LOGGER.info("------------------强制取消订单账务处理开始：订单状态：" + orderStatus + "------------------------");
 			update = compulsoryCancellation(orderId, orderAmount);
-			LOGGER.info("------------------强制取消订单账务处理结束：订单状态："+orderStatus+"------------------------");
+			LOGGER.info("------------------强制取消订单账务处理结束：订单状态：" + orderStatus + "------------------------");
 			// 退款给用户
 			// 强制完成
 		} else if (OrderSkillConstants.ORDER_STATUS_FINISHED_FORCE == orderStatus) { // 给大V冻结金额
@@ -358,23 +359,23 @@ public class OrderService {
 			}
 			paramMap.put("orderStatus", orderStatus);
 			// 强制完成账单流水处理
-			LOGGER.info("---------------------强制完成订单账务处理开始：订单状态："+orderStatus+"------------------------");
-			LOGGER.info("---------------------强制完成订单账务处理开始：update："+update+"------------------------");
-			
+			LOGGER.info("---------------------强制完成订单账务处理开始：订单状态：" + orderStatus + "------------------------");
+			LOGGER.info("---------------------强制完成订单账务处理开始：update：" + update + "------------------------");
+
 			update = compulsoryCompletion(orderId, orderAmount);
-			
-			LOGGER.info("--------------------强制完成订单账务处理开始：订单状态："+orderStatus+"------------------------");
-			LOGGER.info("--------------------强制完成订单账务处理开始：update："+update+"------------------------");
+
+			LOGGER.info("--------------------强制完成订单账务处理开始：订单状态：" + orderStatus + "------------------------");
+			LOGGER.info("--------------------强制完成订单账务处理开始：update：" + update + "------------------------");
 		}
 
 		if (update == 1) {
 			// 强制取消和强制完成账务流水处理完成，更改订单状态
 			LOGGER.info("-------------强制取消/完成 订单状态修改开始--------------------");
-			LOGGER.info("-------------强制取消/完成 订单状态修改开始：update："+update+"-----------------------");
+			LOGGER.info("-------------强制取消/完成 订单状态修改开始：update：" + update + "-----------------------");
 			paramMap.put("orderId", orderId);
 			update = baseManager.update("Order.updateOrder", paramMap);
-			if(update <= 0){
-				LOGGER.info("--------------------强制取消/完成 订单状态修改失败：update："+update+"-----------------------");
+			if (update <= 0) {
+				LOGGER.info("--------------------强制取消/完成 订单状态修改失败：update：" + update + "-----------------------");
 			}
 			LOGGER.info("----------------------强制取消/完成 订单状态修改成功------------------------");
 			// 强制取消完成，发送融云消息和im消息
@@ -386,8 +387,10 @@ public class OrderService {
 				RongYunUtil.sendOrderMessage(Long.valueOf(entity.getPlaceOrderId()),
 						OrderSkillConstants.IM_MSG_CONTENT_CANCEL_FORCE_ORDER_TO_CUST,
 						OrderSkillConstants.MSG_CONTENT_C);
-				LOGGER.info("-----------------------强制取消成功，发送融云内容："+OrderSkillConstants.MSG_CONTENT_DAV+":"+OrderSkillConstants.IM_MSG_CONTENT_CANCEL_FORCE_ORDER_TO_DV);
-				LOGGER.info("-----------------------强制取消成功，发送融云内容："+OrderSkillConstants.MSG_CONTENT_C+":"+OrderSkillConstants.IM_MSG_CONTENT_CANCEL_FORCE_ORDER_TO_CUST);
+				LOGGER.info("-----------------------强制取消成功，发送融云内容：" + OrderSkillConstants.MSG_CONTENT_DAV + ":"
+						+ OrderSkillConstants.IM_MSG_CONTENT_CANCEL_FORCE_ORDER_TO_DV);
+				LOGGER.info("-----------------------强制取消成功，发送融云内容：" + OrderSkillConstants.MSG_CONTENT_C + ":"
+						+ OrderSkillConstants.IM_MSG_CONTENT_CANCEL_FORCE_ORDER_TO_CUST);
 				LOGGER.info("-----------------------强制取消成功，发送融云结束------------------------");
 				// 推动订单IM消息
 				LOGGER.info("-----------------------强制取消成功，发送im消息开始------------------------");
@@ -395,13 +398,16 @@ public class OrderService {
 						OrderSkillConstants.IM_MSG_CONTENT_CANCEL_FORCE_ORDER_TO_DV);
 				sendOrderMsg(Long.valueOf(entity.getReceivedOrderId()), Long.valueOf(entity.getPlaceOrderId()), orderId,
 						OrderSkillConstants.IM_MSG_CONTENT_CANCEL_FORCE_ORDER_TO_CUST);
-				LOGGER.info("-----------------------强制取消成功，发送im消息内容："+OrderSkillConstants.MSG_CONTENT_DAV+":"+OrderSkillConstants.IM_MSG_CONTENT_CANCEL_FORCE_ORDER_TO_DV);
-				LOGGER.info("-----------------------强制取消成功，发送im消息内容："+OrderSkillConstants.MSG_CONTENT_C+":"+OrderSkillConstants.IM_MSG_CONTENT_CANCEL_FORCE_ORDER_TO_CUST);
+				LOGGER.info("-----------------------强制取消成功，发送im消息内容：" + OrderSkillConstants.MSG_CONTENT_DAV + ":"
+						+ OrderSkillConstants.IM_MSG_CONTENT_CANCEL_FORCE_ORDER_TO_DV);
+				LOGGER.info("-----------------------强制取消成功，发送im消息内容：" + OrderSkillConstants.MSG_CONTENT_C + ":"
+						+ OrderSkillConstants.IM_MSG_CONTENT_CANCEL_FORCE_ORDER_TO_CUST);
 				LOGGER.info("-----------------------强制取消成功，发送im消息结束------------------------");
-				//【强制取消】扣除声优技能声量 + 扣除客户经验
+				// 【强制取消】扣除声优技能声量 + 扣除客户经验
 				forceCancelDeductBigvScoreAndCustomerExperience(orderId, Integer.valueOf(order.getOrderStatus()));
-				//强制取消，优惠券退回用户账户
-//				customerCouponService.cancelOrderBackCoupon(orderId, Long.valueOf(entity.getPlaceOrderId()));
+				// 强制取消，优惠券退回用户账户
+				// customerCouponService.cancelOrderBackCoupon(orderId,
+				// Long.valueOf(entity.getPlaceOrderId()));
 				// 强制完成 完成，发送融云消息和im消息
 			} else if (update > 0 && OrderSkillConstants.ORDER_STATUS_FINISHED_FORCE == orderStatus) {
 				LOGGER.info("-----------------------强制完成成功，发送融云开始------------------------");
@@ -409,8 +415,10 @@ public class OrderService {
 						OrderSkillConstants.IM_MSG_CONTENT_DAV_CUST_CONFIRM_TO_DV, OrderSkillConstants.MSG_CONTENT_DAV);
 				RongYunUtil.sendOrderMessage(Long.valueOf(entity.getPlaceOrderId()),
 						OrderSkillConstants.IM_MSG_CONTENT_DAV_CUST_CONFIRM_TO_CUST, OrderSkillConstants.MSG_CONTENT_C);
-				LOGGER.info("-----------------------强制完成成功，发送融云内容："+OrderSkillConstants.MSG_CONTENT_DAV+":"+OrderSkillConstants.IM_MSG_CONTENT_DAV_CUST_CONFIRM_TO_DV);
-				LOGGER.info("-----------------------强制完成成功，发送融云内容："+OrderSkillConstants.MSG_CONTENT_C+":"+OrderSkillConstants.IM_MSG_CONTENT_DAV_CUST_CONFIRM_TO_CUST);
+				LOGGER.info("-----------------------强制完成成功，发送融云内容：" + OrderSkillConstants.MSG_CONTENT_DAV + ":"
+						+ OrderSkillConstants.IM_MSG_CONTENT_DAV_CUST_CONFIRM_TO_DV);
+				LOGGER.info("-----------------------强制完成成功，发送融云内容：" + OrderSkillConstants.MSG_CONTENT_C + ":"
+						+ OrderSkillConstants.IM_MSG_CONTENT_DAV_CUST_CONFIRM_TO_CUST);
 				LOGGER.info("-----------------------强制完成成功，发送融云结束------------------------");
 
 				// 推动订单IM消息
@@ -419,14 +427,17 @@ public class OrderService {
 						OrderSkillConstants.IM_MSG_CONTENT_DAV_CUST_CONFIRM_TO_DV);
 				sendOrderMsg(Long.valueOf(entity.getReceivedOrderId()), Long.valueOf(entity.getPlaceOrderId()), orderId,
 						OrderSkillConstants.IM_MSG_CONTENT_DAV_CUST_CONFIRM_TO_CUST);
-				LOGGER.info("-----------------------强制完成成功，发送im消息内容："+OrderSkillConstants.MSG_CONTENT_DAV+":"+OrderSkillConstants.IM_MSG_CONTENT_DAV_CUST_CONFIRM_TO_DV);
-				LOGGER.info("-----------------------强制完成成功，发送im消息内容："+OrderSkillConstants.MSG_CONTENT_C+":"+OrderSkillConstants.IM_MSG_CONTENT_DAV_CUST_CONFIRM_TO_CUST);
+				LOGGER.info("-----------------------强制完成成功，发送im消息内容：" + OrderSkillConstants.MSG_CONTENT_DAV + ":"
+						+ OrderSkillConstants.IM_MSG_CONTENT_DAV_CUST_CONFIRM_TO_DV);
+				LOGGER.info("-----------------------强制完成成功，发送im消息内容：" + OrderSkillConstants.MSG_CONTENT_C + ":"
+						+ OrderSkillConstants.IM_MSG_CONTENT_DAV_CUST_CONFIRM_TO_CUST);
 				LOGGER.info("-----------------------强制完成成功，发送im消息结束------------------------");
 
-				//【强制完成】给声优增加技能声量 + 给客户增加经验值
+				// 【强制完成】给声优增加技能声量 + 给客户增加经验值
 				forceDoneAddBigvScoreAndCustomerExperience(orderId, Integer.valueOf(order.getOrderStatus()));
-				//强制完成，优惠券
-//				customerCouponService.getCouponInOrder(Long.valueOf(skillItemId), Long.valueOf(entity.getPlaceOrderId()));
+				// 强制完成，优惠券
+				// customerCouponService.getCouponInOrder(Long.valueOf(skillItemId),
+				// Long.valueOf(entity.getPlaceOrderId()));
 			}
 
 		} else {
@@ -477,8 +488,9 @@ public class OrderService {
 						} else {
 							arys = remove(arys, tradeDetail.getTradeId() + "");
 							userFrozenValue = StringUtils.join(arys, ",");
+							JedisUtil.set(userFrozenkey, userFrozenValue);
 						}
-						JedisUtil.set(userFrozenkey, userFrozenValue);
+
 					} else {
 						JedisUtil.del(userFrozenkey);
 					}
@@ -662,7 +674,8 @@ public class OrderService {
 	 * @author duanjun
 	 */
 	private void forceDoneAddBigvScoreAndCustomerExperience(Long orderId, Integer oldOrderStatus) {
-		// 订单状态是已完成状态 && 不等于33，就不用再增加了，因为已经发送MQ消息增加相应值了（防止重复增加）（33完成状态 -- 没有发送MQ消息去加声量、加经验）
+		// 订单状态是已完成状态 && 不等于33，就不用再增加了，因为已经发送MQ消息增加相应值了（防止重复增加）（33完成状态 --
+		// 没有发送MQ消息去加声量、加经验）
 		if (oldOrderStatus >= 30 && !Objects.equals(oldOrderStatus, 33)) {
 			return;
 		}
