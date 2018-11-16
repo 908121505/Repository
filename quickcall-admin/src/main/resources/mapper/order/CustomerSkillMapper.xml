@@ -393,4 +393,13 @@
   	where customer_id = #{customerId}
   </select>
 
+  <update id="updateSkillItemNameBySkillItemId" parameterType="map" >
+		UPDATE 
+			customer_skill
+		SET 
+			skill_name = #{skillName}
+		WHERE
+			skill_item_id =#{skillItemId,jdbcType=BIGINT}
+    
+  </update>
 </mapper>
