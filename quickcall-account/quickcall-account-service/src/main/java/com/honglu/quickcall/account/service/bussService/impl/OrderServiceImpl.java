@@ -1296,6 +1296,10 @@ public class OrderServiceImpl implements IOrderService {
 					} catch (Exception e) {
 						LOGGER.info("订单结束后用户推送券，异常信息：",e);
 					}
+					
+					sendMsgIndex = 1;
+					// 设置请求结束时间
+					commonService.finishUpdateOrder(orderId, newOrderStatus, new Date(), sendMsgIndex);
 					// 用户未评价
 					RongYunUtil.sendOrderMessage(serviceId, OrderSkillConstants.IM_MSG_CONTENT_DAV_CUST_CONFIRM_TO_DV,OrderSkillConstants.MSG_CONTENT_DAV);
 					RongYunUtil.sendOrderMessage(customerId, OrderSkillConstants.IM_MSG_CONTENT_DAV_CUST_CONFIRM_TO_CUST,OrderSkillConstants.MSG_CONTENT_C);
@@ -1305,10 +1309,15 @@ public class OrderServiceImpl implements IOrderService {
 					commonService.sendOrderMsg(serviceId, customerId,orderId, OrderSkillConstants.IM_MSG_CONTENT_DAV_CUST_CONFIRM_TO_CUST);
 					
 					
-					sendMsgIndex = 1;
 				} else {
 					// 大V在服务时间内发起完成服务
 					newOrderStatus = OrderSkillConstants.ORDER_STATUS_GOING_DAV_APPAY_FINISH;
+					
+					
+					
+					
+					// 设置请求结束时间
+					commonService.finishUpdateOrder(orderId, newOrderStatus, new Date(), sendMsgIndex);
 					LOGGER.info("============finishOrder:serviceId:msg:"+OrderSkillConstants.IM_MSG_CONTENT_CUST_FINISH_TO_DAV);
 					RongYunUtil.sendOrderMessage(serviceId, OrderSkillConstants.IM_MSG_CONTENT_CUST_FINISH_TO_DAV,OrderSkillConstants.MSG_CONTENT_DAV);
 					LOGGER.info("============finishOrder:customerIdId:msg:"+OrderSkillConstants.IM_MSG_CONTENT_CUST_FINISH_TO_CUST);
@@ -1323,16 +1332,22 @@ public class OrderServiceImpl implements IOrderService {
 				// 用户发起完成服务
 				newOrderStatus = OrderSkillConstants.ORDER_STATUS_GOING_USRE_APPAY_FINISH;
 				sendMsgIndex = 1;
-				// 冻结大V金额
-				LOGGER.info("---------finishOrder--cust：serviceId=" + order.getServiceId() + ";orderAmounts="
-						+ order.getOrderAmounts());
-				accountService.inAccount(order.getServiceId(), order.getOrderAmounts(), TransferTypeEnum.FROZEN,AccountBusinessTypeEnum.FroZen, orderId);
 				//结束后用户获得券
 				try {
 					couponDubboBusiness.getCouponInOrder(order.getSkillItemId(), customerId);
 				} catch (Exception e) {
 					LOGGER.info("订单结束后用户推送券，异常信息：",e);
 				}
+				
+				// 设置请求结束时间
+				commonService.finishUpdateOrder(orderId, newOrderStatus, new Date(), sendMsgIndex);
+				// 冻结大V金额
+				LOGGER.info("---------finishOrder--cust：serviceId=" + order.getServiceId() + ";orderAmounts="
+						+ order.getOrderAmounts());
+				accountService.inAccount(order.getServiceId(), order.getOrderAmounts(), TransferTypeEnum.FROZEN,AccountBusinessTypeEnum.FroZen, orderId);
+				
+				
+				
 				RongYunUtil.sendOrderMessage(customerId, OrderSkillConstants.IM_MSG_CONTENT_DAV_CUST_CONFIRM_TO_CUST,OrderSkillConstants.MSG_CONTENT_C);
 				RongYunUtil.sendOrderMessage(serviceId, OrderSkillConstants.IM_MSG_CONTENT_DAV_CUST_CONFIRM_TO_DV,OrderSkillConstants.MSG_CONTENT_DAV);
 				
@@ -1342,8 +1357,8 @@ public class OrderServiceImpl implements IOrderService {
 				commonService.sendOrderMsg(serviceId, customerId,orderId, OrderSkillConstants.IM_MSG_CONTENT_DAV_CUST_CONFIRM_TO_CUST);
 			}
 
-			// 设置请求结束时间
-			commonService.finishUpdateOrder(orderId, newOrderStatus, new Date(), sendMsgIndex);
+//			// 设置请求结束时间
+//			commonService.finishUpdateOrder(orderId, newOrderStatus, new Date(), sendMsgIndex);
 			if (sendMsgIndex != null) {
 				// ADUAN 订单服务完成推送MQ消息
 				userCenterSendMqMessageService.sendOrderCostMqMessage(orderId);
