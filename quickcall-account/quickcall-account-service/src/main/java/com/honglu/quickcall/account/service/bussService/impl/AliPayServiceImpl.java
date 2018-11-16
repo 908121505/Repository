@@ -131,6 +131,7 @@ public class AliPayServiceImpl implements AliPayService {
 		Customer customer = commonService.getPhoneByCustomerId(packet.getCustomerId());
 		if (customer != null) {
 			req.setVcUserPhoneNum(customer.getPhone());
+			req.setVcUserId(packet.getCustomerId() + "");
 		}
 		try {
 			dataDuriedPointBusiness.buryFirstChargeData(req);
