@@ -57,9 +57,13 @@
 					if(!check){
 						return false;
 					}
+					var ref = false;
+					if($(modal).find(".needRefresh").val()==1){
+						ref = true;
+					}
 					var form = $(modal).find("form");
 					 $(form).ajaxSubmit(function(data) {
-				         $('#example').dataTable().fnDraw();
+				         $('#example').dataTable().fnDraw(ref);
 				         
 				         if(data == 888){
 				        	 $.globalMessenger().post({
