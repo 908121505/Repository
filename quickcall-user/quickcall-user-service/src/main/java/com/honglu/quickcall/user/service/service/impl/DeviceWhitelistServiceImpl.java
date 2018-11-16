@@ -64,9 +64,6 @@ public class DeviceWhitelistServiceImpl implements DeviceWhitelistService{
 
     @Override
     public CommonResponse saveDeviceWhitelist(SaveDeviceWhitelistReq params) {
-    	if(params.getCustomerId() == null){
-			return ResultUtils.result(BizCode.CustomerNotExist);
-		}
         CommonResponse commonResponse = new CommonResponse();
         if (params.getCustomerId() == null) {
             throw new BizException(UserBizReturnCode.paramError, "customerId不能为空");
