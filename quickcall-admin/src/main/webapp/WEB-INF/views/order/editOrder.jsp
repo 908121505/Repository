@@ -18,7 +18,7 @@
 		<div class="modal-body" style="max-height: 700px; overflow-y: auto;"  id = "editBody">
 			<form class="form-horizontal" method="post" id="editOrderForm" name="editOrderForm" role="form"
 				action="order/saveUpdate.htm">
-				<input type="hidden" name="customerSkillId" value="${entity.customerSkillId}">
+				<input type="hidden" name="skillItemId" value="${entity.skillItemId}">
 				<div class="form-group">
 					<label class="col-sm-3 control-label">订单ID<font color="red">&nbsp;*</font></label>
 					<div class="col-sm-6">
