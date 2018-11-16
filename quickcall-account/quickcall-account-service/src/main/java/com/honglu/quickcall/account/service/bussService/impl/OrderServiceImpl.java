@@ -441,7 +441,7 @@ public class OrderServiceImpl implements IOrderService {
 		req.setDoesSucceed(flag);
 		req.setSkillId(skillItem.getId());
 		req.setSkillName(skillItem.getSkillItemName());
-		req.setVcOwnerUserId("");
+		req.setVcOwnerUserId(serviceId+"");
 		//用户ID
 		req.setVcUserId(customerId+"");
 		Customer  customer = commonService.getPhoneByCustomerId(customerId);
