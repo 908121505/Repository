@@ -348,6 +348,9 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 		}
 
 		int row = customerMapper.customerSetHeardUrl(params.getTel(), img, params.getNickName(), params.getSex());
+		customer = customerMapper.selectByPrimaryKey(customer.getCustomerId());
+		JedisUtil.set(RedisKeyConstants.USER_CUSTOMER_INFO + customer.getCustomerId(),
+				customer == null ? "" : JSON.toJSONString(customer));
 		if (row <= 0) {
 			response.setCode(BizCode.CustomerError);
 			response.setMessage("设置失败");
