@@ -402,7 +402,7 @@ public class UserCommonController {
 			response.setMsg(UserBizReturnCode.paramError.desc());
 			return response;
 		}
-		response = userCenterService.execute(params);
+		response = userCenterService.executeWhite(params);
 		logger.info("userWeb.user.addSystemUser.response.data : " + JSONObject.toJSONString(response));
 		return response;
 
