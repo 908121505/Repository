@@ -17,7 +17,7 @@ public enum EventEnums {
     EVENT_Sign_up_result("Sign_up_result","注册成功"),
 
     /**登陆成功**/
-    EVENT_User_id_login_result("User_id_login_result","登陆成功"),
+    EVENT_User_id_login_result("vc_user_id_login_result","登陆成功"),
 
     /**接单按钮**/
     EVENT_Order_button("Order_button","接单按钮"),
