@@ -271,8 +271,8 @@
                      "aTargets": 10,
                      "mRender": function (data, type, row) {
                          var detail = "", del = "";
-                         detail = "<a href='#' onclick='addAndUpdateRow(\"" + data + "-detail\")' data-toggle='modal' class='padding-right-small label label-success'><i class='glyphicon glyphicon-edit'></i>详情</a>";
-                         del = "<a href='#' onclick='addAndUpdateRow(\"" + data + "-update\")' data-toggle='modal' class='padding-right-small label label-success'><i class='glyphicon glyphicon-edit'></i>编辑</a>";
+                         detail = "<a href='#' onclick='addAndUpdateRow(\"" + row.customerId + "-detail\")' data-toggle='modal' class='padding-right-small label label-success'><i class='glyphicon glyphicon-edit'></i>详情</a>";
+                         del = "<a href='#' onclick='addAndUpdateRow(\"" + row.customerId + "-update\")' data-toggle='modal' class='padding-right-small label label-success'><i class='glyphicon glyphicon-edit'></i>编辑</a>";
                          return detail + "&nbsp;" + del;
                      }
 			} ] 
