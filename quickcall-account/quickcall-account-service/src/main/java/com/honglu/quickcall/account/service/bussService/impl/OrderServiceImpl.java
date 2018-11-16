@@ -509,6 +509,7 @@ public class OrderServiceImpl implements IOrderService {
 			throw new BizException(AccountBizReturnCode.paramError, "查询接收订单参数异常");
 		}
 		LOGGER.info("======>>>>>queryReceiveOrderList()入参：" + request.toString());
+		Date  currTime = new Date();
 		Long customerId = request.getCustomerId();
 		String customerJson = JedisUtil.get(RedisKeyConstants.USER_CUSTOMER_INFO + customerId);
 		if (StringUtils.isEmpty(customerJson)) {
@@ -521,7 +522,7 @@ public class OrderServiceImpl implements IOrderService {
 
 		if (!CollectionUtils.isEmpty(resultList)) {
 			for (OrderReceiveOrderListVO info : resultList) {
-				OrderTempResponseVO responseVO = commonService.getCountDownSeconds(info.getOrderStatus(),
+				OrderTempResponseVO responseVO = commonService.getCountDownSeconds(currTime,info.getOrderStatus(),
 						info.getOrderTime(), info.getReceiveOrderTime(), info.getStartServiceTime(),
 						info.getExpectEndTime(),info.getAppointTime());
 				info.setCountDownSeconds(responseVO.getCountDownSeconds());
@@ -548,13 +549,14 @@ public class OrderServiceImpl implements IOrderService {
 			return ResultUtils.result(BizCode.CustomerNotExist);
 		}
 		LOGGER.info("======>>>>>querySendOrderList()入参：" + request.toString());
+		Date  currTime = new Date();
 		Long customerId = request.getCustomerId();
 		Integer orderStatusParam = request.getOrderStatus();
 		List<Integer> statusList = commonService.getSendOrderStatusList(orderStatusParam);
 		List<OrderSendOrderListVO> resultList = orderMapper.querySendOrderList(customerId, statusList);
 		if (!CollectionUtils.isEmpty(resultList)) {
 			for (OrderSendOrderListVO info : resultList) {
-				OrderTempResponseVO responseVO = commonService.getCountDownSeconds(info.getOrderStatus(),
+				OrderTempResponseVO responseVO = commonService.getCountDownSeconds(currTime,info.getOrderStatus(),
 						info.getOrderTime(), info.getReceiveOrderTime(), info.getStartServiceTime(),
 						info.getExpectEndTime(),info.getAppointTime());
 				info.setCountDownSeconds(responseVO.getCountDownSeconds());
@@ -650,6 +652,7 @@ public class OrderServiceImpl implements IOrderService {
 		}
 
 		LOGGER.info("======>>>>>detailOrder()入参：" + request.toString());
+		Date  currTime = new Date();
 		Integer type = request.getType();
 		if (type != OrderSkillConstants.REQUEST_TYPE_CUST && type != OrderSkillConstants.REQUEST_TYPE_DV) {
 			throw new BizException(AccountBizReturnCode.paramError, "查询订单详情参数异常");
@@ -668,7 +671,7 @@ public class OrderServiceImpl implements IOrderService {
 			Date birthday = orderDetail.getBirthday();
 			int age = DateUtils.getAgeByBirthYear(birthday);
 			orderDetail.setAge(age);
-			OrderTempResponseVO responseVO = commonService.getCountDownSeconds(orderDetail.getOrderStatus(),
+			OrderTempResponseVO responseVO = commonService.getCountDownSeconds(currTime,orderDetail.getOrderStatus(),
 					orderDetail.getOrderTime(), orderDetail.getReceiveOrderTime(), orderDetail.getStartServiceTime(),
 					orderDetail.getExpectEndTime(),orderDetail.getAppointTime());
 			orderDetail.setCountDownSeconds(responseVO.getCountDownSeconds());
@@ -708,7 +711,7 @@ public class OrderServiceImpl implements IOrderService {
 		CommonResponse commonResponse = commonService.getCommonResponse();
 		OrderDetailForIMVO orderDetailForIMVO = new OrderDetailForIMVO();
 		// 判断服务方可不可以下单
-
+		Date  currTime = new Date();
 		Long serviceId = request.getServiceId();
 		Long customerId = request.getCustomerId();
 		// 判断双方是否存在订单关系
@@ -823,7 +826,7 @@ public class OrderServiceImpl implements IOrderService {
 				orderIMVO.setServiceUnit(order.getServiceUnit());
 				
 				//订单倒计时计算
-				OrderTempResponseVO responseVO = commonService.getCountDownSeconds(order.getOrderStatus(),order.getOrderTime(), order.getReceiveOrderTime(), order.getStartServiceTime(),order.getExpectEndTime(),order.getAppointTime());
+				OrderTempResponseVO responseVO = commonService.getCountDownSeconds(currTime,order.getOrderStatus(),order.getOrderTime(), order.getReceiveOrderTime(), order.getStartServiceTime(),order.getExpectEndTime(),order.getAppointTime());
 				orderIMVO.setCountDownSeconds(responseVO.getCountDownSeconds());
 				orderIMVO.setOrderStatus(responseVO.getOrderStatus());
 				orderDetailForIMVO.setServiceId(order.getServiceId());

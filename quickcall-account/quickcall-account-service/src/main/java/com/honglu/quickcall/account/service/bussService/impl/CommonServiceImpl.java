@@ -72,9 +72,9 @@ public class CommonServiceImpl implements CommonService {
 	 * 主要获取订单真是状态+真实的倒计时秒数
 	 */
 	@Override
-	public OrderTempResponseVO getCountDownSeconds(Integer   oldOrderStatus ,Date  orderTime,Date  receiveOrderTime,Date startServiceTime,Date  expectEndTime,Date  appointTime) {
+	public OrderTempResponseVO getCountDownSeconds(Date  currTime ,Integer   oldOrderStatus ,Date  orderTime,Date  receiveOrderTime,Date startServiceTime,Date  expectEndTime,Date  appointTime) {
 		OrderTempResponseVO  tempVO = new OrderTempResponseVO();
-		Date  currTime = new Date();
+//		Date  currTime = new Date();
 		Long  countDownSeconds = 0L ;
 		Date  endTime = null ;
 		tempVO.setOrderStatus(oldOrderStatus);
