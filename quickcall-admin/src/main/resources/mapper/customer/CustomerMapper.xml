@@ -320,7 +320,7 @@
         skill.skill_name AS serviceType,
         skill.receive_status AS receiveStatus,
         skill.end_time_str AS endTime,
-        skill.service_unit AS serviceUnit,
+        CONCAT_WS("/",skill.skill_price ,skill.service_unit) AS serviceUnit,
         ext.skill_ext_discont AS discountType,
         skill.create_time AS createTime,
         skill.modify_time AS modifyTime,
