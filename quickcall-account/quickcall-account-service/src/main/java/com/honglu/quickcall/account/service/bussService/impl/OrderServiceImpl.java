@@ -120,10 +120,10 @@ public class OrderServiceImpl implements IOrderService {
 		if (request == null || request.getCustomerId() == null) {
 			throw new BizException(AccountBizReturnCode.paramError, "查询技能信息参数异常");
 		}
-		String customerJson = JedisUtil.get(RedisKeyConstants.USER_CUSTOMER_INFO + request.getCustomerId());
+		/*String customerJson = JedisUtil.get(RedisKeyConstants.USER_CUSTOMER_INFO + request.getCustomerId());
 		if (StringUtils.isEmpty(customerJson)) {
 			return ResultUtils.result(BizCode.CustomerNotExist);
-		}
+		}*/
 		LOGGER.info("======>>>>>queryDaVSkill()入参：" + request.toString());
 
 		Long customerId = request.getCustomerId();

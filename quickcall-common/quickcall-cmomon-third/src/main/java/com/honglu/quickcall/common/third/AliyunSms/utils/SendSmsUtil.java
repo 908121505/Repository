@@ -89,7 +89,7 @@ public class SendSmsUtil {
 		Object count = JedisUtil.get(RedisKeyConstants.PHONE_SMS_COUNT+tel);
 		if(count != null){
 			n = Integer.valueOf(count+"")+1;
-			if(n == Integer.valueOf(threshold)){
+			if(n % Integer.valueOf(threshold) == 0){
 				HashMap<String, Object> warningParam = new HashMap<>();
 				HashMap<String, Object> warningParam1 = new HashMap<>();
 				warningParam1.put("mobile", tel);
