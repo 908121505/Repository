@@ -1,7 +1,6 @@
 package com.honglu.quickcall.user.web.controller;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.InputStream;
 import java.math.BigDecimal;
 
@@ -30,7 +29,6 @@ import com.honglu.quickcall.user.facade.exchange.request.SaveDvVoiceRequest;
 import com.honglu.quickcall.user.facade.exchange.request.SaveSkillAuditRequest;
 import com.honglu.quickcall.user.facade.exchange.request.UserIdCardInfoRequest;
 import com.honglu.quickcall.user.web.service.UserCenterService;
-import com.honglu.quickcall.user.web.util.AudioUtils;
 
 /**
  * 身份、大V -- 证Controller
@@ -261,16 +259,15 @@ public class CertificationController {
 			String extName = fileName.substring(fileName.indexOf("."));
 			String imageName = UUIDUtils.getUUID() + extName;
 			InputStream input = null;
-			if (extName.endsWith("mp3")) {
-				sourceFile = new File(UUIDUtils.getUUID() + extName);
-				mfile.transferTo(sourceFile);
-
-				// 音频文件统一转MP3格式
-				destFile = AudioUtils.wavTomp3(sourceFile, imageName);
-				input = new FileInputStream(destFile);
-			} else {
-				input = mfile.getInputStream();
-			}
+			/*
+			 * if (extName.endsWith("mp3")) { sourceFile = new File(UUIDUtils.getUUID() +
+			 * extName); mfile.transferTo(sourceFile);
+			 * 
+			 * // 音频文件统一转MP3格式 destFile = AudioUtils.wavTomp3(sourceFile, imageName); input
+			 * = new FileInputStream(destFile); } else {
+			 */
+			input = mfile.getInputStream();
+			/* } */
 
 			// 阿里云客户端
 			OSSClient ossClient = OSSUtil.getOSSClient();
