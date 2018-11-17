@@ -1092,6 +1092,17 @@ public class OrderServiceImpl implements IOrderService {
 		Order order = orderMapper.selectByPrimaryKey(orderId);
 		Integer newOrderStatus = null;
 		if (order != null) {
+			Long serviceId = order.getServiceId();
+			//需要限制声优同时接多个单子
+			if(JedisUtil.setnx(RedisKeyConstants.CANCEL_RECEIVE_KEY + serviceId, ORDER_DEFAULT_VALUE, ORDER_DEFAULT_TIME_OUT) == 0){
+				//说明已经操作，本次不进行操作
+				throw new BizException(AccountBizReturnCode.ORDER_RECEIVE_ERROR, "请稍后重试");
+			}
+			
+			
+			
+			
+			
 			Integer orderStatus = order.getOrderStatus();
 			// 声优只能接受订单状态为：待接单
 			if (OrderSkillConstants.ORDER_STATUS_WAITING_RECEIVE != orderStatus) {
@@ -1099,7 +1110,6 @@ public class OrderServiceImpl implements IOrderService {
 			}
 
 			Long customerId = order.getCustomerId();
-			Long serviceId = order.getServiceId();
 			// 声优同意，状态为声优接受
 			if (OrderSkillConstants.REQUEST_DV_CONFIRM_TYPE_YES == type) {
 				newOrderStatus = OrderSkillConstants.ORDER_STATUS_WAITING_START;
