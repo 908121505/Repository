@@ -54,9 +54,8 @@ public class RabbitSender{
 
         LOGGER.info("发送MQ消息-，body：{}", xnMessage.getMessageBody());
         // 发送消息
-//        byte[] decodes = Base64Util.decode(xnMessage.getMessageBody());
         rabbitTemplate.convertAndSend(xnMessage.getExchangeName(), xnMessage.getRoutingKey(),
-                xnMessage.getMessageBody().getBytes(), processor);
+                xnMessage.getMessageBody(), processor);
         LOGGER.info("发送MQ消息成功-，流水号：{}，消息体：{}", xnMessage.getTraceId(), xnMessage.getMessageId());
     }
 }
