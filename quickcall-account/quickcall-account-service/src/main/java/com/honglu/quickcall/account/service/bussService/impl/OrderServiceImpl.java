@@ -184,6 +184,9 @@ public class OrderServiceImpl implements IOrderService {
 		if (StringUtils.isEmpty(customerJson)) {
 			return ResultUtils.result(BizCode.CustomerNotExist);
 		}
+		// 1.首先判断声优是否可以接单
+		Long customerId = request.getCustomerId();
+		Long serviceId = request.getServiceId();
 		LOGGER.info("======>>>>>saveOrder()入参：" + request.toString());
 		CommonResponse commonResponse = commonService.getCommonResponse();
 		HashMap<String, Object> resultMap = new HashMap<>();
@@ -207,6 +210,8 @@ public class OrderServiceImpl implements IOrderService {
 					resultMap.put("retCode", OrderSkillConstants.RET_CODE_APPOINT_TIME_ERROR);
 					resultMap.put("msg", OrderSkillConstants.RET_CODE_APPOINT_TIME_ERROR_MSG);
 					commonResponse.setData(resultMap);
+					//技能为空，没有技能名称和ID
+					addDuriedPoint(null, customerId, serviceId, request.getVirUserId(), false);
 					// 返回声优正忙，以及结束时间
 					return commonResponse;
 				}
@@ -215,6 +220,7 @@ public class OrderServiceImpl implements IOrderService {
 				
 			}
 		}
+		
 		
 		
 
@@ -233,6 +239,8 @@ public class OrderServiceImpl implements IOrderService {
 			if (customerSkill == null) {
 				resultMap.put("retCode", OrderSkillConstants.RET_CODE_DV_NOT_ACCEPTE_ORDER);
 				commonResponse.setData(resultMap);
+				//技能为空，没有技能名称和ID
+				addDuriedPoint(null, customerId, serviceId, request.getVirUserId(), false);
 				// 返回声优正忙，以及结束时间
 				return commonResponse;
 			}
@@ -243,9 +251,7 @@ public class OrderServiceImpl implements IOrderService {
 			
 			
 			Date currTime = new Date();
-			// 1.首先判断声优是否可以接单
-			Long customerId = request.getCustomerId();
-			Long serviceId = request.getServiceId();
+			
 
 			/**5.判断是否是叫醒逻辑，skillTpe ==  1  非叫醒服务，叫醒服务可以重复下单*/
 			if(OrderSkillConstants.SKILL_TYPE_YES == skillType){
@@ -314,6 +320,8 @@ public class OrderServiceImpl implements IOrderService {
 				BigDecimal rechargeAmounts = account.getRechargeAmounts();
 				if (rechargeAmounts != null) {
 					if (orderAmounts.compareTo(rechargeAmounts) > 0) {
+						//余额不足埋点
+						addDuriedPoint(skillItem, customerId, serviceId, request.getVirUserId(), false);
 						// 声优忙
 						resultMap.put("retCode", OrderSkillConstants.RET_CODE_BALANCE_NOT_ENOUTH);
 						commonResponse.setData(resultMap);
@@ -432,8 +440,10 @@ public class OrderServiceImpl implements IOrderService {
 		BuryMakeOrderReq req = new BuryMakeOrderReq();
 		// 下单触发埋点
 		req.setDoesSucceed(flag);
-		req.setSkillId(skillItem.getId());
-		req.setSkillName(skillItem.getSkillItemName());
+		if(skillItem != null){
+			req.setSkillId(skillItem.getId());
+			req.setSkillName(skillItem.getSkillItemName());
+		}
 		req.setVcOwnerUserId(serviceId+"");
 		//用户ID
 		req.setVcUserId(customerId+"");
