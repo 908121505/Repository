@@ -96,6 +96,8 @@ import com.honglu.quickcall.user.facade.entity.Customer;
 public class OrderServiceImpl implements IOrderService {
 	private static final Logger LOGGER = LoggerFactory.getLogger(OrderServiceImpl.class);
 
+	private static final String   ORDER_DEFAULT_VALUE = "1";
+	private static final Integer   ORDER_DEFAULT_TIME_OUT = 2;
 	@Autowired
 	private CommonService commonService;
 	@Autowired
@@ -184,9 +186,14 @@ public class OrderServiceImpl implements IOrderService {
 		if (StringUtils.isEmpty(customerJson)) {
 			return ResultUtils.result(BizCode.CustomerNotExist);
 		}
+		
 		// 1.首先判断声优是否可以接单
 		Long customerId = request.getCustomerId();
 		Long serviceId = request.getServiceId();
+		if(JedisUtil.setnx(RedisKeyConstants.SAVE_ORDER_KEY+customerId, ORDER_DEFAULT_VALUE, ORDER_DEFAULT_TIME_OUT) == 0){
+			//说明已经操作，本次不进行操作
+			throw new BizException(AccountBizReturnCode.ORDER_SAVE_ERROR, "请稍后重试");
+		}
 		LOGGER.info("======>>>>>saveOrder()入参：" + request.toString());
 		CommonResponse commonResponse = commonService.getCommonResponse();
 		HashMap<String, Object> resultMap = new HashMap<>();
@@ -1248,7 +1255,7 @@ public class OrderServiceImpl implements IOrderService {
 	}
 	
 	
-	private static final String   FINISH_ORDER_VALUE = "1";
+
 
 	@Override
 	public CommonResponse finishOrder(FinishOrderRequest request) {
@@ -1260,7 +1267,7 @@ public class OrderServiceImpl implements IOrderService {
 		Long orderId = request.getOrderId();
 		Integer type = request.getType();
 		
-		if(JedisUtil.setnx(RedisKeyConstants.FINISH_ORDER_KEY + orderId, FINISH_ORDER_VALUE, 2) == 0){
+		if(JedisUtil.setnx(RedisKeyConstants.FINISH_ORDER_KEY + orderId, ORDER_DEFAULT_VALUE, ORDER_DEFAULT_TIME_OUT) == 0){
 			//说明已经操作，本次不进行操作
 			throw new BizException(AccountBizReturnCode.ORDER_FINISH_ERROR, "请稍后重试");
 		}

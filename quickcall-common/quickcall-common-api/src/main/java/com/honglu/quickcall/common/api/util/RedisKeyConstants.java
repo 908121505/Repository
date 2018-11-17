@@ -46,6 +46,9 @@ public class RedisKeyConstants {
 	public static final String PHONE_SMS_COUNT = "sms:send:count:";
 	// 完成订单服务锁
 	public static final String FINISH_ORDER_KEY = "account:finish:order:";
+	
+	/**下单锁限制*/
+	public static final String SAVE_ORDER_KEY = "account:save:order:";
 		
 
 }
