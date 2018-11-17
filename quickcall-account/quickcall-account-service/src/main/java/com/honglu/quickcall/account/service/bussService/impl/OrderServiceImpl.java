@@ -96,6 +96,8 @@ import com.honglu.quickcall.user.facade.entity.Customer;
 public class OrderServiceImpl implements IOrderService {
 	private static final Logger LOGGER = LoggerFactory.getLogger(OrderServiceImpl.class);
 
+	private static final String   ORDER_DEFAULT_VALUE = "1";
+	private static final Integer   ORDER_DEFAULT_TIME_OUT = 2;
 	@Autowired
 	private CommonService commonService;
 	@Autowired
@@ -184,6 +186,15 @@ public class OrderServiceImpl implements IOrderService {
 		if (StringUtils.isEmpty(customerJson)) {
 			return ResultUtils.result(BizCode.CustomerNotExist);
 		}
+		
+		// 1.首先判断声优是否可以接单
+		Long customerId = request.getCustomerId();
+		Long serviceId = request.getServiceId();
+		if(JedisUtil.setnx(RedisKeyConstants.ORDER_KEY+customerId, ORDER_DEFAULT_VALUE, ORDER_DEFAULT_TIME_OUT) == 0){
+			LOGGER.info("======================用户频繁操作，进行限制=======================");
+			//说明已经操作，本次不进行操作
+			throw new BizException(AccountBizReturnCode.ORDER_SAVE_ERROR, "请稍后重试");
+		}
 		LOGGER.info("======>>>>>saveOrder()入参：" + request.toString());
 		CommonResponse commonResponse = commonService.getCommonResponse();
 		HashMap<String, Object> resultMap = new HashMap<>();
@@ -207,6 +218,8 @@ public class OrderServiceImpl implements IOrderService {
 					resultMap.put("retCode", OrderSkillConstants.RET_CODE_APPOINT_TIME_ERROR);
 					resultMap.put("msg", OrderSkillConstants.RET_CODE_APPOINT_TIME_ERROR_MSG);
 					commonResponse.setData(resultMap);
+					//技能为空，没有技能名称和ID
+					addDuriedPoint(null, customerId, serviceId, request.getVirUserId(), false);
 					// 返回声优正忙，以及结束时间
 					return commonResponse;
 				}
@@ -215,6 +228,7 @@ public class OrderServiceImpl implements IOrderService {
 				
 			}
 		}
+		
 		
 		
 
@@ -233,6 +247,8 @@ public class OrderServiceImpl implements IOrderService {
 			if (customerSkill == null) {
 				resultMap.put("retCode", OrderSkillConstants.RET_CODE_DV_NOT_ACCEPTE_ORDER);
 				commonResponse.setData(resultMap);
+				//技能为空，没有技能名称和ID
+				addDuriedPoint(null, customerId, serviceId, request.getVirUserId(), false);
 				// 返回声优正忙，以及结束时间
 				return commonResponse;
 			}
@@ -243,9 +259,7 @@ public class OrderServiceImpl implements IOrderService {
 			
 			
 			Date currTime = new Date();
-			// 1.首先判断声优是否可以接单
-			Long customerId = request.getCustomerId();
-			Long serviceId = request.getServiceId();
+			
 
 			/**5.判断是否是叫醒逻辑，skillTpe ==  1  非叫醒服务，叫醒服务可以重复下单*/
 			if(OrderSkillConstants.SKILL_TYPE_YES == skillType){
@@ -314,6 +328,8 @@ public class OrderServiceImpl implements IOrderService {
 				BigDecimal rechargeAmounts = account.getRechargeAmounts();
 				if (rechargeAmounts != null) {
 					if (orderAmounts.compareTo(rechargeAmounts) > 0) {
+						//余额不足埋点
+						addDuriedPoint(skillItem, customerId, serviceId, request.getVirUserId(), false);
 						// 声优忙
 						resultMap.put("retCode", OrderSkillConstants.RET_CODE_BALANCE_NOT_ENOUTH);
 						commonResponse.setData(resultMap);
@@ -432,8 +448,10 @@ public class OrderServiceImpl implements IOrderService {
 		BuryMakeOrderReq req = new BuryMakeOrderReq();
 		// 下单触发埋点
 		req.setDoesSucceed(flag);
-		req.setSkillId(skillItem.getId());
-		req.setSkillName(skillItem.getSkillItemName());
+		if(skillItem != null){
+			req.setSkillId(skillItem.getId());
+			req.setSkillName(skillItem.getSkillItemName());
+		}
 		req.setVcOwnerUserId(serviceId+"");
 		//用户ID
 		req.setVcUserId(customerId+"");
@@ -903,6 +921,11 @@ public class OrderServiceImpl implements IOrderService {
 
 		LOGGER.info("======>>>>>custConfirmFinish()入参：" + request.toString());
 		Long orderId = request.getOrderId();
+		if(JedisUtil.setnx(RedisKeyConstants.ORDER_KEY+orderId, ORDER_DEFAULT_VALUE, ORDER_DEFAULT_TIME_OUT) == 0){
+			LOGGER.info("======================用户频繁操作，进行限制=======================");
+			//说明已经操作，本次不进行操作
+			throw new BizException(AccountBizReturnCode.ORDER_CONFIRM_FINISH_ERROR, "请稍后重试");
+		}
 
 		Integer newOrderStatus = null;
 		// 查询订单详情
@@ -1238,7 +1261,7 @@ public class OrderServiceImpl implements IOrderService {
 	}
 	
 	
-	private static final String   FINISH_ORDER_VALUE = "1";
+
 
 	@Override
 	public CommonResponse finishOrder(FinishOrderRequest request) {
@@ -1250,7 +1273,7 @@ public class OrderServiceImpl implements IOrderService {
 		Long orderId = request.getOrderId();
 		Integer type = request.getType();
 		
-		if(JedisUtil.setnx(RedisKeyConstants.FINISH_ORDER_KEY + orderId, FINISH_ORDER_VALUE, 2) == 0){
+		if(JedisUtil.setnx(RedisKeyConstants.FINISH_ORDER_KEY + orderId, ORDER_DEFAULT_VALUE, ORDER_DEFAULT_TIME_OUT) == 0){
 			//说明已经操作，本次不进行操作
 			throw new BizException(AccountBizReturnCode.ORDER_FINISH_ERROR, "请稍后重试");
 		}
