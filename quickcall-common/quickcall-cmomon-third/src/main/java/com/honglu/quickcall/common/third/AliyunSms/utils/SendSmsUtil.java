@@ -26,15 +26,19 @@ public class SendSmsUtil {
 	// 通知管理员模板
 	public static String notifyTemplateCode = "sms_10_code_66";
 	
+	//短信sign
 	public static String singName = "轻音互动";
 
+	//发送短信http地址
 	public static String send_msg_url = ResourceBundle.getBundle("thirdconfig").getString("send_msg_url");
 	
+	//声优阀值配置
 	public static String threshold = ResourceBundle.getBundle("thirdconfig").getString("warning_msg_threshold");
 	
 	//管理员的手机号
 	private static String[] adminPhone = ResourceBundle.getBundle("thirdconfig").getString("warning_msg_phone").split(",");
 	
+	//固定线程池
 	private static ExecutorService notifyThreadPool = Executors.newFixedThreadPool(5);
 	
 
