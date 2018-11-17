@@ -1468,7 +1468,7 @@ public class OrderServiceImpl implements IOrderService {
 		if (orderDetail == null) {
 			return ResultUtils.resultDataNotExist("订单信息不存在");
 		}
-		if(Objects.equals(orderDetail.getCustomerIsEvaluate(), 1)){
+		if(Objects.equals(orderDetail.getCustomerIsEvaluate(), 1L)){
 			return ResultUtils.resultDataNotExist("您已评价过该订单");
 		}
 		// 保存订单表评价信息
