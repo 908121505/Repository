@@ -3,6 +3,7 @@ package com.honglu.quickcall.consumer.core.consumer;
 import com.alibaba.fastjson.JSON;
 import com.honglu.quickcall.consumer.core.enums.EventEnums;
 import com.honglu.quickcall.consumer.core.service.DataBuriedPointService;
+import com.honglu.quickcall.consumer.core.utils.Base64Util;
 import com.rabbitmq.client.Channel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -99,13 +100,15 @@ public class DataBuriedPointCustomer {
 
     public void consumerMessage(Message message, Channel channel) throws Exception {
         try {
+            String encode = Base64Util.encode(message.getBody());
             String json = new String(message.getBody());
             String json1 = new String(message.getBody(), encoding);
+            LOGGER.info("----base64--数据埋点消费端收到--【BuriedPointCustomer】 RabbitMQ消息 :" + encode);
             LOGGER.info("数据埋点消费端收到--【BuriedPointCustomer】 RabbitMQ消息 :" + json);
             LOGGER.info("---转--数据埋点消费端收到--【BuriedPointCustomer】 RabbitMQ消息 :" + json1);
             LOGGER.info("数据埋点消费端收到--【BuriedPointCustomer】 RabbitMQ消息 :" + json);
             LOGGER.info("consumer--:"+message.getMessageProperties()+":"+ new String(message.getBody()));
-            Map<String,Object> data = JSON.parseObject(json);
+            Map<String,Object> data = JSON.parseObject(encode);
             String type = (String)data.get("type");
             LOGGER.info("========开始消费=========");
             if (EventEnums.EVENT_getCode.getValue().equals(type)){

@@ -1,5 +1,6 @@
 package com.honglu.quickcall.producer.core.producer;
 
+import com.honglu.quickcall.producer.core.utils.Base64Util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.core.Message;
@@ -54,8 +55,9 @@ public class RabbitSender{
         try{
             LOGGER.info("发送MQ消息-，body：{}", xnMessage.getMessageBody());
             // 发送消息
+            byte[] decodes = Base64Util.decode(xnMessage.getMessageBody());
             rabbitTemplate.convertAndSend(xnMessage.getExchangeName(), xnMessage.getRoutingKey(),
-                    xnMessage.getMessageBody().getBytes(), processor);
+                    decodes, processor);
         }catch (Exception e){
 
         }
