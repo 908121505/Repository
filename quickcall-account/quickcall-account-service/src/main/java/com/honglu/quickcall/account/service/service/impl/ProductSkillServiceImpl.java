@@ -663,7 +663,7 @@ public class ProductSkillServiceImpl implements IProductSkillService {
 		//接单设置埋点
 		DataBuriedPointOrderButtonReq req = new DataBuriedPointOrderButtonReq();
 		req.setButtonexecution_time(DateUtils.formatDate(currTime));
-		req.setOrderbutton_status(receiveStatus +"");
+		req.setOrderbutton_status(receiveStatus == 1?"开启":"关闭");
 		req.setUser_id(customerId +"");
 		try {
 			dataDuriedPointBusiness.buryOrderButtonData(req );
