@@ -52,12 +52,10 @@ public class RabbitSender{
         };
 
         try{
-            LOGGER.info("转前---发送MQ消息-，body：{}", xnMessage.getMessageBody());
-            String message = new String(xnMessage.getMessageBody().getBytes(), "utf-8");
-            LOGGER.info("转后---发送MQ消息-，body：{}", message);
+            LOGGER.info("发送MQ消息-，body：{}", xnMessage.getMessageBody());
             // 发送消息
             rabbitTemplate.convertAndSend(xnMessage.getExchangeName(), xnMessage.getRoutingKey(),
-                    message, processor);
+                    xnMessage.getMessageBody().getBytes(), processor);
         }catch (Exception e){
 
         }
