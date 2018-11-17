@@ -96,7 +96,9 @@ import com.honglu.quickcall.user.facade.entity.Customer;
 public class OrderServiceImpl implements IOrderService {
 	private static final Logger LOGGER = LoggerFactory.getLogger(OrderServiceImpl.class);
 
+	//唯一锁值
 	private static final String   ORDER_DEFAULT_VALUE = "1";
+	//唯一锁存在时间
 	private static final Integer   ORDER_DEFAULT_TIME_OUT = 2;
 	@Autowired
 	private CommonService commonService;
