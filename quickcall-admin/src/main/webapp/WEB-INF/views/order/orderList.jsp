@@ -335,6 +335,7 @@
 				    aoData.push({"name":"orderStatus","value":$("#order_status").val()});
 				    aoData.push({"name":"customerPhone","value":$("#customerPhoneQuery").val()});
 				    aoData.push({"name":"servicePhone","value":$("#servicePhoneQuery").val()});
+				    aoData.push({"name":"discountTypeVal","value":$("#discount_type_val").val()});
                     } ,
                  aoColumnDefs : [ {
                      "aTargets": 15,

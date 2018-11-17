@@ -7,5 +7,8 @@ import com.honglu.quickcall.common.api.exchange.WebResponseModel;
  * Created by len.song on 2017-12-08.
  */
 public interface UserCenterService {
-    WebResponseModel execute(AbstractRequest request);
+	WebResponseModel execute(AbstractRequest request);
+
+	WebResponseModel executeWhite(AbstractRequest request);
+
 }

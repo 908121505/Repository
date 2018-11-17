@@ -572,7 +572,7 @@ FROM
 				od.customer_id = #{customerId}
 	) unionTb
 ORDER BY
-	unionTb.orderId DESC
+	unionTb.orderTime DESC
 	limit  #{pageStart},#{pageEnd}
   </select>
    <!-- 查询发出的订单 -->

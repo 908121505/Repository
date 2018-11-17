@@ -41,7 +41,7 @@ public class FrozenSteamJob {
 	@Autowired
 	private TradeDetailMapper tradeDetailMapper;
 
-	@Scheduled(cron = "* 0/10 * * * ?")
+	@Scheduled(cron = "* 0/5 * * * ?")
 	public void execute() {
 
 		logger.info("冻结金额12小时后   到账户越操作 job 开启------------------------");

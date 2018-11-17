@@ -5,6 +5,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.ResourceBundle;
 import java.util.UUID;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import com.alibaba.fastjson.JSON;
 import com.honglu.quickcall.common.api.util.DateUtils;
@@ -24,14 +26,20 @@ public class SendSmsUtil {
 	// 通知管理员模板
 	public static String notifyTemplateCode = "sms_10_code_66";
 	
+	//短信sign
 	public static String singName = "轻音互动";
 
+	//发送短信http地址
 	public static String send_msg_url = ResourceBundle.getBundle("thirdconfig").getString("send_msg_url");
 	
+	//声优阀值配置
 	public static String threshold = ResourceBundle.getBundle("thirdconfig").getString("warning_msg_threshold");
 	
 	//管理员的手机号
 	private static String[] adminPhone = ResourceBundle.getBundle("thirdconfig").getString("warning_msg_phone").split(",");
+	
+	//固定线程池
+	private static ExecutorService notifyThreadPool = Executors.newFixedThreadPool(5);
 	
 
 	/**
@@ -60,7 +68,13 @@ public class SendSmsUtil {
 				paramMap1.put("code", codeParams[0]);
 
 			} else if (templateType == 2) {
-				notifyAdmin(tel);
+				//通知管理员扔入线程池
+				notifyThreadPool.execute(new Runnable() {
+					@Override
+					public void run() {
+						notifyAdmin(tel);
+					}
+				});
 				
 				paramMap.put("templateId", orderTemplateCode);
 				paramMap1.put("month", month.format(date));
@@ -116,6 +130,7 @@ public class SendSmsUtil {
     } 
 
 	public static void main(String[] args) {
+		JedisUtil.set(RedisKeyConstants.PHONE_SMS_COUNT+"13057035325", "99",DateUtils.getZeroTimestamp());
 		notifyAdmin("13057035325");
 		
 //		sendSms("11244111411", "18217583747", 2, "小花");

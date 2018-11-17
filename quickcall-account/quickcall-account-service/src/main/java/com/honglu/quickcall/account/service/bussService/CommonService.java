@@ -96,7 +96,7 @@ public interface CommonService {
 	 * @param appointTime
 	 * @return
 	 */
-	public OrderTempResponseVO  getCountDownSeconds(Integer   oldOrderStatus ,Date  orderTime,Date  receiveOrderTime,Date startServiceTime,Date expectEndTime,Date  appointTime);
+	public OrderTempResponseVO  getCountDownSeconds(Date  currTime ,Integer   oldOrderStatus ,Date  orderTime,Date  receiveOrderTime,Date startServiceTime,Date expectEndTime,Date  appointTime);
 	
 	
 	
