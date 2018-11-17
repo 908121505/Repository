@@ -190,7 +190,8 @@ public class OrderServiceImpl implements IOrderService {
 		// 1.首先判断声优是否可以接单
 		Long customerId = request.getCustomerId();
 		Long serviceId = request.getServiceId();
-		if(JedisUtil.setnx(RedisKeyConstants.SAVE_ORDER_KEY+customerId, ORDER_DEFAULT_VALUE, ORDER_DEFAULT_TIME_OUT) == 0){
+		if(JedisUtil.setnx(RedisKeyConstants.ORDER_KEY+customerId, ORDER_DEFAULT_VALUE, ORDER_DEFAULT_TIME_OUT) == 0){
+			LOGGER.info("======================用户频繁操作，进行限制=======================");
 			//说明已经操作，本次不进行操作
 			throw new BizException(AccountBizReturnCode.ORDER_SAVE_ERROR, "请稍后重试");
 		}
@@ -920,6 +921,11 @@ public class OrderServiceImpl implements IOrderService {
 
 		LOGGER.info("======>>>>>custConfirmFinish()入参：" + request.toString());
 		Long orderId = request.getOrderId();
+		if(JedisUtil.setnx(RedisKeyConstants.ORDER_KEY+orderId, ORDER_DEFAULT_VALUE, ORDER_DEFAULT_TIME_OUT) == 0){
+			LOGGER.info("======================用户频繁操作，进行限制=======================");
+			//说明已经操作，本次不进行操作
+			throw new BizException(AccountBizReturnCode.ORDER_CONFIRM_FINISH_ERROR, "请稍后重试");
+		}
 
 		Integer newOrderStatus = null;
 		// 查询订单详情
