@@ -126,28 +126,28 @@ public class BuryiedPointUtil {
         //用户id
         String userId = (String) user.get("vc_user_id");
         if (!StringUtils.isEmpty(userId)) {
-            sa.profileSetOnce(distinctId, isReal, "vc_user_id", userId);
+            sa.profileSet(distinctId, isReal, "vc_user_id", userId);
             logger.info("属性设置:用户id -> vc_user_id：" + userId );
         }
 
         //手机号
         String phoneNumber = (String) user.get("phoneNumber");
         if (!StringUtils.isEmpty(phoneNumber)) {
-            sa.profileSetOnce(distinctId, isReal, "phoneNumber", phoneNumber);
+            sa.profileSet(distinctId, isReal, "phoneNumber", phoneNumber);
             logger.info("属性设置:用户手机号 -> phoneNumber：" + phoneNumber );
         }
 
         //注册渠道
         String registSource = (String) user.get("registSource");
         if (!StringUtils.isEmpty(registSource)) {
-            sa.profileSetOnce(distinctId, isReal, "registSource", registSource);
+            sa.profileSet(distinctId, isReal, "registSource", registSource);
             logger.info("属性设置:注册渠道 -> registSource：" + registSource );
         }
 
         //注册时间
         String registDate = (String) user.get("registDate");
         if (!StringUtils.isEmpty(registDate)) {
-            sa.profileSetOnce(distinctId, isReal, "registDate", registDate);
+            sa.profileSet(distinctId, isReal, "registDate", registDate);
             logger.info("属性设置:注册时间 -> registDate：" + registDate );
         }
 
