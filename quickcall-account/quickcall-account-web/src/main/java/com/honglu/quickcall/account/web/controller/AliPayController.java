@@ -16,6 +16,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.honglu.quickcall.account.facade.code.AccountBizReturnCode;
 import com.honglu.quickcall.account.facade.exchange.request.AlipayNotifyRequest;
 import com.honglu.quickcall.account.facade.exchange.request.BindAliaccountRequest;
+import com.honglu.quickcall.account.facade.exchange.request.IsFirstechargeRequest;
 import com.honglu.quickcall.account.facade.exchange.request.QueryAccountRequest;
 import com.honglu.quickcall.account.facade.exchange.request.RechargeRequest;
 import com.honglu.quickcall.account.facade.exchange.request.WhthdrawRequest;
@@ -46,6 +47,7 @@ public class AliPayController extends BaseController {
 			return response;
 		}
 		params.setRemoteIp(this.getRemoteHost(request));
+		logger.info("---------------------ip:" + this.getRemoteHost(request));
 		response = accountCenterService.executeWhite(params);
 
 		logger.info("accountWeb.pay.recharge.resonse.data : " + JSONObject.toJSONString(response));
@@ -124,6 +126,26 @@ public class AliPayController extends BaseController {
 
 		response = accountCenterService.execute(params);
 		logger.info("accountWeb.pay.alipayNotify.response.data : " + JSONObject.toJSONString(response));
+		return response;
+	}
+	
+	/**
+	 * 
+	 * @param params
+	 * @return
+	 * @author baoguochuan
+	 */
+	@RequestMapping(value = "/isFristRecharge")
+	@ResponseBody
+	public WebResponseModel isFirstecharge(IsFirstechargeRequest params) {
+		WebResponseModel response = new WebResponseModel();
+		if (params.getCustomerId()==null) {
+			response.setCode(AccountBizReturnCode.paramError.code());
+			response.setMsg(AccountBizReturnCode.paramError.desc());
+			return response;
+		}
+
+		response = accountCenterService.execute(params);
 		return response;
 	}
 

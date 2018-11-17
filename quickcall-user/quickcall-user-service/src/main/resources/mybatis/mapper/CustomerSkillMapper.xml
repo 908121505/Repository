@@ -39,14 +39,14 @@
     <result column="skill_font_color" property="skillFontColor" jdbcType="VARCHAR" />
     <result column="skill_voice_url" property="skillVoiceUrl" jdbcType="VARCHAR" />
     <result column="skill_voice_time" property="skillVoiceTime" jdbcType="DECIMAL" />
-
+	<result column="score_total" property="skillVolume" jdbcType="DECIMAL" />
   </resultMap>
   
   <sql id="Base_Column_List" >
    customer_skill_id, certify_id, customer_id, skill_item_id, skill_name, service_unit, 
     skill_price, skill_status, switch_status, receive_status, discount_rate, discount_price, 
-    monday, tuesday, wednesday, thursday, friday, saturday, sunday, start_service_time, 
-    end_service_time, skill_describe, create_time, modify_time, create_man, modify_man, 
+    monday, tuesday, wednesday, thursday, friday, saturday, sunday, 
+    skill_describe, create_time, modify_time, create_man, modify_man, 
     remark
   </sql>
  
@@ -419,7 +419,7 @@
     INNER JOIN skill_item si ON si.id = cs.skill_item_id AND si.skill_status = 1
     LEFT JOIN customer_skill_certify csc ON csc.certify_id = cs.certify_id
     WHERE cs.customer_id = #{customerId}
-    AND cs.skill_status = 1
+    AND cs.skill_status = 1 AND cs.switch_status = 1 AND cs.receive_status =1
     ORDER BY cs.create_time ASC
   </select>
 
@@ -446,6 +446,15 @@
     skill_item_id
     from customer_skill
     where customer_id = #{customerId,jdbcType=BIGINT}
+    limit 1;
+  </select>
+  
+  <select id="queryCustomerSkillByCertifyId" resultMap="BaseResultMap"  >
+    select
+    cs.*,bss.score_total
+    from customer_skill cs 
+    left join bigv_skill_score bss on cs.customer_skill_id = bss.customer_skill_id 
+    where certify_id = #{certifyId,jdbcType=BIGINT}
     limit 1;
   </select>
   

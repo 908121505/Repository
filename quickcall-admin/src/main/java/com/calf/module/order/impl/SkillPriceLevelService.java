@@ -98,7 +98,7 @@ public class SkillPriceLevelService {
 		sie2.setSkillItemId(Long.valueOf(entity.getSkillItemId()));
 		sie2.setId(UUIDUtils.getId());
 		sie2.setSkillExtType(1);
-		sie2.setSkillExtUnit("一小时");
+		sie2.setSkillExtUnit("小时");
 		sie2.setSkillExtRange(entity.getPriceLevel());
 		sie2.setSkillExtPrice(entity.getOnePrice());
 		sie2.setSkillExtThreshold(entity.getLevelThreshold());
@@ -142,7 +142,7 @@ public class SkillPriceLevelService {
 		sie2.setSkillItemId(Long.valueOf(entity.getSkillItemId()));
 		sie2.setId(UUIDUtils.getId());
 		sie2.setSkillExtType(1);
-		sie2.setSkillExtUnit("一小时");
+		sie2.setSkillExtUnit("小时");
 		sie2.setSkillExtRange(entity.getPriceLevel());
 		sie2.setSkillExtPrice(entity.getOnePrice());
 		sie2.setSkillExtThreshold(entity.getLevelThreshold());

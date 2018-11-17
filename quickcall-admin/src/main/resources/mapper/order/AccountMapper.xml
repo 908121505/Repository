@@ -62,6 +62,9 @@
     frozen_amounts=frozen_amounts-#{amount}  ,
     remainder_amounts=remainder_amounts+#{amount}
     </if>
+    <if test="type==4"><!-- 强制取消，冻结状态 -->
+    frozen_amounts=frozen_amounts-#{amount}
+    </if>
     where customer_id = #{userId}
    </update>
     <select id="queryFrozenAccouont" resultMap="BaseResultMap">

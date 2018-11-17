@@ -21,12 +21,105 @@
 		UPDATE 
 			customer_skill
 		SET 
-			receive_status = #{updateStatus}
+			receive_status = #{updateStatus},
+			modify_time = #{modifyTime} 
 		WHERE
 			customer_skill_id   IN 
 			<foreach collection="list" item="customerSkillId"    open="("  close=")"  separator=",">
 				#{customerSkillId}
 			</foreach>
   </update>
+  
+    
+  <sql id="SKILL_EXIST_CONDITON">
+      <if test="weekIndex == 1" >
+        AND monday = 1 
+      </if>
+      <if test="weekIndex == 2" >
+        AND  tuesday = 1 
+      </if>
+      <if test="weekIndex == 3" >
+        AND  wednesday = 1
+      </if>
+      <if test="weekIndex == 4" >
+        AND  thursday = 1  
+      </if>
+      <if test="weekIndex == 5" >
+        AND  friday = 1  
+      </if>
+      <if test="weekIndex == 6" >
+        AND  saturday = 1 
+      </if>
+      <if test="weekIndex == 7" >
+        AND  sunday = 1  
+      </if>
+  </sql>
+  
+  
+  <sql id="ISVALID_EXIST_CONDITON">
+      AND  monday+tuesday+wednesday+thursday+friday+saturday+sunday = 0
+  </sql>
+  
+  
+<!-- 根据周索引开启接单开关 -->
+  <select id="queryOpenReceiveByWeek"  resultType="java.lang.Long">
+		SELECT
+			customer_skill_id
+		FROM
+			customer_skill
+		WHERE
+			auto_receive_status = #{autoReceiveStatus}
+		AND receive_status = #{recevieStatus}
+		<!-- AND start_time_str <![CDATA[ <= ]]> #{currTimeStr} -->
+		AND start_time_str = #{currTimeStr}
+		<include refid="SKILL_EXIST_CONDITON"></include>
+  </select>
+  
+  
+  
+  
+  
+<!-- 根据周索引关闭接单开关 -->
+  <select id="queryCloseReceiveByWeek"   resultType="java.lang.Long">
+		SELECT
+			customer_skill_id
+		FROM
+			customer_skill
+		WHERE
+			auto_receive_status = #{autoReceiveStatus}
+		AND receive_status = #{recevieStatus}
+		<!-- AND end_time_str  <![CDATA[ <= ]]>  #{currTimeStr} -->
+		AND end_time_str  =  #{currTimeStr}
+		
+		<include refid="SKILL_EXIST_CONDITON"></include>
+  </select>
+  
+  
+<!-- 根据当前时间开启接单开关 -->
+  <!-- 最新 -->
+  <select id="qeryOpenReceiveByCurrentTimeUpdate"   resultType="java.lang.Long">
+		SELECT
+			customer_skill_id
+		FROM
+			customer_skill
+		WHERE
+			auto_receive_status = #{autoReceiveStatus}
+		AND receive_status = #{recevieStatus}
+		AND  DATE_FORMAT(appoint_start_time ,'%Y-%c-%d %H:%i')  = #{currTimeStr}
+  </select>
+  
+<!-- 根据当前时间关闭接单开关 -->
+  <select id="qeryCloseReceiveByCurrentTimeUpdate"   resultType="java.lang.Long">
+		SELECT
+			customer_skill_id
+		FROM
+			customer_skill
+		WHERE
+			auto_receive_status = #{autoReceiveStatus}
+		AND receive_status = #{recevieStatus}
+		AND  DATE_FORMAT(appoint_end_time ,'%Y-%c-%d %H:%i')  = #{currTimeStr}
+  </select>
+
+
   
 </mapper>

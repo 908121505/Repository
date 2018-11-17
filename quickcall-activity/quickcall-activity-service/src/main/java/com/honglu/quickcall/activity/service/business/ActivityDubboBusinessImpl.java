@@ -1,7 +1,10 @@
 package com.honglu.quickcall.activity.service.business;
 
 import com.honglu.quickcall.activity.facade.code.ActivityFunctionType;
+import com.honglu.quickcall.activity.facade.exchange.request.ActivityCouponQueryRequest;
+import com.honglu.quickcall.activity.facade.exchange.request.ActivityCouponReceiveRequest;
 import com.honglu.quickcall.activity.facade.exchange.request.BannerRequest;
+import com.honglu.quickcall.activity.service.service.ActivityCouponService;
 import com.honglu.quickcall.activity.service.service.AppConfigDataService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,6 +34,9 @@ public class ActivityDubboBusinessImpl implements ActivityDubboBusiness {
      **/
     @Autowired
     private AppConfigDataService appConfigDataService;
+    @Autowired
+    private ActivityCouponService activityCouponService;
+
 
     @Override
     public CommonResponse excute(AbstractRequest request) {
@@ -48,6 +54,14 @@ public class ActivityDubboBusinessImpl implements ActivityDubboBusiness {
                 /** 接口说明：查询Banner信息 **/
                 case ActivityFunctionType.QUERY_BANNER:
                     response = appConfigDataService.queryBannerInfo((BannerRequest) request);
+                    break;
+                /** 接口说明：活动优惠券查询 **/
+                case ActivityFunctionType.ACTIVITY_COUPON_QUERY:
+                    response = activityCouponService.queryActivityCoupon((ActivityCouponQueryRequest) request);
+                    break;
+                /** 接口说明：领券查询 **/
+                case ActivityFunctionType.ACTIVITY_COUPON_RECEIVE:
+                    response = activityCouponService.receiveCoupon((ActivityCouponReceiveRequest) request);
                     break;
                 default:
                     throw new BizException(ActivityBizReturnCode.BizFunctionTypeNotMatch, ActivityBizReturnCode.BizFunctionTypeNotMatch.desc());

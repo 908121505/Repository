@@ -1,5 +1,16 @@
 package com.honglu.quickcall.account.service.bussService.impl;
 
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.alibaba.fastjson.JSON;
 import com.honglu.quickcall.account.facade.constants.OrderSkillConstants;
 import com.honglu.quickcall.account.facade.entity.Order;
@@ -11,17 +22,8 @@ import com.honglu.quickcall.common.api.exchange.CommonResponse;
 import com.honglu.quickcall.common.api.util.DateUtils;
 import com.honglu.quickcall.common.api.util.JedisUtil;
 import com.honglu.quickcall.common.api.util.RedisKeyConstants;
+import com.honglu.quickcall.common.third.rongyun.util.RongYunUtil;
 import com.honglu.quickcall.user.facade.entity.Customer;
-import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
 
 
 @Service("commonService")
@@ -66,50 +68,108 @@ public class CommonServiceImpl implements CommonService {
 		
 	}
 
+	/***
+	 * 主要获取订单真是状态+真实的倒计时秒数
+	 */
 	@Override
-	public OrderTempResponseVO getCountDownSeconds(Integer   oldOrderStatus ,Date  orderTime,Date  receiveOrderTime) {
+	public OrderTempResponseVO getCountDownSeconds(Date  currTime ,Integer   oldOrderStatus ,Date  orderTime,Date  receiveOrderTime,Date startServiceTime,Date  expectEndTime,Date  appointTime) {
 		OrderTempResponseVO  tempVO = new OrderTempResponseVO();
-		Calendar  cal =  Calendar.getInstance();
-		Date  currTime = cal.getTime();
-		Long  countDownSeconds = null ;
+//		Date  currTime = new Date();
+		Long  countDownSeconds = 0L ;
 		Date  endTime = null ;
 		tempVO.setOrderStatus(oldOrderStatus);
+		//需要调整用户5分钟未同意大V立即服务倒计时时间
 		//待接单计算倒计时
 		if(oldOrderStatus == OrderSkillConstants.ORDER_STATUS_WAITING_RECEIVE){
-			Calendar  cal1 =  Calendar.getInstance();
-			cal1.setTime(orderTime);
-			cal1.add(Calendar.MINUTE, 15);//TODO 定义常量
-			endTime = cal1.getTime();
-			countDownSeconds =  DateUtils.getDiffSeconds(currTime, endTime);
+			if(orderTime != null){
+				Calendar  cal =  Calendar.getInstance();
+				cal.setTime(orderTime);
+				cal.add(Calendar.MINUTE, OrderSkillConstants.RECEIVE_ORDER_OVER_TIME);
+				endTime = cal.getTime();
+				countDownSeconds =  DateUtils.getDiffSeconds(currTime, endTime);
+			}
 			//大于0说明正在倒计时，状态不变
-			if(countDownSeconds > 0){
+			if(countDownSeconds >= 0){
 				tempVO.setOrderStatus(oldOrderStatus);
 				tempVO.setCountDownSeconds(countDownSeconds);
 			}else{
 				tempVO.setOrderStatus(OrderSkillConstants.ORDER_STATUS_CANCEL_SYSTEM_NOT_RECEIVE);
 			}
 			//大V未发起服务或者已经发起服务，用户未应答
-		}else if(oldOrderStatus == OrderSkillConstants.ORDER_STATUS_WAITING_START  || oldOrderStatus == OrderSkillConstants.ORDER_STATUS_WAITING_START_DA_APPAY_START_SERVICE){
-			Calendar  cal1 =  Calendar.getInstance();
-			cal1.setTime(receiveOrderTime);
-			cal1.add(Calendar.MINUTE, 5);//TODO 定义常量
-			endTime = cal1.getTime();
-			countDownSeconds =  DateUtils.getDiffSeconds(currTime, endTime);
+		}else if(oldOrderStatus == OrderSkillConstants.ORDER_STATUS_WAITING_START ){
+			if(receiveOrderTime != null){
+				Calendar  cal =  Calendar.getInstance();
+				cal.setTime(receiveOrderTime);
+				cal.add(Calendar.MINUTE, OrderSkillConstants.START_SERVICE_OVER_TIME_DAV);//TODO 定义常量
+				endTime = cal.getTime();
+				countDownSeconds =  DateUtils.getDiffSeconds(currTime, endTime);
+			}
+			
 			//大于0说明正在倒计时，状态不变
-			if(countDownSeconds > 0){
+			if(countDownSeconds >= 0){
 				tempVO.setOrderStatus(oldOrderStatus);
 				tempVO.setCountDownSeconds(countDownSeconds);
 			}else{
 				//小于O说明真实状态已经变更
-				Integer  newOrderStatus = null ;
-				if(oldOrderStatus == OrderSkillConstants.ORDER_STATUS_WAITING_START ){
-					newOrderStatus = OrderSkillConstants.ORDER_STATUS_CANCEL_NOT_START ;
-				}else if (oldOrderStatus == OrderSkillConstants.ORDER_STATUS_WAITING_START_DA_APPAY_START_SERVICE){
-					newOrderStatus = OrderSkillConstants.ORDER_STATUS_CANCEL_USER_NOT_ACCEPCT ;
-				}
+				Integer  newOrderStatus = OrderSkillConstants.ORDER_STATUS_CANCEL_NOT_START ;
 				tempVO.setOrderStatus(newOrderStatus);
 			}
+			//用户5分钟未同意大V立即服务
+		}else if(oldOrderStatus == OrderSkillConstants.ORDER_STATUS_WAITING_START_DA_APPAY_START_SERVICE){
+		
+			if(startServiceTime != null){
+				Calendar  cal =  Calendar.getInstance();
+				//开始时间取声优发起立即服务这一刻
+				cal.setTime(startServiceTime);
+				cal.add(Calendar.MINUTE, OrderSkillConstants.START_SERVICE_OVER_TIME_DAV);//TODO 定义常量
+				endTime = cal.getTime();
+				countDownSeconds =  DateUtils.getDiffSeconds(currTime, endTime);
+			}
+			//大于0说明正在倒计时，状态不变
+			if(countDownSeconds >= 0){
+				tempVO.setOrderStatus(oldOrderStatus);
+				tempVO.setCountDownSeconds(countDownSeconds);
+			}else{
+				//小于O说明真实状态已经变更
+				Integer  newOrderStatus = OrderSkillConstants.ORDER_STATUS_CANCEL_USER_NOT_ACCEPCT ;
+				tempVO.setOrderStatus(newOrderStatus);
+			}
+			//进行中倒计时计算，不同状态逻辑不同 ，需要重新梳理一下    TODO
+		}else if(oldOrderStatus == OrderSkillConstants.ORDER_STATUS_GOING_USER_ACCEPCT   || oldOrderStatus == OrderSkillConstants.ORDER_STATUS_GOING_DAV_APPAY_FINISH){
+			//TODO  如果订单已经过了预计结束时间，则需要变更订单状态为已完成
+			if(expectEndTime != null){
+				endTime =  expectEndTime;
+				countDownSeconds =  DateUtils.getDiffSeconds(currTime, endTime);
+			}
+			//大于0说明正在倒计时，状态不变  小于0的逻辑暂时不考虑
+			tempVO.setOrderStatus(oldOrderStatus);
+//			if(countDownSeconds >= 0){
+//				tempVO.setOrderStatus(oldOrderStatus);
+//			}else{
+//				tempVO.setOrderStatus(OrderSkillConstants.ORDER_STATUS_FINISH_DAV_FINISH_AFTER_SERVICE_TIME);
+//			}
+			tempVO.setCountDownSeconds(countDownSeconds);
+		//叫醒的24状态需要单独处理
+		}else if(oldOrderStatus ==OrderSkillConstants.ORDER_STATUS_GOING_WAITING_START){
+//			if(appointTime != null){
+//				//时间接单从当前时间到预约开始时间
+//				endTime = appointTime;
+//				countDownSeconds =  DateUtils.getDiffSeconds(currTime, endTime);
+//			}
+			//大于0说明正在倒计时，状态不变  小于0的逻辑暂时不考虑
+			tempVO.setOrderStatus(oldOrderStatus);
+//			if(countDownSeconds < 0){
+//				//小于0说明已经到了进行中状态
+//				tempVO.setOrderStatus(OrderSkillConstants.ORDER_STATUS_GOING_USER_ACCEPCT);
+//			}
+			tempVO.setCountDownSeconds(0L);
 		}
+		
+		if(countDownSeconds < 0){
+			countDownSeconds = 0L;
+			tempVO.setCountDownSeconds(countDownSeconds);
+		}
+		
 		return tempVO ;
 	}
 
@@ -177,7 +237,7 @@ public class CommonServiceImpl implements CommonService {
 
 
 	@Override
-	public void cancelUpdateOrder(Long orderId, Integer orderStatus,Date cancelTime,String  selectReason,String   remarkReason) {
+	public void cancelUpdateOrder(Long orderId, Integer orderStatus,Date cancelTime,String  selectReason,String   remarkReason,Integer  couponFlag) {
 		Order record = new Order();
 		record.setOrderStatus(orderStatus);
 		record.setOrderId(orderId);
@@ -185,6 +245,8 @@ public class CommonServiceImpl implements CommonService {
 		record.setCustCancelTime(cancelTime);
 		record.setSelectReason(selectReason);
 		record.setRemarkReason(remarkReason);
+		//设置券状态
+		record.setCouponFlag(couponFlag);
 		//修改订单状态为：已支付
 		orderMapper.updateByPrimaryKeySelective(record);
 		
@@ -234,10 +296,13 @@ public class CommonServiceImpl implements CommonService {
 		}else if(OrderSkillConstants.ORDER_STATUS_PARAM_PING_JIA == orderStatusParam){
 			
 			retList.add(OrderSkillConstants.ORDER_STATUS_FINISHED_USER_ACCEPCT);
+			retList.add(OrderSkillConstants.ORDER_STATUS_GOING_USER_NOT_PING_JIA);
 			retList.add(OrderSkillConstants.ORDER_STATUS_FINISH_DV_FINISH);
+			retList.add(OrderSkillConstants.ORDER_STATUS_FINISH_DV_RELEASE);
 			retList.add(OrderSkillConstants.ORDER_STATUS_GOING_USRE_APPAY_FINISH);
 			retList.add(OrderSkillConstants.ORDER_STATUS_FINISH_DAV_FINISH_AFTER_SERVICE_TIME);
 			retList.add(OrderSkillConstants.ORDER_STATUS_FINISH_BOTH_NO_OPERATE);
+			retList.add(OrderSkillConstants.ORDER_STATUS_FINISHED_FORCE);
 		}
 		
 		return retList;
@@ -264,12 +329,15 @@ public class CommonServiceImpl implements CommonService {
 			
 		}else if(OrderSkillConstants.ORDER_STATUS_PARAM_FINISHED == orderStatusParam){
 			
-			retList.add(OrderSkillConstants.ORDER_STATUS_FINISHED_AND_PINGJIA);
 			retList.add(OrderSkillConstants.ORDER_STATUS_FINISHED_USER_ACCEPCT);
+			retList.add(OrderSkillConstants.ORDER_STATUS_GOING_USER_NOT_PING_JIA);
 			retList.add(OrderSkillConstants.ORDER_STATUS_FINISH_DV_FINISH);
+			retList.add(OrderSkillConstants.ORDER_STATUS_FINISH_DV_RELEASE);
 			retList.add(OrderSkillConstants.ORDER_STATUS_GOING_USRE_APPAY_FINISH);
 			retList.add(OrderSkillConstants.ORDER_STATUS_FINISH_DAV_FINISH_AFTER_SERVICE_TIME);
 			retList.add(OrderSkillConstants.ORDER_STATUS_FINISH_BOTH_NO_OPERATE);
+			retList.add(OrderSkillConstants.ORDER_STATUS_FINISHED_AND_PINGJIA);
+			retList.add(OrderSkillConstants.ORDER_STATUS_FINISHED_FORCE);
 			
 		}else if(OrderSkillConstants.ORDER_STATUS_PARAM_REFUSED == orderStatusParam){
 			
@@ -284,6 +352,7 @@ public class CommonServiceImpl implements CommonService {
 			retList.add(OrderSkillConstants.ORDER_STATUS_CANCLE_USER_SELF_BEFORE_SERVICE);
 			retList.add(OrderSkillConstants.ORDER_STATUS_CANCEL_USER_NOT_ACCEPCT);
 			retList.add(OrderSkillConstants.ORDER_STATUS_CANCEL_BEFORE_APPOINT_TIME);
+			retList.add(OrderSkillConstants.ORDER_STATUS_CANCEL_FORCE);
 			
 		}else if(OrderSkillConstants.ORDER_STATUS_PARAM_PING_JIA == orderStatusParam){
 			retList.add(999);
@@ -341,6 +410,160 @@ public class CommonServiceImpl implements CommonService {
 		record.setEndTime(new Date());
 		//修改订单状态为：已支付
 		orderMapper.updateByPrimaryKeySelective(record);
+		
+	}
+
+	@Override
+	public String getMsgContent(String customerFlag, Integer orderStatus,Integer  skillType) {
+		String  result =  null;
+		if(OrderSkillConstants.MSG_CONTENT_DAV.equals(customerFlag)){
+			//2 通知声优消息
+			if(OrderSkillConstants.ORDER_STATUS_WAITING_RECEIVE ==  orderStatus){
+				result =   OrderSkillConstants.IM_MSG_CONTENT_RECEIVE_ORDER_TO_DV;
+			//6 声优拒绝接单
+			}else if (OrderSkillConstants.ORDER_STATUS_CANCEL_SYSTEM_NOT_RECEIVE ==  orderStatus){
+				result =  OrderSkillConstants.IM_MSG_CONTENT_CANCEL_DV_15MINUTE_TIMEOUT;
+			//8声优接单	
+			}else if (OrderSkillConstants.ORDER_STATUS_DAV_REFUSED_RECEIVE ==  orderStatus){
+				result =  OrderSkillConstants.IM_MSG_CONTENT_DAV_REFUSE_TO_DV;
+			//10声优接单	
+			}else if (OrderSkillConstants.ORDER_STATUS_WAITING_START ==  orderStatus){
+				result =   OrderSkillConstants.IM_MSG_CONTENT_DAV_CONFIRM_TO_DAV;
+			//16 用户取消订单
+			}else if (OrderSkillConstants.ORDER_STATUS_CANCEL_NOT_START ==  orderStatus){
+				result =   OrderSkillConstants.IM_MSG_CONTENT_CANCEL_DV_5MINUTE_START_TIMEOUT;
+			//12 用户取消订单
+			}else if (OrderSkillConstants.ORDER_STATUS_CANCEL_DAV_START_ONE_ORDER ==  orderStatus){
+				result =   OrderSkillConstants.IM_MSG_CONTENT_DAV_CONFIRM_OTHER_CANCEL_TO_DAV;
+			//4     14   20    23用户取消订单
+			}else if(OrderSkillConstants.ORDER_STATUS_CANCEL_BEFORE_RECEIVE== orderStatus 
+					/*||orderStatus == OrderSkillConstants.ORDER_STATUS_CANCEL_DAV_START_ONE_ORDER*/
+					||orderStatus == OrderSkillConstants.ORDER_STATUS_CANCEL_BEFORE_DAV_START
+					/*||orderStatus == OrderSkillConstants.ORDER_STATUS_CANCEL_NOT_START*/
+					||orderStatus == OrderSkillConstants.ORDER_STATUS_CANCLE_USER_SELF_BEFORE_SERVICE
+					/*||orderStatus == OrderSkillConstants.ORDER_STATUS_CANCEL_USER_NOT_ACCEPCT*/
+					||orderStatus == OrderSkillConstants.ORDER_STATUS_CANCEL_BEFORE_APPOINT_TIME){
+				result =   OrderSkillConstants.IM_MSG_CONTENT_CANCEL_ORDER_TO_DV;
+			//18 声优发起立即服务
+			}else if(OrderSkillConstants.ORDER_STATUS_WAITING_START_DA_APPAY_START_SERVICE == orderStatus ){
+				result =  OrderSkillConstants.IM_MSG_CONTENT_DAV_START_SERVICE_TO_DAV;
+			//22用户同意声优立即服务
+			}else if(OrderSkillConstants.ORDER_STATUS_CANCEL_USER_NOT_ACCEPCT == orderStatus ){
+				result =  OrderSkillConstants.IM_MSG_CONTENT_CANCEL_DV_5MINUTE_CONFIRM_TIMEOUT;
+			//24用户同意声优立即服务
+			}else if(OrderSkillConstants.ORDER_STATUS_GOING_WAITING_START == orderStatus){
+				result =   OrderSkillConstants.IM_MSG_CONTENT_USER_CONFIRM_START_SERVICE_JX_TO_DAV;
+			//26 声优在服务时间内发起完成服务
+			}else if(OrderSkillConstants.ORDER_STATUS_GOING_USER_ACCEPCT == orderStatus ){
+				result =   OrderSkillConstants.IM_MSG_CONTENT_USER_CONFIRM_START_SERVICE_TO_DAV;
+			//28 声优在服务时间内发起完成服务
+			}else if(OrderSkillConstants.ORDER_STATUS_GOING_DAV_APPAY_FINISH == orderStatus){
+				result =   OrderSkillConstants.IM_MSG_CONTENT_CUST_FINISH_TO_DAV;
+			//29 强制取消
+			}else if(OrderSkillConstants.ORDER_STATUS_CANCEL_FORCE == orderStatus){
+				result =   OrderSkillConstants.IM_MSG_CONTENT_CANCEL_FORCE_ORDER_TO_DV;
+			//30   31   32  33  34   36  38   42 声优在服务时间之外发起完成服务
+			}else if(OrderSkillConstants.ORDER_STATUS_FINISHED_USER_ACCEPCT == orderStatus
+					||OrderSkillConstants.ORDER_STATUS_GOING_USER_NOT_PING_JIA == orderStatus 
+					||OrderSkillConstants.ORDER_STATUS_FINISH_DV_FINISH == orderStatus 
+					||OrderSkillConstants.ORDER_STATUS_FINISH_DV_RELEASE == orderStatus 
+					||OrderSkillConstants.ORDER_STATUS_GOING_USRE_APPAY_FINISH == orderStatus 
+					||OrderSkillConstants.ORDER_STATUS_FINISH_DAV_FINISH_AFTER_SERVICE_TIME == orderStatus 
+					||OrderSkillConstants.ORDER_STATUS_FINISH_BOTH_NO_OPERATE == orderStatus 
+					|| OrderSkillConstants.ORDER_STATUS_FINISHED_FORCE == orderStatus){
+				result =   OrderSkillConstants.IM_MSG_CONTENT_DAV_CUST_CONFIRM_TO_DV;
+			//40
+			}else if(OrderSkillConstants.ORDER_STATUS_FINISHED_AND_PINGJIA == orderStatus ){
+			    result = OrderSkillConstants.IM_MSG_CONTENT_PING_JIA_FINISH_TO_DV;
+			}
+			
+		}else{
+			// 2  通知用户消息
+			if(OrderSkillConstants.ORDER_STATUS_WAITING_RECEIVE ==  orderStatus){
+				result =  OrderSkillConstants.IM_MSG_CONTENT_RECEIVE_ORDER_TO_CUST;
+			//6 声优拒绝接单
+			}else if (OrderSkillConstants.ORDER_STATUS_CANCEL_SYSTEM_NOT_RECEIVE ==  orderStatus){
+				result =  OrderSkillConstants.IM_MSG_CONTENT_CANCEL_CUST_15MINUTE_TIMEOUT;
+			//8 声优接单	
+			}else if (OrderSkillConstants.ORDER_STATUS_DAV_REFUSED_RECEIVE ==  orderStatus){
+				result =  OrderSkillConstants.IM_MSG_CONTENT_DAV_REFUSE_TO_CUST;
+			//10 声优接单	
+			}else if (OrderSkillConstants.ORDER_STATUS_WAITING_START ==  orderStatus){
+				if(OrderSkillConstants.SKILL_TYPE_YES == skillType){
+					result =  OrderSkillConstants.IM_MSG_CONTENT_DAV_CONFIRM_TO_CUST;
+				}else{
+					result =  OrderSkillConstants.IM_MSG_CONTENT_DAV_CONFIRM_TO_CUST_JIAO_XING;
+				}
+			//16 用户取消订单
+			}else if (OrderSkillConstants.ORDER_STATUS_CANCEL_NOT_START ==  orderStatus){
+				result =   OrderSkillConstants.IM_MSG_CONTENT_CANCEL_CUST_5MINUTE_START_TIMEOUT;
+			//12用户取消订单
+			}else if (OrderSkillConstants.ORDER_STATUS_CANCEL_DAV_START_ONE_ORDER ==  orderStatus){
+				result =   OrderSkillConstants.IM_MSG_CONTENT_DAV_CONFIRM_OTHER_CANCEL_TO_CUST;
+			//4     14   20    23用户取消订单
+			}else if(OrderSkillConstants.ORDER_STATUS_CANCEL_BEFORE_RECEIVE== orderStatus 
+					/*||orderStatus == OrderSkillConstants.ORDER_STATUS_CANCEL_DAV_START_ONE_ORDER*/
+					||orderStatus == OrderSkillConstants.ORDER_STATUS_CANCEL_BEFORE_DAV_START
+					/*||orderStatus == OrderSkillConstants.ORDER_STATUS_CANCEL_NOT_START*/
+					||orderStatus == OrderSkillConstants.ORDER_STATUS_CANCLE_USER_SELF_BEFORE_SERVICE
+					/*||orderStatus == OrderSkillConstants.ORDER_STATUS_CANCEL_USER_NOT_ACCEPCT*/
+					||orderStatus == OrderSkillConstants.ORDER_STATUS_CANCEL_BEFORE_APPOINT_TIME){
+				result =   OrderSkillConstants.IM_MSG_CONTENT_CANCEL_ORDER_TO_CUST;
+			//18 声优发起立即服务
+			}else if(OrderSkillConstants.ORDER_STATUS_WAITING_START_DA_APPAY_START_SERVICE == orderStatus ){
+				result =   OrderSkillConstants.IM_MSG_CONTENT_DAV_START_SERVICE_TO_CUST;
+			//22 用户同意声优立即服务
+			}else if(OrderSkillConstants.ORDER_STATUS_CANCEL_USER_NOT_ACCEPCT == orderStatus ){
+				result =  OrderSkillConstants.IM_MSG_CONTENT_CANCEL_CUST_5MINUTE_CONFIRM_TIMEOUT;
+			//24用户同意声优立即服务
+			}else if( OrderSkillConstants.ORDER_STATUS_GOING_WAITING_START == orderStatus){
+				result =  OrderSkillConstants.IM_MSG_CONTENT_USER_CONFIRM_START_SERVICE_JX_TO_CUST;
+			// 26 声优在服务时间内发起完成服务
+			}else if(OrderSkillConstants.ORDER_STATUS_GOING_USER_ACCEPCT == orderStatus){
+				result =  OrderSkillConstants.IM_MSG_CONTENT_USER_CONFIRM_START_SERVICE_TO_CUST;
+			// 28 声优在服务时间内发起完成服务
+			}else if(OrderSkillConstants.ORDER_STATUS_GOING_DAV_APPAY_FINISH == orderStatus){
+				result =  OrderSkillConstants.IM_MSG_CONTENT_CUST_FINISH_TO_CUST;
+			//29 强制取消
+			}else if(OrderSkillConstants.ORDER_STATUS_CANCEL_FORCE == orderStatus){
+				result =   OrderSkillConstants.IM_MSG_CONTENT_CANCEL_FORCE_ORDER_TO_CUST;
+			// 30  31  32  33   34  36  38   42 声优在服务时间之外发起完成服务
+			}else if(OrderSkillConstants.ORDER_STATUS_FINISHED_USER_ACCEPCT == orderStatus
+					||OrderSkillConstants.ORDER_STATUS_GOING_USER_NOT_PING_JIA == orderStatus 
+					||OrderSkillConstants.ORDER_STATUS_FINISH_DV_FINISH == orderStatus 
+					||OrderSkillConstants.ORDER_STATUS_FINISH_DV_RELEASE == orderStatus 
+					||OrderSkillConstants.ORDER_STATUS_GOING_USRE_APPAY_FINISH == orderStatus 
+					||OrderSkillConstants.ORDER_STATUS_FINISH_DAV_FINISH_AFTER_SERVICE_TIME == orderStatus 
+					||OrderSkillConstants.ORDER_STATUS_FINISH_BOTH_NO_OPERATE == orderStatus 
+					|| OrderSkillConstants.ORDER_STATUS_FINISHED_FORCE == orderStatus){
+				result =   OrderSkillConstants.IM_MSG_CONTENT_DAV_CUST_CONFIRM_TO_CUST;
+			//40
+			}else if(OrderSkillConstants.ORDER_STATUS_FINISHED_AND_PINGJIA == orderStatus ){
+			    result = OrderSkillConstants.IM_MSG_CONTENT_PING_JIA_FINISH_TO_CUST;
+			}
+		}
+		
+		return result;
+	}
+
+	
+	
+	
+	@Override
+	public void sendOrderMsg(Long  customerId,Long  serviceId,Long  orderId,String  orderDesc) {
+		//customer  ---->>>  serviceId
+		String  custStr = JedisUtil.get(RedisKeyConstants.USER_CUSTOMER_INFO+customerId) ;
+		if(StringUtils.isNotBlank(custStr)){
+			try {
+				Customer customer = JSON.parseObject(custStr,  Customer.class);
+				RongYunUtil.sendOrderIMMessage(customer.getNickName(),customerId, serviceId, "", orderId, orderDesc, customer.getHeadPortraitUrl());
+			} catch (Exception e) {
+				LOGGER.error("从Redis中获取客户信息发生异常，异常信息：",e);
+			}
+		}
+		
+		
+				
 		
 	}
 

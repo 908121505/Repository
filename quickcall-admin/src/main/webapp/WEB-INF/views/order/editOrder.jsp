@@ -18,7 +18,7 @@
 		<div class="modal-body" style="max-height: 700px; overflow-y: auto;"  id = "editBody">
 			<form class="form-horizontal" method="post" id="editOrderForm" name="editOrderForm" role="form"
 				action="order/saveUpdate.htm">
-
+				<input type="hidden" name="skillItemId" value="${entity.skillItemId}">
 				<div class="form-group">
 					<label class="col-sm-3 control-label">订单ID<font color="red">&nbsp;*</font></label>
 					<div class="col-sm-6">
@@ -87,15 +87,18 @@
 	                        	<c:if test="${selectFlag == 1 }">
 	                            	<option value="29">强制取消</option>
 	                            </c:if>
-	                        	<c:if test="${selectFlag == 2 }">
+	                        	<%-- <c:if test="${selectFlag == 2 }">
 	                            	<option value="42">强制完成</option>
-	                            </c:if>
+	                            </c:if> --%>
+	                            <c:if test="${selectFlag == 2 }">
+                        	      <option value="29">强制取消</option>
+                        	      <option value="42">强制完成</option>
+                               </c:if>
 	                        </select>
                         </c:if>
                         <c:if test="${selectFlag == 3 }">
 	                        <input type="text" class="form-control"   readonly="readonly" value="${orderStatusDesc}">    	
 	                     </c:if>
-                        
                         
                         
                     </div>
@@ -118,7 +121,6 @@
 
 <script type="text/javascript">
     $(function (){
-    	debugger;
         let order_status_flag = "${selectFlag}";
         if(order_status_flag == 3){
         	$(".modal-footer .btn-primary").attr("disabled","disbaled");

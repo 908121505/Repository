@@ -21,18 +21,11 @@
   <select id="queryIsFollow" resultType="int" parameterType="map">
   	select COUNT(*) FROM fans where anchor_id=#{anchorId} AND fans_id=#{fansId} AND attention_state=1;
   </select>
-  <select id="queryFansNumByCustomerId" resultType="java.lang.Long" parameterType="java.lang.Long" >
-    SELECT COUNT(*) FROM fans WHERE anchor_id=#{customerId} AND attention_state=1;
-  </select>
-  
-   <select id="queryNoReadFansNumByCustomerId" resultType="java.lang.Integer" parameterType="java.lang.Long" >
+
+  <select id="queryNoReadFansNumByCustomerId" resultType="java.lang.Integer" parameterType="java.lang.Long" >
     SELECT COUNT(*) FROM fans WHERE anchor_id=#{customerId} AND attention_state=1 and read_state=0
   </select>
 
-
-  <select id="queryAttentionNumByCustomerId" resultType="int" parameterType="java.lang.Long" >
-    SELECT COUNT(*) FROM fans WHERE fans_id=#{customerId} AND attention_state=1;
-  </select>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
     <include refid="Base_Column_List" />
@@ -156,7 +149,23 @@
       remark = #{remark,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update> -->
-  
+
+  <!-- 查询关注数量 -->
+  <select id="queryAttentionNumByCustomerId" resultType="int">
+    SELECT count(*) FROM fans fs
+    INNER JOIN customer ct ON fs.anchor_id = ct.customer_id
+    LEFT JOIN fans fs1 ON fs.anchor_id = fs1.fans_id and fs.fans_id = fs1.anchor_id
+    WHERE fs.fans_id = #{customerId}  and   fs.attention_state = 1
+  </select>
+
+  <!-- 查询粉丝数量 -->
+  <select id="queryFansNumByCustomerId" resultType="int" >
+    SELECT count(*) FROM fans fs
+    INNER JOIN customer ct ON fs.fans_id = ct.customer_id
+    LEFT JOIN fans fs1 ON fs.anchor_id = fs1.fans_id and fs.fans_id = fs1.anchor_id
+    WHERE fs.anchor_id = #{customerId}  and   fs.attention_state = 1
+  </select>
+
   <!-- 查询关注列表 -->
   <select id="queryAttentionListByCustomerId" resultType="com.honglu.quickcall.user.facade.vo.AttentionFansVO" >
 		SELECT
@@ -175,13 +184,9 @@
 		LEFT JOIN fans fs1 ON fs.anchor_id = fs1.fans_id and fs.fans_id = fs1.anchor_id 
 		WHERE
 			fs.fans_id = #{customerId}  and   fs.attention_state = #{attentionStatus} 
-		ORDER BY eachAttentionStatus desc,fs.modify_time desc
+		ORDER BY eachAttentionStatus desc,fs.modify_time desc,ct.nick_name asc
   </select>
 
-
-
-  
-  
   <!-- 查询粉丝列表 -->
   <select id="queryFansIdListByCustomerId" resultType="com.honglu.quickcall.user.facade.vo.AttentionFansVO"  >
 		SELECT
@@ -200,7 +205,7 @@
 		LEFT JOIN fans fs1 ON fs.anchor_id = fs1.fans_id and fs.fans_id = fs1.anchor_id 
 		WHERE
 			fs.anchor_id = #{customerId}  and   fs.attention_state = #{attentionStatus} 
-		ORDER BY eachAttentionStatus desc,fs.modify_time desc
+		ORDER BY eachAttentionStatus desc,fs.modify_time desc,ct.nick_name asc
   </select>
   
   

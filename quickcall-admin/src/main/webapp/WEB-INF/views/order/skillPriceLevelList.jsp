@@ -24,12 +24,13 @@
 					<div class="form-group">
 						<div class="input-group">
 							<div class="input-group-addon">等级</div>
-							<select class="form-control" id="priceLevelQuery">
+							<!-- <select class="form-control" id="priceLevelQuery">
 								<option value="">--请选择--</option>
 								<option value="1">一等级</option>
 								<option value="2">二等级</option>
 								<option value="3">三等级</option>
-							</select>
+							</select> -->
+							<input class="form-control" type="number" min="1" id="priceLevelQuery">
 						</div>
 					</div>
 				</div>
@@ -130,7 +131,7 @@
 			            { 
 			               "data": "priceLevel",
 			               "sTitle":"价格等级",
-			               'sClass':"text-center",
+			               'sClass':"text-center"/* ,
 			           	"mRender": function(data, type, full) {
 	                    		if(data == 1){
 	                               return "<font color='green'>一等级</font>";
@@ -140,8 +141,8 @@
 	                               return "<font color='green'>三等级</font>";
 	                           }else{
 	                        	   return data;
-	                           }
-                      	 	}
+	                           } 
+                      	 	} */
 			            },
 						{
 							"data": "halfPrice",
@@ -213,6 +214,18 @@
 				 $('#query').click(function(){
 					$('#example').dataTable().fnDraw();
 				});
+				 
+			  	var ipt = $('#priceLevelQuery');
+		        	
+			    ipt.on('keyup',function(){
+		
+			        if(! /^\d+$/.test(this.value)){            
+		
+			        this.value='';
+		
+			        }
+		
+			    })
 			
 			});
 			//增加或者修改受影响的行数

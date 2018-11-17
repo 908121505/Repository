@@ -42,4 +42,20 @@ public class DataDuryBusinessImpl implements DataBuryBusiness {
     public void saveSubmitOrderData(DataBuryPointSubmitOrderReq req) throws DataBuriedPointException {
         dataBuriedPointService.saveSubmitOrderData(req);
     }
+
+    @Override
+    public void buryMakeOrderData(DataBuryMakeOrderReq req) throws DataBuriedPointException{
+        dataBuriedPointService.buryMakeOrderData(req);
+    }
+
+    @Override
+    public void burySetPwdDurationData(DataBurySetPwdDurationReq req) throws DataBuriedPointException {
+        dataBuriedPointService.burySetPwdDurationData(req);
+    }
+
+    @Override
+    public void buryFirstChargeData(DataBuryFirstChargeReq req) throws DataBuriedPointException{
+        dataBuriedPointService.buryFirstChargeData(req);
+    }
+
 }

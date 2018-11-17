@@ -37,5 +37,26 @@ public class RedisKeyConstants {
 	public static final String USER_CUSTOMER_INFO = "voice_user:customerinfo:";
 	// 充值回调锁
 	public static final String ACCOUNT_ORDER_NO_NX = "account:orderNo:nx:";
+	
+	
+	// 检查接单开关是否开启
+	public static final String ACCOUNT_RECEIVE_NO_NX = "account:receive:nx:";
+	
+	// 用户短信次数
+	public static final String PHONE_SMS_COUNT = "sms:send:count:";
+	// 完成订单服务锁
+	public static final String FINISH_ORDER_KEY = "account:finish:order:";
+	
+	/**下单锁限制*/
+//	public static final String ORDER_KEY = "account:save:order:";
+	/**取消订单*/
+	public static final String CANCEL_ORDER_KEY = "account:cancel:order:";
+	/**取消订单*/
+	public static final String CANCEL_RECEIVE_KEY = "account:receive:order:";
+	/**取消订单*/
+	public static final String SAVE_ORDER_KEY = "account:save:order:";
+	/**取消订单*/
+	public static final String CONFIRM_FINISH_ORDER_KEY = "account:confirmfinish:order:";
+		
 
 }

@@ -16,6 +16,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import com.alibaba.fastjson.JSONObject;
 import com.aliyun.oss.OSSClient;
 import com.honglu.quickcall.common.api.code.AliYunFilePaths;
+import com.honglu.quickcall.common.api.code.BizCode;
 import com.honglu.quickcall.common.api.exchange.WebResponseModel;
 import com.honglu.quickcall.common.api.util.JedisUtil;
 import com.honglu.quickcall.common.api.util.RedisKeyConstants;
@@ -24,6 +25,7 @@ import com.honglu.quickcall.common.third.OSS.OSSUtil;
 import com.honglu.quickcall.user.facade.code.UserBizReturnCode;
 import com.honglu.quickcall.user.facade.exchange.request.AddSystemUserRequest;
 import com.honglu.quickcall.user.facade.exchange.request.BindVXorQQRequest;
+import com.honglu.quickcall.user.facade.exchange.request.CustomerApplyBigvRequest;
 import com.honglu.quickcall.user.facade.exchange.request.CustomerCenterRequest;
 import com.honglu.quickcall.user.facade.exchange.request.CustomerHomeRequest;
 import com.honglu.quickcall.user.facade.exchange.request.CustomerLevelRequest;
@@ -92,14 +94,14 @@ public class UserCommonController {
 				&& !"".equals(params.getCodeType())) {
 			if (StringUtils.isBlank(
 					JedisUtil.get(RedisKeyConstants.USER_VERIFYCODE + params.getTel() + params.getCodeType()))) {
-				response.setCode(UserBizReturnCode.paramError.code());
-				response.setMsg("验证码失效请重新获取");
+				response.setCode(BizCode.CustomerSmsError.getCode());
+				response.setMsg("验证码失效");
 				return response;
 			}
 			if (!params.getVerifyCode().equals(
 					JedisUtil.get(RedisKeyConstants.USER_VERIFYCODE + params.getTel() + params.getCodeType()))) {
-				response.setCode(UserBizReturnCode.paramError.code());
-				response.setMsg("验证码输入不正确");
+				response.setCode(BizCode.CustomerSmsError.getCode());
+				response.setMsg("验证码错误");
 				return response;
 			}
 		}
@@ -130,14 +132,14 @@ public class UserCommonController {
 				&& !"".equals(params.getCodeType())) {
 			if (StringUtils.isBlank(
 					JedisUtil.get(RedisKeyConstants.USER_VERIFYCODE + params.getTel() + params.getCodeType()))) {
-				response.setCode(UserBizReturnCode.paramError.code());
-				response.setMsg("验证码失效请重新获取");
+				response.setCode(BizCode.CustomerSmsError.getCode());
+				response.setMsg("验证码失效");
 				return response;
 			}
 			if (!params.getVerifyCode().equals(
 					JedisUtil.get(RedisKeyConstants.USER_VERIFYCODE + params.getTel() + params.getCodeType()))) {
-				response.setCode(UserBizReturnCode.paramError.code());
-				response.setMsg("验证码输入不正确");
+				response.setCode(BizCode.CustomerSmsError.getCode());
+				response.setMsg("验证码错误");
 				return response;
 			}
 		}
@@ -167,14 +169,14 @@ public class UserCommonController {
 				&& !"".equals(params.getCodeType())) {
 			if (StringUtils.isBlank(
 					JedisUtil.get(RedisKeyConstants.USER_VERIFYCODE + params.getTel() + params.getCodeType()))) {
-				response.setCode(UserBizReturnCode.paramError.code());
-				response.setMsg("验证码失效请重新获取");
+				response.setCode(BizCode.CustomerSmsError.getCode());
+				response.setMsg("验证码失效");
 				return response;
 			}
 			if (!params.getVerifyCode().equals(
 					JedisUtil.get(RedisKeyConstants.USER_VERIFYCODE + params.getTel() + params.getCodeType()))) {
-				response.setCode(UserBizReturnCode.paramError.code());
-				response.setMsg("验证码输入不正确");
+				response.setCode(BizCode.CustomerSmsError.getCode());
+				response.setMsg("验证码错误");
 				return response;
 			}
 		}
@@ -384,14 +386,14 @@ public class UserCommonController {
 	}
 
 	/**
-	 * 绑定微信或者QQ
+	 * 修补融云code
 	 * 
 	 * @param params
 	 * @return
 	 */
-	@RequestMapping(value = "/addSystemUser", method = RequestMethod.POST)
+	@RequestMapping(value = "/repairCode", method = RequestMethod.POST)
 	@ResponseBody
-	public WebResponseModel addSystemUser(AddSystemUserRequest params) {
+	public WebResponseModel repairCode(AddSystemUserRequest params) {
 
 		logger.info("userWeb.user.addSystemUser.request.data : " + JSONObject.toJSONString(params));
 		WebResponseModel response = new WebResponseModel();
@@ -400,7 +402,7 @@ public class UserCommonController {
 			response.setMsg(UserBizReturnCode.paramError.desc());
 			return response;
 		}
-		response = userCenterService.execute(params);
+		response = userCenterService.executeWhite(params);
 		logger.info("userWeb.user.addSystemUser.response.data : " + JSONObject.toJSONString(response));
 		return response;
 
@@ -422,14 +424,14 @@ public class UserCommonController {
 				&& !"".equals(params.getCodeType())) {
 			if (StringUtils.isBlank(
 					JedisUtil.get(RedisKeyConstants.USER_VERIFYCODE + params.getTel() + params.getCodeType()))) {
-				response.setCode(UserBizReturnCode.paramError.code());
-				response.setMsg("验证码失效请重新获取");
+				response.setCode(BizCode.CustomerSmsError.code());
+				response.setMsg("验证码失效");
 				return response;
 			}
 			if (!params.getVerifyCode().equals(
 					JedisUtil.get(RedisKeyConstants.USER_VERIFYCODE + params.getTel() + params.getCodeType()))) {
-				response.setCode(UserBizReturnCode.paramError.code());
-				response.setMsg("验证码输入不正确");
+				response.setCode(BizCode.CustomerSmsError.code());
+				response.setMsg("验证码错误");
 				return response;
 			}
 		}
@@ -440,9 +442,34 @@ public class UserCommonController {
 		return response;
 
 	}
+
+	/**
+	 * 提交申请成为大V接口
+	 *
+	 * @param params
+	 * @return
+	 */
+	@RequestMapping(value = "/submitApplyBigv", method = RequestMethod.POST)
+	@ResponseBody
+	public WebResponseModel submitApplyBigv(CustomerApplyBigvRequest params) {
+		logger.info("userWeb.user.submitApplyBigv.request.data : " + JSONObject.toJSONString(params));
+		WebResponseModel response = new WebResponseModel();
+		if (params.getCustomerId() == null) {
+			response.setCode(UserBizReturnCode.paramError.code());
+			response.setMsg(UserBizReturnCode.paramError.desc());
+			return response;
+		}
+		response = userCenterService.execute(params);
+		logger.info("userWeb.user.submitApplyBigv.response.data : " + JSONObject.toJSONString(response));
+		return response;
+
+	}
+
 	/**
 	 * 根据手机号查询用户信息
-	 * @param params phone
+	 * 
+	 * @param params
+	 *            phone
 	 * @return
 	 */
 	@RequestMapping(value = "/searchPersonByPhone", method = RequestMethod.POST)
@@ -450,5 +477,6 @@ public class UserCommonController {
 	public WebResponseModel searchPersonByPhone(SearchPersonByPhoneRequest params) {
 		WebResponseModel response = userCenterService.execute(params);
 		return response;
+
 	}
 }

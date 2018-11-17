@@ -14,4 +14,7 @@
     <dubbo:reference group="userCenter" id="userCenterSendMqMessageService" interface="com.honglu.quickcall.user.facade.business.UserCenterSendMqMessageService" check="false" version="0.0.1"/>
     <!-- 消费者 - 用户中心发送MQ消息服务 -->
     <dubbo:reference group="buryDataCenter" id="dataDuriedPointBusiness" interface="com.honglu.quickcall.producer.facade.business.DataDuriedPointBusiness" check="false" version="1.0.0"/>
+    <!-- 消费者 - 活动中心 优惠券服务 -->
+    <dubbo:reference group="activityCenter" id="couponDubboBusiness" interface="com.honglu.quickcall.activity.facade.business.CouponDubboBusiness" check="false" version="0.0.1"/>
+    
 </beans>

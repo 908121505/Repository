@@ -13,6 +13,9 @@ public class DateUtils {
     static SimpleDateFormat dateFormat = null;
 
     static final String date_format = "yyyy-MM-dd HH:mm:ss";
+    static final String DATE_FORMAT_EXT = "yyyy-MM-dd HH:mm";
+    
+    static final String DATE_FORMAT_HH_MM = "HH:mm";
     
     static final String format = "yyyy-MM-dd";
 
@@ -56,6 +59,15 @@ public class DateUtils {
         dateFormat = new SimpleDateFormat(pattern);
         return dateFormat.format(new Date(System.currentTimeMillis()));
     }
+    /**
+     * 获取当前时间的小时：分钟
+     * @param date
+     * @return
+     */
+    public static String getDateHHMMTime(Date  date) {
+    	dateFormat = new SimpleDateFormat(DATE_FORMAT_HH_MM);
+    	return dateFormat.format(date);
+    }
 
     /**
      * 格式化Date日期
@@ -67,6 +79,10 @@ public class DateUtils {
         dateFormat = new SimpleDateFormat(date_format);
         return dateFormat.format(date);
     }
+    public static String formatDateExt(Date date) {
+    	dateFormat = new SimpleDateFormat(DATE_FORMAT_EXT);
+    	return dateFormat.format(date);
+    }
     
     /**
      * 格式化Date日期
@@ -76,6 +92,10 @@ public class DateUtils {
      */
     public static String formatDateHHSS(Date date) {
     	dateFormat = new SimpleDateFormat("HH:mm");
+    	return dateFormat.format(date);
+    }
+    public static String formatDateHHMM(Date date) {
+    	dateFormat = new SimpleDateFormat("HHmm");
     	return dateFormat.format(date);
     }
     
@@ -334,6 +354,25 @@ public class DateUtils {
 		return  (hourStr +minuteStr + ":"+secondsStr);  
 		
 		
+    }
+    
+    
+    /**
+     * 获取每天的最后一秒钟的时刻即：23:59:59
+     * @param date
+     * @return
+     */
+    public static   Date  getDayEndTime(Date   date){
+    	if(date == null){
+    		return null ;
+    	}
+    	Calendar cal = Calendar.getInstance();
+    	cal.setTime(date);
+    	cal.set(Calendar.HOUR_OF_DAY, 23);
+    	cal.set(Calendar.MINUTE,59);
+    	cal.set(Calendar.SECOND, 59);
+    	cal.set(Calendar.MILLISECOND, 0);
+    	return cal.getTime();
     }
     
     

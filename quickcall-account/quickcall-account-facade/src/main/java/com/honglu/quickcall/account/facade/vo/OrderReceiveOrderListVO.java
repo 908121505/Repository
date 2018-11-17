@@ -14,7 +14,7 @@ import java.util.Date;
  */
 public class OrderReceiveOrderListVO implements  Serializable{
 
-	private static final long serialVersionUID = 7665637990441817116L;
+	private static final long serialVersionUID = 978630168206471041L;
 	/**主播ID*/
 	private Long  orderId;
 	/**主播昵称*/
@@ -56,14 +56,52 @@ public class OrderReceiveOrderListVO implements  Serializable{
 	private Long  customerSkillId;
 	/**技能开关：1=开启,0=关闭*/
 	private Integer  switchStatus;
+	/**开始服务时间*/
+	private Date  startServiceTime;
+	/**订单预计结束时间*/
+	private Date  expectEndTime;
+	/**券标识*/
+	private Integer  couponFlag;
+	/**预约时间*/
+	private Date  appointTime;
+	/**技能类型*/
+	private Integer  skillType;
 	
 	
 	
 	
 	
-	
-	
-	
+	public Integer getSkillType() {
+		return skillType;
+	}
+	public void setSkillType(Integer skillType) {
+		this.skillType = skillType;
+	}
+	public Date getAppointTime() {
+		return appointTime;
+	}
+	public void setAppointTime(Date appointTime) {
+		this.appointTime = appointTime;
+	}
+	public Date getExpectEndTime() {
+		return expectEndTime;
+	}
+	public void setExpectEndTime(Date expectEndTime) {
+		this.expectEndTime = expectEndTime;
+	}
+	public Date getStartServiceTime() {
+		return startServiceTime;
+	}
+	public void setStartServiceTime(Date startServiceTime) {
+		this.startServiceTime = startServiceTime;
+		
+	}
+	public Integer getCouponFlag() {
+		return couponFlag;
+	}
+	public void setCouponFlag(Integer couponFlag) {
+		this.couponFlag = couponFlag;
+	}
 	public Integer getSwitchStatus() {
 		return switchStatus;
 	}

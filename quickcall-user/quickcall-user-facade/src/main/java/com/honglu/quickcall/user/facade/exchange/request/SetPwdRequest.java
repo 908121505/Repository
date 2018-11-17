@@ -4,53 +4,51 @@ import com.honglu.quickcall.user.facade.code.UserFunctionType;
 import com.honglu.quickcall.user.facade.exchange.UserCenterRequest;
 
 public class SetPwdRequest extends UserCenterRequest {
-     private String tel;
-     private String passWord;
-     
-     private String verifyCode;
-     
-     private String codeType;
- 	
-	
+	private String tel;
+	private String passWord;
+	private Long customerId;
+	private String verifyCode;
+	private String codeType;
+
+	public Long getCustomerId() {
+		return customerId;
+	}
+
+	public void setCustomerId(Long customerId) {
+		this.customerId = customerId;
+	}
+
 	public String getTel() {
 		return tel;
 	}
-
 
 	public void setTel(String tel) {
 		this.tel = tel;
 	}
 
-
 	public String getPassWord() {
 		return passWord;
 	}
-
 
 	public void setPassWord(String passWord) {
 		this.passWord = passWord;
 	}
 
-
 	public String getVerifyCode() {
 		return verifyCode;
 	}
-
 
 	public void setVerifyCode(String verifyCode) {
 		this.verifyCode = verifyCode;
 	}
 
-
 	public String getCodeType() {
 		return codeType;
 	}
 
-
 	public void setCodeType(String codeType) {
 		this.codeType = codeType;
 	}
-
 
 	@Override
 	public String getBizCode() {

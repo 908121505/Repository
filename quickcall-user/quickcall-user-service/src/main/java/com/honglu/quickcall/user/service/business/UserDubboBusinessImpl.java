@@ -49,6 +49,8 @@ public class UserDubboBusinessImpl implements UserDubboBusiness {
 	@Autowired
 	private AttentionService attentionService;
 	@Autowired
+	private CustomerVisitService customerVisitService;
+	@Autowired
 	private ScoreRankService scoreRankService;
 
 	@Autowired
@@ -251,6 +253,7 @@ public class UserDubboBusinessImpl implements UserDubboBusiness {
 				break;
 			case UserFunctionType.ADD_CUSYOMER_MESSAGE_SETTING:
 				response = userMessageService.saveCustomerMessageSetting((CustomerMsgSettingRequest) request);
+				break;
 			case UserFunctionType.CANCEL_ATTENTION:
 				response = attentionService.cancelAttention((AttentionCancelRequest) request);
 				break;
@@ -258,14 +261,23 @@ public class UserDubboBusinessImpl implements UserDubboBusiness {
 			case UserFunctionType.INIT_BIGV_SCORE_RANK_DATA:
 				response = scoreRankService.initBigvScoreRankData();
 				break;
-			/*case UserFunctionType.queryDeviceWhitelist:
+			case UserFunctionType.queryDeviceWhitelist:
 				response = deviceWhitelistService.queryDeviceWhitelist((QueryDeviceWhitelistReq) request);
 				break;
 			case UserFunctionType.saveDeviceWhitelist:
 				response = deviceWhitelistService.saveDeviceWhitelist((SaveDeviceWhitelistReq) request);
-				break;*/
+				break;
 			case UserFunctionType.searchPersonByPhone:
 				response = commonPersonService.searchPersonByPhone((SearchPersonByPhoneRequest) request);
+				break;
+			case UserFunctionType.Recent_Visit_List:
+				response = customerVisitService.queryRecentVisitList((RecentVisitRequest)request);
+				break;
+			case UserFunctionType.Set_Visit_Read:
+				response = customerVisitService.setVisitRead((SetVisitReadRequest)request);
+				break;
+			case UserFunctionType.CUSTOMER_APPLY_BIGV:
+				response = personInfoService.submitCustomerApplyBigv((CustomerApplyBigvRequest)request);
 				break;
 			case UserFunctionType.WEIXIN:
 				response = weiXinService.getOpenId((WeiXinRequest) request);

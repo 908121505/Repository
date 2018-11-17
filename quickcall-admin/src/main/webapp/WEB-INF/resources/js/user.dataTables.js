@@ -57,9 +57,13 @@
 					if(!check){
 						return false;
 					}
+					var ref = false;
+					if($(modal).find(".needRefresh").val()==1){
+						ref = true;
+					}
 					var form = $(modal).find("form");
 					 $(form).ajaxSubmit(function(data) {
-				         $('#example').dataTable().fnDraw();
+				         $('#example').dataTable().fnDraw(ref);
 				         
 				         if(data == 888){
 				        	 $.globalMessenger().post({
@@ -86,9 +90,17 @@
 				        			 hideAfter: 2,
 				        			 hideOnNavigate: true
 				        		 });
+				        	 }else if(data == -1){
+				        		 $.globalMessenger().post({
+				        			 message: '操作未完成！',
+				        			 type: 'error',
+				        			 id: "Only-one-message",
+				        			 hideAfter: 2,
+				        			 hideOnNavigate: true
+				        		 });
 				        	 }
 				        	 
-				        	 else{
+				        	  else{
 				        		 $.globalMessenger().post({
 				        			 message: '错误：'+data,
 				        			 type: 'error',

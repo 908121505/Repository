@@ -4,7 +4,9 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 import org.apache.commons.lang3.StringUtils;
@@ -15,6 +17,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
+import com.alibaba.fastjson.JSON;
 import com.honglu.quickcall.account.facade.constants.OrderSkillConstants;
 import com.honglu.quickcall.account.facade.entity.Order;
 import com.honglu.quickcall.account.facade.enums.AccountBusinessTypeEnum;
@@ -27,10 +30,12 @@ import com.honglu.quickcall.task.dao.AccountMapper;
 import com.honglu.quickcall.task.dao.BigvScoreMapper;
 import com.honglu.quickcall.task.dao.BigvSkillScoreMapper;
 import com.honglu.quickcall.task.dao.CustomerMapper;
+import com.honglu.quickcall.task.dao.TaskCustomerCouponMapper;
 import com.honglu.quickcall.task.dao.TaskOrderMapper;
 import com.honglu.quickcall.task.dao.TradeDetailMapper;
 import com.honglu.quickcall.task.entity.TaskOrder;
 import com.honglu.quickcall.task.entity.TradeDetail;
+import com.honglu.quickcall.task.job.service.CouponService;
 import com.honglu.quickcall.user.facade.constants.ScoreRankConstants;
 import com.honglu.quickcall.user.facade.entity.BigvScore;
 import com.honglu.quickcall.user.facade.entity.BigvSkillScore;
@@ -49,6 +54,28 @@ import com.honglu.quickcall.user.facade.entity.Customer;
 public class OrderUpdateJob {
 
     public static final Logger LOGGER = LoggerFactory.getLogger(OrderUpdateJob.class);
+    /**15分钟超时未接*/
+    private  final static Integer  CANCEL_ONE =  1 ;
+    private  final static Integer  CANCEL_TWO =  2 ;
+    private  final static Integer  CANCEL_THREE = 3 ;
+    private  final static Integer  CANCEL_FOUR =  4 ;
+    
+    public static final  HashMap<Integer, String>   CUST_MAP = new HashMap<Integer, String>();
+    public static final  HashMap<Integer, String>   DV_MAP = new HashMap<Integer, String>();
+    
+    static{
+    	//用户提示内容
+    	CUST_MAP.put(CANCEL_ONE, OrderSkillConstants.IM_MSG_CONTENT_CANCEL_CUST_15MINUTE_TIMEOUT);
+    	CUST_MAP.put(CANCEL_TWO, OrderSkillConstants.IM_MSG_CONTENT_CANCEL_CUST_5MINUTE_START_TIMEOUT);
+    	CUST_MAP.put(CANCEL_THREE, OrderSkillConstants.IM_MSG_CONTENT_CANCEL_CUST_5MINUTE_CONFIRM_TIMEOUT);
+    	CUST_MAP.put(CANCEL_FOUR, OrderSkillConstants.IM_MSG_CONTENT_SYSTEM_FINISH_TIMEOUT_TO_CUST);
+    	//声优提示内容
+    	DV_MAP.put(CANCEL_ONE, OrderSkillConstants.IM_MSG_CONTENT_CANCEL_DV_15MINUTE_TIMEOUT);
+    	DV_MAP.put(CANCEL_TWO, OrderSkillConstants.IM_MSG_CONTENT_CANCEL_DV_5MINUTE_START_TIMEOUT);
+    	DV_MAP.put(CANCEL_THREE, OrderSkillConstants.IM_MSG_CONTENT_CANCEL_DV_5MINUTE_CONFIRM_TIMEOUT);
+    	DV_MAP.put(CANCEL_FOUR, OrderSkillConstants.IM_MSG_CONTENT_SYSTEM_FINISH_TIMEOUT_TO_DAV);
+
+    }
 
 
     @Autowired
@@ -59,6 +86,12 @@ public class OrderUpdateJob {
     private BigvSkillScoreMapper bigvSkillScoreMapper ;
     @Autowired
     private BigvScoreMapper bigvScoreMapper ;
+    @Autowired
+    private TaskCustomerCouponMapper taskCustomerCouponMapper ;
+    
+    @Autowired
+    private CouponService  couponService;
+    
     
     /**默认超时小时数      扣减12小时*/
     private final static  Integer   END_OVER_TIME_HOUR = -12;
@@ -69,21 +102,16 @@ public class OrderUpdateJob {
     
     
     
-    
-    private  final static Integer  CANCEL_ONE =  1 ;
-    private  final static Integer  CANCEL_TWO =  2 ;
-    private  final static Integer  CANCEL_THREE = 3 ;
-    private  final static Integer  CANCEL_FOUR =  4 ;
 
     
     //接单设置
     
-    /***大V15分钟未接单超时*/
+    /***声优15分钟未接单超时*/
     @Scheduled(cron = "5 * * * * ?")
     public void updateOrderStatusReceiveOrder() {
     	
     	
-    	LOGGER.info("=============大V15分钟未接单超时自动任务开始=================");
+    	LOGGER.info("=============声优15分钟未接单超时自动任务开始=================");
     	try {
     		Date  currTime = new Date();
     		Calendar  cal = Calendar.getInstance();
@@ -95,30 +123,30 @@ public class OrderUpdateJob {
     		Integer  queryStatus = OrderSkillConstants.ORDER_STATUS_WAITING_RECEIVE;
     		Integer  updateStatus = OrderSkillConstants.ORDER_STATUS_CANCEL_SYSTEM_NOT_RECEIVE;
 			
-    		Date  queryEndTime =  getEndTimeByAddHours(-1);
-    		//大V未接单返回给账户金额  先退款，再更新状态
+    		Date  queryEndTime =  getEndTimeByAddHours(-10);
+    		//声优未接单返回给账户金额  先退款，再更新状态
     		List<TaskOrder>  orderList = taskOrderMapper.queryReceiveOrderOverTime(currTime, endTime, queryStatus, updateStatus, skillType,queryEndTime);
     		refundToCustomer(orderList,CANCEL_ONE);
-    		updateOrderStatusByOrderListForCancel(orderList, updateStatus);
+    		updateOrderStatusByOrderListForCancel(orderList, updateStatus,true);
 //    		taskOrderMapper.waittingReceiveOrderOverTime(currTime, endTime, queryStatus, updateStatus, skillType);
 			
     	} catch (Exception e) {
-    		LOGGER.error("大V15分钟未接单超时执行发生异常，异常信息：", e);
+    		LOGGER.error("声优15分钟未接单超时执行发生异常，异常信息：", e);
     	}
-    	LOGGER.info("=============大V15分钟未接单超时自动任务结束=================");
+    	LOGGER.info("=============声优15分钟未接单超时自动任务结束=================");
     }
     
     
     
 
     
-    /**大V5分钟未发起立即服务超时*/
+    /**声优5分钟未发起立即服务超时*/
     @Scheduled(cron = "10 * * * * ?")
     public void updateOrderStatusDvStartService() {
-    	LOGGER.info("=============大V5分钟未发起立即服务超时自动任务开始=================");
+    	LOGGER.info("=============声优5分钟未发起立即服务超时自动任务开始=================");
     	try {
     		Date  currTime = new Date();
-    		//大V未发起立即服务超时
+    		//声优未发起立即服务超时
     		Calendar  cal = Calendar.getInstance();
     		cal.setTime(currTime);
     		cal.add(Calendar.MINUTE, START_OVER_TIME_MINUTES);
@@ -126,24 +154,24 @@ public class OrderUpdateJob {
     		Integer  queryStatus = OrderSkillConstants.ORDER_STATUS_WAITING_START;
     		Integer  updateStatus = OrderSkillConstants.ORDER_STATUS_CANCEL_NOT_START;
     		Integer skillType = OrderSkillConstants.SKILL_TYPE_YES; 
-    		//大V未发起立即服务超时给账户金额
-    		Date  queryEndTime =  getEndTimeByAddHours(-1);
+    		//声优未发起立即服务超时给账户金额
+    		Date  queryEndTime =  getEndTimeByAddHours(-10);
     		List<TaskOrder>  orderList = taskOrderMapper.queryStartOrderOverTime(currTime, endTime, queryStatus, updateStatus, skillType,queryEndTime);
     		refundToCustomer(orderList,CANCEL_TWO);
-    		updateOrderStatusByOrderListForCancel(orderList, updateStatus);
+    		updateOrderStatusByOrderListForCancel(orderList, updateStatus,true);
 //    		taskOrderMapper.startOrderOverTime(currTime, endTime, queryStatus, updateStatus, skillType);
     		
     	} catch (Exception e) {
-    		LOGGER.error("大V5分钟未发起立即服务超时job执行发生异常，异常信息：", e);
+    		LOGGER.error("声优5分钟未发起立即服务超时job执行发生异常，异常信息：", e);
     	}
-    	LOGGER.info("=============大V5分钟未发起立即服务超时自动任务结束=================");
+    	LOGGER.info("=============声优5分钟未发起立即服务超时自动任务结束=================");
     }
     
     
-    /**用户5分钟未响应大V发起立即服务超时*/
+    /**用户5分钟未响应声优发起立即服务超时*/
     @Scheduled(cron = "15 * * * * ?")
     public void updateOrderStatusCustNotConfirmStartService() {
-    	LOGGER.info("=============用户5分钟未响应大V发起立即服务超时自动任务开始=================");
+    	LOGGER.info("=============用户5分钟未响应声优发起立即服务超时自动任务开始=================");
     	try {
     		Date  currTime = new Date();
     		Integer skillType = OrderSkillConstants.SKILL_TYPE_YES; 
@@ -156,16 +184,37 @@ public class OrderUpdateJob {
     		Integer  updateStatus = OrderSkillConstants.ORDER_STATUS_CANCEL_USER_NOT_ACCEPCT;
     		
     		
-    		//用户5分钟未响应大V未发起立即服务超时给账户金额
-    		Date  queryEndTime =  getEndTimeByAddHours(-1);
-    		List<TaskOrder>  orderList = taskOrderMapper.queryStartOrderOverTime(currTime, endTime, queryStatus, updateStatus, skillType,queryEndTime);
+    		//用户5分钟未响应声优未发起立即服务超时给账户金额
+    		Date  queryEndTime =  getEndTimeByAddHours(-10);
+    		List<TaskOrder>  orderList = taskOrderMapper.queryStartOrderOverTimeCust(currTime, endTime, queryStatus, updateStatus, skillType,queryEndTime);
     		refundToCustomer(orderList,CANCEL_THREE);
-    		updateOrderStatusByOrderListForCancel(orderList, updateStatus);
+    		updateOrderStatusByOrderListForCancel(orderList, updateStatus,true);
 //    		taskOrderMapper.startOrderOverTime(currTime, endTime, queryStatus, updateStatus, skillType);
     	} catch (Exception e) {
-    		LOGGER.error("用户5分钟未响应大V发起立即服务超时job执行发生异常，异常信息：", e);
+    		LOGGER.error("用户5分钟未响应声优发起立即服务超时job执行发生异常，异常信息：", e);
     	}
-    	LOGGER.info("=============用户5分钟未响应大V发起立即服务超时自动任务结束=================");
+    	LOGGER.info("=============用户5分钟未响应声优发起立即服务超时自动任务结束=================");
+    }
+    
+    
+    /**声优服务时间内发起结束服务，到预期结束时间，释放声优，使声优可以继续接单*/
+    @Scheduled(cron = "20 * * * * ?")
+    public void updateOrderStatusReleaseDaV() {
+    	LOGGER.info("=============声优服务时间内发起结束服务，到预期结束时间，释放声优自动任务开始=================");
+    	try {
+    		Date  currTime = new Date();
+    		//用户未接立即服务超时
+    		Integer  queryStatus = OrderSkillConstants.ORDER_STATUS_GOING_DAV_APPAY_FINISH;
+    		Integer  updateStatus = OrderSkillConstants.ORDER_STATUS_FINISH_DV_RELEASE;
+    		
+    		//声优服务时间内发起结束服务，到预期结束时间，释放声优，使声优可以继续接单
+    		List<TaskOrder>  orderList = taskOrderMapper.queryReleaseDaV(currTime, queryStatus);
+//    		refundToCustomer(orderList,CANCEL_THREE);
+    		updateOrderStatusByOrderListForCancel(orderList, updateStatus,false);
+    	} catch (Exception e) {
+    		LOGGER.error("声优服务时间内发起结束服务，到预期结束时间，释放声优定时任务执行发生异常，异常信息：", e);
+    	}
+    	LOGGER.info("=============声优服务时间内发起结束服务，到预期结束时间，释放声优自动任务结束=================");
     }
     
     
@@ -179,14 +228,14 @@ public class OrderUpdateJob {
     		Calendar  cal = Calendar.getInstance();
     		cal.setTime(currTime);
     		//预约时间去当前时间
-    		Date  endTime =  cal.getTime();
+    		Date  endTime =  cal.getTime();	
     		//用户未接立即服务超时
     		Integer  queryStatus = OrderSkillConstants.ORDER_STATUS_GOING_WAITING_START;
     		Integer  updateStatus = OrderSkillConstants.ORDER_STATUS_GOING_USER_ACCEPCT;
     		Integer  skillType = OrderSkillConstants.SKILL_TYPE_NO;
-    		Date  queryEndTime =  getEndTimeByAddDays(-2);
+    		Date  queryEndTime =  getEndTimeByAddDays(-10);
     		List<TaskOrder>  orderList = taskOrderMapper.queryAppointOrderGoing(currTime,endTime, queryStatus, updateStatus, skillType,queryEndTime);
-    		updateOrderStatusByOrderListForCancel(orderList, updateStatus);
+    		updateOrderStatusByOrderListForCancel(orderList, updateStatus,false);
 //    		taskOrderMapper.appointOrderGoing(currTime,endTime, queryStatus, updateStatus, skillType,queryEndTime);
     	} catch (Exception e) {
     		LOGGER.error("叫醒服务达到预约时间自动转为进行中job执行发生异常，异常信息：", e);
@@ -205,38 +254,38 @@ public class OrderUpdateJob {
     /**
      * 扫描频率控制在一分钟一次
      */
-    @Scheduled(cron = "20 * * * * ?")
+    @Scheduled(cron = "25 * * * * ?")
     public void updateOrderStatusAfter12HourCust() {
-    	LOGGER.info(">>>>>>>>>>>>>>>>>>客户单方面未响应大V结束服务12小时超时job开始<<<<<<<<<<<<<<<<<<<<<");
+    	LOGGER.info(">>>>>>>>>>>>>>>>>>客户单方面未响应声优结束服务12小时超时job开始<<<<<<<<<<<<<<<<<<<<<");
     	try {
     		Date  currTime = new Date();
     		Calendar  cal = Calendar.getInstance();
     		cal.setTime(currTime);
     		cal.add(Calendar.HOUR_OF_DAY, END_OVER_TIME_HOUR);
     		Date  endTime =  cal.getTime();
-    		Integer skillType = OrderSkillConstants.SKILL_TYPE_YES; 
     		//获取接单设置超时
     		Integer  queryStatus = OrderSkillConstants.ORDER_STATUS_GOING_DAV_APPAY_FINISH;
+    		Integer  queryStatusExt = OrderSkillConstants.ORDER_STATUS_FINISH_DV_RELEASE;
     		Integer  updateStatus = OrderSkillConstants.ORDER_STATUS_FINISH_DV_FINISH;
     		
-    		Date  queryEndTime =  getEndTimeByAddDays(-2);
-    		//服务完成，大V金额冻结
-    		List<TaskOrder>  orderList = taskOrderMapper.queryOrderStatusAfter12HourCust(currTime, endTime, queryStatus, updateStatus, skillType,queryEndTime);
+    		Date  queryEndTime =  getEndTimeByAddDays(-10);
+    		//服务完成，声优金额冻结
+    		List<TaskOrder>  orderList = taskOrderMapper.queryOrderStatusAfter12HourCust(endTime, queryStatus, updateStatus, queryEndTime,queryStatusExt,currTime);
     		freezeToService(orderList);
     		updateOrderStatusByOrderListForFinish(orderList, updateStatus);
     		sendMsgByOrderList(orderList, CANCEL_FOUR);
     	} catch (Exception e) {
-    		LOGGER.error("客户单方面未响应大V结束服务12小时超时job执行发生异常，异常信息：", e);
+    		LOGGER.error("客户单方面未响应声优结束服务12小时超时job执行发生异常，异常信息：", e);
     	}
-    	LOGGER.info(">>>>>>>>>>>>>>>>>>客户单方面未响应大V结束服务12小时超时job结束<<<<<<<<<<<<<<<<<<<<<");
+    	LOGGER.info(">>>>>>>>>>>>>>>>>>客户单方面未响应声优结束服务12小时超时job结束<<<<<<<<<<<<<<<<<<<<<");
     }
     
     /**
      * 扫描频率控制在一分钟一次
      */
-    @Scheduled(cron = "25 * * * * ?")
+    @Scheduled(cron = "30 * * * * ?")
     public void updateOrderStatusAfter12HourBoth() {
-    	LOGGER.info(">>>>>>>>>>>>>>>>>>客户大V双方未响应大V结束服务12小时超时job开始<<<<<<<<<<<<<<<<<<<<<");
+    	LOGGER.info(">>>>>>>>>>>>>>>>>>客户声优双方未响应声优结束服务12小时超时job开始<<<<<<<<<<<<<<<<<<<<<");
     	try {
     		Date  currTime = new Date();
     		Calendar  cal = Calendar.getInstance();
@@ -248,17 +297,19 @@ public class OrderUpdateJob {
     		//获取接单设置超时
     		Integer queryStatus = OrderSkillConstants.ORDER_STATUS_GOING_USER_ACCEPCT;
     		Integer updateStatus = OrderSkillConstants.ORDER_STATUS_FINISH_BOTH_NO_OPERATE;
-    		Date  queryEndTime =  getEndTimeByAddDays(-2);
-    		//服务完成，大V金额冻结
+    		Date  queryEndTime =  getEndTimeByAddDays(-10);
+    		//服务完成，声优金额冻结
     		List<TaskOrder>  orderList = taskOrderMapper.queryOrderStatusAfter12HourBoth(currTime, endTime, queryStatus, updateStatus, skillType,queryEndTime);
     		freezeToService(orderList);
     		updateOrderStatusByOrderListForFinish(orderList, updateStatus);
     		sendMsgByOrderList(orderList, CANCEL_FOUR);
     		
+    		
+    		
     	} catch (Exception e) {
-    		LOGGER.error("客户大V双方未响应大V结束服务12小时超时job执行发生异常，异常信息：", e);
+    		LOGGER.error("客户声优双方未响应声优结束服务12小时超时job执行发生异常，异常信息：", e);
     	}
-    	LOGGER.info(">>>>>>>>>>>>>>>>>>客户大V双方未响应大V结束服务12小时超时job结束<<<<<<<<<<<<<<<<<<<<<");
+    	LOGGER.info(">>>>>>>>>>>>>>>>>>客户声优双方未响应声优结束服务12小时超时job结束<<<<<<<<<<<<<<<<<<<<<");
     }
     
     
@@ -269,14 +320,31 @@ public class OrderUpdateJob {
      * @param orderList
      * @param updateOrderStatus
      */
-    public  void  updateOrderStatusByOrderListForCancel(List<TaskOrder>  orderList,Integer  updateOrderStatus){
+    public  void  updateOrderStatusByOrderListForCancel(List<TaskOrder>  orderList,Integer  updateOrderStatus,boolean  cancelCouponFlag){
     	
     	if(!CollectionUtils.isEmpty(orderList)){
     		List<Long>  orderIdList =  new ArrayList<Long>();
+    		List<Long>  orderIdCouponList =  new ArrayList<Long>();
+    		
     		for (TaskOrder order : orderList) {
     			orderIdList.add(order.getOrderId());
+    			Integer  couponFlag = order.getCouponFlag();
+    			if(couponFlag != null  && OrderSkillConstants.ORDER_COUPON_FLAG_USE == couponFlag){
+    				orderIdCouponList.add(order.getOrderId());
+    			}
     		}
-    		taskOrderMapper.updateOrderStatus(updateOrderStatus, orderIdList,new Date());
+    		
+    		taskOrderMapper.updateOrderStatus(updateOrderStatus, orderIdList,new Date(),null,new Date());
+    		//用户所得券返回给用户
+    		if(cancelCouponFlag){
+    			try {
+    				taskCustomerCouponMapper.batchUpdateCustomerCoupon(orderIdCouponList, OrderSkillConstants.ORDER_COUPON_FLAG_CANCEL);
+    			} catch (Exception e) {
+    				LOGGER.error("用户券返还发生异常，异常信息：",e);
+    			}
+    		}
+    		
+    		
     	}
     }
     /**
@@ -291,7 +359,7 @@ public class OrderUpdateJob {
     		for (TaskOrder order : orderList) {
     			orderIdList.add(order.getOrderId());
     		}
-    		taskOrderMapper.updateOrderStatusForFinish(updateOrderStatus, orderIdList,new Date());
+    		taskOrderMapper.updateOrderStatusForFinish(updateOrderStatus, orderIdList,new Date(),new Date());
     	}
     }
     
@@ -305,10 +373,23 @@ public class OrderUpdateJob {
 			try {
 				for (TaskOrder order : orderList) {
 					Long  customerId =  order.getCustomerId();
+					Long  serviceId = order.getServiceId();
+					Long  orderId = order.getOrderId();
 					sendOrderMessage(customerId, cancelType, false);
 					sendOrderMessage(order.getServiceId(), cancelType, true);
+					
 					doOrderCastRank(order.getOrderId());
 					doOrderCastJingYan(order.getOrderId());
+					
+					//推送订单消息
+    				sendOrderIMMessage(customerId, serviceId, orderId, cancelType, true);
+    				sendOrderIMMessage(serviceId, customerId, orderId, cancelType, false);
+    				
+    				try {
+						couponService.getCouponInOrder(order.getSkillItemId(), customerId);
+					} catch (Exception e) {
+						LOGGER.info("下单完成给用户下单发生异常，异常信息：",e);
+					}
 				}
 			} catch (Exception e) {
 				LOGGER.error("用户退款发生异常，异常信息",e);
@@ -324,6 +405,8 @@ public class OrderUpdateJob {
     		try {
     			for (TaskOrder order : orderList) {
     				Long  customerId =  order.getCustomerId();
+    				Long  serviceId = order.getServiceId();
+    				Long  orderId = order.getOrderId();
     				BigDecimal  payAmount =  order.getOrderAmounts();
     				//调用接口退款给用户
     				LOGGER.info("OrderInfo"+order.toString());
@@ -331,7 +414,14 @@ public class OrderUpdateJob {
     				LOGGER.info("CID："+customerId +"订单超时，系统自动退款给用户"+payAmount);
     				
     				sendOrderMessage(customerId, cancelType, false);
-    				sendOrderMessage(order.getServiceId(), cancelType, true);
+    				sendOrderMessage(serviceId, cancelType, true);
+    				
+    				
+    				//推动订单消息
+    				sendOrderIMMessage(customerId, serviceId, orderId, cancelType, true);
+    				sendOrderIMMessage(serviceId, customerId, orderId, cancelType, false);
+    				
+    				
     			}
     		} catch (Exception e) {
     			LOGGER.error("用户退款发生异常，异常信息",e);
@@ -341,11 +431,49 @@ public class OrderUpdateJob {
     
     
     
+    
+    
+    
+    
+    
     /***
      * 消息推送
      * @param customerId
      * @param serviceId
-     * @param cancelType 1:15分钟未接受订单   2:大V5分钟未发起立即服务   3：用户未接受大V立即服务   4：订单自动完成
+     * @param cancelType 1:15分钟未接受订单   2:声优5分钟未发起立即服务   3：用户未接受声优立即服务   4：订单自动完成
+     * @param msgContent
+     */
+    public synchronized  void   sendOrderIMMessage(Long  customerId,Long  serviceId,Long  orderId ,Integer  cancelType,boolean  dvFlag){
+    	String   orderDesc =  null;
+    	if(dvFlag){
+    		orderDesc =  DV_MAP.get(cancelType);
+    	}else{
+    		orderDesc =  CUST_MAP.get(cancelType);
+    	}
+    	sendOrderMsg(customerId, serviceId, orderId, orderDesc);
+    }
+    
+	public void sendOrderMsg(Long  customerId,Long  serviceId,Long  orderId,String  orderDesc) {
+		//customer  ---->>>  serviceId
+		String  custStr = JedisUtil.get(RedisKeyConstants.USER_CUSTOMER_INFO+customerId) ;
+		if(StringUtils.isNotBlank(custStr)){
+			try {
+				Customer customer = JSON.parseObject(custStr,  Customer.class);
+				RongYunUtil.sendOrderIMMessage(customer.getNickName(),customerId, serviceId, "", orderId, orderDesc, customer.getHeadPortraitUrl());
+			} catch (Exception e) {
+				LOGGER.error("从Redis中获取客户信息发生异常，异常信息：",e);
+			}
+		}
+		
+		
+				
+		
+	}
+    /***
+     * 消息推送
+     * @param customerId
+     * @param serviceId
+     * @param cancelType 1:15分钟未接受订单   2:声优5分钟未发起立即服务   3：用户未接受声优立即服务   4：订单自动完成
      * @param msgContent
      */
     public synchronized  void   sendOrderMessage(Long  customerId,Integer  cancelType,boolean  dvFlag){
@@ -354,26 +482,28 @@ public class OrderUpdateJob {
     	String  remarkName = null ;
     	if(dvFlag){
     		remarkName = OrderSkillConstants.MSG_CONTENT_DAV ;
-    		if(cancelType == CANCEL_ONE){
-    			content =  OrderSkillConstants.IM_MSG_CONTENT_CANCEL_DV_15MINUTE_TIMEOUT ;
-    		}else if (cancelType == CANCEL_TWO){
-    			content =  OrderSkillConstants.IM_MSG_CONTENT_CANCEL_DV_5MINUTE_START_TIMEOUT ;
-    		}else if (cancelType == CANCEL_THREE){
-    			content =  OrderSkillConstants.IM_MSG_CONTENT_CANCEL_DV_5MINUTE_CONFIRM_TIMEOUT ;
-    		}else if(cancelType == CANCEL_FOUR){
-    			content =  OrderSkillConstants.IM_MSG_CONTENT_CUST_NOT_PING_JIA ;
-    		}
+    		content =  DV_MAP.get(cancelType);
+//    		if(cancelType == CANCEL_ONE){
+//    			content =  OrderSkillConstants.IM_MSG_CONTENT_CANCEL_DV_15MINUTE_TIMEOUT ;
+//    		}else if (cancelType == CANCEL_TWO){
+//    			content =  OrderSkillConstants.IM_MSG_CONTENT_CANCEL_DV_5MINUTE_START_TIMEOUT ;
+//    		}else if (cancelType == CANCEL_THREE){
+//    			content =  OrderSkillConstants.IM_MSG_CONTENT_CANCEL_DV_5MINUTE_CONFIRM_TIMEOUT ;
+//    		}else if(cancelType == CANCEL_FOUR){
+//    			content =  OrderSkillConstants.IM_MSG_CONTENT_SYSTEM_FINISH_TIMEOUT_TO_DAV ;
+//    		}
     	}else{
     		remarkName = OrderSkillConstants.MSG_CONTENT_C ;
-    		if(cancelType == CANCEL_ONE){
-    			content =  OrderSkillConstants.IM_MSG_CONTENT_CANCEL_CUST_15MINUTE_TIMEOUT ;
-    		}else if (cancelType == CANCEL_TWO){
-    			content =  OrderSkillConstants.IM_MSG_CONTENT_CANCEL_CUST_5MINUTE_START_TIMEOUT ;
-    		}else if (cancelType == CANCEL_THREE){
-    			content =  OrderSkillConstants.IM_MSG_CONTENT_CANCEL_CUST_5MINUTE_CONFIRM_TIMEOUT ;
-    		}else if(cancelType == CANCEL_FOUR){
-//    			content =  OrderSkillConstants.IM_MSG_CONTENT_CANCEL_CUST_FINISH ;
-    		}
+    		content =  CUST_MAP.get(cancelType);
+//    		if(cancelType == CANCEL_ONE){
+//    			content =  OrderSkillConstants.IM_MSG_CONTENT_CANCEL_CUST_15MINUTE_TIMEOUT ;
+//    		}else if (cancelType == CANCEL_TWO){
+//    			content =  OrderSkillConstants.IM_MSG_CONTENT_CANCEL_CUST_5MINUTE_START_TIMEOUT ;
+//    		}else if (cancelType == CANCEL_THREE){
+//    			content =  OrderSkillConstants.IM_MSG_CONTENT_CANCEL_CUST_5MINUTE_CONFIRM_TIMEOUT ;
+//    		}else if(cancelType == CANCEL_FOUR){
+//    			content =  OrderSkillConstants.IM_MSG_CONTENT_SYSTEM_FINISH_TIMEOUT_TO_CUST ;
+//    		}
     	}
     	
     	LOGGER.info("----------------给customerId"+customerId+"推送消息："+content);
@@ -383,11 +513,15 @@ public class OrderUpdateJob {
     		//下单成功后推送IM消息
     		RongYunUtil.sendOrderMessage(customerId, content,remarkName);
     	}
+    	
+    	
+    	
+    	
     }
     
     
     /**
-     * 订单结束，大V金额冻结
+     * 订单结束，声优金额冻结
      * @param orderList
      */
     public   void   freezeToService(List<TaskOrder>  orderList){
@@ -396,12 +530,12 @@ public class OrderUpdateJob {
 				for (TaskOrder order : orderList) {
 					Long  serviceId =  order.getServiceId();
 					BigDecimal   payAmount =  order.getOrderAmounts();
-					//大V冻结
+					//声优冻结
 					inAccount(order.getServiceId(), order.getOrderAmounts(), TransferTypeEnum.FROZEN, AccountBusinessTypeEnum.FroZen,order.getOrderId());
 					LOGGER.info("SY_ID："+serviceId +"资金流水冻结，冻结金额"+payAmount);
 				}
 			} catch (Exception e) {
-				LOGGER.error("大V账户冻结发生异常，异常信息",e);
+				LOGGER.error("声优账户冻结发生异常，异常信息",e);
 			}
     	}
     }
@@ -447,7 +581,8 @@ public class OrderUpdateJob {
 			// 缓存24小时
 			JedisUtil.set(frozenTimeKey, "1", Integer.parseInt(froZenTime));
 			// 流水对应的订单Id
-			JedisUtil.set(RedisKeyConstants.ACCOUNT_USERFROZEN_ORDER_NO, orderNo + "");
+			JedisUtil.set(RedisKeyConstants.ACCOUNT_USERFROZEN_ORDER_NO + tradeDetail.getTradeId(), orderNo + "");
+//			JedisUtil.set(RedisKeyConstants.ACCOUNT_USERFROZEN_ORDER_NO, orderNo + "");
 
 		}
 
@@ -493,6 +628,7 @@ public class OrderUpdateJob {
      * @param orderId
      */
     private void doOrderCastJingYan(Long  orderId) {
+    	LOGGER.info(".............订单ID:"+orderId +"+经验开始.............");
         // 查询客户下的订单
         Order order = customerMapper.selectCustomerOrder(orderId);
         if (order == null) {
@@ -512,6 +648,7 @@ public class OrderUpdateJob {
         LOGGER.info("客户下单获取经验值--客户ID：" + customer.getCustomerId() + " ， 增加经验值：" + experience);
         // 更新用户经验值和等级
         customerMapper.updateCustomerExperienceAndLevel(customer.getCustomerId(), experience);
+        LOGGER.info("-------------订单ID:"+orderId +"+经验结束-------------");
     }
     
     /**
@@ -519,7 +656,7 @@ public class OrderUpdateJob {
      * @param orderId
      */
     private void doOrderCastRank(Long  orderId) {
-        LOGGER.info("客户下单消费 -- 更新主播评分排名表：" + orderId);
+        LOGGER.info("客户下单消费 -- 更新主播评分排名表，订单编号：" + orderId +"---开始----");
 
         // 查询客户下的订单
         Order order = customerMapper.selectCustomerOrder(orderId);
@@ -539,9 +676,10 @@ public class OrderUpdateJob {
         // 更新订单价值得分
         bigvSkillScoreMapper.updateValueScoreToOrder(order.getOrderId(), score);
 
-        // 更新评分到大V技能评分表和总评分排名表
+        // 更新评分到声优技能评分表和总评分排名表
         updateToBigvScore(order.getServiceId(), order.getSkillItemId(), order.getCustomerSkillId(), score);
 
+        LOGGER.info("客户下单消费 -- 更新主播评分排名表，订单编号：" + orderId +"....结束....");
     }
     
     
@@ -569,12 +707,16 @@ public class OrderUpdateJob {
 		// 计算总得分
 		BigDecimal valueScore = orderTotalScore.add(servicePriceScore).multiply(calculateEvaluateScore(evaluateStars, order.getOrderNum()));
 
+		// 有抵扣券参与的订单时，在计算此次订单价值时需要额外*40，以此来提高免费服务声优的技能升级速度和平台资源位露出机会.
+		if(Objects.equals(order.getCouponFlag(), 1)){
+			valueScore = valueScore.multiply(new BigDecimal(40));
+		}
 		// 四舍五入取整
 		return valueScore.setScale(0, BigDecimal.ROUND_HALF_UP);
 	}
 
     /**
-     * 更新评分到大V技能评分表和总评分排名表
+     * 更新评分到声优技能评分表和总评分排名表
      *
      * @param customerId
      * @param skillItemId
@@ -594,7 +736,7 @@ public class OrderUpdateJob {
             bigvSkillScoreMapper.insert(bigvSkillScore);
         }
 
-        // 存入大V排名表
+        // 存入声优排名表
         if (bigvScoreMapper.updateBigvScore(customerId, score) == 0) {
             // 更新失败则插入
             BigvScore bigvScore = new BigvScore();

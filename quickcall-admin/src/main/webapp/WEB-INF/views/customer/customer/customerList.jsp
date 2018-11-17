@@ -2,7 +2,7 @@
 <%@ taglib prefix="shiro" uri="http://shiro.apache.org/tags" %>
 <div class="content1">
     <div class="header">
-        <h1 class="page-title">用户管理</h1>
+        <h1 class="page-title">用户管理后台</h1>
         <ul class="breadcrumb">
             <li>用户管理</li>
             <li class="active">用户管理后台</li>
@@ -19,6 +19,14 @@
                 </div>
             </div>
             <div class="col-md-2">
+                <div class="form-group">
+                    <div class="input-group">
+                        <div class="input-group-addon">手机号</div>
+                        <input class="form-control" type="text" id="phoneQuery">
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2">
                 <button type="button" class="btn btn-primary btn-small btn-block"
                         id="query">
                     <i class="glyphicon glyphicon-search"></i> 查询
@@ -27,6 +35,7 @@
             <div class="col-md-2">
                 <div class="form-group">
                     <div class="input-group">
+                        <div class="input-group-addon">用户类型</div>
                         <select class="form-control" id="customTypeQuery">
                             <option value="">--请选择--</option>
                             <option value="0">普通用户</option>
@@ -38,6 +47,7 @@
             <div class="col-md-2">
                 <div class="form-group">
                     <div class="input-group">
+                        <div class="input-group-addon">用户状态</div>
                         <select class="form-control" id="customerStatusQuery" onchange="customerStatusOnChange()">
                             <option value="">--请选择--</option>
                             <option value="1">正常</option>
@@ -50,6 +60,7 @@
             <div class="col-md-2">
                 <div class="form-group">
                     <div class="input-group">
+                        <div class="input-group-addon">封禁类型</div>
                         <select class="form-control" id="closureStatusQuery" disabled="disabled">
                             <option value="">--请选择--</option>
                             <option value="4">已封禁-无法接单</option>
@@ -210,11 +221,13 @@
                             } else if(data == 4){
                                 return "<font color='red'>已封禁-无法接单</font>";
                             } else if(data == 6){
-                                return "<font color='red'>已封禁-无法接指定技能</font>";
+                                return "<font color='red'>已封禁-声优技能</font>";
                             } else if(data == 8){
                                 return "<font color='red'>已封禁-账户登录权限</font>";
                             } else if(data == 10){
                                 return "<font color='red'>已封禁-设备登录权限</font>";
+                            } else if(data == 12){
+                                return "<font color='red'>已封禁-声优资格</font>";
                             }else{
                                 return "<font color='red'>永久封禁</font>";
                             }
@@ -259,6 +272,7 @@
                         "mRender": function (
                             data, type,
                             full) {
+                            //console.log(data);
                             if (data != null) {
                                 return Format(
                                     new Date(
@@ -296,6 +310,7 @@
                     aoData.push({"name": "nickName", "value": $("#nameQuery").val().replace(new RegExp(" ", "g"), "")});
                     aoData.push({"name": "vStatus", "value": $("#customTypeQuery").val()});
                     aoData.push({"name": "appId", "value": $("#nameQuery").val().replace(new RegExp(" ", "g"), "")});
+                    aoData.push({"name": "phone", "value": $("#phoneQuery").val().replace(new RegExp(" ", "g"), "")});
                     var status = $('#customerStatusQuery').val();
                     if(status == 1){
                         aoData.push({"name": "custStatus", "value": 1});
@@ -316,7 +331,9 @@
             });
 
             $('#query').click(function () {
-                $('#example').dataTable().fnDraw();
+                if(check_fun()){
+                    $('#example').dataTable().fnDraw();
+                }
             });
 
         });
@@ -328,13 +345,41 @@
 
 
         function customerStatusOnChange(){
-           var status = $('#customerStatusQuery').val();
+            var status = $('#customerStatusQuery').val();
             if(status == 2){
-                $('#closureStatusQuery').removeAttr("disabled");
-            }else{
-                $('#closureStatusQuery').attr("disabled","disabled");
+                //$('#closureStatusQuery').removeAttr("disabled");
+                $('#closureStatusQuery').attr("disabled",false);
+            }else {
+                /*if($('#closureStatusQuery').attr("disabled")==true){
+                    $('#closureStatusQuery').removeAttr("disabled");
+                }*/
+
+                // $('#closureStatusQuery').attr("disabled",false);
+                //$("#closureStatusQuery option:first").attr('selected', true);
+                // $('#closureStatusQuery').attr("disabled",true);
+                $('#closureStatusQuery').val('').prop('disabled', true);
+
             }
 
+        }
+
+        //校验方法
+        function check_fun() {
+            //状态选择2为封禁，要再选择封禁的类型
+            var status = $('#customerStatusQuery').val();
+            /*if(status == null  || status.trim() == ''){
+                $("#tip").text("请选择用户状态");
+                return  false;
+            }*/
+            if(status == 2){//封禁
+                var closureStatus = $("#closureStatusQuery").val()
+                if(closureStatus == null || closureStatus == ""){
+                    alert("请选择封禁类型");
+                    return  false;
+                }
+            }
+
+            return true;
         }
 
     </script>

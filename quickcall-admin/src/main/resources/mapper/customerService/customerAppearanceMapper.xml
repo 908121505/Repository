@@ -170,7 +170,8 @@
         a.create_man createMan,
         a.modify_man modifyMan,
         a.remark,
-        c.nick_name nickName
+        c.nick_name nickName,
+        c.phone phone
         FROM
         customer_appearance a
         LEFT JOIN customer c
@@ -178,7 +179,8 @@
         WHERE 1=1
         <if test="type !=null ">and a.type = #{type}</if>
         <if test="nickName !=null and nickName!='' ">and c.nick_name like concat('%',#{nickName},'%')</if>
-        <if test="customerId !=null and customerId!='' ">and a.customer_id = #{customerId}</if>
+        <if test="customerId !=null and customerId!='' ">and a.customer_id like concat('%',#{customerId},'%')</if>
+        <if test="phone !=null and phone!='' ">and c.phone like concat('%',#{phone},'%')</if>
         <if test="auditStatus !=null and auditStatus!='' ">and a.audit_status = #{auditStatus}</if>
         ORDER BY a.create_time DESC
         LIMIT ${iDisplayStart}, ${iDisplayLength}
@@ -192,7 +194,8 @@
         where 1=1
         <if test="type !=null ">and a.type = #{type}</if>
         <if test="nickName !=null and nickName!='' ">and c.nick_name like concat('%',#{nickName},'%')</if>
-        <if test="customerId !=null and customerId!='' ">and a.customer_id = #{customerId}</if>
+        <if test="customerId !=null and customerId!='' ">and a.customer_id like concat('%',#{customerId},'%')</if>
+        <if test="phone !=null and phone!='' ">and c.phone like concat('%',#{phone},'%')</if>
         <if test="auditStatus !=null and auditStatus!='' ">and a.audit_status = #{auditStatus}</if>
     </select>
 

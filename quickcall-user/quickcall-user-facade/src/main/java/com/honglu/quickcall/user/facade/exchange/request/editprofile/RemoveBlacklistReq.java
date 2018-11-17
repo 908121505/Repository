@@ -11,20 +11,30 @@ import com.honglu.quickcall.user.facade.exchange.UserCenterRequest;
  */
 public class RemoveBlacklistReq extends UserCenterRequest {
 
-    private Long id;
+    private Long customerId;
+    private Long blackCustomerId;
 
-    public Long getId() {
-        return id;
+    public Long getCustomerId() {
+        return customerId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setCustomerId(Long customerId) {
+        this.customerId = customerId;
+    }
+
+    public Long getBlackCustomerId() {
+        return blackCustomerId;
+    }
+
+    public void setBlackCustomerId(Long blackCustomerId) {
+        this.blackCustomerId = blackCustomerId;
     }
 
     @Override
     public String toString() {
-        return "RemoveAppearanceReq{" +
-                "id=" + id +
+        return "RemoveBlacklistReq{" +
+                "customerId=" + customerId +
+                ", blackCustomerId=" + blackCustomerId +
                 '}';
     }
 

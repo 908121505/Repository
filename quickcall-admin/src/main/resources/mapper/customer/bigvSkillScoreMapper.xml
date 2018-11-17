@@ -161,4 +161,26 @@ id,	customer_id,	skill_item_id,	order_total,	score_total,	create_time,	modify_ti
     </trim>
   </insert>
 
+
+    <!-- 查询大V技能的订单笔数 -->
+    <select id="selectBigvSkillOrderTotal" parameterType="map" resultType="java.lang.Integer">
+      SELECT order_total FROM `bigv_skill_score`
+      WHERE customer_skill_id = #{arg0}
+    </select>
+
+    <!-- 更新大V单项技能评分 -->
+    <update id="updateBigvSkillScore" parameterType="map">
+      UPDATE bigv_skill_score
+      SET order_total = order_total + #{addOrderTotal}, score_total = score_total + #{valueScore}
+      WHERE customer_skill_id = #{customerSkillId}
+    </update>
+
+    <!-- 插入大V技能声量数据 -->
+    <insert id="insertBigvSkillScore" parameterType="com.honglu.quickcall.user.facade.entity.BigvSkillScore">
+      insert into bigv_skill_score (id, customer_id, skill_item_id, customer_skill_id,
+      order_total, score_total, create_man, modify_man, remark)
+      values (#{id,jdbcType=INTEGER}, #{customerId,jdbcType=BIGINT}, #{skillItemId,jdbcType=BIGINT}, #{customerSkillId,jdbcType=BIGINT},
+      #{orderTotal,jdbcType=INTEGER}, #{scoreTotal,jdbcType=DECIMAL}, #{createMan,jdbcType=VARCHAR},
+      #{modifyMan,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR})
+    </insert>
 </mapper>

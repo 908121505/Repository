@@ -17,7 +17,7 @@ public enum EventEnums {
     EVENT_Sign_up_result("Sign_up_result","注册成功"),
 
     /**登陆成功**/
-    EVENT_User_id_login_result("User_id_login_result","登陆成功"),
+    EVENT_User_id_login_result("vc_user_id_login_result","登陆成功"),
 
     /**接单按钮**/
     EVENT_Order_button("Order_button","接单按钮"),
@@ -31,6 +31,14 @@ public enum EventEnums {
     /**提交订单**/
     EVENT_submitorder("submitorder","提交订单"),
 
+    /**下单**/
+    EVENT_Make_Order("Make_order","下单"),
+
+    /**首次充值**/
+    EVENT_First_Charge("first_recharge","首次充值"),
+
+    /**设置密码页面**/
+    EVENT_Set_Password_Duration("Set_password_duration","设置密码页面"),
     ;
 
     private final String value;

@@ -14,6 +14,7 @@ import java.math.BigDecimal;
 public class OrderIMVO implements  Serializable{
 
 	
+	private static final long serialVersionUID = 6871393819620091576L;
 	private Long  orderId;
 	/**产品价格*/
 	private BigDecimal  servicePrice;
@@ -25,6 +26,17 @@ public class OrderIMVO implements  Serializable{
 	private String  icon;
 	/**订单状态*/
 	private Integer  orderStatus;
+	
+	private Long  countDownSeconds;
+	
+	
+	
+	public Long getCountDownSeconds() {
+		return countDownSeconds;
+	}
+	public void setCountDownSeconds(Long countDownSeconds) {
+		this.countDownSeconds = countDownSeconds;
+	}
 	public Long getOrderId() {
 		return orderId;
 	}

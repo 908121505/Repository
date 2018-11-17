@@ -16,8 +16,11 @@ import com.calf.cn.controller.BaseController;
 import com.calf.cn.entity.DataTables;
 import com.calf.cn.service.BaseManager;
 import com.calf.cn.utils.SearchUtil;
+import com.calf.module.customer.entity.Customer;
 import com.calf.module.customer.entity.CustomerSkillCertify;
 import com.calf.module.customer.vo.CustomerSkillCertifyVO;
+import com.calf.module.internal.entity.Message;
+import com.calf.module.internal.entity.MessageCustomer;
 import com.calf.module.order.entity.SkillItemExt;
 import com.honglu.quickcall.common.core.util.UUIDUtils;
 import com.honglu.quickcall.common.third.rongyun.util.RongYunUtil;
@@ -85,9 +88,6 @@ public class CustomerSkillCertifyController implements BaseController<CustomerSk
 			param.put("skillVoiceUrl", csc.getSkillVoiceUrlTmp());
 			param.put("isAudited", 1);
 			
-			Map<String, Object> map = new HashMap<String, Object>();
-			map.put("customerId", csc.getCustomerId());
-			map.put("skillItemId", csc.getSkillItemId());
 //			int count = baseManager.get("CustomerSkill.selectCustomerSkillExist",map);
 			if(csc.getIsAudited() == 0){
 				//如果没有则初始化用户技能表
@@ -115,10 +115,33 @@ public class CustomerSkillCertifyController implements BaseController<CustomerSk
 			}
 		}
 		int n = baseManager.update("CustomerSkillCertify.updateEntity",param);
+		//查询客户手机号
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("customerId", csc.getCustomerId());
+		Customer cus = baseManager.get("Customer.selectByPrimaryKey", map);
+		//插入消息数据库
+		Message msg = new Message();
+		MessageCustomer mc = new MessageCustomer();
+		Long messageId = UUIDUtils.getId();
+		msg.setMessageId(messageId.toString());
+		msg.setTitle("技能审核");
+		mc.setPhone(Long.valueOf(cus.getPhone()));
+		mc.setId(UUIDUtils.getId().toString());
+		mc.setMessageId(messageId);
+		mc.setReceiverId(csc.getCustomerId());
+		String content = "";
 		if(entity.getAuditStatus() == 2){
-			RongYunUtil.sendSystemMessage(csc.getCustomerId(), "您的\""+entity.getSkillItemName()+"\"技能已通过审核，可以提供服务啦");
+			content = "您的\""+entity.getSkillItemName()+"\"技能已通过审核，可以提供服务啦";
+			msg.setMessageContent(content);
+			baseManager.insert("MessageMapper.insertSelective",msg);
+			baseManager.insert("MessageCustomerMapper.insertSelective",mc);
+			RongYunUtil.sendSystemMessage(csc.getCustomerId(),content);
 		}else{
-			RongYunUtil.sendSystemMessage(csc.getCustomerId(), "很遗憾，您申请的\""+entity.getSkillItemName()+"\"技能未通过审核，请重新提交审核材料");
+			content = "很遗憾，您申请的\""+entity.getSkillItemName()+"\"技能未通过审核，请重新提交审核材料";
+			msg.setMessageContent(content);
+			baseManager.insert("MessageMapper.insertSelective",msg);
+			baseManager.insert("MessageCustomerMapper.insertSelective",mc);
+			RongYunUtil.sendSystemMessage(csc.getCustomerId(),content );
 		}
 		return n;
 	}

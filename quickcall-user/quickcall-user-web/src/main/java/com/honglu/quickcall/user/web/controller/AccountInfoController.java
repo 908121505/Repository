@@ -16,6 +16,7 @@ import com.honglu.quickcall.user.facade.exchange.request.QueryAttentionFansListR
 import com.honglu.quickcall.user.facade.exchange.request.QueryInterestListRequest;
 import com.honglu.quickcall.user.facade.exchange.request.QueryOccupationListRequest;
 import com.honglu.quickcall.user.facade.exchange.request.ReadAttentionRequest;
+import com.honglu.quickcall.user.facade.exchange.request.RecentVisitRequest;
 import com.honglu.quickcall.user.facade.exchange.request.SaveBirthRequest;
 import com.honglu.quickcall.user.facade.exchange.request.SaveGenderRequest;
 import com.honglu.quickcall.user.facade.exchange.request.SaveInterestRequest;
@@ -23,6 +24,7 @@ import com.honglu.quickcall.user.facade.exchange.request.SaveNickNameRequest;
 import com.honglu.quickcall.user.facade.exchange.request.SaveOccupationRequest;
 import com.honglu.quickcall.user.facade.exchange.request.SaveSignNameRequest;
 import com.honglu.quickcall.user.facade.exchange.request.SearchPersonRequest;
+import com.honglu.quickcall.user.facade.exchange.request.SetVisitReadRequest;
 import com.honglu.quickcall.user.facade.exchange.request.queryMyskillRequest;
 import com.honglu.quickcall.user.web.service.UserCenterService;
 
@@ -205,6 +207,26 @@ public class AccountInfoController {
 	@RequestMapping(value = "/isBigVidentity", method = RequestMethod.POST)
 	@ResponseBody
 	public WebResponseModel isBigVidentity(IsBigVidentityRequest params) {
+		WebResponseModel response = userCenterService.execute(params);
+		return response;
+	}
+	
+	/**
+	 * 最近来访
+	 */
+	@RequestMapping(value = "/recentVisit", method = RequestMethod.POST)
+	@ResponseBody
+	public WebResponseModel recentVisit(RecentVisitRequest params) {
+		WebResponseModel response = userCenterService.execute(params);
+		return response;
+	}
+	
+	/**
+	 * 来访设为已读
+	 */
+	@RequestMapping(value = "/setVisitRead", method = RequestMethod.POST)
+	@ResponseBody
+	public WebResponseModel setVisitRead(SetVisitReadRequest params) {
 		WebResponseModel response = userCenterService.execute(params);
 		return response;
 	}

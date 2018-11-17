@@ -34,8 +34,12 @@ public class ReceiveOrderService {
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		paramMap.put("userId",parameters.get("userId"));
 		paramMap.put("userNickName",parameters.get("userNickName"));
-		paramMap.put("createTime",parameters.get("createTime"));
-		paramMap.put("modifyTime",parameters.get("modifyTime"));
+//		paramMap.put("createTime",parameters.get("createTime"));
+//		paramMap.put("modifyTime",parameters.get("modifyTime"));
+		paramMap.put("createSTime",parameters.get("createSTime"));
+		paramMap.put("createETime",parameters.get("createETime"));
+		paramMap.put("modifySTime",parameters.get("modifySTime"));
+		paramMap.put("modifyETime",parameters.get("modifyETime"));
 		String discountType = (String)parameters.get("discountTypeVal");
 		String serviceType = (String)parameters.get("serviceType");
 		if (serviceType !=null && (!serviceType.equals("-1"))){

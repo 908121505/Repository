@@ -51,4 +51,22 @@ public interface DataBuryBusiness {
      */
     void saveSubmitOrderData(DataBuryPointSubmitOrderReq req) throws DataBuriedPointException;
 
+    /**
+     * 下单-数据埋点
+     * @param req
+     */
+    void buryMakeOrderData(DataBuryMakeOrderReq req) throws DataBuriedPointException;
+
+    /**
+     * 更新密码页面-数据埋点
+     * @param req
+     */
+    void burySetPwdDurationData(DataBurySetPwdDurationReq req) throws DataBuriedPointException;
+
+    /**
+     * 首次充值-数据埋点
+     * @param req
+     */
+    void buryFirstChargeData(DataBuryFirstChargeReq req) throws DataBuriedPointException;
+
 }

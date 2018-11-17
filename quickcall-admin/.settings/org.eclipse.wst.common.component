@@ -19,7 +19,10 @@
         <dependent-module archiveName="quickcall-activity-facade-1.0.0-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/quickcall-activity-facade/quickcall-activity-facade">
             <dependency-type>uses</dependency-type>
         </dependent-module>
-        <property name="java-output-path" value="/quickcall-admin/target/classes"/>
+        <dependent-module archiveName="quickcall-user-facade-1.0.0-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/quickcall-user-facade/quickcall-user-facade">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
         <property name="context-root" value="admin"/>
+        <property name="java-output-path" value="/quickcall-admin/target/classes"/>
     </wb-module>
 </project-modules>

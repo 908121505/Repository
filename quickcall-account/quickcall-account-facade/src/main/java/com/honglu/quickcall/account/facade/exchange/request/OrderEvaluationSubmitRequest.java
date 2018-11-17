@@ -11,6 +11,7 @@ import com.honglu.quickcall.common.api.exchange.AbstractRequest;
  */
 public class OrderEvaluationSubmitRequest extends AbstractRequest {
 
+    private static final long serialVersionUID = -2103932590830895008L;
     /**
      * 订单ID
      */
@@ -27,6 +28,10 @@ public class OrderEvaluationSubmitRequest extends AbstractRequest {
      * 评价类容
      */
     private String evaluateContent;
+    /**
+     * 关注操作：1=要关注
+     */
+    private Integer attentionFlag;
     /**
      * 评价标签ID
      */
@@ -59,6 +64,14 @@ public class OrderEvaluationSubmitRequest extends AbstractRequest {
 
     public void setEvaluateStart(Integer evaluateStart) {
         this.evaluateStart = evaluateStart;
+    }
+
+    public Integer getAttentionFlag() {
+        return attentionFlag;
+    }
+
+    public void setAttentionFlag(Integer attentionFlag) {
+        this.attentionFlag = attentionFlag;
     }
 
     public String getEvaluateContent() {

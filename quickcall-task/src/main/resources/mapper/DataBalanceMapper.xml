@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.honglu.quickcall.task.dao.DataBalanceMapper" >
+	<select id="queryRegistrationNum" resultType="java.lang.Integer">
+		SELECT count( * ) 
+	FROM
+		customer 
+	WHERE
+		create_time <![CDATA[>]]> ( SELECT CAST( ( CAST( SYSDATE( ) AS DATE ) - INTERVAL 1 DAY ) AS DATETIME ) ) 
+		AND create_time <![CDATA[<]]> ( SELECT CAST( CAST( SYSDATE( ) AS DATE ) AS DATETIME ) )
+	</select>
+	
+	<select id="queryPaidUsersNum" resultType="java.lang.Integer">
+		SELECT count( * ) 
+	FROM
+		( SELECT DISTINCT customer_id FROM recharge WHERE type = 1 AND state = 2 ) tmp
+	</select>
+	
+	<select id="queryPaidSkillOneNum" resultType="java.lang.Integer">
+		SELECT
+	count( * ) 
+FROM
+	(
+	SELECT
+		customer_id 
+	FROM
+		(
+		SELECT DISTINCT
+			o.customer_id 
+		FROM
+			orders o
+			INNER JOIN customer cus ON cus.customer_id = o.customer_id 
+		WHERE
+			o.order_status > 29 
+		) tmp 
+	WHERE
+		(
+		SELECT
+			count( DISTINCT o.skill_item_id ) 
+		FROM
+			orders o
+			INNER JOIN customer cus ON cus.customer_id = o.customer_id 
+		WHERE
+			o.customer_id = tmp.customer_id 
+		) = 1 
+	) tmp1
+	</select>
+	
+	<select id="queryPaidSkillTwoNum" resultType="java.lang.Integer">
+		SELECT
+	count( * ) 
+FROM
+	(
+	SELECT
+		customer_id 
+	FROM
+		(
+		SELECT DISTINCT
+			o.customer_id 
+		FROM
+			orders o
+			INNER JOIN customer cus ON cus.customer_id = o.customer_id 
+		WHERE
+			o.order_status > 29 
+		) tmp 
+	WHERE
+		(
+		SELECT
+			count( DISTINCT o.skill_item_id ) 
+		FROM
+			orders o
+			INNER JOIN customer cus ON cus.customer_id = o.customer_id 
+		WHERE
+			o.customer_id = tmp.customer_id 
+		) = 2 
+	) tmp1
+	</select>
+	
+	<select id="queryPaidSkillThreeNum" resultType="java.lang.Integer">
+		SELECT
+	count( * ) 
+FROM
+	(
+	SELECT
+		customer_id 
+	FROM
+		(
+		SELECT DISTINCT
+			o.customer_id 
+		FROM
+			orders o
+			INNER JOIN customer cus ON cus.customer_id = o.customer_id 
+		WHERE
+			o.order_status > 29 
+		) tmp 
+	WHERE
+		(
+		SELECT
+			count( DISTINCT o.skill_item_id ) 
+		FROM
+			orders o
+			INNER JOIN customer cus ON cus.customer_id = o.customer_id 
+		WHERE
+			o.customer_id = tmp.customer_id 
+		) = 3 
+	) tmp1
+	</select>
+	
+	<select id="queryCouponCirculation" resultType="java.lang.Integer">
+		SELECT count( * ) 
+	FROM
+		customer_coupon 
+	WHERE
+		create_time <![CDATA[>]]> ( SELECT CAST( ( CAST( SYSDATE( ) AS DATE ) - INTERVAL 1 DAY ) AS DATETIME ) ) 
+		AND create_time <![CDATA[<]]> ( SELECT CAST( CAST( SYSDATE( ) AS DATE ) AS DATETIME ) );
+	</select>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<insert id="insertCustomerData" parameterType="java.util.Map">
+		insert into d_customer (registration_num,paid_users_num,paid_skill_one_num,paid_skill_two_num,paid_skill_three_num,col_time)
+		values (#{registrationNum},#{paidUsersNum},#{paidSkillOneNum},#{paidSkillTwoNum},#{paidSkillThreeNum},DATE_ADD(curdate(),INTERVAL -1 DAY))
+	</insert>
+</mapper>

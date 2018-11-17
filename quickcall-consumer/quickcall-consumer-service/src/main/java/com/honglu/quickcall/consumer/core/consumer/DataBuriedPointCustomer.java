@@ -115,6 +115,12 @@ public class DataBuriedPointCustomer {
                 dataBuriedPointService.saveOrderButtonData(data);
             }else if (EventEnums.EVENT_submitorder.getValue().equals(type)){
                 dataBuriedPointService.saveSubmitOrderData(data);
+            }else if (EventEnums.EVENT_Make_Order.getValue().equals(type)){
+                dataBuriedPointService.buryMakeOrderData(data);
+            }else if (EventEnums.EVENT_First_Charge.getValue().equals(type)){
+                dataBuriedPointService.buryFirstChargeData(data);
+            }else if (EventEnums.EVENT_Set_Password_Duration.getValue().equals(type)){
+                dataBuriedPointService.burySetPwdDurationData(data);
             }
         }catch (Exception e){
             e.printStackTrace();

@@ -3,6 +3,7 @@ package com.honglu.quickcall.account.service.bussService.impl;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 
@@ -22,10 +23,12 @@ import com.honglu.quickcall.account.facade.enums.TradeTypeEnum;
 import com.honglu.quickcall.account.facade.enums.TransferTypeEnum;
 import com.honglu.quickcall.account.facade.exchange.request.AlipayNotifyRequest;
 import com.honglu.quickcall.account.facade.exchange.request.BindAliaccountRequest;
+import com.honglu.quickcall.account.facade.exchange.request.IsFirstechargeRequest;
 import com.honglu.quickcall.account.facade.exchange.request.RechargeRequest;
 import com.honglu.quickcall.account.facade.exchange.request.WhthdrawRequest;
 import com.honglu.quickcall.account.service.bussService.AccountService;
 import com.honglu.quickcall.account.service.bussService.AliPayService;
+import com.honglu.quickcall.account.service.bussService.CommonService;
 import com.honglu.quickcall.account.service.dao.AccountMapper;
 import com.honglu.quickcall.account.service.dao.AliacountMapper;
 import com.honglu.quickcall.account.service.dao.RechargeMapper;
@@ -37,6 +40,9 @@ import com.honglu.quickcall.common.api.util.HttpClientUtils;
 import com.honglu.quickcall.common.api.util.JedisUtil;
 import com.honglu.quickcall.common.api.util.RedisKeyConstants;
 import com.honglu.quickcall.common.core.util.UUIDUtils;
+import com.honglu.quickcall.producer.facade.business.DataDuriedPointBusiness;
+import com.honglu.quickcall.producer.facade.req.databury.BuryFirstChargeReq;
+import com.honglu.quickcall.user.facade.entity.Customer;
 
 import net.sf.json.JSONObject;
 
@@ -53,6 +59,11 @@ public class AliPayServiceImpl implements AliPayService {
 	private RechargeMapper rechargeMapper;
 	@Autowired
 	private AccountService accountService;
+	@Autowired
+	private CommonService commonService;
+
+	@Autowired
+	private DataDuriedPointBusiness dataDuriedPointBusiness;
 
 	private final static Logger logger = LoggerFactory.getLogger(AliPayServiceImpl.class);
 	private static String aliPayUrl = ResourceBundle.getBundle("thirdconfig").getString("ALI_UNIFIED_ORDER_URL");
@@ -62,13 +73,16 @@ public class AliPayServiceImpl implements AliPayService {
 	@Override
 	public CommonResponse recharge(RechargeRequest packet) {
 		CommonResponse response = new CommonResponse();
+		String customerJson = JedisUtil.get(RedisKeyConstants.USER_CUSTOMER_INFO + packet.getCustomerId());
+		if (StringUtils.isEmpty(customerJson)) {
+			return ResultUtils.result(BizCode.CustomerNotExist);
+		}
 		String params = "";
 		String orderNo = UUIDUtils.getUUID();// 订单
 		String orderDesc = "";
 
 		if (packet.getPayType() == 1) {
 			orderDesc = "支付宝充值";
-
 		} else {
 			orderDesc = "微信充值";
 		}
@@ -107,13 +121,35 @@ public class AliPayServiceImpl implements AliPayService {
 		recharge.setState(1);// 状态。1-申请支付，2-支付成功 3支付失败
 		recharge.setRechargeType(packet.getPayType());// 充值类型。1为支付宝，2为微信 3为苹果内购 5微信公众号
 		rechargeMapper.insertSelective(recharge);
+		BuryFirstChargeReq req = new BuryFirstChargeReq();
+
+		List<Recharge> list = rechargeMapper.selectByCustomerIdAndState(packet.getCustomerId());
+		if (list != null && list.size() > 0) {
+			req.setFirstTime(false);
+		} else {
+			req.setFirstTime(true);
+		}
+		Customer customer = commonService.getPhoneByCustomerId(packet.getCustomerId());
+		if (customer != null) {
+			req.setVcUserPhoneNum(customer.getPhone());
+			req.setVcUserId(packet.getCustomerId() + "");
+		}
+		try {
+			dataDuriedPointBusiness.buryFirstChargeData(req);
+		} catch (Exception e) {
+			e.printStackTrace();
+
+		}
 		return ResultUtils.resultSuccess(result);
 
 	}
 
 	@Override
 	public CommonResponse whthdraw(WhthdrawRequest params) {
-
+		String customerJson = JedisUtil.get(RedisKeyConstants.USER_CUSTOMER_INFO + params.getCustomerId());
+		if (StringUtils.isEmpty(customerJson)) {
+			return ResultUtils.result(BizCode.CustomerNotExist);
+		}
 		Account account = accountMapper.queryAccount(params.getCustomerId());
 		String errorMsg = null;
 		if (account.getRemainderAmounts().compareTo(params.getAmount()) == -1) {
@@ -168,6 +204,10 @@ public class AliPayServiceImpl implements AliPayService {
 
 	@Override
 	public CommonResponse bindAliaccount(BindAliaccountRequest params) {
+		String customerJson = JedisUtil.get(RedisKeyConstants.USER_CUSTOMER_INFO + params.getCustomerId());
+		if (StringUtils.isEmpty(customerJson)) {
+			return ResultUtils.result(BizCode.CustomerNotExist);
+		}
 		Aliacount acliacount = aliacountMapper.selectByPrimaryKey(params.getCustomerId());
 		if (params.getEtype() != null && params.getEtype() == 1) {
 			return ResultUtils.resultSuccess(acliacount);
@@ -191,32 +231,53 @@ public class AliPayServiceImpl implements AliPayService {
 		// TODO Auto-generated method stub
 		logger.info("支付回调参数===========" + JSON.toJSONString(params));
 		// 回调锁
-		String redisLockKey = RedisKeyConstants.ACCOUNT_ORDER_NO_NX + params.getAccountId();// redis 的open_id 数据锁
-		long redisResult = JedisUtil.setnx(redisLockKey, params.getAccountId() + "", 2);
-		logger.info("支付回调redisResult结果为：" + redisResult);
-		if (redisResult == 0) {
-			return ResultUtils.resultParamEmpty("重复点击");
-		}
+		String redisLockKey = RedisKeyConstants.ACCOUNT_ORDER_NO_NX + params.getOrderNo();// redis 的订单Id 数据锁
+		Long resultRedisLock = JedisUtil.setnx(redisLockKey, "1", 60);
 
-		// RMB转换轻音货币 比例1:100
-		BigDecimal amount = params.getAmount().multiply(new BigDecimal("100"));
-		Recharge recharge = new Recharge();
-		recharge.setCustomerId(params.getAccountId());
-		recharge.setFinishDate(new Date());
-		recharge.setOrdersn(params.getOrderNo());
-		if (rechargeMapper.selectByOrderNo(params.getOrderNo()).getState() == 1) {
+		logger.info("支付回调redisLockKey：" + redisLockKey);
+		try {
+			if (!(resultRedisLock == 0)) {
 
-			if (params.getPayState() == 1) {
-				recharge.setState(2);// 状态。1-申请支付，2-支付成功 3支付失败
+				// RMB转换轻音货币 比例1:100
+				BigDecimal amount = params.getAmount().multiply(new BigDecimal("100"));
+				Recharge recharge = new Recharge();
+				recharge.setCustomerId(params.getAccountId());
+				recharge.setFinishDate(new Date());
+				recharge.setOrdersn(params.getOrderNo());
+				if (rechargeMapper.selectByOrderNo(params.getOrderNo()).getState() == 1) {
+					logger.info("-----------------业务开始111111111111111111");
 
-				accountService.inAccount(params.getAccountId(), amount, TransferTypeEnum.RECHARGE,
-						AccountBusinessTypeEnum.Recharge, null);
-			} else if (params.getPayState() == 0) {
-				recharge.setState(3);// 状态。1-申请支付，2-支付成功 3支付失败
+					if (params.getPayState() == 1) {
+						recharge.setState(2);// 状态。1-申请支付，2-支付成功 3支付失败
+
+						accountService.inAccount(params.getAccountId(), amount, TransferTypeEnum.RECHARGE,
+								AccountBusinessTypeEnum.Recharge, null);
+					} else if (params.getPayState() == 0) {
+						recharge.setState(3);// 状态。1-申请支付，2-支付成功 3支付失败
+					}
+					rechargeMapper.updateByOrderNo(recharge);
+					logger.info("-----------------业务结束222222222222222");
+				}
 			}
-			rechargeMapper.updateByOrderNo(recharge);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			return ResultUtils.resultParamEmpty("回调异常");
+		} finally {
+			JedisUtil.del(redisLockKey);
 		}
+
 		return ResultUtils.resultSuccess();
+	}
+
+	@Override
+	public CommonResponse isFirstecharge(IsFirstechargeRequest request) {
+
+		List<Recharge> list = rechargeMapper.selectByCustomerIdAndState(request.getCustomerId());
+		if (list != null && list.size() > 0) {
+			return ResultUtils.resultSuccess(0);
+		} else {
+			return ResultUtils.resultSuccess(1);
+		}
 	}
 
 }

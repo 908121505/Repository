@@ -17,6 +17,8 @@ public class SearchPersonByPhoneVO implements Serializable {
 	 */
 	private String customerId;
 
+	
+
 	/**
 	 * 头像地址
 	 */

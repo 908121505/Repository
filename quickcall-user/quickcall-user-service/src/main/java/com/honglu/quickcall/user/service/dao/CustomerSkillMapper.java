@@ -54,6 +54,13 @@ public interface CustomerSkillMapper {
      * @return
      */
     CustomerSkill queryCustomerSkillByCustomerId(@Param("customerId") Long customerId);
+    
+    /**
+     * 根据认证ID查询用户技能信息
+     * @param certifyId
+     * @return
+     */
+    CustomerSkill queryCustomerSkillByCertifyId(@Param("certifyId") Long certifyId);
 
     /**
      * 根据客户ID查客户信息

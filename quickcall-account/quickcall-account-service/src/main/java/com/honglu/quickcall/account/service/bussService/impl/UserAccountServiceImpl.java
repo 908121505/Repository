@@ -1,5 +1,6 @@
 package com.honglu.quickcall.account.service.bussService.impl;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,8 @@ import com.honglu.quickcall.common.api.code.BizCode;
 import com.honglu.quickcall.common.api.exception.BizException;
 import com.honglu.quickcall.common.api.exchange.CommonResponse;
 import com.honglu.quickcall.common.api.exchange.ResultUtils;
+import com.honglu.quickcall.common.api.util.JedisUtil;
+import com.honglu.quickcall.common.api.util.RedisKeyConstants;
 import com.honglu.quickcall.common.core.util.UUIDUtils;
 
 /**
@@ -53,7 +56,10 @@ public class UserAccountServiceImpl implements UserAccountService {
 
 	@Override
 	public CommonResponse queryAccount(QueryAccountRequest request) {
-		// TODO Auto-generated method stub
+		String customerJson = JedisUtil.get(RedisKeyConstants.USER_CUSTOMER_INFO+request.getCustomerId());
+		if(StringUtils.isEmpty(customerJson)){
+			return ResultUtils.result(BizCode.CustomerNotExist);
+		}
 		CommonResponse response = new CommonResponse();
 		Account account = accountMapper.queryAccount(request.getCustomerId());
 		response.setCode(BizCode.Success);

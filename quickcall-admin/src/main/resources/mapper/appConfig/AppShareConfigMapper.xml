@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="AppShareConfig" >
+
+  <!-- 结果集合 -->
+  <resultMap id="BaseResultMap" type="com.calf.module.appconfig.entity.AppShareConfig" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="content" property="content" jdbcType="VARCHAR" />
+    <result column="icon_url" property="iconUrl" jdbcType="VARCHAR" />
+    <result column="link_url" property="linkUrl" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="TINYINT" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+    <result column="create_man" property="createMan" jdbcType="VARCHAR" />
+    <result column="modify_man" property="modifyMan" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+  </resultMap>
+
+  <!-- 结果列 -->
+  <sql id="Base_Column_List" >
+    id, title, content, icon_url, link_url, type, create_time, modify_time, create_man,
+    modify_man, remark
+  </sql>
+
+  <!-- 查询（根据主键ID查询） -->
+  <select id="getAppShareConfigById" parameterType="map" resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List" />
+    FROM app_share_config
+    WHERE id = #{arg0}
+  </select>
+
+  <!-- 查询结果集数量 -->
+  <select id="queryCount" parameterType="map" resultType="int">
+    select count(id) from app_share_config where 1=1
+    <if test="type !=null"> and type = #{type}</if>
+  </select>
+
+  <!-- 查询结果集 -->
+  <select id="query" parameterType="map" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from
+    app_share_config where 1=1
+    <if test="type !=null"> and type = #{type}</if>
+    order by create_time desc
+    limit ${iDisplayStart},${iDisplayLength}
+  </select>
+
+  <!-- 插入 -->
+  <insert id="insert" parameterType="com.calf.module.appconfig.entity.AppShareConfig" >
+    insert into app_share_config (id, title, content,
+      icon_url, link_url, type, 
+      create_time, modify_time, create_man, 
+      modify_man, remark)
+    values (#{id,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR}, 
+      #{iconUrl,jdbcType=VARCHAR}, #{linkUrl,jdbcType=VARCHAR}, #{type,jdbcType=TINYINT}, 
+      #{createTime,jdbcType=TIMESTAMP}, current_timestamp(), #{createMan,jdbcType=VARCHAR},
+      #{modifyMan,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR})
+  </insert>
+
+  <!-- 更新 -->
+  <update id="update" parameterType="com.calf.module.appconfig.entity.AppShareConfig" >
+    update app_share_config
+    <set >
+      <if test="title != null" >
+        title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null" >
+        content = #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="iconUrl != null" >
+        icon_url = #{iconUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="linkUrl != null" >
+        link_url = #{linkUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=TINYINT},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyTime != null" >
+        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createMan != null" >
+        create_man = #{createMan,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyMan != null" >
+        modify_man = #{modifyMan,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <delete id="delete" parameterType="map">
+		DELETE FROM app_share_config
+		WHERE
+		id =
+		#{arg0}
+  </delete>
+</mapper>

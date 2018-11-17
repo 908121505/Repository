@@ -31,6 +31,8 @@ public interface CustomerSkillMapper {
     
     /**根据客户编号查询客户所有的技能信息*/
 	List<CustomerSkill> querySkillInfoPersonal(Long customerId);
+	/**根据客户编号查询客户所有的技能信息*/
+	List<CustomerSkill> querySkillInfoPersonalExt(Long customerId);
 
 	/**批量更新数据*/
 	void batchUpdate(@Param("list")  List<CustomerSkill> updateList);
@@ -55,4 +57,26 @@ public interface CustomerSkillMapper {
 	 * @return
 	 */
 	CustomerSkillIMVO selectCustomerSkillByCustomerId(@Param("customerId")Long customerSkillId,@Param("weekIndex")Integer  weekIndex ,@Param("skillSwitch")Integer skillSwitch,@Param("endTime")Date  endTime);
+
+	/**
+	 * 根据客户ID获取接单开关
+	 * @param customerId
+	 * @return
+	 */
+	Integer queryReceiveStatusByCustomerId(@Param("customerId")Long customerId);
+
+	/**
+	 * 根据客户编号开启接单开关
+	 * @param customerId
+	 */
+	void openReceiveSwitch(@Param("customerId")Long customerId,@Param("receiveStatus")Integer  receiveStatus);
+	
+	
+	/**
+	 * 根据用户技能Id获取技能	
+	 * @param customerSkillId
+	 * @return
+	 */
+	Integer   getSkillTypeByCustomerSkillId(Long  customerSkillId);
+	
 }

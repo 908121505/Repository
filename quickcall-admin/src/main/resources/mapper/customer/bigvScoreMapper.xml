@@ -154,4 +154,20 @@ id,	customer_id,	order_total,	score_total,	create_time,	modify_time,	create_man,
     </trim>
   </insert>
 
+
+    <!-- 查询大V声量数据 -->
+    <insert id="insertBigvScore" parameterType="com.honglu.quickcall.user.facade.entity.BigvScore">
+        insert into bigv_score (id, customer_id, order_total,
+          score_total, create_man, modify_man, remark
+          )
+        values (#{id,jdbcType=BIGINT}, #{customerId,jdbcType=BIGINT}, #{orderTotal,jdbcType=INTEGER},
+          #{scoreTotal,jdbcType=DECIMAL}, NOW(), #{modifyMan,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}
+          )
+    </insert>
+
+    <!-- 更新大V评分 -->
+    <update id="updateBigvScore" parameterType="map">
+      UPDATE bigv_score SET order_total = order_total + #{addOrderTotal}, score_total = score_total + #{valueScore}
+      WHERE customer_id = #{customerId}
+    </update>
 </mapper>

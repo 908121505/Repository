@@ -47,7 +47,7 @@
    	  (half.skill_ext_status*4+one.skill_ext_status*2+time.skill_ext_status) as levelStatus 
     from skill_item_ext sie 
     left join skill_item_ext half on sie.skill_item_id = half.skill_item_id and half.skill_ext_unit = '半小时' and sie.skill_ext_range = half.skill_ext_range
-    left join skill_item_ext one on sie.skill_item_id = one.skill_item_id and one.skill_ext_unit = '一小时' and sie.skill_ext_range = one.skill_ext_range
+    left join skill_item_ext one on sie.skill_item_id = one.skill_item_id and one.skill_ext_unit = '小时' and sie.skill_ext_range = one.skill_ext_range
     left join skill_item_ext time on sie.skill_item_id = time.skill_item_id and time.skill_ext_unit = '次'  and sie.skill_ext_range = time.skill_ext_range
     left join skill_item si on sie.skill_item_id = si.id 
     where sie.skill_ext_type = '1'
@@ -78,7 +78,7 @@
    	  (half.skill_ext_status*4+one.skill_ext_status*2+time.skill_ext_status) as levelStatus 
     from skill_item_ext sie 
     left join skill_item_ext half on sie.skill_item_id = half.skill_item_id and half.skill_ext_unit = '半小时' and sie.skill_ext_range = half.skill_ext_range
-    left join skill_item_ext one on sie.skill_item_id = one.skill_item_id and one.skill_ext_unit = '一小时' and sie.skill_ext_range = one.skill_ext_range
+    left join skill_item_ext one on sie.skill_item_id = one.skill_item_id and one.skill_ext_unit = '小时' and sie.skill_ext_range = one.skill_ext_range
     left join skill_item_ext time on sie.skill_item_id = time.skill_item_id and time.skill_ext_unit = '次'  and sie.skill_ext_range = time.skill_ext_range
     left join skill_item si on sie.skill_item_id = si.id
     where sie.skill_ext_type = '1'

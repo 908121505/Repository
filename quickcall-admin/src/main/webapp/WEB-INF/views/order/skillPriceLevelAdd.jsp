@@ -34,11 +34,12 @@
 				<div class="form-group">
 					<label class="col-sm-3 control-label">价格等级<font color="red">&nbsp;*</font></label>
 					<div class="col-sm-6">
-					<select id = "priceLevel" name="priceLevel" class="form-control" ${empty entity?'':'disabled="disabled"' }>
+					<%-- <select id = "priceLevel" name="priceLevel" class="form-control" ${empty entity?'':'disabled="disabled"' }>
                            <option value="1" ${entity.priceLevel==1?"selected='selected'" :""}>一等级</option> 
                            <option value="2" ${entity.priceLevel==2?"selected='selected'" :""}>二等级</option> 
                            <option value="3" ${entity.priceLevel==3?"selected='selected'" :""}>三等级</option> 
-                    </select>
+                    </select> --%>
+                    <input type="number" min="1" id="priceLevel" class="form-control"  name="priceLevel" value="${entity.priceLevel}" ${empty entity?'':'disabled="disabled"' }>
 					</div>
 				</div>
 				<div class="form-group">
@@ -82,6 +83,7 @@
 			</form>
 		</div>
 		<div class="modal-footer">
+		<input type="hidden" class="needRefresh" value="1"/>
 		<span id="tip" style="color: red; font-size: 16px; margin-left: 20px;float:left;"></span>
 			<button class="btn btn-default" data-dismiss="modal" aria-hidden="true" >取消</button>
 			<button class="btn btn-primary" data-dismiss="modal" >保存</button>
@@ -91,8 +93,19 @@
 
 <script type="text/javascript">
 	$(function (){
-		
+		var ipt = $('#priceLevel');
+    	
+	    ipt.on('keyup',function(){
+
+	        if(! /^\d+$/.test(this.value)){            
+
+	        this.value='';
+
+	        }
+
+	    })
 	});
+	
 	function check_fun(){
 		 $("#tip").html("");
 	     var b = true;

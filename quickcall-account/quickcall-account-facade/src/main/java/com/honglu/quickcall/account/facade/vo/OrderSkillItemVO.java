@@ -3,6 +3,7 @@ package com.honglu.quickcall.account.facade.vo;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
+
 /**   
  * Copyright © 2018 www.xiaoniu.com All rights reserved.
  * 
@@ -29,6 +30,22 @@ public class OrderSkillItemVO implements  Serializable{
 	private String  serviceUnit;
 	/**技能类型1：按次收费 有预约时间，2：按时间段收费 没有预约时间*/
 	private Integer  skillType;
+	/**是否展示活动优惠券提示,0=不展示，1=展示*/
+	private Integer showTip;
+ 	/**券的价值*/
+	private Integer couponPrice;
+	/** 显示的提示文案 */
+	//private String tipHtml;
+
+	/**券的ID*/
+	private String couponId;
+	/**券的名称*/
+	private String couponName;
+	/**券的抵扣价值*/
+	private Integer couponDeductPrice;
+	/**customer_coupon的ID*/
+	private Integer customerCouponId;
+
 	public Long getUserSkillItemId() {
 		return userSkillItemId;
 	}
@@ -72,12 +89,60 @@ public class OrderSkillItemVO implements  Serializable{
 	public void setSkillType(Integer skillType) {
 		this.skillType = skillType;
 	}
-	
-	
-	
-	
-	
-	
-	
-	
+
+	public Integer getShowTip() {
+		return showTip;
+	}
+
+	public void setShowTip(Integer showTip) {
+		this.showTip = showTip;
+	}
+
+	public String getCouponId() {
+		return couponId;
+	}
+
+	public void setCouponId(String couponId) {
+		this.couponId = couponId;
+	}
+
+	public String getCouponName() {
+		return couponName;
+	}
+
+	public void setCouponName(String couponName) {
+		this.couponName = couponName;
+	}
+
+	public Integer getCouponPrice() {
+		return couponPrice;
+	}
+
+	public void setCouponPrice(Integer couponPrice) {
+		this.couponPrice = couponPrice;
+	}
+
+	/*public String getTipHtml() {
+		return tipHtml;
+	}
+
+	public void setTipHtml(String tipHtml) {
+		this.tipHtml = tipHtml;
+	}*/
+
+	public Integer getCouponDeductPrice() {
+		return couponDeductPrice;
+	}
+
+	public void setCouponDeductPrice(Integer couponDeductPrice) {
+		this.couponDeductPrice = couponDeductPrice;
+	}
+
+	public Integer getCustomerCouponId() {
+		return customerCouponId;
+	}
+
+	public void setCustomerCouponId(Integer customerCouponId) {
+		this.customerCouponId = customerCouponId;
+	}
 }
