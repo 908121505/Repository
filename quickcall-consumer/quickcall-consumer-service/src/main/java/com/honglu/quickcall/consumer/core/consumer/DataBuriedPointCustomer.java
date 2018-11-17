@@ -109,6 +109,7 @@ public class DataBuriedPointCustomer {
             LOGGER.info("consumer--:"+message.getMessageProperties()+":"+ new String(message.getBody()));
             Map<String,Object> data = JSON.parseObject(new String(message.getBody()));
             String type = (String)data.get("type");
+            LOGGER.info("consumer--data:"+data.toString());
             LOGGER.info("========开始消费=========");
             if (EventEnums.EVENT_getCode.getValue().equals(type)){
                 dataBuriedPointService.saveGetCodeData(data);
