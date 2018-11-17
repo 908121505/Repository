@@ -255,17 +255,10 @@ public interface UserFunctionType {
 	 */
 	String searchPersonByPhone = "0011138";
 
-<<<<<<< HEAD
-
-=======
->>>>>>> refs/remotes/origin/test
 	/**
 	 * 微信
 	 */
-<<<<<<< HEAD
+
 	String WEIXIN = "0022001";
-=======
-	String WEIXIN = "0022210";
->>>>>>> refs/remotes/origin/test
 
 }
