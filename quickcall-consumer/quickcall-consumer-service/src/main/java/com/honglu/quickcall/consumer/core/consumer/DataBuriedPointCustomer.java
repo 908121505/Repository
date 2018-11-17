@@ -1,6 +1,7 @@
 package com.honglu.quickcall.consumer.core.consumer;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.honglu.quickcall.consumer.core.enums.EventEnums;
 import com.honglu.quickcall.consumer.core.service.DataBuriedPointService;
 import com.honglu.quickcall.consumer.core.utils.Base64Util;
@@ -100,16 +101,16 @@ public class DataBuriedPointCustomer {
 
     public void consumerMessage(Message message, Channel channel) throws Exception {
         try {
-            String json = new String(message.getBody());
-            String json1 = new String(message.getBody(), encoding);
-//            LOGGER.info("----base64--数据埋点消费端收到--【BuriedPointCustomer】 RabbitMQ消息 :" + encode);
-//            LOGGER.info("数据埋点消费端收到--【BuriedPointCustomer】 RabbitMQ消息 :" + json);
-//            LOGGER.info("---转--数据埋点消费端收到--【BuriedPointCustomer】 RabbitMQ消息 :" + json1);
-//            LOGGER.info("数据埋点消费端收到--【BuriedPointCustomer】 RabbitMQ消息 :" + json);
-            LOGGER.info("consumer--:"+message.getMessageProperties()+":"+ new String(message.getBody()));
-            Map<String,Object> data = JSON.parseObject(new String(message.getBody()));
-            String type = (String)data.get("type");
+            LOGGER.info("接收到rabbit消息:"+message.getMessageProperties());
+            LOGGER.info("consumer--headers:"+message.getMessageProperties().getHeaders());
+
+            Map<String, Object> body = message.getMessageProperties().getHeaders();
+            Object param = body.get("messageBody");
+
+            LOGGER.info("consumer--body:"+param);
+            Map<String,Object> data = JSON.parseObject((String)param,Map.class);
             LOGGER.info("consumer--data:"+data.toString());
+            String type = (String)data.get("type");
             LOGGER.info("========开始消费=========");
             if (EventEnums.EVENT_getCode.getValue().equals(type)){
                 dataBuriedPointService.saveGetCodeData(data);
