@@ -33,7 +33,7 @@ public class DataBuriedPointCustomer {
     public static final String exchange = "data-dury-point-exchange";
     public static final String routingKey = "data-dury-point-routingKey";
 
-    public static final String encoding = "UTF-8";
+    public static final String encoding = "utf-8";
     public static final String deal_exchange = "data-dury-point-exchange";
     public static final String deal_routingKey = "data-dury-point-routingKey";
 

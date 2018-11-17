@@ -51,9 +51,16 @@ public class RabbitSender{
             return new Message(xnMessage.getMessageBody().getBytes(), messageProperties);
         };
 
-        // 发送消息
-        rabbitTemplate.convertAndSend(xnMessage.getExchangeName(), xnMessage.getRoutingKey(),
-                xnMessage.getMessageBody(), processor);
+        try{
+            LOGGER.info("转前---发送MQ消息-，body：{}", xnMessage.getMessageBody());
+            String message = new String(xnMessage.getMessageBody().getBytes(), "utf-8");
+            LOGGER.info("转后---发送MQ消息-，body：{}", message);
+            // 发送消息
+            rabbitTemplate.convertAndSend(xnMessage.getExchangeName(), xnMessage.getRoutingKey(),
+                    message, processor);
+        }catch (Exception e){
+
+        }
         LOGGER.info("发送MQ消息成功-，流水号：{}，消息体：{}", xnMessage.getTraceId(), xnMessage.getMessageId());
     }
 }
