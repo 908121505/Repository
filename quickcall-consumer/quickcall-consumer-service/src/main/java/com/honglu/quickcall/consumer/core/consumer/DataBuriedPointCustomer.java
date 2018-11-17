@@ -99,7 +99,10 @@ public class DataBuriedPointCustomer {
 
     public void consumerMessage(Message message, Channel channel) throws Exception {
         try {
-            String json = new String(message.getBody(), encoding);
+            String json = new String(message.getBody());
+            String json1 = new String(message.getBody(), encoding);
+            LOGGER.info("数据埋点消费端收到--【BuriedPointCustomer】 RabbitMQ消息 :" + json);
+            LOGGER.info("---转--数据埋点消费端收到--【BuriedPointCustomer】 RabbitMQ消息 :" + json1);
             LOGGER.info("数据埋点消费端收到--【BuriedPointCustomer】 RabbitMQ消息 :" + json);
             LOGGER.info("consumer--:"+message.getMessageProperties()+":"+ new String(message.getBody()));
             Map<String,Object> data = JSON.parseObject(json);
