@@ -359,11 +359,15 @@ public class OrderUpdateJob {
     			}
     		}
     		
-    		taskOrderMapper.updateOrderStatus(updateOrderStatus, orderIdList,new Date(),null,new Date());
+    		if(!CollectionUtils.isEmpty(orderIdList)){
+    			taskOrderMapper.updateOrderStatus(updateOrderStatus, orderIdList,new Date(),null,new Date());
+    		}
     		//用户所得券返回给用户
     		if(cancelCouponFlag){
     			try {
-    				taskCustomerCouponMapper.batchUpdateCustomerCoupon(orderIdCouponList, OrderSkillConstants.ORDER_COUPON_FLAG_CANCEL);
+    				if(!CollectionUtils.isEmpty(orderIdCouponList)){
+    					taskCustomerCouponMapper.batchUpdateCustomerCoupon(orderIdCouponList, OrderSkillConstants.ORDER_COUPON_FLAG_CANCEL);
+    				}
     			} catch (Exception e) {
     				LOGGER.error("用户券返还发生异常，异常信息：",e);
     			}
