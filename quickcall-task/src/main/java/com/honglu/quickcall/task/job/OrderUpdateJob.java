@@ -330,14 +330,8 @@ public class OrderUpdateJob {
     	
     	if(!CollectionUtils.isEmpty(orderList)){
     		List<Long>  orderIdList =  new ArrayList<Long>();
-    		List<Long>  orderIdCouponList =  new ArrayList<Long>();
-    		
     		for (TaskOrder order : orderList) {
     			orderIdList.add(order.getOrderId());
-    			Integer  couponFlag = order.getCouponFlag();
-    			if(couponFlag != null  && OrderSkillConstants.ORDER_COUPON_FLAG_USE == couponFlag){
-    				orderIdCouponList.add(order.getOrderId());
-    			}
     		}
     		
     		taskOrderMapper.updateOrderStatusForAppointGoing(updateOrderStatus, orderIdList,new Date());
