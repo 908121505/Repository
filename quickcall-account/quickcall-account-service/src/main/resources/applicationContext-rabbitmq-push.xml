@@ -15,7 +15,8 @@
                                host="${mq.host}"
                                username="${mq.username}"
                                password="${mq.password}"
-                               port="${mq.port}"/>
+                               port="${mq.port}"
+                               virtual-host="/voice"/>
 
     <rabbit:admin connection-factory="RconnectionFactory"/>
 

@@ -13,7 +13,7 @@
                    
    <!-- 连接服务配置   需要确认publisher-confirms="true" -->
    <rabbit:connection-factory id="RconnectionFactory" host="${mq.host}" username="${mq.username}"
-        password="${mq.password}" port="${mq.port}" />        
+        password="${mq.password}" port="${mq.port}" virtual-host="/voice"/>
 
    <!-- queue 队列声明-->
    <rabbit:queue id="queue_activity" durable="true" auto-delete="false" exclusive="false" name="queue_activity"/>
