@@ -188,7 +188,7 @@ public class CommonServiceImpl implements CommonService {
 
 
 	@Override
-	public void confirmOrderUpdateOrder(Long orderId, Integer orderStatus, Date startTime,Date  endTime) {
+	public void confirmOrderUpdateOrder(Long orderId, Integer orderStatus, Date startTime,Date  endTime,Integer  skillType) {
 		Order record = new Order();
 		record.setOrderStatus(orderStatus);
 		record.setOrderId(orderId);
@@ -196,7 +196,10 @@ public class CommonServiceImpl implements CommonService {
 		Calendar  cal = Calendar.getInstance();
 		cal.setTime(startTime);
 //		cal.add(Calendar.MINUTE, 5);
-		record.setStartTime(cal.getTime());
+		//叫醒服务不设置开始时间
+		if(OrderSkillConstants.SKILL_TYPE_YES == skillType){
+			record.setStartTime(cal.getTime());
+		}
 		if(endTime != null){
 			record.setExpectEndTime(endTime);
 		}

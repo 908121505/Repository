@@ -80,7 +80,7 @@ public interface OrderSkillConstants {
 	public  static final  String  IM_MSG_CONTENT_CANCEL_CUST_15MINUTE_TIMEOUT = "声优未接单，音符已退回轻音账户";
 	
 	//8 拒绝接单
-	public  static final  String  IM_MSG_CONTENT_DAV_REFUSE_TO_DV = "您已拒绝接单，订单已取消~";
+	public  static final  String  IM_MSG_CONTENT_DAV_REFUSE_TO_DV = "您已拒绝接单，订单已取消";
 	public  static final  String  IM_MSG_CONTENT_DAV_REFUSE_TO_CUST = "声优未接单，音符已退回轻音账户";
 		
 	//10 声优接单

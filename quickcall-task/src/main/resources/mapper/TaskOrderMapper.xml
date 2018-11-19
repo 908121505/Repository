@@ -270,6 +270,23 @@
 			#{orderId}
 			</foreach>
   </update>
+  
+  
+<!-- 叫醒自动转为进行中状态 -->
+  <update id="updateOrderStatusForAppointGoing"  >
+    
+		UPDATE 
+			orders
+		SET 
+			start_time = #{startTime},
+		 	order_status = #{updateStatus},
+		 	modify_time = #{startTime}
+		WHERE
+			order_id  IN 
+			<foreach collection="list" item="orderId"    open="("  close=")"  separator=",">
+			#{orderId}
+			</foreach>
+  </update>
 <!-- 用户未接立即服务超时超时 -->
   <update id="updateOrderStatusForFinish"  >
     

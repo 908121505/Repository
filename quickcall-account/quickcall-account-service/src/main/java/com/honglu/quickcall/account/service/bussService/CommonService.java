@@ -60,7 +60,7 @@ public interface CommonService {
 	 * @param orderStatus
 	 * @param startTime
 	 */
-	public void confirmOrderUpdateOrder(Long orderId, Integer orderStatus,Date  startTime,Date  endTime);
+	public void confirmOrderUpdateOrder(Long orderId, Integer orderStatus,Date  startTime,Date  endTime,Integer  skillType);
 	/**
 	 * 大V接单修改订单信息
 	 * @param orderId
