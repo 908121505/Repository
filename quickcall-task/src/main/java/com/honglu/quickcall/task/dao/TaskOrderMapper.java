@@ -134,6 +134,14 @@ public interface TaskOrderMapper {
 	void  updateOrderStatus(@Param("updateStatus")Integer  updateStatus,@Param("list")List<Long>  orderIdList,@Param("cancelTime")Date  cancelTime,@Param("couponFlag")Integer  couponFlag,@Param("modifyTime")Date  modifyTime);
 	/**
 	 * 根据订单ID列表更新订单状态
+	 * 叫醒订单自动进入进行中状态
+	 * @param updateStatus
+	 * @param orderIdList
+	 * @param startTime
+	 */
+	void  updateOrderStatusForAppointGoing(@Param("updateStatus")Integer  updateStatus,@Param("list")List<Long>  orderIdList,@Param("startTime")Date  startTime);
+	/**
+	 * 根据订单ID列表更新订单状态
 	 * @param updateStatus
 	 * @param statusList
 	 */

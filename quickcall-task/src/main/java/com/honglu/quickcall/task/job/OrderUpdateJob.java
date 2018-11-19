@@ -235,7 +235,7 @@ public class OrderUpdateJob {
     		Integer  skillType = OrderSkillConstants.SKILL_TYPE_NO;
     		Date  queryEndTime =  getEndTimeByAddDays(-10);
     		List<TaskOrder>  orderList = taskOrderMapper.queryAppointOrderGoing(currTime,endTime, queryStatus, updateStatus, skillType,queryEndTime);
-    		updateOrderStatusByOrderListForCancel(orderList, updateStatus,false);
+    		updateOrderStatusByOrderListAppointGoing(orderList, updateStatus);
 //    		taskOrderMapper.appointOrderGoing(currTime,endTime, queryStatus, updateStatus, skillType,queryEndTime);
     	} catch (Exception e) {
     		LOGGER.error("叫醒服务达到预约时间自动转为进行中job执行发生异常，异常信息：", e);
@@ -316,6 +316,31 @@ public class OrderUpdateJob {
     
     
     /**
+     * 
+     * @param orderList
+     * @param updateOrderStatus
+     */
+    
+    /**
+     * 根据订单ID批量更新订单信息，叫醒订单自动进入进行中专用
+     * @param orderList
+     * @param updateOrderStatus
+     */
+    public  void  updateOrderStatusByOrderListAppointGoing(List<TaskOrder>  orderList,Integer  updateOrderStatus){
+    	
+    	if(!CollectionUtils.isEmpty(orderList)){
+    		List<Long>  orderIdList =  new ArrayList<Long>();
+    		for (TaskOrder order : orderList) {
+    			orderIdList.add(order.getOrderId());
+    		}
+    		
+    		taskOrderMapper.updateOrderStatusForAppointGoing(updateOrderStatus, orderIdList,new Date());
+    		
+    		
+    	}
+    }
+    
+    /**
      * 根据订单ID批量更新订单信息
      * @param orderList
      * @param updateOrderStatus
@@ -347,6 +372,8 @@ public class OrderUpdateJob {
     		
     	}
     }
+    
+    
     /**
      * 根据订单ID批量更新订单信息
      * @param orderList
