@@ -56,6 +56,9 @@ public class UserDubboBusinessImpl implements UserDubboBusiness {
 	@Autowired
 	private WeiXinService weiXinService;
 
+	@Autowired
+	DeviceInfoService deviceInfoService;
+
 	@Override
 	public CommonResponse excute(AbstractRequest request) {
 		if (request == null) {
@@ -281,6 +284,9 @@ public class UserDubboBusinessImpl implements UserDubboBusiness {
 				break;
 			case UserFunctionType.WEIXIN:
 				response = weiXinService.getOpenId((WeiXinRequest) request);
+				break;
+			case UserFunctionType.ADD_UPDATE_DEVICE_INFO:
+				response = deviceInfoService.saveOrUpdateDeviceInfo((DeviceInfoRequest) request);
 				break;
 			default:
 				throw new BizException(UserBizReturnCode.BizFunctionTypeNotMatch,

@@ -9,6 +9,8 @@ import java.util.ResourceBundle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.honglu.quickcall.user.facade.entity.DeviceInfo;
+import com.honglu.quickcall.user.service.dao.DeviceInfoMapper;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -83,6 +85,9 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 	@Autowired
 	private BigvPhoneMapper bigvPhoneMapper;
 
+	@Autowired
+	private DeviceInfoMapper deviceInfoMapper;
+
 	private static String resendexpire = ResourceBundle.getBundle("thirdconfig").getString("resend.expire");
 	private static String resendexpirehour = ResourceBundle.getBundle("thirdconfig").getString("resend.expire.hour");
 	private static String onehourfreq = ResourceBundle.getBundle("thirdconfig").getString("one.hour.freq");
@@ -136,7 +141,7 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 		 * 神策埋点
 		 */
 		DataBuriedPointLoginReq req = new DataBuriedPointLoginReq();
-
+		DeviceInfo deviceInfo = new DeviceInfo();
 		CommonResponse response = new CommonResponse();
 		Customer customer = null;
 		Customer param = new Customer();
@@ -226,10 +231,10 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 
 		// 更新登录信息
 		login.setCustomerId(customer.getCustomerId());
-
 		login.setModifyTime(new Date());
 		login.setGtClientId(params.getGtClientId());
 		login.setCustState(CustomerCusStateEnum.ON_LINE.getType());
+		login.setDeviceId(params.getDeviceId());
 		customerMapper.updateByPrimaryKeySelective(login);
 		customer = customerMapper.selectByPrimaryKey(customer.getCustomerId());
 		JedisUtil.set(RedisKeyConstants.USER_CUSTOMER_INFO + customer.getCustomerId(),
