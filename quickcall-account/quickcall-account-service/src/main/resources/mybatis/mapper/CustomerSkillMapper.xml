@@ -582,7 +582,7 @@
       </if> -->
       <!-- <include refid="SKILL_EXIST_CONDITON"></include> -->
       <!-- AND   cs.appoint_end_time <![CDATA[  > ]]> #{endTime,jdbcType=TIMESTAMP} -->
-      order by  cs.modify_time desc
+      order by  cs.create_time 
       limit 1
   </select>
   
