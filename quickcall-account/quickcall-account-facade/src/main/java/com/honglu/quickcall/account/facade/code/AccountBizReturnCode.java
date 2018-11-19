@@ -39,6 +39,8 @@ public class AccountBizReturnCode extends BizCode {
     public static final BizCode ORDER_RECEIVE_ERROR = new AccountBizReturnCode("ORDER_RECEIVE_ERROR","715", MyServiceCode.ACCOUNT,"请稍后重试");
     /**用户同意声优服务完成*/
     public static final BizCode ORDER_CONFIRM_FINISH_ERROR = new AccountBizReturnCode("ORDER_CONFIRM_FINISH_ERROR","716", MyServiceCode.ACCOUNT,"请稍后重试");
+    /**自己给自己下单*/
+    public static final BizCode ORDER_SAVE_SELE_ERROR = new AccountBizReturnCode("ORDER_SAVE_SELE_ERROR","717", MyServiceCode.ACCOUNT,"下单失败");
     
     /**余额不足*/
     public static final BizCode ORDER_PAY_BALANCE_NOT_ENOUGH = new AccountBizReturnCode("ORDER_PAY_BALANCE_NOT_ENOUGH","702", MyServiceCode.ACCOUNT,"订单状态不符合");

@@ -192,6 +192,11 @@ public class OrderServiceImpl implements IOrderService {
 		// 1.首先判断声优是否可以接单
 		Long customerId = request.getCustomerId();
 		Long serviceId = request.getServiceId();
+		if(customerId.equals(serviceId)){
+			LOGGER.info("======================用户给自己下单=======================");
+			//说明已经操作，本次不进行操作
+			throw new BizException(AccountBizReturnCode.ORDER_SAVE_SELE_ERROR, "下单失败");
+		}
 		if(JedisUtil.setnx(RedisKeyConstants.SAVE_ORDER_KEY+customerId, ORDER_DEFAULT_VALUE, ORDER_DEFAULT_TIME_OUT) == 0){
 			LOGGER.info("======================用户频繁操作，进行限制=======================");
 			//说明已经操作，本次不进行操作
