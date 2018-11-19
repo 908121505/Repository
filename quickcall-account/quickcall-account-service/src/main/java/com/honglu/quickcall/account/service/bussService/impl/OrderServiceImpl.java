@@ -405,7 +405,7 @@ public class OrderServiceImpl implements IOrderService {
 				String phone = service.getPhone();
 				LOGGER.info("用户下单声优手机号码" + phone);
 				if (StringUtils.isNotBlank(phone)) {
-					SendSmsUtil.sendSms(UUIDUtils.getUUID(), phone, 2, customerSkill.getSkillName());
+					SendSmsUtil.sendSms(UUIDUtils.getUUID(), phone, 2, skillItem.getSkillItemName());
 				}
 
 				String gtId = service.getGtClientId();
