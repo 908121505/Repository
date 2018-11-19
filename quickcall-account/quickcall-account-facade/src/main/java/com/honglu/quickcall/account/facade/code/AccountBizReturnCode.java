@@ -26,7 +26,7 @@ public class AccountBizReturnCode extends BizCode {
     /**订单状态不符合*/
     public static final BizCode ORDER_STATUS_ERROR = new AccountBizReturnCode("ORDER_CANCEL_CODE","701", MyServiceCode.ACCOUNT,"订单状态不符合");
     /**余额不足*/
-    public static final BizCode DV_BUSYING = new AccountBizReturnCode("DV_BUSYING","704", MyServiceCode.ACCOUNT,"大V忙");
+    public static final BizCode DV_BUSYING = new AccountBizReturnCode("DV_BUSYING","704", MyServiceCode.ACCOUNT,"声优正忙");
     /**订单双方同时出发服务完成*/
     public static final BizCode ORDER_FINISH_ERROR = new AccountBizReturnCode("ORDER_FINISH_ERROR","711", MyServiceCode.ACCOUNT,"请稍后重试");
     
