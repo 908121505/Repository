@@ -1040,7 +1040,7 @@ public class OrderServiceImpl implements IOrderService {
 				cal.add(Calendar.MINUTE, addMinute);
 			}
 			endTime = cal.getTime();
-			commonService.confirmOrderUpdateOrder(orderId, newOrderStatus, new Date(), endTime);
+			commonService.confirmOrderUpdateOrder(orderId, newOrderStatus, new Date(), endTime,skillType);
 		} else {
 			// 订单不存在
 			throw new BizException(AccountBizReturnCode.ORDER_NOT_EXIST, "订单不存在，无法对订单操作");
