@@ -507,11 +507,12 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 		try {
 			// 神策埋点
 			dataDuriedPointBusiness.burySignUpResultData(req);
+			// 创建账户
+			accountDubboIntegrationService.createAccount(customer.getCustomerId());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		// 创建账户
-		accountDubboIntegrationService.createAccount(customer.getCustomerId());
+
 		customer = customerMapper.selectByPrimaryKey(customer.getCustomerId());
 		JedisUtil.set(RedisKeyConstants.USER_CUSTOMER_INFO + customer.getCustomerId(),
 				customer == null ? "" : JSON.toJSONString(customer));
