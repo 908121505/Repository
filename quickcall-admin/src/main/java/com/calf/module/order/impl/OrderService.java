@@ -345,9 +345,9 @@ public class OrderService {
 			}
 			paramMap.put("orderStatus", orderStatus);
 			// 强制取消账单流水处理
-			LOGGER.info("------------------强制取消订单账务处理开始：订单状态：" + orderStatus + "------------------------");
+			LOGGER.info("------------------强制取消订单账务处理开始：订单状态：" + orderStatus + " update：" + update +"------------------------");
 			update = compulsoryCancellation(orderId, orderAmount);
-			LOGGER.info("------------------强制取消订单账务处理结束：订单状态：" + orderStatus + "------------------------");
+			LOGGER.info("------------------强制取消订单账务处理结束：订单状态：" + orderStatus + " update="+update+"------------------------");
 			// 退款给用户
 			// 强制完成
 		} else if (OrderSkillConstants.ORDER_STATUS_FINISHED_FORCE == orderStatus) { // 给大V冻结金额
@@ -359,18 +359,15 @@ public class OrderService {
 			}
 			paramMap.put("orderStatus", orderStatus);
 			// 强制完成账单流水处理
-			LOGGER.info("---------------------强制完成订单账务处理开始：订单状态：" + orderStatus + "------------------------");
-			LOGGER.info("---------------------强制完成订单账务处理开始：update：" + update + "------------------------");
+			LOGGER.info("---------------------强制完成订单账务处理开始：订单状态：" + orderStatus + " update：" + update +"------------------------");
 
 			update = compulsoryCompletion(orderId, orderAmount);
 
-			LOGGER.info("--------------------强制完成订单账务处理开始：订单状态：" + orderStatus + "------------------------");
-			LOGGER.info("--------------------强制完成订单账务处理开始：update：" + update + "------------------------");
+			LOGGER.info("--------------------强制完成订单账务处理开始：订单状态：" + orderStatus + " update="+update+"------------------------");
 		}
 
 		if (update == 1) {
 			// 强制取消和强制完成账务流水处理完成，更改订单状态
-			LOGGER.info("-------------强制取消/完成 订单状态修改开始--------------------");
 			LOGGER.info("-------------强制取消/完成 订单状态修改开始：update：" + update + "-----------------------");
 			paramMap.put("orderId", orderId);
 			update = baseManager.update("Order.updateOrder", paramMap);
@@ -404,10 +401,17 @@ public class OrderService {
 						+ OrderSkillConstants.IM_MSG_CONTENT_CANCEL_FORCE_ORDER_TO_CUST);
 				LOGGER.info("-----------------------强制取消成功，发送im消息结束------------------------");
 				// 【强制取消】扣除声优技能声量 + 扣除客户经验
+				LOGGER.info("【强制取消给声优减少技能声量，给客户扣除经验值开始】");
 				forceCancelDeductBigvScoreAndCustomerExperience(orderId, Integer.valueOf(order.getOrderStatus()));
+				LOGGER.info("【强制取消给声优减少技能声量，给客户扣除经验值结束】");
 				// 强制取消，优惠券退回用户账户
-				// customerCouponService.cancelOrderBackCoupon(orderId,
-				// Long.valueOf(entity.getPlaceOrderId()));
+				/**
+				 * 活动券新加  2018-11-20
+				 */
+				LOGGER.info("-------------------【强制取消下单取消优惠券开始】-------------------------------");
+				 customerCouponService.cancelOrderBackCoupon(orderId,
+				 Long.valueOf(entity.getPlaceOrderId()));
+				 LOGGER.info("-------------------【强制取消下单获取优惠券结束】-------------------------------");
 				// 强制完成 完成，发送融云消息和im消息
 			} else if (update > 0 && OrderSkillConstants.ORDER_STATUS_FINISHED_FORCE == orderStatus) {
 				LOGGER.info("-----------------------强制完成成功，发送融云开始------------------------");
@@ -432,16 +436,23 @@ public class OrderService {
 				LOGGER.info("-----------------------强制完成成功，发送im消息内容：" + OrderSkillConstants.MSG_CONTENT_C + ":"
 						+ OrderSkillConstants.IM_MSG_CONTENT_DAV_CUST_CONFIRM_TO_CUST);
 				LOGGER.info("-----------------------强制完成成功，发送im消息结束------------------------");
-
+                LOGGER.info("【强制完成给声优增加技能声量，给客户增加经验值开始】");
 				// 【强制完成】给声优增加技能声量 + 给客户增加经验值
 				forceDoneAddBigvScoreAndCustomerExperience(orderId, Integer.valueOf(order.getOrderStatus()));
+				LOGGER.info("【强制完成给声优增加技能声量，给客户增加经验值结束】");
 				// 强制完成，优惠券
-				// customerCouponService.getCouponInOrder(Long.valueOf(skillItemId),
-				// Long.valueOf(entity.getPlaceOrderId()));
+				/**
+				 * 活动券新加  2018-11-20
+				 */
+				LOGGER.info("-------------------【强制完成下单获取优惠券开始】-------------------------------");
+				 customerCouponService.getCouponInOrder(Long.valueOf(skillItemId),
+				 Long.valueOf(entity.getPlaceOrderId()));
+				LOGGER.info("-------------------【强制完成下单获取优惠券结束】----------------------");
 			}
 
 		} else {
 			update = -1;
+			LOGGER.info("--------------------强制取消/完成 订单状态修改失败：update：" + update + "-----------------------");
 		}
 
 		return update;
