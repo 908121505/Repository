@@ -261,4 +261,9 @@ public interface UserFunctionType {
 
 	String WEIXIN = "0022001";
 
+	/**
+	 * 添加或修改设备信息
+	 */
+	String ADD_UPDATE_DEVICE_INFO = "0011181";
+
 }

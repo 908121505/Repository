@@ -22,6 +22,8 @@ public class UserLoginRequest extends UserCenterRequest {
 
 	private String fictitiousId;// 神策虚拟Id
 
+	private String deviceId;//设备id
+
 	public String getFictitiousId() {
 		return fictitiousId;
 	}
@@ -92,6 +94,14 @@ public class UserLoginRequest extends UserCenterRequest {
 
 	public void setCodeType(String codeType) {
 		this.codeType = codeType;
+	}
+
+	public String getDeviceId() {
+		return deviceId;
+	}
+
+	public void setDeviceId(String deviceId) {
+		this.deviceId = deviceId;
 	}
 
 	@Override
