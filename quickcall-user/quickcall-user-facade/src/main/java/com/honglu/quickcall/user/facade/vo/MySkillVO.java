@@ -38,7 +38,7 @@ public class MySkillVO implements Serializable {
 	//技能字体颜色
 	private String skillFontColor;
 	//技能声量
-	private BigDecimal skillVolume;
+	private String skillVolume;
 
 	
 
@@ -146,11 +146,11 @@ public class MySkillVO implements Serializable {
 		this.skillFontColor = skillFontColor;
 	}
 
-	public BigDecimal getSkillVolume() {
+	public String getSkillVolume() {
 		return skillVolume;
 	}
 
-	public void setSkillVolume(BigDecimal skillVolume) {
+	public void setSkillVolume(String skillVolume) {
 		this.skillVolume = skillVolume;
 	}
 
