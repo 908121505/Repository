@@ -9,7 +9,7 @@ import com.honglu.quickcall.user.facade.entity.DeviceInfo;
  */
 public interface DeviceInfoMapper {
 
-    int queryDeviceInfoByDdeviceId(Long deviceId);
+    int queryDeviceInfoByDdeviceId(String deviceId);
 
     int insertDeviceInfo(DeviceInfo deviceInfo);
 

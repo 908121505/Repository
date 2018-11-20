@@ -35,7 +35,7 @@ public class DeviceInfoServiceImpl implements DeviceInfoService {
      */
     @Override
     public CommonResponse saveOrUpdateDeviceInfo(DeviceInfoRequest params) {
-        Long deviceId = params.getDeviceId();
+        String deviceId = params.getDeviceId();
         String appVersion = params.getAppVersion();
         String channel = params.getChannel();
         String phoneType = params.getPhoneType();
@@ -53,9 +53,10 @@ public class DeviceInfoServiceImpl implements DeviceInfoService {
             deviceInfo.setPhoneType(phoneType);
             deviceInfoMapper.insertDeviceInfo(deviceInfo);
         }else{
-            //存在则更新版本信息
+            //存在则更新版本和渠道信息
             DeviceInfo deviceInfo = new DeviceInfo();
             deviceInfo.setAppVersion(appVersion);
+            deviceInfo.setChannel(channel);
             deviceInfo.setDeviceId(deviceId);
             deviceInfoMapper.updateDeviceInfo(deviceInfo);
         }

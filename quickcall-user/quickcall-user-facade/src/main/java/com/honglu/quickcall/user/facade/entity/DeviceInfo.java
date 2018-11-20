@@ -11,7 +11,7 @@ public class DeviceInfo {
 
     private Long id;
 
-    private Long deviceId;
+    private String deviceId;
 
     private String phoneType;
 
@@ -37,11 +37,11 @@ public class DeviceInfo {
         this.id = id;
     }
 
-    public Long getDeviceId() {
+    public String getDeviceId() {
         return deviceId;
     }
 
-    public void setDeviceId(Long deviceId) {
+    public void setDeviceId(String deviceId) {
         this.deviceId = deviceId;
     }
 
