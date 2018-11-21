@@ -134,8 +134,8 @@
 		FROM  
 		   orders
 		WHERE
-			order_status in ( #{queryStatus}  ,#{queryStatusExt})
-		OR (order_status = #{queryStatus31}  AND create_man = #{createMan})
+			(order_status in ( #{queryStatus}  ,#{queryStatusExt})
+		OR (order_status = #{queryStatus31}  AND create_man = #{createMan}))
 		AND expect_end_time <![CDATA[ < ]]> #{endTime}
 		<!-- AND create_time <![CDATA[ > ]]>  #{queryEndTime} -->
 		<!-- AND expect_end_time <![CDATA[ < ]]> #{currTime} -->
