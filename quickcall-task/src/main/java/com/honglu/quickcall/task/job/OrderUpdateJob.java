@@ -100,9 +100,6 @@ public class OrderUpdateJob {
     /**立即服务超时分钟数   扣减5分钟*/
     private final static  Integer   START_OVER_TIME_MINUTES = -5;
     
-    /**订单创建人默认值（该值用于标记状态曾经是33）*/
-    private final static  String  CREATE_MAN_DEFALUT_VALUE = "IM33";
-    
     
     
 
@@ -213,7 +210,7 @@ public class OrderUpdateJob {
     		//声优服务时间内发起结束服务，到预期结束时间，释放声优，使声优可以继续接单
     		List<TaskOrder>  orderList = taskOrderMapper.queryReleaseDaV(currTime, queryStatus);
 //    		refundToCustomer(orderList,CANCEL_THREE);
-    		updateOrderStatusByOrderListForRelease(orderList, updateStatus,false);
+    		updateOrderStatusByOrderListForCancel(orderList, updateStatus,false);
     	} catch (Exception e) {
     		LOGGER.error("声优服务时间内发起结束服务，到预期结束时间，释放声优定时任务执行发生异常，异常信息：", e);
     	}
@@ -269,12 +266,11 @@ public class OrderUpdateJob {
     		//获取接单设置超时
     		Integer  queryStatus = OrderSkillConstants.ORDER_STATUS_GOING_DAV_APPAY_FINISH;
     		Integer  queryStatusExt = OrderSkillConstants.ORDER_STATUS_FINISH_DV_RELEASE;
-    		Integer  queryStatus31 = OrderSkillConstants.ORDER_STATUS_GOING_USER_NOT_PING_JIA;
     		Integer  updateStatus = OrderSkillConstants.ORDER_STATUS_FINISH_DV_FINISH;
     		
     		Date  queryEndTime =  getEndTimeByAddDays(-10);
     		//服务完成，声优金额冻结
-    		List<TaskOrder>  orderList = taskOrderMapper.queryOrderStatusAfter12HourCust(endTime, queryStatus, updateStatus, queryEndTime,queryStatusExt,queryStatus31,currTime,CREATE_MAN_DEFALUT_VALUE);
+    		List<TaskOrder>  orderList = taskOrderMapper.queryOrderStatusAfter12HourCust(endTime, queryStatus, updateStatus, queryEndTime,queryStatusExt,currTime);
     		freezeToService(orderList);
     		updateOrderStatusByOrderListForFinish(orderList, updateStatus);
     		sendMsgByOrderList(orderList, CANCEL_FOUR);
@@ -377,26 +373,6 @@ public class OrderUpdateJob {
     			}
     		}
     		
-    		
-    	}
-    }
-    /**
-     * 根据订单ID批量更新订单信息
-     * @param orderList
-     * @param updateOrderStatus
-     */
-    public  void  updateOrderStatusByOrderListForRelease(List<TaskOrder>  orderList,Integer  updateOrderStatus,boolean  cancelCouponFlag){
-    	
-    	if(!CollectionUtils.isEmpty(orderList)){
-    		List<Long>  orderIdList =  new ArrayList<Long>();
-    		
-    		for (TaskOrder order : orderList) {
-    			orderIdList.add(order.getOrderId());
-    		}
-    		
-    		if(!CollectionUtils.isEmpty(orderIdList)){
-    			taskOrderMapper.updateOrderStatusForRelease(updateOrderStatus, orderIdList,new Date(),CREATE_MAN_DEFALUT_VALUE);
-    		}
     		
     	}
     }
