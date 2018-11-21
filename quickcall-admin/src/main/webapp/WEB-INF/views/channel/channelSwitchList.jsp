@@ -157,6 +157,13 @@
                         "data": "status",
                         "sTitle":"状态",
                         'sClass':"text-center",
+                        "mRender": function (data, type, full) {
+                            if (data != null && data != "" && data==1) {
+                                return "开";
+                            } else {
+                                return '关';
+                            }
+                        }
                     },
                     {
                         "data": "createMan",

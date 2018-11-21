@@ -63,6 +63,7 @@ public class DelateServiceImpl implements DelateService {
             throw new BizException(BizCode.ParamError, "举报内容不能为空");
         }
 
+        /*
         if (delateIds != null) {
             for (Integer id : delateIds) {
                 CustomerDelate customerDelate = new CustomerDelate();
@@ -83,6 +84,26 @@ public class DelateServiceImpl implements DelateService {
             customerDelate.setCreateMan(delateCustId + "");
             customerDelate.setDelateContent(otherReason);
             customerDelateMapper.insert(customerDelate);
+        }
+        */
+        if (delateIds != null) {
+            for (Integer id : delateIds) {
+                CustomerDelate customerDelate = new CustomerDelate();
+                customerDelate.setCustomerId(customerId);
+                customerDelate.setDelateCustId(delateCustId);
+                customerDelate.setCreateTime(new Date());
+                customerDelate.setCreateMan(delateCustId + "");
+                customerDelate.setDelateId(id);
+                if(id==7){
+                    //其他原因
+                    if (Strings.isNotNullAndNotEmpty(otherReason)) {
+                        customerDelate.setDelateContent(otherReason);
+                    }else{
+                        throw new BizException(BizCode.ParamError, "举报内容不能为空");
+                    }
+                }
+                customerDelateMapper.insert(customerDelate);
+            }
         }
 
         commonResponse.setCode(BizCode.Success);

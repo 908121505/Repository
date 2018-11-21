@@ -122,7 +122,7 @@ public class OrderServiceImpl implements IOrderService {
 	@Override
 	public CommonResponse queryDaVSkill(OrderDaVSkillRequest request) {
 		if (request == null || request.getCustomerId() == null) {
-			throw new BizException(AccountBizReturnCode.paramError, "查询技能信息参数异常");
+			throw new BizException(AccountBizReturnCode.paramError, "请稍后重试");
 		}
 		/*String customerJson = JedisUtil.get(RedisKeyConstants.USER_CUSTOMER_INFO + request.getCustomerId());
 		if (StringUtils.isEmpty(customerJson)) {
@@ -181,7 +181,7 @@ public class OrderServiceImpl implements IOrderService {
 	public CommonResponse saveOrder(OrderSaveRequest request) {
 		/**1.入参判断*/
 		if (request == null || request.getCustomerId() == null || request.getCustomerSkillId() == null) {
-			throw new BizException(AccountBizReturnCode.paramError, "下单参数异常");
+			throw new BizException(AccountBizReturnCode.paramError, "请稍后重试");
 		}
 		/**2.判断用户是否存在*/
 		String customerJson = JedisUtil.get(RedisKeyConstants.USER_CUSTOMER_INFO + request.getCustomerId());
@@ -477,7 +477,7 @@ public class OrderServiceImpl implements IOrderService {
 	@Override
 	public CommonResponse queryMsgOrderList(MsgOrderListRequest request) {
 		if (request == null || request.getCustomerId() == null) {
-			throw new BizException(AccountBizReturnCode.paramError, "查询接收订单参数异常");
+			throw new BizException(AccountBizReturnCode.paramError, "请稍后重试");
 		}
 		LOGGER.info("======>>>>>queryMsgOrderList()入参：" + request.toString());
 		Long customerId = request.getCustomerId();
@@ -524,7 +524,7 @@ public class OrderServiceImpl implements IOrderService {
 	@Override
 	public CommonResponse queryReceiveOrderList(OrderReceiveOrderListRequest request) {
 		if (request == null || request.getCustomerId() == null || request.getOrderStatus() == null) {
-			throw new BizException(AccountBizReturnCode.paramError, "查询接收订单参数异常");
+			throw new BizException(AccountBizReturnCode.paramError, "请稍后重试");
 		}
 		LOGGER.info("======>>>>>queryReceiveOrderList()入参：" + request.toString());
 		Date  currTime = new Date();
@@ -560,7 +560,7 @@ public class OrderServiceImpl implements IOrderService {
 	@Override
 	public CommonResponse querySendOrderList(OrderSendOrderListRequest request) {
 		if (request == null || request.getCustomerId() == null || request.getOrderStatus() == null) {
-			throw new BizException(AccountBizReturnCode.paramError, "查询发起订单参数异常");
+			throw new BizException(AccountBizReturnCode.paramError, "请稍后重试");
 		}
 		String customerJson = JedisUtil.get(RedisKeyConstants.USER_CUSTOMER_INFO + request.getCustomerId());
 		if (StringUtils.isEmpty(customerJson)) {
@@ -592,7 +592,7 @@ public class OrderServiceImpl implements IOrderService {
 	@Override
 	public CommonResponse cancelOrder(CancelOrderRequest request) {
 		if (request == null || request.getOrderId() == null) {
-			throw new BizException(AccountBizReturnCode.paramError, "取消订单参数异常");
+			throw new BizException(AccountBizReturnCode.paramError, "请稍后重试");
 		}
 		LOGGER.info("======>>>>>cancelOrder()入参：" + request.toString());
 		Long orderId = request.getOrderId();
@@ -671,7 +671,7 @@ public class OrderServiceImpl implements IOrderService {
 	@Override
 	public CommonResponse detailOrder(DetailOrderRequest request) {
 		if (request == null || request.getOrderId() == null || request.getType() == null) {
-			throw new BizException(AccountBizReturnCode.paramError, "查询订单详情参数异常");
+			throw new BizException(AccountBizReturnCode.paramError, "请稍后重试");
 		}
 
 		LOGGER.info("======>>>>>detailOrder()入参：" + request.toString());
@@ -723,7 +723,7 @@ public class OrderServiceImpl implements IOrderService {
 	@Override
 	public CommonResponse detailOrderForIM(DetailOrderForIMRequest request) {
 		if (request == null || request.getCustomerId() == null || request.getServiceId() == null) {
-			throw new BizException(AccountBizReturnCode.paramError, "查询订单详情参数异常");
+			throw new BizException(AccountBizReturnCode.paramError, "请稍后重试");
 		}
 
 		/**
@@ -927,7 +927,7 @@ public class OrderServiceImpl implements IOrderService {
 	@Override
 	public CommonResponse custConfirmFinish(CustConfirmFinishRequest request) {
 		if (request == null || request.getOrderId() == null) {
-			throw new BizException(AccountBizReturnCode.paramError, "用户同意声优服务完成参数异常");
+			throw new BizException(AccountBizReturnCode.paramError, "请稍后重试");
 		}
 
 		LOGGER.info("======>>>>>custConfirmFinish()入参：" + request.toString());
@@ -992,7 +992,7 @@ public class OrderServiceImpl implements IOrderService {
 	@Override
 	public CommonResponse confirmOrder(ConfirmOrderRequest request) {
 		if (request == null || request.getOrderId() == null) {
-			throw new BizException(AccountBizReturnCode.paramError, "同意/拒绝订单参数异常");
+			throw new BizException(AccountBizReturnCode.paramError, "请稍后重试");
 		}
 		LOGGER.info("======>>>>>confirmOrder()入参：" + request.toString());
 		Long orderId = request.getOrderId();
@@ -1085,7 +1085,7 @@ public class OrderServiceImpl implements IOrderService {
 	@Override
 	public CommonResponse dvReceiveOrder(DvReceiveOrderRequest request) {
 		if (request == null || request.getOrderId() == null || request.getType() == null) {
-			throw new BizException(AccountBizReturnCode.paramError, "声优同意/拒绝订单参数异常");
+			throw new BizException(AccountBizReturnCode.paramError, "请稍后重试");
 		}
 
 		LOGGER.info("======>>>>>dvReceiveOrder()入参：" + request.toString());
@@ -1218,7 +1218,7 @@ public class OrderServiceImpl implements IOrderService {
 	@Override
 	public CommonResponse dvStartService(DvStartServiceRequest request) {
 		if (request == null || request.getOrderId() == null) {
-			throw new BizException(AccountBizReturnCode.paramError, "声优立即开始参数异常");
+			throw new BizException(AccountBizReturnCode.paramError, "请稍后重试");
 		}
 		LOGGER.info("======>>>>>dvStartService()入参：" + request.toString());
 		Long orderId = request.getOrderId();
@@ -1287,7 +1287,7 @@ public class OrderServiceImpl implements IOrderService {
 	@Override
 	public CommonResponse finishOrder(FinishOrderRequest request) {
 		if (request == null || request.getOrderId() == null || request.getType() == null) {
-			throw new BizException(AccountBizReturnCode.paramError, "用户/声优完成服务参数异常");
+			throw new BizException(AccountBizReturnCode.paramError, "请稍后重试");
 		}
 
 		LOGGER.info("======>>>>>finishOrder()入参：" + request.toString());
@@ -1421,7 +1421,7 @@ public class OrderServiceImpl implements IOrderService {
 	@Override
 	public CommonResponse queryIngOrderCount(QueryIngOrderCountRequest request) {
 		if (request == null || request.getBuyerId() == null || request.getSellerId() == null) {
-			throw new BizException(AccountBizReturnCode.paramError, "查询进行中订单数量参数异常");
+			throw new BizException(AccountBizReturnCode.paramError, "请稍后重试");
 		}
 		LOGGER.info("======>>>>>queryIngOrderCount()入参：" + request.toString());
 		Long buyerId = request.getBuyerId();

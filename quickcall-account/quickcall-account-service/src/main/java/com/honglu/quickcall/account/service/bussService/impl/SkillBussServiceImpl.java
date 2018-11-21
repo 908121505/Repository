@@ -53,7 +53,7 @@ public class SkillBussServiceImpl implements ISkillBussService {
 	@Override
 	public CommonResponse querySkillInfoPersonal(SkillInfoRequest request) {
 		if (request == null || request.getCustomerId() == null) {
-			throw new BizException(AccountBizReturnCode.paramError, "查询技能信息参数异常");
+			throw new BizException(AccountBizReturnCode.paramError, "请稍后重试");
 		}
 		Long  customerId =  request.getCustomerId();
 //		String customerJson = JedisUtil.get(RedisKeyConstants.USER_CUSTOMER_INFO+request.getCustomerId());
@@ -75,7 +75,7 @@ public class SkillBussServiceImpl implements ISkillBussService {
 	@Override
 	public CommonResponse updateSkillInfoPersonal(SkillUpdateRequest request) {
 		if (request == null ) {
-			throw new BizException(AccountBizReturnCode.paramError, "更改技能参数异常");
+			throw new BizException(AccountBizReturnCode.paramError, "请稍后重试");
 		}
 		String customerJson = JedisUtil.get(RedisKeyConstants.USER_CUSTOMER_INFO+request.getCustomerId());
 		if(StringUtils.isEmpty(customerJson)){
@@ -93,7 +93,7 @@ public class SkillBussServiceImpl implements ISkillBussService {
 	@Override
 	public CommonResponse getFirstPageDaVinfo(FirstPageDaVinfoRequest request) {
 		if (request == null) {
-			throw new BizException(AccountBizReturnCode.paramError, "查询首页大V列表参数异常");
+			throw new BizException(AccountBizReturnCode.paramError, "请稍后重试");
 		}
 		//首先查询所有的技能信息
 		List<DaVinfoListVO>   resultList = new ArrayList<>();
@@ -114,7 +114,7 @@ public class SkillBussServiceImpl implements ISkillBussService {
 	@Override
 	public CommonResponse getFirstPageSkillItemInfo(FirstPageSkillinfoRequest request) {
 		if (request == null ) {
-			throw new BizException(AccountBizReturnCode.paramError, "查询技能列表参数异常");
+			throw new BizException(AccountBizReturnCode.paramError, "请稍后重试");
 		}
 		List<FirstPageSkillIteminfoVO>   resultList = productSkillService.selectPartSkill();
 		CommonResponse commonResponse = commonService.getCommonResponse();
@@ -128,7 +128,7 @@ public class SkillBussServiceImpl implements ISkillBussService {
 	@Override
 	public CommonResponse getDaVListBySkillItemId(DaVListBySkillItemIdRequest request) {
 		if (request == null ) {
-			throw new BizException(AccountBizReturnCode.paramError, "查询技能大V参数异常");
+			throw new BizException(AccountBizReturnCode.paramError, "请稍后重试");
 		}
 		Long  skillItemId = request.getSkillItemId();
 		List<DaVinfoVO>    resultList = productSkillService.getDaVListBySkillId(skillItemId);
@@ -143,7 +143,7 @@ public class SkillBussServiceImpl implements ISkillBussService {
 	@Override
 	public CommonResponse checkReceiveSwitch(CheckReceiveSwitchRequest request) {
 		if (request == null ) {
-			throw new BizException(AccountBizReturnCode.paramError, "检查声优接单开关是否开启参数异常");
+			throw new BizException(AccountBizReturnCode.paramError, "请稍后重试");
 		}
 		Long  customerId = request.getCustomerId();
 		Integer     retType = productSkillService.checkReceiveSwitch(customerId);
@@ -158,7 +158,7 @@ public class SkillBussServiceImpl implements ISkillBussService {
 	@Override
 	public CommonResponse openReceiveSwitch(OpenReceiveSwitchRequest request) {
 		if (request == null ) {
-			throw new BizException(AccountBizReturnCode.paramError, "开启声优接单开关参数异常");
+			throw new BizException(AccountBizReturnCode.paramError, "请稍后重试");
 		}
 		Long  customerId = request.getCustomerId();
 		productSkillService.openReceiveSwitch(customerId);
