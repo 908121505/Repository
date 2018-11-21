@@ -84,6 +84,9 @@
       <if test="channel != null" >
         channel = #{channel,jdbcType=VARCHAR},
       </if>
+      <if test="phoneType != null" >
+        phone_type = #{phoneType,jdbcType=VARCHAR},
+      </if>
       <if test="createTime != null" >
         create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>

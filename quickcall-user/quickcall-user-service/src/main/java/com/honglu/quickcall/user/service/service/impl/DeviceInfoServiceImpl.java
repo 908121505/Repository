@@ -57,6 +57,7 @@ public class DeviceInfoServiceImpl implements DeviceInfoService {
             DeviceInfo deviceInfo = new DeviceInfo();
             deviceInfo.setAppVersion(appVersion);
             deviceInfo.setChannel(channel);
+            deviceInfo.setPhoneType(phoneType);
             deviceInfo.setDeviceId(deviceId);
             deviceInfoMapper.updateDeviceInfo(deviceInfo);
         }
