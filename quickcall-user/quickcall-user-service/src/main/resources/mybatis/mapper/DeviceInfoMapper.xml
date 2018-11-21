@@ -4,7 +4,7 @@
 
   <select id="queryDeviceInfoByDdeviceId" resultType="int">
         select count(1)
-        from device_info where device_id = #{deviceId,jdbcType=BIGINT}
+        from device_info where device_id = #{deviceId,jdbcType=VARCHAR}
    </select>
 
   <insert id="insertDeviceInfo" useGeneratedKeys="true" keyProperty="id" parameterType="com.honglu.quickcall.user.facade.entity.DeviceInfo">
@@ -46,7 +46,7 @@
         #{id,jdbcType=BIGINT},
       </if>
       <if test="deviceId != null" >
-        #{deviceId,jdbcType=BIGINT},
+        #{deviceId,jdbcType=VARCHAR},
       </if>
       <if test="phoneType != null" >
         #{phoneType,jdbcType=VARCHAR},
@@ -81,8 +81,8 @@
       <if test="appVersion != null" >
         app_version = #{appVersion,jdbcType=VARCHAR},
       </if>
-      <if test="phoneType != null" >
-        phone_type = #{phoneType,jdbcType=VARCHAR},
+      <if test="channel != null" >
+        channel = #{channel,jdbcType=VARCHAR},
       </if>
       <if test="createTime != null" >
         create_time = #{createTime,jdbcType=TIMESTAMP},
@@ -100,6 +100,6 @@
         remark = #{remark,jdbcType=VARCHAR},
       </if>
     </set>
-    where device_id = #{deviceId,jdbcType=BIGINT}
+    where device_id = #{deviceId,jdbcType=VARCHAR}
   </update>
 </mapper>
