@@ -275,6 +275,9 @@
       <if test="gtClientId != null" >
         gt_client_id,
       </if>
+      <if test="loginDeviceId != null" >
+        login_device_id,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="customerId != null" >
@@ -406,6 +409,9 @@
       <if test="gtClientId != null" >
         #{gtClientId},
       </if>
+      <if test="loginDeviceId != null" >
+        #{loginDeviceId,jdbcType=VARCHAR},
+      </if>
     </trim>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="com.honglu.quickcall.user.facade.entity.Customer" >
@@ -533,6 +539,9 @@
       </if>
       <if test="custState != null and custState!=''" >
         cust_state = #{custState},
+      </if>
+      <if test="loginDeviceId != null and loginDeviceId!=''" >
+        login_device_id = #{loginDeviceId,jdbcType=VARCHAR},
       </if>
     </set>
     where customer_id = #{customerId,jdbcType=BIGINT}
