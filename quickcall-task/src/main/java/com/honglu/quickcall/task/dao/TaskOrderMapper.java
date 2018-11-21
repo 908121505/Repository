@@ -67,6 +67,15 @@ public interface TaskOrderMapper {
 	 * @param skillType
 	 */
 	List<TaskOrder>  queryOrderStatusAfter12HourCust(@Param("endTime")Date  endTime,@Param("queryStatus")Integer queryStatus ,@Param("updateStatus")Integer  updateStatus,@Param("queryEndTime")Date  queryEndTime,@Param("queryStatusExt")Integer  queryStatusExt,@Param("currTime")Date  currTime);
+	/**
+	 *用户12小时未响应大V结束服务
+	 * @param currTime
+	 * @param endTime
+	 * @param queryStatus
+	 * @param updateStatus
+	 * @param skillType
+	 */
+	List<TaskOrder>  queryOrderStatusAfter12HourCustFor31(@Param("endTime")Date  endTime,@Param("queryStatus")Integer queryStatus ,@Param("queryEndTime")Date  queryEndTime,@Param("currTime")Date  currTime,@Param("createMan")String  createMan);
 	
 	
 	
@@ -127,6 +136,12 @@ public interface TaskOrderMapper {
 
 
 	/**
+	 * 声优释放
+	 * @param updateStatus
+	 * @param statusList
+	 */
+	void  updateOrderStatusForRelease(@Param("updateStatus")Integer  updateStatus,@Param("list")List<Long>  orderIdList,@Param("modifyTime")Date  modifyTime,@Param("createMan")String  createMan);
+	/**
 	 * 根据订单ID列表更新订单状态
 	 * @param updateStatus
 	 * @param statusList
@@ -146,6 +161,12 @@ public interface TaskOrderMapper {
 	 * @param statusList
 	 */
 	void  updateOrderStatusForFinish(@Param("updateStatus")Integer  updateStatus,@Param("list")List<Long>  orderIdList,@Param("finishTime")Date  finishTime,@Param("modifyTime")Date  modifyTime);
+	/**
+	 * 根据订单ID列表更新订单状态
+	 * @param updateStatus
+	 * @param statusList
+	 */
+	void  updateOrderStatusFor31(@Param("list")List<Long>  orderIdList,@Param("finishTime")Date  finishTime,@Param("modifyTime")Date  modifyTime);
 	
 	
 	/**
