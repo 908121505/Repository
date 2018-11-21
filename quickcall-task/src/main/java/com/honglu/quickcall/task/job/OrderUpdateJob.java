@@ -266,11 +266,12 @@ public class OrderUpdateJob {
     		//获取接单设置超时
     		Integer  queryStatus = OrderSkillConstants.ORDER_STATUS_GOING_DAV_APPAY_FINISH;
     		Integer  queryStatusExt = OrderSkillConstants.ORDER_STATUS_FINISH_DV_RELEASE;
+    		Integer  queryStatus31 = OrderSkillConstants.ORDER_STATUS_GOING_USER_NOT_PING_JIA;
     		Integer  updateStatus = OrderSkillConstants.ORDER_STATUS_FINISH_DV_FINISH;
     		
     		Date  queryEndTime =  getEndTimeByAddDays(-10);
     		//服务完成，声优金额冻结
-    		List<TaskOrder>  orderList = taskOrderMapper.queryOrderStatusAfter12HourCust(endTime, queryStatus, updateStatus, queryEndTime,queryStatusExt,currTime);
+    		List<TaskOrder>  orderList = taskOrderMapper.queryOrderStatusAfter12HourCust(endTime, queryStatus, updateStatus, queryEndTime,queryStatusExt,queryStatus31,currTime);
     		freezeToService(orderList);
     		updateOrderStatusByOrderListForFinish(orderList, updateStatus);
     		sendMsgByOrderList(orderList, CANCEL_FOUR);

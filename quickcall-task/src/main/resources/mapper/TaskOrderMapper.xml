@@ -134,7 +134,7 @@
 		FROM  
 		   orders
 		WHERE
-			order_status in ( #{queryStatus}  ,#{queryStatusExt})
+			order_status in ( #{queryStatus}  ,#{queryStatusExt},#{queryStatus31})
 		AND expect_end_time <![CDATA[ < ]]> #{endTime}
 		<!-- AND create_time <![CDATA[ > ]]>  #{queryEndTime} -->
 		<!-- AND expect_end_time <![CDATA[ < ]]> #{currTime} -->
