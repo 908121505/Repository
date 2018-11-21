@@ -134,7 +134,8 @@
 		FROM  
 		   orders
 		WHERE
-			order_status in ( #{queryStatus}  ,#{queryStatusExt},#{queryStatus31})
+			order_status in ( #{queryStatus}  ,#{queryStatusExt})
+		OR (order_status = #{queryStatus31}  AND create_man = #{createMan})
 		AND expect_end_time <![CDATA[ < ]]> #{endTime}
 		<!-- AND create_time <![CDATA[ > ]]>  #{queryEndTime} -->
 		<!-- AND expect_end_time <![CDATA[ < ]]> #{currTime} -->
@@ -272,6 +273,21 @@
   </update>
   
   
+<!-- 声优自动释放标识 -->
+  <update id="updateOrderStatusForRelease"  >
+    
+		UPDATE 
+			orders
+		SET 
+			create_man = #{createMan},
+		 	order_status = #{updateStatus},
+		 	modify_time = #{modifyTime}
+		WHERE
+			order_id  IN 
+			<foreach collection="list" item="orderId"    open="("  close=")"  separator=",">
+			#{orderId}
+			</foreach>
+  </update>
 <!-- 叫醒自动转为进行中状态 -->
   <update id="updateOrderStatusForAppointGoing"  >
     

@@ -66,7 +66,7 @@ public interface TaskOrderMapper {
 	 * @param updateStatus
 	 * @param skillType
 	 */
-	List<TaskOrder>  queryOrderStatusAfter12HourCust(@Param("endTime")Date  endTime,@Param("queryStatus")Integer queryStatus ,@Param("updateStatus")Integer  updateStatus,@Param("queryEndTime")Date  queryEndTime,@Param("queryStatusExt")Integer  queryStatusExt,@Param("queryStatus31")Integer  queryStatus31,@Param("currTime")Date  currTime);
+	List<TaskOrder>  queryOrderStatusAfter12HourCust(@Param("endTime")Date  endTime,@Param("queryStatus")Integer queryStatus ,@Param("updateStatus")Integer  updateStatus,@Param("queryEndTime")Date  queryEndTime,@Param("queryStatusExt")Integer  queryStatusExt,@Param("queryStatus31")Integer  queryStatus31,@Param("currTime")Date  currTime,@Param("createMan")String  createMan);
 	
 	
 	
@@ -126,6 +126,12 @@ public interface TaskOrderMapper {
 
 
 
+	/**
+	 * 根据订单ID列表更新订单状态
+	 * @param updateStatus
+	 * @param statusList
+	 */
+	void  updateOrderStatusForRelease(@Param("updateStatus")Integer  updateStatus,@Param("list")List<Long>  orderIdList,@Param("modifyTime")Date  modifyTime,@Param("createMan")String  createMan);
 	/**
 	 * 根据订单ID列表更新订单状态
 	 * @param updateStatus
