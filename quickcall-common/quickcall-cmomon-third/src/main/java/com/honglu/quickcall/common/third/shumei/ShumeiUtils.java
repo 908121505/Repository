@@ -21,6 +21,7 @@ import com.honglu.quickcall.common.constants.PropertiesConstant;
 import com.honglu.quickcall.common.third.shumei.reponse.WordFilterResponse;
 import com.honglu.quickcall.common.third.shumei.request.AudioFilterRequest;
 import com.honglu.quickcall.common.third.shumei.request.ImageFilterRequest;
+import com.honglu.quickcall.common.third.shumei.request.ImageFilterRequest.Image;
 import com.honglu.quickcall.common.third.shumei.request.WordFilterRquest;
 
 /**
@@ -29,14 +30,14 @@ import com.honglu.quickcall.common.third.shumei.request.WordFilterRquest;
  * @author zhaozheyi
  *
  */
-public class ShumeiUtils {
+public class ShumeiUtils {/*
 	private static Logger logger = LoggerFactory.getLogger(HttpClientUtils.class);
 
-	/**
+	*//**
 	 * 
 	 * @param wfr
 	 * @return 文字审核
-	 */
+	 *//*
 	public static WordFilterResponse wordSensitiveFilter(WordFilterRquest wfr) {
 		HashMap<String, Object> paramMap = new HashMap<>();
 		paramMap.put("accessKey", PropertiesConstant.accessKey);
@@ -62,45 +63,44 @@ public class ShumeiUtils {
 		return response;
 	}
 
-	/**
+	*//**
 	 * 图片过滤
 	 * 
 	 * @param requestParam
-	 */
+	 *//*
 	public static void imageSensitiveFilter(ImageFilterRequest requestParam) {
 		HashMap<String, Object> paramMap = new HashMap<>();
 		paramMap.put("accessKey", PropertiesConstant.accessKey);
 		paramMap.put("appId", PropertiesConstant.appId);
 		paramMap.put("type", PropertiesConstant.IMGType);
-		paramMap.put("callback", PropertiesConstant.imgCallbackUrl);
+		//paramMap.put("callback", PropertiesConstant.imgCallbackUrl);
 		paramMap.put("data", requestParam);
 		String json = JSON.toJSONString(paramMap, true);
 		logger.info("图片过滤请求数美数据：" + json);
 		String res = doPost(PropertiesConstant.SENSITIVEIMAGEURL, json);
 		logger.info("图片过滤数美同步返回数据：" + res);
 	}
-
-	public static String AudioSensitiveFilter(AudioFilterRequest requestParam) {
+	*//**
+	 * 音频过滤
+	 * @param requestParam
+	 *//*
+	public static void AudioSensitiveFilter(AudioFilterRequest requestParam) {
 		HashMap<String, Object> paramMap = new HashMap<>();
 		paramMap.put("accessKey", PropertiesConstant.accessKey);
 		paramMap.put("type", PropertiesConstant.AUDIOTYPE);
+		paramMap.put("appId", PropertiesConstant.appId);
 		paramMap.put("btid", requestParam.getBtid());
-		paramMap.put("callback", PropertiesConstant.audCallbackUrl);
+		//paramMap.put("callback", PropertiesConstant.audCallbackUrl);
 		paramMap.put("data", requestParam);
 		String json = JSON.toJSONString(paramMap, true);
 		String res = doPost(PropertiesConstant.SENSITIVEAUDIOURL, json);
-		if (res != null) {
-			JSONObject object = JSON.parseObject(res);
-			// 同步返回唯一标示
-			String requestId = object.getString("requestId");
-			return requestId;
-		}
-		return null;
+		logger.info("数美音频过滤同步返回数据："+res);
+		// 同步返回唯一标示
 	}
 
-	/*
+	
 	 * 利用HttpClient进行post请求的工具类
-	 */
+	 
 	private static String doPost(String url, String json) {
 
 		String returnValue = null;
@@ -138,22 +138,29 @@ public class ShumeiUtils {
 	}
 
 	public static void main(String[] args) {
-		// wordSensitiveFilter(new WordFilterRquest("毛泽东", "12312312312",
-		// "123"));
-		/*
-		 * ImageFilterRequest requestParam = new ImageFilterRequest(); Image
-		 * image = new Image(); Image image2 = new Image(); Image image3 = new
-		 * Image(); image.setImg(
-		 * "https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=667028489,1503194141&fm=200&gp=0.jpg"
-		 * ); image.setBtId("图片唯一标示"); image3.setBtId("图片唯一标示3"); image2.setImg(
-		 * "https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=1808185461,3849564117&fm=200&gp=0.jpg"
-		 * ); image3.setImg(
-		 * "https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=2478918814,2901666318&fm=200&gp=0.jpg"
-		 * ); image2.setBtId("图片唯一标示2"); requestParam.setImgs(new
-		 * Image[]{image,image2,image3}); requestParam.setTokenId("tokenId");
-		 * imageSensitiveFilter(requestParam);
-		 */
-		String str1 = PropertiesConstant.accessKey;
-		System.out.println(str1);
+		 wordSensitiveFilter(new WordFilterRquest("毛泽东", "12312312312",
+"123"));
+		
+		  ImageFilterRequest requestParam = new ImageFilterRequest(); Image
+		  image = new Image(); 
+		  Image image2 = new Image(); 
+		  Image image3 = new Image(); image.setImg(
+		  "https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=667028489,1503194141&fm=200&gp=0.jpg"
+		  ); image.setBtId("图片唯一标示"); image3.setBtId("图片唯一标示3"); image2.setImg(
+		  "https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=1808185461,3849564117&fm=200&gp=0.jpg"
+		  ); image3.setImg(
+		  "https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=2478918814,2901666318&fm=200&gp=0.jpg"
+		  ); image2.setBtId("图片唯一标示2"); requestParam.setImgs(new
+		  Image[]{image,image2,image3}); requestParam.setTokenId("tokenId");
+		  imageSensitiveFilter(requestParam);
+		 
+		AudioFilterRequest request = new AudioFilterRequest();
+		request.setAudioName("测试1");
+		request.setBtid("音频唯一标示");
+		request.setChannel("声优");
+		request.setIp("127.0.0.0");
+		request.setTokenId("用户唯一标示");
+		request.setUrl("http://voice-oss.oss-cn-shanghai.aliyuncs.com/voice/user/skillVoice/9281158e7a37449d91614f7c7a1c2d90.mp3");
+		AudioSensitiveFilter(request);
 	}
-}
+*/}
