@@ -11,11 +11,26 @@ import java.util.List;
  **/
 public class ActivityCouponVo {
 
-	private String activityName;//活动名'
-	private String startTime;//活动的起始时间'
-	private String endTime;//活动的结束时间'
-	private List<CouponVo> coupons;//券
-
+	/**
+	 * 活动名
+	 */
+	private String activityName;
+	/**
+	 *活动的起始时间
+	 */
+	private String startTime;
+	/**
+	 *活动的结束时间
+	 */
+	private String endTime;
+	/**
+	 *券
+	 */
+	private List<CouponVo> coupons;
+	/**
+	 * 服务器当前时间
+	 */
+	private String nowTime;
 
 	public String getActivityName() {
 		return activityName;
@@ -47,5 +62,13 @@ public class ActivityCouponVo {
 
 	public void setCoupons(List<CouponVo> coupons) {
 		this.coupons = coupons;
+	}
+
+	public String getNowTime() {
+		return nowTime;
+	}
+
+	public void setNowTime(String nowTime) {
+		this.nowTime = nowTime;
 	}
 }

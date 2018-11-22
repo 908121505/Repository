@@ -127,6 +127,8 @@ public class CustomerCouponService {
             String couponId = "";
             if(cov!=null && cov.getCouponId()!=null){
                 couponId = cov.getCouponId();
+            }else{
+                cov = new CouponOrderVo();
             }
             //空-没查到，不显示
             if(StringUtils.isBlank(couponId)){
