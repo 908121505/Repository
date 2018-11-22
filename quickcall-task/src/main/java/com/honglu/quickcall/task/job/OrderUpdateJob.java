@@ -99,6 +99,8 @@ public class OrderUpdateJob {
     private final static  Integer   RECEIVE_OVER_TIME_MINUTES = -15;
     /**立即服务超时分钟数   扣减5分钟*/
     private final static  Integer   START_OVER_TIME_MINUTES = -5;
+    /**订单创建人默认值，用于标记该订单曾经是33状态*/
+    private final static  String   CREATE_MAN_DEFAULT_VALUE = "IM33";
     
     
     
@@ -107,7 +109,7 @@ public class OrderUpdateJob {
     //接单设置
     
     /***声优15分钟未接单超时*/
-    @Scheduled(cron = "5 * * * * ?")
+//    @Scheduled(cron = "5 * * * * ?")
     public void updateOrderStatusReceiveOrder() {
     	
     	
@@ -141,7 +143,7 @@ public class OrderUpdateJob {
 
     
     /**声优5分钟未发起立即服务超时*/
-    @Scheduled(cron = "10 * * * * ?")
+//    @Scheduled(cron = "10 * * * * ?")
     public void updateOrderStatusDvStartService() {
     	LOGGER.info("=============声优5分钟未发起立即服务超时自动任务开始=================");
     	try {
@@ -169,7 +171,7 @@ public class OrderUpdateJob {
     
     
     /**用户5分钟未响应声优发起立即服务超时*/
-    @Scheduled(cron = "15 * * * * ?")
+//    @Scheduled(cron = "15 * * * * ?")
     public void updateOrderStatusCustNotConfirmStartService() {
     	LOGGER.info("=============用户5分钟未响应声优发起立即服务超时自动任务开始=================");
     	try {
@@ -210,7 +212,7 @@ public class OrderUpdateJob {
     		//声优服务时间内发起结束服务，到预期结束时间，释放声优，使声优可以继续接单
     		List<TaskOrder>  orderList = taskOrderMapper.queryReleaseDaV(currTime, queryStatus);
 //    		refundToCustomer(orderList,CANCEL_THREE);
-    		updateOrderStatusByOrderListForCancel(orderList, updateStatus,false);
+    		updateOrderStatusByOrderListForRelease(orderList, updateStatus);
     	} catch (Exception e) {
     		LOGGER.error("声优服务时间内发起结束服务，到预期结束时间，释放声优定时任务执行发生异常，异常信息：", e);
     	}
@@ -219,7 +221,7 @@ public class OrderUpdateJob {
     
     
     /**叫醒服务达到预约时间自动转为进行中*/
-    @Scheduled(cron = "0 * * * * ?")
+//    @Scheduled(cron = "0 * * * * ?")
     public void updateOrderStatusAppointGoing() {
     	LOGGER.info("=============叫醒服务达到预约时间自动转为进行中自动任务开始=================");
     	try {
@@ -235,7 +237,7 @@ public class OrderUpdateJob {
     		Integer  skillType = OrderSkillConstants.SKILL_TYPE_NO;
     		Date  queryEndTime =  getEndTimeByAddDays(-10);
     		List<TaskOrder>  orderList = taskOrderMapper.queryAppointOrderGoing(currTime,endTime, queryStatus, updateStatus, skillType,queryEndTime);
-    		updateOrderStatusByOrderListForCancel(orderList, updateStatus,false);
+    		updateOrderStatusByOrderListAppointGoing(orderList, updateStatus);
 //    		taskOrderMapper.appointOrderGoing(currTime,endTime, queryStatus, updateStatus, skillType,queryEndTime);
     	} catch (Exception e) {
     		LOGGER.error("叫醒服务达到预约时间自动转为进行中job执行发生异常，异常信息：", e);
@@ -274,6 +276,21 @@ public class OrderUpdateJob {
     		freezeToService(orderList);
     		updateOrderStatusByOrderListForFinish(orderList, updateStatus);
     		sendMsgByOrderList(orderList, CANCEL_FOUR);
+    		
+    		//单独处理31状态
+    		queryStatus = OrderSkillConstants.ORDER_STATUS_GOING_USER_NOT_PING_JIA;
+    		orderList = taskOrderMapper.queryOrderStatusAfter12HourCustFor31(endTime, queryStatus, queryEndTime,currTime,CREATE_MAN_DEFAULT_VALUE);
+    		freezeToService(orderList);
+    		updateOrderStatusByOrderListFor31(orderList);
+    		sendMsgByOrderList(orderList, CANCEL_FOUR);
+    		
+    		
+    		
+    		
+    		
+    		
+    		
+    		
     	} catch (Exception e) {
     		LOGGER.error("客户单方面未响应声优结束服务12小时超时job执行发生异常，异常信息：", e);
     	}
@@ -283,7 +300,7 @@ public class OrderUpdateJob {
     /**
      * 扫描频率控制在一分钟一次
      */
-    @Scheduled(cron = "30 * * * * ?")
+//    @Scheduled(cron = "30 * * * * ?")
     public void updateOrderStatusAfter12HourBoth() {
     	LOGGER.info(">>>>>>>>>>>>>>>>>>客户声优双方未响应声优结束服务12小时超时job开始<<<<<<<<<<<<<<<<<<<<<");
     	try {
@@ -316,6 +333,50 @@ public class OrderUpdateJob {
     
     
     /**
+     * 
+     * @param orderList
+     * @param updateOrderStatus
+     */
+    
+    /**
+     * 根据订单ID批量更新订单信息，叫醒订单自动进入进行中专用
+     * @param orderList
+     * @param updateOrderStatus
+     */
+    public  void  updateOrderStatusByOrderListAppointGoing(List<TaskOrder>  orderList,Integer  updateOrderStatus){
+    	
+    	if(!CollectionUtils.isEmpty(orderList)){
+    		List<Long>  orderIdList =  new ArrayList<Long>();
+    		for (TaskOrder order : orderList) {
+    			orderIdList.add(order.getOrderId());
+    		}
+    		
+    		taskOrderMapper.updateOrderStatusForAppointGoing(updateOrderStatus, orderIdList,new Date());
+    		
+    		
+    	}
+    }
+    
+    /**
+     * 声优释放
+     * @param orderList
+     * @param updateOrderStatus
+     */
+    public  void  updateOrderStatusByOrderListForRelease(List<TaskOrder>  orderList,Integer  updateOrderStatus){
+    	
+    	if(!CollectionUtils.isEmpty(orderList)){
+    		List<Long>  orderIdList =  new ArrayList<Long>();
+    		
+    		for (TaskOrder order : orderList) {
+    			orderIdList.add(order.getOrderId());
+    		}
+    		
+    		if(!CollectionUtils.isEmpty(orderIdList)){
+    			taskOrderMapper.updateOrderStatusForRelease(updateOrderStatus, orderIdList,new Date(),CREATE_MAN_DEFAULT_VALUE);
+    		}
+    	}
+    }
+    /**
      * 根据订单ID批量更新订单信息
      * @param orderList
      * @param updateOrderStatus
@@ -334,17 +395,38 @@ public class OrderUpdateJob {
     			}
     		}
     		
-    		taskOrderMapper.updateOrderStatus(updateOrderStatus, orderIdList,new Date(),null,new Date());
+    		if(!CollectionUtils.isEmpty(orderIdList)){
+    			taskOrderMapper.updateOrderStatus(updateOrderStatus, orderIdList,new Date(),null,new Date());
+    		}
     		//用户所得券返回给用户
     		if(cancelCouponFlag){
     			try {
-    				taskCustomerCouponMapper.batchUpdateCustomerCoupon(orderIdCouponList, OrderSkillConstants.ORDER_COUPON_FLAG_CANCEL);
+    				if(!CollectionUtils.isEmpty(orderIdCouponList)){
+    					taskCustomerCouponMapper.batchUpdateCustomerCoupon(orderIdCouponList, OrderSkillConstants.ORDER_COUPON_FLAG_CANCEL);
+    				}
     			} catch (Exception e) {
     				LOGGER.error("用户券返还发生异常，异常信息：",e);
     			}
     		}
     		
     		
+    	}
+    }
+    
+    
+    /**
+     * 根据订单ID批量更新订单信息
+     * @param orderList
+     * @param updateOrderStatus
+     */
+    public  void  updateOrderStatusByOrderListFor31(List<TaskOrder>  orderList){
+    	
+    	if(!CollectionUtils.isEmpty(orderList)){
+    		List<Long>  orderIdList =  new ArrayList<Long>();
+    		for (TaskOrder order : orderList) {
+    			orderIdList.add(order.getOrderId());
+    		}
+    		taskOrderMapper.updateOrderStatusFor31(orderIdList,new Date(),new Date());
     	}
     }
     /**

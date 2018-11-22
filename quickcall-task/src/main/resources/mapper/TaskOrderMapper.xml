@@ -140,6 +140,26 @@
 		<!-- AND expect_end_time <![CDATA[ < ]]> #{currTime} -->
   </select>
   
+  <!-- 单独处理31状态 -->
+  <select id="queryOrderStatusAfter12HourCustFor31"   resultType="com.honglu.quickcall.task.entity.TaskOrder" >
+		SELECT
+		order_id  AS orderId ,
+			customer_id AS customerId,
+			service_id AS serviceId,
+			order_amounts AS orderAmounts,
+			coupon_flag AS couponFlag,
+			skill_item_id  AS  skillItemId
+			
+		FROM  
+		   orders
+		WHERE
+			order_status =  #{queryStatus}
+		AND create_man = #{createMan}
+		AND expect_end_time <![CDATA[ < ]]> #{endTime}
+		<!-- AND create_time <![CDATA[ > ]]>  #{queryEndTime} -->
+		<!-- AND expect_end_time <![CDATA[ < ]]> #{currTime} -->
+  </select>
+  
   
   <!-- ///////////////////////////////////////////////////////////////////-->
   
@@ -270,6 +290,38 @@
 			#{orderId}
 			</foreach>
   </update>
+<!-- 声优释放 -->
+  <update id="updateOrderStatusForRelease"  >
+    
+		UPDATE 
+			orders
+		SET 
+			create_man = #{createMan},
+		 	order_status = #{updateStatus},
+		 	modify_time = #{modifyTime}
+		WHERE
+			order_id  IN 
+			<foreach collection="list" item="orderId"    open="("  close=")"  separator=",">
+				#{orderId}
+			</foreach>
+  </update>
+  
+  
+<!-- 叫醒自动转为进行中状态 -->
+  <update id="updateOrderStatusForAppointGoing"  >
+    
+		UPDATE 
+			orders
+		SET 
+			start_time = #{startTime},
+		 	order_status = #{updateStatus},
+		 	modify_time = #{startTime}
+		WHERE
+			order_id  IN 
+			<foreach collection="list" item="orderId"    open="("  close=")"  separator=",">
+			#{orderId}
+			</foreach>
+  </update>
 <!-- 用户未接立即服务超时超时 -->
   <update id="updateOrderStatusForFinish"  >
     
@@ -279,6 +331,21 @@
 			end_time = #{finishTime},
 		 	order_status = #{updateStatus},
 		 	modify_time = #{modifyTime}
+		WHERE
+			order_id  IN 
+			<foreach collection="list" item="orderId"    open="("  close=")"  separator=",">
+			#{orderId}
+			</foreach>
+  </update>
+<!-- 用户未接立即服务超时超时 -->
+  <update id="updateOrderStatusFor31"  >
+    
+		UPDATE 
+			orders
+		SET 
+			end_time = #{finishTime},
+		 	modify_time = #{modifyTime},
+		 	create_man = null
 		WHERE
 			order_id  IN 
 			<foreach collection="list" item="orderId"    open="("  close=")"  separator=",">

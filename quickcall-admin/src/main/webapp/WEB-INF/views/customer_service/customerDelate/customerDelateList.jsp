@@ -231,7 +231,7 @@
 		                   aoData.push({"name": "handleStatus", "value": $("#handleStatus").val()});
 	                    },
 	                    aoColumnDefs : [ {
-							"aTargets" : 8,
+							"aTargets" : 10,
 							"mRender" : function(data,type, row) {
 								var detail = "",del = "";
 								<shiro:hasPermission name="customerDelate:update">
@@ -249,7 +249,8 @@
 				 $('#query').click(function(){
 					$('#example').dataTable().fnDraw();
 				});
-			
+
+
 			});
 			//增加或者修改受影响的行数
 			function addAndUpdateRow(id){

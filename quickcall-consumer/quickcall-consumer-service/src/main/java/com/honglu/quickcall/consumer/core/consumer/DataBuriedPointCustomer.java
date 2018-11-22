@@ -120,6 +120,8 @@ public class DataBuriedPointCustomer {
 //            String type = (String)data.get("type");
 //            LOGGER.info("========开始消费=========");
 
+
+
             if (EventEnums.EVENT_getCode.getValue().equals(type)){
                 dataBuriedPointService.saveGetCodeData(data);
             }else if (EventEnums.EVENT_Sign_up_result.getValue().equals(type)){

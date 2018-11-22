@@ -487,6 +487,7 @@
     set 
       skill_item_id = #{skill.skillItemId,jdbcType=BIGINT},
       skill_item_ext_id = #{skill.skillItemExtId,jdbcType=BIGINT},
+      skill_name = #{skill.skillName,jdbcType=VARCHAR},
       service_unit = #{skill.serviceUnit,jdbcType=VARCHAR},
       skill_price = #{skill.skillPrice,jdbcType=DECIMAL},
       switch_status = #{skill.switchStatus,jdbcType=TINYINT},
@@ -548,7 +549,7 @@
 		SELECT
 			cs.service_unit  AS serviceUnit,
 		  cs.skill_price  AS  servicePrice,
-		  cs.skill_name  AS  skillItemName,
+		  st.skill_item_name  AS  skillItemName,
 		  st.unlock_icon  AS  icon,
 		  cs.customer_skill_id  AS  customerSkillId
 		FROM
@@ -581,7 +582,7 @@
       </if> -->
       <!-- <include refid="SKILL_EXIST_CONDITON"></include> -->
       <!-- AND   cs.appoint_end_time <![CDATA[  > ]]> #{endTime,jdbcType=TIMESTAMP} -->
-      order by  cs.modify_time desc
+      order by  cs.create_time 
       limit 1
   </select>
   

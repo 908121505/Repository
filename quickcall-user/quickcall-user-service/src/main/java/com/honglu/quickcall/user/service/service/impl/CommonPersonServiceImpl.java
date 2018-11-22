@@ -136,7 +136,6 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 		 * 神策埋点
 		 */
 		DataBuriedPointLoginReq req = new DataBuriedPointLoginReq();
-
 		CommonResponse response = new CommonResponse();
 		Customer customer = null;
 		Customer param = new Customer();
@@ -226,10 +225,10 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 
 		// 更新登录信息
 		login.setCustomerId(customer.getCustomerId());
-
 		login.setModifyTime(new Date());
 		login.setGtClientId(params.getGtClientId());
 		login.setCustState(CustomerCusStateEnum.ON_LINE.getType());
+		/*login.setLoginDeviceId(params.getDeviceId());*/
 		customerMapper.updateByPrimaryKeySelective(login);
 		customer = customerMapper.selectByPrimaryKey(customer.getCustomerId());
 		JedisUtil.set(RedisKeyConstants.USER_CUSTOMER_INFO + customer.getCustomerId(),
@@ -455,7 +454,7 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 		customer.setWechatOpenId(request.getWechatOpenId());
 		customer.setPhone(request.getTel());
 		customer.setAppChannelName(request.getAppChannelName());
-		customer.setDeviceId(request.getDeviceNo());
+		/*customer.setLoginDeviceId(request.getDeviceNo());*/
 		customer.setSource(request.getScource());
 		customer.setNickName(
 				StringUtils.isNotBlank(request.getNickName()) ? request.getNickName() : "轻音_" + randomFour());
