@@ -228,7 +228,7 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 		login.setModifyTime(new Date());
 		login.setGtClientId(params.getGtClientId());
 		login.setCustState(CustomerCusStateEnum.ON_LINE.getType());
-		login.setLoginDeviceId(params.getDeviceId());
+		/*login.setLoginDeviceId(params.getDeviceId());*/
 		customerMapper.updateByPrimaryKeySelective(login);
 		customer = customerMapper.selectByPrimaryKey(customer.getCustomerId());
 		JedisUtil.set(RedisKeyConstants.USER_CUSTOMER_INFO + customer.getCustomerId(),
@@ -454,7 +454,7 @@ public class CommonPersonServiceImpl implements CommonPersonService {
 		customer.setWechatOpenId(request.getWechatOpenId());
 		customer.setPhone(request.getTel());
 		customer.setAppChannelName(request.getAppChannelName());
-		customer.setLoginDeviceId(request.getDeviceNo());
+		/*customer.setLoginDeviceId(request.getDeviceNo());*/
 		customer.setSource(request.getScource());
 		customer.setNickName(
 				StringUtils.isNotBlank(request.getNickName()) ? request.getNickName() : "轻音_" + randomFour());
