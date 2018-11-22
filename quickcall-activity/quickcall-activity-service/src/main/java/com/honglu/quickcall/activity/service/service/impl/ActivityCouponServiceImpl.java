@@ -20,9 +20,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * 活动优惠券查询接口
@@ -55,10 +54,15 @@ public class ActivityCouponServiceImpl implements ActivityCouponService {
         map.put("customerId",request.getCustomerId());
         List<CouponVo> tList = couponMapper.queryCouponByActiveIdAndCid(map);
 
+        Date d = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String nowTime = sdf.format(d);
+
         ActivityCouponVo vo = new ActivityCouponVo();
         vo.setActivityName(activityVo.getActivityName());
         vo.setStartTime(activityVo.getStartTimeStr());
         vo.setEndTime(activityVo.getEndTimeStr());
+        vo.setNowTime(nowTime);
         vo.setCoupons(tList);
 
         return ResultUtils.resultSuccess(vo);

@@ -492,7 +492,7 @@ public class OrderServiceImpl implements IOrderService {
 		}
 		
 		Integer  pageStart =  pageIndex * OrderSkillConstants.ORDER_MSG_DEFAULT_PAGE_SIZE ;
-		Integer  pageEnd =  (pageIndex + 1) *  OrderSkillConstants.ORDER_MSG_DEFAULT_PAGE_SIZE;
+		Integer  pageEnd =  /*(pageIndex + 1) * */ OrderSkillConstants.ORDER_MSG_DEFAULT_PAGE_SIZE;
 		
 
 		
