@@ -80,7 +80,7 @@ public class Customer {
 
 	private Date loginTime;
 
-	private String loginDeviceId;
+	/*private String loginDeviceId;*/
 	/** 大V认证声音时长 */
 	private BigDecimal voiceTime;
 	/** 大V自己声音时长 */
@@ -483,11 +483,11 @@ public class Customer {
 		this.customerLevel = customerLevel;
 	}
 
-	public String getLoginDeviceId() {
+/*	public String getLoginDeviceId() {
 		return loginDeviceId;
 	}
 
 	public void setLoginDeviceId(String loginDeviceId) {
 		this.loginDeviceId = loginDeviceId;
-	}
+	}*/
 }
