@@ -109,7 +109,7 @@ public class OrderUpdateJob {
     //接单设置
     
     /***声优15分钟未接单超时*/
-//    @Scheduled(cron = "5 * * * * ?")
+    @Scheduled(cron = "5 * * * * ?")
     public void updateOrderStatusReceiveOrder() {
     	
     	
@@ -143,7 +143,7 @@ public class OrderUpdateJob {
 
     
     /**声优5分钟未发起立即服务超时*/
-//    @Scheduled(cron = "10 * * * * ?")
+    @Scheduled(cron = "10 * * * * ?")
     public void updateOrderStatusDvStartService() {
     	LOGGER.info("=============声优5分钟未发起立即服务超时自动任务开始=================");
     	try {
@@ -171,7 +171,7 @@ public class OrderUpdateJob {
     
     
     /**用户5分钟未响应声优发起立即服务超时*/
-//    @Scheduled(cron = "15 * * * * ?")
+    @Scheduled(cron = "15 * * * * ?")
     public void updateOrderStatusCustNotConfirmStartService() {
     	LOGGER.info("=============用户5分钟未响应声优发起立即服务超时自动任务开始=================");
     	try {
@@ -221,7 +221,7 @@ public class OrderUpdateJob {
     
     
     /**叫醒服务达到预约时间自动转为进行中*/
-//    @Scheduled(cron = "0 * * * * ?")
+    @Scheduled(cron = "0 * * * * ?")
     public void updateOrderStatusAppointGoing() {
     	LOGGER.info("=============叫醒服务达到预约时间自动转为进行中自动任务开始=================");
     	try {
@@ -300,7 +300,7 @@ public class OrderUpdateJob {
     /**
      * 扫描频率控制在一分钟一次
      */
-//    @Scheduled(cron = "30 * * * * ?")
+    @Scheduled(cron = "30 * * * * ?")
     public void updateOrderStatusAfter12HourBoth() {
     	LOGGER.info(">>>>>>>>>>>>>>>>>>客户声优双方未响应声优结束服务12小时超时job开始<<<<<<<<<<<<<<<<<<<<<");
     	try {
