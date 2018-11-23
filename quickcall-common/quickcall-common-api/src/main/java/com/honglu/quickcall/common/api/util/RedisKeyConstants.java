@@ -57,6 +57,8 @@ public class RedisKeyConstants {
 	public static final String SAVE_ORDER_KEY = "account:save:order:";
 	/**取消订单*/
 	public static final String CONFIRM_FINISH_ORDER_KEY = "account:confirmfinish:order:";
+	//用户关注3分钟状态
+	public static final String CUSTOMER_ATTENTION_TIME = "user:attentionTime:";
 		
 
 }
