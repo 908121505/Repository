@@ -29,6 +29,14 @@
 					</div>
 				</div>
 				<div class="col-md-2">
+					<div class="form-group">
+						<div class="input-group">
+							<div class="input-group-addon">联系方式</div>
+							<input class="form-control" type="text" id="contactWay">
+						</div>
+					</div>
+				</div>
+				<div class="col-md-2">
 	                <div class="form-group">
 	                    <div class="input-group">
 	                        <%-- 0=未认证,1=待审核,2=已通过,3=拒绝 --%>
@@ -42,15 +50,10 @@
 	                    </div>
 	                </div>
 	            </div>
-				<div class="col-md-2">
-					<button type="button" class="btn btn-primary btn-small btn-block"
-						id="query">
-						<i class="glyphicon glyphicon-search"></i> 查询
-					</button>
-				</div>
+
 			</div>
 			<div class="row">
-                <div class="col-md-2">
+                <div class="col-md-2" style="width:550px">
                     <div class="form-group">
                         <div class="input-group">
                             <div class="input-group-addon">提交时间</div>
@@ -60,6 +63,13 @@
                         </div>
                     </div>
                 </div>
+
+				<div class="col-md-2">
+					<button type="button" class="btn btn-primary btn-small btn-block"
+							id="query">
+						<i class="glyphicon glyphicon-search"></i> 查询
+					</button>
+				</div>
             </div>
 			<table id="example" class="table"></table>
 		</div>
@@ -153,6 +163,11 @@
 							"sTitle": "用户手机号",
                             'sClass':"text-center"
 						},
+                        {
+                            "data": "contactWay",
+                            "sTitle": "联系方式",
+                            'sClass':"text-center"
+                        },
 						{
 							"data": "handleResult",
 							"sTitle": "处理结果",
@@ -196,9 +211,10 @@
 		                   aoData.push({"name": "startTime", "value": $("#startTime").val()});
 		                   aoData.push({"name": "endTime", "value": $("#endTime").val()});
 		                   aoData.push({"name": "handleStatus", "value": $("#handleStatus").val()});
+		                   aoData.push({"name": "contactWay", "value": $("#contactWay").val()});
 	                    },
 	                    aoColumnDefs : [ {
-							"aTargets" : 7,
+							"aTargets" : 8,
 							"mRender" : function(data,type, row) {
 								var detail = "",del = "";
 								<shiro:hasPermission name="feedBack:update">

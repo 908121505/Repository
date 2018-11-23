@@ -140,7 +140,7 @@ public interface OrderSkillConstants {
 	
 	//40 用户评价完成
 	public  static final  String  IM_MSG_CONTENT_PING_JIA_FINISH_TO_DV = "用户已完成评价，再接再厉哦~";
-	public  static final  String  IM_MSG_CONTENT_PING_JIA_FINISH_TO_CUST = "评级已完成，感谢您对我们的支持！";
+	public  static final  String  IM_MSG_CONTENT_PING_JIA_FINISH_TO_CUST = "评价已完成，感谢您对我们的支持！";
 	
 	
 	
