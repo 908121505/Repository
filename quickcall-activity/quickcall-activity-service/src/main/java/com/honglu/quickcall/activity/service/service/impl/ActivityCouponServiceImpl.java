@@ -47,6 +47,7 @@ public class ActivityCouponServiceImpl implements ActivityCouponService {
         if (request.getActivityCode() == null) {
             return ResultUtils.resultParamEmpty("活动编码必传");
         }
+
         ActivityVo activityVo = activityMapper.queryActivityByActivityCode(request.getActivityCode());
 
         Map<String,String> map = new HashMap<String,String>();

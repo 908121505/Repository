@@ -230,27 +230,60 @@
   </update>
 
   <select id="queryCouponByActiveIdAndCid" resultType="com.honglu.quickcall.activity.facade.vo.CouponVo" parameterType="map">
-    select t.coupon_id as couponId, t.coupon_name as couponName,t.coupon_price as couponPrice
-    <if test="customerId != null" >
-    ,IFNULL(ct.is_used,2)
-    </if>
-    <if test="customerId == null" >
-      ,2
-    </if>
-    as isUsed,IFNULL(cs.skill_item_id,'') as skillItemId
-      ,IFNULL(sit.skill_item_name,'') as skillItemName
-      from coupon t
-    <if test="customerId != null" >
-      LEFT JOIN customer_coupon ct ON ct.coupon_id = t.coupon_id
-    </if>
-      LEFT JOIN coupon_skill cs ON cs.coupon_id = t.coupon_id and cs.status = 1
-      LEFT JOIN skill_item sit ON sit.id = cs.skill_item_id and sit.skill_status = 1
-      where t.activity_id = #{activityId,jdbcType=VARCHAR}
+      <if test="customerId == null" >
+          select t.coupon_id as couponId, t.coupon_name as couponName,t.coupon_price as couponPrice
+          ,2 as isUsed,IFNULL(cs.skill_item_id,'') as skillItemId
+          ,IFNULL(sit.skill_item_name,'') as skillItemName
+          from coupon t
+          LEFT JOIN coupon_skill cs ON cs.coupon_id = t.coupon_id and cs.status = 1
+          LEFT JOIN skill_item sit ON sit.id = cs.skill_item_id and sit.skill_status = 1
+          where t.activity_id = #{activityId,jdbcType=VARCHAR}
+          group by couponId
+        </if>
       <if test="customerId != null" >
-        and ct.customer_id = #{customerId,jdbcType=VARCHAR}
-        and ct.is_used = 0
+          SELECT
+          t.coupon_id AS couponId,
+          t.coupon_name AS couponName,
+          t.coupon_price AS couponPrice,
+
+          IF (
+          t.coupon_id IN (
+          SELECT
+          cc.coupon_id
+          FROM
+          customer_coupon cc
+          WHERE
+          cc.customer_id = #{customerId,jdbcType=VARCHAR}
+          ),
+
+          IF (
+          0 = (
+          SELECT
+          cc.is_Used
+          FROM
+          customer_coupon cc
+          WHERE
+          cc.customer_id = #{customerId,jdbcType=VARCHAR}
+          AND cc.coupon_id = t.coupon_id
+          ),
+          "0",
+          "1"
+          ),
+          "2"
+          ) AS isUsed,
+          IFNULL(cs.skill_item_id, '') AS skillItemId,
+          IFNULL(sit.skill_item_name, '') AS skillItemName
+          FROM
+          coupon t
+          LEFT JOIN coupon_skill cs ON cs.coupon_id = t.coupon_id
+          AND cs. STATUS = 1
+          LEFT JOIN skill_item sit ON sit.id = cs.skill_item_id
+          AND sit.skill_status = 1
+          WHERE
+          t.activity_id = #{activityId,jdbcType=VARCHAR}
+          GROUP BY
+          couponId
       </if>
-      group by couponId
   </select>
 
 </mapper>
