@@ -786,6 +786,7 @@ public class OrderServiceImpl implements IOrderService {
 					//修改状态
 					List<Long> orderIdList = new ArrayList<Long>();
 					orderIdList.add(order.getOrderId());
+					LOGGER.info("订单状态更新为31，订单编号："+order.getOrderId());
 					//更改订单状态为31
 					try {
 						orderMapper.updateOrderReceiveOrder(orderIdList , OrderSkillConstants.ORDER_STATUS_GOING_USER_NOT_PING_JIA);
