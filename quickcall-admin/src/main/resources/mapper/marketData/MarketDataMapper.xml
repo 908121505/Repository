@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="MarketDataMapper">
+	<select id="queryAll" resultType="com.calf.module.marketData.vo.MarketDataVO">
+		select 
+			#{date} as date,
+			IF(channel.app_channel_name='',"未知渠道",channel.app_channel_name) as appChannelName,
+			IFNULL(tmp1.num,0) as registerNum,
+			IFNULL(tmp2.num,0) as couponNum,
+			IFNULL(tmp3.num,0) as rechargeNum,IFNULL(tmp3.time,0) as rechargeTime,IFNULL(tmp3.total,0) as rechargeTotal,
+			IFNULL(tmp4.num,0) as orderNum,IFNULL(tmp4.time,0) as orderTime,IFNULL(tmp4.total,0) as orderTotal,
+			IFNULL(tmp5.jiaoxing,0) as wakeNum,IFNULL(tmp5.hongshui,0) as sleepNum,IFNULL(tmp5.zixun,0) as consultNum
+		from 
+		(<include refid="queryChannel"/>) channel
+		left join (<include refid="queryRegisterNum"/>) tmp1 on channel.app_channel_name = tmp1.app_channel_name
+		left join (<include refid="queryUsedCouponNum"/>) tmp2 on channel.app_channel_name=tmp2.app_channel_name
+		left join (<include refid="queryRechargeNum"/>) tmp3 on channel.app_channel_name=tmp3.app_channel_name
+		left join (<include refid="queryOrderNum"/>) tmp4 on channel.app_channel_name=tmp4.app_channel_name
+		left join (<include refid="querySkillNum"/>) tmp5 on channel.app_channel_name=tmp5.app_channel_name
+		where 1=1
+		<if test="appChannelName != null">
+			and channel.app_channel_name in 
+				<foreach item="item" index="index" collection="appChannelName" 
+                         open="(" separator="," close=")">
+                        #{item}
+                </foreach>
+		</if>
+	</select>
+	<select id="queryCount" resultType="java.lang.Integer">
+		SELECT
+			count( DISTINCT app_channel_name ) 
+		FROM
+			customer
+	</select>
+	<sql id="queryChannel" >
+		SELECT DISTINCT
+			app_channel_name 
+		FROM
+			customer
+	</sql>
+	
+	<select id="queryAllChannel" resultType="java.lang.String">
+		<include refid="queryChannel"/>
+	</select>
+	
+	<sql id="queryRegisterNum">
+		SELECT
+			app_channel_name,count( 1 ) AS num
+		FROM
+			customer 
+		WHERE
+			create_time between #{start} and #{end}
+		GROUP BY
+			app_channel_name
+	</sql>
+	<sql id="queryUsedCouponNum">
+		SELECT
+			cus.app_channel_name,count( 1 ) AS num
+		FROM
+			orders ord
+		INNER JOIN customer	cus on ord.customer_id = cus.customer_id 
+		WHERE
+			ord.coupon_flag = 1
+			and ord.create_time between #{start} and #{end}
+		GROUP BY
+			cus.app_channel_name
+	</sql>
+	<sql id="queryRechargeNum" >
+		SELECT
+			cus.app_channel_name,count( DISTINCT rec.customer_id ) as num,count(1) as time,sum(rec.amount) as total
+		FROM
+			recharge rec
+		INNER JOIN customer	cus on rec.customer_id = cus.customer_id 
+		WHERE
+			rec.type = 1
+			and rec.create_date between #{start} and #{end}
+		GROUP BY
+			cus.app_channel_name
+	</sql>
+	<sql id="queryOrderNum" >
+		SELECT
+			cus.app_channel_name,count( DISTINCT ord.customer_id) as num,count(1) as time,sum(ord.order_amounts) as total
+		FROM
+			orders ord
+		INNER JOIN customer	cus on ord.customer_id = cus.customer_id 
+		WHERE
+			ord.create_time between #{start} and #{end}
+		GROUP BY
+			cus.app_channel_name
+	</sql>
+	<sql id="querySkillNum">
+		SELECT
+			app_channel_name,
+			MAX( CASE skill_item_name WHEN '叫醒' THEN num ELSE 0 END ) AS jiaoxing,
+			MAX( CASE skill_item_name WHEN '哄睡' THEN num ELSE 0 END ) AS hongshui,
+			MAX( CASE skill_item_name WHEN '情感咨询' THEN num ELSE 0 END ) AS zixun 
+		FROM
+			(
+			SELECT
+				cus.app_channel_name,
+				si.skill_item_name,
+				count( 1 ) AS num 
+			FROM
+				orders ord
+				INNER JOIN skill_item si ON ord.skill_item_id = si.id
+				INNER JOIN customer cus ON ord.customer_id = cus.customer_id 
+			where
+				ord.create_time between #{start} and #{end}
+			GROUP BY
+				cus.app_channel_name,
+				si.skill_item_name 
+			) tmp 
+		GROUP BY
+			app_channel_name
+	</sql>
+</mapper>
