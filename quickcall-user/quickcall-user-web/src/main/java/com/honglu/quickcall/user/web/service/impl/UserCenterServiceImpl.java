@@ -52,7 +52,7 @@ public class UserCenterServiceImpl implements UserCenterService {
 		} catch (Exception e) {
 			logger.error("功能编码为" + request.getBizCode() + "接口未知异常" + e.getMessage(), e);
 			response.setCode(UserBizReturnCode.Unknown.code());
-			response.setMsg(e.getMessage());
+			response.setMsg(UserBizReturnCode.Unknown.desc());
 		}
 		logger.info("返回结果{}", response);
 		return response;
@@ -81,7 +81,7 @@ public class UserCenterServiceImpl implements UserCenterService {
 		} catch (Exception e) {
 			logger.error("功能编码为" + request.getBizCode() + "接口未知异常" + e.getMessage(), e);
 			response.setCode(UserBizReturnCode.Unknown.code());
-			response.setMsg(e.getMessage());
+			response.setMsg(UserBizReturnCode.Unknown.desc());
 		}
 		logger.info("返回结果{}", response);
 		return response;
