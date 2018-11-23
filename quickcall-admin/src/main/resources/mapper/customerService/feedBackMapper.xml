@@ -44,7 +44,7 @@ id,	customer_id,	feed_back_content,	handle_status,	handle_result,	create_time,	c
 	<select id="queryFeedBackList" resultMap="feedBackVOMap">
 		select 
 		cus.nick_name,cus.phone,fb.id,fb.customer_id,fb.feed_back_content,
-		fb.handle_status,fb.handle_result,fb.create_time,fb.contact_way,
+		fb.handle_status,fb.handle_result,fb.create_time,fb.contact_way contactWay,
 		fb.modify_time,fb.handle_time,fb.create_man,fb.modify_man,fb.handle_user,
 		fb.remark 
 		from feed_back fb
@@ -52,6 +52,7 @@ id,	customer_id,	feed_back_content,	handle_status,	handle_result,	create_time,	c
 		<where>
 			<if test="nickName != null">and  cus.nick_name like concat('%',#{nickName},'%')</if>
 			<if test="phone != null">and  cus.phone = #{phone}</if>
+			<if test="contactWay !=null and contactWay!='' ">and fb.contact_way like concat('%',#{contactWay},'%')</if>
 			<if test="handleStatus != null">and  fb.handle_status = #{handleStatus}</if>
 			<if test="startTime !=null and startTime!=''">and fb.create_time <![CDATA[  >= ]]> #{startTime}</if>
         	<if test="endTime !=null and endTime!=''">and fb.create_time <![CDATA[  <= ]]> #{endTime}</if>
