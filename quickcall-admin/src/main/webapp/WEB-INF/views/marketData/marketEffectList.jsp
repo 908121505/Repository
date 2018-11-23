@@ -4,10 +4,10 @@
 <script type="text/javascript" language="javascript" src="resources/bootstrap/js/bootstrap-select.min.js"  charset="utf-8"></script>
 <div class="content1">
     <div class="header">
-        <h1 class="page-title">轻音渠道后台</h1>
+        <h1 class="page-title">市场成效</h1>
         <ul class="breadcrumb">
-            <li>当日实时数据</li>
-            <li class="active">轻音渠道后台</li>
+            <li>市场渠道管理</li>
+            <li class="active">市场成效</li>
         </ul>
     </div>
     <div class="main-content">
@@ -36,7 +36,7 @@
                 <div class="form-group">
                     <div class="input-group">
                         <div class="input-group-addon">渠道</div>
-                        <select class="form-control selectpicker" id="appChannelName" multiple>
+                        <select class="form-control selectpicker" id="appChannelName" data-live-search="true" multiple>
                         </select>
                     </div>
                 </div>

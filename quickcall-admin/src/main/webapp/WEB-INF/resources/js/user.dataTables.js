@@ -5,7 +5,8 @@
 				sAjaxSource:"",
 				aoColumns:"",
 				fnServerParams:"",
-				aoColumnDefs:""
+				aoColumnDefs:"",
+				bPaginate:true
 			}
 			var efunboxVars = $.extend(defaults,options);
 			
@@ -19,6 +20,7 @@
 	             "fnServerParams": efunboxVars.fnServerParams,
 		         "aoColumns": efunboxVars.aoColumns, 
 		         "aoColumnDefs":efunboxVars.aoColumnDefs,
+		         "bPaginate" : efunboxVars.bPaginate,
 				 "oLanguage": {
 	              "sProcessing": "正在加载中......",
 	              "sLengthMenu": "每页显示 _MENU_ 条记录",
