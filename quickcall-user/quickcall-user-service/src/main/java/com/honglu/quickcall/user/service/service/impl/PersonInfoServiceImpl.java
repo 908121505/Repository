@@ -511,17 +511,17 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 			Integer type = request.getType();
 
 			Fans fans = fansMapper.queryFans(fansId, attendedId);
-
+			
+			HashMap<String,Object> map = new HashMap<>();
+			int needPush = 0;//默认不需要推送
 			if (UserBizConstants.ATTENTION_TYPE_ADD == type) {
 				//查询3分钟之内是否有关注的状态
 				String isAtt = JedisUtil.get(RedisKeyConstants.CUSTOMER_ATTENTION_TIME+fansId+":"+attendedId);
-				HashMap<String,Object> map = new HashMap<>();
-				if(isAtt!=null){
-					map.put("needPush", 0);
-				}else{
-					map.put("needPush", 1);
+				
+				if(isAtt==null){
+					needPush = 1;
 				}
-				commonResponse.setData(map);
+				
 				//插入一条3分钟的状态
 				JedisUtil.set(RedisKeyConstants.CUSTOMER_ATTENTION_TIME+fansId+":"+attendedId, "1", 180);
 				// 添加关注
@@ -557,7 +557,8 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 				}
 
 			}
-
+			map.put("needPush", needPush);
+			commonResponse.setData(map);
 			commonResponse.setCode(UserBizReturnCode.Success);
 			commonResponse.setMessage(UserBizReturnCode.Success.desc());
 		} catch (Exception e) {
