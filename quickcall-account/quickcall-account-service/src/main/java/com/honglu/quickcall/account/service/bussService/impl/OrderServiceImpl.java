@@ -389,6 +389,8 @@ public class OrderServiceImpl implements IOrderService {
 			if(customerCouponId != null){
 				CustomerCoupon customerCoupon = new CustomerCoupon();
 				customerCoupon.setId(customerCouponId);
+				customerCoupon.setIsUsed(CustomerCoupon.useCoupon);
+				customerCoupon.setOrderId(orderId);
 				try {
 					couponDubboBusiness.updateCustomerCouponById(customerCoupon );
 				} catch (Exception e1) {
