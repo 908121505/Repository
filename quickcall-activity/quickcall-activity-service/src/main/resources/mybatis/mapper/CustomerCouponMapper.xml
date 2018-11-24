@@ -266,29 +266,44 @@
         where
         cs.skill_item_id = #{skillItemId}
         and cs.status = 1
+        and c.get_way = 1
         and ( NOW() BETWEEN a.start_time AND a.end_time)
+        and ( NOW() BETWEEN c.start_time AND c.end_time)
         order by c.coupon_price desc
         LIMIT 1
   </select>
 
   <select id="getDeductCoupon" resultType="com.honglu.quickcall.activity.facade.vo.CouponOrderVo" parameterType="map">
-       select cc.id as customerCouponId,x.couponId,x.couponName,x.couponDeductPrice
-          from customer_coupon cc,
-            (select cs.coupon_id as couponId,c.coupon_name as couponName,c.coupon_price as couponDeductPrice
-            from coupon_skill cs
-            LEFT JOIN coupon c ON c.coupon_id = cs.coupon_id
-                    where
-                    cs.skill_item_id = #{skillItemId}
-                     and ( NOW() BETWEEN c.start_time AND c.end_time or c.is_permanent=1)
-                     and c.get_way = 1
-                     and cs.status = 1
-                    order by c.coupon_price desc
-                    LIMIT 1 ) x
-        where
-        cc.customer_id = #{customerId}
-        and cc.coupon_id = x.couponId
-        and cc.is_used = 0
-         LIMIT 1
+      SELECT
+              cc.id AS customerCouponId,
+              cou.coupon_Id as couponId,
+              cou.coupon_Name as couponName,
+              cou.coupon_price as couponDeductPrice
+          FROM
+              customer_coupon cc
+          LEFT JOIN coupon cou ON cc.coupon_id = cou.coupon_id
+          WHERE
+              (
+                  SELECT
+                      count(1)
+                  FROM
+                      coupon_skill
+                  WHERE
+                      skill_item_id = #{skillItemId}
+                  AND coupon_id = cc.coupon_id
+                  AND STATUS = 1
+              ) > 0
+          AND cc.customer_id = #{customerId}
+          AND (
+              NOW() BETWEEN cou.start_time
+              AND cou.end_time
+              OR cou.is_permanent = 1
+          )
+          AND cc.is_used = 0
+          ORDER BY
+              cou.coupon_price DESC,
+              cou.end_time DESC
+          LIMIT 1
   </select>
 
   <insert id="insertSelectiveMessage" >
