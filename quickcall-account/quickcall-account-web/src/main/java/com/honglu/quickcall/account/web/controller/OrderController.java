@@ -15,6 +15,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.honglu.quickcall.account.web.service.IOrderInfoService;
 import com.honglu.quickcall.common.api.exchange.WebResponseModel;
 
+import javax.servlet.http.HttpServletRequest;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 @Controller
 @RequestMapping("/order")
 public class OrderController {
@@ -22,7 +26,10 @@ public class OrderController {
 
     @Autowired
     private IOrderInfoService orderInfoService;
-
+    /**
+     * 匹配是否是ios（苹果）
+     */
+    private static Pattern USER_AGENT_PATTERN = Pattern.compile("/\\(i[^;]+;( U;)? CPU.+Mac OS X/");
     /**
      * 获取主播开启产品
      * @param params
@@ -30,8 +37,23 @@ public class OrderController {
      */
     @RequestMapping(value = "/dvProduct", method = RequestMethod.POST)
     @ResponseBody
-    public WebResponseModel queryDaVProduct(/*  @RequestBody  */OrderDaVSkillRequest params) {
-    	WebResponseModel response = orderInfoService.execute(params);
+    public WebResponseModel queryDaVProduct(HttpServletRequest request/*, OrderDaVSkillRequest params*/) {
+        //安卓和默认
+        String userAgent = request.getHeader("User-Agent");
+        //ios终端
+        Matcher isiOS = USER_AGENT_PATTERN.matcher(userAgent);
+        if (isiOS.find()) {
+            userAgent = request.getHeader("UserAgent");
+        }
+
+        Long customerId = Long.valueOf(request.getParameter("customerId"));
+
+        OrderDaVSkillRequest params = new OrderDaVSkillRequest();
+        params.setCustomerId(customerId);
+        params.setUserAgent(userAgent);
+        WebResponseModel response = orderInfoService.execute(params);
+
+
         return response;
     }
     

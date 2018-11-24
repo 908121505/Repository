@@ -12,7 +12,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
-//import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -118,6 +117,10 @@ public class OrderServiceImpl implements IOrderService {
 	private DataDuriedPointBusiness dataDuriedPointBusiness;
 	@Autowired
 	private CouponDubboBusiness couponDubboBusiness;
+	/**
+	 * 取userAgent登录人ID
+	 */
+	//private static Pattern USER_AGENT_PATTERN = Pattern.compile("reg");
 
 	@Override
 	public CommonResponse queryDaVSkill(OrderDaVSkillRequest request) {
@@ -149,10 +152,30 @@ public class OrderServiceImpl implements IOrderService {
 				vo.setServiceUnit(skill.getServiceUnit());
 				vo.setSkillItemName(skillItem.getSkillItemName());
 
+				//取userAgent登录人ID
+				String userAgent = request.getUserAgent();
+				/*Matcher matcher = USER_AGENT_PATTERN.matcher(userAgent);
+				String loginId = null;
+				if (matcher.find()) {
+					loginId = matcher.group(0).trim();//group(0)待定
+					LOGGER.warn("通过userAgent解析出登录人ID："+loginId);
+				}*/
+				//非法请求
+				if(!userAgent.contains("voice:")){
+					throw new BizException(AccountBizReturnCode.paramError, "非法请求");
+				}
+				String loginId = "";
+				String[] arr = userAgent.split("-");
+				if(arr!=null && arr.length>2){
+					if(StringUtils.isNotBlank(arr[1]) && !"0".equals(arr[1])){
+						loginId = arr[1];
+					}
+				}
+				LOGGER.warn("通过userAgent解析出登录人ID："+loginId);
 				//技能-客户优惠券
 				CouponOrderVo cov = null;
 				try {
-					cov = couponDubboBusiness.showActivityCouponForOrder(skillItemId+"",customerId+"");
+					cov = couponDubboBusiness.showActivityCouponForOrder(skillItemId+"",loginId+"");
 				} catch (Exception e) {
 					LOGGER.warn("根据技能ID获取券信息发生异常，异常信息：",e);
 				}
