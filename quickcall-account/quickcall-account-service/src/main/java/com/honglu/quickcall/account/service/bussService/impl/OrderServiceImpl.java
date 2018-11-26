@@ -1161,6 +1161,7 @@ public class OrderServiceImpl implements IOrderService {
 							OrderSkillConstants.ORDER_STATUS_WAITING_RECEIVE, OrderSkillConstants.SKILL_TYPE_YES);
 					if (!CollectionUtils.isEmpty(orderList)) {
 						List<Long> orderIdList = new ArrayList<Long>();
+						List<Long> orderCouponIdList = new ArrayList<Long>();
 						//声优接单，其它订单取消
 						for (Order od : orderList) {
 							orderIdList.add(od.getOrderId());
@@ -1182,14 +1183,32 @@ public class OrderServiceImpl implements IOrderService {
 								commonService.sendOrderMsg(odCustomerId, odServiceId, odOrderId, OrderSkillConstants.IM_MSG_CONTENT_DAV_CONFIRM_OTHER_CANCEL_TO_DAV);
 								commonService.sendOrderMsg(odServiceId, odCustomerId,odOrderId, OrderSkillConstants.IM_MSG_CONTENT_DAV_CONFIRM_OTHER_CANCEL_TO_CUST);
 							
+								// 查询用户此订单是否使用优惠券
+								try {
+									CustomerCoupon customerCoupon = couponDubboBusiness.queryCustomerCouponByCustomerIdAndOrderId(customerId,orderId);
+									if (customerCoupon != null) {
+										int cancelUpdateCustomerCouponCount = couponDubboBusiness.cancelUpdateCustomerCoupon(customerCoupon.getId());
+										orderCouponIdList.add(orderId);
+										LOGGER.info("==========订单ID："+ orderId);
+										LOGGER.info("取消订单 退回优惠券 id：" + customerCoupon.getId() + "更新数量：" + cancelUpdateCustomerCouponCount);
+									}
+								} catch (Exception e) {
+									LOGGER.warn("=======声优接单，其它订单取消，券退回发生异常，异常信息：",e);
+								}
 							
 							} catch (Exception e) {
 								LOGGER.error("用户退款异常异常信息：", e);
 							}
 							
 						}
+						//需要取消券
 						commonService.updateOrderReceiveOrder(orderIdList,OrderSkillConstants.ORDER_STATUS_CANCEL_DAV_START_ONE_ORDER);
 
+						//需要更新券状态
+						if(!CollectionUtils.isEmpty(orderCouponIdList)){
+							commonService.updateOrderCouponFlag(orderCouponIdList,OrderSkillConstants.ORDER_STATUS_CANCEL_DAV_START_ONE_ORDER,OrderSkillConstants.ORDER_COUPON_FLAG_CANCEL);
+							
+						}
 					}
 				}
 				
