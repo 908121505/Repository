@@ -11,7 +11,7 @@
         </ul>
     </div>
     <div class="main-content">
-        <div class="row">
+        <div class="row" id="searchInput">
             <div class="col-md-4">
                 <div class="form-group">
                     <div class="input-group">
@@ -41,7 +41,14 @@
                     </div>
                 </div>
             </div>
-            
+            <div class="col-md-2">
+                <div class="form-group">
+                    <div class="input-group">
+                        <div class="input-group-addon">渠道模糊</div>
+                         <input class="form-control"  type="text" id="keyword" >
+                    </div>
+                </div>
+            </div>
             <div class="col-md-2">
                 <button type="button" class="btn btn-primary btn-small btn-block"
                         id="query">
@@ -330,6 +337,11 @@
                 	$('#example').dataTable().fnDraw();
             	}
             });
+            $("#searchInput").keydown(function () {
+                if (event.keyCode == "13") {//keyCode=13是回车键
+                     $('#query').click();
+                }
+   	       });
 			
         });
         
@@ -359,6 +371,7 @@
             aoData.push({"name": "eTime", "value": $("#eTime").val()});
             aoData.push({"name": "sHour", "value": $("#sHour").val()});
             aoData.push({"name": "eHour", "value": $("#eHour").val()});
+            aoData.push({"name": "keyword", "value":$("#keyword").val()});
             aoData.push({"name": "appChannelName", "value":channel});
             aoData.push({"name": "type", "value": 3});
         }

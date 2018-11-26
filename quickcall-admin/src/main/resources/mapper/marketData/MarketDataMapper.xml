@@ -25,6 +25,9 @@
                         #{item}
                 </foreach>
 		</if>
+		<if test="keyword != null">
+			and channel.app_channel_name like concat('%',#{keyword},'%') 
+		</if>
 	</select>
 	<select id="queryCount" resultType="java.lang.Integer">
 		SELECT
@@ -50,6 +53,9 @@
 			customer 
 		WHERE
 			create_time between #{start} and #{end}
+			<if test="keyword != null">
+				and app_channel_name like concat('%',#{keyword},'%') 
+			</if>
 		GROUP BY
 			app_channel_name
 	</sql>
@@ -62,6 +68,9 @@
 		WHERE
 			ord.coupon_flag = 1
 			and ord.create_time between #{start} and #{end}
+			<if test="keyword != null">
+				and cus.app_channel_name like concat('%',#{keyword},'%') 
+			</if>
 		GROUP BY
 			cus.app_channel_name
 	</sql>
@@ -74,6 +83,9 @@
 		WHERE
 			rec.type = 1
 			and rec.create_date between #{start} and #{end}
+			<if test="keyword != null">
+				and app_channel_name like concat('%',#{keyword},'%') 
+			</if>
 		GROUP BY
 			cus.app_channel_name
 	</sql>
@@ -85,6 +97,9 @@
 		INNER JOIN customer	cus on ord.customer_id = cus.customer_id 
 		WHERE
 			ord.create_time between #{start} and #{end}
+			<if test="keyword != null">
+				and app_channel_name like concat('%',#{keyword},'%') 
+			</if>
 		GROUP BY
 			cus.app_channel_name
 	</sql>
@@ -106,6 +121,9 @@
 				INNER JOIN customer cus ON ord.customer_id = cus.customer_id 
 			where
 				ord.create_time between #{start} and #{end}
+				<if test="keyword != null">
+				and cus.app_channel_name like concat('%',#{keyword},'%') 
+				</if>
 			GROUP BY
 				cus.app_channel_name,
 				si.skill_item_name 
