@@ -734,7 +734,7 @@ public class OrderServiceImpl implements IOrderService {
 			}
 			if(map != null && map.size() > 0){
 				orderDetail.setCouponName(map.get("couponName") == null ? "" : (String) map.get("couponName"));
-				orderDetail.setCouponPrice(map.get("couponPrice") == null ? null : new BigDecimal((String) map.get("couponPrice")));
+				orderDetail.setCouponPrice(map.get("couponPrice") == null ? null : new BigDecimal(Integer.valueOf(map.get("couponPrice").toString())));
 			}
 
 		}
