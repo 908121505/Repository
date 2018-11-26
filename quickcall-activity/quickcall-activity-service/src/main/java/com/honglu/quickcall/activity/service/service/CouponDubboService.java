@@ -20,7 +20,7 @@ public interface CouponDubboService {
 	 * 根据订单ID查询客户优惠券
 	 * @return
 	 */
-	Map<String,String> getCustomerCouponByOrderId(Long orderId);
+	Map<String,Object> getCustomerCouponByOrderId(Long orderId);
 
     /**
      * 判断现在时间是否有活动

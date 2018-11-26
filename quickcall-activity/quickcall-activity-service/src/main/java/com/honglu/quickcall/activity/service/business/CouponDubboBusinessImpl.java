@@ -64,7 +64,7 @@ public class CouponDubboBusinessImpl implements CouponDubboBusiness{
 	 * @return
 	 */
 	@Override
-	public Map<String,String> getCustomerCouponByOrderId(Long orderId){
+	public Map<String,Object> getCustomerCouponByOrderId(Long orderId){
 		return couponDubboService.getCustomerCouponByOrderId(orderId);
 	}
 

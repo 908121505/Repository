@@ -726,16 +726,15 @@ public class OrderServiceImpl implements IOrderService {
 			orderDetail.setOrderStatus(responseVO.getOrderStatus());
 
 			// 根据订单ID查询客户优惠券
-			Map<String, String> map = new HashMap<String, String>();
+			Map<String, Object> map = new HashMap<String, Object>();
 			try {
 				map = couponDubboBusiness.getCustomerCouponByOrderId(orderId);
 			} catch (Exception e) {
 				LOGGER.warn("获取券信息发生异常,异常信息：",e);
 			}
 			if(map != null && map.size() > 0){
-				LOGGER.info("===========couponName:"+ map.get("couponName") +"   couponPrice:"+map.get("couponPrice"));
-				orderDetail.setCouponName(map.get("couponName") == null ? "" : map.get("couponName"));
-				orderDetail.setCouponPrice(map.get("couponPrice") == null ? null : new BigDecimal(map.get("couponPrice")));
+				orderDetail.setCouponName(map.get("couponName") == null ? "" : (String) map.get("couponName"));
+				orderDetail.setCouponPrice(map.get("couponPrice") == null ? null : new BigDecimal((String) map.get("couponPrice")));
 			}
 
 		}

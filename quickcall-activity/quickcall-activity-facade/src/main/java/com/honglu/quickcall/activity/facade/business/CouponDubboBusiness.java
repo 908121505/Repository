@@ -26,7 +26,7 @@ public interface CouponDubboBusiness {
 	 * 根据订单ID查询客户优惠券
 	 * @return
 	 */
-	Map<String,String> getCustomerCouponByOrderId(Long orderId);
+	Map<String,Object> getCustomerCouponByOrderId(Long orderId);
 
 	/**
 	 * 查询是否显示活动优惠券提示
