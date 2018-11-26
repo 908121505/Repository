@@ -403,6 +403,11 @@ public class OrderUpdateJob {
     			try {
     				if(!CollectionUtils.isEmpty(orderIdCouponList)){
     					taskCustomerCouponMapper.batchUpdateCustomerCoupon(orderIdCouponList, OrderSkillConstants.ORDER_COUPON_FLAG_CANCEL);
+    					//更新券状态为未使用
+    					LOGGER.info("==============更新券状态开始==============");
+    					Integer  couponFlag =  OrderSkillConstants.ORDER_COUPON_FLAG_CANCEL;
+    					taskOrderMapper.updateOrderCouponFlag(orderIdCouponList,couponFlag);
+    					LOGGER.info("==============更新券状态结束==============");
     				}
     			} catch (Exception e) {
     				LOGGER.error("用户券返还发生异常，异常信息：",e);
