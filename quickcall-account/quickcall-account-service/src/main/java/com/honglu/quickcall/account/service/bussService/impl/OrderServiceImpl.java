@@ -732,7 +732,7 @@ public class OrderServiceImpl implements IOrderService {
 			} catch (Exception e) {
 				LOGGER.warn("获取券信息发生异常,异常信息：",e);
 			}
-			if(map != null){
+			if(map != null && map.size() > 0){
 				orderDetail.setCouponName(map.get("couponName") == null ? "" : map.get("couponName"));
 				orderDetail.setCouponPrice(map.get("couponPrice") == null ? null : new BigDecimal(map.get("couponPrice")));
 			}
