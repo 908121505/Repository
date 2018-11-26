@@ -1185,11 +1185,11 @@ public class OrderServiceImpl implements IOrderService {
 							
 								// 查询用户此订单是否使用优惠券
 								try {
-									CustomerCoupon customerCoupon = couponDubboBusiness.queryCustomerCouponByCustomerIdAndOrderId(customerId,orderId);
+									CustomerCoupon customerCoupon = couponDubboBusiness.queryCustomerCouponByCustomerIdAndOrderId(customerId,odOrderId);
 									if (customerCoupon != null) {
 										int cancelUpdateCustomerCouponCount = couponDubboBusiness.cancelUpdateCustomerCoupon(customerCoupon.getId());
-										orderCouponIdList.add(orderId);
-										LOGGER.info("==========订单ID："+ orderId);
+										orderCouponIdList.add(odOrderId);
+										LOGGER.info("==========订单ID："+ odOrderId);
 										LOGGER.info("取消订单 退回优惠券 id：" + customerCoupon.getId() + "更新数量：" + cancelUpdateCustomerCouponCount);
 									}
 								} catch (Exception e) {
