@@ -653,6 +653,10 @@ public class OrderServiceImpl implements IOrderService {
 			BigDecimal payAmount = order.getOrderAmounts();
 			//订单取消需要将券返还给用户
 			Integer  couponFlag = order.getCouponFlag();
+			if(OrderSkillConstants.ORDER_COUPON_FLAG_USE == couponFlag){
+				couponFlag = OrderSkillConstants.ORDER_COUPON_FLAG_CANCEL;
+			}
+			
 			commonService.cancelUpdateOrder(orderId, orderStatus, new Date(), request.getSelectReason(),
 					request.getRemarkReason(),couponFlag);
 			// 金额不为空，说明需要退款给用户
@@ -1215,12 +1219,19 @@ public class OrderServiceImpl implements IOrderService {
 				// 声优不同意，状态为声优拒绝，退款给购买者
 			} else {
 				newOrderStatus = OrderSkillConstants.ORDER_STATUS_DAV_REFUSED_RECEIVE;
+				//返还券给用户
+				Integer  couponFlag =  OrderSkillConstants.ORDER_COUPON_FLAG_CANCEL;
+				// 查询用户此订单是否使用优惠券
+				CustomerCoupon customerCoupon = couponDubboBusiness.queryCustomerCouponByCustomerIdAndOrderId(customerId,orderId);
+				if (customerCoupon != null) {
+					int cancelUpdateCustomerCouponCount = couponDubboBusiness.cancelUpdateCustomerCoupon(customerCoupon.getId());
+					LOGGER.info("取消订单 退回优惠券 id：" + customerCoupon.getId() + "更新数量：" + cancelUpdateCustomerCouponCount);
+				}
+				
 				BigDecimal payAmount = order.getOrderAmounts();
-				LOGGER.info("---------dvReceiveOrder--refuse：customerId=" + order.getCustomerId() + ";orderAmounts="
-						+ order.getOrderAmounts());
-				accountService.inAccount(customerId, payAmount, TransferTypeEnum.RECHARGE,
-						AccountBusinessTypeEnum.OrderRefund, orderId);
-				commonService.updateOrder(orderId, newOrderStatus);
+				LOGGER.info("---------dvReceiveOrder--refuse：customerId=" + order.getCustomerId() + ";orderAmounts="+ order.getOrderAmounts());
+				accountService.inAccount(customerId, payAmount, TransferTypeEnum.RECHARGE,AccountBusinessTypeEnum.OrderRefund, orderId);
+				commonService.updateOrder(orderId, newOrderStatus,couponFlag);
 
 				// 声优拒绝订单通知用户
 				RongYunUtil.sendOrderMessage(customerId, OrderSkillConstants.IM_MSG_CONTENT_DAV_REFUSE_TO_CUST,OrderSkillConstants.MSG_CONTENT_C);
@@ -1560,7 +1571,7 @@ public class OrderServiceImpl implements IOrderService {
 			
 		}
 
-		commonService.updateOrder(request.getOrderId(), OrderSkillConstants.ORDER_STATUS_FINISHED_AND_PINGJIA);
+		commonService.updateOrder(request.getOrderId(), OrderSkillConstants.ORDER_STATUS_FINISHED_AND_PINGJIA,null);
 		Long  serviceId = orderDetail.getServiceId();
 		Long  customerId = orderDetail.getCustomerId();
 		Long  orderId =orderDetail.getOrderId();
