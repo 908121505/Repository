@@ -1182,13 +1182,27 @@ public class OrderServiceImpl implements IOrderService {
 								commonService.sendOrderMsg(odCustomerId, odServiceId, odOrderId, OrderSkillConstants.IM_MSG_CONTENT_DAV_CONFIRM_OTHER_CANCEL_TO_DAV);
 								commonService.sendOrderMsg(odServiceId, odCustomerId,odOrderId, OrderSkillConstants.IM_MSG_CONTENT_DAV_CONFIRM_OTHER_CANCEL_TO_CUST);
 							
+								// ----start---chenpeng 2018.11.1 取消订单时，查询是否使用优惠券，如果有则退回优惠券
+								// 查询用户此订单是否使用优惠券
+								try {
+									CustomerCoupon customerCoupon = couponDubboBusiness.queryCustomerCouponByCustomerIdAndOrderId(customerId,
+											orderId);
+									if (customerCoupon != null) {
+										int cancelUpdateCustomerCouponCount = couponDubboBusiness.cancelUpdateCustomerCoupon(customerCoupon.getId());
+										LOGGER.info("取消订单 退回优惠券 id：" + customerCoupon.getId() + "更新数量：" + cancelUpdateCustomerCouponCount);
+									}
+								} catch (Exception e) {
+									LOGGER.warn("=======声优接单，其它订单取消，券退回发生异常，异常信息：",e);
+								}
+								// -----end---chenpeng 2018.11.1
 							
 							} catch (Exception e) {
 								LOGGER.error("用户退款异常异常信息：", e);
 							}
 							
 						}
-						commonService.updateOrderReceiveOrder(orderIdList,OrderSkillConstants.ORDER_STATUS_CANCEL_DAV_START_ONE_ORDER);
+						//需要取消券
+						commonService.updateOrderReceiveOrder(orderIdList,OrderSkillConstants.ORDER_STATUS_CANCEL_DAV_START_ONE_ORDER,OrderSkillConstants.ORDER_COUPON_FLAG_CANCEL);
 
 					}
 				}

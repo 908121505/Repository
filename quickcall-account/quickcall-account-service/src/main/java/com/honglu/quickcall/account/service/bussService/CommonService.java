@@ -106,6 +106,11 @@ public interface CommonService {
 	 */
 	public void updateOrderReceiveOrder(List<Long>  orderIdList,Integer  orderStatus);
 	/**
+	 * 大V接单取消已接收的订单
+	 * @param orderIdList
+	 */
+	public void updateOrderReceiveOrder(List<Long>  orderIdList,Integer  orderStatus,Integer  couponFlag);
+	/**
 	 * 大V接单查询是否有其他待接单订单
 	 * @param serviceId
 	 * @param orderId
@@ -150,5 +155,7 @@ public interface CommonService {
 	 * @param orderDesc
 	 */
 	public void  sendOrderMsg(Long  customerId,Long  serviceId,Long  orderId,String  orderDesc);
+
+
    
 }

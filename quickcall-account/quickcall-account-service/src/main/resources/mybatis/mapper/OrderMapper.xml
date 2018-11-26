@@ -892,6 +892,14 @@ ORDER BY
       #{orderId}
     </foreach>
   </update>
+  <!-- 保存评价信息 -->
+  <update id="updateOrderReceiveOrderExt"  parameterType="map">
+    update orders set order_status = #{orderStatus} ,coupon_flag =  #{couponFlag} where  order_id  in
+    
+    <foreach collection="list" item="orderId" open="("  close=")"  separator=",">
+      #{orderId}
+    </foreach>
+  </update>
 
   <!-- 查询声优是否被客户关注 -->
   <select id="findServicerIsAttentioned" resultType="integer">

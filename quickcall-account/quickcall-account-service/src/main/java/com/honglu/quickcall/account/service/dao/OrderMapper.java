@@ -128,6 +128,14 @@ public interface OrderMapper {
 	 * @param skillType
 	 */
 	void updateOrderReceiveOrder(@Param("list")List<Long>  orderIdList,@Param("orderStatus")Integer orderStatus);
+	/***
+	 * 取消其它订单
+	 * @param orderId
+	 * @param queryStatus
+	 * @param updateStatus
+	 * @param skillType
+	 */
+	void updateOrderReceiveOrderExt(@Param("list")List<Long>  orderIdList,@Param("orderStatus")Integer orderStatus,@Param("couponFlag")Integer couponFlag);
 
 	
 

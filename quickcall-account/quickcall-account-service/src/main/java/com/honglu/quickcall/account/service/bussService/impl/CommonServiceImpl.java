@@ -229,6 +229,11 @@ public class CommonServiceImpl implements CommonService {
 		orderMapper.updateOrderReceiveOrder(orderIdList,orderStatus);
 		
 	}
+	
+	
+	public void updateOrderReceiveOrder(List<Long>  orderIdList,Integer  orderStatus,Integer  couponFlag){
+		orderMapper.updateOrderReceiveOrderExt(orderIdList,orderStatus,couponFlag);
+	}
 
 
 
