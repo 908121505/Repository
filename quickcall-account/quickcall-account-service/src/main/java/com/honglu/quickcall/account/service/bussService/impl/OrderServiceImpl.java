@@ -1189,12 +1189,12 @@ public class OrderServiceImpl implements IOrderService {
 									if (customerCoupon != null) {
 										int cancelUpdateCustomerCouponCount = couponDubboBusiness.cancelUpdateCustomerCoupon(customerCoupon.getId());
 										orderCouponIdList.add(orderId);
+										LOGGER.info("==========订单ID："+ orderId);
 										LOGGER.info("取消订单 退回优惠券 id：" + customerCoupon.getId() + "更新数量：" + cancelUpdateCustomerCouponCount);
 									}
 								} catch (Exception e) {
 									LOGGER.warn("=======声优接单，其它订单取消，券退回发生异常，异常信息：",e);
 								}
-								// -----end---chenpeng 2018.11.1
 							
 							} catch (Exception e) {
 								LOGGER.error("用户退款异常异常信息：", e);
