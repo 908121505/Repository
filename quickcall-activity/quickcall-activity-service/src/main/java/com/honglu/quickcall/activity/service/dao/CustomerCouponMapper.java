@@ -64,7 +64,7 @@ public interface CustomerCouponMapper {
      * 根据订单ID查询客户优惠券
      * @return
      */
-    Map<String,String> getCustomerCouponByOrderId(@Param("orderId")Long orderId);
+    Map<String,Object> getCustomerCouponByOrderId(@Param("orderId")Long orderId);
 
     /**
      * 查询券
