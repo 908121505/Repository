@@ -284,7 +284,7 @@
                     },
                     
                     {
-                        "data": "wakeNum",
+                        "data": "sleepNum",
                         "sTitle": "哄睡单数",
                         'sClass': "text-center",
                         "mRender": function (data, type, full) {
@@ -296,7 +296,7 @@
                         }
                     },
                     {
-                        "data": "sleepNum",
+                        "data": "consultNum",
                         "sTitle": "咨询单数",
                         'sClass': "text-center",
                         "mRender": function (data, type, full) {
@@ -308,7 +308,7 @@
                         }
                     },
                     {
-                        "data": "consultNum",
+                        "data": "wakeNum",
                         "sTitle": "叫醒单数",
                         'sClass': "text-center",
                         "mRender": function (data, type, full) {
