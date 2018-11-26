@@ -175,7 +175,7 @@
     <select id="selectRankBigvListBySkillItemId" resultType="com.honglu.quickcall.user.facade.entity.CustomerSkill">
         select * from(
         	<if test="skillItemId == null">
-                select *  from(
+                select * from(
             </if>
             SELECT
 	            (SELECT count(o.order_id) FROM orders o WHERE o.service_id = bss.customer_id
