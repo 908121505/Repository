@@ -135,7 +135,7 @@ public interface OrderMapper {
 	 * @param updateStatus
 	 * @param skillType
 	 */
-	void updateOrderReceiveOrderExt(@Param("list")List<Long>  orderIdList,@Param("orderStatus")Integer orderStatus,@Param("couponFlag")Integer couponFlag);
+	void updateOrderCouponFlag(@Param("list")List<Long>  orderIdList,@Param("orderStatus")Integer orderStatus,@Param("couponFlag")Integer couponFlag);
 
 	
 

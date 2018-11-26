@@ -109,7 +109,7 @@ public interface CommonService {
 	 * 大V接单取消已接收的订单
 	 * @param orderIdList
 	 */
-	public void updateOrderReceiveOrder(List<Long>  orderIdList,Integer  orderStatus,Integer  couponFlag);
+	public void updateOrderCouponFlag(List<Long>  orderIdList,Integer  orderStatus,Integer  couponFlag);
 	/**
 	 * 大V接单查询是否有其他待接单订单
 	 * @param serviceId

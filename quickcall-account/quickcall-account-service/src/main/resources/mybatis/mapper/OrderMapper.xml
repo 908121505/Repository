@@ -892,9 +892,9 @@ ORDER BY
       #{orderId}
     </foreach>
   </update>
-  <!-- 保存评价信息 -->
-  <update id="updateOrderReceiveOrderExt"  parameterType="map">
-    update orders set order_status = #{orderStatus} ,coupon_flag =  #{couponFlag} where  order_id  in
+  <!-- 更新券状态 -->
+  <update id="updateOrderCouponFlag"  parameterType="map">
+    update orders set coupon_flag =  #{couponFlag} where  order_id  in
     
     <foreach collection="list" item="orderId" open="("  close=")"  separator=",">
       #{orderId}
