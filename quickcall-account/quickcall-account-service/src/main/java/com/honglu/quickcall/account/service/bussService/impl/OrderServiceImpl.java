@@ -653,6 +653,10 @@ public class OrderServiceImpl implements IOrderService {
 			BigDecimal payAmount = order.getOrderAmounts();
 			//订单取消需要将券返还给用户
 			Integer  couponFlag = order.getCouponFlag();
+			if(OrderSkillConstants.ORDER_COUPON_FLAG_USE == couponFlag){
+				couponFlag = OrderSkillConstants.ORDER_COUPON_FLAG_CANCEL;
+			}
+			
 			commonService.cancelUpdateOrder(orderId, orderStatus, new Date(), request.getSelectReason(),
 					request.getRemarkReason(),couponFlag);
 			// 金额不为空，说明需要退款给用户
