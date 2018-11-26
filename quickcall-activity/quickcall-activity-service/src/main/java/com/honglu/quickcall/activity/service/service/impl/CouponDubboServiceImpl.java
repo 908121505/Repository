@@ -53,7 +53,7 @@ public class CouponDubboServiceImpl implements CouponDubboService{
      * @return
      */
 	@Override
-	public Map<String,String> getCustomerCouponByOrderId(Long orderId){
+	public Map<String,Object> getCustomerCouponByOrderId(Long orderId){
 		return customerCouponMapper.getCustomerCouponByOrderId(orderId);
 	}
 
