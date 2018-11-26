@@ -375,7 +375,7 @@ public interface OrderSkillConstants {
 	/**订单用券状态1：使用券*/
 	public static final  Integer  ORDER_COUPON_FLAG_USE = 1;
 	/**订单用券状态2：使用券订单取消*/
-	public static final  Integer  ORDER_COUPON_FLAG_CANCEL = 2;
+	public static final  Integer  ORDER_COUPON_FLAG_CANCEL = 0;
 	
 	
 	

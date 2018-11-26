@@ -41,7 +41,7 @@ public class CommonServiceImpl implements CommonService {
 	}
 
 	@Override
-	public void updateOrder(Long orderId, Integer orderStatus) {
+	public void updateOrder(Long orderId, Integer orderStatus,Integer  couponFlag ) {
 		Order record = new Order();
 		record.setOrderStatus(orderStatus);
 		record.setOrderId(orderId);
