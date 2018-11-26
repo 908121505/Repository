@@ -119,7 +119,7 @@
 	                ORDER BY bss.score_total DESC
                 )tmp
                 GROUP BY tmp.customerId
-                ORDER BY tmp.score_total DESC
+                ORDER BY sum(score_total) DESC
                 LIMIT #{beginIndex},#{endIndex}
         ) tt
         LEFT JOIN customer_skill_certify csc ON csc.certify_id = tt.certify_id
@@ -175,7 +175,7 @@
     <select id="selectRankBigvListBySkillItemId" resultType="com.honglu.quickcall.user.facade.entity.CustomerSkill">
         select * from(
         	<if test="skillItemId == null">
-                select * from(
+                select * as total from(
             </if>
             SELECT
 	            (SELECT count(o.order_id) FROM orders o WHERE o.service_id = bss.customer_id
@@ -210,7 +210,7 @@
             <if test="skillItemId == null">
                 )tmp 
                 GROUP BY tmp.customerId 
-                ORDER BY ooo ASC , tmp.score_total DESC
+                ORDER BY ooo ASC ,sum(score_total) DESC
             </if>
         ) tt
         LIMIT #{start},#{size}
