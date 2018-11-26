@@ -11,7 +11,7 @@
         </ul>
     </div>
     <div class="main-content">
-        <div class="row">
+        <div class="row" id="searchInput">
             <!-- <div class="col-md-4">
                 <div class="form-group">
                     <div class="input-group">
@@ -41,6 +41,14 @@
                     </div>
                 </div>
             </div>
+            <div class="col-md-2">
+                <div class="form-group">
+                    <div class="input-group">
+                        <div class="input-group-addon">渠道模糊</div>
+                         <input class="form-control"  type="text" id="keyword" >
+                    </div>
+                </div>
+            </div>
             
             <div class="col-md-2">
                 <button type="button" class="btn btn-primary btn-small btn-block"
@@ -54,6 +62,11 @@
                     <i class="glyphicon glyphicon-export"></i> 导出CSV
                 </button>
             </div>
+        </div>
+        <div class="row">
+	        <div class="col-md-2">
+                <span id = "nowTime"></span>
+	        </div>
         </div>
         <table id="example" class="table"></table>
     </div>
@@ -324,12 +337,25 @@
                 }] */
 
             });
-
+			
+            $('#nowTime').html('本次查询时间'+Format(
+                    new Date(),
+                        "yyyy-MM-dd HH:mm:ss"));
+            
             $('#query').click(function () {
             	if(check()){
                 	$('#example').dataTable().fnDraw();
+                	$('#nowTime').html('本次查询时间'+Format(
+                            new Date(),
+                    "yyyy-MM-dd HH:mm:ss"));
             	}
             });
+            
+            $("#searchInput").keydown(function () {
+                if (event.keyCode == "13") {//keyCode=13是回车键
+                     $('#query').click();
+                }
+   	       });
             //setInterval('refresh()',5000);
         });
         
@@ -359,6 +385,7 @@
             aoData.push({"name": "eTime", "value": $("#eTime").val()});
             aoData.push({"name": "sHour", "value": $("#sHour").val()});
             aoData.push({"name": "eHour", "value": $("#eHour").val()});
+            aoData.push({"name": "keyword", "value":$("#keyword").val()});
             aoData.push({"name": "appChannelName", "value":channel});
             aoData.push({"name": "type", "value": 1});
         }
