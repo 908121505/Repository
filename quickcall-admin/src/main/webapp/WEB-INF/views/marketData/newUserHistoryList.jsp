@@ -206,42 +206,6 @@
                         }
                     },
                     {
-                        "data": "rechargeNum",
-                        "sTitle": "充值人数",
-                        'sClass': "text-center",
-                        "mRender": function (data, type, full) {
-                            if (data == '' || data == null) {
-                                return "0";
-                            } else {
-                                return data;
-                            }
-                        }
-                    },
-                    {
-                        "data": "rechargeTime",
-                        "sTitle": "充值次数",
-                        'sClass': "text-center",
-                        "mRender": function (data, type, full) {
-                            if (data == '' || data == null) {
-                                return "0";
-                            } else {
-                                return data;
-                            }
-                        }
-                    },
-                    {
-                        "data": "rechargeTotal",
-                        "sTitle": "充值金额",
-                        'sClass': "text-center",
-                        "mRender": function (data, type, full) {
-                            if (data == '' || data == null) {
-                                return "0";
-                            } else {
-                                return data;
-                            }
-                        }
-                    },
-                    {
                         "data": "orderNum",
                         "sTitle": "总下单人数",
                         'sClass': "text-center",
@@ -268,6 +232,42 @@
                     {
                         "data": "orderTotal",
                         "sTitle": "总下单金额",
+                        'sClass': "text-center",
+                        "mRender": function (data, type, full) {
+                            if (data == '' || data == null) {
+                                return "0";
+                            } else {
+                                return data;
+                            }
+                        }
+                    },
+                    {
+                        "data": "rechargeNum",
+                        "sTitle": "充值人数",
+                        'sClass': "text-center",
+                        "mRender": function (data, type, full) {
+                            if (data == '' || data == null) {
+                                return "0";
+                            } else {
+                                return data;
+                            }
+                        }
+                    },
+                    {
+                        "data": "rechargeTime",
+                        "sTitle": "充值次数",
+                        'sClass': "text-center",
+                        "mRender": function (data, type, full) {
+                            if (data == '' || data == null) {
+                                return "0";
+                            } else {
+                                return data;
+                            }
+                        }
+                    },
+                    {
+                        "data": "rechargeTotal",
+                        "sTitle": "充值金额",
                         'sClass': "text-center",
                         "mRender": function (data, type, full) {
                             if (data == '' || data == null) {
