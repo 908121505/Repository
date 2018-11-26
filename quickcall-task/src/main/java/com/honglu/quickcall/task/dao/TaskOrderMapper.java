@@ -176,5 +176,11 @@ public interface TaskOrderMapper {
 	 * @return
 	 */
 	List<TaskOrder> queryReleaseDaV(@Param("currTime")Date  currTime,@Param("queryStatus")Integer queryStatus);
+	
+	/**
+	 * 根据订单Id列表更新券状态为取消
+	 * @param orderIdCouponList
+	 */
+	void updateOrderCouponFlag(@Param("list")List<Long> orderIdCouponList,@Param("couponFlag")Integer  couponFlag);
 
 }
