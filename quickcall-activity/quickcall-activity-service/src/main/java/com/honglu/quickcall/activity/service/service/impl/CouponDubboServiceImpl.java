@@ -1,6 +1,8 @@
 package com.honglu.quickcall.activity.service.service.impl;
 
 import com.honglu.quickcall.activity.facade.vo.CouponOrderVo;
+import com.honglu.quickcall.common.api.util.JedisUtil;
+import com.honglu.quickcall.common.api.util.RedisKeyConstants;
 import com.honglu.quickcall.common.core.util.UUIDUtils;
 import com.honglu.quickcall.common.third.rongyun.util.RongYunUtil;
 import com.honglu.quickcall.user.facade.entity.Message;
@@ -35,7 +37,14 @@ public class CouponDubboServiceImpl implements CouponDubboService{
 
 	@Override
 	public int updateCustomerCouponById(CustomerCoupon customerCoupon) {
-		return customerCouponMapper.updateByPrimaryKeySelective(customerCoupon);
+		int num = customerCouponMapper.updateByPrimaryKeySelective(customerCoupon);
+		try {
+			//领取券，加入redis,超时1天
+			JedisUtil.set(RedisKeyConstants.CUSTOMER_COUPON_STATUS+customerCoupon.getCustomerId()+":"+customerCoupon.getCouponId(),customerCoupon.getIsUsed()+"",3600*24);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return num;
 	}
 
 	@Override
@@ -45,7 +54,19 @@ public class CouponDubboServiceImpl implements CouponDubboService{
 
 	@Override
 	public int cancelUpdateCustomerCoupon(Integer id) {
-		return customerCouponMapper.cancelUpdateCustomerCoupon(id);
+		int num = customerCouponMapper.cancelUpdateCustomerCoupon(id);
+		if(num > 0){
+			try {
+				CustomerCoupon customerCoupon = customerCouponMapper.selectByPrimaryKey(id);
+				if(customerCoupon!=null){
+					//领取券，加入redis,0未使用状态,超时1天
+					JedisUtil.set(RedisKeyConstants.CUSTOMER_COUPON_STATUS+customerCoupon.getCustomerId()+":"+customerCoupon.getCouponId(),"0",3600*24);
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return num;
 	}
 
     /**
@@ -127,7 +148,10 @@ public class CouponDubboServiceImpl implements CouponDubboService{
 	 */
 	@Override
 	public int insertCustomerCoupon(CustomerCoupon customerCoupon){
-		return customerCouponMapper.insertSelective(customerCoupon);
+		int num = customerCouponMapper.insertSelective(customerCoupon);
+		//领取券，加入redis,0未使用状态,超时1天
+		JedisUtil.set(RedisKeyConstants.CUSTOMER_COUPON_STATUS+customerCoupon.getCustomerId()+":"+customerCoupon.getCouponId(),"0",3600*24);
+		return num;
 	}
 
 	/**

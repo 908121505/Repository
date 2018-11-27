@@ -5,6 +5,8 @@ import com.honglu.quickcall.activity.facade.vo.CouponOrderVo;
 //import com.honglu.quickcall.common.third.rongyun.util.RongYunUtil;
 //import com.honglu.quickcall.user.facade.entity.Message;
 //import com.honglu.quickcall.user.facade.entity.MessageCustomer;
+import com.honglu.quickcall.common.api.util.JedisUtil;
+import com.honglu.quickcall.common.api.util.RedisKeyConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -36,6 +38,7 @@ public class CouponDubboBusinessImpl implements CouponDubboBusiness{
 	@Override
 	public int updateCustomerCouponById(CustomerCoupon customerCoupon) {
 		return couponDubboService.updateCustomerCouponById(customerCoupon);
+
 	}
 
 	/**
@@ -182,6 +185,12 @@ public class CouponDubboBusinessImpl implements CouponDubboBusiness{
 					if(num > 0){
 						//插入消息记录
 						couponDubboService.sendActivityMessage(couponId,customerId.toString());
+						try {
+							//领取券，加入redis,超时1天
+							JedisUtil.set(RedisKeyConstants.CUSTOMER_COUPON_STATUS+customerId+":"+couponId,"0",3600*24);
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
 					}
 				}
 			}

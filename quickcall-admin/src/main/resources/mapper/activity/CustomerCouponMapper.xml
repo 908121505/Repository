@@ -218,6 +218,14 @@
      and order_id = #{orderId}
   </update>
 
+  <select id="getCustomerCouponByOrderIdAndCustomerId" parameterType="map" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+     from customer_coupon
+    where customer_id = #{customerId}
+     and order_id = #{orderId}
+  </select>
+
   <select id="getCustomerCouponByOrderId" resultType="map" parameterType="Long">
       select c.coupon_name as couponName,c.coupon_price as couponPrice
          from customer_coupon cc
