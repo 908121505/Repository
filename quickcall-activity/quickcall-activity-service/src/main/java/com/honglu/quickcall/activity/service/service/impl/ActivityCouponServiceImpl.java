@@ -1,5 +1,6 @@
 package com.honglu.quickcall.activity.service.service.impl;
 
+import com.honglu.quickcall.activity.facade.code.ActivityBizReturnCode;
 import com.honglu.quickcall.activity.facade.entity.CustomerCoupon;
 import com.honglu.quickcall.activity.facade.exchange.request.ActivityCouponQueryRequest;
 import com.honglu.quickcall.activity.facade.exchange.request.ActivityCouponReceiveRequest;
@@ -10,13 +11,18 @@ import com.honglu.quickcall.activity.service.dao.ActivityMapper;
 import com.honglu.quickcall.activity.service.dao.CouponMapper;
 import com.honglu.quickcall.activity.service.dao.CustomerCouponMapper;
 import com.honglu.quickcall.activity.service.service.ActivityCouponService;
+import com.honglu.quickcall.common.api.exception.BizException;
 import com.honglu.quickcall.common.api.exchange.CommonResponse;
 import com.honglu.quickcall.common.api.exchange.ResultUtils;
+import com.honglu.quickcall.common.api.util.JedisUtil;
+import com.honglu.quickcall.common.api.util.RedisKeyConstants;
 import com.honglu.quickcall.common.core.util.UUIDUtils;
 import com.honglu.quickcall.common.third.rongyun.util.RongYunUtil;
 import com.honglu.quickcall.user.facade.entity.Message;
 import com.honglu.quickcall.user.facade.entity.MessageCustomer;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,6 +37,12 @@ import java.util.*;
  */
 @Service
 public class ActivityCouponServiceImpl implements ActivityCouponService {
+    private static final Logger LOGGER = LoggerFactory.getLogger(ActivityCouponServiceImpl.class);
+
+    //唯一锁值
+    private static final String ACTIVITY_DEFAULT_VALUE = "1";
+    //唯一锁存在时间
+    private static final Integer ACTIVITY_DEFAULT_TIME_OUT = 2;
 
     @Autowired
     private ActivityMapper activityMapper;
@@ -80,6 +92,13 @@ public class ActivityCouponServiceImpl implements ActivityCouponService {
         if (request.getCouponId() == null) {
             return ResultUtils.resultParamEmpty("券编号必传");
         }
+        //设置分布式锁，防止重复领取
+        if(JedisUtil.setnx(RedisKeyConstants.ACTIVITY_RECEIVE_COUPON_KEY + request.getCustomerId(), ACTIVITY_DEFAULT_VALUE, ACTIVITY_DEFAULT_TIME_OUT) == 0){
+            LOGGER.info("======================用户频繁操作，进行限制=======================");
+            //说明已经操作，本次不进行操作
+            throw new BizException(ActivityBizReturnCode.ACTIVITY_REPEAT_RECEIVE_COUPON, "请稍后重试");
+        }
+
         Map<String,String> map = new HashMap<String,String>();
         map.put("couponId",request.getCouponId());
         map.put("customerId",request.getCustomerId());
@@ -126,6 +145,7 @@ public class ActivityCouponServiceImpl implements ActivityCouponService {
             remap.put("code","1");
             remap.put("msg","领取失败，已经领取过了");
         }
+
         return ResultUtils.resultSuccess(remap);
     }
 

@@ -51,10 +51,13 @@ public class OrderController {
             LOGGER.debug("isiOS-userAgent:"+userAgent);
         }
         */
-        String[] keywords = { "iPhone", "iPod", "iPad", "Windows Phone" };
+        //String[] keywords = { "iPhone", "iPod", "iPad", "Windows Phone" };
+        String[] keywords = { "IPHONE", "IPOD", "IPAD", "WINDOWS PHONE" };
         boolean flag = false;
+        //转大写匹配
+        String userAgentUpperCase = userAgent.toUpperCase();
         for (String item:keywords ) {
-            if (userAgent.contains(item))
+            if (userAgentUpperCase.contains(item))
             {
                 flag = true;
                 break;

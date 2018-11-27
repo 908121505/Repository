@@ -79,6 +79,7 @@ public class MarketDataController implements BaseController<MarketDataVO>{
     	return list;
     }
     
+    //根据参数查询各个类型的数据
 	private List<MarketDataVO> getMarketDataList(Map<String, Object> params){
 		List<MarketDataVO> list = new ArrayList<>();
 		HashMap<String,Object> map = new HashMap<>();
@@ -99,6 +100,7 @@ public class MarketDataController implements BaseController<MarketDataVO>{
 		Calendar end = Calendar.getInstance();
 		switch(type){
 		case "1":
+			LOGGER.info("查询市场渠道当日实时数据");
 			CalendarUtil.clearTime(start);
 //			CalendarUtil.setTenMinutes(end);
 			if(sHour != null){
@@ -115,6 +117,7 @@ public class MarketDataController implements BaseController<MarketDataVO>{
 			list.addAll(getTotal(result));
 			break;
 		case "2":
+			LOGGER.info("查询市场渠道新客历史数据");
 			if(sTime != null && eTime != null){
 				start = CalendarUtil.getCalendarByDate(sTime);
 				end = CalendarUtil.getCalendarByDate(eTime);
@@ -144,6 +147,7 @@ public class MarketDataController implements BaseController<MarketDataVO>{
 			}
 			break;
 		case "3":
+			LOGGER.info("查询市场渠道市场成效");
 			Calendar startAll = CalendarUtil.getCalendarByYear(2018);
 			if(sTime != null && eTime != null){
 				start = CalendarUtil.getCalendarByDate(sTime);
@@ -173,6 +177,7 @@ public class MarketDataController implements BaseController<MarketDataVO>{
 		return list;
     }
     
+	//统计合计账目
 	private List<MarketDataVO> getTotal(List<MarketDataVO> marketDataList){
 		if(marketDataList.size()>0){
 			MarketDataVO data = new MarketDataVO();
@@ -196,6 +201,7 @@ public class MarketDataController implements BaseController<MarketDataVO>{
 		return marketDataList;
 	}
 	
+	//合计计算
 	private String addValue(String a,String b,boolean isBigDeciaml){
 		if(isBigDeciaml){
 			BigDecimal x = new BigDecimal(0);
