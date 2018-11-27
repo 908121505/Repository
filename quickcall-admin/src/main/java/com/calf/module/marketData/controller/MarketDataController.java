@@ -1,5 +1,6 @@
 package com.calf.module.marketData.controller;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -78,15 +79,18 @@ public class MarketDataController implements BaseController<MarketDataVO>{
     	return list;
     }
     
+    //根据参数查询各个类型的数据
 	private List<MarketDataVO> getMarketDataList(Map<String, Object> params){
 		List<MarketDataVO> list = new ArrayList<>();
 		HashMap<String,Object> map = new HashMap<>();
+		String keyword = (String) params.get("keyword");
     	String type = (String) params.get("type");
 		String appChannelName = (String) params.get("appChannelName");
 		String sHour = (String) params.get("sHour");
 		String eHour = (String) params.get("eHour");
 		String sTime = (String) params.get("sTime");
 		String eTime = (String) params.get("eTime");
+		map.put("keyword", keyword);
 		if(appChannelName != null){
 			appChannelName = appChannelName.replaceAll("未知渠道", "");
 			String[] chs = appChannelName.split(",");
@@ -96,8 +100,9 @@ public class MarketDataController implements BaseController<MarketDataVO>{
 		Calendar end = Calendar.getInstance();
 		switch(type){
 		case "1":
+			LOGGER.info("查询市场渠道当日实时数据");
 			CalendarUtil.clearTime(start);
-			CalendarUtil.setTenMinutes(end);
+//			CalendarUtil.setTenMinutes(end);
 			if(sHour != null){
 				start.add(Calendar.HOUR_OF_DAY, Integer.valueOf(sHour));
 			}
@@ -109,9 +114,10 @@ public class MarketDataController implements BaseController<MarketDataVO>{
 			map.put("end", end.getTime());
 			map.put("date", DateUtil.dateYMDEXT(start.getTime()));
 			List<MarketDataVO> result = baseManager.query("MarketDataMapper.queryAll", map);
-			list.addAll(result);
+			list.addAll(getTotal(result));
 			break;
 		case "2":
+			LOGGER.info("查询市场渠道新客历史数据");
 			if(sTime != null && eTime != null){
 				start = CalendarUtil.getCalendarByDate(sTime);
 				end = CalendarUtil.getCalendarByDate(eTime);
@@ -134,12 +140,14 @@ public class MarketDataController implements BaseController<MarketDataVO>{
 				map.put("end", endHour.getTime());
 				map.put("date", DateUtil.dateYMDEXT(startHour.getTime()));
 				List<MarketDataVO> res = baseManager.query("MarketDataMapper.queryAll", map);
-				list.addAll(res);
+				
+				list.addAll(getTotal(res));
 				startHour.add(Calendar.DAY_OF_MONTH, 1);
 				endHour.add(Calendar.DAY_OF_MONTH, 1);
 			}
 			break;
 		case "3":
+			LOGGER.info("查询市场渠道市场成效");
 			Calendar startAll = CalendarUtil.getCalendarByYear(2018);
 			if(sTime != null && eTime != null){
 				start = CalendarUtil.getCalendarByDate(sTime);
@@ -158,7 +166,7 @@ public class MarketDataController implements BaseController<MarketDataVO>{
 				tmp.add(Calendar.DAY_OF_MONTH, -1);
 				map.put("date", DateUtil.dateYMDEXT(tmp.getTime()));
 				List<MarketDataVO> res = baseManager.query("MarketDataMapper.queryAll", map);
-				list.addAll(res);
+				list.addAll(getTotal(res));
 				endAll.add(Calendar.DAY_OF_MONTH, 1);
 			}
 			break;
@@ -169,6 +177,54 @@ public class MarketDataController implements BaseController<MarketDataVO>{
 		return list;
     }
     
+	//统计合计账目
+	private List<MarketDataVO> getTotal(List<MarketDataVO> marketDataList){
+		if(marketDataList.size()>0){
+			MarketDataVO data = new MarketDataVO();
+			data.setAppChannelName("合计");
+			for (MarketDataVO marketDataVO : marketDataList) {
+				data.setDate(marketDataVO.getDate());
+				data.setConsultNum(addValue(data.getConsultNum(),marketDataVO.getConsultNum(),false));
+				data.setCouponNum(addValue(data.getCouponNum(),marketDataVO.getCouponNum(),false));
+				data.setOrderNum(addValue(data.getOrderNum(),marketDataVO.getOrderNum(),false));
+				data.setOrderTime(addValue(data.getOrderTime(),marketDataVO.getOrderTime(),false));
+				data.setOrderTotal(addValue(data.getOrderTotal(),marketDataVO.getOrderTotal(),true));
+				data.setRechargeNum(addValue(data.getRechargeNum(),marketDataVO.getRechargeNum(),false));
+				data.setRechargeTime(addValue(data.getRechargeTime(),marketDataVO.getRechargeTime(),false));
+				data.setRechargeTotal(addValue(data.getRechargeTotal(),marketDataVO.getRechargeTotal(),true));
+				data.setRegisterNum(addValue(data.getRegisterNum(),marketDataVO.getRegisterNum(),false));
+				data.setSleepNum(addValue(data.getSleepNum(),marketDataVO.getSleepNum(),false));
+				data.setWakeNum(addValue(data.getWakeNum(),marketDataVO.getWakeNum(),false));
+			}
+			marketDataList.add(0, data);
+		}
+		return marketDataList;
+	}
+	
+	//合计计算
+	private String addValue(String a,String b,boolean isBigDeciaml){
+		if(isBigDeciaml){
+			BigDecimal x = new BigDecimal(0);
+			BigDecimal y = new BigDecimal(0);
+			if(a != null){
+				x = BigDecimal.valueOf(Double.valueOf(a));
+			}
+			if(b != null){
+				y = BigDecimal.valueOf(Double.valueOf(b));
+			}
+			return x.add(y).setScale(2)+"";
+		}else{
+			Integer x = 0;
+			Integer y = 0;
+			if(a != null){
+				x = Integer.valueOf(a);
+			}
+			if(b != null){
+				y = Integer.valueOf(b);
+			}
+			return x+y+"";
+		}
+	}
 	
 	@Override
 	public String addAndUpdateHome(Model model, String id) {

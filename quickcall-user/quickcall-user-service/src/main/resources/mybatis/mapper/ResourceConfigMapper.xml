@@ -119,7 +119,7 @@
 	                ORDER BY bss.score_total DESC
                 )tmp
                 GROUP BY tmp.customerId
-                ORDER BY tmp.score_total DESC
+                ORDER BY sum(score_total) DESC
                 LIMIT #{beginIndex},#{endIndex}
         ) tt
         LEFT JOIN customer_skill_certify csc ON csc.certify_id = tt.certify_id
@@ -210,7 +210,7 @@
             <if test="skillItemId == null">
                 )tmp 
                 GROUP BY tmp.customerId 
-                ORDER BY ooo ASC , tmp.score_total DESC
+                ORDER BY ooo ASC ,sum(score_total) DESC
             </if>
         ) tt
         LIMIT #{start},#{size}
