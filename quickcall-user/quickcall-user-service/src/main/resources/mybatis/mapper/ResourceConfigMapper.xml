@@ -205,12 +205,13 @@
             WHERE 1 =1
             <if test="skillItemId != null">
                 AND bss.skill_item_id = #{skillItemId}
+                ORDER BY ooo ASC , bss.score_total DESC
             </if>
-            ORDER BY ooo ASC , bss.score_total DESC
             <if test="skillItemId == null">
+            	ORDER BY bss.score_total DESC
                 )tmp 
                 GROUP BY tmp.customerId 
-                ORDER BY ooo ASC ,sum(score_total) DESC
+                ORDER BY sum(ooo) ASC ,sum(score_total) DESC
             </if>
         ) tt
         LIMIT #{start},#{size}
