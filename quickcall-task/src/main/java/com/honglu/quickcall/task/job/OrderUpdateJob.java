@@ -733,10 +733,11 @@ public class OrderUpdateJob {
             return;
         }
         //TODO 根据地订单中customer_skill_id获取用户技能价格 * 订单数量orderNum
-        BigDecimal skillPrice = skillItemMapper.selectOneSkillPrice(order.getSkillItemId());
+//        BigDecimal skillPrice = skillItemMapper.selectOneSkillPrice(order.getSkillItemId());
+        BigDecimal skillPrice = order.getServicePrice();
         // 计算客户需要获取的经验值
-        Integer experience = skillPrice.multiply(new BigDecimal(order.getOrderNum())).intValue();
-//        Integer experience = order.getOrderAmounts().intValue();
+        Integer experience = skillPrice.multiply(new BigDecimal(order.getOrderNum())).intValue(); 
+//        Integer experience = order.getOrderAmounts().intValue(); 
 
         LOGGER.info("客户下单获取经验值--客户ID：" + customer.getCustomerId() + " ， 增加经验值：" + experience);
         // 更新用户经验值和等级

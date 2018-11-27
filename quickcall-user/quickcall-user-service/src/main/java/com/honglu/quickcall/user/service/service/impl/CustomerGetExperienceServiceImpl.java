@@ -8,11 +8,8 @@ import org.springframework.stereotype.Service;
 
 import com.honglu.quickcall.account.facade.entity.Order;
 import com.honglu.quickcall.user.facade.entity.Customer;
-import com.honglu.quickcall.user.facade.entity.SkillItem;
 import com.honglu.quickcall.user.facade.exchange.mqrequest.DoOrderCastMqRequest;
 import com.honglu.quickcall.user.service.dao.CustomerMapper;
-import com.honglu.quickcall.user.service.dao.SkillItemExtMapper;
-import com.honglu.quickcall.user.service.dao.SkillItemMapper;
 import com.honglu.quickcall.user.service.service.CustomerGetExperienceService;
 
 /**
@@ -27,8 +24,8 @@ public class CustomerGetExperienceServiceImpl implements CustomerGetExperienceSe
 
     @Autowired
     private CustomerMapper customerMapper;
-    @Autowired
-    private SkillItemExtMapper skillItemExtMapper;
+  /*  @Autowired
+    private SkillItemExtMapper skillItemExtMapper;*/
 
     @Override
     public void doOrderCast(DoOrderCastMqRequest request) {
@@ -46,7 +43,8 @@ public class CustomerGetExperienceServiceImpl implements CustomerGetExperienceSe
             return;
         }
       //TODO 根据地订单中customer_skill_id获取用户技能价格 * 订单数量orderNum
-        BigDecimal skillPrice = skillItemExtMapper.selectOneSkillPrice(order.getSkillItemId());
+//        BigDecimal skillPrice = skillItemExtMapper.selectOneSkillPrice(order.getSkillItemId());
+        BigDecimal skillPrice = order.getServicePrice();
         // 计算客户需要获取的经验值
         Integer experience = skillPrice.multiply(new BigDecimal(order.getOrderNum())).intValue();
 //        Integer experience = order.getOrderAmounts().intValue();
