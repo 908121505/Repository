@@ -15,7 +15,14 @@ public class ActivityBizReturnCode extends BizCode {
 
     public static final BizCode Unknown = new ActivityBizReturnCode("Unknown","999", MyServiceCode.ACTIVITY,"未知异常");
     public static final BizCode BizFunctionTypeNotMatch=new ActivityBizReturnCode("BizFunctionTypeNotMatch","998",MyServiceCode.ACTIVITY,"接口功能编码不匹配");
-    
+
+    //活动使用异常号段：1100-1200-------开始
+    /**重复领券*/
+    public static final BizCode ACTIVITY_REPEAT_RECEIVE_COUPON = new ActivityBizReturnCode("ACTIVITY_REPEAT_RECEIVE_COUPON","1100", MyServiceCode.ACTIVITY,"重复领券");
+
+
+    //活动使用异常号段：1100-1200-------结束
+
     public ActivityBizReturnCode() {
 
     }
