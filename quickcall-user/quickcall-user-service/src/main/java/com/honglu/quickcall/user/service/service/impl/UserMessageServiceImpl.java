@@ -1,5 +1,14 @@
 package com.honglu.quickcall.user.service.service.impl;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.honglu.quickcall.common.api.code.BizCode;
 import com.honglu.quickcall.common.api.exchange.CommonResponse;
 import com.honglu.quickcall.common.api.exchange.ResultUtils;
@@ -7,28 +16,28 @@ import com.honglu.quickcall.common.api.util.JedisUtil;
 import com.honglu.quickcall.common.core.util.UUIDUtils;
 import com.honglu.quickcall.common.third.rongyun.util.RongYunUtil;
 import com.honglu.quickcall.user.facade.code.UserBizReturnCode;
-import com.honglu.quickcall.user.facade.entity.*;
+import com.honglu.quickcall.user.facade.entity.Customer;
+import com.honglu.quickcall.user.facade.entity.CustomerMsgSetting;
+import com.honglu.quickcall.user.facade.entity.CustomerSkill;
+import com.honglu.quickcall.user.facade.entity.MessageCustomer;
+import com.honglu.quickcall.user.facade.entity.MessageReservation;
+import com.honglu.quickcall.user.facade.entity.SkillItem;
 import com.honglu.quickcall.user.facade.exchange.request.BookingMessageQueryRequest;
 import com.honglu.quickcall.user.facade.exchange.request.BookingMessageSaveRequest;
 import com.honglu.quickcall.user.facade.exchange.request.CustomerMessageSettingQueryRequest;
 import com.honglu.quickcall.user.facade.exchange.request.CustomerMsgSettingRequest;
 import com.honglu.quickcall.user.facade.exchange.request.UserUnreadMessageNumRequest;
 import com.honglu.quickcall.user.facade.vo.MessageReservationVO;
-import com.honglu.quickcall.user.service.dao.*;
+import com.honglu.quickcall.user.service.dao.CustomerMapper;
+import com.honglu.quickcall.user.service.dao.CustomerMsgSettingMapper;
+import com.honglu.quickcall.user.service.dao.CustomerSkillMapper;
+import com.honglu.quickcall.user.service.dao.MessageCustomerMapper;
+import com.honglu.quickcall.user.service.dao.MessageMapper;
+import com.honglu.quickcall.user.service.dao.MessageReservationMapper;
+import com.honglu.quickcall.user.service.dao.SkillItemMapper;
 import com.honglu.quickcall.user.service.service.UserMessageService;
 import com.honglu.quickcall.user.service.util.DateUtil;
 import com.honglu.quickcall.user.service.util.RadomUtil;
-
-import org.apache.commons.beanutils.BeanUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 /**
  * 用户消息服务实现类
@@ -74,7 +83,7 @@ public class UserMessageServiceImpl implements UserMessageService {
             MessageReservation messageReservation = new MessageReservation();
             Date curDate = new Date();
             messageReservation.setId(getRandomId());
-            messageReservation.setContent("希望能快一点看到我的消息给我回复");
+            messageReservation.setContent("看到消息记得给我回复哦~");
             messageReservation.setCreateTime(curDate);
             messageReservation.setCustomerId(params.getCustomerId());
             messageReservation.setPriceUnit(params.getPriceUnit()+"-"+params.getPriceUnitTimeCount());
