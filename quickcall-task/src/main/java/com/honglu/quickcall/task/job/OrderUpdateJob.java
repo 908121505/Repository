@@ -729,6 +729,7 @@ public class OrderUpdateJob {
             LOGGER.warn("客户下单消费获取经验值 -- 未查询到客户信息，客户ID：" + order.getCustomerId());
             return;
         }
+        //TODO 根据地订单中customer_skill_id获取用户技能价格 * 订单数量orderNum
         // 计算客户需要获取的经验值
         Integer experience = order.getOrderAmounts().intValue();
 
