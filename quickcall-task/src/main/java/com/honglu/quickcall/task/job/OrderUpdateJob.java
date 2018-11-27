@@ -407,18 +407,19 @@ public class OrderUpdateJob {
     					taskOrderMapper.updateOrderCouponFlag(orderIdCouponList,couponFlag);
     					LOGGER.info("==============更新券状态结束==============");
 
-						for (int i = 0; i < orderIdCouponList.size(); i++) {
-							Map<String,Object> map = new HashMap<String,Object>();
-							map.put("orderId",orderIdCouponList.get(i));
-							CustomerCoupon cc = taskCustomerCouponMapper.getCustomerCouponByOrderId(map);
-							try {
-								//领取券，加入redis,超时1天
-								JedisUtil.set(RedisKeyConstants.CUSTOMER_COUPON_STATUS+cc.getCustomerId()+":"+cc.getCouponId(),couponFlag+"",3600*24);
-							} catch (Exception e) {
-								LOGGER.info("==============task-JedisUtil更新券状态结束==============");
-								e.printStackTrace();
-							}
-						}
+                        try {
+                            for (int i = 0; i < orderIdCouponList.size(); i++) {
+                                Map<String,Object> map = new HashMap<String,Object>();
+                                map.put("orderId",orderIdCouponList.get(i));
+                                CustomerCoupon cc = taskCustomerCouponMapper.getCustomerCouponByOrderId(map);
+
+                                //领取券，加入redis,超时1天
+                                JedisUtil.set(RedisKeyConstants.CUSTOMER_COUPON_STATUS+cc.getCustomerId()+":"+cc.getCouponId(),couponFlag+"",3600*24);
+                            }
+                        } catch (Exception e) {
+                            LOGGER.info("==============task-JedisUtil更新券状态结束==============");
+                            e.printStackTrace();
+                        }
 
 					}
     			} catch (Exception e) {
