@@ -81,14 +81,40 @@
                         'sClass': "text-center"
                     },
                     {
-                        "data": "skillVoiceUrlTmp",
-                        "sTitle": "声音",
+                        "data": "skillVoiceUrl",
+                        "sTitle": "当前声音",
                         'sClass': "text-center",
                         "mRender": function (data, type, full) {
                             if(data && data != ''){
                                 return "<img src='resources/images/pause.png' height='30px;' onclick='pauseVoiceFn(\"" + data + "\")'/>";
                             }else {
                                 return "<font color='red'>文件不存在</font>";
+                            }
+                        }
+                    },
+                    {
+                        "data": "skillVoiceUrlTmp",
+                        "sTitle": "待审核声音",
+                        'sClass': "text-center",
+                        "mRender": function (data, type, full) {
+                            if(data && data != ''){
+                                return "<img src='resources/images/pause.png' height='30px;' onclick='pauseVoiceFn(\"" + data + "\")'/>";
+                            }else {
+                                return "<font color='red'>文件不存在</font>";
+                            }
+                        }
+                    },
+                    {
+                        "data": "isAudited",
+                        "sTitle": "曾经状态",
+                        'sClass': "text-center",
+                        "mRender": function (data, type, full) {
+                            if (data == 0) {
+                                return "<font color='red'>未通过</font>";
+                            } else if (data == 1) {
+                                return "<font color='blue'>已通过</font>";
+                            } else {
+                                return "<font color='red'>" + data + "</font>";
                             }
                         }
                     },
@@ -120,7 +146,7 @@
                 },
                 aoColumnDefs: [
                     {
-                        "aTargets": 5, "mRender": function (data, type, row) {
+                        "aTargets": 7, "mRender": function (data, type, row) {
                             var approved = "", refuse = "";
                             <shiro:hasPermission name="customerSkillCertify:update">
                             if (row.auditStatus == 1) {
