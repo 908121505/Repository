@@ -94,7 +94,7 @@ public class ActivityCouponServiceImpl implements ActivityCouponService {
         }
         //设置分布式锁，防止重复领取
         if(JedisUtil.setnx(RedisKeyConstants.ACTIVITY_RECEIVE_COUPON_KEY + request.getCustomerId(), ACTIVITY_DEFAULT_VALUE, ACTIVITY_DEFAULT_TIME_OUT) == 0){
-            LOGGER.info("======================用户频繁操作，进行限制=======================");
+            LOGGER.info("======================用户频繁操作，重复领取receiveCoupon,进行限制=======================");
             //说明已经操作，本次不进行操作
             throw new BizException(ActivityBizReturnCode.ACTIVITY_REPEAT_RECEIVE_COUPON, "请稍后重试");
         }
@@ -108,42 +108,53 @@ public class ActivityCouponServiceImpl implements ActivityCouponService {
             CustomerCoupon customerCoupon = new CustomerCoupon();
             customerCoupon.setCouponId(Long.parseLong(request.getCouponId()));
             customerCoupon.setCustomerId(Long.parseLong(request.getCustomerId()));
-            customerCouponMapper.insertSelective(customerCoupon);
-            remap.put("code","0");
-            remap.put("msg","领取成功");
+            int in = customerCouponMapper.insertSelective(customerCoupon);
+            if(in > 0){
+                remap.put("code","0");
+                remap.put("msg","领取成功");
 
-            //领取券，加入redis,0未使用状态,超时1天
-            JedisUtil.set(RedisKeyConstants.CUSTOMER_COUPON_STATUS+request.getCustomerId()+":"+request.getCouponId(),"0",3600*24);
+                try {
+                    LOGGER.info("ActivityCouponServiceImpl.receiveCoupon-客户券放redis:"+request.getCustomerId());
+                    //领取券，加入redis,0未使用状态,超时1天
+                    JedisUtil.set(RedisKeyConstants.CUSTOMER_COUPON_STATUS+request.getCustomerId()+":"+request.getCouponId(),"0",3600*24);
+                } catch (Exception e) {
+                    LOGGER.info("ActivityCouponServiceImpl.receiveCoupon-客户券放redis异常");
+                    e.printStackTrace();
+                }
 
-            Map<String,String> mapA = customerCouponMapper.selectActivityNameAndCouponName(Long.parseLong(request.getCouponId()));
-            //发送消息
-            StringBuilder builder = new StringBuilder();
-            builder.append("您有新的抵扣券可用----恭喜您在【");
-            builder.append(mapA.get("activityName"));
-            builder.append("】活动中获得了“");
-            builder.append(mapA.get("couponName"));
-            builder.append("”，可在下单时直接抵扣。");
-            //"您有新的抵扣券可用----恭喜您在【XXX】活动中获得了“情感咨询1588抵用券”，可在下单时直接抵扣。";
-            RongYunUtil.sendActivityMessage(Long.valueOf(request.getCustomerId()),builder.toString());
-            //插入消息数据
-            String phone = customerCouponMapper.selectPhoneByCustomerId(request.getCustomerId());
-            Message m = new Message();
-            Long mid = UUIDUtils.getId();
-            m.setMessageId(mid);
-            m.setMessageContent(builder.toString());
-            m.setTitle("活动获取优惠券");
-            m.setType(Byte.parseByte("1"));//0=系统通知,1=活动通知,2=通知消息
-            customerCouponMapper.insertSelectiveMessage(m);
+                Map<String,String> mapA = customerCouponMapper.selectActivityNameAndCouponName(Long.parseLong(request.getCouponId()));
+                //发送消息
+                StringBuilder builder = new StringBuilder();
+                builder.append("您有新的抵扣券可用----恭喜您在【");
+                builder.append(mapA.get("activityName"));
+                builder.append("】活动中获得了“");
+                builder.append(mapA.get("couponName"));
+                builder.append("”，可在下单时直接抵扣。");
+                //"您有新的抵扣券可用----恭喜您在【XXX】活动中获得了“情感咨询1588抵用券”，可在下单时直接抵扣。";
+                RongYunUtil.sendActivityMessage(Long.valueOf(request.getCustomerId()),builder.toString());
+                //插入消息数据
+                String phone = customerCouponMapper.selectPhoneByCustomerId(request.getCustomerId());
+                Message m = new Message();
+                Long mid = UUIDUtils.getId();
+                m.setMessageId(mid);
+                m.setMessageContent(builder.toString());
+                m.setTitle("活动获取优惠券");
+                m.setType(Byte.parseByte("1"));//0=系统通知,1=活动通知,2=通知消息
+                customerCouponMapper.insertSelectiveMessage(m);
 
-            MessageCustomer mc = new MessageCustomer();
-            Long mcid = UUIDUtils.getId();
-            mc.setId(mcid);
-            if(StringUtils.isNotBlank(phone)){
-                mc.setPhone(Long.valueOf(phone));
+                MessageCustomer mc = new MessageCustomer();
+                Long mcid = UUIDUtils.getId();
+                mc.setId(mcid);
+                if(StringUtils.isNotBlank(phone)){
+                    mc.setPhone(Long.valueOf(phone));
+                }
+                mc.setReceiverId(Long.valueOf(request.getCustomerId()));
+                mc.setMessageId(mid);
+                customerCouponMapper.insertSelectiveMessageCustomer(mc);
+            }else{
+                remap.put("code","1");
+                remap.put("msg","领取异常");
             }
-            mc.setReceiverId(Long.valueOf(request.getCustomerId()));
-            mc.setMessageId(mid);
-            customerCouponMapper.insertSelectiveMessageCustomer(mc);
         }else{
             remap.put("code","1");
             remap.put("msg","领取失败，已经领取过了");

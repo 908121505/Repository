@@ -64,6 +64,7 @@ public class CustomerCouponService {
             try {
                 CustomerCoupon cc = baseManager.get("CustomerCoupon.getCustomerCouponByOrderIdAndCustomerId",map);
                 if(cc!=null){
+                    logger.info("admin 取消下单返还券接口cancelOrderBackCoupon-JedisUtil:"+customerId);
                     //领取券，加入redis,超时1天
                     JedisUtil.set(RedisKeyConstants.CUSTOMER_COUPON_STATUS+customerId+":"+cc.getCouponId(),"0",3600*24);
                 }
@@ -111,6 +112,7 @@ public class CustomerCouponService {
                         //插入消息记录
                         this.sendActivityMessage(couponId,customerId.toString());
                         try {
+                            logger.info("admin 下单获取券接口getCouponInOrder-JedisUtil:"+customerId.toString());
                             //领取券，加入redis,超时1天
                             JedisUtil.set(RedisKeyConstants.CUSTOMER_COUPON_STATUS+customerId+":"+couponId,"0",3600*24);
                         } catch (Exception e) {

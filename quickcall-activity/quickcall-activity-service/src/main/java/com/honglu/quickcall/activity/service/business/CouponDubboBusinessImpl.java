@@ -7,6 +7,8 @@ import com.honglu.quickcall.activity.facade.vo.CouponOrderVo;
 //import com.honglu.quickcall.user.facade.entity.MessageCustomer;
 import com.honglu.quickcall.common.api.util.JedisUtil;
 import com.honglu.quickcall.common.api.util.RedisKeyConstants;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,7 +28,9 @@ import java.util.Map;
 
 @Service("Activity.CouponDubboBusiness")
 public class CouponDubboBusinessImpl implements CouponDubboBusiness{
-	
+
+	private static final Logger logger = LoggerFactory.getLogger(CouponDubboBusinessImpl.class);
+
 	@Autowired
 	private CouponDubboService couponDubboService;
 
@@ -163,6 +167,7 @@ public class CouponDubboBusinessImpl implements CouponDubboBusiness{
 	@Override
 	@Transactional(rollbackFor = Exception.class)
 	public int getCouponInOrder(Long skillItemId, Long customerId){
+		logger.debug("CouponDubboBusinessImpl.getCouponInOrder");
 		try {
 			int num = 0;
 			CouponOrderVo cvo = getShowTipForActivity(skillItemId.toString(), customerId.toString());
@@ -186,9 +191,11 @@ public class CouponDubboBusinessImpl implements CouponDubboBusiness{
 						//插入消息记录
 						couponDubboService.sendActivityMessage(couponId,customerId.toString());
 						try {
+							logger.debug("CouponDubboBusinessImpl.getCouponInOrder-客户券放redis："+customerId);
 							//领取券，加入redis,超时1天
 							JedisUtil.set(RedisKeyConstants.CUSTOMER_COUPON_STATUS+customerId+":"+couponId,"0",3600*24);
 						} catch (Exception e) {
+							logger.debug("CouponDubboBusinessImpl.getCouponInOrder-客户券放redis异常"+e);
 							e.printStackTrace();
 						}
 					}
@@ -196,6 +203,7 @@ public class CouponDubboBusinessImpl implements CouponDubboBusiness{
 			}
 			return num;
 		} catch (Exception e) {
+			logger.debug("CouponDubboBusinessImpl.getCouponInOrder异常"+e);
 			e.printStackTrace();
 			return 0;
 		}

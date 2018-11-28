@@ -412,12 +412,14 @@ public class OrderUpdateJob {
                                 Map<String,Object> map = new HashMap<String,Object>();
                                 map.put("orderId",orderIdCouponList.get(i));
                                 CustomerCoupon cc = taskCustomerCouponMapper.getCustomerCouponByOrderId(map);
-
-                                //领取券，加入redis,超时1天
-                                JedisUtil.set(RedisKeyConstants.CUSTOMER_COUPON_STATUS+cc.getCustomerId()+":"+cc.getCouponId(),couponFlag+"",3600*24);
+								if(cc != null){
+									LOGGER.info("OrderUpdateJob.updateOrderStatusByOrderListForCancel-客户券放redis:"+cc.getCustomerId());
+									//领取券，加入redis,超时1天
+									JedisUtil.set(RedisKeyConstants.CUSTOMER_COUPON_STATUS+cc.getCustomerId()+":"+cc.getCouponId(),couponFlag+"",3600*24);
+								}
                             }
                         } catch (Exception e) {
-                            LOGGER.info("==============task-JedisUtil更新券状态结束==============");
+                            LOGGER.info("==============task-客户券放redis异常==============");
                             e.printStackTrace();
                         }
 
