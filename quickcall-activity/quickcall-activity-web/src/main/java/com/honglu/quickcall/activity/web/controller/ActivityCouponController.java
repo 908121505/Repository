@@ -67,6 +67,8 @@ public class ActivityCouponController {
         logger.info("activityWeb cacheCoupon queryCacheCoupon request data : " + JSONObject.toJSONString(params));
         List<String> status = new ArrayList<>();
         for (String couponId : params.getCouponId()) {
+        	couponId = couponId.replace("[", "");
+        	couponId = couponId.replace("]", "");
         	String s = JedisUtil.get(RedisKeyConstants.CUSTOMER_COUPON_STATUS+params.getCustomerId()+":"+couponId);
         	status.add(s);
 		}
