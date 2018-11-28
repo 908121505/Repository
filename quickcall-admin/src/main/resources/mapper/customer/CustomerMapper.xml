@@ -373,12 +373,17 @@
         <if test="userNickName != null" >
             AND  cust.nick_name = #{userNickName}
         </if>
-        <if test="createTime != null" >
-            AND  cust.create_time &gt;= #{createTime}
-        </if>
-        <if test="modifyTime != null" >
-            AND  cust.modify_time &gt;= #{modifyTime}
-        </if>
+        <!--<if test="createTime != null" >-->
+        <!--AND  skill.create_time &gt;= #{createTime}-->
+        <!--</if>-->
+        <!--<if test="modifyTime != null" >-->
+        <!--AND  skill.modify_time &gt;= #{modifyTime}-->
+        <!--</if>-->
+        <if test="createSTime !=null and createSTime!=''">and skill.create_time <![CDATA[  >= ]]> #{createSTime}</if>
+        <if test="createETime !=null and createETime!=''">and skill.create_time <![CDATA[  <= ]]> #{createETime}</if>
+        <if test="modifySTime !=null and modifySTime!=''">and skill.modify_time <![CDATA[  >= ]]> #{modifySTime}</if>
+        <if test="modifyETime !=null and modifyETime!=''">and skill.modify_time <![CDATA[  <= ]]> #{modifyETime}</if>
+
         <if test="serviceType != null" >
             AND  skill.skill_item_id = #{serviceType}
         </if>

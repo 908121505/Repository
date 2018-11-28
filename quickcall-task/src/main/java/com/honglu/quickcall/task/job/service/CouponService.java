@@ -4,6 +4,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.honglu.quickcall.common.api.util.JedisUtil;
+import com.honglu.quickcall.common.api.util.RedisKeyConstants;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -54,6 +56,11 @@ public class CouponService {
 					if(num > 0){
 						//插入消息记录
 						sendActivityMessage(couponId,customerId.toString());
+						try {
+							//领取券，加入redis,超时1天
+							JedisUtil.set(RedisKeyConstants.CUSTOMER_COUPON_STATUS+customerId+":"+couponId,"0",3600*24);
+						} catch (Exception e) {
+						}
 					}
 				}
 			}

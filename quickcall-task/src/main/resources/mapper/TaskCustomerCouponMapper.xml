@@ -39,7 +39,16 @@
 			#{orderId}
 		</foreach>
   </update>
-  
+
+  <select id="getCustomerCouponByOrderId" resultMap="BaseResultMap" parameterType="map">
+      select
+    <include refid="Base_Column_List" />
+    from
+       customer_coupon
+      WHERE
+      order_id = #{orderId}
+  </select>
+
   <select id="getActivityNum" resultType="int">
       select count(1)
 	 from activity a

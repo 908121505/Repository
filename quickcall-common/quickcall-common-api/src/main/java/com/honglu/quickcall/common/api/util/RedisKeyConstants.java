@@ -63,5 +63,8 @@ public class RedisKeyConstants {
 	//活动activity
 	/**分享活动领券*/
 	public static final String ACTIVITY_RECEIVE_COUPON_KEY = "activity:receive:coupon:";
+	
+	//用户券的状态
+	public static final String CUSTOMER_COUPON_STATUS = "customer:coupon:status";
 
 }

@@ -7,6 +7,8 @@ import com.calf.module.internal.entity.Message;
 import com.calf.module.internal.entity.MessageCustomer;
 import com.honglu.quickcall.activity.facade.entity.CustomerCoupon;
 import com.honglu.quickcall.activity.facade.vo.CouponOrderVo;
+import com.honglu.quickcall.common.api.util.JedisUtil;
+import com.honglu.quickcall.common.api.util.RedisKeyConstants;
 import com.honglu.quickcall.common.core.util.UUIDUtils;
 import com.honglu.quickcall.common.third.rongyun.util.RongYunUtil;
 import org.apache.commons.lang3.StringUtils;
@@ -58,6 +60,17 @@ public class CustomerCouponService {
             map.put("orderId",orderId);
             map.put("customerId",customerId);
             num = baseManager.update("CustomerCoupon.cancelOrderBackCoupon",map);
+
+            try {
+                CustomerCoupon cc = baseManager.get("CustomerCoupon.getCustomerCouponByOrderIdAndCustomerId",map);
+                if(cc!=null){
+                    //领取券，加入redis,超时1天
+                    JedisUtil.set(RedisKeyConstants.CUSTOMER_COUPON_STATUS+customerId+":"+cc.getCouponId(),"0",3600*24);
+                }
+            } catch (Exception e) {
+                logger.info("admin 取消下单返还券接口cancelOrderBackCoupon-JedisUtil异常");
+                e.printStackTrace();
+            }
             return num;
         } catch (Exception e) {
             logger.info("admin 取消下单返还券接口cancelOrderBackCoupon异常");
@@ -93,9 +106,18 @@ public class CustomerCouponService {
                     cc.setCreateTime(new Date());
                     //num = couponDubboService.insertCustomerCoupon(cc);
                     num = baseManager.insert("CustomerCoupon.insertSelective",cc);
+
                     if(num > 0){
                         //插入消息记录
                         this.sendActivityMessage(couponId,customerId.toString());
+                        try {
+                            //领取券，加入redis,超时1天
+                            JedisUtil.set(RedisKeyConstants.CUSTOMER_COUPON_STATUS+customerId+":"+couponId,"0",3600*24);
+                        } catch (Exception e) {
+                            logger.info("admin 下单获取券接口getCouponInOrder-JedisUtil异常");
+                            e.printStackTrace();
+                        }
+
                     }
                 }
             }

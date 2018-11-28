@@ -1,14 +1,9 @@
 package com.honglu.quickcall.task.job;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Objects;
-import java.util.ResourceBundle;
+import java.util.*;
 
+import com.honglu.quickcall.task.entity.CustomerCoupon;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -411,7 +406,22 @@ public class OrderUpdateJob {
     					Integer  couponFlag =  OrderSkillConstants.ORDER_COUPON_FLAG_CANCEL;
     					taskOrderMapper.updateOrderCouponFlag(orderIdCouponList,couponFlag);
     					LOGGER.info("==============更新券状态结束==============");
-    				}
+
+                        try {
+                            for (int i = 0; i < orderIdCouponList.size(); i++) {
+                                Map<String,Object> map = new HashMap<String,Object>();
+                                map.put("orderId",orderIdCouponList.get(i));
+                                CustomerCoupon cc = taskCustomerCouponMapper.getCustomerCouponByOrderId(map);
+
+                                //领取券，加入redis,超时1天
+                                JedisUtil.set(RedisKeyConstants.CUSTOMER_COUPON_STATUS+cc.getCustomerId()+":"+cc.getCouponId(),couponFlag+"",3600*24);
+                            }
+                        } catch (Exception e) {
+                            LOGGER.info("==============task-JedisUtil更新券状态结束==============");
+                            e.printStackTrace();
+                        }
+
+					}
     			} catch (Exception e) {
     				LOGGER.error("用户券返还发生异常，异常信息：",e);
     			}

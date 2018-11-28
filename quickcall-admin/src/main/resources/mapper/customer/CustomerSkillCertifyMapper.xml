@@ -56,13 +56,23 @@ certify_id,	customer_id,	skill_item_id,	audit_status,	skill_voice_url,	skill_voi
 	</select>
 	
 	<select id="selectSkillCertifyTable" resultType="com.calf.module.customer.vo.CustomerSkillCertifyVO">
-		select csc.certify_id as certifyId,csc.customer_id as customerId,cus.real_name as realName,cus.nick_name as nickName,csc.skill_item_id as skillItemId,
-		si.skill_item_name as skillItemName,csc.audit_status as auditStatus,csc.skill_voice_url_tmp as skillVoiceUrlTmp,
-		csc.skill_voice_time_tmp as skillVoiceTimeTmp,
-		csc.is_audited as isAudited 
-			from customer_skill_certify csc
-			left join customer cus on cus.customer_id = csc.customer_id
-			left join skill_item si on csc.skill_item_id = si.id 
+		SELECT
+			csc.certify_id AS certifyId,
+			csc.customer_id AS customerId,
+			cus.real_name AS realName,
+			cus.nick_name AS nickName,
+			csc.skill_item_id AS skillItemId,
+			si.skill_item_name AS skillItemName,
+			csc.audit_status AS auditStatus,
+			csc.skill_voice_url AS skillVoiceUrl,
+			csc.skill_voice_time AS skillVoiceTime,
+			csc.skill_voice_url_tmp AS skillVoiceUrlTmp,
+			csc.skill_voice_time_tmp AS skillVoiceTimeTmp,
+			csc.is_audited AS isAudited 
+		FROM
+			customer_skill_certify csc
+			LEFT JOIN customer cus ON cus.customer_id = csc.customer_id
+			LEFT JOIN skill_item si ON csc.skill_item_id = si.id
 		<where>
 			<if test="realName != null">
 				and cus.real_name like concat('%',#{realName},'%')
@@ -77,8 +87,9 @@ certify_id,	customer_id,	skill_item_id,	audit_status,	skill_voice_url,	skill_voi
 				and csc.audit_status = #{auditStatus}
 			</if>
 		</where>
-		order by csc.modify_time desc
-		limit ${iDisplayStart},${iDisplayLength}
+		ORDER BY
+			csc.modify_time DESC
+		LIMIT ${iDisplayStart},${iDisplayLength}
 		
 	</select>
 	<select id="selectTableCount" resultType="java.lang.Integer">

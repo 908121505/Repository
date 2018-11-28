@@ -112,6 +112,9 @@ public class ActivityCouponServiceImpl implements ActivityCouponService {
             remap.put("code","0");
             remap.put("msg","领取成功");
 
+            //领取券，加入redis,0未使用状态,超时1天
+            JedisUtil.set(RedisKeyConstants.CUSTOMER_COUPON_STATUS+request.getCustomerId()+":"+request.getCouponId(),"0",3600*24);
+
             Map<String,String> mapA = customerCouponMapper.selectActivityNameAndCouponName(Long.parseLong(request.getCouponId()));
             //发送消息
             StringBuilder builder = new StringBuilder();
