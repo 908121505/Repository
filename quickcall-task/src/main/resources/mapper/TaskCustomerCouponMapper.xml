@@ -28,6 +28,18 @@
   </sql>
 
 <!-- 根据订单ID列表更新用户券状态 -->
+ <select id="queryCustomerCouponList" resultMap="BaseResultMap" >
+		SELECT 
+		<include refid="Base_Column_List">
+		FROM	
+			customer_coupon
+		WHERE
+			order_id  IN 
+		<foreach collection="list" item="orderId"    open="("  close=")"  separator=",">
+			#{orderId}
+		</foreach>
+  </select>
+
   <update id="batchUpdateCustomerCoupon"  >
 		UPDATE 
 			customer_coupon

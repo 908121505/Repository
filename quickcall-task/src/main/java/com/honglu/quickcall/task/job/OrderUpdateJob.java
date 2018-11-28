@@ -19,6 +19,7 @@ import com.honglu.quickcall.account.facade.enums.AccountBusinessTypeEnum;
 import com.honglu.quickcall.account.facade.enums.TransferTypeEnum;
 import com.honglu.quickcall.common.api.util.JedisUtil;
 import com.honglu.quickcall.common.api.util.RedisKeyConstants;
+import com.honglu.quickcall.common.core.util.Detect;
 import com.honglu.quickcall.common.core.util.UUIDUtils;
 import com.honglu.quickcall.common.third.rongyun.util.RongYunUtil;
 import com.honglu.quickcall.task.dao.AccountMapper;
@@ -400,6 +401,11 @@ public class OrderUpdateJob {
     		if(cancelCouponFlag){
     			try {
     				if(!CollectionUtils.isEmpty(orderIdCouponList)){
+    					List<CustomerCoupon> customerCouponList = null;
+						try {
+							customerCouponList = taskCustomerCouponMapper.queryCustomerCouponList(orderIdList);
+						} catch (Exception e1) {
+						}
     					taskCustomerCouponMapper.batchUpdateCustomerCoupon(orderIdCouponList, OrderSkillConstants.ORDER_COUPON_FLAG_CANCEL);
     					//更新券状态为未使用
     					LOGGER.info("==============更新券状态开始==============");
@@ -407,21 +413,19 @@ public class OrderUpdateJob {
     					taskOrderMapper.updateOrderCouponFlag(orderIdCouponList,couponFlag);
     					LOGGER.info("==============更新券状态结束==============");
 
-                        try {
-                            for (int i = 0; i < orderIdCouponList.size(); i++) {
-                                Map<String,Object> map = new HashMap<String,Object>();
-                                map.put("orderId",orderIdCouponList.get(i));
-                                CustomerCoupon cc = taskCustomerCouponMapper.getCustomerCouponByOrderId(map);
-								if(cc != null){
-									LOGGER.info("OrderUpdateJob.updateOrderStatusByOrderListForCancel-客户券放redis:"+cc.getCustomerId());
+    					try {
+    						if (Detect.notEmpty(customerCouponList)) {
+    							for (CustomerCoupon customerCoupon :customerCouponList) {
+    								
+									LOGGER.info("OrderUpdateJob.updateOrderStatusByOrderListForCancel-客户券放redis:"+customerCoupon.getCustomerId());
 									//领取券，加入redis,超时1天
-									JedisUtil.set(RedisKeyConstants.CUSTOMER_COUPON_STATUS+cc.getCustomerId()+":"+cc.getCouponId(),couponFlag+"",3600*24);
-								}
-                            }
-                        } catch (Exception e) {
-                            LOGGER.info("==============task-客户券放redis异常==============");
-                            e.printStackTrace();
-                        }
+									JedisUtil.set(RedisKeyConstants.CUSTOMER_COUPON_STATUS+customerCoupon.getCustomerId()+":"+customerCoupon.getCouponId(),couponFlag+"",3600*24);
+    							}
+    						}
+    					} catch (Exception e) {
+    						LOGGER.info("==============task-客户券放redis异常==============");
+    						e.printStackTrace();
+    					}
 
 					}
     			} catch (Exception e) {
