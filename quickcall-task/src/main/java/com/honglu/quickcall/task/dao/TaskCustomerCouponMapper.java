@@ -91,4 +91,11 @@ public interface TaskCustomerCouponMapper {
      * @mbggenerated
      */
     int insertSelectiveMessageCustomer(MessageCustomer record);
+    
+    /**
+     * 通过order的list得到券的list
+     * @param map
+     * @return
+     */
+    List<CustomerCoupon> queryCustomerCouponList(@Param("list")List<Long>  orderIdList);
 }
