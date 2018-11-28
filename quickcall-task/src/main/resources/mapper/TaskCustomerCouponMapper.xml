@@ -30,7 +30,7 @@
 <!-- 根据订单ID列表更新用户券状态 -->
  <select id="queryCustomerCouponList" resultMap="BaseResultMap" >
 		SELECT 
-		<include refid="Base_Column_List">
+		<include refid="Base_Column_List"></include>
 		FROM	
 			customer_coupon
 		WHERE
