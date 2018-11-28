@@ -56,11 +56,16 @@ public class CustomerCouponService {
             if(customerId == null){
                 return -1;
             }
+
+            //先查出券，之后用；再更新
+            Map<String,Object> mapA = new HashMap<String,Object>();
+            mapA.put("orderId",orderId);
+            mapA.put("customerId",customerId);
+            CustomerCoupon cc = baseManager.get("CustomerCoupon.getCustomerCouponByOrderIdAndCustomerId",mapA);
+
             Map<String,Object> map = new HashMap<String,Object>();
             map.put("orderId",orderId);
             map.put("customerId",customerId);
-
-            CustomerCoupon cc = baseManager.get("CustomerCoupon.getCustomerCouponByOrderIdAndCustomerId",map);
             num = baseManager.update("CustomerCoupon.cancelOrderBackCoupon",map);
 
             try {
