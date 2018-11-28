@@ -1,10 +1,9 @@
 package com.honglu.quickcall.activity.facade.exchange.request;
 
-import java.util.List;
 
 public class CacheCouponQueryRequest {
 	private String customerId;
-	private List<String> couponId;
+	private String couponId;
 	
 	public String getCustomerId() {
 		return customerId;
@@ -12,10 +11,10 @@ public class CacheCouponQueryRequest {
 	public void setCustomerId(String customerId) {
 		this.customerId = customerId;
 	}
-	public List<String> getCouponId() {
+	public String getCouponId() {
 		return couponId;
 	}
-	public void setCouponId(List<String> couponId) {
+	public void setCouponId(String couponId) {
 		this.couponId = couponId;
 	}
 }
