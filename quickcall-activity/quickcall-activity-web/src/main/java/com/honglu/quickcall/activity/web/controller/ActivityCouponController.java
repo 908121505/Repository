@@ -69,6 +69,7 @@ public class ActivityCouponController {
         for (String couponId : params.getCouponId()) {
         	couponId = couponId.replace("[", "");
         	couponId = couponId.replace("]", "");
+        	couponId = couponId.replaceAll("\"","");
         	String s = JedisUtil.get(RedisKeyConstants.CUSTOMER_COUPON_STATUS+params.getCustomerId()+":"+couponId);
         	status.add(s);
 		}
