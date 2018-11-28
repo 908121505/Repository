@@ -990,7 +990,7 @@ public class OrderServiceImpl implements IOrderService {
 			//结束后用户获得券
 			couponDubboBusiness.getCouponInOrder(order.getSkillItemId(), order.getCustomerId());
 			// ADUAN 订单服务完成推送MQ消息
-			userCenterSendMqMessageService.sendOrderCostMqMessage(orderId);
+//			userCenterSendMqMessageService.sendOrderCostMqMessage(orderId);
 
 			Long  customerId =  order.getCustomerId();
 			Long  serviceId = order.getServiceId();
