@@ -48,6 +48,7 @@ public class CouponDubboServiceImpl implements CouponDubboService{
 				//领取券，加入redis,超时1天
 				JedisUtil.set(RedisKeyConstants.CUSTOMER_COUPON_STATUS+customerCoupon.getCustomerId()+":"+customerCoupon.getCouponId(),customerCoupon.getIsUsed()+"",3600*24);
 			} catch (Exception e) {
+				logger.debug("CouponDubboServiceImpl.updateCustomerCouponById-客户券redis异常");
 				e.printStackTrace();
 			}
 		}
@@ -71,6 +72,7 @@ public class CouponDubboServiceImpl implements CouponDubboService{
 					JedisUtil.set(RedisKeyConstants.CUSTOMER_COUPON_STATUS+customerCoupon.getCustomerId()+":"+customerCoupon.getCouponId(),"0",3600*24);
 				}
 			} catch (Exception e) {
+				logger.debug("CouponDubboServiceImpl.cancelUpdateCustomerCoupon-客户券redis:异常");
 				e.printStackTrace();
 			}
 		}
@@ -157,8 +159,11 @@ public class CouponDubboServiceImpl implements CouponDubboService{
 	@Override
 	public int insertCustomerCoupon(CustomerCoupon customerCoupon){
 		int num = customerCouponMapper.insertSelective(customerCoupon);
-		//领取券，加入redis,0未使用状态,超时1天
-		JedisUtil.set(RedisKeyConstants.CUSTOMER_COUPON_STATUS+customerCoupon.getCustomerId()+":"+customerCoupon.getCouponId(),"0",3600*24);
+		if(num > 0){
+			logger.debug("CouponDubboServiceImpl.insertCustomerCoupon-客户券redis:"+customerCoupon.getCustomerId());
+			//领取券，加入redis,0未使用状态,超时1天
+			JedisUtil.set(RedisKeyConstants.CUSTOMER_COUPON_STATUS+customerCoupon.getCustomerId()+":"+customerCoupon.getCouponId(),"0",3600*24);
+		}
 		return num;
 	}
 
