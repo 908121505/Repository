@@ -59,10 +59,11 @@ public class CustomerCouponService {
             Map<String,Object> map = new HashMap<String,Object>();
             map.put("orderId",orderId);
             map.put("customerId",customerId);
+
+            CustomerCoupon cc = baseManager.get("CustomerCoupon.getCustomerCouponByOrderIdAndCustomerId",map);
             num = baseManager.update("CustomerCoupon.cancelOrderBackCoupon",map);
 
             try {
-                CustomerCoupon cc = baseManager.get("CustomerCoupon.getCustomerCouponByOrderIdAndCustomerId",map);
                 if(cc!=null){
                     logger.info("admin 取消下单返还券接口cancelOrderBackCoupon-JedisUtil:"+customerId);
                     //领取券，加入redis,超时1天
