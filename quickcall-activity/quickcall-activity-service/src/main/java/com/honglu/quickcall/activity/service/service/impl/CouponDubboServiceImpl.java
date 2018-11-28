@@ -7,6 +7,8 @@ import com.honglu.quickcall.common.core.util.UUIDUtils;
 import com.honglu.quickcall.common.third.rongyun.util.RongYunUtil;
 import com.honglu.quickcall.user.facade.entity.Message;
 import com.honglu.quickcall.user.facade.entity.MessageCustomer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,12 +19,14 @@ import com.honglu.quickcall.activity.service.dao.CustomerCouponMapper;
 import com.honglu.quickcall.activity.service.service.CouponDubboService;
 
 import java.util.HashMap;
-import java.util.List;
+//import java.util.List;
 import java.util.Map;
 
 @Service
 public class CouponDubboServiceImpl implements CouponDubboService{
-	
+
+	private static final Logger logger = LoggerFactory.getLogger(CouponDubboServiceImpl.class);
+
 	@Autowired
 	private CustomerCouponMapper customerCouponMapper;
 	@Autowired
@@ -38,11 +42,14 @@ public class CouponDubboServiceImpl implements CouponDubboService{
 	@Override
 	public int updateCustomerCouponById(CustomerCoupon customerCoupon) {
 		int num = customerCouponMapper.updateByPrimaryKeySelective(customerCoupon);
-		try {
-			//领取券，加入redis,超时1天
-			JedisUtil.set(RedisKeyConstants.CUSTOMER_COUPON_STATUS+customerCoupon.getCustomerId()+":"+customerCoupon.getCouponId(),customerCoupon.getIsUsed()+"",3600*24);
-		} catch (Exception e) {
-			e.printStackTrace();
+		if(num > 0){
+			try {
+				logger.debug("CouponDubboServiceImpl.updateCustomerCouponById-客户券redis:"+customerCoupon.getCustomerId());
+				//领取券，加入redis,超时1天
+				JedisUtil.set(RedisKeyConstants.CUSTOMER_COUPON_STATUS+customerCoupon.getCustomerId()+":"+customerCoupon.getCouponId(),customerCoupon.getIsUsed()+"",3600*24);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 		return num;
 	}
@@ -59,6 +66,7 @@ public class CouponDubboServiceImpl implements CouponDubboService{
 			try {
 				CustomerCoupon customerCoupon = customerCouponMapper.selectByPrimaryKey(id);
 				if(customerCoupon!=null){
+					logger.debug("CouponDubboServiceImpl.cancelUpdateCustomerCoupon-客户券redis:"+customerCoupon.getCustomerId());
 					//领取券，加入redis,0未使用状态,超时1天
 					JedisUtil.set(RedisKeyConstants.CUSTOMER_COUPON_STATUS+customerCoupon.getCustomerId()+":"+customerCoupon.getCouponId(),"0",3600*24);
 				}
