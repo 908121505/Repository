@@ -61,15 +61,14 @@ public class ActivityCouponController {
      * @param params
      * @return
      */
-    @RequestMapping(value = "/queryCacheCoupon", method = RequestMethod.POST)
+    @SuppressWarnings("unchecked")
+	@RequestMapping(value = "/queryCacheCoupon", method = RequestMethod.POST)
     @ResponseBody
     public WebResponseModel queryCacheCoupon(CacheCouponQueryRequest params) {
         logger.info("activityWeb cacheCoupon queryCacheCoupon request data : " + JSONObject.toJSONString(params));
         List<String> status = new ArrayList<>();
-        for (String couponId : params.getCouponId()) {
-        	couponId = couponId.replace("[", "");
-        	couponId = couponId.replace("]", "");
-        	couponId = couponId.replaceAll("\"", "");
+        List<String> couponIds = (List<String>) JSON.parse(params.getCouponId());
+        for (String couponId : couponIds) {
         	String s = JedisUtil.get(RedisKeyConstants.CUSTOMER_COUPON_STATUS+params.getCustomerId()+":"+couponId);
         	status.add(s);
 		}
@@ -98,5 +97,5 @@ public class ActivityCouponController {
         logger.info("activityWeb activityCoupon receiveCoupon response data : " + JSONObject.toJSONString(response));
         return response;
     }
-
+    
 }
