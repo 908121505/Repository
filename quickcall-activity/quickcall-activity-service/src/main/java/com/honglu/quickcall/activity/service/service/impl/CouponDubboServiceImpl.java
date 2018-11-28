@@ -44,9 +44,12 @@ public class CouponDubboServiceImpl implements CouponDubboService{
 		int num = customerCouponMapper.updateByPrimaryKeySelective(customerCoupon);
 		if(num > 0){
 			try {
-				logger.debug("CouponDubboServiceImpl.updateCustomerCouponById-客户券redis:"+customerCoupon.getCustomerId());
+				//根据CustomerCoupon的ID，查询对象,原对象没有客户ID
+				Integer ccId = customerCoupon.getId();
+				CustomerCoupon cc = customerCouponMapper.selectByPrimaryKey(ccId);
+				logger.debug("CouponDubboServiceImpl.updateCustomerCouponById-客户券redis:"+cc.getCustomerId());
 				//领取券，加入redis,超时1天
-				JedisUtil.set(RedisKeyConstants.CUSTOMER_COUPON_STATUS+customerCoupon.getCustomerId()+":"+customerCoupon.getCouponId(),customerCoupon.getIsUsed()+"",3600*24);
+				JedisUtil.set(RedisKeyConstants.CUSTOMER_COUPON_STATUS+cc.getCustomerId()+":"+cc.getCouponId(),cc.getIsUsed()+"",3600*24);
 			} catch (Exception e) {
 				logger.debug("CouponDubboServiceImpl.updateCustomerCouponById-客户券redis异常");
 				e.printStackTrace();
