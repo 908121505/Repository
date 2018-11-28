@@ -244,7 +244,8 @@ public class AliPayServiceImpl implements AliPayService {
 				recharge.setCustomerId(params.getAccountId());
 				recharge.setFinishDate(new Date());
 				recharge.setOrdersn(params.getOrderNo());
-				if (rechargeMapper.selectByOrderNo(params.getOrderNo()).getState() == 1) {
+				Recharge rec = rechargeMapper.selectByOrderNo(params.getOrderNo());
+				if (rec != null && rec.getState() == 1 && rec.getAmount() == params.getAmount()) {
 					logger.info("-----------------业务开始111111111111111111");
 
 					if (params.getPayState() == 1) {
