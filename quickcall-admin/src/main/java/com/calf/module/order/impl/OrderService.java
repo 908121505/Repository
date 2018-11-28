@@ -711,7 +711,10 @@ public class OrderService {
 	private void addCustomerExperience(com.honglu.quickcall.account.facade.entity.Order order) {
 		try {
 			// 计算客户需要获取的经验值
-			Integer experience = order.getOrderAmounts().intValue();
+			 BigDecimal skillPrice = order.getServicePrice();
+		        // 计算客户需要获取的经验值
+		    Integer experience = skillPrice.multiply(new BigDecimal(order.getOrderNum())).intValue(); 
+//			Integer experience = order.getOrderAmounts().intValue();
 
 			LOGGER.info("【强制完成】 -- 给客户增加经验值--客户ID：" + order.getCustomerId() + " ， 增加经验值：" + experience);
 			Map<String, Object> paramsMap = new HashMap<>();

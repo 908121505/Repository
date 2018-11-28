@@ -28,6 +28,18 @@
   </sql>
 
 <!-- 根据订单ID列表更新用户券状态 -->
+ <select id="queryCustomerCouponList" resultMap="BaseResultMap" >
+		SELECT 
+		<include refid="Base_Column_List"></include>
+		FROM	
+			customer_coupon
+		WHERE
+			order_id  IN 
+		<foreach collection="list" item="orderId"    open="("  close=")"  separator=",">
+			#{orderId}
+		</foreach>
+  </select>
+
   <update id="batchUpdateCustomerCoupon"  >
 		UPDATE 
 			customer_coupon
@@ -39,7 +51,16 @@
 			#{orderId}
 		</foreach>
   </update>
-  
+
+  <select id="getCustomerCouponByOrderId" resultMap="BaseResultMap" parameterType="map">
+      select
+    <include refid="Base_Column_List" />
+    from
+       customer_coupon
+      WHERE
+      order_id = #{orderId}
+  </select>
+
   <select id="getActivityNum" resultType="int">
       select count(1)
 	 from activity a
@@ -49,8 +70,8 @@
       <select id="getCountByCustomerIdAndCouponId" parameterType="map" resultMap="BaseResultMap">
         select *
         from customer_coupon
-        where is_used = 0
-		and coupon_id = #{couponId}
+        where
+         coupon_id = #{couponId}
         and customer_id = #{customerId}
      </select>
      
@@ -63,7 +84,9 @@
         where
         cs.skill_item_id = #{skillItemId}
         and cs.status = 1
+        and c.get_way = 1
         and ( NOW() BETWEEN a.start_time AND a.end_time)
+        and ( NOW() BETWEEN c.start_time AND c.end_time)
         order by c.coupon_price desc
         LIMIT 1
   </select>

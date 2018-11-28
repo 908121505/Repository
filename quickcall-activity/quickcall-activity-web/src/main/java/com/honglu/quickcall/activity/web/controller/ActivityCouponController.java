@@ -1,10 +1,20 @@
 package com.honglu.quickcall.activity.web.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.honglu.quickcall.activity.facade.exchange.request.ActivityCouponQueryRequest;
 import com.honglu.quickcall.activity.facade.exchange.request.ActivityCouponReceiveRequest;
+import com.honglu.quickcall.activity.facade.exchange.request.CacheCouponQueryRequest;
 import com.honglu.quickcall.activity.web.service.ActivityCenterService;
+import com.honglu.quickcall.common.api.exchange.CommonResponse;
+import com.honglu.quickcall.common.api.exchange.ResultUtils;
 import com.honglu.quickcall.common.api.exchange.WebResponseModel;
+import com.honglu.quickcall.common.api.util.JedisUtil;
+import com.honglu.quickcall.common.api.util.RedisKeyConstants;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +52,35 @@ public class ActivityCouponController {
         logger.info("activityWeb activityCoupon queryActivityCoupon response data : " + JSONObject.toJSONString(response));
         return response;
     }
+    
+    
+    /**
+     * 活动优惠券查询接口
+     * @date 2018-10-30
+     *
+     * @param params
+     * @return
+     */
+    @SuppressWarnings("unchecked")
+	@RequestMapping(value = "/queryCacheCoupon", method = RequestMethod.POST)
+    @ResponseBody
+    public WebResponseModel queryCacheCoupon(CacheCouponQueryRequest params) {
+        logger.info("activityWeb cacheCoupon queryCacheCoupon request data : " + JSONObject.toJSONString(params));
+        List<String> status = new ArrayList<>();
+        List<String> couponIds = (List<String>) JSON.parse(params.getCouponId());
+        for (String couponId : couponIds) {
+        	String s = JedisUtil.get(RedisKeyConstants.CUSTOMER_COUPON_STATUS+params.getCustomerId()+":"+couponId);
+        	status.add(s);
+		}
+        WebResponseModel response = new WebResponseModel();
+        CommonResponse $response = ResultUtils.resultSuccess(status);
+        response.setCode($response.getCode().code());
+		response.setMsg($response.getMessage());
+		response.setData(JSON.toJSONString($response.getData()));
+        logger.info("activityWeb cacheCoupon queryCacheCoupon response data : " + JSONObject.toJSONString(response));
+        
+        return response;
+    }
 
     /**
      * 领券接口
@@ -58,5 +97,5 @@ public class ActivityCouponController {
         logger.info("activityWeb activityCoupon receiveCoupon response data : " + JSONObject.toJSONString(response));
         return response;
     }
-
+    
 }

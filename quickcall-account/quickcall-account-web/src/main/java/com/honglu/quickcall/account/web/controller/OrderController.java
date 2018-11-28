@@ -14,6 +14,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.honglu.quickcall.account.web.service.IOrderInfoService;
 import com.honglu.quickcall.common.api.exchange.WebResponseModel;
+//import sun.management.resources.agent;
+
+import javax.servlet.http.HttpServletRequest;
+//import java.util.regex.Matcher;
+//import java.util.regex.Pattern;
 
 @Controller
 @RequestMapping("/order")
@@ -22,7 +27,10 @@ public class OrderController {
 
     @Autowired
     private IOrderInfoService orderInfoService;
-
+    /**
+     * 匹配是否是ios（苹果）
+     */
+    //private static Pattern USER_AGENT_PATTERN = Pattern.compile("/\\(i[^;]+;( U;)? CPU.+Mac OS X/");
     /**
      * 获取主播开启产品
      * @param params
@@ -30,8 +38,43 @@ public class OrderController {
      */
     @RequestMapping(value = "/dvProduct", method = RequestMethod.POST)
     @ResponseBody
-    public WebResponseModel queryDaVProduct(/*  @RequestBody  */OrderDaVSkillRequest params) {
-    	WebResponseModel response = orderInfoService.execute(params);
+    public WebResponseModel queryDaVProduct(HttpServletRequest request/*, OrderDaVSkillRequest params*/) {
+        //安卓和默认
+        String userAgent = request.getHeader("User-Agent");
+        LOGGER.debug("userAgent:"+userAgent);
+        //ios终端判断
+        /*
+        Matcher isiOS = USER_AGENT_PATTERN.matcher(userAgent);
+        LOGGER.debug("isiOS.find():"+isiOS.find());
+        if (isiOS.find()) {
+            userAgent = request.getHeader("UserAgent");
+            LOGGER.debug("isiOS-userAgent:"+userAgent);
+        }
+        */
+        //String[] keywords = { "iPhone", "iPod", "iPad", "Windows Phone" };
+        String[] keywords = { "IPHONE", "IPOD", "IPAD", "WINDOWS PHONE" };
+        boolean flag = false;
+        //转大写匹配
+        String userAgentUpperCase = userAgent.toUpperCase();
+        for (String item:keywords ) {
+            if (userAgentUpperCase.contains(item))
+            {
+                flag = true;
+                break;
+            }
+        }
+        if (flag) {
+            userAgent = request.getHeader("UserAgent");
+            LOGGER.debug("iOS-userAgent:"+userAgent);
+        }
+        Long customerId = Long.valueOf(request.getParameter("customerId"));
+
+        OrderDaVSkillRequest params = new OrderDaVSkillRequest();
+        params.setCustomerId(customerId);
+        params.setUserAgent(userAgent);
+        WebResponseModel response = orderInfoService.execute(params);
+
+
         return response;
     }
     

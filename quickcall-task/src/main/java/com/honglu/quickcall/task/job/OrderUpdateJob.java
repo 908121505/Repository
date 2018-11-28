@@ -1,14 +1,9 @@
 package com.honglu.quickcall.task.job;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Objects;
-import java.util.ResourceBundle;
+import java.util.*;
 
+import com.honglu.quickcall.task.entity.CustomerCoupon;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,12 +19,14 @@ import com.honglu.quickcall.account.facade.enums.AccountBusinessTypeEnum;
 import com.honglu.quickcall.account.facade.enums.TransferTypeEnum;
 import com.honglu.quickcall.common.api.util.JedisUtil;
 import com.honglu.quickcall.common.api.util.RedisKeyConstants;
+import com.honglu.quickcall.common.core.util.Detect;
 import com.honglu.quickcall.common.core.util.UUIDUtils;
 import com.honglu.quickcall.common.third.rongyun.util.RongYunUtil;
 import com.honglu.quickcall.task.dao.AccountMapper;
 import com.honglu.quickcall.task.dao.BigvScoreMapper;
 import com.honglu.quickcall.task.dao.BigvSkillScoreMapper;
 import com.honglu.quickcall.task.dao.CustomerMapper;
+import com.honglu.quickcall.task.dao.SkillItemMapper;
 import com.honglu.quickcall.task.dao.TaskCustomerCouponMapper;
 import com.honglu.quickcall.task.dao.TaskOrderMapper;
 import com.honglu.quickcall.task.dao.TradeDetailMapper;
@@ -92,6 +89,8 @@ public class OrderUpdateJob {
     @Autowired
     private CouponService  couponService;
     
+    @Autowired
+    private SkillItemMapper skillItemMapper;
     
     /**默认超时小时数      扣减12小时*/
     private final static  Integer   END_OVER_TIME_HOUR = -12;
@@ -402,8 +401,33 @@ public class OrderUpdateJob {
     		if(cancelCouponFlag){
     			try {
     				if(!CollectionUtils.isEmpty(orderIdCouponList)){
+    					List<CustomerCoupon> customerCouponList = null;
+						try {
+							customerCouponList = taskCustomerCouponMapper.queryCustomerCouponList(orderIdList);
+						} catch (Exception e1) {
+						}
     					taskCustomerCouponMapper.batchUpdateCustomerCoupon(orderIdCouponList, OrderSkillConstants.ORDER_COUPON_FLAG_CANCEL);
-    				}
+    					//更新券状态为未使用
+    					LOGGER.info("==============更新券状态开始==============");
+    					Integer  couponFlag =  OrderSkillConstants.ORDER_COUPON_FLAG_CANCEL;
+    					taskOrderMapper.updateOrderCouponFlag(orderIdCouponList,couponFlag);
+    					LOGGER.info("==============更新券状态结束==============");
+
+    					try {
+    						if (Detect.notEmpty(customerCouponList)) {
+    							for (CustomerCoupon customerCoupon :customerCouponList) {
+    								
+									LOGGER.info("OrderUpdateJob.updateOrderStatusByOrderListForCancel-客户券放redis:"+customerCoupon.getCustomerId());
+									//领取券，加入redis,超时1天
+									JedisUtil.set(RedisKeyConstants.CUSTOMER_COUPON_STATUS+customerCoupon.getCustomerId()+":"+customerCoupon.getCouponId(),couponFlag+"",3600*24);
+    							}
+    						}
+    					} catch (Exception e) {
+    						LOGGER.info("==============task-客户券放redis异常==============");
+    						e.printStackTrace();
+    					}
+
+					}
     			} catch (Exception e) {
     				LOGGER.error("用户券返还发生异常，异常信息：",e);
     			}
@@ -724,8 +748,12 @@ public class OrderUpdateJob {
             LOGGER.warn("客户下单消费获取经验值 -- 未查询到客户信息，客户ID：" + order.getCustomerId());
             return;
         }
+        //TODO 根据地订单中customer_skill_id获取用户技能价格 * 订单数量orderNum
+//        BigDecimal skillPrice = skillItemMapper.selectOneSkillPrice(order.getSkillItemId());
+        BigDecimal skillPrice = order.getServicePrice();
         // 计算客户需要获取的经验值
-        Integer experience = order.getOrderAmounts().intValue();
+        Integer experience = skillPrice.multiply(new BigDecimal(order.getOrderNum())).intValue(); 
+//        Integer experience = order.getOrderAmounts().intValue(); 
 
         LOGGER.info("客户下单获取经验值--客户ID：" + customer.getCustomerId() + " ， 增加经验值：" + experience);
         // 更新用户经验值和等级

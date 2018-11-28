@@ -15,9 +15,11 @@ public class CustomerSkillCertifyVO {
 	private String skillItemId;
 	private String skillItemName;
 	private Integer auditStatus;
+	private String skillVoiceUrl;
+	private String skillVoiceTime;
 	private String skillVoiceUrlTmp;
 	private String skillVoiceTimeTmp;
-	private String isAudit;
+	private String isAudited;
 
 	public String getCustomerId() {
 		return customerId;
@@ -83,13 +85,6 @@ public class CustomerSkillCertifyVO {
 		this.skillVoiceTimeTmp = skillVoiceTimeTmp;
 	}
 
-	public String getIsAudit() {
-		return isAudit;
-	}
-
-	public void setIsAudit(String isAudit) {
-		this.isAudit = isAudit;
-	}
 
 	public String getCertifyId() {
 		return certifyId;
@@ -98,6 +93,46 @@ public class CustomerSkillCertifyVO {
 	public void setCertifyId(String certifyId) {
 		this.certifyId = certifyId;
 	}
+
+	public String getSkillVoiceUrl() {
+		return skillVoiceUrl;
+	}
+
+	public void setSkillVoiceUrl(String skillVoiceUrl) {
+		this.skillVoiceUrl = skillVoiceUrl;
+	}
+
+	public String getSkillVoiceTime() {
+		return skillVoiceTime;
+	}
+
+	public void setSkillVoiceTime(String skillVoiceTime) {
+		this.skillVoiceTime = skillVoiceTime;
+	}
+
+	/**
+	 * @return the isAudited
+	 */
+	public String getIsAudited() {
+		return isAudited;
+	}
+
+	/**
+	 * @param isAudited the isAudited to set
+	 */
+	public void setIsAudited(String isAudited) {
+		this.isAudited = isAudited;
+	}
+
+	@Override
+	public String toString() {
+		return "CustomerSkillCertifyVO [certifyId=" + certifyId + ", customerId=" + customerId + ", realName="
+				+ realName + ", nickName=" + nickName + ", skillItemId=" + skillItemId + ", skillItemName="
+				+ skillItemName + ", auditStatus=" + auditStatus + ", skillVoiceUrl=" + skillVoiceUrl
+				+ ", skillVoiceTime=" + skillVoiceTime + ", skillVoiceUrlTmp=" + skillVoiceUrlTmp
+				+ ", skillVoiceTimeTmp=" + skillVoiceTimeTmp + ", isAudited=" + isAudited + "]";
+	}
+
 
 
 	

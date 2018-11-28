@@ -352,5 +352,18 @@
 			#{orderId}
 			</foreach>
   </update>
+<!-- 根据订单Id列表更新券状态为取消 -->
+  <update id="updateOrderCouponFlag"  >
+    
+		UPDATE 
+			orders
+		SET 
+			coupon_flag = #{couponFlag}
+		WHERE
+			order_id  IN 
+			<foreach collection="list" item="orderId"    open="("  close=")"  separator=",">
+			#{orderId}
+			</foreach>
+  </update>
   
 </mapper>

@@ -4,7 +4,11 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.honglu.quickcall.common.api.util.JedisUtil;
+import com.honglu.quickcall.common.api.util.RedisKeyConstants;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,7 +30,9 @@ import com.honglu.quickcall.user.facade.entity.MessageCustomer;
  */
 @Service("couponService")
 public class CouponService {
-	
+
+	private static final Logger logger = LoggerFactory.getLogger(CouponService.class);
+
 	@Autowired
 	private  TaskCustomerCouponMapper   taskCustomerCouponMapper;
 	
@@ -54,6 +60,13 @@ public class CouponService {
 					if(num > 0){
 						//插入消息记录
 						sendActivityMessage(couponId,customerId.toString());
+						try {
+							logger.debug("task:CouponService.getCouponInOrder-客户券放redis:"+customerId);
+							//领取券，加入redis,超时1天
+							JedisUtil.set(RedisKeyConstants.CUSTOMER_COUPON_STATUS+customerId+":"+couponId,"0",3600*24);
+						} catch (Exception e) {
+							logger.debug("task:CouponService.getCouponInOrder-客户券放redis异常");
+						}
 					}
 				}
 			}
@@ -89,7 +102,9 @@ public class CouponService {
             String couponId = "";
             if(cov!=null && cov.getCouponId()!=null){
                 couponId = cov.getCouponId();
-            }
+            }else{
+				cov = new CouponOrderVo();
+			}
 			//空-没查到，不显示
 			if(StringUtils.isBlank(couponId)){
 				showTip = 0;

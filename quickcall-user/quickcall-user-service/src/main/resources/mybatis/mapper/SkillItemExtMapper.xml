@@ -196,4 +196,11 @@
       remark = #{remark,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
+  
+  <select id="selectOneSkillPrice" resultType="java.math.BigDecimal" >
+    select skill_ext_price
+    from skill_item_ext
+    where skill_item_id=#{skillId} and skill_ext_type=1 and skill_ext_status=1 and skill_ext_price>0
+    limit 0,1
+  </select>
 </mapper>

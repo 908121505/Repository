@@ -31,8 +31,13 @@ public interface TaskCustomerCouponMapper {
 	 * @param couponFlag
 	 */
 	void  batchUpdateCustomerCoupon(@Param("list")List<Long>  orderIdList,@Param("couponFlag")Integer  couponFlag);
-	
-	
+
+
+    /**
+     * 根据订单ID查询用户券
+     */
+    CustomerCoupon getCustomerCouponByOrderId(Map<String,Object> map);
+
     /**
      * 判断现在时间是否有活动
      * @return
@@ -86,4 +91,11 @@ public interface TaskCustomerCouponMapper {
      * @mbggenerated
      */
     int insertSelectiveMessageCustomer(MessageCustomer record);
+    
+    /**
+     * 通过order的list得到券的list
+     * @param map
+     * @return
+     */
+    List<CustomerCoupon> queryCustomerCouponList(@Param("list")List<Long>  orderIdList);
 }

@@ -59,6 +59,12 @@ public class RedisKeyConstants {
 	public static final String CONFIRM_FINISH_ORDER_KEY = "account:confirmfinish:order:";
 	//用户关注3分钟状态
 	public static final String CUSTOMER_ATTENTION_TIME = "user:attentionTime:";
-		
+
+	//活动activity
+	/**分享活动领券*/
+	public static final String ACTIVITY_RECEIVE_COUPON_KEY = "activity:receive:coupon:";
+	
+	//用户券的状态
+	public static final String CUSTOMER_COUPON_STATUS = "customer:coupon:status";
 
 }

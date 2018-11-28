@@ -12,7 +12,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
-//import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -118,6 +117,10 @@ public class OrderServiceImpl implements IOrderService {
 	private DataDuriedPointBusiness dataDuriedPointBusiness;
 	@Autowired
 	private CouponDubboBusiness couponDubboBusiness;
+	/**
+	 * 取userAgent登录人ID
+	 */
+	//private static Pattern USER_AGENT_PATTERN = Pattern.compile("reg");
 
 	@Override
 	public CommonResponse queryDaVSkill(OrderDaVSkillRequest request) {
@@ -149,10 +152,30 @@ public class OrderServiceImpl implements IOrderService {
 				vo.setServiceUnit(skill.getServiceUnit());
 				vo.setSkillItemName(skillItem.getSkillItemName());
 
+				//取userAgent登录人ID
+				String userAgent = request.getUserAgent();
+				/*Matcher matcher = USER_AGENT_PATTERN.matcher(userAgent);
+				String loginId = null;
+				if (matcher.find()) {
+					loginId = matcher.group(0).trim();//group(0)待定
+					LOGGER.warn("通过userAgent解析出登录人ID："+loginId);
+				}*/
+				//非法请求
+				if(!userAgent.contains("voice:")){
+					throw new BizException(AccountBizReturnCode.paramError, "非法请求");
+				}
+				String loginId = "";
+				String[] arr = userAgent.split("-");
+				if(arr!=null && arr.length>2){
+					if(StringUtils.isNotBlank(arr[1]) && !"0".equals(arr[1])){
+						loginId = arr[1];
+					}
+				}
+				LOGGER.warn("通过userAgent解析出登录人ID："+loginId);
 				//技能-客户优惠券
 				CouponOrderVo cov = null;
 				try {
-					cov = couponDubboBusiness.showActivityCouponForOrder(skillItemId+"",customerId+"");
+					cov = couponDubboBusiness.showActivityCouponForOrder(skillItemId+"",loginId+"");
 				} catch (Exception e) {
 					LOGGER.warn("根据技能ID获取券信息发生异常，异常信息：",e);
 				}
@@ -389,6 +412,8 @@ public class OrderServiceImpl implements IOrderService {
 			if(customerCouponId != null){
 				CustomerCoupon customerCoupon = new CustomerCoupon();
 				customerCoupon.setId(customerCouponId);
+				customerCoupon.setIsUsed(CustomerCoupon.useCoupon);
+				customerCoupon.setOrderId(orderId);
 				try {
 					couponDubboBusiness.updateCustomerCouponById(customerCoupon );
 				} catch (Exception e1) {
@@ -628,6 +653,10 @@ public class OrderServiceImpl implements IOrderService {
 			BigDecimal payAmount = order.getOrderAmounts();
 			//订单取消需要将券返还给用户
 			Integer  couponFlag = order.getCouponFlag();
+			if(OrderSkillConstants.ORDER_COUPON_FLAG_USE == couponFlag){
+				couponFlag = OrderSkillConstants.ORDER_COUPON_FLAG_CANCEL;
+			}
+			
 			commonService.cancelUpdateOrder(orderId, orderStatus, new Date(), request.getSelectReason(),
 					request.getRemarkReason(),couponFlag);
 			// 金额不为空，说明需要退款给用户
@@ -701,15 +730,15 @@ public class OrderServiceImpl implements IOrderService {
 			orderDetail.setOrderStatus(responseVO.getOrderStatus());
 
 			// 根据订单ID查询客户优惠券
-			Map<String, String> map = new HashMap<String, String>();
+			Map<String, Object> map = new HashMap<String, Object>();
 			try {
 				map = couponDubboBusiness.getCustomerCouponByOrderId(orderId);
 			} catch (Exception e) {
 				LOGGER.warn("获取券信息发生异常,异常信息：",e);
 			}
-			if(map != null){
-				orderDetail.setCouponName(map.get("couponName") == null ? "" : map.get("couponName"));
-				orderDetail.setCouponPrice(map.get("couponPrice") == null ? null : new BigDecimal(map.get("couponPrice")));
+			if(map != null && map.size() > 0){
+				orderDetail.setCouponName(map.get("couponName") == null ? "" : (String) map.get("couponName"));
+				orderDetail.setCouponPrice(map.get("couponPrice") == null ? null : new BigDecimal(Integer.valueOf(map.get("couponPrice").toString())));
 			}
 
 		}
@@ -958,10 +987,10 @@ public class OrderServiceImpl implements IOrderService {
 			accountService.inAccount(order.getServiceId(), order.getOrderAmounts(), TransferTypeEnum.FROZEN,
 					AccountBusinessTypeEnum.FroZen, orderId);
 			
-//			//结束后用户获得券
-//			couponDubboBusiness.getCouponInOrder(order.getSkillItemId(), order.getCustomerId());
-//			// ADUAN 订单服务完成推送MQ消息
-//			userCenterSendMqMessageService.sendOrderCostMqMessage(orderId);
+			//结束后用户获得券
+			couponDubboBusiness.getCouponInOrder(order.getSkillItemId(), order.getCustomerId());
+			// ADUAN 订单服务完成推送MQ消息
+			userCenterSendMqMessageService.sendOrderCostMqMessage(orderId);
 
 			Long  customerId =  order.getCustomerId();
 			Long  serviceId = order.getServiceId();
@@ -1132,6 +1161,7 @@ public class OrderServiceImpl implements IOrderService {
 							OrderSkillConstants.ORDER_STATUS_WAITING_RECEIVE, OrderSkillConstants.SKILL_TYPE_YES);
 					if (!CollectionUtils.isEmpty(orderList)) {
 						List<Long> orderIdList = new ArrayList<Long>();
+						List<Long> orderCouponIdList = new ArrayList<Long>();
 						//声优接单，其它订单取消
 						for (Order od : orderList) {
 							orderIdList.add(od.getOrderId());
@@ -1153,14 +1183,32 @@ public class OrderServiceImpl implements IOrderService {
 								commonService.sendOrderMsg(odCustomerId, odServiceId, odOrderId, OrderSkillConstants.IM_MSG_CONTENT_DAV_CONFIRM_OTHER_CANCEL_TO_DAV);
 								commonService.sendOrderMsg(odServiceId, odCustomerId,odOrderId, OrderSkillConstants.IM_MSG_CONTENT_DAV_CONFIRM_OTHER_CANCEL_TO_CUST);
 							
+								// 查询用户此订单是否使用优惠券
+								try {
+									CustomerCoupon customerCoupon = couponDubboBusiness.queryCustomerCouponByCustomerIdAndOrderId(customerId,odOrderId);
+									if (customerCoupon != null) {
+										int cancelUpdateCustomerCouponCount = couponDubboBusiness.cancelUpdateCustomerCoupon(customerCoupon.getId());
+										orderCouponIdList.add(odOrderId);
+										LOGGER.info("==========订单ID："+ odOrderId);
+										LOGGER.info("取消订单 退回优惠券 id：" + customerCoupon.getId() + "更新数量：" + cancelUpdateCustomerCouponCount);
+									}
+								} catch (Exception e) {
+									LOGGER.warn("=======声优接单，其它订单取消，券退回发生异常，异常信息：",e);
+								}
 							
 							} catch (Exception e) {
 								LOGGER.error("用户退款异常异常信息：", e);
 							}
 							
 						}
+						//需要取消券
 						commonService.updateOrderReceiveOrder(orderIdList,OrderSkillConstants.ORDER_STATUS_CANCEL_DAV_START_ONE_ORDER);
 
+						//需要更新券状态
+						if(!CollectionUtils.isEmpty(orderCouponIdList)){
+							commonService.updateOrderCouponFlag(orderCouponIdList,OrderSkillConstants.ORDER_STATUS_CANCEL_DAV_START_ONE_ORDER,OrderSkillConstants.ORDER_COUPON_FLAG_CANCEL);
+							
+						}
 					}
 				}
 				
@@ -1190,12 +1238,19 @@ public class OrderServiceImpl implements IOrderService {
 				// 声优不同意，状态为声优拒绝，退款给购买者
 			} else {
 				newOrderStatus = OrderSkillConstants.ORDER_STATUS_DAV_REFUSED_RECEIVE;
+				//返还券给用户
+				Integer  couponFlag =  OrderSkillConstants.ORDER_COUPON_FLAG_CANCEL;
+				// 查询用户此订单是否使用优惠券
+				CustomerCoupon customerCoupon = couponDubboBusiness.queryCustomerCouponByCustomerIdAndOrderId(customerId,orderId);
+				if (customerCoupon != null) {
+					int cancelUpdateCustomerCouponCount = couponDubboBusiness.cancelUpdateCustomerCoupon(customerCoupon.getId());
+					LOGGER.info("取消订单 退回优惠券 id：" + customerCoupon.getId() + "更新数量：" + cancelUpdateCustomerCouponCount);
+				}
+				
 				BigDecimal payAmount = order.getOrderAmounts();
-				LOGGER.info("---------dvReceiveOrder--refuse：customerId=" + order.getCustomerId() + ";orderAmounts="
-						+ order.getOrderAmounts());
-				accountService.inAccount(customerId, payAmount, TransferTypeEnum.RECHARGE,
-						AccountBusinessTypeEnum.OrderRefund, orderId);
-				commonService.updateOrder(orderId, newOrderStatus);
+				LOGGER.info("---------dvReceiveOrder--refuse：customerId=" + order.getCustomerId() + ";orderAmounts="+ order.getOrderAmounts());
+				accountService.inAccount(customerId, payAmount, TransferTypeEnum.RECHARGE,AccountBusinessTypeEnum.OrderRefund, orderId);
+				commonService.updateOrder(orderId, newOrderStatus,couponFlag);
 
 				// 声优拒绝订单通知用户
 				RongYunUtil.sendOrderMessage(customerId, OrderSkillConstants.IM_MSG_CONTENT_DAV_REFUSE_TO_CUST,OrderSkillConstants.MSG_CONTENT_C);
@@ -1535,7 +1590,7 @@ public class OrderServiceImpl implements IOrderService {
 			
 		}
 
-		commonService.updateOrder(request.getOrderId(), OrderSkillConstants.ORDER_STATUS_FINISHED_AND_PINGJIA);
+		commonService.updateOrder(request.getOrderId(), OrderSkillConstants.ORDER_STATUS_FINISHED_AND_PINGJIA,null);
 		Long  serviceId = orderDetail.getServiceId();
 		Long  customerId = orderDetail.getCustomerId();
 		Long  orderId =orderDetail.getOrderId();

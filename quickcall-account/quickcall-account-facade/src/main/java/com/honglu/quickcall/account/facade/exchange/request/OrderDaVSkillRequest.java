@@ -19,6 +19,11 @@ public class OrderDaVSkillRequest extends AbstractRequest {
 	/**客户编号*/
 	private Long  customerId;
 
+	/**
+	 * 请求头里的，包含设备信息，登录人ID等
+	 */
+	private String userAgent;
+
 	public Long getCustomerId() {
 		return customerId;
 	}
@@ -27,6 +32,13 @@ public class OrderDaVSkillRequest extends AbstractRequest {
 		this.customerId = customerId;
 	}
 
+	public String getUserAgent() {
+		return userAgent;
+	}
+
+	public void setUserAgent(String userAgent) {
+		this.userAgent = userAgent;
+	}
 
 	@Override
 	public String getBizCode() {
